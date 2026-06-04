@@ -256,11 +256,15 @@ export function LandingPage() {
             </a>
           </nav>
 
-          {/* B2B CTA */}
-          <button className="shrink-0 bg-[#c8102e] hover:bg-[#e01535] text-white text-[13px] font-semibold px-5 py-2.5 rounded transition-colors duration-200 flex items-center gap-1.5 group">
-            B2B Portal
-            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-          </button>
+          {/* Parcabul.com CTA */}
+          <a href="#" className="shrink-0 flex items-center gap-2.5 bg-white hover:bg-gray-50 border border-gray-200 px-4 py-2 rounded-lg transition-all duration-200 shadow-sm hover:shadow group">
+            <div className="flex items-center gap-1 leading-none">
+              <span className="text-[#1a1d23] font-black text-[15px] tracking-tight">parça</span>
+              <span className="bg-[#c8102e] text-white font-black text-[15px] tracking-tight px-1 rounded-sm">bul</span>
+              <span className="text-[#1a1d23] font-black text-[15px] tracking-tight">.com</span>
+            </div>
+            <ArrowRight className="w-3.5 h-3.5 text-[#c8102e] group-hover:translate-x-0.5 transition-transform" />
+          </a>
         </div>
       </header>
 
