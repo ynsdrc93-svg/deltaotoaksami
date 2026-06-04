@@ -248,7 +248,7 @@ export function LandingPage() {
 
           {/* Nav */}
           <nav className="hidden xl:flex items-center gap-7 text-[13px] font-medium text-gray-400">
-            {["Hakkımızda", "Tedarikçiler", "Operasyon ve Lojistik", "Kariyer", "Groupauto", "İletişim"].map(link => (
+            {["Hakkımızda", "Tedarikçiler", "Operasyon ve Lojistik", "Kariyer", "İletişim"].map(link => (
               <a key={link} href="#" className="do-nav-link hover:text-white transition-colors duration-200">{link}</a>
             ))}
             <a href="#" className="do-spart-badge flex items-center gap-2">
@@ -287,7 +287,7 @@ export function LandingPage() {
         {/* Red vertical accent */}
         <div className="absolute left-0 top-0 w-[3px] h-full bg-gradient-to-b from-transparent via-[#1B3A8F] to-transparent opacity-60"></div>
 
-        <div className="max-w-7xl mx-auto px-6 relative z-10 pt-20 pb-32">
+        <div className="w-full max-w-7xl mx-auto px-16 relative z-10 pt-20 pb-32">
           <div className="max-w-4xl">
 
             {/* eyebrow */}
