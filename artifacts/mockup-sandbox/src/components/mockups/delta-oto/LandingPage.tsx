@@ -66,7 +66,7 @@ const CSS = `
 
   /* metric counter */
   .do-metric-num {
-    background: linear-gradient(135deg, #fff 40%, rgba(200,16,46,0.85));
+    background: linear-gradient(135deg, #fff 40%, rgba(27,58,143,0.85));
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -81,7 +81,7 @@ const CSS = `
   .do-card:hover {
     transform: translateY(-6px);
     box-shadow: 0 24px 48px rgba(0,0,0,0.1);
-    border-top-color: #c8102e;
+    border-top-color: #1B3A8F;
   }
 
   /* red accent line */
@@ -90,7 +90,7 @@ const CSS = `
     display: block;
     width: 40px;
     height: 3px;
-    background: #c8102e;
+    background: #1B3A8F;
     margin-bottom: 20px;
   }
 
@@ -114,7 +114,7 @@ const CSS = `
     left: 0;
     width: 0;
     height: 1.5px;
-    background: #c8102e;
+    background: #1B3A8F;
     transition: width 0.25s ease;
   }
   .do-nav-link:hover::after { width: 100%; }
@@ -126,7 +126,7 @@ const CSS = `
     width: 42%;
     height: 100%;
     clip-path: polygon(18% 0, 100% 0, 100% 100%, 0% 100%);
-    background: linear-gradient(135deg, rgba(200,16,46,0.06), rgba(14,16,22,0.0));
+    background: linear-gradient(135deg, rgba(27,58,143,0.06), rgba(14,16,22,0.0));
     pointer-events: none;
   }
 
@@ -212,14 +212,14 @@ export function LandingPage() {
   const ref = useReveal();
   const scrolled = useScrolled();
 
-  const tickerItems = ["250+ Marka", "81 İl + İhracat", "1976'dan Bu Yana", "Groupauto Üyesi", "Otokoç İzmir Tofaş", "Ümraniye Merkez", "Binek & Hafif Ticari", "Sıfır Hata Toleransı"];
+  const tickerItems = ["250+ Marka", "81 İl + İhracat", "1976'dan Bu Yana", "Groupauto Üyesi", "Opar Ege Bölge Bayiliği", "Ümraniye Merkez", "Binek & Hafif Ticari", "Sıfır Hata Toleransı"];
 
   return (
     <div className="do-page min-h-screen bg-[#0e1016] text-white overflow-x-hidden">
       <style>{CSS}</style>
 
       {/* ── TICKER BAR ─────────────────────────────────── */}
-      <div className="bg-[#c8102e] py-2 overflow-hidden">
+      <div className="bg-[#1B3A8F] py-2 overflow-hidden">
         <div className="do-ticker-inner">
           {[...tickerItems, ...tickerItems].map((item, i) => (
             <span key={i} className="px-8 text-xs font-bold uppercase tracking-[0.2em] text-white/90 flex items-center gap-8">
@@ -260,10 +260,10 @@ export function LandingPage() {
           <a href="#" className="shrink-0 flex items-center gap-2.5 bg-white hover:bg-gray-50 border border-gray-200 px-4 py-2 rounded-lg transition-all duration-200 shadow-sm hover:shadow group">
             <div className="flex items-center gap-1 leading-none">
               <span className="text-[#1a1d23] font-black text-[15px] tracking-tight">parça</span>
-              <span className="bg-[#c8102e] text-white font-black text-[15px] tracking-tight px-1 rounded-sm">bul</span>
+              <span className="bg-[#1B3A8F] text-white font-black text-[15px] tracking-tight px-1 rounded-sm">bul</span>
               <span className="text-[#1a1d23] font-black text-[15px] tracking-tight">.com</span>
             </div>
-            <ArrowRight className="w-3.5 h-3.5 text-[#c8102e] group-hover:translate-x-0.5 transition-transform" />
+            <ArrowRight className="w-3.5 h-3.5 text-[#1B3A8F] group-hover:translate-x-0.5 transition-transform" />
           </a>
         </div>
       </header>
@@ -289,7 +289,7 @@ export function LandingPage() {
         <div className="absolute inset-0 do-grid-bg opacity-60"></div>
 
         {/* Red vertical accent */}
-        <div className="absolute left-0 top-0 w-[3px] h-full bg-gradient-to-b from-transparent via-[#c8102e] to-transparent opacity-60"></div>
+        <div className="absolute left-0 top-0 w-[3px] h-full bg-gradient-to-b from-transparent via-[#1B3A8F] to-transparent opacity-60"></div>
 
         <div className="max-w-7xl mx-auto px-6 relative z-10 pt-20 pb-32">
           <div className="max-w-4xl">
@@ -299,8 +299,8 @@ export function LandingPage() {
               ref={ref}
               className="do-reveal flex items-center gap-3 mb-8"
             >
-              <div className="w-8 h-[2px] bg-[#c8102e]"></div>
-              <span className="text-[#c8102e] text-xs font-bold uppercase tracking-[0.3em]">1976 · Türkiye'nin Aftermarket Lideri</span>
+              <div className="w-8 h-[2px] bg-[#1B3A8F]"></div>
+              <span className="text-[#1B3A8F] text-xs font-bold uppercase tracking-[0.3em]">1976 · Türkiye'nin Aftermarket Lideri</span>
             </div>
 
             {/* H1 */}
@@ -314,7 +314,7 @@ export function LandingPage() {
               <br />
               <span className="text-white">AFTERMARKET'İN</span>
               <br />
-              <span className="text-[#c8102e]">KESİNTİSİZ GÜCÜ</span>
+              <span className="text-[#1B3A8F]">KESİNTİSİZ GÜCÜ</span>
             </h1>
 
             {/* H2 */}
@@ -327,7 +327,7 @@ export function LandingPage() {
 
             {/* CTAs */}
             <div ref={ref} className="do-reveal do-d3 flex flex-wrap gap-4 items-center">
-              <button className="bg-[#c8102e] hover:bg-[#e01535] text-white font-semibold px-8 py-4 rounded text-base transition-all duration-200 flex items-center gap-2.5 group shadow-[0_0_32px_rgba(200,16,46,0.3)] hover:shadow-[0_0_48px_rgba(200,16,46,0.45)]">
+              <button className="bg-[#1B3A8F] hover:bg-[#2547B5] text-white font-semibold px-8 py-4 rounded text-base transition-all duration-200 flex items-center gap-2.5 group shadow-[0_0_32px_rgba(27,58,143,0.3)] hover:shadow-[0_0_48px_rgba(27,58,143,0.45)]">
                 Operasyon Gücümüzü İnceleyin
                 <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
@@ -344,7 +344,7 @@ export function LandingPage() {
                 { Icon: Truck, text: "81 İl + İhracat" },
               ].map(({ Icon, text }) => (
                 <div key={text} className="flex items-center gap-2.5 text-gray-500 text-sm">
-                  <Icon className="w-4 h-4 text-[#c8102e]" />
+                  <Icon className="w-4 h-4 text-[#1B3A8F]" />
                   <span>{text}</span>
                 </div>
               ))}
@@ -361,7 +361,7 @@ export function LandingPage() {
       {/* ── POWER METRICS ──────────────────────────────── */}
       <section className="relative bg-[#0e1016] border-y border-white/5 py-20 overflow-hidden">
         <div className="absolute inset-0 do-grid-bg"></div>
-        <div className="absolute left-0 top-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#c8102e]/50 to-transparent"></div>
+        <div className="absolute left-0 top-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#1B3A8F]/50 to-transparent"></div>
 
         <div className="max-w-7xl mx-auto px-6 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-white/8">
@@ -382,15 +382,15 @@ export function LandingPage() {
 
       {/* ── STRATEGIC PARTNERSHIP ──────────────────────── */}
       <section className="py-28 bg-[#13151c] relative overflow-hidden">
-        <div className="absolute right-0 top-0 w-1/2 h-full bg-gradient-to-l from-[#c8102e]/4 to-transparent pointer-events-none"></div>
+        <div className="absolute right-0 top-0 w-1/2 h-full bg-gradient-to-l from-[#1B3A8F]/4 to-transparent pointer-events-none"></div>
 
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex flex-col lg:flex-row items-center gap-20">
 
             {/* Text */}
             <div className="lg:w-1/2">
-              <p ref={ref} className="do-reveal text-[#c8102e] text-xs font-bold uppercase tracking-[0.3em] mb-5 flex items-center gap-3">
-                <span className="w-8 h-[2px] bg-[#c8102e] inline-block"></span>
+              <p ref={ref} className="do-reveal text-[#1B3A8F] text-xs font-bold uppercase tracking-[0.3em] mb-5 flex items-center gap-3">
+                <span className="w-8 h-[2px] bg-[#1B3A8F] inline-block"></span>
                 Stratejik Ortaklık
               </p>
               <h2 ref={ref} className="do-reveal do-d1 do-red-line text-4xl md:text-5xl font-black text-white mb-7 tracking-tight leading-[1.1]">
@@ -422,10 +422,10 @@ export function LandingPage() {
                 <div
                   key={item.label}
                   ref={ref}
-                  className={`do-reveal ${i === 1 ? "do-d2" : ""} flex-1 border border-white/8 rounded-lg p-10 flex flex-col items-center justify-center text-center gap-4 bg-[#0e1016]/60 hover:border-[#c8102e]/30 transition-colors duration-300 group min-h-[180px]`}
+                  className={`do-reveal ${i === 1 ? "do-d2" : ""} flex-1 border border-white/8 rounded-lg p-10 flex flex-col items-center justify-center text-center gap-4 bg-[#0e1016]/60 hover:border-[#1B3A8F]/30 transition-colors duration-300 group min-h-[180px]`}
                 >
-                  <div className="w-10 h-10 rounded-full bg-[#c8102e]/10 flex items-center justify-center group-hover:bg-[#c8102e]/20 transition-colors">
-                    <Globe className="w-5 h-5 text-[#c8102e]" />
+                  <div className="w-10 h-10 rounded-full bg-[#1B3A8F]/10 flex items-center justify-center group-hover:bg-[#1B3A8F]/20 transition-colors">
+                    <Globe className="w-5 h-5 text-[#1B3A8F]" />
                   </div>
                   <div>
                     <div className="font-bold text-white text-base">{item.label}</div>
@@ -454,19 +454,19 @@ export function LandingPage() {
 
         <div className="max-w-7xl mx-auto px-6 py-28 relative z-10 w-full">
           <div className="max-w-2xl">
-            <p ref={ref} className="do-reveal text-[#c8102e] text-xs font-bold uppercase tracking-[0.3em] mb-5 flex items-center gap-3">
-              <span className="w-8 h-[2px] bg-[#c8102e] inline-block"></span>
+            <p ref={ref} className="do-reveal text-[#1B3A8F] text-xs font-bold uppercase tracking-[0.3em] mb-5 flex items-center gap-3">
+              <span className="w-8 h-[2px] bg-[#1B3A8F] inline-block"></span>
               Operasyon & Lojistik
             </p>
             <h2 ref={ref} className="do-reveal do-d1 text-4xl md:text-5xl font-black text-white mb-8 leading-[1.1] tracking-tight">
               Kesintisiz Tedarik.<br />
-              <span className="text-[#c8102e]">Sıfır Hata Toleransı.</span>
+              <span className="text-[#1B3A8F]">Sıfır Hata Toleransı.</span>
             </h2>
             <p ref={ref} className="do-reveal do-d2 text-[16px] text-gray-400 leading-[1.85] font-light mb-5">
               Otomotiv satış sonrası pazarında mazerete yer yoktur. Lojistiği sadece bir taşıma işlemi değil, iş ortaklarımız için stratejik bir rekabet avantajı olarak yönetiyoruz. Ümraniye'deki merkezimizden Türkiye'nin tamamına ve küresel pazarlara uzanan dağıtım ağımızla, binek ve hafif ticari araç gruplarında 250'den fazla markanın tedariğini sağlıyoruz.
             </p>
             <p ref={ref} className="do-reveal do-d3 text-[16px] text-gray-400 leading-[1.85] font-light">
-              Yakın zamanda Otokoç İzmir Tofaş yedek parça bayiliğini de bünyemize katarak sahadaki gücümüzü pekiştirdik.
+              Yakın zamanda Opar Ege Bölge Bayiliği'ni de bünyemize katarak sahadaki gücümüzü pekiştirdik.
             </p>
 
             {/* Capability chips */}
@@ -484,12 +484,12 @@ export function LandingPage() {
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-14 gap-6">
             <div>
-              <p ref={ref} className="do-reveal text-[#c8102e] text-xs font-bold uppercase tracking-[0.3em] mb-4 flex items-center gap-3">
-                <span className="w-8 h-[2px] bg-[#c8102e] inline-block"></span>
+              <p ref={ref} className="do-reveal text-[#1B3A8F] text-xs font-bold uppercase tracking-[0.3em] mb-4 flex items-center gap-3">
+                <span className="w-8 h-[2px] bg-[#1B3A8F] inline-block"></span>
                 Gündem & Vizyon
               </p>
               <h2 ref={ref} className="do-reveal do-d1 text-4xl md:text-5xl font-black text-white tracking-tight leading-tight">
-                Sahadaki <span className="text-[#c8102e]">Gelişmeler</span>
+                Sahadaki <span className="text-[#1B3A8F]">Gelişmeler</span>
               </h2>
             </div>
             <p ref={ref} className="do-reveal do-d2 text-gray-500 text-sm max-w-xs leading-relaxed">
@@ -503,19 +503,19 @@ export function LandingPage() {
               ref={ref}
               className="do-reveal do-card bg-[#0e1016] border border-white/8 rounded-xl p-10 group relative overflow-hidden"
             >
-              <div className="absolute top-0 right-0 w-32 h-32 bg-[#c8102e]/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-500"></div>
+              <div className="absolute top-0 right-0 w-32 h-32 bg-[#1B3A8F]/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-500"></div>
               <div className="flex items-center gap-2 mb-6">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-[#c8102e] bg-[#c8102e]/10 border border-[#c8102e]/20 px-2.5 py-1 rounded">Mayıs 2026</span>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-[#1B3A8F] bg-[#1B3A8F]/10 border border-[#1B3A8F]/20 px-2.5 py-1 rounded">Mayıs 2026</span>
                 <Zap className="w-3.5 h-3.5 text-gray-600" />
                 <span className="text-[10px] text-gray-600 uppercase tracking-wider">Yeni Operasyon</span>
               </div>
               <h3 className="text-xl font-bold text-white mb-5 leading-snug group-hover:text-[#f4f4f4] transition-colors">
-                Otokoç İzmir Tofaş Operasyonu Başladı
+                Opar Ege Bölge Bayiliği Operasyonu Başladı
               </h3>
               <p className="text-[15px] text-gray-500 leading-[1.8] font-light">
-                Yarım asırlık büyüme ivmemizi sahada yeni yatırımlarla somutlaştırıyoruz. Mayıs 2026 itibarıyla Otokoç İzmir Tofaş yedek parça bayiliğini devralarak Ege bölgesindeki tedarik ağımızı doğrudan genişlettik. Hedefimiz net: İş ortaklarımıza her koşulda daha hızlı, daha geniş ve daha güçlü bir envanter sunmak.
+                Yarım asırlık büyüme ivmemizi sahada yeni yatırımlarla somutlaştırıyoruz. Mayıs 2026 itibarıyla Opar Ege Bölge Bayiliği operasyonunu devralarak Ege bölgesindeki tedarik ağımızı doğrudan genişlettik. Hedefimiz net: İş ortaklarımıza her koşulda daha hızlı, daha geniş ve daha güçlü bir envanter sunmak.
               </p>
-              <div className="mt-8 flex items-center gap-2 text-[13px] text-[#c8102e] font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className="mt-8 flex items-center gap-2 text-[13px] text-[#1B3A8F] font-medium opacity-0 group-hover:opacity-100 transition-opacity">
                 Devamını Oku <ArrowRight className="w-3.5 h-3.5" />
               </div>
             </div>
@@ -525,9 +525,9 @@ export function LandingPage() {
               ref={ref}
               className="do-reveal do-d2 do-card bg-[#0e1016] border border-white/8 rounded-xl p-10 group relative overflow-hidden"
             >
-              <div className="absolute top-0 right-0 w-32 h-32 bg-[#c8102e]/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-500"></div>
+              <div className="absolute top-0 right-0 w-32 h-32 bg-[#1B3A8F]/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-500"></div>
               <div className="flex items-center gap-2 mb-6">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-[#c8102e] bg-[#c8102e]/10 border border-[#c8102e]/20 px-2.5 py-1 rounded">27–29 Mayıs 2026</span>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-[#1B3A8F] bg-[#1B3A8F]/10 border border-[#1B3A8F]/20 px-2.5 py-1 rounded">27–29 Mayıs 2026</span>
                 <Globe className="w-3.5 h-3.5 text-gray-600" />
                 <span className="text-[10px] text-gray-600 uppercase tracking-wider">Uluslararası Zirve</span>
               </div>
@@ -537,7 +537,7 @@ export function LandingPage() {
               <p className="text-[15px] text-gray-500 leading-[1.8] font-light">
                 27-29 Mayıs tarihlerinde düzenlenen uluslararası zirvede Türkiye'yi ve yerel gücümüzü temsil ettik. İş ortaklarımızın pazar rekabetinde daha da güçlenmesi ve yeni fırsatlara erişimi için 35 farklı global üreticiyle kritik görüşmeler gerçekleştirdik. Sektörün geleceği yazılırken masadayız.
               </p>
-              <div className="mt-8 flex items-center gap-2 text-[13px] text-[#c8102e] font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+              <div className="mt-8 flex items-center gap-2 text-[13px] text-[#1B3A8F] font-medium opacity-0 group-hover:opacity-100 transition-opacity">
                 Devamını Oku <ArrowRight className="w-3.5 h-3.5" />
               </div>
             </div>
@@ -546,7 +546,7 @@ export function LandingPage() {
       </section>
 
       {/* ── CTA BAND ───────────────────────────────────── */}
-      <section className="relative py-24 bg-[#c8102e] overflow-hidden">
+      <section className="relative py-24 bg-[#1B3A8F] overflow-hidden">
         <div className="absolute inset-0 do-grid-bg opacity-30"></div>
         <div className="absolute -right-20 top-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-white/5 blur-3xl pointer-events-none"></div>
         <div className="max-w-7xl mx-auto px-6 relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
@@ -559,7 +559,7 @@ export function LandingPage() {
             </p>
           </div>
           <div ref={ref} className="do-reveal do-d2 flex gap-4 shrink-0">
-            <button className="bg-white text-[#c8102e] font-bold px-8 py-4 rounded hover:bg-gray-100 transition-colors text-sm flex items-center gap-2 group">
+            <button className="bg-white text-[#1B3A8F] font-bold px-8 py-4 rounded hover:bg-gray-100 transition-colors text-sm flex items-center gap-2 group">
               B2B Portal
               <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
             </button>
@@ -605,7 +605,7 @@ export function LandingPage() {
                 {["Kurumsal", "B2B Portal Girişi", "İletişim", "Gizlilik Politikası"].map(link => (
                   <li key={link}>
                     <a href="#" className="text-sm text-gray-500 hover:text-white transition-colors flex items-center gap-2 group">
-                      <span className="w-0 group-hover:w-3 h-[1px] bg-[#c8102e] inline-block transition-all duration-200"></span>
+                      <span className="w-0 group-hover:w-3 h-[1px] bg-[#1B3A8F] inline-block transition-all duration-200"></span>
                       {link}
                     </a>
                   </li>
@@ -640,7 +640,7 @@ export function LandingPage() {
           <div className="pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-600">
             <span>© 2026 Delta Oto. Tüm hakları saklıdır.</span>
             <div className="flex items-center gap-1.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-[#c8102e] animate-pulse"></div>
+              <div className="w-1.5 h-1.5 rounded-full bg-[#1B3A8F] animate-pulse"></div>
               <span>Türkiye'nin Aftermarket Lideri · 1976'dan Bu Yana</span>
             </div>
           </div>
