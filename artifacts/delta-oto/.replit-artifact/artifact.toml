@@ -1,0 +1,31 @@
+kind = "web"
+previewPath = "/"
+title = "Delta Oto — Kurumsal Landing Page"
+version = "1.0.0"
+id = "artifacts/delta-oto"
+router = "path"
+
+[[integratedSkills]]
+name = "react-vite"
+version = "1.0.0"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 24695
+
+[services.development]
+run = "pnpm --filter @workspace/delta-oto run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/delta-oto", "run", "build" ]
+publicDir = "artifacts/delta-oto/dist/public"
+serve = "static"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "24695"
+BASE_PATH = "/"
