@@ -1,0 +1,14 @@
+uploads = []
+outputs = []
+
+[[generated]]
+id = "fB4rAdBhLWdysBL58GYpY"
+uri = "file://artifacts/mockup-sandbox/public/images/delta-oto-hero.png"
+type = "image"
+title = "Logistics warehouse hero"
+
+[[generated]]
+id = "YPaLVUO3Ha5aCqvmmQFGV"
+uri = "file://artifacts/mockup-sandbox/public/images/delta-oto-ops.png"
+type = "image"
+title = "Pristine warehouse facility"

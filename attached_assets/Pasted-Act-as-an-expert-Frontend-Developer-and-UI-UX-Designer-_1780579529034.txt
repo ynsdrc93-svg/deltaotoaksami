@@ -1,0 +1,58 @@
+Act as an expert Frontend Developer and UI/UX Designer. Your task is to build a modern, high-performance, and premium corporate landing page for "Delta Oto," a 50-year-old leader in the automotive aftermarket and logistics industry. 
+
+### CONTEXT & OBJECTIVE (Why and What We Are Doing)
+This is not a cheap SME website. It must look like an enterprise-level, tier-1 corporate logistics giant. The design language must communicate power, precision, zero-margin-for-error, and global reach. 
+- Use a tech stack like React and Tailwind CSS.
+- The UI must be sleek, using high-contrast elements (e.g., dark anthracite sections mixed with clean white/light gray areas). 
+- Animations should be subtle and professional (fade-ins, smooth scrolling) – nothing overly flashy.
+- ALL front-facing text MUST be exactly in Turkish as provided below. Do not translate the Turkish content.
+
+### PAGE STRUCTURE & CONTENT DIRECTIVES
+
+**1. HEADER (Top Navigation)**
+- Keep it sticky, modern, and highly legible.
+- Left: Placeholder for "Delta Oto 50. Yıl Logosu".
+- Center Nav Links: Hakkımızda | Tedarikçiler | Operasyon ve Lojistik | Kariyer | Groupauto | İletişim
+- Special Center Item: Add "SPART" to the navigation, but style it differently (e.g., a subtle premium badge or distinct color) so it stands out from the standard links as an exclusive Private Label.
+- Right: A prominent, high-contrast Call-to-Action (CTA) button labeled "B2B Portal".
+
+**2. HERO SECTION**
+- Background: A placeholder for a premium, cinematic video background (label it "Video Background Placeholder: Bright, massive, hyper-modern logistics warehouse in action"). Do not use dark, gritty overlays; it must look bright, massive, and flawless.
+- Overlay: A dark gradient overlay to ensure text readability.
+- H1 (Main Title, Large & Bold): 50 YILDIR OTOMOTİV AFTERMARKET'İN KESİNTİSİZ GÜCÜ
+- H2 (Subtitle, clean typography): Binek ve hafif ticari araç yedek parça pazarında, bağımsız yenileme sektörünü 1976'dan bugüne güçlü lojistik altyapımız ve küresel tedarik ağımızla yönlendiriyoruz.
+- CTA Button: "Operasyon Gücümüzü İnceleyin" (Make it look clickable and solid).
+
+**3. POWER METRICS SECTION**
+- Design: Dark anthracite background with massive, bold typography for the numbers. Center-aligned or cleanly distributed in a 3-column grid.
+- Metric 1: "250+" (Number) / "Ulusal ve Uluslararası Marka Referansı" (Text)
+- Metric 2: "81 İl + İhracat" (Number) / "Kesintisiz Dağıtım ve Lojistik Ağı" (Text)
+- Metric 3: "1976" (Number) / "Kuruluş ve Sektörel Liderlik" (Text)
+
+**4. STRATEGIC PARTNERSHIP SECTION**
+- Layout: Split layout (Text on one side, Logos on the other) or a clean centered approach.
+- Visual: Placeholder for "Groupauto International & Groupauto Türkiye" logos.
+- Title: Uluslararası Güç, Yerel Hakimiyet.
+- Paragraph: Dünyanın en büyük yedek parça organizasyonlarından Groupauto'nun gücüyle, optimize edilmiş satın alma kapasitemizi birleştiriyoruz. Global vizyonumuzla, iş ortaklarımıza her geçen gün daha rekabetçi ve öncü çalışma olanakları sunuyoruz.
+
+**5. OPERATIONS & LOGISTICS SECTION**
+- Visual: A large, sharp placeholder image depicting a pristine, high-tech warehouse facility.
+- Title: Kesintisiz Tedarik. Sıfır Hata Toleransı.
+- Paragraph: Otomotiv satış sonrası pazarında mazerete yer yoktur. Lojistiği sadece bir taşıma işlemi değil, iş ortaklarımız için stratejik bir rekabet avantajı olarak yönetiyoruz. Ümraniye'deki merkezimizden Türkiye'nin tamamına ve küresel pazarlara uzanan dağıtım ağımızla, binek ve hafif ticari araç gruplarında 250'den fazla markanın tedariğini sağlıyoruz. Yakın zamanda Otokoç İzmir Tofaş yedek parça bayiliğini de bünyemize katarak sahadaki operasyonel hakimiyetimizi daha da genişlettik. İhtiyaç duyulan parça, tam zamanında, olması gereken yerde. Bizde süreçler kağıt üzerinde değil, sahada kusursuz işler.
+
+**6. AGENDA & VISION (Card Grid)**
+- Layout: A clean, modern 2-column card grid. The cards must look premium with subtle hover effects (like a slight lift or shadow increase).
+- Card 1: 
+  - Title: Otokoç İzmir Tofaş Operasyonu Başladı
+  - Text: Yarım asırlık büyüme ivmemizi sahada yeni yatırımlarla somutlaştırıyoruz. Mayıs 2026 itibarıyla Otokoç İzmir Tofaş yedek parça bayiliğini devralarak Ege bölgesindeki tedarik ağımızı doğrudan genişlettik. Hedefimiz net: İş ortaklarımıza her koşulda daha hızlı, daha geniş ve daha güçlü bir envanter sunmak.
+- Card 2: 
+  - Title: GROUPAUTO O2O Europe & O2O Heavy Duty Days 2026 in Mallorca
+  - Text: 27-29 Mayıs tarihlerinde düzenlenen uluslararası zirvede Türkiye'yi ve yerel gücümüzü temsil ettik. İş ortaklarımızın pazar rekabetinde daha da güçlenmesi ve yeni fırsatlara erişimi için 35 farklı global üreticiyle kritik görüşmeler gerçekleştirdik. Sektörün geleceği yazılırken masadayız.
+
+**7. FOOTER**
+- Layout: A structured 3-column footer, dark background.
+- Left Column: "Delta Oto Logosu" (Placeholder) | Barbaros Cd. Beyit Sk. No:17, Yukarı Dudullu - Ümraniye / İstanbul | info@deltaoto.com | 0216 526 64 64 / 0216 526 33 44
+- Center Column: Gizlilik Politikası | B2B Portal Girişi | Kurumsal | İletişim
+- Right Column: Placeholders for "OSS Derneği Logosu" and "ISO / Kalite Sertifika Logoları".
+
+Please generate the complete, responsive code for this landing page. Prioritize clean architecture, semantic HTML, and a high-end corporate aesthetic.
