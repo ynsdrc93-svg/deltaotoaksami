@@ -447,7 +447,7 @@ export function LandingPage() {
       </section>
 
       {/* POWER METRICS (light) */}
-      <section className="relative bg-[#f4f6f9] border-y border-slate-200 py-20 overflow-hidden">
+      <section className="relative bg-[#f4f6f9] border-y border-slate-200 py-16 md:py-20 overflow-hidden">
         <div className="absolute inset-0 do-grid-bg-light"></div>
         <div className="absolute left-0 top-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#1B3A8F]/40 to-transparent"></div>
 
@@ -461,13 +461,13 @@ export function LandingPage() {
       </section>
 
       {/* STRATEGIC PARTNERSHIP (navy) */}
-      <section className="py-28 relative overflow-hidden text-white" style={{ background: "linear-gradient(135deg, #1B3A8F 0%, #14275c 100%)" }}>
+      <section className="py-20 md:py-28 relative overflow-hidden text-white" style={{ background: "linear-gradient(135deg, #1B3A8F 0%, #14275c 100%)" }}>
         <div className="absolute inset-0 do-grid-bg opacity-40"></div>
         <div className="absolute right-0 top-0 w-1/2 h-full bg-gradient-to-l from-white/5 to-transparent pointer-events-none"></div>
         <div className="do-beam do-beam-delay"></div>
 
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-          <div className="flex flex-col lg:flex-row items-center gap-20">
+          <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
             <div className="lg:w-1/2">
               <p ref={ref} className="do-reveal text-blue-200 text-xs font-bold uppercase tracking-[0.3em] mb-5 flex items-center gap-3">
                 <span className="w-8 h-[2px] bg-blue-300 inline-block"></span>
@@ -545,7 +545,7 @@ export function LandingPage() {
         </div>
         <div className="absolute inset-0 do-grid-bg"></div>
 
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-28 relative z-10 w-full">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-20 md:py-28 relative z-10 w-full">
           <div className="max-w-2xl">
             <p ref={ref} className="do-reveal text-[#7d9bea] text-xs font-bold uppercase tracking-[0.3em] mb-5 flex items-center gap-3">
               <span className="w-8 h-[2px] bg-[#4d74d6] inline-block"></span>
@@ -572,7 +572,7 @@ export function LandingPage() {
       </section>
 
       {/* AGENDA & VISION (light) */}
-      <section className="py-28 bg-white">
+      <section className="py-20 md:py-28 bg-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-14 gap-6">
             <div>
@@ -636,7 +636,7 @@ export function LandingPage() {
       </section>
 
       {/* CTA BAND (navy) */}
-      <section className="relative py-24 bg-[#1B3A8F] overflow-hidden text-white">
+      <section className="relative py-16 md:py-24 bg-[#1B3A8F] overflow-hidden text-white">
         <div className="absolute inset-0 do-grid-bg opacity-30"></div>
         <div className="absolute -right-20 top-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-white/5 blur-3xl pointer-events-none"></div>
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
@@ -661,7 +661,7 @@ export function LandingPage() {
       </section>
 
       {/* FOOTER (dark) */}
-      <footer className="bg-[#0a0c11] pt-20 pb-10 border-t border-white/5 text-white">
+      <footer className="bg-[#0a0c11] pt-16 md:pt-20 pb-10 border-t border-white/5 text-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-14 mb-16">
 
