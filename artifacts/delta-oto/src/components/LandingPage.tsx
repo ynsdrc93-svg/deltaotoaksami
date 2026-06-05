@@ -225,28 +225,31 @@ export function LandingPage() {
         className="sticky top-0 z-50 transition-all duration-300 bg-white/90 backdrop-blur-md border-b border-slate-200"
         style={{ ...(scrolled ? { background: "rgba(255,255,255,0.98)", borderColor: "rgba(15,23,42,0.1)", boxShadow: "0 4px 24px rgba(15,23,42,0.08)" } : {}) }}
       >
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between gap-6">
-          <div className="flex items-center shrink-0">
+        <div className="max-w-7xl mx-auto px-8 h-[72px] flex items-center justify-between gap-8">
+          <a href="#" className="flex items-center shrink-0">
             <img
               src="/images/delta-oto-logo.png"
               alt="Delta Oto 50. Yıl"
-              className="h-10"
+              className="h-8 w-auto"
             />
-          </div>
+          </a>
 
-          <nav className="hidden xl:flex items-center gap-7 text-[13px] font-medium text-slate-600">
+          <nav className="hidden xl:flex items-center gap-8 text-[13px] font-medium tracking-tight text-slate-600">
             {["Hakkımızda", "Tedarikçiler", "Operasyon ve Lojistik", "Kariyer", "İletişim"].map(link => (
-              <a key={link} href="#" className="do-nav-link hover:text-slate-900 transition-colors duration-200">{link}</a>
+              <a key={link} href="#" className="do-nav-link whitespace-nowrap hover:text-[#1B3A8F] transition-colors duration-200">{link}</a>
             ))}
-            <a href="#" className="flex items-center shrink-0 rounded-md overflow-hidden border border-slate-200 hover:border-[#1B3A8F]/40 transition-colors">
-              <img src="/images/spart-logo.png" alt="SPART Original Replacement" className="h-8 w-auto block" />
-            </a>
           </nav>
 
-          <a href="#" className="shrink-0 bg-[#1B3A8F] hover:bg-[#2547B5] text-white text-[13px] font-semibold px-5 py-2.5 rounded transition-colors duration-200 flex items-center gap-1.5 group">
-            B2B Portal
-            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-          </a>
+          <div className="flex items-center gap-5 shrink-0">
+            <a href="#" className="hidden lg:flex items-center rounded-md overflow-hidden ring-1 ring-slate-200 hover:ring-[#1B3A8F]/40 transition-all duration-200">
+              <img src="/images/spart-logo.png" alt="SPART Original Replacement" className="h-7 w-auto block" />
+            </a>
+            <span className="hidden lg:block w-px h-6 bg-slate-200"></span>
+            <a href="#" className="bg-[#1B3A8F] hover:bg-[#2547B5] text-white text-[13px] font-semibold tracking-[0.01em] px-5 py-2.5 rounded-md transition-all duration-200 flex items-center gap-1.5 shadow-sm hover:shadow-md group">
+              B2B Portal
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+            </a>
+          </div>
         </div>
       </header>
 
