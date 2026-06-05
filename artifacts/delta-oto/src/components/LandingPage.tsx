@@ -238,8 +238,8 @@ export function LandingPage() {
             {["Hakkımızda", "Tedarikçiler", "Operasyon ve Lojistik", "Kariyer", "İletişim"].map(link => (
               <a key={link} href="#" className="do-nav-link hover:text-slate-900 transition-colors duration-200">{link}</a>
             ))}
-            <a href="#" className="do-spart-badge flex items-center gap-2">
-              <img src="/images/spart-logo.png" alt="SPART" className="h-5 do-spart-dark" />
+            <a href="#" className="flex items-center shrink-0 rounded-md overflow-hidden border border-slate-200 hover:border-[#1B3A8F]/40 transition-colors">
+              <img src="/images/spart-logo.png" alt="SPART Original Replacement" className="h-8 w-auto block" />
             </a>
           </nav>
 
@@ -568,7 +568,7 @@ export function LandingPage() {
 
               <div className="mt-10">
                 <h4 className="text-white text-xs font-bold uppercase tracking-[0.2em] mb-5">Private Label</h4>
-                <img src="/images/spart-logo.png" alt="SPART Original Replacement" className="h-7 opacity-40 hover:opacity-70 transition-opacity do-spart-logo-filter" />
+                <img src="/images/spart-logo.png" alt="SPART Original Replacement" className="h-9 w-auto rounded-md opacity-90 hover:opacity-100 transition-opacity" />
               </div>
             </div>
 
