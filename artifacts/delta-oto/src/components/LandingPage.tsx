@@ -114,6 +114,14 @@ const CSS = `
   }
   .do-nav-link:hover::after { width: 100%; }
 
+  .do-page a, .do-page button { outline: none; }
+  .do-page a:focus-visible,
+  .do-page button:focus-visible {
+    outline: 2px solid #2547B5;
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
+
   .do-hero-stripe {
     position: absolute;
     top: 0; right: 0;
@@ -178,7 +186,7 @@ function useCounter(target: number, duration = 1600, start = false) {
   return val;
 }
 
-function MetricItem({ number, suffix = "", label, delay = "0ms" }: { number: number; suffix?: string; label: string; delay?: string }) {
+function MetricItem({ number, suffix = "", label, delay = "0ms", plus = false }: { number: number; suffix?: string; label: string; delay?: string; plus?: boolean }) {
   const [started, setStarted] = useState(false);
   const divRef = useRef<HTMLDivElement>(null);
   const count = useCounter(number, 1800, started);
@@ -191,7 +199,7 @@ function MetricItem({ number, suffix = "", label, delay = "0ms" }: { number: num
     <div ref={divRef} className="text-center px-10 py-10 md:py-0 relative" style={{ transitionDelay: delay }}>
       <div className="do-metric-num text-6xl md:text-7xl xl:text-8xl font-black mb-3 leading-none tracking-tighter">
         {started ? `${suffix}${count}` : `${suffix}0`}
-        {number === 250 && "+"}
+        {plus && "+"}
       </div>
       <div className="text-slate-600 text-sm font-medium tracking-widest uppercase leading-relaxed max-w-[180px] mx-auto">{label}</div>
     </div>
@@ -225,7 +233,7 @@ export function LandingPage() {
         className="sticky top-0 z-50 transition-all duration-300 bg-white/90 backdrop-blur-md border-b border-slate-200"
         style={{ ...(scrolled ? { background: "rgba(255,255,255,0.98)", borderColor: "rgba(15,23,42,0.1)", boxShadow: "0 4px 24px rgba(15,23,42,0.08)" } : {}) }}
       >
-        <div className="max-w-7xl mx-auto px-8 h-[72px] flex items-center justify-between gap-8">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 h-[72px] flex items-center justify-between gap-8">
           <a href="#" className="flex items-center shrink-0">
             <img
               src="/images/delta-oto-logo.png"
@@ -269,7 +277,7 @@ export function LandingPage() {
         <div className="absolute inset-0 do-grid-bg opacity-60"></div>
         <div className="absolute left-0 top-0 w-[3px] h-full bg-gradient-to-b from-transparent via-[#1B3A8F] to-transparent opacity-60"></div>
 
-        <div className="w-full max-w-7xl mx-auto px-16 relative z-10 pt-20 pb-32">
+        <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 relative z-10 pt-20 pb-32">
           <div className="max-w-4xl">
             <div ref={ref} className="do-reveal flex items-center gap-3 mb-8">
               <div className="w-8 h-[2px] bg-[#4d74d6]"></div>
@@ -297,11 +305,11 @@ export function LandingPage() {
             </p>
 
             <div ref={ref} className="do-reveal do-d3 flex flex-wrap gap-4 items-center">
-              <button className="bg-[#1B3A8F] hover:bg-[#2547B5] text-white font-semibold px-8 py-4 rounded text-base transition-all duration-200 flex items-center gap-2.5 group shadow-[0_0_32px_rgba(27,58,143,0.3)] hover:shadow-[0_0_48px_rgba(27,58,143,0.45)]">
+              <button className="bg-[#1B3A8F] hover:bg-[#2547B5] text-white font-semibold px-8 py-4 rounded-md text-base transition-all duration-200 flex items-center gap-2.5 group shadow-[0_0_32px_rgba(27,58,143,0.3)] hover:shadow-[0_0_48px_rgba(27,58,143,0.45)]">
                 Operasyon Gücümüzü İnceleyin
                 <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
-              <button className="text-gray-200 hover:text-white text-base font-medium flex items-center gap-2 border border-white/15 hover:border-white/30 px-8 py-4 rounded transition-all duration-200">
+              <button className="text-gray-200 hover:text-white text-base font-medium flex items-center gap-2 border border-white/15 hover:border-white/30 px-8 py-4 rounded-md transition-all duration-200">
                 Hakkımızda
               </button>
             </div>
@@ -331,16 +339,11 @@ export function LandingPage() {
         <div className="absolute inset-0 do-grid-bg-light"></div>
         <div className="absolute left-0 top-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#1B3A8F]/40 to-transparent"></div>
 
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate-200">
-            <MetricItem number={250} suffix="" label="Ulusal ve Uluslararası Marka Referansı" delay="0ms" />
-            <div className="text-center px-10 py-10 md:py-0">
-              <div className="do-metric-num text-6xl md:text-7xl xl:text-8xl font-black mb-3 leading-none tracking-tighter">
-                81+
-              </div>
-              <div className="text-slate-600 text-sm font-medium tracking-widest uppercase leading-relaxed max-w-[180px] mx-auto">Kesintisiz Dağıtım<br/>ve Lojistik Ağı</div>
-            </div>
-            <MetricItem number={1976} suffix="" label="Kuruluş ve Sektörel Liderlik" delay="160ms" />
+            <MetricItem number={250} plus label="Ulusal ve Uluslararası Marka Referansı" delay="0ms" />
+            <MetricItem number={81} plus label="Kesintisiz Dağıtım ve Lojistik Ağı" delay="80ms" />
+            <MetricItem number={1976} label="Kuruluş ve Sektörel Liderlik" delay="160ms" />
           </div>
         </div>
       </section>
@@ -350,7 +353,7 @@ export function LandingPage() {
         <div className="absolute inset-0 do-grid-bg opacity-40"></div>
         <div className="absolute right-0 top-0 w-1/2 h-full bg-gradient-to-l from-white/5 to-transparent pointer-events-none"></div>
 
-        <div className="max-w-7xl mx-auto px-6 relative z-10">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
           <div className="flex flex-col lg:flex-row items-center gap-20">
             <div className="lg:w-1/2">
               <p ref={ref} className="do-reveal text-blue-200 text-xs font-bold uppercase tracking-[0.3em] mb-5 flex items-center gap-3">
@@ -414,7 +417,7 @@ export function LandingPage() {
         </div>
         <div className="absolute inset-0 do-grid-bg"></div>
 
-        <div className="max-w-7xl mx-auto px-6 py-28 relative z-10 w-full">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-28 relative z-10 w-full">
           <div className="max-w-2xl">
             <p ref={ref} className="do-reveal text-[#7d9bea] text-xs font-bold uppercase tracking-[0.3em] mb-5 flex items-center gap-3">
               <span className="w-8 h-[2px] bg-[#4d74d6] inline-block"></span>
@@ -433,7 +436,7 @@ export function LandingPage() {
 
             <div ref={ref} className="do-reveal do-d4 mt-10 flex flex-wrap gap-3">
               {["Tam Günlük Dağıtım", "Soğuk Zincir", "Stok Optimizasyonu", "İhracat Lojistiği"].map(chip => (
-                <span key={chip} className="text-xs text-gray-300 border border-white/10 rounded px-3 py-1.5 font-medium">{chip}</span>
+                <span key={chip} className="text-xs text-gray-300 border border-white/10 hover:border-white/25 hover:text-white rounded-md px-3 py-1.5 font-medium transition-colors duration-200">{chip}</span>
               ))}
             </div>
           </div>
@@ -442,7 +445,7 @@ export function LandingPage() {
 
       {/* AGENDA & VISION (light) */}
       <section className="py-28 bg-white">
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between mb-14 gap-6">
             <div>
               <p ref={ref} className="do-reveal text-[#1B3A8F] text-xs font-bold uppercase tracking-[0.3em] mb-4 flex items-center gap-3">
@@ -508,7 +511,7 @@ export function LandingPage() {
       <section className="relative py-24 bg-[#1B3A8F] overflow-hidden text-white">
         <div className="absolute inset-0 do-grid-bg opacity-30"></div>
         <div className="absolute -right-20 top-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-white/5 blur-3xl pointer-events-none"></div>
-        <div className="max-w-7xl mx-auto px-6 relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
           <div>
             <h2 ref={ref} className="do-reveal text-3xl md:text-4xl font-black text-white tracking-tight">
               İş ortağımız olmak ister misiniz?
@@ -518,11 +521,11 @@ export function LandingPage() {
             </p>
           </div>
           <div ref={ref} className="do-reveal do-d2 flex gap-4 shrink-0">
-            <button className="bg-white text-[#1B3A8F] font-bold px-8 py-4 rounded hover:bg-gray-100 transition-colors text-sm flex items-center gap-2 group">
+            <button className="bg-white text-[#1B3A8F] font-bold px-8 py-4 rounded-md hover:bg-gray-100 transition-colors text-sm flex items-center gap-2 group">
               B2B Portal
               <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
             </button>
-            <button className="border border-white/30 hover:border-white/60 text-white font-medium px-8 py-4 rounded transition-colors text-sm">
+            <button className="border border-white/30 hover:border-white/60 text-white font-medium px-8 py-4 rounded-md transition-colors text-sm">
               İletişim
             </button>
           </div>
@@ -531,7 +534,7 @@ export function LandingPage() {
 
       {/* FOOTER (dark) */}
       <footer className="bg-[#0a0c11] pt-20 pb-10 border-t border-white/5 text-white">
-        <div className="max-w-7xl mx-auto px-6">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-14 mb-16">
 
             <div>
