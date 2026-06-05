@@ -34,7 +34,9 @@ _Describe the high-level user-facing capabilities of this app once they exist._
 
 ## User preferences
 
-_Populate as you build — explicit user instructions worth remembering across sessions._
+- Delta Oto landing page: all copy in Turkish, no emojis.
+- Brand accent is Delta navy (`#1B3A8F`, hover `#2547B5`). Do NOT use red as a brand color ("kırmızı bizlik değil").
+- Theme is "karma ritim" (mixed rhythm): sections alternate dark → light → navy → dark → light → navy → dark. Avoid an all-dark page.
 
 ## Gotchas
 
