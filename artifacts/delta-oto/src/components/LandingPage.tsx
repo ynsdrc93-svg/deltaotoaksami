@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { ChevronRight, ArrowRight, MapPin, Mail, Phone, Globe, Truck, Shield, Zap } from "lucide-react";
+import { ChevronRight, ArrowRight, MapPin, Mail, Phone, Globe, Truck, Shield, Zap, Network } from "lucide-react";
 
 const CSS = `
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
@@ -122,6 +122,51 @@ const CSS = `
     border-radius: 6px;
   }
 
+  @keyframes do-sweep {
+    0% { transform: translateX(-150%) skewX(-14deg); opacity: 0; }
+    16% { opacity: 1; }
+    52% { opacity: 0; }
+    100% { transform: translateX(280%) skewX(-14deg); opacity: 0; }
+  }
+  .do-beam {
+    position: absolute; top: 0; bottom: 0; left: 0;
+    width: 26%;
+    background: linear-gradient(90deg, transparent, rgba(125,155,234,0.16), transparent);
+    filter: blur(8px);
+    pointer-events: none;
+    z-index: 1;
+    animation: do-sweep 9s ease-in-out infinite;
+  }
+  .do-beam-delay { animation-delay: 4.5s; }
+
+  .do-card-beam {
+    position: absolute; top: 0; bottom: 0; left: -70%;
+    width: 55%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.14), transparent);
+    transform: skewX(-16deg);
+    pointer-events: none;
+    z-index: 1;
+    transition: left 0.75s cubic-bezier(.22,1,.36,1);
+  }
+  .group:hover .do-card-beam { left: 140%; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .do-beam, .do-beam-delay { animation: none; opacity: 0; }
+    .do-ticker-inner { animation: none; }
+    .do-card-beam { display: none; }
+    .do-reveal, .do-reveal-left, .do-reveal-right {
+      opacity: 1 !important;
+      transform: none !important;
+      transition: none !important;
+    }
+    .do-card, .do-nav-link::after, .do-spart-badge { transition: none; }
+    .do-card:hover { transform: none; }
+    .animate-pulse { animation: none; }
+    .do-page *, .do-page *::before, .do-page *::after {
+      transition-duration: 0.001ms !important;
+    }
+  }
+
   .do-hero-stripe {
     position: absolute;
     top: 0; right: 0;
@@ -172,6 +217,10 @@ function useCounter(target: number, duration = 1600, start = false) {
   const [val, setVal] = useState(0);
   useEffect(() => {
     if (!start) return;
+    if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setVal(target);
+      return;
+    }
     let raf: number;
     const startTime = performance.now();
     const step = (now: number) => {
@@ -206,15 +255,76 @@ function MetricItem({ number, suffix = "", label, delay = "0ms", plus = false }:
   );
 }
 
+function useScrollProgress() {
+  const [p, setP] = useState(0);
+  useEffect(() => {
+    let raf = 0;
+    const update = () => {
+      const h = document.documentElement.scrollHeight - window.innerHeight;
+      setP(h > 0 ? Math.min(window.scrollY / h, 1) : 0);
+      raf = 0;
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => { window.removeEventListener("scroll", onScroll); window.removeEventListener("resize", onScroll); cancelAnimationFrame(raf); };
+  }, []);
+  return p;
+}
+
+function useParallax<T extends HTMLElement>(speed = 0.12) {
+  const ref = useRef<T | null>(null);
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let raf = 0;
+    const update = () => {
+      const el = ref.current;
+      if (el) {
+        const rect = el.getBoundingClientRect();
+        const offset = (rect.top + rect.height / 2 - window.innerHeight / 2) * speed;
+        el.style.transform = `translate3d(0, ${(-offset).toFixed(1)}px, 0) scale(1.16)`;
+      }
+      raf = 0;
+    };
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => { window.removeEventListener("scroll", onScroll); window.removeEventListener("resize", onScroll); cancelAnimationFrame(raf); };
+  }, [speed]);
+  return ref;
+}
+
+function CountUp({ target, suffix = "", duration = 1600, className = "" }: { target: number; suffix?: string; duration?: number; className?: string }) {
+  const [started, setStarted] = useState(false);
+  const ref = useRef<HTMLSpanElement>(null);
+  const count = useCounter(target, duration, started);
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setStarted(true); obs.disconnect(); } }, { threshold: 0.4 });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+  return <span ref={ref} className={className}>{started ? count : 0}{suffix}</span>;
+}
+
 export function LandingPage() {
   const ref = useReveal();
   const scrolled = useScrolled();
+  const progress = useScrollProgress();
+  const heroParallax = useParallax<HTMLImageElement>(0.12);
+  const opsParallax = useParallax<HTMLImageElement>(0.1);
 
   const tickerItems = ["250+ Marka", "81 İl + İhracat", "1976'dan Bu Yana", "Groupauto Üyesi", "Opar Ege Bölge Bayiliği", "Ümraniye Merkez", "Binek & Hafif Ticari", "Sıfır Hata Toleransı"];
 
   return (
     <div className="do-page min-h-screen bg-white text-slate-900 overflow-x-hidden">
       <style>{CSS}</style>
+
+      {/* SCROLL PROGRESS */}
+      <div className="fixed top-0 left-0 right-0 z-[60] h-[3px] bg-transparent pointer-events-none">
+        <div className="h-full bg-gradient-to-r from-[#1B3A8F] via-[#2547B5] to-[#7d9bea]" style={{ width: `${progress * 100}%` }}></div>
+      </div>
 
       {/* TICKER BAR */}
       <div className="bg-[#1B3A8F] py-2 overflow-hidden">
@@ -265,9 +375,10 @@ export function LandingPage() {
       <section className="relative min-h-screen flex items-center overflow-hidden bg-[#0e1016] text-white">
         <div className="absolute inset-0">
           <img
+            ref={heroParallax}
             src="/images/delta-oto-hero.png"
             alt=""
-            className="w-full h-full object-cover opacity-30"
+            className="w-full h-full object-cover opacity-30 will-change-transform"
             style={{ objectPosition: "center 40%" }}
           />
           <div className="absolute inset-0 bg-gradient-to-r from-[#0e1016] via-[#0e1016]/80 to-[#0e1016]/30"></div>
@@ -276,6 +387,7 @@ export function LandingPage() {
         <div className="do-hero-stripe"></div>
         <div className="absolute inset-0 do-grid-bg opacity-60"></div>
         <div className="absolute left-0 top-0 w-[3px] h-full bg-gradient-to-b from-transparent via-[#1B3A8F] to-transparent opacity-60"></div>
+        <div className="do-beam"></div>
 
         <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 relative z-10 pt-20 pb-32">
           <div className="max-w-4xl">
@@ -352,6 +464,7 @@ export function LandingPage() {
       <section className="py-28 relative overflow-hidden text-white" style={{ background: "linear-gradient(135deg, #1B3A8F 0%, #14275c 100%)" }}>
         <div className="absolute inset-0 do-grid-bg opacity-40"></div>
         <div className="absolute right-0 top-0 w-1/2 h-full bg-gradient-to-l from-white/5 to-transparent pointer-events-none"></div>
+        <div className="do-beam do-beam-delay"></div>
 
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
           <div className="flex flex-col lg:flex-row items-center gap-20">
@@ -367,14 +480,18 @@ export function LandingPage() {
                 Dünyanın en büyük yedek parça organizasyonlarından Groupauto'nun gücüyle, optimize edilmiş satın alma kapasitemizi birleştiriyoruz. Global vizyonumuzla, iş ortaklarımıza her geçen gün daha rekabetçi ve öncü çalışma olanakları sunuyoruz.
               </p>
 
-              <div ref={ref} className="do-reveal do-d3 mt-10 flex gap-8">
+              <div ref={ref} className="do-reveal do-d3 mt-12 flex gap-12">
                 {[
-                  { num: "35+", label: "Global Tedarikçi" },
-                  { num: "12", label: "Avrupa Ülkesi" },
-                ].map(({ num, label }) => (
+                  { target: 35, suffix: "+", label: "Global Tedarikçi" },
+                  { target: 12, suffix: "", label: "Avrupa Ülkesi" },
+                ].map(({ target, suffix, label }) => (
                   <div key={label}>
-                    <div className="text-2xl font-bold text-white mb-1">{num}</div>
-                    <div className="text-xs text-blue-200/70 uppercase tracking-wider">{label}</div>
+                    <div className="flex items-baseline">
+                      <CountUp target={target} className="text-4xl md:text-5xl font-black text-white tabular-nums tracking-tight" />
+                      <span className="text-3xl font-black text-[#7d9bea]">{suffix}</span>
+                    </div>
+                    <div className="w-9 h-[2px] bg-[#4d74d6] mt-3 mb-3"></div>
+                    <div className="text-[11px] text-blue-200/70 uppercase tracking-[0.18em]">{label}</div>
                   </div>
                 ))}
               </div>
@@ -382,20 +499,30 @@ export function LandingPage() {
 
             <div className="lg:w-1/2 flex flex-col sm:flex-row gap-5 w-full">
               {[
-                { label: "Groupauto International", sub: "Global Ağ" },
-                { label: "Groupauto Türkiye", sub: "Yerel Güç" },
+                { Icon: Globe, label: "Groupauto International", sub: "Global Ağ", desc: "Dünya genelinde entegre satın alma ve tedarik organizasyonu." },
+                { Icon: Network, label: "Groupauto Türkiye", sub: "Yerel Hakimiyet", desc: "Türkiye genelinde yaygın bayi ve dağıtım gücü." },
               ].map((item, i) => (
                 <div
                   key={item.label}
                   ref={ref}
-                  className={`do-reveal ${i === 1 ? "do-d2" : ""} flex-1 border border-white/15 rounded-lg p-10 flex flex-col items-center justify-center text-center gap-4 bg-white/10 backdrop-blur-sm hover:border-white/40 hover:bg-white/[0.14] transition-all duration-300 group min-h-[180px]`}
+                  className={`do-reveal ${i === 1 ? "do-d2" : "do-d1"} group relative flex-1 overflow-hidden rounded-xl border border-white/15 bg-white/[0.06] backdrop-blur-sm p-8 transition-all duration-500 hover:border-white/40 hover:bg-white/[0.1] hover:-translate-y-1.5 hover:shadow-[0_24px_60px_rgba(0,0,0,0.35)] min-h-[230px]`}
                 >
-                  <div className="w-10 h-10 rounded-full bg-white/15 flex items-center justify-center group-hover:bg-white/25 transition-colors">
-                    <Globe className="w-5 h-5 text-white" />
-                  </div>
-                  <div>
-                    <div className="font-bold text-white text-base">{item.label}</div>
-                    <div className="text-xs text-blue-200/70 mt-1 uppercase tracking-wider">{item.sub}</div>
+                  <div className="do-card-beam"></div>
+                  <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-white/10 to-transparent rounded-bl-[100%] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+                  <div className="relative z-10 flex flex-col h-full">
+                    <div className="flex items-center justify-between mb-7">
+                      <div className="w-12 h-12 rounded-lg bg-white/10 border border-white/15 flex items-center justify-center group-hover:bg-[#2547B5] group-hover:border-[#2547B5] group-hover:scale-105 transition-all duration-300">
+                        <item.Icon className="w-6 h-6 text-white" />
+                      </div>
+                      <span className="text-[11px] font-black tracking-[0.3em] text-blue-200/40 tabular-nums">0{i + 1}</span>
+                    </div>
+                    <div className="font-bold text-white text-lg leading-tight">{item.label}</div>
+                    <div className="text-[11px] text-[#7d9bea] mt-1.5 uppercase tracking-[0.2em] font-semibold">{item.sub}</div>
+                    <p className="text-sm text-blue-100/65 leading-relaxed font-light mt-4">{item.desc}</p>
+                    <div className="mt-auto pt-5 flex items-center gap-2 text-[12px] text-blue-200/50 group-hover:text-white transition-colors duration-300">
+                      <span className="w-5 h-[1.5px] bg-current"></span>
+                      Detaylı Bilgi
+                    </div>
                   </div>
                 </div>
               ))}
@@ -408,9 +535,10 @@ export function LandingPage() {
       <section className="relative min-h-[640px] flex items-center overflow-hidden bg-[#0e1016] text-white">
         <div className="absolute inset-0">
           <img
+            ref={opsParallax}
             src="/images/delta-oto-ops.png"
             alt="Operations"
-            className="w-full h-full object-cover opacity-25"
+            className="w-full h-full object-cover opacity-25 will-change-transform"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-[#0e1016] via-[#0e1016]/85 to-[#0e1016]/40"></div>
           <div className="absolute inset-0 bg-gradient-to-t from-[#0e1016] via-transparent to-transparent"></div>

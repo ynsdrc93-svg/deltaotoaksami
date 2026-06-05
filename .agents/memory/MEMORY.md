@@ -1,0 +1,1 @@
+- [Delta Oto motion & accessibility](delta-oto-motion.md) — every animation on the landing page must be guarded for prefers-reduced-motion (CSS media block + JS matchMedia).
