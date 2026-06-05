@@ -398,7 +398,7 @@ export function LandingPage() {
 
             <h1
               ref={ref}
-              className="do-reveal do-d1 text-5xl md:text-6xl lg:text-[72px] xl:text-[80px] font-black leading-[1.0] mb-6 tracking-[-0.02em]"
+              className="do-reveal do-d1 text-[34px] sm:text-5xl md:text-6xl lg:text-[72px] xl:text-[80px] font-black leading-[1.05] sm:leading-[1.0] mb-6 tracking-[-0.02em] break-words"
             >
               <span className="do-hero-line">50 YILDIR</span>
               <br />
