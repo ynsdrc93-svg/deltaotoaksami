@@ -235,7 +235,7 @@ export function LandingPage() {
         className="sticky top-0 z-50 transition-all duration-300 bg-[#0e1016]/90 backdrop-blur-md border-b border-white/5"
         style={{ ...(scrolled ? { background: "rgba(14,16,22,0.98)", borderColor: "rgba(255,255,255,0.08)", boxShadow: "0 4px 24px rgba(0,0,0,0.5)" } : {}) }}
       >
-        <div className="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between gap-6">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 h-16 sm:h-20 flex items-center justify-between gap-3 sm:gap-6">
 
           {/* Logo */}
           <div className="flex items-center shrink-0">
@@ -257,7 +257,7 @@ export function LandingPage() {
           </nav>
 
           {/* B2B Portal CTA */}
-          <a href="#" className="shrink-0 bg-[#1B3A8F] hover:bg-[#2547B5] text-white text-[13px] font-semibold px-5 py-2.5 rounded transition-colors duration-200 flex items-center gap-1.5 group">
+          <a href="#" className="shrink-0 bg-[#1B3A8F] hover:bg-[#2547B5] text-white text-xs sm:text-[13px] font-semibold px-3.5 sm:px-5 py-2 sm:py-2.5 rounded transition-colors duration-200 flex items-center gap-1.5 group whitespace-nowrap">
             B2B Portal
             <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
           </a>
