@@ -212,7 +212,7 @@ export function LandingPage() {
   const ref = useReveal();
   const scrolled = useScrolled();
 
-  const tickerItems = ["250+ Marka", "81 İl + İhracat", "1976'dan Bu Yana", "Groupauto Üyesi", "Opar Ege Bölge Bayiliği", "Ümraniye Merkez", "Binek & Hafif Ticari", "Sıfır Hata Toleransı"];
+  const tickerItems = ["250+ Marka", "81 İl + İhracat", "1976'dan Bu Yana", "Groupauto Üyesi", "Opar Ege Bölge Bayiliği", "Ümraniye Merkez", "Binek & Hafif Ticari", "Kesintisiz Lojistik"];
 
   return (
     <div className="do-page min-h-screen bg-[#0e1016] text-white overflow-x-hidden">
@@ -458,7 +458,7 @@ export function LandingPage() {
             </p>
             <h2 ref={ref} className="do-reveal do-d1 text-4xl md:text-5xl font-black text-white mb-8 leading-[1.1] tracking-tight">
               Kesintisiz Tedarik.<br />
-              <span className="text-[#1B3A8F]">Sıfır Hata Toleransı.</span>
+              <span className="text-[#1B3A8F]">Operasyonel Üstünlük.</span>
             </h2>
             <p ref={ref} className="do-reveal do-d2 text-[16px] text-gray-400 leading-[1.85] font-light mb-5">
               Otomotiv satış sonrası pazarında mazerete yer yoktur. Lojistiği sadece bir taşıma işlemi değil, iş ortaklarımız için stratejik bir rekabet avantajı olarak yönetiyoruz. Ümraniye'deki merkezimizden Türkiye'nin tamamına ve küresel pazarlara uzanan dağıtım ağımızla, binek ve hafif ticari araç gruplarında 250'den fazla markanın tedariğini sağlıyoruz.
