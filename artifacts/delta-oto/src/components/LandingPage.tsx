@@ -704,7 +704,7 @@ export function LandingPage() {
               </ul>
 
               <div className="mt-10">
-                <h4 className="text-white text-xs font-bold uppercase tracking-[0.2em] mb-5">Private Label</h4>
+                <h4 className="text-white text-xs font-bold tracking-[0.2em] mb-5">Private Label</h4>
                 <img src="/images/spart-logo.png" alt="SPART Original Replacement" className="h-9 w-auto rounded-md opacity-90 hover:opacity-100 transition-opacity" />
               </div>
             </div>
