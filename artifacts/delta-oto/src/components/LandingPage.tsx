@@ -315,7 +315,7 @@ export function LandingPage() {
   const heroParallax = useParallax<HTMLImageElement>(0.12);
   const opsParallax = useParallax<HTMLImageElement>(0.1);
 
-  const tickerItems = ["250+ Marka", "81 İl + İhracat", "1976'dan Bu Yana", "Groupauto Üyesi", "Opar Ege Bölge Bayiliği", "Ümraniye Merkez", "Binek & Hafif Ticari", "Kesintisiz Lojistik"];
+  const tickerItems = ["250+ Marka", "81 İl + İhracat", "Kuruluş 1976", "Groupauto Üyesi", "Opar Ege Bölge Bayiliği", "Ümraniye Merkez", "Binek & Hafif Ticari", "Kesintisiz Lojistik"];
 
   return (
     <div className="do-page min-h-screen bg-white text-slate-900 overflow-x-hidden">
@@ -396,7 +396,7 @@ export function LandingPage() {
           <div className="max-w-4xl">
             <div ref={ref} className="do-reveal flex items-center gap-3 mb-8">
               <div className="w-8 h-[2px] bg-[#4d74d6]"></div>
-              <span className="text-[#7d9bea] text-xs font-bold uppercase tracking-[0.3em]">1976 · 50 Yıllık Sektörel Güç</span>
+              <span className="text-[#7d9bea] text-xs font-bold uppercase tracking-[0.3em]">Kuruluş 1976 · Aftermarket Liderliği</span>
             </div>
 
             <h1
@@ -729,7 +729,7 @@ export function LandingPage() {
             <span>© 2026 Delta Oto. Tüm hakları saklıdır.</span>
             <div className="flex items-center gap-1.5">
               <div className="w-1.5 h-1.5 rounded-full bg-[#1B3A8F] animate-pulse"></div>
-              <span>50 Yıllık Sektörel Güç · 1976'dan Bu Yana</span>
+              <span>Türkiye Aftermarket'in Köklü Lideri</span>
             </div>
           </div>
         </div>

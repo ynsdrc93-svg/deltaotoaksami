@@ -212,7 +212,7 @@ export function LandingPage() {
   const ref = useReveal();
   const scrolled = useScrolled();
 
-  const tickerItems = ["250+ Marka", "81 İl + İhracat", "1976'dan Bu Yana", "Groupauto Üyesi", "Opar Ege Bölge Bayiliği", "Ümraniye Merkez", "Binek & Hafif Ticari", "Kesintisiz Lojistik"];
+  const tickerItems = ["250+ Marka", "81 İl + İhracat", "Kuruluş 1976", "Groupauto Üyesi", "Opar Ege Bölge Bayiliği", "Ümraniye Merkez", "Binek & Hafif Ticari", "Kesintisiz Lojistik"];
 
   return (
     <div className="do-page min-h-screen bg-[#0e1016] text-white overflow-x-hidden">
@@ -639,7 +639,7 @@ export function LandingPage() {
             <span>© 2026 Delta Oto. Tüm hakları saklıdır.</span>
             <div className="flex items-center gap-1.5">
               <div className="w-1.5 h-1.5 rounded-full bg-[#1B3A8F] animate-pulse"></div>
-              <span>Türkiye'nin Aftermarket Lideri · 1976'dan Bu Yana</span>
+              <span>Türkiye Aftermarket'in Köklü Lideri</span>
             </div>
           </div>
         </div>
