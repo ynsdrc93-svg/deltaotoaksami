@@ -298,7 +298,7 @@ export function LandingPage() {
               className="do-reveal flex items-center gap-3 mb-8"
             >
               <div className="w-8 h-[2px] bg-[#1B3A8F]"></div>
-              <span className="text-[#1B3A8F] text-xs font-bold uppercase tracking-[0.3em]">1976 · Türkiye'nin Aftermarket Lideri</span>
+              <span className="text-[#1B3A8F] text-xs font-bold uppercase tracking-[0.3em]">Kuruluş 1976 · Delta Oto</span>
             </div>
 
             {/* H1 */}
@@ -639,7 +639,7 @@ export function LandingPage() {
             <span>© 2026 Delta Oto. Tüm hakları saklıdır.</span>
             <div className="flex items-center gap-1.5">
               <div className="w-1.5 h-1.5 rounded-full bg-[#1B3A8F] animate-pulse"></div>
-              <span>Türkiye Aftermarket'in Köklü Lideri</span>
+              <span>Delta Oto · Kuruluş 1976</span>
             </div>
           </div>
         </div>
