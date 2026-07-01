@@ -538,28 +538,32 @@ export function LandingPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {PRODUCT_GROUPS.map(({ Icon, image, title, desc }, i) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-7 lg:gap-8">
+            {PRODUCT_GROUPS.map(({ image, title, desc }, i) => (
               <div
                 key={title}
                 ref={ref}
-                className={`do-reveal ${i % 4 === 1 ? "do-d1" : i % 4 === 2 ? "do-d2" : i % 4 === 3 ? "do-d3" : ""} do-card flex flex-col h-full bg-white border border-slate-200 rounded-xl overflow-hidden group transition-all duration-300 hover:-translate-y-1 hover:border-[#1B3A8F]/35 hover:shadow-[0_20px_44px_rgba(27,58,143,0.14)]`}
+                className={`do-reveal ${i % 4 === 1 ? "do-d1" : i % 4 === 2 ? "do-d2" : i % 4 === 3 ? "do-d3" : ""} do-card flex flex-col h-full bg-white border border-[#E6ECF4] rounded-[22px] overflow-hidden group transition-all duration-300 hover:-translate-y-1.5 hover:border-[#1B3A8F]/25 shadow-[0_12px_32px_rgba(15,35,70,0.06)] hover:shadow-[0_20px_44px_rgba(15,35,70,0.11)]`}
               >
-                <div className="relative w-full aspect-[16/10] overflow-hidden bg-[#f4f6f9]">
-                  <img
-                    src={image}
-                    alt={title}
-                    className="absolute inset-0 w-full h-full object-contain p-4 transition-transform duration-500 group-hover:scale-[1.04]"
-                  />
-                  <div className="absolute top-3 left-3 w-8 h-8 rounded-md bg-white/90 backdrop-blur-sm border border-slate-200 flex items-center justify-center shadow-sm">
-                    <Icon className="w-4 h-4 text-[#1B3A8F]" />
+                <div className="relative pt-5 px-5">
+                  <div
+                    className="relative w-full h-[170px] md:h-[184px] rounded-[18px] overflow-hidden flex items-center justify-center"
+                    style={{ background: "linear-gradient(180deg, #F7F9FC 0%, #EEF3F9 100%)" }}
+                  >
+                    <div className="absolute w-40 h-40 rounded-full bg-[#1B3A8F]/[0.07] blur-2xl"></div>
+                    <img
+                      src={image}
+                      alt={title}
+                      className="relative z-10 w-full h-full object-contain p-5 transition-transform duration-500 group-hover:scale-[1.04]"
+                    />
                   </div>
                 </div>
-                <div className="flex flex-col flex-1 p-6">
-                  <h3 className="font-bold text-slate-900 text-base mb-2 leading-snug">{title}</h3>
-                  <p className="text-[13px] text-slate-600 leading-relaxed mb-4 font-light flex-1">{desc}</p>
-                  <a href="#" className="inline-flex items-center gap-1.5 text-[13px] text-[#1B3A8F] font-medium">
-                    Detaylı İncele <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                <div className="flex flex-col flex-1 px-6 py-6">
+                  <h3 className="font-extrabold text-[#0B1328] text-[22px] leading-snug mb-2.5">{title}</h3>
+                  <p className="text-[15px] text-[#66758A] leading-[1.65] mb-5 flex-1">{desc}</p>
+                  <a href="#" className="inline-flex items-center gap-1.5 text-[15px] text-[#1B3A8F] font-bold group/link">
+                    Detaylı İncele
+                    <ArrowRight className="w-4 h-4 transition-transform group-hover/link:translate-x-1" />
                   </a>
                 </div>
               </div>

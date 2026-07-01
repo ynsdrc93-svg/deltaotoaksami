@@ -1,0 +1,92 @@
+Ürün Grupları kartlarını daha estetik, modern ve premium görünecek şekilde revize et.
+
+Şu an kartlar fazla standart ve kaba görünüyor. Görseller doğru ama kart tasarımı daha kurumsal, şık ve otomotiv yedek parça distribütörü sitesine uygun olmalı.
+
+Yapılacaklar:
+
+1. Kart Genel Tasarımı
+- Kartları daha modern premium hale getir.
+- Kart border’ı çok belirgin olmasın; #E6ECF4 gibi çok ince ve soft olsun.
+- Kart arka planı beyaz olsun.
+- Kart radius 20-24px aralığında olsun.
+- Çok hafif shadow kullan:
+  0 12px 32px rgba(15, 35, 70, 0.06)
+- Hover’da:
+  kart 4-6px yukarı kalksın,
+  shadow biraz artsın,
+  border Delta mavisine hafif yaklaşsın.
+- Kartlar eşit yükseklikte ve dengeli grid içinde dursun.
+
+2. Görsel Alanı
+- Her kartın üstünde ürün görseli daha premium bir görsel bant içinde yer alsın.
+- Görsel alanı kartın üst kısmında tam genişlikte olsun, ama kart kenarlarına çok yapışmasın.
+- Görsel alanı için iç padding kullan:
+  üst/sağ/sol 18-22px.
+- Görsel bir kutu içinde dursun:
+  background: linear-gradient(180deg, #F7F9FC 0%, #EEF3F9 100%)
+  border-radius: 18px
+- Görseller aynı yükseklikte crop edilsin.
+- Görsel yüksekliği desktop’ta yaklaşık 170-190px olsun.
+- object-fit: contain kullan; ürünler kesilmesin.
+- Görselin arkasına çok hafif radial glow / mavi ışık efekti eklenebilir.
+- Görsel karttan kopuk fotoğraf gibi değil, kartın doğal parçası gibi görünmeli.
+
+3. İkon Kullanımı
+- Şu an sol üstteki ikonlar görselin üstünde gereksiz duruyor.
+- İkonları ya tamamen kaldır ya da kartın metin alanında küçük kategori işareti olarak kullan.
+- Tercihim: ikonları kaldır, çünkü görseller zaten kategori anlatıyor.
+- Eğer ikon kalacaksa:
+  36x36 px küçük olsun,
+  metin alanında başlığın yanında veya üstünde dursun,
+  görselin üstüne binmesin.
+
+4. Metin Alanı
+- Metin alanında padding 24-28px olsun.
+- Başlık daha dengeli:
+  font-size 22-24px,
+  font-weight 700/800,
+  color #0B1328.
+- Açıklama:
+  font-size 15-16px,
+  line-height 1.65,
+  color #66758A.
+- Başlık ve açıklama arasında 10-12px boşluk olsun.
+- Açıklamalar 2 satır civarında kalsın, kartlar uzamasın.
+
+5. “Detaylı İncele” CTA
+- Şu an “Detaylı İncele” bazı kartlarda input/buton gibi çizgili görünüyor; bunu düzelt.
+- CTA sade text link gibi olsun.
+- Renk Delta mavisi.
+- Font-weight 700.
+- Yanında küçük ok ikonu olabilir.
+- Hover’da ok 4px sağa hareket etsin.
+- CTA kartın altına hizalansın.
+- Kart yüksekliği eşit olsun diye metin alanında flex kullan:
+  content üstte, CTA altta.
+
+6. Layout
+- Desktop’ta 4 kolon korunabilir.
+- Kartlar arası boşluk 28-32px olsun.
+- Bölüm üst başlığı ve açıklamasıyla kart grid arasında yeterli ama abartısız boşluk olsun.
+- Kartların görsel ağırlığı daha dengeli olsun; sayfa daha az boş, daha premium görünsün.
+
+7. Alternatif Kart Stili
+Kart yapısı şu sırada olsun:
+- Üstte görsel alanı
+- Altta içerik alanı
+- Başlık
+- Açıklama
+- Detaylı İncele linki
+
+Örnek görünüm:
+[Premium rounded card]
+  [soft grey image panel with product image]
+  [title]
+  [description]
+  [Detaylı İncele →]
+
+8. Genel Tasarım Dili
+- Görünüm “AI ile hızlı yapılmış kartlar” gibi değil, profesyonel otomotiv aftermarket kurumsal sitesi gibi olmalı.
+- Beyaz, açık gri, Delta mavisi ve koyu lacivert dengeli kullanılmalı.
+- Görseller ön plana çıksın ama kartlar katalog gibi kalabalık olmasın.
+- Minimal, premium, temiz ve güvenilir bir tasarım hedefle.
