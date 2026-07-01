@@ -1,1 +1,2 @@
 - [Delta Oto motion & accessibility](delta-oto-motion.md) — every animation on the landing page must be guarded for prefers-reduced-motion (CSS media block + JS matchMedia).
+- [Delta Oto header nav breakpoint](delta-oto-header-breakpoint.md) — full desktop nav+CTAs gated on 2xl (1536px), not xl (1280px), to avoid overlap; re-screenshot at 1280x720 when changing header items.

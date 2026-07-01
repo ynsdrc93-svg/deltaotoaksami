@@ -1,0 +1,137 @@
+Delta Oto web sitesini Türkiye ve Avrupa’daki güçlü otomotiv yedek parça distribütörü siteleri seviyesine taşımanı istiyorum.
+
+Referans yaklaşım:
+- Martaş Otomotiv: güçlü kurumsal yapı, rakamlarla biz, iş birimleri, dağıtım merkezleri, tedarikçiler, B2B giriş.
+- Başbuğ: net bayi/B2B girişleri, lojistik merkezleri, aday müşteri formu, global deneyim vurgusu.
+- WM, Inter Cars, CARAT, Stahlgruber: güçlü hero mesajı, ürün/servis kategorileri, lojistik gücü, müşteri olma CTA’sı, dijital çözümler, workshop / bayi destek alanları, kurumsal güven ve ölçek hissi.
+
+Mevcut Delta sitesini aşağıdaki şekilde geliştir:
+
+1. Header / Navbar
+- Header’daki Delta logosunu belirgin şekilde büyüt.
+- Masaüstünde logo yüksekliği yaklaşık 58-72px aralığında olsun.
+- Mobilde logo 42-48px aralığında dengeli görünsün.
+- Header daha premium ve kurumsal dursun; beyaz zemin, mavi vurgu, hafif gölge.
+- Menü yapısını şu şekilde düzenle:
+  Anasayfa
+  Kurumsal
+  Ürün Grupları
+  Markalar
+  Lojistik Gücümüz
+  İş Ortaklığı
+  Haberler
+  İletişim
+- Sağ tarafta iki belirgin CTA olsun:
+  “B2B Giriş”
+  “İş Ortağı Olun”
+- Header sticky olsun ama sayfayı boğmasın.
+
+2. Hero Alanı
+- Eklediğim Delta depo görselini ana sayfada güçlü biçimde kullan.
+- Görseli hero background olarak veya sağ tarafta büyük görsel kart olarak kullan.
+- Görselin üzerine koyu mavi yarı transparan gradient overlay ekle.
+- Hero metni:
+  “Dünyanın Parçası, 50 Yıldır Aynı Çatı Altında.”
+- Alt metin:
+  “Delta Oto Aksamı, geniş ürün portföyü, güçlü marka iş birlikleri ve gelişmiş lojistik altyapısıyla otomotiv satış sonrası sektörüne güvenilir yedek parça çözümleri sunar.”
+- CTA butonları:
+  “Ürün Gruplarını İncele”
+  “B2B Giriş”
+- Hero premium, kurumsal, modern ve otomotiv distribütörü ölçeğini hissettirmeli.
+
+3. Güven / Rakamlarla Delta Bölümü
+Hero’dan hemen sonra “Rakamlarla Delta” bölümü oluştur.
+Kartlar:
+- 1976’dan beri sektör deneyimi
+- 50 yıla yaklaşan uzmanlık
+- Geniş ürün portföyü
+- Güçlü lojistik altyapı
+- Türkiye geneline yaygın hizmet
+Bu kartlar ikonlu, sade, mavi-beyaz kurumsal tasarımda olsun.
+Not: Gerçek net sayılar elimizde yoksa abartılı veri yazma; doğrulanmamış sayıları kullanma.
+
+4. Ürün Grupları Bölümü
+Ana sayfaya güçlü bir “Ürün Grupları” bölümü ekle.
+Kart yapısı kullan:
+- Fren Sistemleri
+- Filtre Grubu
+- Süspansiyon & Direksiyon
+- Motor Parçaları
+- Elektrik & Aydınlatma
+- Akü & Enerji
+- Yağ, Kimyasal & Bakım
+- Ağır Vasıta Ürünleri
+Her kartta minimal line icon, kısa açıklama ve “Detaylı İncele” linki olsun.
+
+5. Markalar Bölümü
+“Global ve Yerel Güçlü Marka İş Birlikleri” başlıklı bir alan oluştur.
+Marka logoları için placeholder grid kullan.
+Logo alanları eşit ölçüde, beyaz kart içinde, gri border ile premium dursun.
+Altına şu mesajı ekle:
+“Delta Oto, otomotiv satış sonrası sektörünün ihtiyaçlarına yönelik geniş marka ve ürün çeşitliliğiyle iş ortaklarına değer katar.”
+Gerçek logolar eklenene kadar sade logo placeholder bırak.
+
+6. Lojistik Gücümüz Bölümü
+Delta depo görselini burada ikinci kez küçük/parallax/arka plan olarak kullanabilirsin.
+Bu bölümde lojistik ve operasyon gücü vurgulansın:
+- Depolama ve sevkiyat altyapısı
+- Hızlı sipariş hazırlama
+- Güvenilir tedarik akışı
+- Bayi ve iş ortaklarına kesintisiz destek
+- Operasyonel verimlilik
+Tasarımda depo, sevkiyat, kamyon, raf sistemi ve dağıtım hissi ver.
+Kurumsal ama etkileyici olsun.
+
+7. İş Ortaklığı Bölümü
+Ana sayfaya “Delta ile İş Ortağı Olun” bölümü ekle.
+Bayi / servis / yedek parça satıcısı gibi profesyonel hedef kitleye konuşsun.
+Metin:
+“Güçlü ürün portföyü, güvenilir tedarik yapısı ve uzun yıllara dayanan sektör deneyimiyle Delta Oto, iş ortaklarının sürdürülebilir büyümesine katkı sağlar.”
+CTA:
+“Başvuru Formu”
+“Bizimle İletişime Geçin”
+
+8. Kurumsal Hikaye / Timeline
+Ana sayfada kısa bir “1976’dan Bugüne” timeline alanı oluştur.
+Örnek akış:
+1976 — Delta Oto’nun temelleri atıldı.
+Bugün — Geniş ürün portföyü ve güçlü lojistik altyapısıyla sektöre hizmet veriyor.
+Gelecek — Dijitalleşen, hızlı ve güvenilir yedek parça tedarik deneyimi.
+Bu alan çok uzun olmasın, premium bir marka hikayesi gibi dursun.
+
+9. Haberler / Duyurular Alanı
+Ana sayfaya 3 kartlık “Haberler ve Duyurular” bölümü ekle.
+Placeholder içerikler olabilir:
+- Sektörel gelişmeler
+- Marka iş birlikleri
+- Fuar ve etkinlik haberleri
+Kartlar görselli, tarihli ve sade olsun.
+
+10. Footer
+Footer’ı güçlendir:
+- Delta logo
+- Kısa kurumsal açıklama
+- Hızlı menü
+- Ürün Grupları
+- İletişim bilgileri
+- B2B Giriş
+- Sosyal medya ikonları
+- KVKK / Gizlilik / Çerez Politikası linkleri
+Footer koyu lacivert zeminli, premium ve kurumsal olsun.
+
+11. Tasarım Dili
+- Ana renkler: Delta mavi, beyaz, açık gri, koyu lacivert.
+- Kurumsal, güçlü, temiz, modern.
+- Çok fazla animasyon kullanma; sadece hafif fade-in, hover ve scroll reveal olabilir.
+- Otomotiv yedek parça sektörüne uygun ciddi ve güven veren bir görünüm olsun.
+- Site kesinlikle fazla boş, demo veya yapay görünmemeli.
+- Görseller profesyonel kartlar içinde kullanılmalı.
+- Header’daki logo mevcut halinden daha büyük ve daha prestijli görünmeli.
+
+12. Teknik
+- Responsive tasarım kusursuz olsun.
+- Mobilde menü düzgün açılıp kapansın.
+- Görsel optimizasyonu yapılsın.
+- SEO için title, description, og:title, og:description, og:image alanları düzenlensin.
+- Sayfa performansını bozacak ağır efektlerden kaçın.
+- Kod yapısını temiz, sürdürülebilir ve component bazlı düzenle.
