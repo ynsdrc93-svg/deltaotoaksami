@@ -312,7 +312,7 @@ function CountUp({ target, suffix = "", duration = 1600, className = "" }: { tar
   return <span ref={ref} className={className}>{started ? count : 0}{suffix}</span>;
 }
 
-const NAV_LINKS = ["Anasayfa", "Kurumsal", "Ürün Grupları", "Markalar", "Lojistik Gücümüz", "İş Ortaklığı", "Haberler", "İletişim"];
+const NAV_LINKS = ["Anasayfa", "Kurumsal", "Ürün Grupları", "Markalar", "Lojistik", "İş Ortaklığı", "İletişim"];
 
 const PRODUCT_GROUPS = [
   { Icon: Disc, title: "Fren Sistemleri", desc: "Balata, disk, kaliper ve fren hattı bileşenlerinde geniş kapsam." },
@@ -326,11 +326,11 @@ const PRODUCT_GROUPS = [
 ];
 
 const TRUST_CARDS = [
-  { Icon: Calendar, text: "1976'dan beri sektör deneyimi" },
-  { Icon: Shield, text: "50 yıla yaklaşan uzmanlık" },
-  { Icon: PackageCheck, text: "Geniş ürün portföyü" },
-  { Icon: Warehouse, text: "Güçlü lojistik altyapı" },
-  { Icon: MapPin, text: "Türkiye geneline yaygın hizmet" },
+  { Icon: Shield, text: "250+ Marka" },
+  { Icon: Truck, text: "81 İl + İhracat" },
+  { Icon: Calendar, text: "Kuruluş 1976" },
+  { Icon: Globe, text: "Groupauto Üyesi" },
+  { Icon: Handshake, text: "Opar Ege Bölge Bayiliği" },
 ];
 
 const NEWS_ITEMS = [
@@ -376,12 +376,12 @@ export function LandingPage() {
       </div>
 
       {/* TICKER BAR */}
-      <div className="bg-[#1B3A8F] py-2 overflow-hidden">
+      <div className="bg-[#1B3A8F] py-1.5 overflow-hidden">
         <div className="do-ticker-inner">
           {[...tickerItems, ...tickerItems].map((item, i) => (
-            <span key={i} className="px-8 text-xs font-bold uppercase tracking-[0.2em] text-white/90 flex items-center gap-8">
+            <span key={i} className="px-7 text-[10px] font-semibold uppercase tracking-[0.18em] text-white/85 flex items-center gap-7">
               {item}
-              <span className="w-1 h-1 rounded-full bg-white/40 inline-block"></span>
+              <span className="w-1 h-1 rounded-full bg-white/35 inline-block"></span>
             </span>
           ))}
         </div>
@@ -392,36 +392,33 @@ export function LandingPage() {
         className="sticky top-0 z-50 transition-all duration-300 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-[0_1px_0_rgba(15,23,42,0.04)]"
         style={{ ...(scrolled ? { background: "rgba(255,255,255,0.98)", borderColor: "rgba(15,23,42,0.1)", boxShadow: "0 4px 24px rgba(15,23,42,0.08)" } : {}) }}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-[72px] sm:h-20 flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-[76px] flex items-center justify-between">
           {/* Left: logo + nav */}
-          <div className="flex items-center gap-8 2xl:gap-10 min-w-0">
+          <div className="flex items-center gap-6 xl:gap-9 min-w-0">
             <a href="#" className="flex items-center shrink-0">
               <img
                 src="/images/delta-oto-logo.png"
                 alt="Delta Oto 50. Yıl"
-                className="h-[42px] sm:h-12 lg:h-[62px] xl:h-[68px] w-auto"
+                className="h-10 sm:h-11 lg:h-14 xl:h-16 w-auto"
               />
             </a>
-            <nav className="hidden 2xl:flex items-center gap-4 text-[13px] font-medium tracking-tight text-slate-600">
+            <nav className="hidden xl:flex items-center gap-5 text-[13px] font-medium tracking-tight text-slate-600">
               {NAV_LINKS.map(link => (
                 <a key={link} href="#" className="do-nav-link whitespace-nowrap hover:text-[#1B3A8F] transition-colors duration-200">{link}</a>
               ))}
             </nav>
           </div>
 
-          {/* Right: CTAs (desktop) + hamburger (mobile/tablet) */}
+          {/* Right: CTA (desktop) + hamburger (mobile/tablet) */}
           <div className="flex items-center gap-3 shrink-0">
-            <a href="#" className="hidden 2xl:flex items-center border border-slate-200 hover:border-[#1B3A8F]/40 text-slate-700 hover:text-[#1B3A8F] text-[13px] font-semibold px-4 py-2.5 rounded-md transition-all duration-200 whitespace-nowrap">
+            <a href="#" className="hidden xl:flex items-center bg-[#1B3A8F] hover:bg-[#2547B5] text-white text-[13px] font-semibold tracking-[0.01em] px-5 py-2.5 rounded-md transition-all duration-200 gap-1.5 shadow-sm hover:shadow-md group whitespace-nowrap">
               B2B Giriş
-            </a>
-            <a href="#" className="hidden 2xl:flex items-center bg-[#1B3A8F] hover:bg-[#2547B5] text-white text-[13px] font-semibold tracking-[0.01em] px-5 py-2.5 rounded-md transition-all duration-200 gap-1.5 shadow-sm hover:shadow-md group whitespace-nowrap">
-              İş Ortağı Olun
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
             </a>
             <button
               aria-label={mobileOpen ? "Menüyü kapat" : "Menüyü aç"}
               onClick={() => setMobileOpen(v => !v)}
-              className="2xl:hidden flex items-center justify-center w-10 h-10 rounded-md border border-slate-200 text-slate-700 hover:border-[#1B3A8F]/40 hover:text-[#1B3A8F] transition-colors"
+              className="xl:hidden flex items-center justify-center w-10 h-10 rounded-md border border-slate-200 text-slate-700 hover:border-[#1B3A8F]/40 hover:text-[#1B3A8F] transition-colors"
             >
               {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -430,7 +427,7 @@ export function LandingPage() {
 
         {/* MOBILE / TABLET MENU PANEL */}
         <div
-          className={`2xl:hidden overflow-hidden transition-[max-height] duration-300 ease-in-out border-t border-slate-200 bg-white ${mobileOpen ? "max-h-[calc(100vh-72px)] overflow-y-auto" : "max-h-0"}`}
+          className={`xl:hidden overflow-hidden transition-[max-height] duration-300 ease-in-out border-t border-slate-200 bg-white ${mobileOpen ? "max-h-[calc(100vh-64px)] overflow-y-auto" : "max-h-0"}`}
         >
           <nav className="flex flex-col px-4 sm:px-6 py-4">
             {NAV_LINKS.map(link => (
@@ -443,12 +440,9 @@ export function LandingPage() {
                 {link}
               </a>
             ))}
-            <div className="flex flex-col gap-3 mt-5">
-              <a href="#" className="w-full text-center border border-slate-200 hover:border-[#1B3A8F]/40 text-slate-700 text-sm font-semibold px-5 py-3 rounded-md transition-colors">
-                B2B Giriş
-              </a>
+            <div className="mt-5">
               <a href="#" className="w-full text-center bg-[#1B3A8F] hover:bg-[#2547B5] text-white text-sm font-semibold px-5 py-3 rounded-md transition-colors flex items-center justify-center gap-1.5">
-                İş Ortağı Olun
+                B2B Giriş
                 <ArrowRight className="w-3.5 h-3.5" />
               </a>
             </div>
@@ -463,11 +457,11 @@ export function LandingPage() {
             ref={heroParallax}
             src="/images/delta-oto-depot.jpg"
             alt="Delta Oto lojistik deposu ve dağıtım filosu"
-            className="w-full h-full object-cover opacity-45 will-change-transform"
+            className="w-full h-full object-cover opacity-70 will-change-transform"
             style={{ objectPosition: "center 55%" }}
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0e1016] via-[#0e1016]/85 to-[#1B3A8F]/30"></div>
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0e1016] via-[#0e1016]/20 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0e1016] via-[#0e1016]/60 to-[#1B3A8F]/20"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0e1016]/50 via-transparent to-transparent"></div>
         </div>
         <div className="do-hero-stripe"></div>
         <div className="absolute inset-0 do-grid-bg opacity-60"></div>
@@ -494,9 +488,9 @@ export function LandingPage() {
 
             <p
               ref={ref}
-              className="do-reveal do-d2 text-[17px] text-gray-300 leading-[1.75] max-w-2xl mb-12 font-light"
+              className="do-reveal do-d2 text-[17px] text-gray-200 leading-[1.75] max-w-2xl mb-12 font-light"
             >
-              Delta Oto Aksamı, geniş ürün portföyü, güçlü marka iş birlikleri ve gelişmiş lojistik altyapısıyla otomotiv satış sonrası sektörüne güvenilir yedek parça çözümleri sunar.
+              Delta Oto Aksamı, güçlü marka iş birlikleri, geniş ürün portföyü ve gelişmiş lojistik altyapısıyla otomotiv satış sonrası sektörüne güvenilir çözümler sunar.
             </p>
 
             <div ref={ref} className="do-reveal do-d3 flex flex-wrap gap-4 items-center">
@@ -504,8 +498,8 @@ export function LandingPage() {
                 Ürün Gruplarını İncele
                 <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
               </button>
-              <button className="text-gray-200 hover:text-white text-base font-medium flex items-center gap-2 border border-white/15 hover:border-white/30 px-8 py-4 rounded-md transition-all duration-200">
-                B2B Giriş
+              <button className="text-gray-100 hover:text-white text-base font-medium flex items-center gap-2 border border-white/25 hover:border-white/45 px-8 py-4 rounded-md transition-all duration-200">
+                İş Ortağı Olun
               </button>
             </div>
 
@@ -529,27 +523,48 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* TRUST CARDS — RAKAMLARLA DELTA (light) */}
+      {/* TRUST CARDS — RAKAMLARLA DELTA (light, split layout) */}
       <section className="relative bg-[#f4f6f9] border-y border-slate-200 py-16 md:py-20 overflow-hidden">
-        <div className="absolute inset-0 do-grid-bg-light"></div>
+        <div className="absolute inset-0 do-grid-bg-light opacity-60"></div>
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-          <div className="text-center mb-12">
-            <p ref={ref} className="do-reveal text-[#1B3A8F] text-xs font-bold uppercase tracking-[0.3em] mb-4">Rakamlarla Delta</p>
-            <h2 ref={ref} className="do-reveal do-d1 text-3xl md:text-4xl font-black text-slate-900 tracking-tight">Yarım Asırlık Sektörel Tecrübe</h2>
-          </div>
-          <div className="grid grid-cols-2 md:grid-cols-5 gap-4 md:gap-5">
-            {TRUST_CARDS.map(({ Icon, text }, i) => (
-              <div
-                key={text}
-                ref={ref}
-                className={`do-reveal ${i % 4 === 1 ? "do-d1" : i % 4 === 2 ? "do-d2" : i % 4 === 3 ? "do-d3" : ""} do-card bg-white border border-slate-200 rounded-xl p-6 flex flex-col items-center text-center gap-4`}
-              >
-                <div className="w-12 h-12 rounded-lg bg-[#1B3A8F]/10 flex items-center justify-center">
-                  <Icon className="w-6 h-6 text-[#1B3A8F]" />
-                </div>
-                <p className="text-sm font-semibold text-slate-700 leading-snug">{text}</p>
+          <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-10 lg:gap-14 items-center">
+            <div>
+              <p ref={ref} className="do-reveal text-[#1B3A8F] text-xs font-bold uppercase tracking-[0.3em] mb-4">Rakamlarla Delta</p>
+              <h2 ref={ref} className="do-reveal do-d1 text-3xl md:text-4xl font-black text-slate-900 tracking-tight mb-4">Yarım Asırlık Sektörel Tecrübe</h2>
+              <p ref={ref} className="do-reveal do-d2 text-slate-600 text-[15px] leading-relaxed max-w-lg mb-8 font-light">
+                1976'dan bu yana otomotiv yedek parça sektöründe güvenilir tedarik, güçlü marka iş birlikleri ve yaygın hizmet anlayışıyla faaliyet gösteriyoruz.
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {TRUST_CARDS.map(({ Icon, text }, i) => (
+                  <div
+                    key={text}
+                    ref={ref}
+                    className={`do-reveal ${i % 4 === 1 ? "do-d1" : i % 4 === 2 ? "do-d2" : i % 4 === 3 ? "do-d3" : ""} flex items-center gap-3 bg-white border border-slate-200 rounded-lg px-4 py-3.5 hover:border-[#1B3A8F]/30 transition-colors`}
+                  >
+                    <div className="w-9 h-9 rounded-md bg-[#1B3A8F]/10 flex items-center justify-center shrink-0">
+                      <Icon className="w-[18px] h-[18px] text-[#1B3A8F]" />
+                    </div>
+                    <p className="text-sm font-semibold text-slate-700 leading-snug">{text}</p>
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
+
+            <div ref={ref} className="do-reveal do-d2 relative rounded-2xl overflow-hidden shadow-[0_24px_60px_rgba(15,23,42,0.12)] min-h-[280px] lg:min-h-[360px]">
+              <img
+                src="/images/delta-oto-depot.jpg"
+                alt="Delta Oto depo ve sevkiyat operasyonu"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#0e1016]/70 via-[#0e1016]/10 to-transparent"></div>
+              <div className="absolute inset-0 bg-gradient-to-r from-[#1B3A8F]/20 to-transparent"></div>
+              <div className="absolute bottom-6 left-6 right-6 flex items-center gap-3 text-white">
+                <div className="w-10 h-10 rounded-lg bg-white/15 backdrop-blur-sm border border-white/20 flex items-center justify-center">
+                  <Warehouse className="w-5 h-5 text-white" />
+                </div>
+                <span className="text-sm font-semibold tracking-tight">Ümraniye Lojistik ve Dağıtım Merkezi</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -577,14 +592,15 @@ export function LandingPage() {
               <div
                 key={title}
                 ref={ref}
-                className={`do-reveal ${i % 4 === 1 ? "do-d1" : i % 4 === 2 ? "do-d2" : i % 4 === 3 ? "do-d3" : ""} do-card bg-[#f4f6f9] border border-slate-200 rounded-xl p-7 group`}
+                className={`do-reveal ${i % 4 === 1 ? "do-d1" : i % 4 === 2 ? "do-d2" : i % 4 === 3 ? "do-d3" : ""} do-card relative bg-[#f4f6f9] border border-slate-200 rounded-xl p-7 group overflow-hidden transition-all duration-300 hover:border-[#1B3A8F]/30 hover:shadow-[0_16px_40px_rgba(27,58,143,0.14)]`}
               >
-                <div className="w-12 h-12 rounded-lg bg-white border border-slate-200 flex items-center justify-center mb-6 group-hover:border-[#1B3A8F]/40 group-hover:bg-[#1B3A8F]/5 transition-colors">
+                <Icon className="absolute -right-3 -top-3 w-28 h-28 text-[#1B3A8F]/[0.05] group-hover:text-[#1B3A8F]/[0.09] group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 pointer-events-none" strokeWidth={1} />
+                <div className="relative z-10 w-12 h-12 rounded-lg bg-white border border-slate-200 flex items-center justify-center mb-6 group-hover:border-[#1B3A8F]/40 group-hover:bg-[#1B3A8F]/5 transition-colors">
                   <Icon className="w-6 h-6 text-[#1B3A8F]" />
                 </div>
-                <h3 className="font-bold text-slate-900 text-base mb-2.5 leading-snug">{title}</h3>
-                <p className="text-[13px] text-slate-600 leading-relaxed mb-5 font-light">{desc}</p>
-                <a href="#" className="inline-flex items-center gap-1.5 text-[13px] text-[#1B3A8F] font-medium opacity-0 group-hover:opacity-100 transition-opacity">
+                <h3 className="relative z-10 font-bold text-slate-900 text-base mb-2.5 leading-snug">{title}</h3>
+                <p className="relative z-10 text-[13px] text-slate-600 leading-relaxed mb-5 font-light">{desc}</p>
+                <a href="#" className="relative z-10 inline-flex items-center gap-1.5 text-[13px] text-[#1B3A8F] font-medium opacity-0 group-hover:opacity-100 transition-opacity">
                   Detaylı İncele <ArrowRight className="w-3.5 h-3.5" />
                 </a>
               </div>
@@ -727,20 +743,19 @@ export function LandingPage() {
               Lojistik Gücümüz
             </p>
             <h2 ref={ref} className="do-reveal do-d1 text-4xl md:text-5xl font-black text-white mb-8 leading-[1.1] tracking-tight">
-              Kesintisiz Tedarik.<br />
-              <span className="text-[#7d9bea]">Operasyonel Üstünlük.</span>
+              Güvenilir Tedarik,<br />
+              <span className="text-[#7d9bea]">Güçlü Operasyon.</span>
             </h2>
             <p ref={ref} className="do-reveal do-d2 text-[16px] text-gray-300 leading-[1.85] font-light mb-5">
-              Otomotiv satış sonrası pazarında mazerete yer yoktur. Lojistiği sadece bir taşıma işlemi değil, iş ortaklarımız için stratejik bir rekabet avantajı olarak yönetiyoruz. Ümraniye'deki merkezimizden Türkiye'nin tamamına ve küresel pazarlara uzanan dağıtım ağımızla, binek ve hafif ticari araç gruplarında 250'den fazla markanın tedariğini sağlıyoruz.
+              Delta Oto, gelişmiş depolama ve sevkiyat altyapısıyla iş ortaklarına hızlı, düzenli ve sürdürülebilir yedek parça tedarik desteği sunar. Ümraniye'deki merkezimizden Türkiye'nin tamamına ve küresel pazarlara uzanan dağıtım ağımızla, binek ve hafif ticari araç gruplarında 250'den fazla markanın tedariğini sağlıyoruz.
             </p>
 
             <div ref={ref} className="do-reveal do-d3 mt-10 grid grid-cols-1 sm:grid-cols-2 gap-3">
               {[
-                { Icon: Warehouse, text: "Depolama ve sevkiyat altyapısı" },
-                { Icon: ClipboardCheck, text: "Hızlı sipariş hazırlama" },
-                { Icon: PackageCheck, text: "Güvenilir tedarik akışı" },
-                { Icon: Handshake, text: "Bayi ve iş ortaklarına kesintisiz destek" },
-                { Icon: Zap, text: "Operasyonel verimlilik" },
+                { Icon: Warehouse, text: "Geniş Depolama Altyapısı" },
+                { Icon: ClipboardCheck, text: "Hızlı Sipariş Hazırlama" },
+                { Icon: MapPin, text: "Türkiye Geneline Hizmet" },
+                { Icon: PackageCheck, text: "Güvenilir Tedarik Akışı" },
               ].map(({ Icon, text }) => (
                 <div key={text} className="flex items-center gap-3 text-sm text-gray-300 border border-white/10 hover:border-white/25 hover:text-white rounded-md px-4 py-3 font-medium transition-colors duration-200">
                   <Icon className="w-4 h-4 text-[#7d9bea] shrink-0" />
@@ -752,59 +767,30 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* İŞ ORTAKLIĞI (navy) */}
-      <section className="relative py-20 md:py-28 bg-[#1B3A8F] overflow-hidden text-white">
-        <div className="absolute inset-0 do-grid-bg opacity-30"></div>
-        <div className="absolute -right-20 top-1/2 -translate-y-1/2 w-96 h-96 rounded-full bg-white/5 blur-3xl pointer-events-none"></div>
+      {/* İŞ ORTAKLIĞI (light, minimal band) */}
+      <section className="relative py-12 md:py-14 bg-white border-y border-slate-200 overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-          <div className="max-w-3xl">
-            <p ref={ref} className="do-reveal text-blue-200 text-xs font-bold uppercase tracking-[0.3em] mb-5 flex items-center gap-3">
-              <span className="w-8 h-[2px] bg-blue-300 inline-block"></span>
-              İş Ortaklığı
-            </p>
-            <h2 ref={ref} className="do-reveal do-d1 text-3xl md:text-4xl lg:text-5xl font-black text-white tracking-tight leading-[1.1] mb-6">
-              Delta ile İş Ortağı Olun
-            </h2>
-            <p ref={ref} className="do-reveal do-d2 text-[17px] text-blue-100/85 leading-[1.8] font-light">
-              Güçlü ürün portföyü, güvenilir tedarik yapısı ve uzun yıllara dayanan sektör deneyimiyle Delta Oto, iş ortaklarının sürdürülebilir büyümesine katkı sağlar.
-            </p>
-            <div ref={ref} className="do-reveal do-d3 mt-10 flex flex-wrap gap-4">
-              <button className="bg-white text-[#1B3A8F] font-bold px-8 py-4 rounded-md hover:bg-gray-100 transition-colors text-sm flex items-center gap-2 group">
+          <div className="flex flex-col md:flex-row md:items-center justify-between gap-8">
+            <div className="flex items-start gap-4 max-w-xl">
+              <div className="w-8 h-[2px] bg-[#1B3A8F] mt-3 shrink-0"></div>
+              <div>
+                <h2 ref={ref} className="do-reveal text-2xl md:text-3xl font-black text-slate-900 tracking-tight leading-[1.15] mb-3">
+                  Delta ile İş Ortaklığınızı Güçlendirin
+                </h2>
+                <p ref={ref} className="do-reveal do-d1 text-[15px] text-slate-600 leading-relaxed font-light">
+                  Geniş ürün portföyümüz, güvenilir tedarik yapımız ve sektör deneyimimizle iş ortaklarımızın sürdürülebilir büyümesine katkı sağlıyoruz.
+                </p>
+              </div>
+            </div>
+            <div ref={ref} className="do-reveal do-d2 flex flex-wrap gap-3 shrink-0">
+              <button className="bg-[#1B3A8F] hover:bg-[#2547B5] text-white font-semibold px-6 py-3.5 rounded-md text-sm transition-colors flex items-center gap-2 group whitespace-nowrap">
                 Başvuru Formu
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
               </button>
-              <button className="border border-white/30 hover:border-white/60 text-white font-medium px-8 py-4 rounded-md transition-colors text-sm">
+              <button className="border border-slate-200 hover:border-[#1B3A8F]/40 text-slate-700 hover:text-[#1B3A8F] font-medium px-6 py-3.5 rounded-md text-sm transition-colors whitespace-nowrap">
                 Bizimle İletişime Geçin
               </button>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* TIMELINE — 1976'DAN BUGÜNE (light) */}
-      <section className="py-20 md:py-28 bg-white">
-        <div className="max-w-5xl mx-auto px-6 lg:px-8">
-          <div className="text-center mb-14">
-            <p ref={ref} className="do-reveal text-[#1B3A8F] text-xs font-bold uppercase tracking-[0.3em] mb-4">Kurumsal Hikaye</p>
-            <h2 ref={ref} className="do-reveal do-d1 text-3xl md:text-4xl font-black text-slate-900 tracking-tight">1976'dan Bugüne</h2>
-          </div>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {[
-              { year: "1976", title: "Temeller", desc: "Delta Oto'nun temelleri atıldı." },
-              { year: "Bugün", title: "Güçlü Altyapı", desc: "Geniş ürün portföyü ve güçlü lojistik altyapısıyla sektöre hizmet veriyor." },
-              { year: "Gelecek", title: "Dijital Vizyon", desc: "Dijitalleşen, hızlı ve güvenilir yedek parça tedarik deneyimi." },
-            ].map((item, i) => (
-              <div
-                key={item.year}
-                ref={ref}
-                className={`do-reveal ${i === 1 ? "do-d1" : i === 2 ? "do-d2" : ""} do-card bg-[#f4f6f9] border border-slate-200 rounded-xl p-8 text-center relative`}
-              >
-                <div className="text-2xl font-black text-[#1B3A8F] mb-3 tracking-tight">{item.year}</div>
-                <div className="w-8 h-[2px] bg-[#1B3A8F] mx-auto mb-4"></div>
-                <div className="font-bold text-slate-900 text-base mb-2">{item.title}</div>
-                <p className="text-[13px] text-slate-600 leading-relaxed font-light">{item.desc}</p>
-              </div>
-            ))}
           </div>
         </div>
       </section>

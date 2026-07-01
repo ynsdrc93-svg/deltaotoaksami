@@ -1,0 +1,162 @@
+Mevcut Delta Oto web sitesinde önceki tasarım diline geri dönerek bazı alanları revize etmeni istiyorum. Şu anki son versiyonda header yapısı yanlış değişti; ben önceki Delta Replit sitesindeki header düzenini istiyorum. Sadece logonun biraz daha büyük olmasını istemiştim.
+
+Referans alınacak eski site:
+http://asset-viewer-deltaoto.replit.app/
+
+Yapılacak revizyonlar:
+
+1. HEADER’I ESKİ YAPIYA GERİ DÖNDÜR
+- Header sadece büyük logodan oluşmasın.
+- Önceki Delta Replit sitesindeki header yapısını, menü hissini ve premium minimal düzeni geri getir.
+- Eski header’daki gibi kurumsal, dengeli, yatay ve kullanışlı bir navigasyon olsun.
+- Header’da logo, menü linkleri ve sağ tarafta aksiyon alanı dengeli yerleşsin.
+- Sadece Delta logosunu eski haline göre biraz büyüt.
+- Logo fazla devasa olmasın; premium görünmeli.
+- Desktop için logo yüksekliği yaklaşık 54-64px aralığında olsun.
+- Mobilde logo yaklaşık 40-46px aralığında olsun.
+- Header yüksekliği gereksiz büyümesin.
+- Şu anki gibi sadece logo + hamburger yapısı olmasın; desktop’ta menüler görünür olsun.
+- Mobilde hamburger olabilir ama desktop görünümde kurumsal menü yapısı korunmalı.
+- Üstteki mavi bilgi şeridi kullanılacaksa çok kalın durmasın; zarif, ince ve premium kalsın.
+
+Menü önerisi:
+Anasayfa
+Kurumsal
+Ürün Grupları
+Markalar
+Lojistik
+İş Ortaklığı
+İletişim
+
+Sağ tarafta küçük ama görünür CTA:
+B2B Giriş
+
+2. HERO ALANI
+- Hero alanında Delta depo görseli güçlü şekilde kullanılmaya devam etsin.
+- Ancak hero çok karanlık ve boş görünmesin.
+- Depo görselindeki Delta logosu ve operasyon hissi görünür kalmalı.
+- Yazı alanı okunaklı olsun ama görseli tamamen öldüren aşırı koyu overlay kullanılmasın.
+- Hero mesajı:
+  “Dünyanın Parçası, 50 Yıldır Aynı Çatı Altında.”
+- Alt metin:
+  “Delta Oto Aksamı, güçlü marka iş birlikleri, geniş ürün portföyü ve gelişmiş lojistik altyapısıyla otomotiv satış sonrası sektörüne güvenilir çözümler sunar.”
+- CTA’lar:
+  “Ürün Gruplarını İncele”
+  “İş Ortağı Olun”
+
+3. RAKAMLARLA DELTA BÖLÜMÜNÜ GÖRSELLE DESTEKLE
+Şu anki ikinci görseldeki “Rakamlarla Delta” alanı sadece ikonlu kartlardan oluşuyor ve fazla boş/düz kalıyor. Bu alanı daha etkileyici hale getir.
+
+Yapılacaklar:
+- Kartları tamamen kaldırma, ama görsellerle destekle.
+- Bölümün sağında veya arka planında Delta depo / lojistik / raf / sevkiyat hissi veren görsel alanı olsun.
+- Kartlar daha yatay, daha kompakt ve premium görünsün.
+- Sadece ikon değil, küçük görsel dokunuşları veya operasyon fotoğrafı hissi kullanılmalı.
+- Kartlar çok büyük beyaz kutular gibi durmasın.
+- Daha dinamik bir grid veya split layout kullan.
+
+İçerik:
+- 250+ Marka
+- 81 İl + İhracat
+- Kuruluş 1976
+- Groupauto Üyesi
+- Opar Ege Bölge Bayiliği
+
+Başlık:
+“Rakamlarla Delta”
+
+Ana başlık:
+“Yarım Asırlık Sektörel Tecrübe”
+
+Açıklama:
+“1976’dan bu yana otomotiv yedek parça sektöründe güvenilir tedarik, güçlü marka iş birlikleri ve yaygın hizmet anlayışıyla faaliyet gösteriyoruz.”
+
+4. ÜRÜN GRUPLARI BÖLÜMÜNÜ GÖRSELLE ZENGİNLEŞTİR
+Şu anki üçüncü görseldeki ürün grupları alanı çok temiz ama fazla boş ve jenerik duruyor. Otomotiv yedek parça sitesinde ürün gruplarının görsel olarak daha güçlü hissettirmesi gerekiyor.
+
+Yapılacaklar:
+- Ürün grubu kartlarına sadece ikon değil, ilgili parçaları çağrıştıran görsel/texture/ürün fotoğrafı alanı ekle.
+- Kartların üst kısmında küçük görsel bant veya sağ üstte soluk ürün görseli kullanılabilir.
+- Kartlar hâlâ modern ve minimal kalsın; katalog gibi kalabalık olmasın.
+- Fren, filtre, süspansiyon, motor, elektrik, akü, yağ, ağır vasıta kategorileri görsel olarak ayrışmalı.
+- Kart hover durumunda hafif mavi gölge ve görsel zoom efekti olabilir.
+- Arka plan çok boş kalmasın ama premium sadelik korunsun.
+
+Ürün grupları:
+Fren Sistemleri
+Filtre Grubu
+Süspansiyon & Direksiyon
+Motor Parçaları
+Elektrik & Aydınlatma
+Akü & Enerji
+Yağ, Kimyasal & Bakım
+Ağır Vasıta Ürünleri
+
+Her kartta:
+- Başlık
+- 1 cümle kısa açıklama
+- “Detaylı İncele” küçük linki
+- İlgili görsel veya görsel doku
+
+5. “DELTA İLE İŞ ORTAĞI OLUN” ALANINI ESKİ SİTEDEKİ GİBİ MİNİMAL YAP
+Şu anki dördüncü görseldeki iş ortaklığı alanı çok büyük, ağır ve mavi blok gibi duruyor. Ben bu alanın önceki Delta Replit sitesindeki gibi daha minimal, ince ve zarif olmasını istiyorum.
+
+Yapılacaklar:
+- Devasa mavi blok tasarımı kaldır.
+- Daha ince, premium, yatay bir CTA bandı yap.
+- Beyaz veya çok açık gri zemin üzerinde mavi çizgi/detay kullanılabilir.
+- Sol tarafta kısa başlık ve açıklama, sağ tarafta iki buton olsun.
+- Bölüm yüksekliği çok fazla olmasın.
+- Daha kurumsal, sakin ve güven veren bir görünüm olsun.
+
+Başlık:
+“Delta ile İş Ortaklığınızı Güçlendirin”
+
+Açıklama:
+“Geniş ürün portföyümüz, güvenilir tedarik yapımız ve sektör deneyimimizle iş ortaklarımızın sürdürülebilir büyümesine katkı sağlıyoruz.”
+
+Butonlar:
+“Başvuru Formu”
+“Bizimle İletişime Geçin”
+
+6. “1976’DAN BUGÜNE” ALANINI YA KALDIR YA DA CİDDİ ŞEKİLDE GELİŞTİR
+Şu anki beşinci görseldeki “1976’dan Bugüne” alanı hiçbir şey ifade etmiyor. Çok boş ve jenerik duruyor.
+
+Öncelikli tercih:
+- Bu bölümü tamamen kaldır.
+- Yerine daha anlamlı bir “Lojistik Gücümüz” veya “Delta’nın Tedarik Gücü” bölümü getir.
+
+Yeni bölüm önerisi:
+Başlık:
+“Lojistik Gücümüz”
+
+Ana başlık:
+“Güvenilir Tedarik, Güçlü Operasyon”
+
+Açıklama:
+“Delta Oto, gelişmiş depolama ve sevkiyat altyapısıyla iş ortaklarına hızlı, düzenli ve sürdürülebilir yedek parça tedarik desteği sunar.”
+
+Bu bölümde:
+- Delta depo görseli kullanılsın.
+- Kamyon, depo, sevkiyat, ürün akışı hissi verilsin.
+- 3 veya 4 kısa özellik kartı olsun:
+  “Geniş Depolama Altyapısı”
+  “Hızlı Sipariş Hazırlama”
+  “Türkiye Geneline Hizmet”
+  “Güvenilir Tedarik Akışı”
+- Bu alan görsel ağırlıklı ve kurumsal görünmeli.
+
+Eğer timeline kalacaksa:
+- Sadece 3 boş kart şeklinde kalmasın.
+- Görsel, tarih, kısa hikaye ve operasyonel gelişim hissi eklensin.
+- Ama mümkünse bu bölümü kaldırıp lojistik gücü bölümüyle değiştir.
+
+7. GENEL TASARIM DÜZELTMELERİ
+- Şu an bazı bölümler çok boş ve kartlar çok büyük duruyor. Boşlukları azalt, oranları dengeli hale getir.
+- Mavi-beyaz kurumsal dil korunsun.
+- Çok fazla grid çizgisi kullanma; arka plan çizgileri varsa daha soft olsun.
+- Kartlar daha premium, daha az demo görünmeli.
+- Görseller profesyonel şekilde crop edilmeli.
+- Delta’nın distribütör, lojistik ve tedarik gücü her bölümde hissedilmeli.
+- Site “startup landing page” gibi değil, köklü otomotiv yedek parça distribütörü sitesi gibi görünmeli.
+- Desktop ve mobil responsive yapıyı kontrol et.
