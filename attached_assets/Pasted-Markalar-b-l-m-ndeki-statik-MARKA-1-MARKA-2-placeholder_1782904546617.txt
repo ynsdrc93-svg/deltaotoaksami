@@ -1,0 +1,50 @@
+Markalar bölümündeki statik “MARKA 1, MARKA 2...” placeholder kutularını kaldır.
+
+Bu alanı Delta Oto’nun tedarikçi marka logolarının döndüğü premium bir “logo marquee / logo wall” alanına çevir.
+
+Referans:
+https://www.deltaoto.com/tedarikcilerimiz
+
+İstek:
+- Delta Oto’nun mevcut tedarikçilerimiz sayfasındaki tüm marka logolarını kullan.
+- Logoları mümkünse bu sayfadan çek veya projeye eklenmiş logo assetleri varsa onları kullan.
+- Placeholder “MARKA 1” kutuları kesinlikle kalmasın.
+- Bölüm başlığı mevcut kalabilir:
+  “Global ve Yerel Güçlü Marka İş Birlikleri”
+- Alt açıklama:
+  “Delta Oto, otomotiv satış sonrası sektörünün ihtiyaçlarına yönelik geniş marka ve ürün çeşitliliğiyle iş ortaklarına değer katar.”
+
+Tasarım:
+- Arka plan çok açık gri / beyaz kalsın.
+- Logolar beyaz kartların içinde yer alsın.
+- Kartlar yuvarlatılmış köşeli, ince border’lı ve soft gölgeli olsun.
+- Logolar farklı boyutlarda geldiği için her biri aynı kart içinde object-fit: contain ile ortalansın.
+- Logo kartları 160x80 veya 180x90 px civarında olabilir.
+- Logolar temiz, okunaklı ve bozulmadan görünmeli.
+- Çok renkli logo kullanılıyorsa orijinal renkleri koru.
+- Görsel kalite düşükse kart içinde düzgün hizala, büyütüp pikselleştirme.
+
+Hareket:
+- Alan 3 satırlı sonsuz kayan logo bandı gibi çalışsın.
+- 1. satır soldan sağa aksın.
+- 2. satır sağdan sola aksın.
+- 3. satır soldan sağa daha yavaş aksın.
+- Satırlar arasında hafif boşluk olsun.
+- Animasyon kesintisiz loop olmalı.
+- Hover edildiğinde ilgili satır çok hafif yavaşlasın veya durabilir.
+- Hareket çok hızlı olmasın; premium ve sakin aksın.
+- Sağ ve sol kenarlarda soft fade mask kullan, logolar kenarlardan yumuşak girip çıksın.
+
+Responsive:
+- Desktop’ta 3 satır logo marquee görünsün.
+- Tablet’te 2 veya 3 satır korunabilir.
+- Mobilde 2 satır yeterli; logolar daha küçük olabilir.
+- Mobil performansını bozacak ağır animasyon kullanma.
+
+Teknik:
+- Tedarikçi logolarını doğrudan dış URL’den kullanmak sorun çıkarırsa, Replit projesinde attached_assets içine logo görsellerini indirip/ekleyip oradan kullan.
+- Logo listesini bir array olarak yönet.
+- Aynı logoları loop için iki kez çoğaltarak kesintisiz marquee yap.
+- CSS keyframes ile performanslı transform animasyonu kullan.
+- Layout shift olmaması için kartlara sabit width/height ver.
+- Eğer logolardan bazıları yüklenmezse kart boş kalmasın; o logoyu gizle.

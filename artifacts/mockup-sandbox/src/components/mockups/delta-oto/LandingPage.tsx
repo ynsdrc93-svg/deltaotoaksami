@@ -191,6 +191,33 @@ const CSS = `
   .do-logo-invert { filter: brightness(0) invert(1); }
   .do-spart-logo-filter { filter: brightness(0) invert(1) sepia(1) saturate(0) brightness(1.6); }
   .do-spart-dark { filter: brightness(0) saturate(0); opacity: 0.72; }
+
+  @keyframes do-marquee-ltr {
+    0% { transform: translateX(-50%); }
+    100% { transform: translateX(0); }
+  }
+  @keyframes do-marquee-rtl {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .do-marquee-row {
+    position: relative;
+    overflow: hidden;
+    -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
+    mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%);
+  }
+  .do-marquee-track {
+    display: flex;
+    width: max-content;
+    will-change: transform;
+  }
+  .do-marquee-track.do-mq-ltr { animation: do-marquee-ltr 46s linear infinite; }
+  .do-marquee-track.do-mq-rtl { animation: do-marquee-rtl 40s linear infinite; }
+  .do-marquee-track.do-mq-slow { animation-duration: 62s; }
+  .do-marquee-row:hover .do-marquee-track { animation-play-state: paused; }
+  @media (prefers-reduced-motion: reduce) {
+    .do-marquee-track { animation: none; }
+  }
 `;
 
 function useReveal() {
@@ -324,6 +351,50 @@ const PRODUCT_GROUPS = [
   { Icon: Droplet, image: "/images/oil-chemicals.png", title: "Yağ, Kimyasal & Bakım", desc: "Motor yağı, bakım ürünleri ve kimyasal çözümler." },
   { Icon: Truck, image: "/images/heavy-duty.png", title: "Ağır Vasıta Ürünleri", desc: "Ticari araç ve ağır vasıta yedek parça grubu." },
 ];
+
+const BRAND_LOGOS = [
+  "bosch", "valeo", "skf", "ngk", "denso", "mahle", "sachs", "trw", "hella", "febi",
+  "gates", "monroe", "philips", "osram", "delphi", "luk", "ina", "fag", "brembo", "contitech",
+  "mannfilter", "borgwarner", "corteco", "knecht", "lemforder", "swag", "gunsan", "optimal",
+  "filtron", "kale", "champion", "elring", "wahler", "vdo",
+].map((slug) => ({ slug, src: `/images/brands/${slug}.png` }));
+
+function splitIntoRows<T>(arr: T[], rows: number): T[][] {
+  const out: T[][] = Array.from({ length: rows }, () => []);
+  arr.forEach((item, i) => out[i % rows].push(item));
+  return out;
+}
+
+const BRAND_ROWS = splitIntoRows(BRAND_LOGOS, 3);
+
+function BrandLogoCard({ slug, src }: { slug: string; src: string }) {
+  const [failed, setFailed] = useState(false);
+  if (failed) return null;
+  return (
+    <div className="shrink-0 w-[160px] h-20 sm:w-[180px] sm:h-[90px] mx-3 bg-white border border-[#E6ECF4] rounded-xl shadow-[0_6px_18px_rgba(15,35,70,0.05)] flex items-center justify-center px-5 py-4">
+      <img
+        src={src}
+        alt={slug.toUpperCase()}
+        loading="lazy"
+        className="max-w-full max-h-full w-auto h-auto object-contain"
+        onError={() => setFailed(true)}
+      />
+    </div>
+  );
+}
+
+function BrandMarqueeRow({ logos, direction, slow }: { logos: { slug: string; src: string }[]; direction: "ltr" | "rtl"; slow?: boolean }) {
+  const doubled = [...logos, ...logos];
+  return (
+    <div className="do-marquee-row">
+      <div className={`do-marquee-track ${direction === "ltr" ? "do-mq-ltr" : "do-mq-rtl"} ${slow ? "do-mq-slow" : ""}`}>
+        {doubled.map((logo, i) => (
+          <BrandLogoCard key={`${logo.slug}-${i}`} slug={logo.slug} src={logo.src} />
+        ))}
+      </div>
+    </div>
+  );
+}
 
 const NEWS_ITEMS = [
   {
@@ -582,16 +653,12 @@ export function LandingPage() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-4 mb-10">
-            {Array.from({ length: 12 }).map((_, i) => (
-              <div
-                key={i}
-                ref={ref}
-                className={`do-reveal ${i % 4 === 1 ? "do-d1" : i % 4 === 2 ? "do-d2" : i % 4 === 3 ? "do-d3" : ""} h-20 bg-white border border-slate-200 rounded-lg flex items-center justify-center hover:border-[#1B3A8F]/30 transition-colors`}
-              >
-                <span className="text-[11px] font-bold uppercase tracking-widest text-slate-300">Marka {i + 1}</span>
-              </div>
-            ))}
+          <div ref={ref} className="do-reveal flex flex-col gap-4 sm:gap-5 mb-10 -mx-6 lg:-mx-8 px-0">
+            <BrandMarqueeRow logos={BRAND_ROWS[0]} direction="ltr" />
+            <BrandMarqueeRow logos={BRAND_ROWS[1]} direction="rtl" />
+            <div className="hidden sm:block">
+              <BrandMarqueeRow logos={BRAND_ROWS[2]} direction="ltr" slow />
+            </div>
           </div>
 
           <p ref={ref} className="do-reveal text-center text-slate-600 text-[15px] leading-relaxed max-w-2xl mx-auto font-light">
