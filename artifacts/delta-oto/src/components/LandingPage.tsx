@@ -325,14 +325,6 @@ const PRODUCT_GROUPS = [
   { Icon: Truck, title: "Ağır Vasıta Ürünleri", desc: "Ticari araç ve ağır vasıta yedek parça grubu." },
 ];
 
-const TRUST_CARDS = [
-  { Icon: Shield, text: "250+ Marka" },
-  { Icon: Truck, text: "81 İl + İhracat" },
-  { Icon: Calendar, text: "Kuruluş 1976" },
-  { Icon: Globe, text: "Groupauto Üyesi" },
-  { Icon: Handshake, text: "Opar Ege Bölge Bayiliği" },
-];
-
 const NEWS_ITEMS = [
   {
     date: "Mayıs 2026", tag: "Yeni Operasyon", Icon: Zap,
@@ -525,52 +517,6 @@ export function LandingPage() {
 
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2 opacity-40">
           <div className="w-[1px] h-10 bg-gradient-to-b from-transparent to-white animate-pulse"></div>
-        </div>
-      </section>
-
-      {/* TRUST CARDS — RAKAMLARLA DELTA (light, split layout) */}
-      <section className="relative bg-[#f4f6f9] border-y border-slate-200 py-16 md:py-20 overflow-hidden">
-        <div className="absolute inset-0 do-grid-bg-light opacity-60"></div>
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-[1.1fr_0.9fr] gap-10 lg:gap-14 items-center">
-            <div>
-              <p ref={ref} className="do-reveal text-[#1B3A8F] text-xs font-bold uppercase tracking-[0.3em] mb-4">Rakamlarla Delta</p>
-              <h2 ref={ref} className="do-reveal do-d1 text-3xl md:text-4xl font-black text-slate-900 tracking-tight mb-4">Yarım Asırlık Sektörel Tecrübe</h2>
-              <p ref={ref} className="do-reveal do-d2 text-slate-600 text-[15px] leading-relaxed max-w-lg mb-8 font-light">
-                1976'dan bu yana otomotiv yedek parça sektöründe güvenilir tedarik, güçlü marka iş birlikleri ve yaygın hizmet anlayışıyla faaliyet gösteriyoruz.
-              </p>
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                {TRUST_CARDS.map(({ Icon, text }, i) => (
-                  <div
-                    key={text}
-                    ref={ref}
-                    className={`do-reveal ${i % 4 === 1 ? "do-d1" : i % 4 === 2 ? "do-d2" : i % 4 === 3 ? "do-d3" : ""} flex items-center gap-3 bg-white border border-slate-200 rounded-lg px-4 py-3.5 hover:border-[#1B3A8F]/30 transition-colors`}
-                  >
-                    <div className="w-9 h-9 rounded-md bg-[#1B3A8F]/10 flex items-center justify-center shrink-0">
-                      <Icon className="w-[18px] h-[18px] text-[#1B3A8F]" />
-                    </div>
-                    <p className="text-sm font-semibold text-slate-700 leading-snug">{text}</p>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div ref={ref} className="do-reveal do-d2 relative rounded-2xl overflow-hidden shadow-[0_24px_60px_rgba(15,23,42,0.12)] min-h-[280px] lg:min-h-[360px]">
-              <img
-                src="/images/delta-oto-depot.jpg"
-                alt="Delta Oto depo ve sevkiyat operasyonu"
-                className="absolute inset-0 w-full h-full object-cover"
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0e1016]/70 via-[#0e1016]/10 to-transparent"></div>
-              <div className="absolute inset-0 bg-gradient-to-r from-[#1B3A8F]/20 to-transparent"></div>
-              <div className="absolute bottom-6 left-6 right-6 flex items-center gap-3 text-white">
-                <div className="w-10 h-10 rounded-lg bg-white/15 backdrop-blur-sm border border-white/20 flex items-center justify-center">
-                  <Warehouse className="w-5 h-5 text-white" />
-                </div>
-                <span className="text-sm font-semibold tracking-tight">Ümraniye Lojistik ve Dağıtım Merkezi</span>
-              </div>
-            </div>
-          </div>
         </div>
       </section>
 
