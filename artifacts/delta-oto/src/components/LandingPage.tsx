@@ -315,14 +315,14 @@ function CountUp({ target, suffix = "", duration = 1600, className = "" }: { tar
 const NAV_LINKS = ["Hakkımızda", "Tedarikçiler", "Operasyon ve Lojistik", "Kariyer", "İletişim"];
 
 const PRODUCT_GROUPS = [
-  { Icon: Disc, title: "Fren Sistemleri", desc: "Balata, disk, kaliper ve fren hattı bileşenlerinde geniş kapsam." },
-  { Icon: Filter, title: "Filtre Grubu", desc: "Yağ, hava, yakıt ve polen filtrelerinde tam ürün derinliği." },
-  { Icon: Settings, title: "Süspansiyon & Direksiyon", desc: "Amortisör, rotil ve direksiyon sistemi parçaları." },
-  { Icon: Cog, title: "Motor Parçaları", desc: "Motor bloğu, conta ve tahrik sistemi bileşenleri." },
-  { Icon: Zap, title: "Elektrik & Aydınlatma", desc: "Far, sensör ve elektrik sistemi ekipmanları." },
-  { Icon: BatteryCharging, title: "Akü & Enerji", desc: "Marka çeşitliliğiyle akü ve enerji çözümleri." },
-  { Icon: Droplet, title: "Yağ, Kimyasal & Bakım", desc: "Motor yağı, bakım ürünleri ve kimyasal çözümler." },
-  { Icon: Truck, title: "Ağır Vasıta Ürünleri", desc: "Ticari araç ve ağır vasıta yedek parça grubu." },
+  { Icon: Disc, image: "/images/brake-systems.png", title: "Fren Sistemleri", desc: "Balata, disk, kaliper ve fren hattı bileşenlerinde geniş kapsam." },
+  { Icon: Filter, image: "/images/filters.png", title: "Filtre Grubu", desc: "Yağ, hava, yakıt ve polen filtrelerinde tam ürün derinliği." },
+  { Icon: Settings, image: "/images/suspension-steering.png", title: "Süspansiyon & Direksiyon", desc: "Amortisör, rotil ve direksiyon sistemi parçaları." },
+  { Icon: Cog, image: "/images/engine-parts.png", title: "Motor Parçaları", desc: "Motor bloğu, conta ve tahrik sistemi bileşenleri." },
+  { Icon: Zap, image: "/images/electrical-lighting.png", title: "Elektrik & Aydınlatma", desc: "Far, sensör ve elektrik sistemi ekipmanları." },
+  { Icon: BatteryCharging, image: "/images/battery-energy.png", title: "Akü & Enerji", desc: "Marka çeşitliliğiyle akü ve enerji çözümleri." },
+  { Icon: Droplet, image: "/images/oil-chemicals.png", title: "Yağ, Kimyasal & Bakım", desc: "Motor yağı, bakım ürünleri ve kimyasal çözümler." },
+  { Icon: Truck, image: "/images/heavy-duty.png", title: "Ağır Vasıta Ürünleri", desc: "Ticari araç ve ağır vasıta yedek parça grubu." },
 ];
 
 const NEWS_ITEMS = [
@@ -539,21 +539,29 @@ export function LandingPage() {
           </div>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
-            {PRODUCT_GROUPS.map(({ Icon, title, desc }, i) => (
+            {PRODUCT_GROUPS.map(({ Icon, image, title, desc }, i) => (
               <div
                 key={title}
                 ref={ref}
-                className={`do-reveal ${i % 4 === 1 ? "do-d1" : i % 4 === 2 ? "do-d2" : i % 4 === 3 ? "do-d3" : ""} do-card relative bg-[#f4f6f9] border border-slate-200 rounded-xl p-7 group overflow-hidden transition-all duration-300 hover:border-[#1B3A8F]/30 hover:shadow-[0_16px_40px_rgba(27,58,143,0.14)]`}
+                className={`do-reveal ${i % 4 === 1 ? "do-d1" : i % 4 === 2 ? "do-d2" : i % 4 === 3 ? "do-d3" : ""} do-card flex flex-col h-full bg-white border border-slate-200 rounded-xl overflow-hidden group transition-all duration-300 hover:-translate-y-1 hover:border-[#1B3A8F]/35 hover:shadow-[0_20px_44px_rgba(27,58,143,0.14)]`}
               >
-                <Icon className="absolute -right-3 -top-3 w-28 h-28 text-[#1B3A8F]/[0.05] group-hover:text-[#1B3A8F]/[0.09] group-hover:scale-110 group-hover:rotate-6 transition-all duration-500 pointer-events-none" strokeWidth={1} />
-                <div className="relative z-10 w-12 h-12 rounded-lg bg-white border border-slate-200 flex items-center justify-center mb-6 group-hover:border-[#1B3A8F]/40 group-hover:bg-[#1B3A8F]/5 transition-colors">
-                  <Icon className="w-6 h-6 text-[#1B3A8F]" />
+                <div className="relative w-full aspect-[16/10] overflow-hidden bg-[#f4f6f9]">
+                  <img
+                    src={image}
+                    alt={title}
+                    className="absolute inset-0 w-full h-full object-contain p-4 transition-transform duration-500 group-hover:scale-[1.04]"
+                  />
+                  <div className="absolute top-3 left-3 w-8 h-8 rounded-md bg-white/90 backdrop-blur-sm border border-slate-200 flex items-center justify-center shadow-sm">
+                    <Icon className="w-4 h-4 text-[#1B3A8F]" />
+                  </div>
                 </div>
-                <h3 className="relative z-10 font-bold text-slate-900 text-base mb-2.5 leading-snug">{title}</h3>
-                <p className="relative z-10 text-[13px] text-slate-600 leading-relaxed mb-5 font-light">{desc}</p>
-                <a href="#" className="relative z-10 inline-flex items-center gap-1.5 text-[13px] text-[#1B3A8F] font-medium opacity-0 group-hover:opacity-100 transition-opacity">
-                  Detaylı İncele <ArrowRight className="w-3.5 h-3.5" />
-                </a>
+                <div className="flex flex-col flex-1 p-6">
+                  <h3 className="font-bold text-slate-900 text-base mb-2 leading-snug">{title}</h3>
+                  <p className="text-[13px] text-slate-600 leading-relaxed mb-4 font-light flex-1">{desc}</p>
+                  <a href="#" className="inline-flex items-center gap-1.5 text-[13px] text-[#1B3A8F] font-medium">
+                    Detaylı İncele <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+                  </a>
+                </div>
               </div>
             ))}
           </div>
