@@ -312,7 +312,7 @@ function CountUp({ target, suffix = "", duration = 1600, className = "" }: { tar
   return <span ref={ref} className={className}>{started ? count : 0}{suffix}</span>;
 }
 
-const NAV_LINKS = ["Anasayfa", "Kurumsal", "Ürün Grupları", "Markalar", "Lojistik", "İş Ortaklığı", "İletişim"];
+const NAV_LINKS = ["Hakkımızda", "Tedarikçiler", "Operasyon ve Lojistik", "Kariyer", "İletişim"];
 
 const PRODUCT_GROUPS = [
   { Icon: Disc, title: "Fren Sistemleri", desc: "Balata, disk, kaliper ve fren hattı bileşenlerinde geniş kapsam." },
@@ -409,10 +409,15 @@ export function LandingPage() {
             </nav>
           </div>
 
-          {/* Right: CTA (desktop) + hamburger (mobile/tablet) */}
-          <div className="flex items-center gap-3 shrink-0">
+          {/* Right: SPART badge + CTA (desktop) + hamburger (mobile/tablet) */}
+          <div className="flex items-center gap-4 lg:gap-5 shrink-0">
+            <img
+              src="/images/spart-logo.png"
+              alt="SPART"
+              className="hidden lg:block h-6 xl:h-7 w-auto shrink-0"
+            />
             <a href="#" className="hidden lg:flex items-center bg-[#1B3A8F] hover:bg-[#2547B5] text-white text-[12.5px] xl:text-[13px] font-semibold tracking-[0.01em] px-4 xl:px-5 py-2.5 rounded-md transition-all duration-200 gap-1.5 shadow-sm hover:shadow-md group whitespace-nowrap">
-              B2B Giriş
+              B2B Portal
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
             </a>
             <button
@@ -442,7 +447,7 @@ export function LandingPage() {
             ))}
             <div className="mt-5">
               <a href="#" className="w-full text-center bg-[#1B3A8F] hover:bg-[#2547B5] text-white text-sm font-semibold px-5 py-3 rounded-md transition-colors flex items-center justify-center gap-1.5">
-                B2B Giriş
+                B2B Portal
                 <ArrowRight className="w-3.5 h-3.5" />
               </a>
             </div>
