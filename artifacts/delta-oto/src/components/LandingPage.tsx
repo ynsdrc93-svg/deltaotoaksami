@@ -392,17 +392,17 @@ export function LandingPage() {
         className="sticky top-0 z-50 transition-all duration-300 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-[0_1px_0_rgba(15,23,42,0.04)]"
         style={{ ...(scrolled ? { background: "rgba(255,255,255,0.98)", borderColor: "rgba(15,23,42,0.1)", boxShadow: "0 4px 24px rgba(15,23,42,0.08)" } : {}) }}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-[76px] flex items-center justify-between">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between">
           {/* Left: logo + nav */}
-          <div className="flex items-center gap-6 xl:gap-9 min-w-0">
+          <div className="flex items-center gap-5 lg:gap-7 min-w-0">
             <a href="#" className="flex items-center shrink-0">
               <img
                 src="/images/delta-oto-logo.png"
                 alt="Delta Oto 50. Yıl"
-                className="h-10 sm:h-11 lg:h-14 xl:h-16 w-auto"
+                className="h-10 sm:h-12 lg:h-14 xl:h-[68px] w-auto"
               />
             </a>
-            <nav className="hidden xl:flex items-center gap-5 text-[13px] font-medium tracking-tight text-slate-600">
+            <nav className="hidden lg:flex items-center gap-4 xl:gap-5 text-[12.5px] xl:text-[13px] font-medium tracking-tight text-slate-600">
               {NAV_LINKS.map(link => (
                 <a key={link} href="#" className="do-nav-link whitespace-nowrap hover:text-[#1B3A8F] transition-colors duration-200">{link}</a>
               ))}
@@ -411,14 +411,14 @@ export function LandingPage() {
 
           {/* Right: CTA (desktop) + hamburger (mobile/tablet) */}
           <div className="flex items-center gap-3 shrink-0">
-            <a href="#" className="hidden xl:flex items-center bg-[#1B3A8F] hover:bg-[#2547B5] text-white text-[13px] font-semibold tracking-[0.01em] px-5 py-2.5 rounded-md transition-all duration-200 gap-1.5 shadow-sm hover:shadow-md group whitespace-nowrap">
+            <a href="#" className="hidden lg:flex items-center bg-[#1B3A8F] hover:bg-[#2547B5] text-white text-[12.5px] xl:text-[13px] font-semibold tracking-[0.01em] px-4 xl:px-5 py-2.5 rounded-md transition-all duration-200 gap-1.5 shadow-sm hover:shadow-md group whitespace-nowrap">
               B2B Giriş
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
             </a>
             <button
               aria-label={mobileOpen ? "Menüyü kapat" : "Menüyü aç"}
               onClick={() => setMobileOpen(v => !v)}
-              className="xl:hidden flex items-center justify-center w-10 h-10 rounded-md border border-slate-200 text-slate-700 hover:border-[#1B3A8F]/40 hover:text-[#1B3A8F] transition-colors"
+              className="lg:hidden flex items-center justify-center w-10 h-10 rounded-md border border-slate-200 text-slate-700 hover:border-[#1B3A8F]/40 hover:text-[#1B3A8F] transition-colors"
             >
               {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -427,7 +427,7 @@ export function LandingPage() {
 
         {/* MOBILE / TABLET MENU PANEL */}
         <div
-          className={`xl:hidden overflow-hidden transition-[max-height] duration-300 ease-in-out border-t border-slate-200 bg-white ${mobileOpen ? "max-h-[calc(100vh-64px)] overflow-y-auto" : "max-h-0"}`}
+          className={`lg:hidden overflow-hidden transition-[max-height] duration-300 ease-in-out border-t border-slate-200 bg-white ${mobileOpen ? "max-h-[calc(100vh-64px)] overflow-y-auto" : "max-h-0"}`}
         >
           <nav className="flex flex-col px-4 sm:px-6 py-4">
             {NAV_LINKS.map(link => (
