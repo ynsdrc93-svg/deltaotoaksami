@@ -880,11 +880,8 @@ export function LandingPage() {
               <img
                 src="/images/delta-oto-logo.png"
                 alt="Delta Oto"
-                className="h-10 do-logo-invert mb-6 opacity-80"
+                className="h-16 do-logo-invert mb-7 opacity-80"
               />
-              <p className="text-sm text-gray-500 leading-relaxed mb-7 max-w-xs">
-                1976'dan bu yana otomotiv satış sonrası sektöründe güvenilir yedek parça tedariği ve güçlü lojistik altyapısıyla iş ortaklarımızın yanındayız.
-              </p>
               <div className="flex items-center gap-3">
                 {[Facebook, Instagram, Linkedin].map((Icon, i) => (
                   <a key={i} href="#" aria-label="Sosyal medya" className="w-9 h-9 rounded-md border border-white/10 flex items-center justify-center text-gray-400 hover:text-white hover:border-white/30 transition-colors">
