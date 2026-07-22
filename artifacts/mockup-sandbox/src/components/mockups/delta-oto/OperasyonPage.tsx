@@ -9,29 +9,28 @@ const CSS = `
       linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
     background-size: 40px 40px;
   }
+  .do-hero-line {
+    background: linear-gradient(90deg, #fff 60%, rgba(255,255,255,0.55));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
 `;
 
-const NAV_LINKS = ["Hakkımızda", "Tedarikçiler", "Operasyon ve Lojistik", "Kariyer", "İletişim"];
-
-const METRICS = [
-  { value: "81", unit: "İl", desc: "Türkiye'nin tüm illerine teslimat" },
-  { value: "50.000+", unit: "SKU", desc: "Sürekli stokta tutulan ürün" },
-  { value: "Aynı Gün", unit: "Teslimat", desc: "Kritik siparişlerde aynı gün karşılama" },
-  { value: "2", unit: "Depo", desc: "Ümraniye merkez + Opar Ege bölge" },
-];
+const NAV = ["Hakkımızda", "Tedarikçiler", "Operasyon ve Lojistik", "Kariyer", "İletişim"];
 
 const OPS_FEATURES = [
-  { icon: Truck, title: "Geniş Dağıtım Ağı", desc: "İstanbul çıkışlı merkez depodan 81 ile servis. Bölgesel dağıtım için Ege'de Opar bayiliği ile destek." },
-  { icon: Zap, title: "Hızlı Sipariş Karşılama", desc: "B2B portalı üzerinden verilen siparişler öncelik sırasına göre işleme alınır. Kritik siparişler aynı gün sevk edilir." },
-  { icon: Shield, title: "Depo Yönetimi", desc: "WMS destekli depo yönetimi ile stok doğruluğu ve sipariş karşılama hızı üst seviyede tutulur." },
-  { icon: Network, title: "İhracat Kanalı", desc: "Türkiye dışındaki pazarlara Groupauto International kanalları aracılığıyla ihracat gerçekleştiriyoruz." },
+  { icon: Truck, title: "Ulusal Dağıtım Kapasitesi", desc: "Ümraniye merkez depo ve Opar Ege bölge operasyonuyla Türkiye'nin 81 iline düzenli ve güvenilir teslimat gerçekleştirilir." },
+  { icon: Zap, title: "Öncelikli Sipariş Karşılama", desc: "B2B portalı üzerinden iletilen acil talepler öncelik sıralamasına alınır; stokta olan kritik siparişler aynı gün sevk edilir." },
+  { icon: Shield, title: "WMS Destekli Depo Yönetimi", desc: "Ambar yönetim sistemiyle stok doğruluğu ve sipariş hazırlık süresi üst düzeyde korunur; hata payı minimize edilir." },
+  { icon: Network, title: "İhracat ve Bölgesel Erişim", desc: "Groupauto International kanalları aracılığıyla Türkiye dışındaki pazarlara ürün ihracatı gerçekleştirilmektedir." },
 ];
 
-const PROCESS_STEPS = [
-  { num: "01", title: "Sipariş", desc: "B2B portalı veya telefon üzerinden sipariş oluşturulur." },
-  { num: "02", title: "Stok Kontrolü", desc: "Anlık stok bilgisi ile ürün onaylanır veya alternatif önerilir." },
-  { num: "03", title: "Hazırlık", desc: "WMS sistemi ile depo personeli siparişi hazırlar." },
-  { num: "04", title: "Sevk", desc: "Anlaşmalı kargo ve kurye ağı ile ilgili ile yönlendirilir." },
+const PROCESS = [
+  { num: "01", title: "Talep İletimi", desc: "B2B portalı veya yetkili satış kanalı aracılığıyla sipariş oluşturulur." },
+  { num: "02", title: "Stok Doğrulama", desc: "Anlık envanter sistemi üzerinden ürün varlığı teyit edilir; alternatif gerekiyorsa önerilir." },
+  { num: "03", title: "Sipariş Hazırlığı", desc: "WMS talimatıyla depo personeli sevkiyat hazırlığını başlatır." },
+  { num: "04", title: "Sevk & Teslimat", desc: "Anlaşmalı lojistik partnerleri aracılığıyla hedef ile yönlendirilir." },
 ];
 
 export default function OperasyonPage() {
@@ -47,62 +46,73 @@ export default function OperasyonPage() {
               <img src="/images/delta-oto-logo.png" alt="Delta Oto 50. Yıl" className="h-16 w-auto" />
             </a>
             <nav className="hidden lg:flex items-center gap-6 text-[13.5px] font-medium text-slate-600">
-              {NAV_LINKS.map(l => (
-                <a key={l} href="#" className={`hover:text-[#1B3A8F] transition-colors whitespace-nowrap ${l === "Operasyon ve Lojistik" ? "text-[#1B3A8F] font-semibold" : ""}`}>{l}</a>
+              {NAV.map(l => (
+                <a key={l} href="#" className={`hover:text-[#1B3A8F] transition-colors whitespace-nowrap ${l === "Operasyon ve Lojistik" ? "text-[#1B3A8F] font-semibold border-b-2 border-[#1B3A8F] pb-0.5" : ""}`}>{l}</a>
               ))}
             </nav>
           </div>
-          <div className="flex items-center gap-4">
-            <a href="#" className="bg-[#1B3A8F] hover:bg-[#2547B5] text-white text-[13px] font-semibold px-5 py-2.5 rounded-md transition-colors flex items-center gap-1.5 group">
-              B2B Portal <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-            </a>
-          </div>
+          <a href="#" className="bg-[#1B3A8F] hover:bg-[#2547B5] text-white text-[13px] font-semibold px-5 py-2.5 rounded-md transition-colors flex items-center gap-1.5 group">
+            B2B Portal <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+          </a>
         </div>
       </header>
 
-      {/* HERO — dark */}
-      <section className="relative bg-[#0e1016] text-white py-28 overflow-hidden">
-        <div className="absolute inset-0 do-grid-bg opacity-50" />
+      {/* HERO — dark + warehouse image */}
+      <section className="relative min-h-[560px] flex items-center text-white overflow-hidden bg-[#0e1016]">
+        <div className="absolute inset-0">
+          <img
+            src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1920&q=80"
+            alt=""
+            className="w-full h-full object-cover opacity-30"
+            style={{ objectPosition: "center 40%" }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0e1016] via-[#0e1016]/80 to-[#0e1016]/30" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0e1016] via-transparent to-transparent" />
+        </div>
+        <div className="absolute inset-0 do-grid-bg opacity-40" />
         <div className="absolute left-0 top-0 w-[3px] h-full bg-gradient-to-b from-transparent via-[#1B3A8F] to-transparent opacity-60" />
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-          <div className="flex items-center gap-3 mb-6">
+
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 py-28">
+          <div className="flex items-center gap-3 mb-7">
             <div className="w-8 h-[2px] bg-[#4d74d6]" />
-            <span className="text-[#7d9bea] text-xs font-bold uppercase tracking-[0.3em]">Lojistik & Operasyon</span>
+            <span className="text-[#7d9bea] text-xs font-bold uppercase tracking-[0.3em]">Lojistik & Operasyon Altyapısı</span>
           </div>
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-black leading-[1.05] tracking-[-0.02em] mb-6">
-            <span className="text-white">81 İLDE</span><br />
-            <span className="text-[#7d9bea]">KESİNTİSİZ TEDARİK</span>
+          <h1 className="text-5xl md:text-6xl lg:text-[72px] font-black leading-[1.05] tracking-[-0.02em] mb-6">
+            <span className="do-hero-line">81 İLE</span><br />
+            <span className="text-white">KESİNTİSİZ</span><br />
+            <span className="text-[#7d9bea]">TEDARİK GÜCÜ</span>
           </h1>
-          <p className="text-[17px] text-gray-300 leading-[1.75] max-w-2xl mb-10 font-light">
-            Ümraniye merkez depo ve Opar Ege bölge operasyonuyla Türkiye'nin her iline hızlı, güvenilir teslimat sağlıyoruz. Depo yönetiminden son mile kadar her adım optimize edilmiştir.
+          <p className="text-[17px] text-gray-300 leading-[1.8] max-w-2xl mb-10 font-light">
+            Ümraniye merkez depo ve Opar Ege bölge operasyonuyla desteklenen lojistik ağımız; sipariş hazırlıktan son mile kadar her aşamada performans ve güvenilirlik standartlarını korur.
           </p>
-          <div className="flex flex-wrap gap-4">
-            {METRICS.map((m) => (
-              <div key={m.unit} className="border border-white/15 rounded-xl px-6 py-4 bg-white/5">
-                <div className="text-2xl font-black text-white">{m.value}</div>
-                <div className="text-[12px] font-bold text-[#7d9bea] uppercase tracking-wide mt-0.5">{m.unit}</div>
-                <div className="text-[12px] text-gray-400 mt-1">{m.desc}</div>
+          <div className="flex flex-wrap gap-5">
+            {[["81", "İl", "Türkiye geneli teslimat"], ["50.000+", "SKU", "Sürekli stok derinliği"], ["Aynı Gün", "Sevkiyat", "Kritik siparişler için"]].map(([n, l, d]) => (
+              <div key={l} className="border border-white/15 rounded-xl px-6 py-4 bg-white/5">
+                <div className="text-2xl font-black text-white">{n}</div>
+                <div className="text-[12px] font-bold text-[#7d9bea] uppercase tracking-wide mt-0.5">{l}</div>
+                <div className="text-[11px] text-gray-400 mt-1">{d}</div>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* ÖZELLİKLER — light */}
+      {/* OPERASYONEL GÜÇLER — light */}
       <section className="bg-white py-24">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="mb-14">
-            <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">Altyapı</span>
-            <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-2 tracking-tight">Operasyonel Güçlerimiz</h2>
+            <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">Lojistik Altyapı</span>
+            <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-2 tracking-tight">Operasyonel Yetkinliklerimiz</h2>
+            <p className="text-slate-500 mt-3 max-w-2xl text-[15px]">Her operasyonel süreç, müşteri teslimat deneyimini optimize etmek amacıyla yapılandırılmıştır.</p>
           </div>
-          <div className="grid md:grid-cols-2 gap-8">
+          <div className="grid md:grid-cols-2 gap-7">
             {OPS_FEATURES.map((f) => (
               <div key={f.title} className="flex gap-6 p-7 rounded-xl border border-slate-200 hover:border-[#1B3A8F]/30 hover:shadow-lg transition-all">
                 <div className="shrink-0 w-12 h-12 bg-[#1B3A8F]/8 rounded-xl flex items-center justify-center">
                   <f.icon className="w-6 h-6 text-[#1B3A8F]" />
                 </div>
                 <div>
-                  <h3 className="text-lg font-bold text-slate-900 mb-2">{f.title}</h3>
+                  <h3 className="text-[15px] font-bold text-slate-900 mb-2 leading-snug">{f.title}</h3>
                   <p className="text-slate-500 text-[14px] leading-relaxed">{f.desc}</p>
                 </div>
               </div>
@@ -115,18 +125,19 @@ export default function OperasyonPage() {
       <section className="bg-[#1B3A8F] py-24 text-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="mb-14">
-            <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea]">Süreç</span>
-            <h2 className="text-3xl md:text-4xl font-black mt-2 tracking-tight">Siparişten Teslimata</h2>
+            <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea]">İş Akışı</span>
+            <h2 className="text-3xl md:text-4xl font-black mt-2 tracking-tight">Siparişten Teslimata İş Akışı</h2>
+            <p className="text-white/60 mt-3 max-w-xl text-[15px]">Standartlaştırılmış dört aşamalı süreç; her siparişte öngörülebilir ve şeffaf bir deneyim sağlar.</p>
           </div>
           <div className="grid md:grid-cols-4 gap-6">
-            {PROCESS_STEPS.map((s) => (
+            {PROCESS.map((s, i) => (
               <div key={s.num} className="relative">
-                <div className="text-5xl font-black text-white/15 mb-4">{s.num}</div>
-                <h3 className="text-lg font-bold mb-2">{s.title}</h3>
-                <p className="text-white/65 text-[14px] leading-relaxed">{s.desc}</p>
-                {s.num !== "04" && (
-                  <div className="hidden md:block absolute top-10 -right-3 text-white/20">
-                    <ChevronRight className="w-6 h-6" />
+                <div className="text-6xl font-black text-white/10 mb-4 leading-none">{s.num}</div>
+                <h3 className="text-[15px] font-bold mb-2 leading-snug">{s.title}</h3>
+                <p className="text-white/60 text-[13.5px] leading-relaxed">{s.desc}</p>
+                {i < 3 && (
+                  <div className="hidden md:block absolute top-8 -right-3 text-white/20">
+                    <ChevronRight className="w-5 h-5" />
                   </div>
                 )}
               </div>
@@ -135,26 +146,31 @@ export default function OperasyonPage() {
         </div>
       </section>
 
-      {/* SPART — dark */}
-      <section className="bg-[#0e1016] text-white py-20">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 flex flex-col lg:flex-row items-center gap-12">
+      {/* SPART — dark + image */}
+      <section className="relative bg-[#0e1016] text-white py-20 overflow-hidden">
+        <div className="absolute inset-0">
+          <img src="https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?w=1920&q=80" alt="" className="w-full h-full object-cover opacity-10" />
+          <div className="absolute inset-0 bg-[#0e1016]/80" />
+        </div>
+        <div className="absolute inset-0 do-grid-bg opacity-25" />
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 flex flex-col lg:flex-row items-center gap-14">
           <div className="flex-1">
-            <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea] block mb-4">Markamız</span>
-            <h2 className="text-3xl md:text-4xl font-black tracking-tight mb-4">SPART Original Replacement</h2>
-            <p className="text-gray-300 leading-[1.8] max-w-lg text-[16px]">
-              SPART, Delta Oto'nun kendi dağıtım markasıdır. OEM kalite eşdeğeri ürünleri rekabetçi fiyatla sunar. Branda, motor, fren ve süspansiyon kategorilerinde geniş SKU gamı mevcuttur.
+            <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea] block mb-4">Dağıtım Markası</span>
+            <h2 className="text-3xl md:text-4xl font-black tracking-tight mb-5">SPART Original Replacement</h2>
+            <p className="text-gray-300 leading-[1.85] max-w-lg text-[15.5px]">
+              SPART, Delta Oto'nun kendi dağıtım markasıdır. OEM eşdeğeri kalite standartlarını rekabetçi fiyat yapısıyla bir araya getirir. Fren, süspansiyon, motor ve kaporta kategorilerinde geniş SKU gamı mevcuttur.
             </p>
           </div>
-          <div className="shrink-0">
-            <img src="/images/spart-logo.png" alt="SPART" className="h-20 w-auto" onError={(e) => {(e.target as HTMLImageElement).style.display='none'}} />
+          <div className="shrink-0 flex items-center justify-center w-56 h-28 rounded-xl bg-white/5 border border-white/10">
+            <img src="/images/spart-logo.png" alt="SPART" className="h-14 w-auto" onError={(e) => { (e.target as HTMLImageElement).parentElement!.querySelector('span')!.style.display='block'; (e.target as HTMLImageElement).style.display='none'; }} />
+            <span className="text-white/30 text-sm font-medium hidden">SPART</span>
           </div>
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="bg-[#060810] text-white py-16 border-t border-white/5">
+      <footer className="bg-[#060810] text-white py-14 border-t border-white/5">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
-          <img src="/images/delta-oto-logo.png" alt="Delta Oto" className="h-12 mx-auto mb-6 brightness-0 invert opacity-70" />
+          <img src="/images/delta-oto-logo.png" alt="Delta Oto" className="h-12 mx-auto mb-5 brightness-0 invert opacity-70" />
           <p className="text-gray-500 text-sm">© 2026 Delta Oto A.Ş. — Tüm hakları saklıdır.</p>
         </div>
       </footer>

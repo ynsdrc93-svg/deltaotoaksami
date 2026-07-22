@@ -9,32 +9,38 @@ const CSS = `
       linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
     background-size: 40px 40px;
   }
+  .do-hero-line {
+    background: linear-gradient(90deg, #fff 60%, rgba(255,255,255,0.55));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
 `;
 
-const NAV_LINKS = ["Hakkımızda", "Tedarikçiler", "Operasyon ve Lojistik", "Kariyer", "İletişim"];
+const NAV = ["Hakkımızda", "Tedarikçiler", "Operasyon ve Lojistik", "Kariyer", "İletişim"];
 
-const CULTURE_VALUES = [
-  { title: "Sonuç Odaklılık", desc: "Hedefleri zamanında ve nitelikli biçimde gerçekleştirmek temel beklentimizdir." },
-  { title: "Takım Ruhu", desc: "Bireysel başarı takım başarısının temelidir; iş birliğini her zaman öne alırız." },
-  { title: "Sürekli Gelişim", desc: "Sektör bilgisini güncel tutmak için eğitim ve gelişim fırsatları sunuyoruz." },
-  { title: "Dürüstlük", desc: "Müşterilerimize, tedarikçilerimize ve birbirimize karşı şeffaf ve dürüst ilişki kuruyoruz." },
+const CULTURE = [
+  { title: "Performans Odaklılık", desc: "Sonuçlar ve taahhüt bütünlüğü temel değerlendirme kriterleridir. Hedefler netleştirilir, takip edilir ve gerçekleştirilir." },
+  { title: "Kolektif Başarı", desc: "Bireysel yetkinlik, takım dinamikleriyle pekiştirilir. Bilgi paylaşımı ve iş birliği kurumsal kültürün temel bileşenidir." },
+  { title: "Sürekli Yetkinlik Gelişimi", desc: "Sektör bilgisini güncel tutmak için eğitim programları, mentorluk ve konferans katılım desteği sunulmaktadır." },
+  { title: "Kurumsal Dürüstlük", desc: "Müşterilerimize, tedarikçilerimize ve birbirimize karşı şeffaf, tutarlı ve dürüst ilişki standartları korunur." },
 ];
 
-const OPEN_POSITIONS = [
-  { title: "Satış Uzmanı — İç Piyasa", dept: "Satış", type: "Tam Zamanlı", location: "Ümraniye, İstanbul" },
-  { title: "Tedarik Zinciri Analisti", dept: "Operasyon", type: "Tam Zamanlı", location: "Ümraniye, İstanbul" },
-  { title: "Depo ve Lojistik Sorumlusu", dept: "Lojistik", type: "Tam Zamanlı", location: "Ümraniye, İstanbul" },
-  { title: "Ürün Yöneticisi — Aftermarket", dept: "Ürün", type: "Tam Zamanlı", location: "Ümraniye, İstanbul" },
-  { title: "Yazılım Geliştirici (Full Stack)", dept: "Teknoloji", type: "Tam Zamanlı / Hibrit", location: "İstanbul" },
-  { title: "Müşteri Hizmetleri Uzmanı", dept: "Müşteri Deneyimi", type: "Tam Zamanlı", location: "Ümraniye, İstanbul" },
+const POSITIONS = [
+  { title: "Satış Uzmanı — Yurt İçi Piyasa", dept: "Satış & Müşteri Yönetimi", type: "Tam Zamanlı", loc: "Ümraniye, İstanbul" },
+  { title: "Tedarik Zinciri Analisti", dept: "Operasyon & Planlama", type: "Tam Zamanlı", loc: "Ümraniye, İstanbul" },
+  { title: "Depo ve Lojistik Sorumlusu", dept: "Depo Operasyonları", type: "Tam Zamanlı", loc: "Ümraniye, İstanbul" },
+  { title: "Ürün Yöneticisi — Aftermarket", dept: "Ürün & Portföy", type: "Tam Zamanlı", loc: "Ümraniye, İstanbul" },
+  { title: "Yazılım Geliştirici (Full Stack)", dept: "Teknoloji & Dijital", type: "Tam Zamanlı / Hibrit", loc: "İstanbul" },
+  { title: "Müşteri Deneyimi Uzmanı", dept: "Müşteri İlişkileri", type: "Tam Zamanlı", loc: "Ümraniye, İstanbul" },
 ];
 
 const BENEFITS = [
   "Özel sağlık sigortası",
-  "Yemek kartı",
-  "Sektörel eğitim desteği",
+  "Yemek kartı katkısı",
+  "Sektörel eğitim ve gelişim bütçesi",
   "Esnek çalışma saatleri (pozisyona göre)",
-  "Yıllık gelişim görüşmesi",
+  "Yıllık performans ve kariyer görüşmesi",
   "Ulaşım desteği",
 ];
 
@@ -51,56 +57,66 @@ export default function KariyerPage() {
               <img src="/images/delta-oto-logo.png" alt="Delta Oto 50. Yıl" className="h-16 w-auto" />
             </a>
             <nav className="hidden lg:flex items-center gap-6 text-[13.5px] font-medium text-slate-600">
-              {NAV_LINKS.map(l => (
-                <a key={l} href="#" className={`hover:text-[#1B3A8F] transition-colors whitespace-nowrap ${l === "Kariyer" ? "text-[#1B3A8F] font-semibold" : ""}`}>{l}</a>
+              {NAV.map(l => (
+                <a key={l} href="#" className={`hover:text-[#1B3A8F] transition-colors whitespace-nowrap ${l === "Kariyer" ? "text-[#1B3A8F] font-semibold border-b-2 border-[#1B3A8F] pb-0.5" : ""}`}>{l}</a>
               ))}
             </nav>
           </div>
-          <div className="flex items-center gap-4">
-            <a href="#" className="bg-[#1B3A8F] hover:bg-[#2547B5] text-white text-[13px] font-semibold px-5 py-2.5 rounded-md transition-colors flex items-center gap-1.5 group">
-              B2B Portal <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-            </a>
-          </div>
+          <a href="#" className="bg-[#1B3A8F] hover:bg-[#2547B5] text-white text-[13px] font-semibold px-5 py-2.5 rounded-md transition-colors flex items-center gap-1.5 group">
+            B2B Portal <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+          </a>
         </div>
       </header>
 
-      {/* HERO — dark */}
-      <section className="relative bg-[#0e1016] text-white py-28 overflow-hidden">
-        <div className="absolute inset-0 do-grid-bg opacity-50" />
+      {/* HERO — dark + office image */}
+      <section className="relative min-h-[560px] flex items-center text-white overflow-hidden bg-[#0e1016]">
+        <div className="absolute inset-0">
+          <img
+            src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=1920&q=80"
+            alt=""
+            className="w-full h-full object-cover opacity-20"
+            style={{ objectPosition: "center 30%" }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0e1016] via-[#0e1016]/80 to-[#0e1016]/30" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0e1016] via-transparent to-transparent" />
+        </div>
+        <div className="absolute inset-0 do-grid-bg opacity-40" />
         <div className="absolute left-0 top-0 w-[3px] h-full bg-gradient-to-b from-transparent via-[#1B3A8F] to-transparent opacity-60" />
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-          <div className="flex items-center gap-3 mb-6">
+
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 py-28">
+          <div className="flex items-center gap-3 mb-7">
             <div className="w-8 h-[2px] bg-[#4d74d6]" />
-            <span className="text-[#7d9bea] text-xs font-bold uppercase tracking-[0.3em]">İnsan Kaynakları</span>
+            <span className="text-[#7d9bea] text-xs font-bold uppercase tracking-[0.3em]">İnsan Kaynakları · Kariyer Fırsatları</span>
           </div>
-          <h1 className="text-5xl md:text-6xl lg:text-7xl font-black leading-[1.05] tracking-[-0.02em] mb-6">
-            <span className="text-white">GELECEĞİ</span><br />
-            <span className="text-[#7d9bea]">BİZİMLE İNŞA ET</span>
+          <h1 className="text-5xl md:text-6xl lg:text-[72px] font-black leading-[1.05] tracking-[-0.02em] mb-6">
+            <span className="do-hero-line">GELECEĞİ</span><br />
+            <span className="text-white">BİZİMLE</span><br />
+            <span className="text-[#7d9bea]">İNŞA EDİN</span>
           </h1>
-          <p className="text-[17px] text-gray-300 leading-[1.75] max-w-2xl mb-10 font-light">
-            50 yıllık büyüme hikayemizin bir parçası olun. Delta Oto'da çalışmak; güçlü bir sektör bilgisi kazanmak, dinamik bir ekibin içinde yer almak ve kalıcı kariyer fırsatları yaratmak anlamına gelir.
+          <p className="text-[17px] text-gray-300 leading-[1.8] max-w-2xl mb-10 font-light">
+            50 yıllık kurumsal birikimin parçası olun. Delta Oto'da kariyer; güçlü sektör yetkinliği, dinamik bir ekip yapısı ve uzun vadeli profesyonel gelişim fırsatı anlamına gelir.
           </p>
           <button className="bg-[#1B3A8F] hover:bg-[#2547B5] text-white font-semibold px-8 py-4 rounded-md flex items-center gap-2.5 group transition-colors shadow-[0_0_32px_rgba(27,58,143,0.3)]">
-            Açık Pozisyonlara Bak <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            Açık Pozisyonları İnceleyin <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
           </button>
         </div>
       </section>
 
-      {/* ŞİRKET KÜLTÜRÜ — light */}
+      {/* KÜLTÜR — light */}
       <section className="bg-white py-24">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="mb-14">
-            <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">Kültür</span>
-            <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-2 tracking-tight">Çalışma Kültürümüz</h2>
-            <p className="text-slate-500 mt-3 text-[15px] max-w-xl">
-              Delta Oto'da başarı bireysel değil, kolektiftir. Sonuç odaklı, dürüst ve gelişime açık bir yapı içinde çalışıyoruz.
+            <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">Çalışma Kültürü</span>
+            <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-2 tracking-tight">Kurumsal Kültür Değerlerimiz</h2>
+            <p className="text-slate-500 mt-3 text-[15px] max-w-2xl">
+              Delta Oto'da başarı bireysel değil, kolektiftir. Sonuç odaklı, dürüst ve gelişime açık kurumsal kültür içinde çalışıyoruz.
             </p>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {CULTURE_VALUES.map((v) => (
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+            {CULTURE.map((v) => (
               <div key={v.title} className="border border-slate-200 rounded-xl p-7 hover:border-[#1B3A8F]/30 hover:shadow-lg transition-all">
-                <h3 className="text-lg font-bold text-slate-900 mb-3">{v.title}</h3>
-                <p className="text-slate-500 text-[14px] leading-relaxed">{v.desc}</p>
+                <h3 className="text-[15px] font-bold text-slate-900 mb-3 leading-snug">{v.title}</h3>
+                <p className="text-slate-500 text-[13.5px] leading-relaxed">{v.desc}</p>
               </div>
             ))}
           </div>
@@ -111,24 +127,25 @@ export default function KariyerPage() {
       <section className="bg-[#1B3A8F] py-24 text-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="mb-14">
-            <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea]">Fırsatlar</span>
-            <h2 className="text-3xl md:text-4xl font-black mt-2 tracking-tight">Açık Pozisyonlar</h2>
+            <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea]">Açık Pozisyonlar</span>
+            <h2 className="text-3xl md:text-4xl font-black mt-2 tracking-tight">Kariyer Fırsatları</h2>
+            <p className="text-white/60 mt-3 max-w-xl text-[15px]">Ekibimize katılmak için aşağıdaki pozisyonlardan size uygun olanı seçin.</p>
           </div>
           <div className="space-y-3">
-            {OPEN_POSITIONS.map((pos) => (
-              <div key={pos.title} className="bg-white/10 backdrop-blur border border-white/15 rounded-xl px-7 py-5 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-white/15 transition-colors group cursor-pointer">
+            {POSITIONS.map((p) => (
+              <div key={p.title} className="bg-white/8 backdrop-blur border border-white/12 rounded-xl px-7 py-5 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-white/14 transition-colors group cursor-pointer">
                 <div>
-                  <h3 className="text-base font-bold">{pos.title}</h3>
-                  <div className="flex items-center gap-3 mt-1.5">
-                    <span className="text-[12px] text-[#7d9bea] font-medium">{pos.dept}</span>
-                    <span className="text-white/30">·</span>
-                    <span className="text-[12px] text-white/60">{pos.location}</span>
-                    <span className="text-white/30">·</span>
-                    <span className="text-[12px] text-white/60">{pos.type}</span>
+                  <h3 className="text-[15px] font-bold leading-snug">{p.title}</h3>
+                  <div className="flex items-center flex-wrap gap-2 mt-1.5">
+                    <span className="text-[12px] text-[#7d9bea] font-semibold">{p.dept}</span>
+                    <span className="text-white/25">·</span>
+                    <span className="text-[12px] text-white/55">{p.loc}</span>
+                    <span className="text-white/25">·</span>
+                    <span className="text-[12px] text-white/55">{p.type}</span>
                   </div>
                 </div>
-                <button className="shrink-0 text-[13px] font-semibold border border-white/30 px-4 py-2 rounded-lg hover:bg-white hover:text-[#1B3A8F] transition-colors flex items-center gap-1.5">
-                  Başvur <ChevronRight className="w-3.5 h-3.5" />
+                <button className="shrink-0 text-[13px] font-semibold border border-white/25 px-4 py-2 rounded-lg hover:bg-white hover:text-[#1B3A8F] transition-colors flex items-center gap-1.5 whitespace-nowrap">
+                  Başvurun <ChevronRight className="w-3.5 h-3.5" />
                 </button>
               </div>
             ))}
@@ -136,12 +153,17 @@ export default function KariyerPage() {
         </div>
       </section>
 
-      {/* YAN HAKLAR — dark */}
-      <section className="bg-[#0e1016] text-white py-20">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+      {/* YAN HAKLAR — dark + image */}
+      <section className="relative bg-[#0e1016] text-white py-20 overflow-hidden">
+        <div className="absolute inset-0">
+          <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&q=80" alt="" className="w-full h-full object-cover opacity-10" />
+          <div className="absolute inset-0 bg-[#0e1016]/80" />
+        </div>
+        <div className="absolute inset-0 do-grid-bg opacity-25" />
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
           <div className="mb-10">
-            <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea] block mb-3">Yan Haklar</span>
-            <h2 className="text-3xl font-black tracking-tight">Çalışan Avantajları</h2>
+            <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea] block mb-3">Çalışan Avantajları</span>
+            <h2 className="text-3xl font-black tracking-tight">Yan Haklar ve İmkânlar</h2>
           </div>
           <div className="grid md:grid-cols-3 gap-4">
             {BENEFITS.map((b) => (
@@ -154,10 +176,9 @@ export default function KariyerPage() {
         </div>
       </section>
 
-      {/* FOOTER */}
-      <footer className="bg-[#060810] text-white py-16 border-t border-white/5">
+      <footer className="bg-[#060810] text-white py-14 border-t border-white/5">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 text-center">
-          <img src="/images/delta-oto-logo.png" alt="Delta Oto" className="h-12 mx-auto mb-6 brightness-0 invert opacity-70" />
+          <img src="/images/delta-oto-logo.png" alt="Delta Oto" className="h-12 mx-auto mb-5 brightness-0 invert opacity-70" />
           <p className="text-gray-500 text-sm">© 2026 Delta Oto A.Ş. — Tüm hakları saklıdır.</p>
         </div>
       </footer>
