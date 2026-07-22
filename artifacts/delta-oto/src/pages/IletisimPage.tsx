@@ -1,7 +1,59 @@
 import React, { useState } from "react";
-import { MapPin, Phone, Mail, Globe, ChevronRight } from "lucide-react";
+import { MapPin, Phone, Mail, Globe, Clock, ChevronRight, Users, Package, MonitorSmartphone } from "lucide-react";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
+
+const DEPT_CONTACTS = [
+  {
+    icon: Package,
+    dept: "Satış & Sipariş",
+    lines: ["0216 526 64 64"],
+    info: "Ürün sorguları, sipariş ve fiyat bilgisi",
+    hours: "Pazartesi – Cuma, 08:30 – 18:00",
+    email: "satis@deltaoto.com",
+  },
+  {
+    icon: MonitorSmartphone,
+    dept: "B2B Portal Desteği",
+    lines: ["0216 526 33 44"],
+    info: "Portal erişimi, kullanıcı yetkilendirme, teknik destek",
+    hours: "Pazartesi – Cuma, 09:00 – 17:30",
+    email: "b2b@deltaoto.com",
+  },
+  {
+    icon: Users,
+    dept: "İnsan Kaynakları",
+    lines: [],
+    info: "Kariyer başvuruları ve staj talepleri",
+    hours: "Pazartesi – Cuma, 09:00 – 17:00",
+    email: "ik@deltaoto.com",
+  },
+  {
+    icon: Globe,
+    dept: "İhracat & Genel Kurumsal",
+    lines: [],
+    info: "Yurt dışı iş birlikleri ve kurumsal iletişim",
+    hours: "Pazartesi – Cuma, 08:30 – 17:30",
+    email: "info@deltaoto.com",
+  },
+];
+
+const LOCATIONS = [
+  {
+    name: "Merkez Ofis & Depo",
+    city: "Ümraniye, İstanbul",
+    address: "Barbaros Cd. Beyit Sk. No:17, Yukarı Dudullu – Ümraniye / İstanbul",
+    phone: "0216 526 64 64 / 0216 526 33 44",
+    type: "Merkez",
+  },
+  {
+    name: "Opar Ege Bölge Operasyonu",
+    city: "İzmir",
+    address: "İzmir – Ege bölgesi distribüsyon merkezi",
+    phone: "—",
+    type: "Bölge",
+  },
+];
 
 export function IletisimPage() {
   const [form, setForm] = useState({ ad: "", firma: "", telefon: "", email: "", konu: "", mesaj: "" });
@@ -11,7 +63,7 @@ export function IletisimPage() {
       <SiteHeader />
 
       {/* HERO */}
-      <section className="relative min-h-[560px] flex items-center text-white overflow-hidden bg-[#0e1016]">
+      <section className="relative min-h-[480px] flex items-center text-white overflow-hidden bg-[#0e1016]">
         <div className="absolute inset-0">
           <img
             src="https://images.unsplash.com/photo-1527838832700-5059252407fa?w=1920&q=80"
@@ -25,7 +77,7 @@ export function IletisimPage() {
         <div className="absolute inset-0 do-grid-bg opacity-40" />
         <div className="absolute left-0 top-0 w-[3px] h-full bg-gradient-to-b from-transparent via-[#1B3A8F] to-transparent opacity-60" />
 
-        <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 relative z-10 py-28">
+        <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 relative z-10 py-24">
           <div className="flex items-center gap-3 mb-7">
             <div className="w-8 h-[2px] bg-[#4d74d6]" />
             <span className="text-[#7d9bea] text-xs font-bold uppercase tracking-[0.3em]">Kurumsal İletişim · Ümraniye, İstanbul</span>
@@ -35,25 +87,93 @@ export function IletisimPage() {
             <span className="text-[#7d9bea]">ULAŞIN</span>
           </h1>
           <p className="text-[17px] text-gray-300 max-w-xl font-light leading-[1.8]">
-            Ürün ve stok sorguları, sipariş talepleri, B2B portal erişimi veya genel kurumsal iletişim için aşağıdaki kanalları kullanabilirsiniz.
+            Ürün sorguları, B2B portal erişimi, bayi başvurusu veya kurumsal iletişim için size özel kanaldan ulaşın.
           </p>
         </div>
       </section>
 
-      {/* İLETİŞİM + FORM — light */}
+      {/* DEPARTMAN KİŞİ BİLGİLERİ — light */}
+      <section className="bg-[#f8fafc] py-20 border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="mb-12">
+            <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">Departman İletişim</span>
+            <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-2 tracking-tight">Doğru Birime Ulaşın</h2>
+            <p className="text-slate-500 mt-3 text-[15px]">Her talep türü için ilgili departman doğrudan burada.</p>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+            {DEPT_CONTACTS.map(({ icon: Icon, dept, lines, info, hours, email }) => (
+              <div key={dept} className="bg-white border border-slate-200 rounded-xl p-6 hover:border-[#1B3A8F]/30 hover:shadow-md transition-all flex flex-col">
+                <div className="w-10 h-10 bg-[#1B3A8F]/[0.08] rounded-xl flex items-center justify-center mb-4">
+                  <Icon className="w-5 h-5 text-[#1B3A8F]" />
+                </div>
+                <h3 className="text-[14px] font-bold text-slate-900 mb-2 leading-snug">{dept}</h3>
+                <p className="text-slate-400 text-[12.5px] leading-relaxed mb-3 flex-1">{info}</p>
+                <div className="border-t border-slate-100 pt-3 space-y-1.5">
+                  {lines.map(l => (
+                    <div key={l} className="flex items-center gap-2">
+                      <Phone className="w-3.5 h-3.5 text-[#1B3A8F] shrink-0" />
+                      <span className="text-[13px] font-semibold text-slate-800">{l}</span>
+                    </div>
+                  ))}
+                  <div className="flex items-center gap-2">
+                    <Mail className="w-3.5 h-3.5 text-[#1B3A8F] shrink-0" />
+                    <a href={`mailto:${email}`} className="text-[13px] text-[#1B3A8F] hover:underline font-medium">{email}</a>
+                  </div>
+                  <div className="flex items-start gap-2 mt-1">
+                    <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0 mt-0.5" />
+                    <span className="text-[11.5px] text-slate-400 leading-snug">{hours}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* LOKASYONLAR — navy */}
+      <section className="bg-[#1B3A8F] py-20 text-white">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="mb-10">
+            <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea] block mb-3">Operasyon Merkezlerimiz</span>
+            <h2 className="text-3xl font-black tracking-tight">Bizi Nerede Bulabilirsiniz</h2>
+          </div>
+          <div className="grid md:grid-cols-2 gap-5">
+            {LOCATIONS.map((loc) => (
+              <div key={loc.name} className="bg-white/[0.08] border border-white/[0.12] rounded-xl p-7 hover:bg-white/[0.14] transition-colors">
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <span className="text-[11px] font-bold uppercase tracking-widest text-[#7d9bea]">{loc.type}</span>
+                    <h3 className="text-[16px] font-bold mt-1">{loc.name}</h3>
+                  </div>
+                  <MapPin className="w-5 h-5 text-[#7d9bea] shrink-0 mt-1" />
+                </div>
+                <p className="text-white/65 text-[13.5px] leading-relaxed mb-3">{loc.address}</p>
+                {loc.phone !== "—" && (
+                  <div className="flex items-center gap-2">
+                    <Phone className="w-3.5 h-3.5 text-[#7d9bea] shrink-0" />
+                    <span className="text-[13px] text-white/80">{loc.phone}</span>
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* FORM — light */}
       <section className="bg-[#f8fafc] py-20">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-5 gap-12 items-start">
 
           <div className="lg:col-span-2 space-y-4">
             <div className="mb-6">
-              <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">Merkez Ofis</span>
-              <h2 className="text-2xl font-black text-slate-900 mt-2">İletişim Kanalları</h2>
+              <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">Merkez Adres</span>
+              <h2 className="text-2xl font-black text-slate-900 mt-2">Genel İletişim</h2>
             </div>
             {[
-              { Icon: MapPin, label: "Adres", lines: ["Barbaros Cd. Beyit Sk. No:17,", "Yukarı Dudullu - Ümraniye / İstanbul"] },
-              { Icon: Phone, label: "Telefon", lines: ["0216 526 64 64 / 0216 526 33 44", "Pazartesi–Cuma, 08:30–18:00"] },
-              { Icon: Mail, label: "Kurumsal E-posta", lines: ["info@deltaoto.com", "b2b@deltaoto.com"] },
-              { Icon: Globe, label: "Dijital Kanallar", lines: ["www.deltaoto.com.tr", "b2b.deltaoto.com.tr (B2B Portal)"] },
+              { Icon: MapPin, label: "Adres",           lines: ["Barbaros Cd. Beyit Sk. No:17,", "Yukarı Dudullu – Ümraniye / İstanbul"] },
+              { Icon: Phone,  label: "Santral",          lines: ["0216 526 64 64 / 0216 526 33 44", "Pazartesi – Cuma, 08:30 – 18:00"] },
+              { Icon: Mail,   label: "Kurumsal E-posta", lines: ["info@deltaoto.com", "b2b@deltaoto.com"] },
+              { Icon: Globe,  label: "Dijital Kanallar", lines: ["www.deltaoto.com.tr", "b2b.deltaoto.com.tr (B2B Portal)"] },
             ].map(({ Icon, label, lines }) => (
               <div key={label} className="flex gap-4 bg-white rounded-xl p-5 border border-slate-200 shadow-sm hover:border-[#1B3A8F]/30 transition-colors">
                 <div className="shrink-0 w-10 h-10 bg-[#1B3A8F]/[0.08] rounded-lg flex items-center justify-center">
@@ -67,7 +187,7 @@ export function IletisimPage() {
                 </div>
               </div>
             ))}
-            <div className="h-44 rounded-xl bg-slate-200 border border-slate-300 overflow-hidden relative">
+            <div className="h-40 rounded-xl bg-slate-200 border border-slate-300 overflow-hidden relative">
               <img src="https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?w=800&q=70" alt="İstanbul harita" className="w-full h-full object-cover opacity-60" />
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="bg-white/90 backdrop-blur-sm rounded-lg px-4 py-2 text-[13px] font-semibold text-slate-700 shadow-sm flex items-center gap-2">
@@ -85,10 +205,10 @@ export function IletisimPage() {
             </div>
             <div className="grid md:grid-cols-2 gap-5">
               {[
-                { id: "ad",      label: "Ad Soyad",        ph: "Adınız ve soyadınız"    },
-                { id: "firma",   label: "Firma Ünvanı",     ph: "Firma adı"              },
-                { id: "telefon", label: "Telefon",          ph: "+90 5XX XXX XX XX"      },
-                { id: "email",   label: "Kurumsal E-posta", ph: "ornek@firma.com.tr"     },
+                { id: "ad",      label: "Ad Soyad",        ph: "Adınız ve soyadınız" },
+                { id: "firma",   label: "Firma Ünvanı",     ph: "Firma adı" },
+                { id: "telefon", label: "Telefon",          ph: "+90 5XX XXX XX XX" },
+                { id: "email",   label: "Kurumsal E-posta", ph: "ornek@firma.com.tr" },
               ].map(({ id, label, ph }) => (
                 <div key={id}>
                   <label className="block text-[11.5px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">{label}</label>
@@ -114,7 +234,9 @@ export function IletisimPage() {
                 <option>Stok ve Ürün Bilgisi</option>
                 <option>B2B Portal Erişimi ve Yetkilendirme</option>
                 <option>Bayi / Distribütör Başvurusu</option>
+                <option>İhracat Talebi</option>
                 <option>Kurumsal İletişim</option>
+                <option>İnsan Kaynakları & Kariyer</option>
                 <option>Diğer</option>
               </select>
             </div>

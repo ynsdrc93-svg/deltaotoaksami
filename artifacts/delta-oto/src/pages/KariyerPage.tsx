@@ -1,5 +1,5 @@
 import React from "react";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, Quote } from "lucide-react";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
 
@@ -7,25 +7,53 @@ const CULTURE = [
   { title: "Performans Odaklılık", desc: "Sonuçlar ve taahhüt bütünlüğü temel değerlendirme kriterleridir. Hedefler netleştirilir, takip edilir ve gerçekleştirilir." },
   { title: "Kolektif Başarı", desc: "Bireysel yetkinlik, takım dinamikleriyle pekiştirilir. Bilgi paylaşımı ve iş birliği kurumsal kültürün temel bileşenidir." },
   { title: "Sürekli Yetkinlik Gelişimi", desc: "Sektör bilgisini güncel tutmak için eğitim programları, mentorluk ve konferans katılım desteği sunulmaktadır." },
-  { title: "Kurumsal Dürüstlük", desc: "Müşterilerimize, tedarikçilerimize ve birbirimize karşı şeffaf, tutarlı ve dürüst ilişki standartları korunur." },
+  { title: "Kurumsal Dürüstlük", desc: "Müşterilere, tedarikçilere ve birbirimize karşı şeffaf, tutarlı ve dürüst ilişki standartları istisnasız korunur." },
 ];
 
-const POSITIONS = [
-  { title: "Satış Uzmanı — Yurt İçi Piyasa", dept: "Satış & Müşteri Yönetimi", type: "Tam Zamanlı", loc: "Ümraniye, İstanbul" },
-  { title: "Tedarik Zinciri Analisti", dept: "Operasyon & Planlama", type: "Tam Zamanlı", loc: "Ümraniye, İstanbul" },
-  { title: "Depo ve Lojistik Sorumlusu", dept: "Depo Operasyonları", type: "Tam Zamanlı", loc: "Ümraniye, İstanbul" },
-  { title: "Ürün Yöneticisi — Aftermarket", dept: "Ürün & Portföy", type: "Tam Zamanlı", loc: "Ümraniye, İstanbul" },
-  { title: "Yazılım Geliştirici (Full Stack)", dept: "Teknoloji & Dijital", type: "Tam Zamanlı / Hibrit", loc: "İstanbul" },
-  { title: "Müşteri Deneyimi Uzmanı", dept: "Müşteri İlişkileri", type: "Tam Zamanlı", loc: "Ümraniye, İstanbul" },
+const TESTIMONIALS = [
+  { quote: "Delta Oto'da geçen yıllar, sektörün derinliklerini keşfetmemi sağladı. Hem ürün bilgisi hem de ticari ilişki yönetimi açısından kendimi buraya borçluyum.", name: "Satış & Müşteri Yönetimi", yrs: "9 Yıl" },
+  { quote: "Lojistik ve tedarik zinciri alanında sıfırdan öğrenmek için doğru adres. Ekip olarak hedeflerimizi paylaşıyor, başarıyı birlikte inşa ediyoruz.", name: "Operasyon & Planlama", yrs: "5 Yıl" },
+  { quote: "Ürün portföyünü yönetmek; hem teknik hem de stratejik yetkinlik gerektiriyor. Delta Oto bu ikisini bir arada geliştirme fırsatı sunuyor.", name: "Ürün & Portföy Yönetimi", yrs: "7 Yıl" },
+];
+
+const DEPARTMENTS = [
+  {
+    dept: "Satış & Müşteri Yönetimi",
+    positions: [
+      { title: "Satış Uzmanı — Yurt İçi Piyasa", type: "Tam Zamanlı", loc: "Ümraniye, İstanbul" },
+      { title: "Müşteri Deneyimi Uzmanı",          type: "Tam Zamanlı", loc: "Ümraniye, İstanbul" },
+    ],
+  },
+  {
+    dept: "Operasyon & Planlama",
+    positions: [
+      { title: "Tedarik Zinciri Analisti",         type: "Tam Zamanlı", loc: "Ümraniye, İstanbul" },
+      { title: "Depo ve Lojistik Sorumlusu",        type: "Tam Zamanlı", loc: "Ümraniye, İstanbul" },
+    ],
+  },
+  {
+    dept: "Ürün & Portföy",
+    positions: [
+      { title: "Ürün Yöneticisi — Aftermarket",    type: "Tam Zamanlı", loc: "Ümraniye, İstanbul" },
+    ],
+  },
+  {
+    dept: "Teknoloji & Dijital",
+    positions: [
+      { title: "Yazılım Geliştirici (Full Stack)",  type: "Tam Zamanlı / Hibrit", loc: "İstanbul" },
+    ],
+  },
 ];
 
 const BENEFITS = [
-  "Özel sağlık sigortası",
-  "Yemek kartı katkısı",
-  "Sektörel eğitim ve gelişim bütçesi",
-  "Esnek çalışma saatleri (pozisyona göre)",
-  "Yıllık performans ve kariyer görüşmesi",
-  "Ulaşım desteği",
+  { label: "Özel sağlık sigortası",           sub: "Tüm çalışanlar için" },
+  { label: "Yemek kartı katkısı",              sub: "Günlük katkı desteği" },
+  { label: "Sektörel eğitim bütçesi",          sub: "Yıllık gelişim programı" },
+  { label: "Esnek çalışma saatleri",           sub: "Pozisyona göre uygulanır" },
+  { label: "Yıllık kariyer görüşmesi",         sub: "Şeffaf performans değerlendirmesi" },
+  { label: "Ulaşım desteği",                   sub: "Servis veya ulaşım katkısı" },
+  { label: "Marka ve ürün eğitimleri",         sub: "Tedarikçi işbirliğiyle" },
+  { label: "Mentörlük programı",               sub: "Kıdemli çalışan rehberliği" },
 ];
 
 export function KariyerPage() {
@@ -73,7 +101,7 @@ export function KariyerPage() {
           <div className="mb-14">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">Çalışma Kültürü</span>
             <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-2 tracking-tight">Kurumsal Kültür Değerlerimiz</h2>
-            <p className="text-slate-500 mt-3 text-[15px] max-w-2xl">Delta Oto'da başarı bireysel değil, kolektiftir. Sonuç odaklı, dürüst ve gelişime açık kurumsal kültür içinde çalışıyoruz.</p>
+            <p className="text-slate-500 mt-3 text-[15px] max-w-2xl">Delta Oto'da başarı bireysel değil, kolektiftir. Sonuç odaklı, dürüst ve gelişime açık bir ortamda çalışıyoruz.</p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
             {CULTURE.map((v) => (
@@ -86,32 +114,69 @@ export function KariyerPage() {
         </div>
       </section>
 
-      {/* POZİSYONLAR — navy */}
+      {/* ÇALIŞAN SESİ — navy */}
       <section className="bg-[#1B3A8F] py-24 text-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="mb-14">
-            <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea]">Açık Pozisyonlar</span>
-            <h2 className="text-3xl md:text-4xl font-black mt-2 tracking-tight">Kariyer Fırsatları</h2>
-            <p className="text-white/60 mt-3 max-w-xl text-[15px]">Ekibimize katılmak için size uygun pozisyonu inceleyin ve başvurun.</p>
+            <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea]">Çalışan Deneyimi</span>
+            <h2 className="text-3xl md:text-4xl font-black mt-2 tracking-tight">Delta Oto'da Olmak</h2>
+            <p className="text-white/60 mt-3 max-w-xl text-[15px]">Farklı departmanlardan çalışanların Delta Oto deneyimi.</p>
           </div>
-          <div className="space-y-3">
-            {POSITIONS.map((p) => (
-              <div key={p.title} className="bg-white/[0.08] border border-white/[0.12] rounded-xl px-7 py-5 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:bg-white/[0.14] transition-colors group cursor-pointer">
-                <div>
-                  <h3 className="text-[15px] font-bold leading-snug">{p.title}</h3>
-                  <div className="flex items-center flex-wrap gap-2 mt-1.5">
-                    <span className="text-[12px] text-[#7d9bea] font-semibold">{p.dept}</span>
-                    <span className="text-white/25">·</span>
-                    <span className="text-[12px] text-white/55">{p.loc}</span>
-                    <span className="text-white/25">·</span>
-                    <span className="text-[12px] text-white/55">{p.type}</span>
-                  </div>
+          <div className="grid md:grid-cols-3 gap-6">
+            {TESTIMONIALS.map((t) => (
+              <div key={t.name} className="bg-white/[0.08] border border-white/[0.12] rounded-xl p-8 hover:bg-white/[0.14] transition-colors flex flex-col">
+                <Quote className="w-5 h-5 text-[#7d9bea] mb-5 shrink-0" />
+                <p className="text-white/75 text-[14px] leading-[1.85] flex-1 italic">"{t.quote}"</p>
+                <div className="mt-6 pt-5 border-t border-white/10">
+                  <div className="text-[13px] font-bold text-white">{t.name}</div>
+                  <div className="text-[12px] text-[#7d9bea] mt-0.5">{t.yrs} Deneyim</div>
                 </div>
-                <button className="shrink-0 text-[13px] font-semibold border border-white/25 px-4 py-2 rounded-lg hover:bg-white hover:text-[#1B3A8F] transition-colors flex items-center gap-1.5 whitespace-nowrap">
-                  Başvurun <ChevronRight className="w-3.5 h-3.5" />
-                </button>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* AÇIK POZİSYONLAR — white */}
+      <section className="bg-white py-24">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="mb-14">
+            <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">Açık Pozisyonlar</span>
+            <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-2 tracking-tight">Kariyer Fırsatları</h2>
+            <p className="text-slate-500 mt-3 max-w-xl text-[15px]">Departmanlara göre açık pozisyonları inceleyin ve size uygun rolü bulun.</p>
+          </div>
+          <div className="space-y-8">
+            {DEPARTMENTS.map(({ dept, positions }) => (
+              <div key={dept}>
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-2.5 h-2.5 rounded-full bg-[#1B3A8F]" />
+                  <h3 className="text-[13px] font-bold uppercase tracking-widest text-[#1B3A8F]">{dept}</h3>
+                </div>
+                <div className="space-y-2">
+                  {positions.map((p) => (
+                    <div key={p.title} className="border border-slate-200 rounded-xl px-7 py-5 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:border-[#1B3A8F]/30 hover:shadow-md transition-all group cursor-pointer">
+                      <div>
+                        <h4 className="text-[15px] font-bold text-slate-900 leading-snug">{p.title}</h4>
+                        <div className="flex items-center flex-wrap gap-2 mt-1.5">
+                          <span className="text-[12px] text-slate-400">{p.loc}</span>
+                          <span className="text-slate-300">·</span>
+                          <span className="text-[12px] text-slate-400">{p.type}</span>
+                        </div>
+                      </div>
+                      <button className="shrink-0 text-[13px] font-semibold border border-slate-300 text-slate-700 px-4 py-2 rounded-lg hover:bg-[#1B3A8F] hover:text-white hover:border-[#1B3A8F] transition-colors flex items-center gap-1.5 whitespace-nowrap">
+                        Başvurun <ChevronRight className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-10 p-6 bg-slate-50 border border-slate-200 rounded-xl text-center">
+            <p className="text-slate-600 text-[14px]">Aradığınız pozisyonu bulamadınız mı?</p>
+            <p className="text-slate-900 font-semibold text-[14px] mt-1">
+              Genel başvuru için <a href="mailto:ik@deltaoto.com" className="text-[#1B3A8F] hover:underline">ik@deltaoto.com</a> adresine CV'nizi iletebilirsiniz.
+            </p>
           </div>
         </div>
       </section>
@@ -127,12 +192,14 @@ export function KariyerPage() {
           <div className="mb-10">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea] block mb-3">Çalışan Avantajları</span>
             <h2 className="text-3xl font-black tracking-tight">Yan Haklar ve İmkânlar</h2>
+            <p className="text-white/55 mt-3 text-[15px] max-w-xl">Uzun vadeli kurumsal ilişkilerde çalışanların gelişimine yatırım yapıyoruz.</p>
           </div>
-          <div className="grid md:grid-cols-3 gap-4">
+          <div className="grid md:grid-cols-4 gap-4">
             {BENEFITS.map((b) => (
-              <div key={b} className="flex items-center gap-3 bg-white/5 border border-white/10 rounded-xl px-5 py-4">
-                <div className="w-1.5 h-1.5 rounded-full bg-[#7d9bea] shrink-0" />
-                <span className="text-[14px] text-gray-300">{b}</span>
+              <div key={b.label} className="bg-white/[0.06] border border-white/[0.1] rounded-xl px-5 py-5 hover:bg-white/[0.1] transition-colors">
+                <div className="w-2 h-2 rounded-full bg-[#7d9bea] mb-4" />
+                <div className="text-[13.5px] font-semibold text-gray-200">{b.label}</div>
+                <div className="text-[12px] text-white/40 mt-1">{b.sub}</div>
               </div>
             ))}
           </div>

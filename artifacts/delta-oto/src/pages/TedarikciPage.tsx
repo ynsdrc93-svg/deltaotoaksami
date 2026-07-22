@@ -1,28 +1,63 @@
 import React from "react";
 import { Link } from "wouter";
-import { ChevronRight } from "lucide-react";
+import { ChevronRight, CheckCircle2 } from "lucide-react";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
 
+const MARQUEE_CSS = `
+  @keyframes brand-ltr { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+  @keyframes brand-rtl { 0% { transform: translateX(-50%); } 100% { transform: translateX(0); } }
+  .bm-wrap { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%); mask-image: linear-gradient(90deg, transparent 0%, #000 8%, #000 92%, transparent 100%); }
+  .bm-track { display: flex; width: max-content; gap: 12px; }
+  .bm-track.ltr { animation: brand-ltr 38s linear infinite; }
+  .bm-track.rtl { animation: brand-rtl 42s linear infinite; }
+  .bm-wrap:hover .bm-track { animation-play-state: paused; }
+`;
+
+const ROW1 = ["bosch","valeo","hella","brembo","ngk","sachs","denso","monroe","trw","mahle","gates","skf","febi","osram","philips","delphi","ina"];
+const ROW2 = ["contitech","luk","lemforder","fag","elring","corteco","filtron","knecht","mannfilter","champion","borgwarner","swag","optimal","kale","wahler","vdo","gunsan"];
+
 const CATEGORIES = [
-  { name: "Fren & Güvenlik Sistemleri", count: "45+ Marka", brands: ["Brembo", "ATE", "Bosch", "TRW", "Ferodo"] },
-  { name: "Süspansiyon & Direksiyon", count: "38+ Marka", brands: ["Monroe", "Bilstein", "KYB", "Sachs", "Lemförder"] },
+  { name: "Fren & Güvenlik Sistemleri", count: "45+ Marka", brands: ["Brembo", "Bosch", "TRW", "Ferodo", "ATE"] },
+  { name: "Süspansiyon & Direksiyon", count: "38+ Marka", brands: ["Monroe", "Sachs", "KYB", "Lemförder", "SKF"] },
   { name: "Motor, Ateşleme & Elektrik", count: "52+ Marka", brands: ["Bosch", "Denso", "NGK", "Gates", "INA"] },
-  { name: "Egzoz & Emisyon Yönetimi", count: "22+ Marka", brands: ["Walker", "Bosal", "Eberspächer", "Vegaz", "Klarius"] },
-  { name: "Filtre & Periyodik Bakım", count: "30+ Marka", brands: ["Mann+Hummel", "Mahle", "Hengst", "Sogefi", "UFI"] },
-  { name: "Kaporta & Aydınlatma", count: "35+ Marka", brands: ["Valeo", "Hella", "Osram", "Magneti Marelli", "Depo"] },
+  { name: "Rulman & Transmisyon", count: "28+ Marka", brands: ["FAG", "SKF", "LUK", "ContiTech", "GKN"] },
+  { name: "Filtre & Periyodik Bakım", count: "30+ Marka", brands: ["Mann+Hummel", "Mahle", "Filtron", "Hengst", "UFI"] },
+  { name: "Kaporta & Aydınlatma", count: "35+ Marka", brands: ["Valeo", "Hella", "Osram", "Philips", "Depo"] },
+];
+
+const QUALITY = [
+  "OEM veya OEM eşdeğeri sertifikasyon zorunluluğu",
+  "Kayıt dışı ve taklit ürün sıfır toleranstır",
+  "Üretici belgelendirmesi ve lot takip zorunluluğu",
+  "Periyodik ürün denetimleri ve saha geri bildirim sistemi",
+  "Groupauto International global satın alma standartları",
+  "Stok tutarlılığı ve teslimat performansı SLA takibi",
 ];
 
 const ADVANTAGES = [
   { title: "Kapsamlı Ürün Gamı", desc: "250'den fazla markanın 50.000'i aşkın SKU'sundan oluşan portföy; tek tedarikçi ilişkisiyle uçtan uca karşılanır." },
-  { title: "Groupauto Tedarik Ayrıcalığı", desc: "Groupauto International üyeliği, küresel üretici anlaşmaları ve hacim avantajlarına erişim imkânı sunar." },
+  { title: "Groupauto Tedarik Ayrıcalığı", desc: "Groupauto International üyeliği, küresel üretici anlaşmaları ve hacim avantajlarına doğrudan erişim imkânı sunar." },
   { title: "OEM Standart Kalite Güvencesi", desc: "Yalnızca orijinal ve OEM eşdeğeri ürün kategorilerinde faaliyet gösteriyoruz. Kayıt dışı ürün portföyde yer almaz." },
-  { title: "Dinamik Katalog Yönetimi", desc: "Yeni araç modelleri ve marka genişlemeleri portföye sürekli eklenir. Güncel stok ve fiyat bilgisine B2B portalı üzerinden anlık erişilebilir." },
+  { title: "Dinamik Katalog Yönetimi", desc: "Yeni araç modelleri ve marka genişlemeleri portföye sürekli eklenir. Güncel stok bilgisine B2B portalı üzerinden anlık erişilebilir." },
 ];
+
+function BrandCard({ slug }: { slug: string }) {
+  return (
+    <div className="shrink-0 w-36 h-20 bg-white rounded-xl border border-slate-200 flex items-center justify-center px-4 shadow-sm">
+      <img
+        src={`/images/brands/${slug}.png`}
+        alt={slug}
+        className="max-h-10 max-w-[104px] w-auto object-contain grayscale hover:grayscale-0 transition-all duration-300"
+      />
+    </div>
+  );
+}
 
 export function TedarikciPage() {
   return (
     <div className="do-site bg-white min-h-screen">
+      <style>{MARQUEE_CSS}</style>
       <SiteHeader />
 
       {/* HERO */}
@@ -54,7 +89,7 @@ export function TedarikciPage() {
             Binek ve hafif ticari araç kategorilerinde 250'den fazla marka ve 50.000'i aşkın SKU; tek tedarikçi ilişkisiyle eksiksiz karşılanır.
           </p>
           <div className="flex flex-wrap gap-5">
-            {[["250+", "Aktif Marka", "Sürekli güncellenen portföy"], ["50.000+", "Aktif SKU", "Geniş stok derinliği"], ["OEM", "Kalite Standardı", "Kayıt dışı ürün yok"]].map(([n, l, d]) => (
+            {[["250+","Aktif Marka","Sürekli güncellenen portföy"],["50.000+","Aktif SKU","Geniş stok derinliği"],["OEM","Kalite Standardı","Kayıt dışı ürün yok"]].map(([n,l,d]) => (
               <div key={l} className="border border-white/15 rounded-xl px-6 py-4 bg-white/5">
                 <div className="text-2xl font-black text-white">{n}</div>
                 <div className="text-[12px] font-bold text-[#7d9bea] uppercase tracking-wide mt-0.5">{l}</div>
@@ -65,15 +100,39 @@ export function TedarikciPage() {
         </div>
       </section>
 
-      {/* KATEGORİLER — light */}
+      {/* MARKA DUVARI — light */}
+      <section className="bg-[#f8fafc] py-20 border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 mb-10">
+          <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">Global Marka Portföyü</span>
+          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mt-2">
+            <h2 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight">Güvenilir Markaların Tek Çatısı</h2>
+            <p className="text-slate-500 text-[14px] max-w-sm sm:text-right">Dünyanın önde gelen OEM tedarikçilerinin Türkiye distribütörü olarak, bayilerimize global kaliteyi yerel hızla ulaştırıyoruz.</p>
+          </div>
+        </div>
+        <div className="space-y-3">
+          <div className="bm-wrap py-1">
+            <div className="bm-track ltr pl-3">
+              {[...ROW1, ...ROW1].map((b, i) => <BrandCard key={i} slug={b} />)}
+            </div>
+          </div>
+          <div className="bm-wrap py-1">
+            <div className="bm-track rtl pl-3">
+              {[...ROW2, ...ROW2].map((b, i) => <BrandCard key={i} slug={b} />)}
+            </div>
+          </div>
+        </div>
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 mt-10 text-center">
+          <p className="text-slate-400 text-[13px]">Portföydeki tüm markalar OEM veya OEM eşdeğeri sertifikasyon standardındadır. Gösterilen markalar temsili seçimdir; tam liste için B2B portalına giriş yapınız.</p>
+        </div>
+      </section>
+
+      {/* KATEGORİLER — white */}
       <section className="bg-white py-24">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="mb-14">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">Ürün Kategorileri</span>
             <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-2 tracking-tight">Uçtan Uca Kategori Kapsamı</h2>
-            <p className="text-slate-500 mt-3 max-w-2xl text-[15px]">
-              Her kategoride birden fazla marka alternatifi sunarak müşterilerimize tercih esnekliği ve maliyet optimizasyon imkânı sağlıyoruz.
-            </p>
+            <p className="text-slate-500 mt-3 max-w-2xl text-[15px]">Her kategoride birden fazla marka alternatifi sunarak müşterilerimize tercih esnekliği ve maliyet optimizasyon imkânı sağlıyoruz.</p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
             {CATEGORIES.map((cat) => (
@@ -94,19 +153,55 @@ export function TedarikciPage() {
         </div>
       </section>
 
-      {/* AVANTAJLAR — navy */}
+      {/* TEDARİKÇİ KALİTE KRİTERLERİ — navy */}
       <section className="bg-[#1B3A8F] py-24 text-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="mb-14">
-            <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea]">Tedarik Üstünlüğü</span>
-            <h2 className="text-3xl md:text-4xl font-black mt-2 tracking-tight">Neden Delta Oto?</h2>
-            <p className="text-white/60 mt-3 max-w-xl text-[15px]">50 yılın birikimi ve Groupauto International üyeliğinin sağladığı avantajlar, müşterilerimizin pazar rekabetini doğrudan güçlendirir.</p>
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea] block mb-4">Kalite Güvencesi</span>
+              <h2 className="text-3xl md:text-4xl font-black tracking-tight mb-6">Tedarikçi Kalite Kriterleri</h2>
+              <p className="text-white/65 leading-[1.85] text-[15.5px] mb-8">
+                Portföyümüze alınan her marka, titiz bir ön değerlendirme ve süregelen denetim sürecine tabidir. Groupauto International global satın alma standartları bu sürecin omurgasını oluşturur. Müşterilerimizin saha güvenilirliğini korumak için sahte ve düşük kaliteli ürüne karşı sıfır tolerans politikamız uygulanır.
+              </p>
+              <div className="space-y-3">
+                {QUALITY.map((q) => (
+                  <div key={q} className="flex items-start gap-3">
+                    <CheckCircle2 className="w-4 h-4 text-[#7d9bea] shrink-0 mt-0.5" />
+                    <span className="text-white/80 text-[14px] leading-snug">{q}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="grid grid-cols-2 gap-4">
+              {[
+                { n: "250+", l: "Aktif Marka", d: "Sürekli büyüyen portföy" },
+                { n: "50.000+", l: "Aktif SKU", d: "Geniş stok derinliği" },
+                { n: "OEM", l: "Standart", d: "Tüm ürünlerde zorunlu" },
+                { n: "Groupauto", l: "Üyeliği", d: "Global satın alma ağı" },
+              ].map(({ n, l, d }) => (
+                <div key={l} className="bg-white/[0.08] border border-white/[0.12] rounded-xl p-6 hover:bg-white/[0.14] transition-colors">
+                  <div className="text-2xl font-black text-white mb-1">{n}</div>
+                  <div className="text-[12px] font-bold text-[#7d9bea] uppercase tracking-wide">{l}</div>
+                  <div className="text-[12px] text-white/50 mt-1">{d}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* AVANTAJLAR — white */}
+      <section className="bg-white py-20">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="mb-12">
+            <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">Tedarik Üstünlüğü</span>
+            <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-2 tracking-tight">Neden Delta Oto?</h2>
           </div>
           <div className="grid md:grid-cols-2 gap-5">
             {ADVANTAGES.map((a) => (
-              <div key={a.title} className="bg-white/[0.08] border border-white/[0.12] rounded-xl p-8 hover:bg-white/[0.14] transition-colors">
-                <h3 className="text-[15px] font-bold mb-3 leading-snug">{a.title}</h3>
-                <p className="text-white/65 text-[14px] leading-relaxed">{a.desc}</p>
+              <div key={a.title} className="border border-slate-200 rounded-xl p-8 hover:border-[#1B3A8F]/30 hover:shadow-lg transition-all">
+                <h3 className="text-[15px] font-bold text-slate-900 mb-3 leading-snug">{a.title}</h3>
+                <p className="text-slate-500 text-[14px] leading-relaxed">{a.desc}</p>
               </div>
             ))}
           </div>
