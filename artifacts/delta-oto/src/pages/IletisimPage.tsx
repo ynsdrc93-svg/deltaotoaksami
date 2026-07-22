@@ -25,7 +25,7 @@ export function IletisimPage() {
         <div className="absolute inset-0 do-grid-bg opacity-40" />
         <div className="absolute left-0 top-0 w-[3px] h-full bg-gradient-to-b from-transparent via-[#1B3A8F] to-transparent opacity-60" />
 
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 py-28">
+        <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 relative z-10 py-28">
           <div className="flex items-center gap-3 mb-7">
             <div className="w-8 h-[2px] bg-[#4d74d6]" />
             <span className="text-[#7d9bea] text-xs font-bold uppercase tracking-[0.3em]">Kurumsal İletişim · Ümraniye, İstanbul</span>
