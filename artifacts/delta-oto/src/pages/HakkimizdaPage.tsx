@@ -143,6 +143,34 @@ export function HakkimizdaPage() {
         </div>
       </section>
 
+      {/* İŞ BİRİMLERİ — navy */}
+      <section className="bg-[#1B3A8F] py-24 text-white">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="mb-14">
+            <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea]">Faaliyet Alanları</span>
+            <h2 className="text-3xl md:text-4xl font-black mt-2 tracking-tight">İş Birimlerimiz</h2>
+            <p className="text-white/60 mt-3 max-w-xl text-[15px]">Delta Oto, birbirini tamamlayan iş kollarıyla otomotiv satış sonrası sektöründe kapsamlı bir tedarik gücü sunmaktadır.</p>
+          </div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+            {[
+              { num: "01", title: "Aftermarket Dağıtım", desc: "Binek ve hafif ticari araç kategorilerinde 250'den fazla küresel ve yerel marka distribütörlüğü. Türkiye'nin tamamına B2B kanalı üzerinden tedarik.", tags: ["250+ Marka","50.000+ SKU","B2B Portal"] },
+              { num: "02", title: "SPART Private Label", desc: "Delta Oto'nun özel dağıtım markası SPART; OEM eşdeğeri kaliteyi rekabetçi fiyat yapısıyla sunar. Fren, süspansiyon, motor ve kaporta kategorilerinde aktif portföy.", tags: ["OEM Eşdeğeri","Rekabetçi Fiyat","Geniş SKU Gamı"] },
+              { num: "03", title: "Ağır Vasıta Grubu", desc: "Kamyon, otobüs ve iş makinesi kategorilerinde seçilmiş marka ve ürün gamıyla ağır vasıta segmentine özel tedarik hizmeti.", tags: ["Kamyon","Otobüs","İş Makinesi"] },
+              { num: "04", title: "B2B Dijital Kanal", desc: "7/24 erişilebilen B2B portalı üzerinden anlık stok sorgulama, fiyat listeleri ve sipariş yönetimi. Müşteri operasyonlarına entegre dijital tedarik deneyimi.", tags: ["7/24 Erişim","Anlık Stok","Dijital Sipariş"] },
+            ].map(({ num, title, desc, tags }) => (
+              <div key={num} className="bg-white/[0.08] border border-white/[0.12] rounded-xl p-7 hover:bg-white/[0.14] transition-colors flex flex-col">
+                <div className="text-5xl font-black text-white/10 mb-4 leading-none select-none">{num}</div>
+                <h3 className="text-[15px] font-bold mb-3 leading-snug">{title}</h3>
+                <p className="text-white/60 text-[13.5px] leading-relaxed flex-1">{desc}</p>
+                <div className="flex flex-wrap gap-1.5 mt-5">
+                  {tags.map(t => <span key={t} className="text-[11px] bg-white/10 border border-white/15 text-white/70 px-2.5 py-1 rounded-full">{t}</span>)}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* GROUPAUTO — dark */}
       <section className="relative bg-[#0e1016] text-white py-24 overflow-hidden">
         <div className="absolute inset-0">

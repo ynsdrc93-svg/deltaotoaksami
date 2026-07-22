@@ -149,6 +149,73 @@ export function OperasyonPage() {
         </div>
       </section>
 
+      {/* LOJİSTİK MERKEZLERİMİZ — navy */}
+      <section className="bg-[#1B3A8F] py-24 text-white">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="mb-14">
+            <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea]">Dağıtım Ağı</span>
+            <h2 className="text-3xl md:text-4xl font-black mt-2 tracking-tight">Lojistik Merkezlerimiz</h2>
+            <p className="text-white/60 mt-3 max-w-xl text-[15px]">Yanınızda ve yakınınızdayız. İki operasyon merkezi üzerinden Türkiye'nin tamamına kesintisiz hizmet sunuyoruz.</p>
+          </div>
+          <div className="grid md:grid-cols-2 gap-6 mb-10">
+            {[
+              {
+                label: "Merkez",
+                name: "Ümraniye Merkez Depo",
+                city: "İstanbul",
+                address: "Barbaros Cd. Beyit Sk. No:17, Yukarı Dudullu – Ümraniye / İstanbul",
+                phone: "0216 526 64 64 / 0216 526 33 44",
+                kapsam: "İstanbul, Marmara, Trakya ve Türkiye geneli sevkiyat merkezi",
+                hizlar: ["Aynı Gün Sevkiyat (14:00 kesim)","Ertesi Gün İstanbul İçi","Tüm 81 İle Dağıtım"],
+              },
+              {
+                label: "Bölge",
+                name: "Opar Ege Bölge Operasyonu",
+                city: "İzmir",
+                address: "İzmir – Ege Bölgesi Distribüsyon Merkezi",
+                phone: "—",
+                kapsam: "İzmir, Manisa, Aydın, Muğla ve çevre iller bölgesel tedarik üssü",
+                hizlar: ["Bölgesel Stok Noktası","Ege İlleri Öncelikli Teslimat","Groupauto Bölge Temsilciliği"],
+              },
+            ].map(({ label, name, city, address, phone, kapsam, hizlar }) => (
+              <div key={name} className="bg-white/[0.08] border border-white/[0.12] rounded-xl p-8 hover:bg-white/[0.14] transition-colors">
+                <div className="flex items-start justify-between mb-5">
+                  <div>
+                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#7d9bea]">{label} Operasyon</span>
+                    <h3 className="text-[17px] font-black mt-1">{name}</h3>
+                    <p className="text-white/50 text-[13px] mt-0.5">{city}</p>
+                  </div>
+                  <div className="w-10 h-10 rounded-xl bg-white/10 border border-white/15 flex items-center justify-center shrink-0">
+                    <svg className="w-5 h-5 text-[#7d9bea]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                  </div>
+                </div>
+                <p className="text-white/55 text-[13px] mb-4">{address}</p>
+                {phone !== "—" && <p className="text-white/70 text-[13px] font-semibold mb-4">{phone}</p>}
+                <p className="text-white/60 text-[13px] leading-relaxed mb-5 border-t border-white/10 pt-4">{kapsam}</p>
+                <div className="space-y-2">
+                  {hizlar.map(h => (
+                    <div key={h} className="flex items-center gap-2.5">
+                      <div className="w-1.5 h-1.5 rounded-full bg-[#7d9bea] shrink-0" />
+                      <span className="text-[13px] text-white/75">{h}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+          <div className="bg-white/[0.05] border border-white/[0.1] rounded-xl px-8 py-6 flex flex-col sm:flex-row items-center gap-6 justify-between">
+            <div>
+              <div className="text-[15px] font-bold">Tüm Türkiye'ye Kesintisiz Erişim</div>
+              <p className="text-white/55 text-[13.5px] mt-1">İki operasyon merkezimiz ve anlaşmalı lojistik partnerlerimiz aracılığıyla 81 ile düzenli teslimat gerçekleştirilmektedir.</p>
+            </div>
+            <div className="shrink-0 text-center">
+              <div className="text-4xl font-black text-white">81</div>
+              <div className="text-[11px] text-[#7d9bea] font-bold uppercase tracking-wide mt-1">İl Kapsamı</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* SİPARİŞ SÜRECİ — dark */}
       <section className="relative bg-[#0e1016] text-white py-24 overflow-hidden">
         <div className="absolute inset-0 do-grid-bg opacity-25" />

@@ -1,0 +1,2753 @@
+<!doctype html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Başbuğ - Oto Yedek Parça</title>
+    <meta name="description" content="Başbuğ Oto - 1974&#039;ten beri Türkiye&#039;nin güvenilir oto yedek parça tedarikçisi. Hafif ticari ve ağır vasıta parçalarında geniş ürün yelpazesi ve hızlı teslimat." />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+    <link href="https://www.basbug.com.tr/styles/main.css" rel="stylesheet" />
+    <link href="https://www.basbug.com.tr/styles/common.css" rel="stylesheet" />
+    <!-- Font -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+        <style>
+        .slide-content {
+            max-width: 100%;
+        }
+        .swiper-hero .slide-content h1 {
+            width: 100%;
+        }
+        .nav-tabs .nav-link {
+            padding: 13px;
+        }
+        .second-unit-block {
+            padding-top: 3rem;
+        }
+        .second-unit-title {
+            font-weight: 600;
+        }
+        .second-unit-images {
+            display: flex;
+            flex-wrap: nowrap;
+            width: 100%;
+            gap: 0;
+            height: 540px;
+        }
+        .second-unit-image-link {
+            flex: 1 1 0;
+            min-width: 0;
+            display: block;
+            line-height: 0;
+            position: relative;
+            overflow: hidden;
+            transition: flex-grow 0.7s ease;
+        }
+        .second-unit-image-link:hover,
+        .second-unit-image-link:focus-visible {
+            flex-grow: 1.6;
+            /*flex-grow: 2.5;*/
+        }
+        .second-unit-image-link img {
+            width: auto;
+            min-width: 100%;
+            height: 100%;
+            max-width: none;
+            object-fit: cover;
+            /object-position: left center;
+            display: block;
+            filter: grayscale(100%);
+            transition: filter 0.55s ease;
+        }
+        .second-unit-image-link:hover img,
+        .second-unit-image-link:focus-visible img {
+            filter: grayscale(0%);
+        }
+        .second-unit-image-link .category-title {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: #fff;
+            font-weight: 600;
+            font-size: 1.25rem;
+            line-height: 1.2;
+            text-align: center;
+            padding: 0 1rem;
+            text-shadow: 0 2px 6px rgba(0, 0, 0, 0.8), 0 0 12px rgba(0, 0, 0, 0.6);
+            opacity: 0;
+            transition: opacity 0.35s ease;
+            pointer-events: none;
+        }
+        .second-unit-image-link:hover .category-title,
+        .second-unit-image-link:focus-visible .category-title {
+            opacity: 1;
+        }
+        @media (max-width: 768px) {
+            .second-unit-images {
+                flex-wrap: wrap;
+                height: auto;
+            }
+            .second-unit-image-link {
+                flex: 0 0 100%;
+                max-width: 100%;
+                height: 300px;
+            }
+            .second-unit-image-link:hover,
+            .second-unit-image-link:focus-visible {
+                flex-grow: 0;
+            }
+            .second-unit-image-link img {
+                filter: none;
+            }
+            .second-unit-image-link .category-title {
+                opacity: 1;
+            }
+        }
+    </style>
+
+    <style>
+        @media (min-width:801px)  {
+            /* İstanbul */
+            .circle-1 .hover-box {
+                margin-left: 36px!important;
+                height: 280px;
+                width: 230px;
+                bottom: -97px!important;
+            }
+            /* Antalya */
+            .circle-4 .hover-box {
+                margin-top:20px;
+                margin-left: 25px!important;
+                height: 120px!important;
+            }
+            /* Samsun */
+            .circle-3 .hover-box {
+                margin-top: 10px;
+                margin-left: 20px!important;
+                height: 130px!important;
+            }
+            /* Bursa */
+            .circle-2 .hover-box {
+                margin-bottom: 30px;
+                height: 160px!important;
+            }
+            .circle.circle-2 .hover-box p:hover {
+                top:50px;
+            }
+            /* Adana */
+            .circle-7 .hover-box {
+                margin-left: 20px!important;
+            }
+            /* Çorlu */
+            .circle-12 .hover-box {
+                margin-left: 20px!important;
+                height: 130px!important;
+            }
+            /* Diyarbakır */
+            .circle-12 .hover-box {
+                margin-left: 40px!important;
+                height: 130px!important;
+            }
+            /* Gaziantep */
+            .circle-11 .hover-box {
+                margin-top:20px!important;
+                margin-left: 30px!important;
+                height: 140px!important;
+            }
+            /* Kayseri */
+            .circle-13 .hover-box {
+                margin-left: 30px!important;
+                height: 240px!important;
+            }
+        }
+    </style>
+
+
+
+    <style>
+        .lang-menu > li > a, .lang-menu-mobile > li > a {
+            text-decoration: none!important;
+            color: #333;
+        }
+    </style>
+    <style>
+        section.page-banner {
+            padding-bottom:30px!important;
+            padding-top: 100px!important;
+        }
+        section.page-banner.page-banner-centered {
+            align-items: end!important;
+        }
+        .page-banner-content-centered {
+            justify-content: start!important;
+            align-items: unset!important;
+        }
+        .page-banner-description {
+            text-align: left!important;
+        }
+        @media screen and (max-width: 767px) {
+            h3.page-banner-subtitle-centered {
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+<body>
+<div id="scrollUp"><i class="fas fa-chevron-up"></i></div>
+<nav class="navbar navbar-expand-lg fixed-top">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="https://www.basbug.com.tr/tr">
+            <img src="https://www.basbug.com.tr/assets/img/basbug_logo.png" width="120" height="80" class="navbar-logo" />
+        </a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon custom-toggler">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+        </button>
+
+        <!-- Overlay -->
+        <div class="navbar-overlay"></div>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <div class="collapse-head">
+                <img src="https://www.basbug.com.tr/assets/img/basbug-oto-sticky-logo.png" width="120" height="80" alt="" />
+                <div id="navbar-close"><i class="fas fa-times"></i></div>
+            </div>
+            <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+                <li class="nav-item px-0">
+                    <a class="nav-link" href="https://www.basbug.com.tr/tr/kurumsal">Kurumsal</a>
+                </li>
+                <li class="nav-item px-0 desktop-only">
+                    <a class="nav-link" href="https://www.basbug.com.tr/tr/is-ortaklarimiz" id="partners-link">İş Ortakları <i class="fas fa-chevron-down"></i></a>
+                </li>
+                <li class="nav-item px-0 mobile-only">
+                    <a class="nav-link" href="#" id="partners-btn-mobile">İş Ortakları <i class="fas fa-chevron-down ps-2"></i></a>
+                    <!-- Dropdown -->
+                    <div class="nav-dropdown-mobile" id="partners-mobile-dropdown">
+                        <a href="https://www.basbug.com.tr/tr/iam" class="dropdown-item">IAM</a>
+                        <a href="https://www.basbug.com.tr/tr/oes" class="dropdown-item">OES</a>
+                    </div>
+                </li>
+                <li class="nav-item px-0">
+                    <a class="nav-link" href="https://www.basbug.com.tr/tr/arac-gruplari">Araç Grupları</a>
+                </li>
+                <li class="nav-item px-0 desktop-only">
+                    <a class="nav-link" href="https://www.basbug.com.tr/tr/lojistik-merkezleri" id="lojistik-link">Lojistik Merkezleri <i class="fas fa-chevron-down"></i> </a>
+                </li>
+                <li class="nav-item px-0 mobile-only">
+                    <a class="nav-link" href="https://www.basbug.com.tr/tr/lojistik-merkezleri">Lojistik Merkezleri</a>
+                </li>
+                <li class="nav-item px-0">
+                    <a class="nav-link" href="https://www.basbug.com.tr/tr/iletisim">İletişim</a>
+                </li>
+                <div class="desktop-only">
+                    <ul class="language-dropdown d-flex position-relative">
+                        <li class="d-flex gap-2 align-items-center" id="lang-btn">
+                            <img src="https://www.basbug.com.tr/assets/img/tr-icon.png" alt="" width="18" />
+                            <span class="small text-uppercase">tr</span>
+                            <i class="fas fa-chevron-down small"></i>
+
+                            <!-- Dropdown -->
+                            <ul class="lang-menu">
+                                <li class="lang-item text-uppercase">
+                                    <a href="https://www.basbug.com.tr/en">EN</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <div class="mobile-only">
+                    <ul class="language-dropdown d-flex position-relative">
+                        <li class="d-flex gap-2 align-items-center" id="lang-btn-mobile">
+                            <span class="small text-dark nav-link">TR</span>
+                            <img src="https://www.basbug.com.tr/assets/img/tr-icon.png" alt="" width="18" />
+                            <i class="fas fa-chevron-down ps-2"></i>
+                            <ul class="lang-menu-mobile">
+                                                                                                                                                                                                                                    <li class="lang-item text-uppercase">
+                                                <a href="https://www.basbug.com.tr/en">EN</a>
+                                            </li>
+                                                                                                                                        </ul>
+                        </li>
+                    </ul>
+                </div>
+
+                <li class="nav-item px-0 d-flex d-lg-none">
+                    <a class="nav-link" href="https://www.basbug.com.tr/tr/aday-musteri-formu">Aday Müşteri Formu</a>
+                </li>
+                <li class="nav-item px-0 d-flex d-lg-none">
+                    <a class="nav-link" href="#" class="btn btn-sign-in" id="bayi-btn-mobile">Bayi Girişi <i class="fas fa-chevron-down ps-2"></i> </a>
+                    <!-- Dropdown -->
+                    <div class="nav-dropdown-mobile" id="bayi-mobile-dropdown">
+                        <a href="https://b2bbasbug.com/web/login" class="dropdown-item" target="_blank">B2B</a>
+                        <a href="https://www.b4bbasbug.com/" class="dropdown-item" target="_blank">B4B</a>
+                    </div>
+                </li>
+
+            </ul>
+
+            <!-- Custom Dropdown -->
+            <div id="custom-dropdown" class="custom-dropdown">
+                <div class="dropdown-inner d-flex flex-column">
+                    <h3 class="title">Lojistik Merkezleri</h3>
+                    <div class="dropdown-items-container d-flex">
+                                                                                    <a href="https://www.basbug.com.tr/tr/lojistik-merkezi/istanbul-lojistik-merkezi" class="dropdown-item">
+                                    <div class="image-content">
+                                        <img src="https://www.basbug.com.tr/uploads/2026/04/1775037436_69ccebfc5040f.png" alt="İSTANBUL LOJİSTİK MERKEZİ">
+                                    </div>
+                                    <div class="text-content text-start d-flex flex-column justify-content-center gap-2">
+                                        <h5>İSTANBUL<br>LOJİSTİK<br>MERKEZİ</h5> 
+                                                                            </div>
+                                </a>
+                                                            <a href="https://www.basbug.com.tr/tr/lojistik-merkezi/kayseri-lojistik-merkezi" class="dropdown-item">
+                                    <div class="image-content">
+                                        <img src="https://www.basbug.com.tr/uploads/2026/04/1775734200_69d78db8c3dc5.jpg" alt="KAYSERİ LOJİSTİK MERKEZİ">
+                                    </div>
+                                    <div class="text-content text-start d-flex flex-column justify-content-center gap-2">
+                                        <h5>KAYSERİ<br>LOJİSTİK<br>MERKEZİ</h5> 
+                                                                            </div>
+                                </a>
+                                                            <a href="https://www.basbug.com.tr/tr/lojistik-merkezi/ankara-lojistik-merkezi" class="dropdown-item">
+                                    <div class="image-content">
+                                        <img src="https://www.basbug.com.tr/uploads/2026/04/1775734217_69d78dc93b3bf.jpg" alt="ANKARA LOJİSTİK MERKEZİ">
+                                    </div>
+                                    <div class="text-content text-start d-flex flex-column justify-content-center gap-2">
+                                        <h5>ANKARA<br>LOJİSTİK<br>MERKEZİ</h5> 
+                                                                            </div>
+                                </a>
+                                                            <a href="https://www.basbug.com.tr/tr/lojistik-merkezi/izmir-lojistik-merkezi" class="dropdown-item">
+                                    <div class="image-content">
+                                        <img src="https://www.basbug.com.tr/uploads/2026/04/1775734235_69d78ddba4881.jpg" alt="İZMİR LOJİSTİK MERKEZİ">
+                                    </div>
+                                    <div class="text-content text-start d-flex flex-column justify-content-center gap-2">
+                                        <h5>İZMİR<br>LOJİSTİK<br>MERKEZİ</h5> 
+                                                                            </div>
+                                </a>
+                                                            <a href="https://www.basbug.com.tr/tr/lojistik-merkezi/sekerpinar-lojistik-merkezi" class="dropdown-item">
+                                    <div class="image-content">
+                                        <img src="https://www.basbug.com.tr/uploads/2026/04/1775037635_69ccecc359f8e.png" alt="ŞEKERPINAR LOJİSTİK MERKEZİ">
+                                    </div>
+                                    <div class="text-content text-start d-flex flex-column justify-content-center gap-2">
+                                        <h5>ŞEKERPINAR<br>LOJİSTİK<br>MERKEZİ</h5> 
+                                                                            </div>
+                                </a>
+                                                                        </div>
+                </div>
+                <div class="dropdown-cta d-flex align-items-center justify-content-center pt-5">
+                    <a href="https://www.basbug.com.tr/tr/lojistik-merkezleri" class="link-primary text-decoration-none">
+                        Tüm Lojistik Merkezlerini Ziyaret Edin <i class="fas fa-chevron-right ps-2"></i>
+                    </a>
+                </div>
+            </div>
+
+            <!-- Custom Dropdown: Business Partners -->
+            <div id="custom-dropdown-partners" class="custom-dropdown custom-dropdown-business-units">
+                <div class="dropdown-inner d-flex flex-column">
+                    <h3 class="title text-lg-center">İş Ortakları</h3>
+                    <div class="dropdown-items-container d-flex justify-content-center">
+                                                                                    <a href="https://www.basbug.com.tr/tr/iam" class="dropdown-item" style="justify-content:right">
+                                    <div class="image-content">
+                                        <img src="https://www.basbug.com.tr/uploads/2026/06/1782129356_6a3922cc8248c.jpeg" alt="IAM">
+                                    </div>
+                                    <div class="text-content text-start d-flex flex-column justify-content-center gap-2">
+                                        
+                                        
+                                    </div>
+                                </a>
+                                                            <a href="https://www.basbug.com.tr/tr/oes" class="dropdown-item" style="justify-content:left">
+                                    <div class="image-content">
+                                        <img src="https://www.basbug.com.tr/uploads/2026/06/1782129364_6a3922d49bf4f.jpeg" alt="OES">
+                                    </div>
+                                    <div class="text-content text-start d-flex flex-column justify-content-center gap-2">
+                                        
+                                        
+                                    </div>
+                                </a>
+                                                                        </div>
+                </div>
+            </div>
+
+
+            <div class="d-none d-lg-flex">
+                <div class="d-flex align-items-center position-relative">
+                    <a href="#" class="btn btn-sign-in" id="bayi-btn">
+                        Bayi Girişi <i class="fas fa-chevron-down ps-2"></i>
+                    </a>
+                    <!-- Dropdown -->
+                    <div class="dropdown-menu-sign-in">
+                        <a href="https://b2bbasbug.com/web/login" target="_blank" class="dropdown-item">B2B</a>
+                        <a href="https://www.b4bbasbug.com/" target="_blank" class="dropdown-item">B4B</a>
+                    </div>
+
+                    <a href="https://www.basbug.com.tr/tr/aday-musteri-formu" class="btn btn-sign-up">Aday Müşteri Formu</a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</nav>
+
+    <!-- YouTube Video Modal -->
+    <div class="modal fade" id="videoModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg">
+            <div class="modal-content bg-transparent border-0">
+                <div class="modal-body p-0">
+                    <div class="ratio ratio-16x9">
+                        <iframe id="youtubeVideo" src="" title="YouTube video" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                    </div>
+                </div>
+                <button type="button" class="btn-close position-absolute top-0 end-0 m-3" data-bs-dismiss="modal" aria-label="Kapat"></button>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- MAIN SLIDER -->
+    <div class="swiper swiper-hero">
+        <div class="swiper-wrapper">
+                                                <div class="swiper-slide">
+                        <video autoplay muted loop playsinline>
+                            <source src="https://www.basbug.com.tr/uploads/2026/03/1772830584_69ab3f7832d47.mp4" type="video/mp4">
+                        </video>
+                        <div class="slide-content">
+                            <h1>Global Deneyim <br>Yenilikçi Vizyon</h1>
+                                                        <p>Yarım asrı aşkın deneyimimiz, güçlü stok kapasitemiz  ve global iş ortaklıklarımızla otomotiv yedek parça sektöründe güveni ve sürdürülebilir büyümeyi temsil ediyoruz.</p>
+                                                    </div>
+                    </div>
+                                                                <div class="swiper-slide">
+                        <div class="slide-bg" style="background-image: url('https://www.basbug.com.tr/uploads/2026/01/1767619962_695bbd7acdc38.png');"></div>
+                        <div class="slide-content">
+                            <h1>Tecrübeden Gelen Güç, Geleceğe Yön Veren Vizyon</h1>
+                            <p>50 yılı aşan tecrübemizle, 90’dan fazla ülkeye uzanan dağıtım gücümüz ve yenilikçi çözümlerimizle otomotivin geleceğine yön veriyoruz.</p>
+                        </div>
+                    </div>
+                                    </div>
+        <!-- Pagination -->
+        <div class="swiper-pagination hero-pagination"></div>
+        <!-- Navigation -->
+        <div class="swiper-button-prev"><i class="fas fa-chevron-left"></i></div>
+        <div class="swiper-button-next"><i class="fas fa-chevron-right"></i></div>
+    </div>
+
+
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-6 d-flex flex-column align-items-start justify-content-center">
+                    <h2 class="hero-line">1974’ten Beri</h2>
+                    <h1 class="hero-title">Başbuğ Güvencesi</h1>
+                    <p class="hero-subtitle">Otomotiv sektöründe yarım asrı aşkın deneyim, güçlü grup yapımız ve iştiraklerimizle edindiğimiz uzmanlıkla yanınızdayız.</p>
+                </div>
+                <div class="col-lg-6">
+                    <div class="hero-image-wrapper">
+                                                    <img src="https://www.basbug.com.tr/uploads/2026/01/1767619918_695bbd4ebdbee.png" alt="" class="img-fluid hero-img w-100 border-radius-5" loading="lazy">
+                                            </div>
+                </div>
+            </div>
+
+            <div class="brand-logos-row">
+                <div class="brand-items-container mobile-only first-row">
+                    <div class="brand-item">
+                        <a href="https://www.basbuggroup.com/" target="_blank">
+                            <img src="https://www.basbug.com.tr/assets/img/intro_basbug_group_logo.png" alt="Başbuğ Group" width="300" height="200" class="brand-logo-img">
+                        </a>
+                    </div>
+                    <div class="brand-item">
+                        <img src="https://www.basbug.com.tr/assets/img/basbug-oto-sticky-logo.png" alt="Başbuğ Group Oto Yedek Parça" width="300" height="200" class="brand-logo-img">
+                    </div>
+                    <div class="brand-item">
+                        <a href="https://bsgautoparts.com/" target="_blank">
+                            <img src="https://www.basbug.com.tr/assets/img/bsg.png" alt="Başbuğ Group BSG"  width="300" height="200"  class="brand-logo-img">
+                        </a>
+                    </div>
+                </div>
+
+                <div class="brand-items-container mobile-only second-row">
+                    <div class="brand-item">
+                        <a href="https://aseloto.com.tr/" target="_blank">
+                            <img src="https://www.basbug.com.tr/assets/img/Asel_1.png" alt="Başbuğ Group Asel" width="300" height="200" class="brand-logo-img">
+                        </a>
+                    </div>
+                    <div class="brand-item">
+                        <a href="https://www.nevoto.com.tr/" target="_blank">
+                            <img src="https://www.basbug.com.tr/assets/img/4_logo.png" alt="Başbuğ Group Nev" width="625" height="275" class="brand-logo-img">
+                        </a>
+                    </div>
+                    <div class="brand-item">
+                        <a href="https://nerex.com.tr/" target="_blank">
+                            <img src="https://www.basbug.com.tr/assets/img/nerenx.png" alt="Başbuğ Group Nerex" width="300" height="200" class="brand-logo-img">
+                        </a>
+                    </div>
+                    <div class="brand-item">
+                        <a href="https://goodyearotoaksesuar.com.tr/" target="_blank">
+                            <img src="https://www.basbug.com.tr/assets/img/gdy_transparent.png" alt="Başbuğ Group Goodyear" width="300" height="200" class="brand-logo-img">
+                        </a>
+                    </div>
+                </div>
+
+
+                <div class="brand-items-container desktop-only">
+                    <div class="brand-item">
+                        <a href="https://www.basbuggroup.com/" target="_blank">
+                            <img src="https://www.basbug.com.tr/assets/img/intro_basbug_group_logo.png" alt="Başbuğ Group" width="300" height="200" class="brand-logo-img">
+                        </a>
+                    </div>
+                    <div class="brand-item second-item">
+                        <img src="https://www.basbug.com.tr/assets/img/basbug-oto-sticky-logo.png" alt="Başbuğ Group Oto Yedek Parça" width="300" height="200" class="brand-logo-img">
+                    </div>
+                    <div class="brand-item">
+                        <a href="https://bsgautoparts.com/" target="_blank">
+                            <img src="https://www.basbug.com.tr/assets/img/bsg.png" alt="Başbuğ Group BSG" width="300" height="200" class="brand-logo-img">
+                        </a>
+                    </div>
+                    <div class="brand-item">
+                        <a href="https://aseloto.com.tr/" target="_blank">
+                            <img src="https://www.basbug.com.tr/assets/img/Asel_1.png" alt="Başbuğ Group Asel" width="300" height="200" class="brand-logo-img">
+                        </a>
+                    </div>
+                    <div class="brand-item">
+                        <a href="https://www.nevoto.com.tr/" target="_blank">
+                            <img src="https://www.basbug.com.tr/assets/img/4_logo.png" alt="Başbuğ Group Nev" width="625" height="275"  class="brand-logo-img">
+                        </a>
+                    </div>
+                    <div class="brand-item">
+                        <a href="https://nerex.com.tr/" target="_blank">
+                            <img src="https://www.basbug.com.tr/assets/img/nerenx.png" alt="Başbuğ Group Nerex" width="300" height="200" class="brand-logo-img">
+                        </a>
+                    </div>
+                    <div class="brand-item">
+                        <a href="https://goodyearotoaksesuar.com.tr/" target="_blank">
+                            <img src="https://www.basbug.com.tr/assets/img/gdy_transparent.png" alt="Başbuğ Group Goodyear 7" width="300" height="200" class="brand-logo-img">
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- EXPERIENCE -->
+            <style>
+            section.section-experience {
+                background-image: url(https://www.basbug.com.tr/uploads/2026/03/1772777324_69aa6f6c4ccf2.jpeg);
+            }
+        </style>
+        <section class="section-experience">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-4">
+                    <div class="h-100 d-flex flex-column align-items-start justify-content-start">
+                        <h2 class="hero-line">Dünyaları Birleştiren</h2>
+                        <h1 class="hero-title mt-3">Deneyim ve Güç</h1>
+                    </div>
+                </div>
+                <div class="col-lg-8">
+                    <div class="row">
+                        <div class="col-6 col-lg-6 gy-3 gy-lg-0 gy-md-0 gx-3 pe-lg-0">
+                            <div class="card experience-card d-flex flex-column flex-lg-row gap-3 border-radius-5">
+                                <div class="icon-container">
+                                    <img src="https://www.basbug.com.tr/build/depo.svg" alt="" width="80" height="80">
+                                </div>
+                                <div class="text-container">
+                                    <h5 class="number" data-target="75000" data-suffix="K+"></h5>
+                                    <span class="subtitle">Depo Kapasitesi (m²)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-6 gy-3 gy-lg-0 gy-md-0 gx-3 pe-lg-0">
+                            <div class="card experience-card d-flex flex-column flex-lg-row gap-3 border-radius-5">
+                                <div class="icon-container">
+                                    <img src="https://www.basbug.com.tr/build/delivery2.svg" alt="" width="80" height="80">
+                                </div>
+                                <div class="text-container">
+                                    <h5 class="number" data-target="15000000" data-suffix="M+"></h5>
+                                    <span class="subtitle">Gönderi (KM)</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-6 gy-3 gy-lg-3 gy-md-0 gx-3 pe-lg-0">
+                            <div class="card experience-card d-flex flex-column flex-lg-row gap-3 border-radius-5">
+                                <div class="icon-container">
+                                    <img src="https://www.basbug.com.tr/build/urun_cesidi.svg" alt="" width="80" height="80">
+                                </div>
+                                <div class="text-container">
+                                    <h5 class="number" data-target="450000" data-suffix="K+"></h5>
+                                    <span class="subtitle">Ürün Çeşidi</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6 col-lg-6 gy-3 gy-lg-3 gy-md-0 gx-3 pe-lg-0">
+                            <div class="card experience-card d-flex flex-column flex-lg-row gap-3 border-radius-5">
+                                <div class="icon-container">
+                                    <img src="https://www.basbug.com.tr/build/stok_cesidi.svg" alt="" width="80" height="80">
+                                </div>
+                                <div class="text-container">
+                                    <h5 class="number" data-target="150000" data-suffix="K+"></h5>
+                                    <span class="subtitle">Stok Çeşidi</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- LOJİSTİK MERKEZLERİMİZ -->
+    <section class="distribution-network desktop-only">
+        <div class="container-fluid">
+            <div class="section-head style-dark">
+                <div class="row">
+                    <div class="col text-center">
+                        <h3 class="hero-title">Lojistik Merkezlerimiz</h3>
+                        <h1 class="hero-subtitle">Yanınızda ve Yakınınızdayız</h1>
+                        <p class="hero-description">Türkiye’nin dört bir yanındaki lojistik merkezlerimiz, gelişmiş BT altyapısı ve akıllı sistemleri sayesinde tüm dünyaya hızlı, güvenilir ve etkin hizmet sunuyor.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+
+                                        <div class="circle-wrapper mt-5">
+                        <div class="circles">
+                            <div class="main-circle">
+                                <div class="circle-inner">
+                                    <img src="https://www.basbug.com.tr/assets/img/homepage_logistics_centers_text_tr.png" width="390" height="384" />
+                                </div>
+                            </div>
+
+                            <div class="circle circle-1">
+                                <a class="circle-inner" href="#.">
+                                    <div class="hover-box">
+                                        <div class="overlay"></div>
+                                        <p>
+                                            İSTANBUL LOJİSTİK MERKEZİ
+                                            <br />
+                                            <span style="font-size: 9px; font-weight:normal">Akçaburgaz Mah, Muhsin Yazıcıoğlu Cad , No:29 Esenyurt / İstanbul</span>
+                                            <br />
+                                            <b>Depo Alanı</b> 25.000 m2
+                                        </p>
+                                    </div>
+                                    <img src="https://www.basbug.com.tr/assets/logistics-centers/istanbul.png" width="380" loading="lazy" />
+                                </a>
+                            </div>
+
+                            <div class="circle circle-2">
+                                <a class="circle-inner" href="#.">
+                                    <div class="hover-box hover-box-md">
+                                        <div class="overlay"></div>
+                                        <p>
+                                            BURSA LOJİSTİK MERKEZİ
+                                            <br />
+                                            <span style="font-size: 9px; font-weight:normal">Yaylacık Mah .Kilerciler mevkii103 ada 89 parsel Nilüfer/BURSA</span>
+                                            <br />
+                                            <b>Depo Alanı</b> 3.200 m2
+                                        </p>
+                                    </div>
+                                    <img src="https://www.basbug.com.tr/assets/logistics-centers/bursa.png" width="219" height="172" />
+                                </a>
+                            </div>
+
+                            <div class="circle circle-3">
+                                <a class="circle-inner" href="#.">
+                                    <div class="hover-box hover-box-sm">
+                                        <div class="overlay"></div>
+                                        <p>
+                                            SAMSUN LOJİSTİK MERKEZİ
+                                            <br />
+                                            <span style="font-size: 9px; font-weight:normal">Çinik Mah. 4114 Cad. No:1/1 Tekkeköy / Samsun</span>
+                                            <br />
+                                            <b>Depo Alanı</b> 2.500 m2
+                                        </p>
+                                    </div>
+                                    <img src="https://www.basbug.com.tr/assets/logistics-centers/samsun.png" width="219" height="172" />
+                                </a>
+                            </div>
+
+                            <div class="circle circle-4">
+                                <a class="circle-inner" href="#.">
+                                    <div class="hover-box hover-box-sm">
+                                        <div class="overlay"></div>
+                                        <p>
+                                            ANTALYA LOJİSTİK MERKEZİ
+                                            <br />
+                                            <span style="font-size: 9px; font-weight:normal">Altınkale Mah. Çiftlik Cad. No:268 Döşemealtı / Antalya</span>
+                                            <br />
+                                            <b>Depo Alanı</b> 2.500 m2
+                                        </p>
+                                    </div>
+                                    <img src="https://www.basbug.com.tr/assets/logistics-centers/antalya.png" width="220">
+                                </a>
+                            </div>
+
+
+
+                            <div class="circle circle-5">
+                                <a class="circle-inner" href="#.">
+                                    <div class="hover-box hover-box-md">
+                                        <div class="overlay"></div>
+                                        <p>
+                                            KONYA LOJİSTİK MERKEZİ
+                                            <br />
+                                            <span style="font-size: 9px; font-weight:normal">Fevziçakmak Mah. Kosgeb Cad. No:89/1 Karatay / Konya</span>
+                                            <br />
+                                            <b>Depo Alanı</b> 2.000 m2
+                                        </p>
+                                    </div>
+                                    <img src="https://www.basbug.com.tr/assets/logistics-centers/konya.png" width="236" height="171" />
+                                </a>
+                            </div>
+
+
+                            <div class="circle circle-7">
+                                <a class="circle-inner" href="#.">
+                                    <div class="hover-box hover-box-sm">
+                                        <div class="overlay"></div>
+                                        <p>
+                                            ADANA LOJİSTİK MERKEZİ
+                                            <br />
+                                            <span style="font-size: 9px; font-weight:normal">Yeşiloba Mah. Orta Ölçekli San. Sit. 46237 Sk. No:20 B Blok Seyhan / Adana</span>
+                                            <br />
+                                            <b>Depo Alanı</b> 2.000 m2
+                                        </p>
+                                    </div>
+                                    <img src="https://www.basbug.com.tr/assets/logistics-centers/adana.png" width="215">
+                                </a>
+                            </div>
+
+                            <div class="circle circle-8">
+                                <a class="circle-inner" href="#.">
+                                    <div class="hover-box hover-box-md">
+                                        <div class="overlay"></div>
+                                        <p>
+                                            ANKARA LOJİSTİK MERKEZİ
+                                            <br />
+                                            <span style="font-size: 9px; font-weight:normal">İvedik Org. San. Bölg. 1531/1 Sk. No:3/B Yenimahalle / Ankara</span>
+                                            <br />
+                                            <b>Depo Alanı</b> 3.200 m2
+                                        </p>
+                                    </div>
+                                    <img src="https://www.basbug.com.tr/assets/logistics-centers/ankara.png" width="225">
+                                </a>
+                            </div>
+
+
+                            <div class="circle circle-9">
+                                <a class="circle-inner" href="#.">
+                                    <div class="hover-box hover-box-md">
+                                        <div class="overlay"></div>
+                                        <p>
+                                            ŞEKERPINAR LOJİSTİK MERKEZİ
+                                            <br />
+                                            <span style="font-size: 9px; font-weight:normal">Cumhuriyet Mah. Botanik sk. No:3 41420 Çayırova / Kocaeli</span>
+                                            <br />
+                                            <b>Depo Alanı</b> 5.000 m2
+                                        </p>
+                                    </div>
+                                    <img src="https://www.basbug.com.tr/assets/logistics-centers/sekerpinar.png" width="226" height="143" />
+                                </a>
+                            </div>
+
+                            <div class="circle circle-10">
+                                <a class="circle-inner" href="#.">
+                                    <div class="hover-box hover-box-md">
+                                        <div class="overlay"></div>
+                                        <p>
+                                            ERZURUM LOJİSTİK MERKEZİ
+                                            <br />
+                                            <span style="font-size: 9px; font-weight:normal">1.     Org. San. Bölg. Ek Osb Alanı No:22 Aziziye / Erzurum</span>
+                                            <br />
+                                            <b>Depo Alanı</b> 2.500 m2
+                                        </p>
+                                    </div>
+                                    <img src="https://www.basbug.com.tr/assets/logistics-centers/erzurum.png" width="232" height="153" />
+                                </a>
+                            </div>
+
+                            <div class="circle circle-11">
+                                <a class="circle-inner" href="#.">
+                                    <div class="hover-box hover-box-sm">
+                                        <div class="overlay"></div>
+                                        <p>
+                                            GAZİANTEP LOJİSTİK MERKEZİ
+                                            <br />
+                                            <span style="font-size: 9px; font-weight:normal">Taşlıca , 70154 Nolu sok E5 Blok 27690 Şehitkamil/Gaziantep</span>
+                                            <br />
+                                            <b>Depo Alanı</b> 2.600 m2
+                                        </p>
+                                    </div>
+                                    <img src="https://www.basbug.com.tr/assets/logistics-centers/gaziantep.png" width="250">
+                                </a>
+                            </div>
+
+                            <div class="circle circle-12">
+                                <a class="circle-inner" href="#.">
+                                    <div class="hover-box hover-box-sm">
+                                        <div class="overlay"></div>
+                                        <p>
+                                            ÇORLU LOJİSTİK MERKEZİ
+                                            <br />
+                                            <span style="font-size: 9px; font-weight:normal">Türkgücü mh YılmazAlparslan cd No:25 ÇORLU</span>
+                                            <br />
+                                            <b>Depo Alanı</b> 1.800 m2
+                                        </p>
+                                    </div>
+                                    <img src="https://www.basbug.com.tr/assets/logistics-centers/corlu.png" width="214" height="135" />
+                                </a>
+                            </div>
+
+                            <div class="circle circle-13">
+                                <a class="circle-inner" href="#.">
+                                    <div class="hover-box">
+                                        <div class="overlay"></div>
+                                        <p>
+                                            KAYSERİ LOJİSTİK MERKEZİ
+                                            <br />
+                                            <span style="font-size: 9px; font-weight:normal">Mimarsinan OSB 18. Cad no:9  Melikgazi /Kayseri</span>
+                                            <br />
+                                            <b>Depo Alanı</b> 7.000 m2
+                                        </p>
+                                    </div>
+                                    <img src="https://www.basbug.com.tr/assets/logistics-centers/kayseri.png" width="420" />
+                                </a>
+                            </div>
+
+                            <div class="circle circle-14">
+                                <a class="circle-inner" href="#.">
+                                    <div class="hover-box hover-box-md">
+                                        <div class="overlay"></div>
+                                        <p>
+                                            İZMİR LOJİSTİK MERKEZİ
+                                            <br />
+                                            <span style="font-size: 9px; font-weight:normal">Hürriyet Mah. 5112 Sk. No:1 Menderes / İzmir</span>
+                                            <br />
+                                            <b>Depo Alanı</b> 3.000 m2
+                                        </p>
+                                    </div>
+                                    <img src="https://www.basbug.com.tr/assets/logistics-centers/izmir.png" width="210" loading="lazy">
+                                </a>
+                            </div>
+
+                            <div class="circle circle-15">
+                                <a class="circle-inner" href="#.">
+                                    <div class="hover-box hover-box-sm">
+                                        <div class="overlay"></div>
+                                        <p>
+                                            DİYARBAKIR LOJİSTİK MERKEZİ
+                                            <br />
+                                            <span style="font-size: 9px; font-weight:normal">Bağcılar Mah. 1253 Sk. Agüloğlu Filli Boya Depo İçi Bağlar / Diyarbakır</span>
+                                            <br />
+                                            <b>Depo Alanı</b> 2.200 m2
+                                        </p>
+                                    </div>
+                                    <img src="https://www.basbug.com.tr/assets/logistics-centers/diyarbakir.png" width="250" loading="lazy" />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- LOJİSTİK MERKEZLERİMİZ MOBİLE -->
+    <section class="distribution-network-mobile mobile-only position-relative">
+        <div class="container-fluid">
+            <div class="section-head style-dark">
+                <div class="row">
+                    <div class="col text-center">
+                        <h3 class="hero-title">Lojistik Merkezlerimiz</h3>
+                        <h1 class="hero-subtitle">Yanınızda ve Yakınınızdayız</h1>
+                        <p class="hero-description">Türkiye’nin dört bir yanındaki lojistik merkezlerimiz, gelişmiş BT altyapısı ve akıllı sistemleri sayesinde tüm dünyaya hızlı, güvenilir ve etkin hizmet sunuyor.</p>
+                    </div>
+                </div>
+            </div>
+            <!-- Swiper Container -->
+            <div class="swiper service-swiper">
+                <div class="swiper-wrapper">
+                                        <div class="swiper-slide">
+                        <div class="service-card">
+                            <div class="service-img">
+                                <img src="https://www.basbug.com.tr/uploads/2026/04/1775108454_69ce016683de7.png" width="376" height="217" loading="lazy" />
+                            </div>
+                            <div class="service-title-holder">
+                                <h3 class="service-title">İSTANBUL LOJİSTİK MERKEZİ</h3>
+                                                                    <p class="service-desc">&nbsp;</p>
+                                                                <div class="read-more">
+                                    <a href="https://www.basbug.com.tr/tr/lojistik-merkezi/istanbul-lojistik-merkezi">
+                                        <span class="btn-text">Devamını Oku...</span>
+                                        <span class="btn-icon">
+                                          <svg aria-hidden="true" class="e-font-icon-svg e-fas-long-arrow-alt-right" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M313.941 216H12c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12h301.941v46.059c0 21.382
+                                            25.851 32.09 40.971 16.971l86.059-86.059c9.373-9.373
+                                            9.373-24.569 0-33.941l-86.059-86.059c-15.119-15.119-40.971-4.411-40.971
+                                            16.971V216z"></path>
+                                          </svg>
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                                        <div class="swiper-slide">
+                        <div class="service-card">
+                            <div class="service-img">
+                                <img src="https://www.basbug.com.tr/uploads/2026/04/1775108489_69ce0189225a9.jpg" width="376" height="217" loading="lazy" />
+                            </div>
+                            <div class="service-title-holder">
+                                <h3 class="service-title">KAYSERİ LOJİSTİK MERKEZİ</h3>
+                                                                    <p class="service-desc">&nbsp;</p>
+                                                                <div class="read-more">
+                                    <a href="https://www.basbug.com.tr/tr/lojistik-merkezi/kayseri-lojistik-merkezi">
+                                        <span class="btn-text">Devamını Oku...</span>
+                                        <span class="btn-icon">
+                                          <svg aria-hidden="true" class="e-font-icon-svg e-fas-long-arrow-alt-right" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M313.941 216H12c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12h301.941v46.059c0 21.382
+                                            25.851 32.09 40.971 16.971l86.059-86.059c9.373-9.373
+                                            9.373-24.569 0-33.941l-86.059-86.059c-15.119-15.119-40.971-4.411-40.971
+                                            16.971V216z"></path>
+                                          </svg>
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                                        <div class="swiper-slide">
+                        <div class="service-card">
+                            <div class="service-img">
+                                <img src="https://www.basbug.com.tr/uploads/2026/04/1775108375_69ce0117d230a.jpg" width="376" height="217" loading="lazy" />
+                            </div>
+                            <div class="service-title-holder">
+                                <h3 class="service-title">ANKARA LOJİSTİK MERKEZİ</h3>
+                                                                    <p class="service-desc">&nbsp;</p>
+                                                                <div class="read-more">
+                                    <a href="https://www.basbug.com.tr/tr/lojistik-merkezi/ankara-lojistik-merkezi">
+                                        <span class="btn-text">Devamını Oku...</span>
+                                        <span class="btn-icon">
+                                          <svg aria-hidden="true" class="e-font-icon-svg e-fas-long-arrow-alt-right" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M313.941 216H12c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12h301.941v46.059c0 21.382
+                                            25.851 32.09 40.971 16.971l86.059-86.059c9.373-9.373
+                                            9.373-24.569 0-33.941l-86.059-86.059c-15.119-15.119-40.971-4.411-40.971
+                                            16.971V216z"></path>
+                                          </svg>
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                                        <div class="swiper-slide">
+                        <div class="service-card">
+                            <div class="service-img">
+                                <img src="https://www.basbug.com.tr/uploads/2026/04/1775544693_69d4a975f3217.jpg" width="376" height="217" loading="lazy" />
+                            </div>
+                            <div class="service-title-holder">
+                                <h3 class="service-title">İZMİR LOJİSTİK MERKEZİ</h3>
+                                                                    <p class="service-desc">&nbsp;</p>
+                                                                <div class="read-more">
+                                    <a href="https://www.basbug.com.tr/tr/lojistik-merkezi/izmir-lojistik-merkezi">
+                                        <span class="btn-text">Devamını Oku...</span>
+                                        <span class="btn-icon">
+                                          <svg aria-hidden="true" class="e-font-icon-svg e-fas-long-arrow-alt-right" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M313.941 216H12c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12h301.941v46.059c0 21.382
+                                            25.851 32.09 40.971 16.971l86.059-86.059c9.373-9.373
+                                            9.373-24.569 0-33.941l-86.059-86.059c-15.119-15.119-40.971-4.411-40.971
+                                            16.971V216z"></path>
+                                          </svg>
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                                        <div class="swiper-slide">
+                        <div class="service-card">
+                            <div class="service-img">
+                                <img src="https://www.basbug.com.tr/uploads/2026/04/1775544652_69d4a94c3d15e.jpg" width="376" height="217" loading="lazy" />
+                            </div>
+                            <div class="service-title-holder">
+                                <h3 class="service-title">ANTALYA LOJİSTİK MERKEZİ</h3>
+                                                                    <p class="service-desc">&nbsp;</p>
+                                                                <div class="read-more">
+                                    <a href="https://www.basbug.com.tr/tr/lojistik-merkezi/antalya-lojistik-merkezi">
+                                        <span class="btn-text">Devamını Oku...</span>
+                                        <span class="btn-icon">
+                                          <svg aria-hidden="true" class="e-font-icon-svg e-fas-long-arrow-alt-right" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M313.941 216H12c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12h301.941v46.059c0 21.382
+                                            25.851 32.09 40.971 16.971l86.059-86.059c9.373-9.373
+                                            9.373-24.569 0-33.941l-86.059-86.059c-15.119-15.119-40.971-4.411-40.971
+                                            16.971V216z"></path>
+                                          </svg>
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                                        <div class="swiper-slide">
+                        <div class="service-card">
+                            <div class="service-img">
+                                <img src="https://www.basbug.com.tr/uploads/2026/04/1775108401_69ce01313e080.jpg" width="376" height="217" loading="lazy" />
+                            </div>
+                            <div class="service-title-holder">
+                                <h3 class="service-title">BURSA LOJİSTİK MERKEZİ</h3>
+                                                                    <p class="service-desc">&nbsp;</p>
+                                                                <div class="read-more">
+                                    <a href="https://www.basbug.com.tr/tr/lojistik-merkezi/bursa-lojistik-merkezi">
+                                        <span class="btn-text">Devamını Oku...</span>
+                                        <span class="btn-icon">
+                                          <svg aria-hidden="true" class="e-font-icon-svg e-fas-long-arrow-alt-right" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M313.941 216H12c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12h301.941v46.059c0 21.382
+                                            25.851 32.09 40.971 16.971l86.059-86.059c9.373-9.373
+                                            9.373-24.569 0-33.941l-86.059-86.059c-15.119-15.119-40.971-4.411-40.971
+                                            16.971V216z"></path>
+                                          </svg>
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                                        <div class="swiper-slide">
+                        <div class="service-card">
+                            <div class="service-img">
+                                <img src="https://www.basbug.com.tr/uploads/2026/04/1775108411_69ce013b127fe.jpg" width="376" height="217" loading="lazy" />
+                            </div>
+                            <div class="service-title-holder">
+                                <h3 class="service-title">ÇORLU LOJİSTİK MERKEZİ</h3>
+                                                                    <p class="service-desc">&nbsp;</p>
+                                                                <div class="read-more">
+                                    <a href="https://www.basbug.com.tr/tr/lojistik-merkezi/corlu-lojistik-merkezi">
+                                        <span class="btn-text">Devamını Oku...</span>
+                                        <span class="btn-icon">
+                                          <svg aria-hidden="true" class="e-font-icon-svg e-fas-long-arrow-alt-right" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M313.941 216H12c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12h301.941v46.059c0 21.382
+                                            25.851 32.09 40.971 16.971l86.059-86.059c9.373-9.373
+                                            9.373-24.569 0-33.941l-86.059-86.059c-15.119-15.119-40.971-4.411-40.971
+                                            16.971V216z"></path>
+                                          </svg>
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                                        <div class="swiper-slide">
+                        <div class="service-card">
+                            <div class="service-img">
+                                <img src="https://www.basbug.com.tr/uploads/2026/04/1775131354_69ce5ada5fa3d.png" width="376" height="217" loading="lazy" />
+                            </div>
+                            <div class="service-title-holder">
+                                <h3 class="service-title">ADANA LOJİSTİK MERKEZİ</h3>
+                                                                    <p class="service-desc">&nbsp;</p>
+                                                                <div class="read-more">
+                                    <a href="https://www.basbug.com.tr/tr/lojistik-merkezi/adana-logistics-center">
+                                        <span class="btn-text">Devamını Oku...</span>
+                                        <span class="btn-icon">
+                                          <svg aria-hidden="true" class="e-font-icon-svg e-fas-long-arrow-alt-right" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M313.941 216H12c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12h301.941v46.059c0 21.382
+                                            25.851 32.09 40.971 16.971l86.059-86.059c9.373-9.373
+                                            9.373-24.569 0-33.941l-86.059-86.059c-15.119-15.119-40.971-4.411-40.971
+                                            16.971V216z"></path>
+                                          </svg>
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                                        <div class="swiper-slide">
+                        <div class="service-card">
+                            <div class="service-img">
+                                <img src="https://www.basbug.com.tr/uploads/2026/04/1775108421_69ce014517d84.jpg" width="376" height="217" loading="lazy" />
+                            </div>
+                            <div class="service-title-holder">
+                                <h3 class="service-title">DİYARBAKIR LOJİSTİK MERKEZİ</h3>
+                                                                    <p class="service-desc">&nbsp;</p>
+                                                                <div class="read-more">
+                                    <a href="https://www.basbug.com.tr/tr/lojistik-merkezi/diyarbakir-lojistik-merkezi">
+                                        <span class="btn-text">Devamını Oku...</span>
+                                        <span class="btn-icon">
+                                          <svg aria-hidden="true" class="e-font-icon-svg e-fas-long-arrow-alt-right" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M313.941 216H12c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12h301.941v46.059c0 21.382
+                                            25.851 32.09 40.971 16.971l86.059-86.059c9.373-9.373
+                                            9.373-24.569 0-33.941l-86.059-86.059c-15.119-15.119-40.971-4.411-40.971
+                                            16.971V216z"></path>
+                                          </svg>
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                                        <div class="swiper-slide">
+                        <div class="service-card">
+                            <div class="service-img">
+                                <img src="https://www.basbug.com.tr/uploads/2026/04/1775108432_69ce0150288bd.jpg" width="376" height="217" loading="lazy" />
+                            </div>
+                            <div class="service-title-holder">
+                                <h3 class="service-title">ERZURUM LOJİSTİK MERKEZİ</h3>
+                                                                    <p class="service-desc">&nbsp;</p>
+                                                                <div class="read-more">
+                                    <a href="https://www.basbug.com.tr/tr/lojistik-merkezi/erzurum-lojistik-merkezi">
+                                        <span class="btn-text">Devamını Oku...</span>
+                                        <span class="btn-icon">
+                                          <svg aria-hidden="true" class="e-font-icon-svg e-fas-long-arrow-alt-right" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M313.941 216H12c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12h301.941v46.059c0 21.382
+                                            25.851 32.09 40.971 16.971l86.059-86.059c9.373-9.373
+                                            9.373-24.569 0-33.941l-86.059-86.059c-15.119-15.119-40.971-4.411-40.971
+                                            16.971V216z"></path>
+                                          </svg>
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                                        <div class="swiper-slide">
+                        <div class="service-card">
+                            <div class="service-img">
+                                <img src="https://www.basbug.com.tr/uploads/2026/04/1775108443_69ce015b7bf3b.jpg" width="376" height="217" loading="lazy" />
+                            </div>
+                            <div class="service-title-holder">
+                                <h3 class="service-title">GAZİANTEP LOJİSTİK MERKEZİ</h3>
+                                                                    <p class="service-desc">&nbsp;</p>
+                                                                <div class="read-more">
+                                    <a href="https://www.basbug.com.tr/tr/lojistik-merkezi/gaziantep-lojistik-merkezi">
+                                        <span class="btn-text">Devamını Oku...</span>
+                                        <span class="btn-icon">
+                                          <svg aria-hidden="true" class="e-font-icon-svg e-fas-long-arrow-alt-right" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M313.941 216H12c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12h301.941v46.059c0 21.382
+                                            25.851 32.09 40.971 16.971l86.059-86.059c9.373-9.373
+                                            9.373-24.569 0-33.941l-86.059-86.059c-15.119-15.119-40.971-4.411-40.971
+                                            16.971V216z"></path>
+                                          </svg>
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                                        <div class="swiper-slide">
+                        <div class="service-card">
+                            <div class="service-img">
+                                <img src="https://www.basbug.com.tr/uploads/2026/04/1775026390_69ccc0d6014ac.jpg" width="376" height="217" loading="lazy" />
+                            </div>
+                            <div class="service-title-holder">
+                                <h3 class="service-title">KONYA LOJİSTİK MERKEZİ</h3>
+                                                                    <p class="service-desc">&nbsp;</p>
+                                                                <div class="read-more">
+                                    <a href="https://www.basbug.com.tr/tr/lojistik-merkezi/konya-lojistik-merkezi">
+                                        <span class="btn-text">Devamını Oku...</span>
+                                        <span class="btn-icon">
+                                          <svg aria-hidden="true" class="e-font-icon-svg e-fas-long-arrow-alt-right" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M313.941 216H12c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12h301.941v46.059c0 21.382
+                                            25.851 32.09 40.971 16.971l86.059-86.059c9.373-9.373
+                                            9.373-24.569 0-33.941l-86.059-86.059c-15.119-15.119-40.971-4.411-40.971
+                                            16.971V216z"></path>
+                                          </svg>
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                                        <div class="swiper-slide">
+                        <div class="service-card">
+                            <div class="service-img">
+                                <img src="https://www.basbug.com.tr/uploads/2026/04/1775108538_69ce01ba12785.jpg" width="376" height="217" loading="lazy" />
+                            </div>
+                            <div class="service-title-holder">
+                                <h3 class="service-title">SAMSUN LOJİSTİK MERKEZİ</h3>
+                                                                    <p class="service-desc">&nbsp;</p>
+                                                                <div class="read-more">
+                                    <a href="https://www.basbug.com.tr/tr/lojistik-merkezi/samsun-lojistik-merkezi">
+                                        <span class="btn-text">Devamını Oku...</span>
+                                        <span class="btn-icon">
+                                          <svg aria-hidden="true" class="e-font-icon-svg e-fas-long-arrow-alt-right" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M313.941 216H12c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12h301.941v46.059c0 21.382
+                                            25.851 32.09 40.971 16.971l86.059-86.059c9.373-9.373
+                                            9.373-24.569 0-33.941l-86.059-86.059c-15.119-15.119-40.971-4.411-40.971
+                                            16.971V216z"></path>
+                                          </svg>
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                                        <div class="swiper-slide">
+                        <div class="service-card">
+                            <div class="service-img">
+                                <img src="https://www.basbug.com.tr/uploads/2026/04/1775108555_69ce01cb3fafd.png" width="376" height="217" loading="lazy" />
+                            </div>
+                            <div class="service-title-holder">
+                                <h3 class="service-title">ŞEKERPINAR LOJİSTİK MERKEZİ</h3>
+                                                                    <p class="service-desc">&nbsp;</p>
+                                                                <div class="read-more">
+                                    <a href="https://www.basbug.com.tr/tr/lojistik-merkezi/sekerpinar-lojistik-merkezi">
+                                        <span class="btn-text">Devamını Oku...</span>
+                                        <span class="btn-icon">
+                                          <svg aria-hidden="true" class="e-font-icon-svg e-fas-long-arrow-alt-right" viewBox="0 0 448 512" xmlns="http://www.w3.org/2000/svg">
+                                            <path d="M313.941 216H12c-6.627 0-12 5.373-12 12v56c0 6.627 5.373 12 12 12h301.941v46.059c0 21.382
+                                            25.851 32.09 40.971 16.971l86.059-86.059c9.373-9.373
+                                            9.373-24.569 0-33.941l-86.059-86.059c-15.119-15.119-40.971-4.411-40.971
+                                            16.971V216z"></path>
+                                          </svg>
+                                        </span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                                    </div>
+            </div>
+
+
+            <!-- Pagination -->
+            <div class="swiper-pagination services-pagination"></div>
+
+
+
+
+        </div>
+
+
+
+        <div class="section-footer style-dark">
+            <div class="dropdown-cta d-flex align-items-center justify-content-center pt-3">
+                <a href="lojistik-merkezleri.html" class="text-decoration-none">
+                    Tüm Lojistik Merkezleri <i class="fas fa-arrow-right ps-2"></i>
+                </a>
+            </div>
+        </div>
+
+
+    </section>
+
+    <!-- İŞ ORTAKLARIMIZ -->
+                <style>
+            section.section-companions::before {
+                background-image: url(https://www.basbug.com.tr/uploads/2026/01/1768290417_6965f87161407.jpg);
+            }
+        </style>
+        <section class="section-companions">
+        <div class="container-fluid">
+            <div class="section-head pb-0">
+                <div class="row">
+                    <div class="col text-center">
+                        <h3 class="hero-title">İş Ortaklarımız</h3>
+                        <h1 class="hero-subtitle">Birlikte Güçlüyüz</h1>
+                        <p class="hero-description">Daha fazlası için sektörün en iyileriyle bir aradayız!</p>
+                    </div>
+                </div>
+            </div>
+
+            
+            
+                            <div class="row mt-4">
+                    <h2 class="second-unit-title text-center mb-4">IAM</h2>
+                                            <div class="col-lg-4 gy-3">
+                            <a href="https://www.basbug.com.tr/tr/is-ortaklarimiz/coklu-urun-saglayicilari" class="card companion-card position-relative border-radius-5">
+                                <div class="overlay"></div>
+                                <span>
+                                    <em><?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 23.8 19.9">
+  <!-- Generator: Adobe Illustrator 30.0.0, SVG Export Plug-In . SVG Version: 2.1.1 Build 123)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: none;
+        stroke: #010101;
+        stroke-miterlimit: 10;
+        stroke-width: .6px;
+      }
+    </style>
+  </defs>
+  <g id="Layer_1-2">
+    <g>
+      <g>
+        <rect class="st0" x="2.4" y="2.5" width="18.8" height="16.1"/>
+        <line class="st0" x1="1.3" y1="18.6" x2="22.3" y2="18.6"/>
+      </g>
+      <rect class="st0" x="5.1" y="9.8" width="13.5" height="8.8"/>
+      <rect class="st0" x="4.3" y="4.6" width="2.3" height="2.3"/>
+      <rect class="st0" x="8.5" y="4.6" width="2.3" height="2.3"/>
+      <rect class="st0" x="12.7" y="4.6" width="2.3" height="2.3"/>
+      <rect class="st0" x="16.9" y="4.6" width="2.3" height="2.3"/>
+      <rect class="st0" x="4.4" y="8.5" width="14.8" height="1.2"/>
+      <rect class="st0" x="1.5" y="1.3" width="20.8" height="1.2"/>
+      <line class="st0" x1="11.8" y1="9.8" x2="11.8" y2="18.6"/>
+    </g>
+  </g>
+</svg></em>
+                                    Çoklu Ürün Sağlayıcıları
+                                </span>
+                            </a>
+                        </div>
+                                            <div class="col-lg-4 gy-3">
+                            <a href="https://www.basbug.com.tr/tr/is-ortaklarimiz/motor-sistemi" class="card companion-card position-relative border-radius-5">
+                                <div class="overlay"></div>
+                                <span>
+                                    <em><?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 26.7 19.9">
+  <!-- Generator: Adobe Illustrator 30.0.0, SVG Export Plug-In . SVG Version: 2.1.1 Build 123)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: none;
+        stroke: #010101;
+        stroke-miterlimit: 10;
+        stroke-width: .6px;
+      }
+    </style>
+  </defs>
+  <g id="Layer_1-2">
+    <g>
+      <rect class="st0" x="1.2" y="5.4" width="1.5" height="7.8"/>
+      <rect class="st0" x="2.7" y="6.2" width="1.5" height="6.2"/>
+      <path class="st0" d="M15.1,3.8H4.1v11h0c1.3,0,2.5.7,3,1.9l.6,1.1h13.3V5.4h-3.2c-1.1,0-2.2-.6-2.7-1.6Z"/>
+      <rect class="st0" x="7.8" y="2.2" width="3.7" height="1.6"/>
+      <rect class="st0" x="5.7" y=".6" width="7.9" height="1.6" rx=".7" ry=".7"/>
+      <rect class="st0" x="21.1" y="7.6" width="1.5" height="7.9"/>
+      <path class="st0" d="M22.6,6.2h.6c1.3,0,2.3,1,2.3,2.3v5.5c0,1.6-1.3,2.9-2.9,2.9h0V6.2h0Z"/>
+      <line class="st0" x1="24.2" y1="6.5" x2="24.2" y2="16.5"/>
+      <path class="st0" d="M12.2,9.3c0,1.6-1.3,2.8-2.8,2.8s-2.8-1.3-2.8-2.8,1.3-2.8,2.8-2.8,2.8,1.3,2.8,2.8Z"/>
+      <circle class="st0" cx="16.2" cy="14.2" r="1.7"/>
+      <line class="st0" x1="14.5" y1="14.7" x2="9.6" y2="12"/>
+      <line class="st0" x1="12.2" y1="8.9" x2="16.4" y2="12.5"/>
+      <line class="st0" x1="13.6" y1="1.4" x2="15.1" y2="1.4"/>
+      <line class="st0" x1="4.1" y1="1.4" x2="5.7" y2="1.4"/>
+      <path class="st0" d="M10.8,9.3c0,.8-.7,1.5-1.5,1.5s-1.5-.7-1.5-1.5.7-1.5,1.5-1.5,1.5.7,1.5,1.5Z"/>
+      <line class="st0" x1="9.1" y1="17.8" x2="9.1" y2="18.8"/>
+      <line class="st0" x1="19.8" y1="17.8" x2="19.8" y2="18.8"/>
+      <line class="st0" x1="19.8" y1="4.4" x2="19.8" y2="5.4"/>
+    </g>
+  </g>
+</svg></em>
+                                    Motor Sistemi
+                                </span>
+                            </a>
+                        </div>
+                                            <div class="col-lg-4 gy-3">
+                            <a href="https://www.basbug.com.tr/tr/is-ortaklarimiz/aktarma-organlari-sistemi" class="card companion-card position-relative border-radius-5">
+                                <div class="overlay"></div>
+                                <span>
+                                    <em><?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 19.2 20.8">
+  <!-- Generator: Adobe Illustrator 30.0.0, SVG Export Plug-In . SVG Version: 2.1.1 Build 123)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: none;
+        stroke: #010101;
+        stroke-miterlimit: 10;
+        stroke-width: .5px;
+      }
+    </style>
+  </defs>
+  <g id="Layer_1-2">
+    <g>
+      <path class="st0" d="M4,14.1v3.6c.3,0,.5-.3.5-.6v-2.4c0-.3-.2-.5-.5-.6Z"/>
+      <path class="st0" d="M4.8,3.3v.6h3.2c0-.2-.1-.4-.1-.6,0,0-3.1,0-3.1,0Z"/>
+      <path class="st0" d="M4.8,15.5v.6h3.7c0-.1,0-.2,0-.3s0-.2,0-.3c0,0-3.7,0-3.7,0Z"/>
+      <path class="st0" d="M4,1.9v3.6c.3,0,.5-.3.5-.6v-2.4c0-.3-.2-.5-.5-.6Z"/>
+      <rect class="st0" x="1.6" y="1" width="2.3" height="5.2" rx=".6" ry=".6"/>
+      <rect class="st0" x="1.6" y="13.2" width="2.3" height="5.2" rx=".6" ry=".6"/>
+      <path class="st0" d="M14.7,14.7v2.4c0,.3.2.5.5.6v-3.6c-.3,0-.5.3-.5.6Z"/>
+      <path class="st0" d="M10.7,15.8c0,.1,0,.2,0,.3h3.7v-.6h-3.7c0,.1,0,.2,0,.3Z"/>
+      <path class="st0" d="M11.1,4h3.2v-.6h-3.1c0,.2,0,.4-.1.6Z"/>
+      <rect class="st0" x="15.3" y="13.2" width="2.3" height="5.2" rx=".6" ry=".6"/>
+      <path class="st0" d="M14.7,2.5v2.4c0,.3.2.5.5.6V1.9c-.3,0-.5.3-.5.6Z"/>
+      <rect class="st0" x="15.3" y="1" width="2.3" height="5.2" rx=".6" ry=".6"/>
+      <path class="st0" d="M9.6,1.2c-.8,0-1.4.8-1.4,1.8s0,.7.2.9l.4,1.7h1.6l.4-1.7c.1-.3.2-.6.2-.9,0-1-.6-1.8-1.4-1.8h0Z"/>
+      <path class="st0" d="M10,14.7h-.9l-.2.7c0,.1-.1.3-.1.4,0,.4.3.8.8.8s.8-.3.8-.8,0-.3-.1-.4c0,0-.2-.7-.2-.7Z"/>
+      <rect class="st0" x="9.3" y="8.6" width=".6" height="5.9"/>
+      <path class="st0" d="M10.2,5.9h-1.2c-.2,0-.3.1-.3.3h0v.9h0v.9c0,.2.1.3.3.3h.7c.2,0,.3-.1.3-.3v-.6h.1c.2,0,.3-.2.3-.3v-.8c0-.2-.2-.3-.3-.3h0Z"/>
+    </g>
+  </g>
+</svg></em>
+                                    Aktarma Organları Sistemi
+                                </span>
+                            </a>
+                        </div>
+                                            <div class="col-lg-4 gy-3">
+                            <a href="https://www.basbug.com.tr/tr/is-ortaklarimiz/elektrik-aydinlatma-sistemleri" class="card companion-card position-relative border-radius-5">
+                                <div class="overlay"></div>
+                                <span>
+                                    <em><?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 29 19.3">
+  <!-- Generator: Adobe Illustrator 30.0.0, SVG Export Plug-In . SVG Version: 2.1.1 Build 123)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: none;
+        stroke: #010101;
+        stroke-miterlimit: 10;
+        stroke-width: .6px;
+      }
+    </style>
+  </defs>
+  <g id="Layer_1-2">
+    <g>
+      <path class="st0" d="M4.7,17.9h.8s12.2-.4,12.2-.4c1.5,0,3.3,0,4.9-1.1,1.9-1.1,3.1-3.3,3.4-6.3.1-.9.1-1.8.1-2.8,0-1.3,0-2.7.3-3.7l.6-1.8-1.9-.2c-.8,0-1.7-.2-2.5-.2h0c-3.7,0-7.5,1-10.7,2.8-4,2.2-7.3,5.7-9.2,9.9l-.4.9s2.6,2.8,2.6,2.8Z"/>
+      <path class="st0" d="M22,4.4c1.4,1,2.4,2.6,2.4,4.4,0,2.9-2.4,5.3-5.3,5.3s-5.3-2.4-5.3-5.3,1.7-4.5,3.9-5.1"/>
+      <path class="st0" d="M21.4,8.8c0,1.3-1,2.3-2.3,2.3s-2.3-1-2.3-2.3,1-2.3,2.3-2.3,2.3,1,2.3,2.3Z"/>
+      <path class="st0" d="M8.4,8.7c.7-.6,1.4-1,2.4-1,1.8,0,3.2,1.4,3.2,3.2s-1.4,3.2-3.2,3.2-2.9-1.1-3.2-2.6"/>
+      <path class="st0" d="M12.2,10.9c0,.8-.6,1.4-1.4,1.4s-1.4-.6-1.4-1.4.6-1.4,1.4-1.4,1.4.6,1.4,1.4Z"/>
+      <path class="st0" d="M10.6,16.1c-2.5,0-4.6-1.7-5.1-4.1"/>
+      <path class="st0" d="M10.6,16.1c1.1,0,2-.3,2.9-.8.7-.5,1.6-.6,2.3-.2.9.5,2,.8,3.1.7,1,0,1.9-.3,2.7-.8,1.7-1,2.4-3.1,2.7-5.1.2-2-.1-4.8.5-6.7-4.2-.5-8.6.4-12.3,2.4-3.7,2.1-6.7,5.3-8.5,9.1.4.5,1,1,1.4,1.5,1.7,0,3.5-.1,5.2-.2"/>
+    </g>
+  </g>
+</svg></em>
+                                    Elektrik &amp; Aydınlatma Sistemleri
+                                </span>
+                            </a>
+                        </div>
+                                            <div class="col-lg-4 gy-3">
+                            <a href="https://www.basbug.com.tr/tr/is-ortaklarimiz/direksiyon-suspansiyon" class="card companion-card position-relative border-radius-5">
+                                <div class="overlay"></div>
+                                <span>
+                                    <em><?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 21.7 21.7">
+  <!-- Generator: Adobe Illustrator 30.0.0, SVG Export Plug-In . SVG Version: 2.1.1 Build 123)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: none;
+        stroke: #000;
+        stroke-miterlimit: 10;
+        stroke-width: .6px;
+      }
+    </style>
+  </defs>
+  <g id="Layer_2-2">
+    <g>
+      <circle class="st0" cx="10.9" cy="10.9" r="9"/>
+      <path class="st0" d="M12,12.9c.8-.9,1.7-2.1,1.8-3.1,0-.7-.5-1.3-1.2-1.3h-3.3c-.7,0-1.3.6-1.2,1.3,0,1,.9,2.2,1.8,3.1.2.2.6.4.9.4h.4c.3,0,.7-.1.9-.4Z"/>
+      <path class="st0" d="M9.5,10.4c.2.4.5.9.9,1.3"/>
+      <g>
+        <path class="st0" d="M18,11.3h-3.1c-.3,0-.5.1-.7.4-.3.6-.8,1.3-1.5,2-.1.1-.2.2-.4.3-.2.1-.4.4-.4.7v3.5"/>
+        <path class="st0" d="M9.7,18.1v-3.5c0-.3-.1-.5-.4-.7-.1,0-.3-.2-.4-.3-.6-.7-1.1-1.3-1.5-2-.1-.2-.4-.4-.7-.4h-3.5"/>
+        <path class="st0" d="M3.8,8.9h2.7c.3,0,.6-.2.7-.4,0-.2.2-.3.3-.4.4-.5,1.1-.7,1.7-.7h3.3c.6,0,1.3.3,1.7.7.1.1.2.3.3.4.1.2.4.4.7.4h2.8"/>
+      </g>
+      <path class="st0" d="M6.2,6.1c0,0,.1,0,.2,0,.4-.1.8-.5.9-.9h0c.2-.9.9-1.1,1.8-1.3.6-.1,1.1-.2,1.7-.2s1.2,0,1.7.2c.9.2,1.5.4,1.8,1.3h0c.1.5.5.8.9,1,0,0,.1,0,.2,0,.9,0,1.7,1.2,2.1,2,.4,1,.6,2.1.5,3.2-.2,3.7-3.3,6.6-7,6.8-4.1.2-7.6-3.2-7.6-7.3s.2-1.9.5-2.7c.4-.9,1.2-1.9,2.1-2h0Z"/>
+    </g>
+  </g>
+</svg></em>
+                                    Direksiyon &amp; Süspansiyon
+                                </span>
+                            </a>
+                        </div>
+                                            <div class="col-lg-4 gy-3">
+                            <a href="https://www.basbug.com.tr/tr/is-ortaklarimiz/filtrasyon" class="card companion-card position-relative border-radius-5">
+                                <div class="overlay"></div>
+                                <span>
+                                    <em><?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 19.5 19.5">
+  <!-- Generator: Adobe Illustrator 30.0.0, SVG Export Plug-In . SVG Version: 2.1.1 Build 123)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: none;
+        stroke: #010101;
+        stroke-miterlimit: 10;
+        stroke-width: .7px;
+      }
+    </style>
+  </defs>
+  <g id="Layer_1-2">
+    <g>
+      <path class="st0" d="M18.6,3.9c0,1.7-4,3-8.8,3S.9,5.6.9,3.9,4.9.9,9.8.9s8.8,1.3,8.8,3Z"/>
+      <path class="st0" d="M18.6,3.9v2.1c0,1.7-4,3-8.8,3S.9,7.7.9,6v-2.1"/>
+      <ellipse class="st0" cx="9.8" cy="3.9" rx="6" ry="1.6"/>
+      <path class="st0" d="M2.3,17.2c-.9-.5-1.4-1-1.4-1.6v-2.1"/>
+      <path class="st0" d="M18.6,13.5v2.1c0,1.7-4,3-8.8,3s-4.8-.4-6.4-.9"/>
+      <path class="st0" d="M17.6,7.4v4.7c.7.4,1,.9,1,1.4,0,1.7-4,3-8.8,3S.9,15.2.9,13.5s.4-1,1-1.4v-4.7"/>
+      <path class="st0" d="M2.7,13.2c-.5-.3-.8-.7-.8-1.1"/>
+      <path class="st0" d="M17.6,12.1c0,.4-.3.7-.7,1"/>
+      <g>
+        <line class="st0" x1="3.7" y1="8.2" x2="3.7" y2="14.4"/>
+        <line class="st0" x1="5.5" y1="8.7" x2="5.5" y2="14.9"/>
+        <line class="st0" x1="7.2" y1="8.9" x2="7.2" y2="15.2"/>
+        <line class="st0" x1="8.9" y1="9.1" x2="8.9" y2="15.3"/>
+        <line class="st0" x1="10.6" y1="9.1" x2="10.6" y2="15.3"/>
+        <line class="st0" x1="12.4" y1="8.9" x2="12.4" y2="15.2"/>
+        <line class="st0" x1="14.1" y1="8.6" x2="14.1" y2="14.9"/>
+        <line class="st0" x1="15.8" y1="8.2" x2="15.8" y2="14.4"/>
+      </g>
+      <g>
+        <line class="st0" x1="14.1" y1="5.2" x2="14.1" y2="3.8"/>
+        <line class="st0" x1="12.4" y1="5.5" x2="12.4" y2="3.5"/>
+        <line class="st0" x1="10.6" y1="5.5" x2="10.6" y2="3.4"/>
+        <line class="st0" x1="8.9" y1="5.5" x2="8.9" y2="3.4"/>
+        <line class="st0" x1="7.2" y1="5.5" x2="7.2" y2="3.5"/>
+        <line class="st0" x1="5.5" y1="5.3" x2="5.5" y2="3.8"/>
+      </g>
+    </g>
+  </g>
+</svg></em>
+                                    Filtrasyon
+                                </span>
+                            </a>
+                        </div>
+                                            <div class="col-lg-4 gy-3">
+                            <a href="https://www.basbug.com.tr/tr/is-ortaklarimiz/fren-sistemleri" class="card companion-card position-relative border-radius-5">
+                                <div class="overlay"></div>
+                                <span>
+                                    <em><?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 20.4 20.5">
+  <!-- Generator: Adobe Illustrator 30.0.0, SVG Export Plug-In . SVG Version: 2.1.1 Build 123)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: none;
+        stroke: #010101;
+        stroke-miterlimit: 10;
+        stroke-width: .7px;
+      }
+    </style>
+  </defs>
+  <g id="Layer_1-2">
+    <g>
+      <circle class="st0" cx="10.7" cy="10.8" r="1.5"/>
+      <circle class="st0" cx="10.7" cy="10.8" r="4.4"/>
+      <path class="st0" d="M10.3,2.1c.1,0,.3,0,.4,0,4.8,0,8.7,3.9,8.7,8.7s-3.9,8.7-8.7,8.7S2,15.6,2,10.8v-.3"/>
+      <circle class="st0" cx="12.8" cy="8.7" r="0"/>
+      <path class="st0" d="M9.4,8.2s0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0Z"/>
+      <path class="st0" d="M7.8,11.3s0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0Z"/>
+      <path class="st0" d="M10.2,13.7s0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0Z"/>
+      <path class="st0" d="M13.3,12.2s0,0,0,0c0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0Z"/>
+      <path class="st0" d="M10.5,3.2l-.3-1.3c0-.5-.5-.9-1-.9-1.3,0-3.8.2-6,2.3C1.1,5.4.9,8,1,9.4c0,.5.3.9.8,1l1.3.3c.1,0,.3,0,.4,0,.2-.1.4-.3.4-.6,0-.3,0-.7.1-1,.6-1.8,1.6-1.7,2.4-2.4.8-.8,1-1.9,2.4-2.5.5-.1.5-.1,1-.1.3,0,.5-.2.6-.4,0-.1,0-.3,0-.4h0Z"/>
+    </g>
+  </g>
+</svg></em>
+                                    Fren Sistemleri
+                                </span>
+                            </a>
+                        </div>
+                                            <div class="col-lg-4 gy-3">
+                            <a href="https://www.basbug.com.tr/tr/is-ortaklarimiz/hvac" class="card companion-card position-relative border-radius-5">
+                                <div class="overlay"></div>
+                                <span>
+                                    <em><?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 29.1 21.4">
+  <!-- Generator: Adobe Illustrator 30.0.0, SVG Export Plug-In . SVG Version: 2.1.1 Build 123)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: none;
+        stroke: #010101;
+        stroke-miterlimit: 10;
+        stroke-width: .8px;
+      }
+    </style>
+  </defs>
+  <g id="Layer_1-2">
+    <g>
+      <line class="st0" x1="17.6" y1="17.4" x2="7.6" y2="17.4"/>
+      <path class="st0" d="M4.9,17.4h-2.8c-.7,0-1.3-.6-1.3-1.3V2.7c0-.7.6-1.3,1.3-1.3h23.7c.7,0,1.3.6,1.3,1.3v13.3c0,.7-.6,1.3-1.3,1.3h-5.6"/>
+      <line class="st0" x1="17.3" y1="15.6" x2="7.9" y2="15.6"/>
+      <polyline class="st0" points="5.6 15.6 2.4 15.6 2.4 3.1 21.7 3.1 21.7 15.6 19.9 15.6"/>
+      <line class="st0" x1="2.4" y1="5.2" x2="21.7" y2="5.2"/>
+      <line class="st0" x1="2.4" y1="7.3" x2="21.7" y2="7.3"/>
+      <line class="st0" x1="2.4" y1="9.4" x2="8.9" y2="9.4"/>
+      <line class="st0" x1="15.2" y1="9.4" x2="21.7" y2="9.4"/>
+      <line class="st0" x1="2.4" y1="11.5" x2="17" y2="11.5"/>
+      <line class="st0" x1="2.4" y1="13.6" x2="6.1" y2="13.6"/>
+      <path class="st0" d="M14.4,10.2h-4.7c-.5,0-.8-.4-.8-.8h0c0-.5.4-.8.8-.8h4.7c.5,0,.8.4.8.8h0c0,.5-.4.8-.8.8Z"/>
+      <path class="st0" d="M23.5,12.1v-5.5c0-.5.4-1,1-1h0c.5,0,1,.4,1,1v5.5c0,.5-.4,1-1,1h0c-.5,0-1-.4-1-1Z"/>
+      <g>
+        <line class="st0" x1="23.5" y1="7.2" x2="24.5" y2="7.1"/>
+        <line class="st0" x1="23.5" y1="8.6" x2="24.5" y2="8.6"/>
+        <line class="st0" x1="23.5" y1="10.1" x2="24.5" y2="10.1"/>
+        <line class="st0" x1="23.5" y1="11.6" x2="24.5" y2="11.6"/>
+      </g>
+      <path class="st0" d="M4.1,19.1c2.1-4.1,2-6.8,2-6.8"/>
+      <path class="st0" d="M8.2,12.3s0,2.6-.9,6.8"/>
+      <line class="st0" x1="8.2" y1="13.6" x2="17.2" y2="13.6"/>
+      <path class="st0" d="M5.9,18.8c-.1.4-.3.8-.6,1.3"/>
+      <line class="st0" x1="6.8" y1="14.9" x2="6.7" y2="15.7"/>
+      <g>
+        <path class="st0" d="M21.5,19.6c-2.7-4-2.5-9.4-2.5-9.4"/>
+        <path class="st0" d="M17,10.2s0,2.9.6,9.4"/>
+        <line class="st0" x1="18.6" y1="16.7" x2="18.9" y2="17.6"/>
+      </g>
+      <line class="st0" x1="19.3" y1="13.6" x2="21.7" y2="13.6"/>
+      <line class="st0" x1="19.3" y1="11.5" x2="21.7" y2="11.5"/>
+      <path class="st0" d="M19.2,19.2s.4,1.2.7,1.5"/>
+    </g>
+  </g>
+</svg></em>
+                                    Hvac
+                                </span>
+                            </a>
+                        </div>
+                                            <div class="col-lg-4 gy-3">
+                            <a href="https://www.basbug.com.tr/tr/is-ortaklarimiz/kaucuk-metal-parcalar" class="card companion-card position-relative border-radius-5">
+                                <div class="overlay"></div>
+                                <span>
+                                    <em><?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 20.4 20.6">
+  <!-- Generator: Adobe Illustrator 30.0.0, SVG Export Plug-In . SVG Version: 2.1.1 Build 123)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: none;
+        stroke: #010101;
+        stroke-miterlimit: 10;
+        stroke-width: .6px;
+      }
+    </style>
+  </defs>
+  <g id="Layer_1-2">
+    <g>
+      <path class="st0" d="M6,17c-1.6,0-2.9-1.3-2.9-2.9s1.3-2.9,2.9-2.9,2.9,1.3,2.9,2.9-1.3,2.9-2.9,2.9Z"/>
+      <path class="st0" d="M6,15.4c-.7,0-1.2-.6-1.2-1.2s.6-1.2,1.2-1.2,1.2.6,1.2,1.2-.6,1.2-1.2,1.2Z"/>
+      <path class="st0" d="M5,9.4c.3,0,.6-.1,1-.1,2.7,0,4.9,2.2,4.9,4.9s-2.2,4.9-4.9,4.9-4.9-2.2-4.9-4.9.3-2.1.9-2.9"/>
+      <path class="st0" d="M19.2,12.3c0,1.3-1,2.3-2.3,2.3s-2.3-1-2.3-2.3,1-2.3,2.3-2.3,2.3,1,2.3,2.3Z"/>
+      <circle class="st0" cx="16.9" cy="12.3" r=".1"/>
+      <path class="st0" d="M14.3,3.8c0,1.7-1.3,3-3,3s-3-1.3-3-3,1.3-3,3-3,3,1.3,3,3Z"/>
+      <path class="st0" d="M12.9,3.8c0,.9-.7,1.6-1.6,1.6s-1.6-.7-1.6-1.6.7-1.6,1.6-1.6,1.6.7,1.6,1.6Z"/>
+      <g>
+        <g>
+          <line class="st0" x1="6" y1="11.3" x2="6" y2="10.3"/>
+          <line class="st0" x1="6" y1="18" x2="6" y2="17"/>
+        </g>
+        <g>
+          <line class="st0" x1="8.9" y1="14.2" x2="9.9" y2="14.2"/>
+          <line class="st0" x1="2.2" y1="14.2" x2="3.2" y2="14.2"/>
+        </g>
+      </g>
+      <g>
+        <g>
+          <line class="st0" x1="8.1" y1="12.1" x2="8.8" y2="11.4"/>
+          <line class="st0" x1="3.3" y1="16.9" x2="3.9" y2="16.2"/>
+        </g>
+        <g>
+          <line class="st0" x1="8.1" y1="16.2" x2="8.8" y2="16.9"/>
+          <line class="st0" x1="3.3" y1="11.4" x2="4" y2="12.1"/>
+        </g>
+      </g>
+      <line class="st0" x1="2.1" y1="11.3" x2="8.8" y2="2.2"/>
+      <line class="st0" x1="14" y1="2.4" x2="19" y2="11.3"/>
+      <line class="st0" x1="7.7" y1="18.7" x2="17.9" y2="14.4"/>
+      <line class="st0" x1="5.8" y1="6.3" x2="6.6" y2="6.8"/>
+      <line class="st0" x1="6.7" y1="5" x2="7.5" y2="5.5"/>
+      <line class="st0" x1="4.9" y1="7.5" x2="5.6" y2="8.1"/>
+      <line class="st0" x1="15.7" y1="7.4" x2="16.5" y2="6.9"/>
+      <line class="st0" x1="16.5" y1="8.8" x2="17.3" y2="8.3"/>
+      <line class="st0" x1="14.9" y1="6" x2="15.7" y2="5.5"/>
+      <line class="st0" x1="13.1" y1="15.4" x2="13.5" y2="16.2"/>
+      <line class="st0" x1="11.7" y1="16" x2="12" y2="16.9"/>
+      <line class="st0" x1="14.6" y1="14.7" x2="15" y2="15.6"/>
+    </g>
+  </g>
+</svg></em>
+                                    Kauçuk &amp; Metal Parçalar
+                                </span>
+                            </a>
+                        </div>
+                                            <div class="col-lg-4 gy-3">
+                            <a href="https://www.basbug.com.tr/tr/is-ortaklarimiz/yaglar-ve-sivilar" class="card companion-card position-relative border-radius-5">
+                                <div class="overlay"></div>
+                                <span>
+                                    <em><?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 17.8 16.8">
+  <!-- Generator: Adobe Illustrator 30.0.0, SVG Export Plug-In . SVG Version: 2.1.1 Build 123)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: none;
+        stroke: #010101;
+        stroke-miterlimit: 10;
+        stroke-width: .5px;
+      }
+    </style>
+  </defs>
+  <g id="Layer_1-2">
+    <g>
+      <path class="st0" d="M13.3,15.2H4.6c-.3,0-.6-.3-.6-.6V4.4c0-.3.3-.6.6-.6h3.9c.1,0,.2,0,.4.1l4.8,3.1c.2.1.3.3.3.5v7.1c0,.3-.3.6-.6.6h0Z"/>
+      <path class="st0" d="M12.6,9.2l-4.1-2.7s0,0,0-.1v-1.2c0-.1.1-.2.2-.1l4.1,2.7s0,0,0,.1v1.2c0,.1-.1.2-.2.1h0Z"/>
+      <rect class="st0" x="4.9" y="2.7" width="2.1" height="1"/>
+      <path class="st0" d="M4.8,1.6h2.2c.3,0,.5.2.5.5v.7h-3.2v-.7c0-.3.2-.5.5-.5Z"/>
+    </g>
+  </g>
+</svg></em>
+                                    Yağlar ve Sıvılar
+                                </span>
+                            </a>
+                        </div>
+                                            <div class="col-lg-4 gy-3">
+                            <a href="https://www.basbug.com.tr/tr/is-ortaklarimiz/akuler" class="card companion-card position-relative border-radius-5">
+                                <div class="overlay"></div>
+                                <span>
+                                    <em><?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 17.8 16.8">
+  <!-- Generator: Adobe Illustrator 30.0.0, SVG Export Plug-In . SVG Version: 2.1.1 Build 123)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: none;
+        stroke: #010101;
+        stroke-miterlimit: 10;
+        stroke-width: .6px;
+      }
+    </style>
+  </defs>
+  <g id="Layer_1-2">
+    <g>
+      <rect class="st0" x="2.2" y="3.2" width="13.4" height="1.5" rx=".2" ry=".2"/>
+      <rect class="st0" x="2.2" y="13.4" width="13.4" height="1.5" rx=".2" ry=".2"/>
+      <polyline class="st0" points="15.2 5 15.2 13.4 2.7 13.4 2.7 4.7"/>
+      <rect class="st0" x="3.8" y="2.3" width="1.8" height="1"/>
+      <rect class="st0" x="12.2" y="2.3" width="1.8" height="1"/>
+      <g>
+        <line class="st0" x1="4.7" y1="7.8" x2="4.7" y2="6.1"/>
+        <line class="st0" x1="3.9" y1="7" x2="5.5" y2="7"/>
+      </g>
+      <line class="st0" x1="12.3" y1="7" x2="13.9" y2="7"/>
+    </g>
+  </g>
+</svg></em>
+                                    Aküler
+                                </span>
+                            </a>
+                        </div>
+                                            <div class="col-lg-4 gy-3">
+                            <a href="https://www.basbug.com.tr/tr/is-ortaklarimiz/kimyasallar" class="card companion-card position-relative border-radius-5">
+                                <div class="overlay"></div>
+                                <span>
+                                    <em><?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 21.7 21.7">
+  <!-- Generator: Adobe Illustrator 30.0.0, SVG Export Plug-In . SVG Version: 2.1.1 Build 123)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: none;
+        stroke: #000;
+        stroke-linecap: round;
+        stroke-linejoin: round;
+        stroke-width: .5px;
+      }
+    </style>
+  </defs>
+  <g>
+    <path class="st0" d="M5.2,9.4v9.2c0,.7.6,1.3,1.3,1.3h8.1c.7,0,1.3-.6,1.3-1.3V6c0-.3-.1-.6-.3-.8l-.9-.9c-.2-.2-.5-.3-.8-.3h-3.3c-.3,0-.6.1-.8.4l-4.1,4.3c-.2.2-.3.5-.3.8Z"/>
+    <path class="st0" d="M10.5,4v-1.8c0-.2.2-.3.3-.3h2.3c.2,0,.3.1.3.3v1.8"/>
+    <line class="st0" x1="5.2" y1="9.4" x2="15.7" y2="6.9"/>
+    <line class="st0" x1="5.2" y1="18.1" x2="15.7" y2="15.5"/>
+  </g>
+  <path class="st0" d="M13.4,12.8c0,.8-.6,1.4-1.4,1.4s-1.4-.6-1.4-1.4,1.4-2.5,1.4-2.5c0,0,1.4,1.7,1.4,2.5Z"/>
+</svg></em>
+                                    Kimyasallar
+                                </span>
+                            </a>
+                        </div>
+                                            <div class="col-lg-4 gy-3">
+                            <a href="https://www.basbug.com.tr/tr/is-ortaklarimiz/aksesuarlar" class="card companion-card position-relative border-radius-5">
+                                <div class="overlay"></div>
+                                <span>
+                                    <em><?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 25.2 29.4">
+  <!-- Generator: Adobe Illustrator 30.0.0, SVG Export Plug-In . SVG Version: 2.1.1 Build 123)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: none;
+        stroke: #010101;
+        stroke-miterlimit: 10;
+        stroke-width: .8px;
+      }
+    </style>
+  </defs>
+  <g id="Layer_1-2">
+    <g>
+      <g>
+        <g>
+          <path class="st0" d="M10.1,25c.2,0,.4,0,.4-.2,0-1.3,0-2,1.5-2.7l4.9-2.2c.6-.4.7-.9.2-1.2l-5.2-3c-.5-.3-1.5-.3-2.1,0l-1.3.6-2.7,1.2c-1.4.7-1.5,1.4-1.5,2.6,0,.9.4,1.7,1.2,2.1l4.7,2.7h0Z"/>
+          <path class="st0" d="M17.4,19.3v1.1c0,.9-.5,1.8-1.3,2.2l-4.1,2.1c-.9.4-1.4.7-1.9.4"/>
+        </g>
+        <path class="st0" d="M17.4,19.3c0-2.4,0-5.2,1.1-7.3.6-1.1,1.3-2.2,1.8-3.4.3-.7-.1-1.6-.9-1.8l-4.3-1.3c-1-.3-2,.2-2.4,1.1-.5,1.1-1.2,2.1-1.7,3.1-1.1,2.2-.7,3.2-.2,5.6"/>
+        <path class="st0" d="M15.9,5.7c0-.7,0-1.2.1-1.8.2-.7,1-1.1,1.7-.9l2,.6s0,0,0,0c-.6.9-.9,1.9-.8,3"/>
+        <path class="st0" d="M19.8,3.6c.4.1.9.3,1.1.7.2.3,0,.7,0,1.1-.2.7-.4,1.5-.6,2.2"/>
+      </g>
+      <path class="st0" d="M14.9,23.1c3-1.5,4.6-2,4.5-3.6-.1-1.8,0-5,.7-6.4.6-1.4,1.6-4.1,0-5.9"/>
+    </g>
+  </g>
+</svg></em>
+                                    Aksesuarlar
+                                </span>
+                            </a>
+                        </div>
+                                            <div class="col-lg-4 gy-3">
+                            <a href="https://www.basbug.com.tr/tr/is-ortaklarimiz/lastikler" class="card companion-card position-relative border-radius-5">
+                                <div class="overlay"></div>
+                                <span>
+                                    <em><?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 25.2 29.4">
+  <!-- Generator: Adobe Illustrator 30.0.0, SVG Export Plug-In . SVG Version: 2.1.1 Build 123)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: none;
+        stroke: #010101;
+        stroke-miterlimit: 10;
+        stroke-width: .7px;
+      }
+    </style>
+  </defs>
+  <g id="Layer_1-2">
+    <path class="st0" d="M21.5,14.3c0,5.8-2.2,10.4-4.9,10.4s-4.9-4.7-4.9-10.4,2.2-10.4,4.9-10.4,4.9,4.7,4.9,10.4Z"/>
+    <ellipse class="st0" cx="16.6" cy="14.3" rx="2.2" ry="6.8"/>
+    <ellipse class="st0" cx="16.6" cy="14.3" rx="2.2" ry="6.8"/>
+    <path class="st0" d="M21.5,14.3c0,5.8-2.2,10.4-4.9,10.4s-4.9-4.7-4.9-10.4,2.2-10.4,4.9-10.4,4.9,4.7,4.9,10.4Z"/>
+    <path class="st0" d="M16.6,3.8h-8.1c-2.7,0-4.9,4.7-4.9,10.4s2.2,10.4,4.9,10.4h8.1"/>
+    <path class="st0" d="M14.5,12.2h1.4c.5,0,1,1,1,2.1s-.4,2.1-1,2.1h-1.4"/>
+    <path class="st0" d="M13.1,3.9c-2.7,0-4.9,4.7-4.9,10.4s2.2,10.4,4.9,10.4"/>
+    <path class="st0" d="M10.6,3.8c-1.9,1-3.6,6.1-3.6,10.5s1.5,8.6,3.4,10.4"/>
+    <polyline class="st0" points="13.9 3.9 12.8 5.4 11.3 6.1 11.5 7.7 10.2 8.7 10.7 10.2 9.7 11.5 10.4 12.9 9.5 14.3 10.4 15.6 9.7 17.1 10.7 18.3 10.2 19.9 11.5 20.9 11.3 22.5 12.8 23.2 13.7 24.7"/>
+    <polyline class="st0" points="9.2 3.9 8.1 5.4 6.6 6.1 6.8 7.7 5.5 8.7 6 10.2 5 11.5 5.7 12.9 4.8 14.3 5.7 15.6 5 17.1 6 18.3 5.5 19.9 6.8 20.9 6.6 22.5 8.1 23.2 9 24.7"/>
+    <line class="st0" x1="17.6" y1="8.3" x2="16.1" y2="12.6"/>
+    <path class="st0" d="M16.1,16.2s1.7,4,1.6,4.1"/>
+    <line class="st0" x1="16.5" y1="15.2" x2="18.8" y2="17.2"/>
+    <line class="st0" x1="16.5" y1="13.5" x2="18.7" y2="11"/>
+    <line class="st0" x1="16.6" y1="14.4" x2="19" y2="14.4"/>
+  </g>
+</svg></em>
+                                    Lastikler
+                                </span>
+                            </a>
+                        </div>
+                                            <div class="col-lg-4 gy-3">
+                            <a href="https://www.basbug.com.tr/tr/is-ortaklarimiz/servis-ekipmanlari" class="card companion-card position-relative border-radius-5">
+                                <div class="overlay"></div>
+                                <span>
+                                    <em><?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 27.7 19.9">
+  <!-- Generator: Adobe Illustrator 30.0.0, SVG Export Plug-In . SVG Version: 2.1.1 Build 123)  -->
+  <defs>
+    <style>
+      .st0 {
+        fill: none;
+        stroke: #010101;
+        stroke-miterlimit: 10;
+        stroke-width: .6px;
+      }
+    </style>
+  </defs>
+  <g id="Layer_1-2">
+    <g>
+      <polyline class="st0" points="16.5 6.9 7.6 6.9 6.1 8.5 3.1 8.5 1.6 7.3 1.6 7 3.9 7 4.8 5.5 3.9 4.1 1.6 4.1 1.6 3.7 3.1 2.6 6.1 2.5 7.6 4.2 8.7 4.2"/>
+      <polyline class="st0" points="18.7 4.2 20.1 4.2 21.6 2.5 24.7 2.6 26.1 3.7 26.1 4.1 23.8 4.1 23 5.5 23.8 7 26.1 7 26.1 7.3 24.7 8.5 21.6 8.5 20.1 6.9 18.7 6.9"/>
+      <g>
+        <path class="st0" d="M12.4,5.3c.2-.2.3-.4.3-.7v-2.1c0-.5-.4-1.1-.9-1.1s-.5,0-.7.3c-.2.2-.3.4-.3.7v2.1c0,.5.4,1.1.9,1.1s.5,0,.7-.3h0Z"/>
+        <path class="st0" d="M10.4,5.2c.2-.2.3-.4.3-.7v-.8c0-.5-.4-1.1-.9-1.1s-.5,0-.7.3c-.2.2-.3.4-.3.7v.8c0,.5.4,1.1.9,1.1s.5,0,.7-.3h0Z"/>
+        <path class="st0" d="M16.4,5.2c.2-.2.3-.4.3-.7v-1.8c0-.5-.4-1.1-.9-1.1s-.5,0-.7.3c-.2.2-.3.4-.3.7v1.8c0,.5.4,1.1.9,1.1s.5,0,.7-.3h0Z"/>
+        <path class="st0" d="M14.4,5.6c.2-.2.3-.4.3-.7V2c0-.5-.4-1.1-.9-1.1s-.5,0-.7.3c-.2.2-.3.4-.3.7v2.9c0,.5.4,1.1.9,1.1s.5,0,.7-.3h0Z"/>
+        <path class="st0" d="M13.4,8.8c1.4-1.6,3.2-1.9,3.2-1.9v-.9c0-1.2.9-2.4,2.2-2.4v4h0c0,.6-.3,1.2-.8,1.6,0,0-1.3,1.1-1.8,2.5-.2.4-.2,4.4-.2,7.2"/>
+        <path class="st0" d="M8.7,8c0,1.8,1.1,3.3,1.1,4.6v6"/>
+      </g>
+    </g>
+  </g>
+</svg></em>
+                                    Servis Ekipmanları
+                                </span>
+                            </a>
+                        </div>
+                                    </div>
+            
+            
+                            <div class="second-unit-block">
+                    <h2 class="second-unit-title text-center mb-4">OES</h2>
+                    <div class="second-unit-images">
+                                                    <a href="https://www.basbug.com.tr/tr/is-ortaklarimiz/ford-otosan"
+                               class="second-unit-image-link"
+                               title="FORD OTOSAN">
+                                <img src="https://www.basbug.com.tr/uploads/2026/06/1781783797_6a33dcf5be970.jpg"
+                                     alt="FORD OTOSAN"
+                                     loading="lazy" />
+                                <span class="category-title">FORD OTOSAN</span>
+                            </a>
+                                                    <a href="https://www.basbug.com.tr/tr/is-ortaklarimiz/distrigo"
+                               class="second-unit-image-link"
+                               title="DISTRIGO">
+                                <img src="https://www.basbug.com.tr/uploads/2026/06/1781783826_6a33dd12e087e.jpg"
+                                     alt="DISTRIGO"
+                                     loading="lazy" />
+                                <span class="category-title">DISTRIGO</span>
+                            </a>
+                                                    <a href="https://www.basbug.com.tr/tr/is-ortaklarimiz/opar"
+                               class="second-unit-image-link"
+                               title="OPAR">
+                                <img src="https://www.basbug.com.tr/uploads/2026/06/1781783860_6a33dd34ac214.jpg"
+                                     alt="OPAR"
+                                     loading="lazy" />
+                                <span class="category-title">OPAR</span>
+                            </a>
+                                            </div>
+                </div>
+            
+            <div class="row">
+                <div class="col">
+                    <div class="section-footer">
+                        <div class="dropdown-cta d-flex align-items-center justify-content-center pt-3">
+                            <a href="https://www.basbug.com.tr/tr/tum-is-ortaklarimiz" class="text-decoration-none">
+                                Tüm İş Ortaklarını İncele <i class="fas fa-arrow-right ps-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+    
+
+            
+        <section class="section-news">
+        <div class="container-fluid">
+
+            <div class="section-head style-dark">
+                <div class="row">
+                    <div class="col text-center">
+                        <h3 class="hero-title">Medya Merkezi</h3>
+                        <h1 class="hero-subtitle">Bizden Haberler</h1>
+                        <p class="hero-description">Başbuğ Oto Yedek Parça’nın tüm kurumsal etkinlikleri, duyuruları ve sektör gelişmelerini buradan takip edebilirsiniz.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-5 desktop-only">
+                                    <div class="col-lg-4">
+                        <div class="card news-card">
+                            <div class="card-image-wrapper border-radius-5">
+                                <a href="https://www.basbug.com.tr/tr/haber/automechanika-istanbul-2026ya-katildik" title="Automechanika Istanbul 2026’ya Katıldık">
+                                    <img src="https://www.basbug.com.tr/uploads/2026/07/1782889598_6a44bc7e04b10.jpeg" alt="Automechanika Istanbul 2026’ya Katıldık" loading="lazy" />
+                                </a>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="pre-blog-content">
+                                    <h5 class="pre-post-title">
+                                        <a href="https://www.basbug.com.tr/tr/haber/automechanika-istanbul-2026ya-katildik"
+                                           title="Automechanika Istanbul 2026’ya Katıldık"
+                                           class="pre-pointer-events">Automechanika Istanbul 2026’ya Katıldık</a>
+                                    </h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                                    <div class="col-lg-4">
+                        <div class="card news-card">
+                            <div class="card-image-wrapper border-radius-5">
+                                <a href="https://www.basbug.com.tr/tr/haber/basbug-group-temot-executive-summit-2026da-uluslararasi-buyume-perspektifini-paylasti" title="Basbug Group, TEMOT Executive Summit 2026’da Uluslararası Büyüme Perspektifini Paylaştı">
+                                    <img src="https://www.basbug.com.tr/uploads/2026/07/1782889331_6a44bb7391191.jpg" alt="Basbug Group, TEMOT Executive Summit 2026’da Uluslararası Büyüme Perspektifini Paylaştı" loading="lazy" />
+                                </a>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="pre-blog-content">
+                                    <h5 class="pre-post-title">
+                                        <a href="https://www.basbug.com.tr/tr/haber/basbug-group-temot-executive-summit-2026da-uluslararasi-buyume-perspektifini-paylasti"
+                                           title="Basbug Group, TEMOT Executive Summit 2026’da Uluslararası Büyüme Perspektifini Paylaştı"
+                                           class="pre-pointer-events">Basbug Group, TEMOT Executive Summit 2026’da Uluslararası Bü...</a>
+                                    </h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                                    <div class="col-lg-4">
+                        <div class="card news-card">
+                            <div class="card-image-wrapper border-radius-5">
+                                <a href="https://www.basbug.com.tr/tr/haber/sinirlari-asan-kampanya-111-musteri-singapur-balide-agirlandi" title="Sınırları Aşan Kampanya: 111 Müşteri Singapur &amp; Bali’de Ağırlandı">
+                                    <img src="https://www.basbug.com.tr/uploads/2026/07/1782888786_6a44b952c9f47.jpeg" alt="Sınırları Aşan Kampanya: 111 Müşteri Singapur &amp; Bali’de Ağırlandı" loading="lazy" />
+                                </a>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="pre-blog-content">
+                                    <h5 class="pre-post-title">
+                                        <a href="https://www.basbug.com.tr/tr/haber/sinirlari-asan-kampanya-111-musteri-singapur-balide-agirlandi"
+                                           title="Sınırları Aşan Kampanya: 111 Müşteri Singapur &amp; Bali’de Ağırlandı"
+                                           class="pre-pointer-events">Sınırları Aşan Kampanya: 111 Müşteri Singapur &amp; Bali’de Ağır...</a>
+                                    </h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                            </div>
+
+            <!-- NEWS MOBILE SLIDER -->
+            <div class="news-mobile-slider-container mobile-only position-relative">
+                <div class="news-progress">
+                    <div class="news-progress-bar"></div>
+                </div>
+                <div class="swiper swiper-news">
+                    <div class="swiper-wrapper">
+                                                <div class="swiper-slide">
+                            <div class="news-card">
+                                <div class="card-image-wrapper">
+                                    <a href="https://www.basbug.com.tr/tr/haber/automechanika-istanbul-2026ya-katildik"
+                                       title="Automechanika Istanbul 2026’ya Katıldık">
+                                        <img src="https://www.basbug.com.tr/uploads/2026/07/1782889598_6a44bc7e04b10.jpeg" alt="Automechanika Istanbul 2026’ya Katıldık" loading="lazy" />
+                                    </a>
+                                </div>
+                                <h5 class="news-slide-title">
+                                    <a href="https://www.basbug.com.tr/tr/haber/automechanika-istanbul-2026ya-katildik"
+                                       title="Automechanika Istanbul 2026’ya Katıldık">Automechanika Istanbul 2026’ya Katıldık</a>
+                                </h5>
+                            </div>
+                        </div>
+                                                <div class="swiper-slide">
+                            <div class="news-card">
+                                <div class="card-image-wrapper">
+                                    <a href="https://www.basbug.com.tr/tr/haber/basbug-group-temot-executive-summit-2026da-uluslararasi-buyume-perspektifini-paylasti"
+                                       title="Basbug Group, TEMOT Executive Summit 2026’da Uluslararası Büyüme Perspektifini Paylaştı">
+                                        <img src="https://www.basbug.com.tr/uploads/2026/07/1782889331_6a44bb7391191.jpg" alt="Basbug Group, TEMOT Executive Summit 2026’da Uluslararası Büyüme Perspektifini Paylaştı" loading="lazy" />
+                                    </a>
+                                </div>
+                                <h5 class="news-slide-title">
+                                    <a href="https://www.basbug.com.tr/tr/haber/basbug-group-temot-executive-summit-2026da-uluslararasi-buyume-perspektifini-paylasti"
+                                       title="Basbug Group, TEMOT Executive Summit 2026’da Uluslararası Büyüme Perspektifini Paylaştı">Basbug Group, TEMOT Executive Summit 2026’da Uluslararası Büyüme Perspektifini Paylaştı</a>
+                                </h5>
+                            </div>
+                        </div>
+                                                <div class="swiper-slide">
+                            <div class="news-card">
+                                <div class="card-image-wrapper">
+                                    <a href="https://www.basbug.com.tr/tr/haber/sinirlari-asan-kampanya-111-musteri-singapur-balide-agirlandi"
+                                       title="Sınırları Aşan Kampanya: 111 Müşteri Singapur &amp; Bali’de Ağırlandı">
+                                        <img src="https://www.basbug.com.tr/uploads/2026/07/1782888786_6a44b952c9f47.jpeg" alt="Sınırları Aşan Kampanya: 111 Müşteri Singapur &amp; Bali’de Ağırlandı" loading="lazy" />
+                                    </a>
+                                </div>
+                                <h5 class="news-slide-title">
+                                    <a href="https://www.basbug.com.tr/tr/haber/sinirlari-asan-kampanya-111-musteri-singapur-balide-agirlandi"
+                                       title="Sınırları Aşan Kampanya: 111 Müşteri Singapur &amp; Bali’de Ağırlandı">Sınırları Aşan Kampanya: 111 Müşteri Singapur &amp; Bali’de Ağırlandı</a>
+                                </h5>
+                            </div>
+                        </div>
+                                            </div>
+                </div>
+                <!-- Navigation Arrows -->
+                <div class="swiper-button-prev news-prev"><i class="fas fa-chevron-left"></i></div>
+                <div class="swiper-button-next news-next"><i class="fas fa-chevron-right"></i></div>
+            </div>
+
+            <div class="row">
+                <div class="col">
+                    <div class="section-footer style-dark">
+                        <div class="dropdown-cta d-flex align-items-center justify-content-center pt-3">
+                            <a href="https://www.basbug.com.tr/tr/haberler" class="text-decoration-none">
+                                Tüm Haberleri İncele <i class="fas fa-arrow-right ps-2"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+    
+            <style>
+            section.section-truck {
+                background-image: url(https://www.basbug.com.tr/uploads/2026/07/1782888339_6a44b79398a61.jpg);
+            }
+        </style>
+        <section class="section-truck">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-6">
+                    <h1 class="text-white">Sektörün En Büyük Buluşması: Automechanika Istanbul 2026 Tamamlandı</h1>
+                    <p class="text-white">Yenilik, iş birliği ve değerli iş bağlantılarıyla dolu ilham verici bir haftayı geride bıraktık. Standımızı ziyaret ederek bu organizasyonun başarısına katkı sağlayan tüm misafirlerimize teşekkür ederiz.</p>
+                </div>
+                <div class="col-lg-6"></div>
+            </div>
+        </div>
+    </section>
+
+        <!-- ARAÇ GRUPLARI -->
+    <section class="section-groups pb-5">
+        <div class="container-fluid">
+            <div class="section-head style-dark">
+                <div class="row">
+                    <div class="col text-center">
+                        <h3 class="hero-title">Araç Grupları</h3>
+                        <h1 class="hero-subtitle">Her Araç İçin Doğru Parça</h1>
+                        <p class="hero-description">140+ global markayla, binekten hafif ticariye kadar tüm araç gruplarına kaliteli ve eksiksiz parça tedariği sağlıyoruz.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DESKTOP  -->
+            <nav class="d-none d-lg-flex d-md-flex justify-content-center mt-4">
+                <div class="nav nav-tabs gap-1 gap-lg-4 gap-md-4" id="nav-tab" role="tablist">
+                                            <button class="nav-link active" id="nav-1-tab-desktop" data-bs-toggle="tab"
+                                data-bs-target="#nav-1-desktop" type="button" role="tab"
+                                aria-controls="nav-1-desktop" aria-selected="true">
+                            <span class="tab-icon"><?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 27.7 19.9">
+  <defs>
+    <style>
+      .st0 {
+        stroke-linecap: round;
+      }
+
+      .st0, .st1 {
+        fill: none;
+        /* Sabit renk yerine temanın metin rengini kullanır */
+        stroke: currentColor; 
+        stroke-linejoin: round;
+        stroke-width: .4px;
+      }
+    </style>
+  </defs>
+  <g>
+    <circle class="st1" cx="23.9" cy="13.4" r="1.3"/>
+    <line class="st0" x1="25.8" y1="10.9" x2="27" y2="10.9"/>
+    <line class="st0" x1="18.9" y1="13.4" x2="22.6" y2="13.4"/>
+    <path class="st0" d="M25.1,13.4h1.3c.4,0,.6-.3.6-.6v-2.2c0-.9-.7-1.6-1.6-1.6h-.3l-2.2-3.3c-.2-.4-.6-.6-1.1-.6h-9.8c-.5,0-1,.4-1,1v.3"/>
+    <path class="st1" d="M23.4,6.4h-2.4c-.2,0-.3.1-.3.3v1.9c0,.2.1.3.3.3h4.1"/>
+    <path class="st0" d="M14.7,9h2.6s-1,0-1,0h2.7c.2,0,.4-.1.4-.3v-1.9c0-.2-.2-.3-.4-.3h-4.6s1,0,1,0h-2c-.2,0-.4.1-.4.3v.4"/>
+  </g>
+  <g>
+    <line class="st0" x1="16.9" y1="11.4" x2="18.2" y2="11.4"/>
+    <line class="st1" x1="5.9" y1="13.4" x2="13.6" y2="13.4"/>
+    <path class="st1" d="M16.2,13.4h1.3c.4,0,.6-.3.6-.7v-1.7c0-.6-.4-1-1-1h-2.9l-2.3-2.4c-.2-.2-.4-.3-.7-.3h-6.3c-.2,0-.5.1-.6.4l-1,2.1c0,.1-.2.2-.3.2h-1.7c-.4,0-.6.3-.6.7v2c0,.4.3.7.6.7h1.9"/>
+    <line class="st1" x1="9.1" y1="7.3" x2="9.1" y2="10"/>
+    <path class="st1" d="M6.2,7.3l-.8,2.2c0,.2,0,.5.3.5h8.6"/>
+    <ellipse class="st1" cx="4.6" cy="13.4" rx="1.3" ry="1.3"/>
+    <ellipse class="st1" cx="14.9" cy="13.4" rx="1.3" ry="1.3"/>
+  </g>
+</svg>
+</span>
+                            Binek ve Hafif Ticari Araç Grubu
+                        </button>
+                                    </div>
+            </nav>
+
+            <div class="tab-content d-none d-lg-flex d-md-flex" id="nav-tabContent-desktop">
+                                    <div class="tab-pane w-100 fade active show" id="nav-1-desktop" role="tabpanel" aria-labelledby="nav-1-tab-desktop" tabindex="0">
+                    <div class="brand-cards-container py-3 py-lg-g py-md-5">
+                        <div class="row row-cols-3 row-cols-md-5 g-3">
+                                                                                                <div class="col">
+                                        <div class="card brand-card border rounded-3 d-flex align-items-center justify-content-center">
+                                            <img src="https://www.basbug.com.tr/uploads/2025/11/1762240416_6909a7a063e16.png" alt="RENAULT Başbuğ Oto Yedek Parça" loading="lazy">
+                                        </div>
+                                    </div>
+                                                                    <div class="col">
+                                        <div class="card brand-card border rounded-3 d-flex align-items-center justify-content-center">
+                                            <img src="https://www.basbug.com.tr/uploads/2025/11/1762240695_6909a8b7ab6be.png" alt="FIAT Başbuğ Oto Yedek Parça" loading="lazy">
+                                        </div>
+                                    </div>
+                                                                    <div class="col">
+                                        <div class="card brand-card border rounded-3 d-flex align-items-center justify-content-center">
+                                            <img src="https://www.basbug.com.tr/uploads/2025/11/1762240686_6909a8aeab7c7.png" alt="FORD Başbuğ Oto Yedek Parça" loading="lazy">
+                                        </div>
+                                    </div>
+                                                                    <div class="col">
+                                        <div class="card brand-card border rounded-3 d-flex align-items-center justify-content-center">
+                                            <img src="https://www.basbug.com.tr/uploads/2025/11/1762240240_6909a6f0e38ac.png" alt="VOLKSWAGEN Başbuğ Oto Yedek Parça" loading="lazy">
+                                        </div>
+                                    </div>
+                                                                    <div class="col">
+                                        <div class="card brand-card border rounded-3 d-flex align-items-center justify-content-center">
+                                            <img src="https://www.basbug.com.tr/uploads/2025/11/1762240490_6909a7ea0e9e1.png" alt="OPEL Başbuğ Oto Yedek Parça" loading="lazy">
+                                        </div>
+                                    </div>
+                                                                    <div class="col">
+                                        <div class="card brand-card border rounded-3 d-flex align-items-center justify-content-center">
+                                            <img src="https://www.basbug.com.tr/uploads/2025/11/1762240648_6909a888313a5.png" alt="HYUNDAI Başbuğ Oto Yedek Parça" loading="lazy">
+                                        </div>
+                                    </div>
+                                                                    <div class="col">
+                                        <div class="card brand-card border rounded-3 d-flex align-items-center justify-content-center">
+                                            <img src="https://www.basbug.com.tr/uploads/2025/11/1762240248_6909a6f8c338a.png" alt="TOYOYA Başbuğ Oto Yedek Parça" loading="lazy">
+                                        </div>
+                                    </div>
+                                                                    <div class="col">
+                                        <div class="card brand-card border rounded-3 d-flex align-items-center justify-content-center">
+                                            <img src="https://www.basbug.com.tr/uploads/2025/11/1762240459_6909a7cbcddcc.png" alt="PEUGEOT Başbuğ Oto Yedek Parça" loading="lazy">
+                                        </div>
+                                    </div>
+                                                                    <div class="col">
+                                        <div class="card brand-card border rounded-3 d-flex align-items-center justify-content-center">
+                                            <img src="https://www.basbug.com.tr/uploads/2025/11/1762240549_6909a8254ff52.png" alt="MERCEDES BENZ Başbuğ Oto Yedek Parça" loading="lazy">
+                                        </div>
+                                    </div>
+                                                                    <div class="col">
+                                        <div class="card brand-card border rounded-3 d-flex align-items-center justify-content-center">
+                                            <img src="https://www.basbug.com.tr/uploads/2025/11/1762240803_6909a923cc5fe.png" alt="BMW Başbuğ Oto Yedek Parça" loading="lazy">
+                                        </div>
+                                    </div>
+                                                                                    </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="section-footer style-dark">
+                                <div class="dropdown-cta d-flex align-items-center justify-content-center pt-3">
+                                    <a href="https://www.basbug.com.tr/tr/arac-gruplari/binek-ve-hafif-ticari-arac-grubu" class="text-decoration-none">
+                                        Tümünü Görüntüle "Binek ve Hafif Ticari Araç Grubu" <i class="fas fa-arrow-right ps-2"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                            </div>
+
+
+            <!-- MOBILE TABS -->
+            <nav class="d-flex d-lg-none d-md-none justify-content-center mt-4">
+                <div class="nav nav-tabs mobile-tabs gap-1 gap-lg-4 gap-md-4" id="nav-tab" role="tablist">
+                                            <button class="nav-link" id="nav-1-tab" data-bs-toggle="tab" data-bs-target="#nav-1" type="button" role="tab" aria-controls="nav-1" aria-selected="false">
+                              <span class="tab-icon"><?xml version="1.0" encoding="UTF-8"?>
+<svg id="Layer_2" xmlns="http://www.w3.org/2000/svg" version="1.1" viewBox="0 0 27.7 19.9">
+  <defs>
+    <style>
+      .st0 {
+        stroke-linecap: round;
+      }
+
+      .st0, .st1 {
+        fill: none;
+        /* Sabit renk yerine temanın metin rengini kullanır */
+        stroke: currentColor; 
+        stroke-linejoin: round;
+        stroke-width: .4px;
+      }
+    </style>
+  </defs>
+  <g>
+    <circle class="st1" cx="23.9" cy="13.4" r="1.3"/>
+    <line class="st0" x1="25.8" y1="10.9" x2="27" y2="10.9"/>
+    <line class="st0" x1="18.9" y1="13.4" x2="22.6" y2="13.4"/>
+    <path class="st0" d="M25.1,13.4h1.3c.4,0,.6-.3.6-.6v-2.2c0-.9-.7-1.6-1.6-1.6h-.3l-2.2-3.3c-.2-.4-.6-.6-1.1-.6h-9.8c-.5,0-1,.4-1,1v.3"/>
+    <path class="st1" d="M23.4,6.4h-2.4c-.2,0-.3.1-.3.3v1.9c0,.2.1.3.3.3h4.1"/>
+    <path class="st0" d="M14.7,9h2.6s-1,0-1,0h2.7c.2,0,.4-.1.4-.3v-1.9c0-.2-.2-.3-.4-.3h-4.6s1,0,1,0h-2c-.2,0-.4.1-.4.3v.4"/>
+  </g>
+  <g>
+    <line class="st0" x1="16.9" y1="11.4" x2="18.2" y2="11.4"/>
+    <line class="st1" x1="5.9" y1="13.4" x2="13.6" y2="13.4"/>
+    <path class="st1" d="M16.2,13.4h1.3c.4,0,.6-.3.6-.7v-1.7c0-.6-.4-1-1-1h-2.9l-2.3-2.4c-.2-.2-.4-.3-.7-.3h-6.3c-.2,0-.5.1-.6.4l-1,2.1c0,.1-.2.2-.3.2h-1.7c-.4,0-.6.3-.6.7v2c0,.4.3.7.6.7h1.9"/>
+    <line class="st1" x1="9.1" y1="7.3" x2="9.1" y2="10"/>
+    <path class="st1" d="M6.2,7.3l-.8,2.2c0,.2,0,.5.3.5h8.6"/>
+    <ellipse class="st1" cx="4.6" cy="13.4" rx="1.3" ry="1.3"/>
+    <ellipse class="st1" cx="14.9" cy="13.4" rx="1.3" ry="1.3"/>
+  </g>
+</svg>
+</span>
+                            Binek ve Hafif Ticari Araç Grubu
+                        </button>
+                        <div class="tab-content" id="nav-tabContent">
+                            <div class="tab-pane fade" id="nav-1" role="tabpanel" aria-labelledby="nav-1-tab" tabindex="0">
+                                <div class="brand-cards-container py-3 py-lg-g py-md-5">
+                                    <div class="row row-cols-3 row-cols-md-5 g-3">
+                                                                                                                                    <div class="col">
+                                                    <div class="card brand-card border rounded-3 d-flex align-items-center justify-content-center">
+                                                        <img src="https://www.basbug.com.tr/uploads/2025/11/1762240416_6909a7a063e16.png" alt="Başbuğ Oto Yedek Parça RENAULT" loading="lazy">
+                                                    </div>
+                                                </div>
+                                                                                            <div class="col">
+                                                    <div class="card brand-card border rounded-3 d-flex align-items-center justify-content-center">
+                                                        <img src="https://www.basbug.com.tr/uploads/2025/11/1762240695_6909a8b7ab6be.png" alt="Başbuğ Oto Yedek Parça FIAT" loading="lazy">
+                                                    </div>
+                                                </div>
+                                                                                            <div class="col">
+                                                    <div class="card brand-card border rounded-3 d-flex align-items-center justify-content-center">
+                                                        <img src="https://www.basbug.com.tr/uploads/2025/11/1762240686_6909a8aeab7c7.png" alt="Başbuğ Oto Yedek Parça FORD" loading="lazy">
+                                                    </div>
+                                                </div>
+                                                                                            <div class="col">
+                                                    <div class="card brand-card border rounded-3 d-flex align-items-center justify-content-center">
+                                                        <img src="https://www.basbug.com.tr/uploads/2025/11/1762240240_6909a6f0e38ac.png" alt="Başbuğ Oto Yedek Parça VOLKSWAGEN" loading="lazy">
+                                                    </div>
+                                                </div>
+                                                                                            <div class="col">
+                                                    <div class="card brand-card border rounded-3 d-flex align-items-center justify-content-center">
+                                                        <img src="https://www.basbug.com.tr/uploads/2025/11/1762240490_6909a7ea0e9e1.png" alt="Başbuğ Oto Yedek Parça OPEL" loading="lazy">
+                                                    </div>
+                                                </div>
+                                                                                            <div class="col">
+                                                    <div class="card brand-card border rounded-3 d-flex align-items-center justify-content-center">
+                                                        <img src="https://www.basbug.com.tr/uploads/2025/11/1762240648_6909a888313a5.png" alt="Başbuğ Oto Yedek Parça HYUNDAI" loading="lazy">
+                                                    </div>
+                                                </div>
+                                                                                            <div class="col">
+                                                    <div class="card brand-card border rounded-3 d-flex align-items-center justify-content-center">
+                                                        <img src="https://www.basbug.com.tr/uploads/2025/11/1762240248_6909a6f8c338a.png" alt="Başbuğ Oto Yedek Parça TOYOYA" loading="lazy">
+                                                    </div>
+                                                </div>
+                                                                                            <div class="col">
+                                                    <div class="card brand-card border rounded-3 d-flex align-items-center justify-content-center">
+                                                        <img src="https://www.basbug.com.tr/uploads/2025/11/1762240459_6909a7cbcddcc.png" alt="Başbuğ Oto Yedek Parça PEUGEOT" loading="lazy">
+                                                    </div>
+                                                </div>
+                                                                                            <div class="col">
+                                                    <div class="card brand-card border rounded-3 d-flex align-items-center justify-content-center">
+                                                        <img src="https://www.basbug.com.tr/uploads/2025/11/1762240549_6909a8254ff52.png" alt="Başbuğ Oto Yedek Parça MERCEDES BENZ" loading="lazy">
+                                                    </div>
+                                                </div>
+                                                                                            <div class="col">
+                                                    <div class="card brand-card border rounded-3 d-flex align-items-center justify-content-center">
+                                                        <img src="https://www.basbug.com.tr/uploads/2025/11/1762240803_6909a923cc5fe.png" alt="Başbuğ Oto Yedek Parça BMW" loading="lazy">
+                                                    </div>
+                                                </div>
+                                                                                                                        </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col">
+                                        <div class="section-footer style-dark">
+                                            <div class="dropdown-cta d-flex align-items-center justify-content-center pt-3">
+                                                <a href="https://www.basbug.com.tr/tr/arac-gruplari/binek-ve-hafif-ticari-arac-grubu" class="text-decoration-none">
+                                                    Tümünü Görüntüle "Binek ve Hafif Ticari Araç Grubu" <i class="fas fa-arrow-right ps-2"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                                    </div>
+            </nav>
+        </div>
+    </section>
+    
+
+
+
+<!-- Footer -->
+
+<!-- Footer -->
+<footer class="bg-secondary pt-5 pb-4">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-6 col-md-6 mb-4 mb-lg-0 mobile-only">
+                <div class="footer-logo-mobile-wrapper d-flex flex-row">
+                    <img class="footer-logo-mobile" style="image-orientation: none;!important;" src="https://www.basbug.com.tr/basbug_logo_black.png" width="300" height="200" alt="" />
+                </div>
+                <p>Başbuğ Grup&#039;un bir iştirakidir.</p>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4 mb-lg-0 desktop-only-column">
+                <img class="footer-logo mb-2" src="https://www.basbug.com.tr/basbug_logo_black.png" width="189" alt="" />
+                <p class="copyright-info">Başbuğ Oto Yedek Parça Sanayi <br>İthalat İhracat ve Ticaret A.Ş</p>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+                <h2 class="footer-title">Hızlı Linkler</h2>
+                <ul class="footer-list list-unstyled">
+                    <li><a href="https://www.basbug.com.tr/tr/kurumsal">Hakkımızda</a></li>
+                    <li><a href="https://www.basbug.com.tr/tr/is-ortaklarimiz">İş Ortaklarımız</a></li>
+                    <li><a href="https://www.basbug.com.tr/tr/lojistik-merkezleri">Lojistik Merkezlerimiz</a></li>
+                    <li><a href="https://www.basbug.com.tr/tr/indirme-merkezi">İndirme Merkezi</a></li>
+                    <li><a href="https://www.basbug.com.tr/tr/haberler">Haberler</a></li>
+                    <li><a href="https://www.basbug.com.tr/tr/kariyer">Kariyer</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+                <h2 class="footer-title">Destek</h2>
+                <ul class="footer-list list-unstyled">
+                    <li><a id="recall" href="#">Gönüllü Geri Çağırma</a></li>
+                    <li><a href="https://www.basbug.com.tr/tr/sss">Sıkça Sorulan Sorular</a></li>
+                    <li><a href="https://www.basbug.com.tr/tr/iletisim">Destek Talebi</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+                <h2 class="footer-title">Bize Ulaşın</h2>
+                <ul class="footer-list list-unstyled">
+                    <li><a href="#.">E-Posta</a></li>
+                    <li><a href="mailto:info@basbug.com.tr" style="color:#868383">info@basbug.com.tr</a></li>
+                    <li><a href="#.">Telefon</a></li>
+                    <li><a href="tel:+90 212 886 90 60" style="color:#868383">+90 212 886 90 60</a></li>
+                    <li><a href="#.">Adres</a></li>
+                    <h2 style="color:#868383">Taşocağı cd. Balance Plaza F Blok Bağcılar /İSTANBUL</h2>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-center">
+            <div class="row">
+                <div class="col">
+                    <div class="row">
+                        <div class="col-lg-3 desktop-only-column">
+                            <img class="footer-logo" src="https://www.basbug.com.tr/assets/img/basbug_group_footer_logo.png" width="300" height="200" alt="Başbuğ Oto Yedek Parça" />
+                            <p>Başbuğ Grup&#039;un bir iştirakidir.</p>
+                        </div>
+                        <div class="col-lg-6">
+
+                            <div class="footer-brand-items-container">
+                                <div class="footer-brand-item">
+                                    <img src="https://www.basbug.com.tr/assets/img/footer/bsg.png" alt="Başbuğ Group BSG" class="footer-brand-logo-img" width="300" height="200">
+                                </div>
+                                <div class="footer-brand-item">
+                                    <img src="https://www.basbug.com.tr/assets/img/footer/asel.png" alt="Başbuğ Group Asel" class="footer-brand-logo-img" width="300" height="200">
+                                </div>
+                                <div class="footer-brand-item">
+                                    <img src="https://www.basbug.com.tr/assets/img/footer/nev.png" alt="Başbuğ Group Nev" class="footer-brand-logo-img" width="300" height="200">
+                                </div>
+                                <div class="footer-brand-item">
+                                    <img src="https://www.basbug.com.tr/assets/img/footer/nerex.png" alt="Başbuğ Group Nerex" class="footer-brand-logo-img" width="300" height="200">
+                                </div>
+                                <div class="footer-brand-item">
+                                    <img src="https://www.basbug.com.tr/assets/img/footer/goodyear.png" alt="Başbuğ Group Goodyear" class="footer-brand-logo-img" width="300" height="200">
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="col-lg-3">
+                            <ul class="social-list list-unstyled d-flex justify-content-end mb-0 gap-2">
+                                                                <li>
+                                    <a href="https://www.facebook.com/basbugotoyedekparca" target="_blank">
+                                        <i class="fab fa-facebook"></i>
+                                    </a>
+                                </li>
+                                                                                                <li>
+                                    <a href="https://www.instagram.com/basbugotoyedekparca/" target="_blank">
+                                        <i class="fab fa-instagram"></i>
+                                    </a>
+                                </li>
+                                                                                                <li>
+                                    <a href="https://www.linkedin.com/company/basbug-group/?viewAsMember=true" target="_blank">
+                                        <i class="fab fa-linkedin"></i>
+                                    </a>
+                                </li>
+                                                                                                    <li>
+                                        <a href="https://www.youtube.com/@basbuggroup" target="_blank">
+                                            <i class="fab fa-youtube"></i>
+                                        </a>
+                                    </li>
+                                                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <div class="row">
+                <div class="col-lg-3">
+                    <p class="copyright">© 2025. BAŞBUĞ OTO YEDEK PARÇA <br /> Tüm hakları saklıdır.</p>
+                </div>
+                <div class="col-lg-9">
+                    <ul class="footer-bottom-links d-none d-lg-flex flex-row" style="justify-content: right">
+                        <li><a href="https://www.basbug.com.tr/tr/kvkk">K.V. Koruması</a></li>
+                        <li style="margin-left: 10px"><a href="https://www.basbug.com.tr/tr/cerez-politikasi">Çerez Politikası</a></li>
+                        
+                        
+                        
+                    </ul>
+
+                    <!-- MOBILE -->
+                    <div class="row d-lg-none">
+                        <div class="col-6">
+                            <ul class="footer-bottom-links">
+                                <li><a href="https://www.basbug.com.tr/tr/kvkk">K.V. Koruması</a></li>
+                                
+                                <li><a href="https://www.basbug.com.tr/tr/cerez-politikasi">Çerez Politikası</a></li>
+                            </ul>
+                        </div>
+                        
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+</footer>
+
+<!-- Campaign Modal -->
+<style>
+    #campaignModal .modal-body { padding: 1.5rem; }
+    #campaignModal .campaign-images img { width: 100%; height: auto; border-radius: 0.5rem; }
+    #campaignModal .alert { border-radius: 0.5rem; }
+    #campaignModal .form-label { font-weight: 500; margin-bottom: 0.5rem; }
+    #campaignModal .btn { padding: 0.5rem 1rem; font-weight: 500; }
+</style>
+<div class="modal fade" id="campaignModal" tabindex="-1" aria-labelledby="campaignModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="campaignModalLabel">
+                    Gönüllü Geri Çağırma Kampanyası
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Kapat"></button>
+            </div>
+            <div class="modal-body">
+                <div id="step1">
+                    <div class="campaign-images mb-3">
+                        <img src="https://www.basbug.com.tr/ge-images/tr/mobile.png" alt="Kampanya" class="img-fluid d-block d-md-none">
+                        <img src="https://www.basbug.com.tr/ge-images/tr/desktop.png" alt="Kampanya" class="img-fluid d-none d-md-block">
+                    </div>
+                    <div class="alert alert-info">
+                        <p class="mb-0">
+                            Ürününüzün geri çağırma kampanyası kapsamında olup olmadığını kontrol etmek için aşağıdaki alana ürününüzün GKN numarasını veya EAN numarasını girerek sorgulayabilirsiniz.
+                        </p>
+                    </div>
+                    <div class="search-section">
+                        <div class="mb-3">
+                            <label for="searchInput" class="form-label">
+                                Ürün Numarası:
+                            </label>
+                            <input type="text" class="form-control" id="searchInput"
+                                   placeholder="GKN No veya EAN No giriniz">
+                        </div>
+                        <div class="row g-2">
+                            <div class="col-md-6">
+                                <button type="button" class="btn btn-info w-100" onclick="searchProduct('material')">
+                                    GKN No ile Sorgula
+                                </button>
+                            </div>
+                            <div class="col-md-6">
+                                <button type="button" class="btn btn-info w-100" style="background-color:#17a2b8!important;border-color:#17a2b8!important;" onclick="searchProduct('ean')">
+                                    EAN No ile Sorgula
+                                </button>
+                            </div>
+                        </div>
+                        <div id="searchResult" class="mt-3"></div>
+                    </div>
+                </div>
+                <div id="step2" style="display: none;">
+                    <div class="alert alert-success mb-3">
+                        <h6 class="alert-heading">
+                            <i class="fas fa-check-circle me-2"></i>
+                            Ürününüz kampanya kapsamındadır!
+                        </h6>
+                        <p class="mb-0">
+                            Lütfen iletişim bilgilerinizi doldurunuz:
+                        </p>
+                    </div>
+                    <form id="recallForm" class="needs-validation" novalidate>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <label for="fullName" class="form-label">Ad Soyad *</label>
+                                <input type="text" class="form-control" id="fullName" name="full_name" required>
+                                <div class="invalid-feedback">Lütfen adınızı giriniz.</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="companyName" class="form-label">Firma Adı</label>
+                                <input type="text" class="form-control" id="companyName" name="company_name">
+                            </div>
+                            <div class="col-md-6">
+                                <label for="email" class="form-label">Email *</label>
+                                <input type="email" class="form-control" id="email" name="email" required>
+                                <div class="invalid-feedback">Geçerli bir email adresi giriniz.</div>
+                            </div>
+                            <div class="col-md-6">
+                                <label for="phone" class="form-label">Telefon *</label>
+                                <input type="tel" class="form-control" id="phone" name="phone" required>
+                                <div class="invalid-feedback">Lütfen telefon numaranızı giriniz.</div>
+                            </div>
+                            <div class="col-12">
+                                <label for="description" class="form-label">Açıklama</label>
+                                <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <div id="footer-step1">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times me-2"></i>Kapat
+                    </button>
+                </div>
+                <div id="footer-step2" style="display: none;">
+                    <button type="button" class="btn btn-secondary" onclick="showStep1()">
+                        <i class="fas fa-arrow-left me-2"></i>Geri
+                    </button>
+                    <button type="button" class="btn btn-success" onclick="submitForm()">
+                        <i class="fas fa-paper-plane me-2"></i>Gönder
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- END Campaign Modal -->
+
+<!-- Swiper JS -->
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
+<!-- Custom JS -->
+    <script>
+        const videoModal = document.getElementById('videoModal');
+        const youtubeVideo = document.getElementById('youtubeVideo');
+
+        videoModal.addEventListener('show.bs.modal', event => {
+            const button = event.relatedTarget;
+            const videoUrl = button.getAttribute('data-video-url');
+
+            if (videoUrl) {
+                youtubeVideo.src = `${videoUrl}?autoplay=1`;
+                console.log("Oynatılacak video:", videoUrl);
+            }
+        });
+
+        videoModal.addEventListener('hidden.bs.modal', () => {
+            youtubeVideo.src = "";
+        });
+
+    </script>
+
+
+<script>
+    const blackLogo = 'https://www.basbug.com.tr/assets/img/basbug_logo_black.png';
+</script>
+<script src="https://www.basbug.com.tr/js/main.js"></script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+
+<!-- Campaign Modal JS -->
+<script>
+    const campaignMessages = {
+        tr: {
+            pleaseEnterValue: 'Lütfen bir değer giriniz',
+            errorOccurred: 'Bir hata oluştu, lütfen tekrar deneyiniz',
+            informationSent: 'Bilgileriniz başarıyla gönderildi',
+            searching: 'Sorgulanıyor',
+            productCoveredRedirect: 'Ürün kampanya kapsamındadır! Forma yönlendiriliyorsunuz',
+            productNotCovered: 'Bu ürün geri çağırma kapsamında değildir',
+            errorTryAgain: 'Bir hata oluştu, lütfen tekrar deneyiniz'
+        },
+        en: {
+            pleaseEnterValue: 'Please enter a value',
+            errorOccurred: 'An error occurred, please try again',
+            informationSent: 'Your information has been sent successfully',
+            searching: 'Searching',
+            productCoveredRedirect: 'The product is covered by the campaign! Redirecting to form',
+            productNotCovered: 'This product is not covered by the recall',
+            errorTryAgain: 'An error occurred, please try again'
+        }
+    };
+
+    function getCampaignMessage(key) {
+        const locale = 'tr';
+        if (campaignMessages[locale] && campaignMessages[locale][key]) {
+            return campaignMessages[locale][key];
+        }
+        return campaignMessages['en'][key] || 'Missing translation: ' + key;
+    }
+
+    function showStep1() {
+        document.getElementById('step1').style.display = 'block';
+        document.getElementById('step2').style.display = 'none';
+        document.getElementById('footer-step1').style.display = 'block';
+        document.getElementById('footer-step2').style.display = 'none';
+        document.getElementById('searchResult').innerHTML = '';
+    }
+
+    function showStep2() {
+        document.getElementById('step1').style.display = 'none';
+        document.getElementById('step2').style.display = 'block';
+        document.getElementById('footer-step1').style.display = 'none';
+        document.getElementById('footer-step2').style.display = 'block';
+    }
+
+    function searchProduct(type) {
+        const inputValue = document.getElementById('searchInput').value.trim();
+        if (!inputValue) {
+            alert(getCampaignMessage('pleaseEnterValue'));
+            return;
+        }
+
+        const data = type === 'material' ? { material_no: inputValue } : { ean_no: inputValue };
+
+        document.getElementById('searchResult').innerHTML =
+            '<div class="alert alert-info"><i class="fas fa-spinner fa-spin me-2"></i>' +
+            getCampaignMessage('searching') + '...</div>';
+
+        fetch('/recall', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || 'uIypgEbfeerrhaILX6g1tbhsIQK0XEnvyKEn1ARD'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.result === 'true') {
+                document.getElementById('searchResult').innerHTML =
+                    '<div class="alert alert-success"><i class="fas fa-check-circle me-2"></i>' +
+                    getCampaignMessage('productCoveredRedirect') + '</div>';
+                setTimeout(() => showStep2(), 1500);
+            } else {
+                document.getElementById('searchResult').innerHTML =
+                    '<div class="alert alert-warning"><i class="fas fa-exclamation-triangle me-2"></i>' +
+                    getCampaignMessage('productNotCovered') + '</div>';
+                setTimeout(() => {
+                    document.getElementById('searchInput').value = '';
+                }, 1500);
+            }
+        })
+        .catch(error => {
+            document.getElementById('searchResult').innerHTML =
+                '<div class="alert alert-danger"><i class="fas fa-times-circle me-2"></i>' +
+                getCampaignMessage('errorTryAgain') + '</div>';
+        });
+    }
+
+    function submitForm() {
+        const form = document.getElementById('recallForm');
+        if (!form.checkValidity()) {
+            form.classList.add('was-validated');
+            return;
+        }
+
+        const formData = {
+            full_name: document.getElementById('fullName').value,
+            company_name: document.getElementById('companyName').value,
+            email: document.getElementById('email').value,
+            phone: document.getElementById('phone').value,
+            description: document.getElementById('description').value,
+            product_number: document.getElementById('searchInput').value
+        };
+
+        document.querySelectorAll('#campaignModal button').forEach(btn => btn.disabled = true);
+
+        fetch('/send-recall-email', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || 'uIypgEbfeerrhaILX6g1tbhsIQK0XEnvyKEn1ARD'
+            },
+            body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            alert(getCampaignMessage('informationSent'));
+            bootstrap.Modal.getInstance(document.getElementById('campaignModal')).hide();
+            form.reset();
+            form.classList.remove('was-validated');
+            showStep1();
+            document.getElementById('searchInput').value = '';
+        })
+        .catch(error => {
+            alert(getCampaignMessage('errorOccurred'));
+        })
+        .finally(() => {
+            document.querySelectorAll('#campaignModal button').forEach(btn => btn.disabled = false);
+        });
+    }
+
+    document.getElementById('recall').addEventListener('click', function(e) {
+        e.preventDefault();
+        new bootstrap.Modal(document.getElementById('campaignModal')).show();
+    });
+
+    document.getElementById('campaignModal').addEventListener('hidden.bs.modal', function() {
+        showStep1();
+        document.getElementById('recallForm').reset();
+        document.getElementById('recallForm').classList.remove('was-validated');
+        document.getElementById('searchInput').value = '';
+    });
+</script>
+</body>
+</html>

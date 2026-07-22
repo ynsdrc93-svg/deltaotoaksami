@@ -317,6 +317,7 @@ export function LandingPage() {
   const opsParallax = useParallax<HTMLImageElement>(0.1);
 
   const tickerItems = ["250+ Marka", "81 İl + İhracat", "Kuruluş 1976", "Groupauto Üyesi", "Opar Ege Bölge Bayiliği", "Ümraniye Merkez", "Binek & Hafif Ticari", "Kesintisiz Lojistik"];
+  const [adayForm, setAdayForm] = useState({ ad: "", firma: "", telefon: "", email: "", konu: "", mesaj: "" });
 
   return (
     <div className="do-page min-h-screen bg-white text-slate-900 overflow-x-hidden">
@@ -640,6 +641,74 @@ export function LandingPage() {
               <div className="mt-8 flex items-center gap-2 text-[13px] text-[#1B3A8F] font-medium opacity-0 group-hover:opacity-100 transition-opacity">
                 Devamını Oku <ArrowRight className="w-3.5 h-3.5" />
               </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ADAY MÜŞTERİ BAŞVURUSU — light */}
+      <section className="bg-[#f8fafc] py-20 md:py-28 border-t border-slate-200">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F] block mb-4">Bayi & Distribütör Başvurusu</span>
+              <h2 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight mb-6">Aday Müşteri Başvurusu</h2>
+              <p className="text-slate-600 leading-[1.85] text-[15.5px] mb-8">
+                Delta Oto ile iş ortaklığına başlamak için aday müşteri formunu doldurun. Satış ekibimiz talebinizi değerlendirerek en kısa sürede geri dönüş yapacaktır.
+              </p>
+              <div className="space-y-5">
+                {[
+                  { label: "Güçlü Tedarik Altyapısı", desc: "Türkiye genelinde 81 ile kesintisiz dağıtım. Stokta olan ürünler için aynı gün sevk." },
+                  { label: "Kapsamlı Ürün Portföyü", desc: "250'den fazla marka ve 50.000'i aşkın SKU ile tek tedarikçi çözümü." },
+                  { label: "B2B Dijital Erişim", desc: "Anlık stok sorgulama ve sipariş yönetimi için 7/24 erişilebilen portal." },
+                  { label: "Rekabetçi Fiyat Yapısı", desc: "Groupauto International satın alma gücü ve SPART private label ile maliyet avantajı." },
+                ].map(({ label, desc }) => (
+                  <div key={label} className="flex gap-4">
+                    <div className="w-2 h-2 rounded-full bg-[#1B3A8F] shrink-0 mt-2" />
+                    <div>
+                      <div className="text-[14px] font-bold text-slate-900">{label}</div>
+                      <div className="text-[13.5px] text-slate-500 mt-0.5 leading-relaxed">{desc}</div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-8 lg:p-10">
+              <div className="mb-7">
+                <h3 className="text-xl font-black text-slate-900">Başvuru Formu</h3>
+                <p className="text-slate-500 text-[13.5px] mt-1.5">Tüm alanları eksiksiz doldurunuz. Talebiniz 1 iş günü içinde yanıtlanacaktır.</p>
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                {[
+                  { id: "ad",      label: "Ad Soyad",        ph: "Adınız ve soyadınız",  col: "col-span-2 sm:col-span-1" },
+                  { id: "firma",   label: "Firma Ünvanı",     ph: "Firma adı",            col: "col-span-2 sm:col-span-1" },
+                  { id: "telefon", label: "Telefon",          ph: "+90 5XX XXX XX XX",    col: "col-span-2 sm:col-span-1" },
+                  { id: "email",   label: "Kurumsal E-posta", ph: "ornek@firma.com.tr",   col: "col-span-2 sm:col-span-1" },
+                ].map(({ id, label, ph, col }) => (
+                  <div key={id} className={col}>
+                    <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">{label}</label>
+                    <input
+                      type="text" placeholder={ph}
+                      className="w-full border border-slate-200 rounded-lg px-4 py-3 text-[14px] text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#1B3A8F] focus:ring-1 focus:ring-[#1B3A8F]/20 transition"
+                      value={(adayForm as Record<string, string>)[id]}
+                      onChange={e => setAdayForm(f => ({ ...f, [id]: e.target.value }))}
+                    />
+                  </div>
+                ))}
+                <div className="col-span-2">
+                  <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Faaliyet Bölgesi / Açıklama</label>
+                  <textarea
+                    rows={3} placeholder="Faaliyet bölgenizi ve mevcut durumunuzu kısaca belirtiniz..."
+                    className="w-full border border-slate-200 rounded-lg px-4 py-3 text-[14px] text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#1B3A8F] focus:ring-1 focus:ring-[#1B3A8F]/20 transition resize-none"
+                    value={adayForm.mesaj}
+                    onChange={e => setAdayForm(f => ({ ...f, mesaj: e.target.value }))}
+                  />
+                </div>
+              </div>
+              <button className="mt-5 w-full bg-[#1B3A8F] hover:bg-[#2547B5] text-white font-semibold py-4 rounded-lg transition-colors flex items-center justify-center gap-2 shadow-[0_4px_16px_rgba(27,58,143,0.2)]">
+                Başvuruyu Gönderin <ChevronRight className="w-4 h-4" />
+              </button>
+              <p className="text-center text-[12px] text-slate-400 mt-4">Verileriniz yalnızca müşteri değerlendirme sürecinde kullanılır.</p>
             </div>
           </div>
         </div>
