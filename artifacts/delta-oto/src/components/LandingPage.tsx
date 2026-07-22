@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
+import { Link } from "wouter";
 import { ChevronRight, ArrowRight, MapPin, Mail, Phone, Globe, Truck, Shield, Zap, Network } from "lucide-react";
 
 const CSS = `
@@ -354,8 +355,14 @@ export function LandingPage() {
               />
             </a>
             <nav className="hidden lg:flex items-center gap-6 xl:gap-8 text-[13.5px] font-medium tracking-tight text-slate-600">
-              {["Hakkımızda", "Tedarikçiler", "Operasyon ve Lojistik", "Kariyer", "İletişim"].map(link => (
-                <a key={link} href="#" className="do-nav-link whitespace-nowrap hover:text-[#1B3A8F] transition-colors duration-200">{link}</a>
+              {[
+                { label: "Hakkımızda",           href: "/hakkimizda"  },
+                { label: "Tedarikçiler",          href: "/tedarikciler" },
+                { label: "Operasyon ve Lojistik", href: "/operasyon"   },
+                { label: "Kariyer",               href: "/kariyer"     },
+                { label: "İletişim",              href: "/iletisim"    },
+              ].map(({ label, href }) => (
+                <Link key={href} href={href} className="whitespace-nowrap hover:text-[#1B3A8F] transition-colors duration-200 border-b-2 border-transparent pb-0.5">{label}</Link>
               ))}
             </nav>
           </div>
