@@ -9,7 +9,7 @@ const DEPT_CONTACTS = [
     dept: "Satış & Sipariş",
     lines: ["0216 526 64 64"],
     info: "Ürün sorguları, sipariş ve fiyat bilgisi",
-    hours: "Pazartesi – Cuma, 08:30 – 18:00",
+    hours: "Pazartesi – Cumartesi, 08:30 – 18:00",
     email: "satis@deltaoto.com",
   },
   {
@@ -42,16 +42,23 @@ const LOCATIONS = [
   {
     name: "Merkez Ofis & Depo",
     city: "Ümraniye, İstanbul",
-    address: "Barbaros Cd. Beyit Sk. No:17, Yukarı Dudullu – Ümraniye / İstanbul",
+    address: "Barbaros Cd. Beyit Sk. No:17, Yukarı Dudullu — Ümraniye / İstanbul",
     phone: "0216 526 64 64 / 0216 526 33 44",
     type: "Merkez",
   },
   {
+    name: "Gebze Deposu",
+    city: "Gebze, Kocaeli",
+    address: "Barış, 1804. Sk. No:4, 41400 Gebze / Kocaeli",
+    phone: null,
+    type: "Kocaeli",
+  },
+  {
     name: "Opar Ege Bölge Operasyonu",
-    city: "İzmir",
-    address: "İzmir – Ege bölgesi distribüsyon merkezi",
-    phone: "—",
-    type: "Bölge",
+    city: "Kemalpaşa, İzmir",
+    address: "Kemalpaşa Kızılüzüm Kırovası Kümeevleri No: 12/1, Kemalpaşa / İzmir",
+    phone: null,
+    type: "Ege Bölge",
   },
 ];
 
@@ -87,7 +94,7 @@ export function IletisimPage() {
             <span className="text-[#7d9bea]">ULAŞIN</span>
           </h1>
           <p className="text-[17px] text-gray-300 max-w-xl font-light leading-[1.8]">
-            Ürün sorguları, B2B portal erişimi, bayi başvurusu veya kurumsal iletişim için size özel kanaldan ulaşın.
+            Ürün sorguları, B2B portal erişimi veya kurumsal iletişim için size özel kanaldan ulaşın.
           </p>
         </div>
       </section>
@@ -136,20 +143,22 @@ export function IletisimPage() {
           <div className="mb-10">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea] block mb-3">Operasyon Merkezlerimiz</span>
             <h2 className="text-3xl font-black tracking-tight">Bizi Nerede Bulabilirsiniz</h2>
+            <p className="text-white/55 mt-3 text-[15px]">Ümraniye, Gebze ve İzmir'deki üç merkezimizden Türkiye'nin tamamına hizmet veriyoruz.</p>
           </div>
-          <div className="grid md:grid-cols-2 gap-5">
+          <div className="grid md:grid-cols-3 gap-5">
             {LOCATIONS.map((loc) => (
               <div key={loc.name} className="bg-white/[0.08] border border-white/[0.12] rounded-xl p-7 hover:bg-white/[0.14] transition-colors">
                 <div className="flex items-start justify-between mb-4">
                   <div>
                     <span className="text-[11px] font-bold uppercase tracking-widest text-[#7d9bea]">{loc.type}</span>
                     <h3 className="text-[16px] font-bold mt-1">{loc.name}</h3>
+                    <p className="text-white/50 text-[12px] mt-0.5">{loc.city}</p>
                   </div>
                   <MapPin className="w-5 h-5 text-[#7d9bea] shrink-0 mt-1" />
                 </div>
-                <p className="text-white/65 text-[13.5px] leading-relaxed mb-3">{loc.address}</p>
-                {loc.phone !== "—" && (
-                  <div className="flex items-center gap-2">
+                <p className="text-white/65 text-[13px] leading-relaxed mb-3">{loc.address}</p>
+                {loc.phone && (
+                  <div className="flex items-center gap-2 mt-2">
                     <Phone className="w-3.5 h-3.5 text-[#7d9bea] shrink-0" />
                     <span className="text-[13px] text-white/80">{loc.phone}</span>
                   </div>
@@ -170,8 +179,8 @@ export function IletisimPage() {
               <h2 className="text-2xl font-black text-slate-900 mt-2">Genel İletişim</h2>
             </div>
             {[
-              { Icon: MapPin, label: "Adres",           lines: ["Barbaros Cd. Beyit Sk. No:17,", "Yukarı Dudullu – Ümraniye / İstanbul"] },
-              { Icon: Phone,  label: "Santral",          lines: ["0216 526 64 64 / 0216 526 33 44", "Pazartesi – Cuma, 08:30 – 18:00"] },
+              { Icon: MapPin, label: "Merkez Ofis",     lines: ["Barbaros Cd. Beyit Sk. No:17,", "Yukarı Dudullu — Ümraniye / İstanbul"] },
+              { Icon: Phone,  label: "Santral",          lines: ["0216 526 64 64 / 0216 526 33 44", "Pazartesi – Cumartesi, 08:30 – 18:00"] },
               { Icon: Mail,   label: "Kurumsal E-posta", lines: ["info@deltaoto.com", "b2b@deltaoto.com"] },
               { Icon: Globe,  label: "Dijital Kanallar", lines: ["www.deltaoto.com.tr", "b2b.deltaoto.com.tr (B2B Portal)"] },
             ].map(({ Icon, label, lines }) => (
@@ -187,14 +196,6 @@ export function IletisimPage() {
                 </div>
               </div>
             ))}
-            <div className="h-40 rounded-xl bg-slate-200 border border-slate-300 overflow-hidden relative">
-              <img src="https://images.unsplash.com/photo-1524231757912-21f4fe3a7200?w=800&q=70" alt="İstanbul harita" className="w-full h-full object-cover opacity-60" />
-              <div className="absolute inset-0 flex items-center justify-center">
-                <div className="bg-white/90 backdrop-blur-sm rounded-lg px-4 py-2 text-[13px] font-semibold text-slate-700 shadow-sm flex items-center gap-2">
-                  <MapPin className="w-4 h-4 text-[#1B3A8F]" /> Ümraniye, İstanbul
-                </div>
-              </div>
-            </div>
           </div>
 
           <div className="lg:col-span-3 bg-white rounded-2xl border border-slate-200 shadow-sm p-10">
@@ -233,7 +234,6 @@ export function IletisimPage() {
                 <option>Sipariş ve Teslimat Süreci</option>
                 <option>Stok ve Ürün Bilgisi</option>
                 <option>B2B Portal Erişimi ve Yetkilendirme</option>
-                <option>Bayi / Distribütör Başvurusu</option>
                 <option>İhracat Talebi</option>
                 <option>Kurumsal İletişim</option>
                 <option>İnsan Kaynakları & Kariyer</option>

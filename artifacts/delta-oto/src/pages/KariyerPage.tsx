@@ -1,5 +1,5 @@
 import React from "react";
-import { ChevronRight, Quote } from "lucide-react";
+import { ExternalLink, Quote, Linkedin } from "lucide-react";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
 
@@ -16,35 +16,6 @@ const TESTIMONIALS = [
   { quote: "Ürün portföyünü yönetmek; hem teknik hem de stratejik yetkinlik gerektiriyor. Delta Oto bu ikisini bir arada geliştirme fırsatı sunuyor.", name: "Ürün & Portföy Yönetimi", yrs: "7 Yıl" },
 ];
 
-const DEPARTMENTS = [
-  {
-    dept: "Satış & Müşteri Yönetimi",
-    positions: [
-      { title: "Satış Uzmanı — Yurt İçi Piyasa", type: "Tam Zamanlı", loc: "Ümraniye, İstanbul" },
-      { title: "Müşteri Deneyimi Uzmanı",          type: "Tam Zamanlı", loc: "Ümraniye, İstanbul" },
-    ],
-  },
-  {
-    dept: "Operasyon & Planlama",
-    positions: [
-      { title: "Tedarik Zinciri Analisti",         type: "Tam Zamanlı", loc: "Ümraniye, İstanbul" },
-      { title: "Depo ve Lojistik Sorumlusu",        type: "Tam Zamanlı", loc: "Ümraniye, İstanbul" },
-    ],
-  },
-  {
-    dept: "Ürün & Portföy",
-    positions: [
-      { title: "Ürün Yöneticisi — Aftermarket",    type: "Tam Zamanlı", loc: "Ümraniye, İstanbul" },
-    ],
-  },
-  {
-    dept: "Teknoloji & Dijital",
-    positions: [
-      { title: "Yazılım Geliştirici (Full Stack)",  type: "Tam Zamanlı / Hibrit", loc: "İstanbul" },
-    ],
-  },
-];
-
 const BENEFITS = [
   { label: "Özel sağlık sigortası",           sub: "Tüm çalışanlar için" },
   { label: "Yemek kartı katkısı",              sub: "Günlük katkı desteği" },
@@ -54,6 +25,25 @@ const BENEFITS = [
   { label: "Ulaşım desteği",                   sub: "Servis veya ulaşım katkısı" },
   { label: "Marka ve ürün eğitimleri",         sub: "Tedarikçi işbirliğiyle" },
   { label: "Mentörlük programı",               sub: "Kıdemli çalışan rehberliği" },
+];
+
+const JOB_PLATFORMS = [
+  {
+    name: "LinkedIn",
+    desc: "Delta Oto'nun LinkedIn sayfasını takip ederek açık pozisyonlara başvurabilir, şirket güncellemelerini ve sektör haberlerini takip edebilirsiniz.",
+    url: "https://www.linkedin.com/company/delta-oto",
+    label: "LinkedIn'de Pozisyonları İnceleyin",
+    color: "#0A66C2",
+    Icon: Linkedin,
+  },
+  {
+    name: "Kariyer.net",
+    desc: "Güncel iş ilanlarımızı Kariyer.net üzerinden inceleyebilir, online başvurunuzu kolayca tamamlayabilirsiniz.",
+    url: "https://www.kariyer.net",
+    label: "Kariyer.net'te İlanları Görün",
+    color: "#1B3A8F",
+    Icon: ExternalLink,
+  },
 ];
 
 export function KariyerPage() {
@@ -89,9 +79,6 @@ export function KariyerPage() {
           <p className="text-[17px] text-gray-300 leading-[1.8] max-w-2xl mb-10 font-light">
             50 yıllık kurumsal birikimin parçası olun. Delta Oto'da kariyer; güçlü sektör yetkinliği, dinamik bir ekip yapısı ve uzun vadeli profesyonel gelişim fırsatı anlamına gelir.
           </p>
-          <button className="inline-flex items-center gap-2.5 bg-[#1B3A8F] hover:bg-[#2547B5] text-white font-semibold px-8 py-4 rounded-md transition-colors shadow-[0_0_32px_rgba(27,58,143,0.3)] group">
-            Açık Pozisyonları İnceleyin <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-          </button>
         </div>
       </section>
 
@@ -137,45 +124,43 @@ export function KariyerPage() {
         </div>
       </section>
 
-      {/* AÇIK POZİSYONLAR — white */}
+      {/* KARİYER PLATFORMLARI — white */}
       <section className="bg-white py-24">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="mb-14">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">Açık Pozisyonlar</span>
             <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-2 tracking-tight">Kariyer Fırsatları</h2>
-            <p className="text-slate-500 mt-3 max-w-xl text-[15px]">Departmanlara göre açık pozisyonları inceleyin ve size uygun rolü bulun.</p>
+            <p className="text-slate-500 mt-3 max-w-xl text-[15px]">
+              Güncel pozisyonlarımız LinkedIn ve Kariyer.net üzerinde yayımlanmaktadır. Başvuru için tercih ettiğiniz platformu seçin.
+            </p>
           </div>
-          <div className="space-y-8">
-            {DEPARTMENTS.map(({ dept, positions }) => (
-              <div key={dept}>
-                <div className="flex items-center gap-3 mb-3">
-                  <div className="w-2.5 h-2.5 rounded-full bg-[#1B3A8F]" />
-                  <h3 className="text-[13px] font-bold uppercase tracking-widest text-[#1B3A8F]">{dept}</h3>
+          <div className="grid md:grid-cols-2 gap-6 mb-10">
+            {JOB_PLATFORMS.map(({ name, desc, url, label, Icon }) => (
+              <a
+                key={name}
+                href={url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group border border-slate-200 rounded-2xl p-8 hover:border-[#1B3A8F]/40 hover:shadow-xl transition-all block"
+              >
+                <div className="flex items-start justify-between mb-6">
+                  <div className="w-14 h-14 bg-[#1B3A8F]/[0.08] rounded-xl flex items-center justify-center group-hover:bg-[#1B3A8F] transition-colors">
+                    <Icon className="w-7 h-7 text-[#1B3A8F] group-hover:text-white transition-colors" />
+                  </div>
+                  <ExternalLink className="w-4 h-4 text-slate-300 group-hover:text-[#1B3A8F] transition-colors mt-1" />
                 </div>
-                <div className="space-y-2">
-                  {positions.map((p) => (
-                    <div key={p.title} className="border border-slate-200 rounded-xl px-7 py-5 flex flex-col md:flex-row md:items-center justify-between gap-4 hover:border-[#1B3A8F]/30 hover:shadow-md transition-all group cursor-pointer">
-                      <div>
-                        <h4 className="text-[15px] font-bold text-slate-900 leading-snug">{p.title}</h4>
-                        <div className="flex items-center flex-wrap gap-2 mt-1.5">
-                          <span className="text-[12px] text-slate-400">{p.loc}</span>
-                          <span className="text-slate-300">·</span>
-                          <span className="text-[12px] text-slate-400">{p.type}</span>
-                        </div>
-                      </div>
-                      <button className="shrink-0 text-[13px] font-semibold border border-slate-300 text-slate-700 px-4 py-2 rounded-lg hover:bg-[#1B3A8F] hover:text-white hover:border-[#1B3A8F] transition-colors flex items-center gap-1.5 whitespace-nowrap">
-                        Başvurun <ChevronRight className="w-3.5 h-3.5" />
-                      </button>
-                    </div>
-                  ))}
+                <h3 className="text-[18px] font-black text-slate-900 mb-3">{name}</h3>
+                <p className="text-slate-500 text-[14px] leading-relaxed mb-6">{desc}</p>
+                <div className="inline-flex items-center gap-2 text-[13px] font-semibold text-[#1B3A8F] group-hover:gap-3 transition-all">
+                  {label} <ExternalLink className="w-3.5 h-3.5" />
                 </div>
-              </div>
+              </a>
             ))}
           </div>
-          <div className="mt-10 p-6 bg-slate-50 border border-slate-200 rounded-xl text-center">
-            <p className="text-slate-600 text-[14px]">Aradığınız pozisyonu bulamadınız mı?</p>
+          <div className="p-7 bg-slate-50 border border-slate-200 rounded-xl text-center">
+            <p className="text-slate-600 text-[14px]">Proaktif başvuru yapmak ister misiniz?</p>
             <p className="text-slate-900 font-semibold text-[14px] mt-1">
-              Genel başvuru için <a href="mailto:ik@deltaoto.com" className="text-[#1B3A8F] hover:underline">ik@deltaoto.com</a> adresine CV'nizi iletebilirsiniz.
+              CV'nizi ve ilgilendiğiniz departmanı <a href="mailto:ik@deltaoto.com" className="text-[#1B3A8F] hover:underline">ik@deltaoto.com</a> adresine iletebilirsiniz.
             </p>
           </div>
         </div>

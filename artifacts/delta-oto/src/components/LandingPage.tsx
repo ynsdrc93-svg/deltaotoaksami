@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "wouter";
-import { ChevronRight, ArrowRight, MapPin, Mail, Phone, Globe, Truck, Shield, Zap, Network } from "lucide-react";
+import { ChevronRight, ArrowRight, MapPin, Mail, Phone, Globe, Truck, Zap, Network } from "lucide-react";
 
 const CSS = `
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
@@ -317,7 +317,6 @@ export function LandingPage() {
   const opsParallax = useParallax<HTMLImageElement>(0.1);
 
   const tickerItems = ["250+ Marka", "81 İl + İhracat", "Kuruluş 1976", "Groupauto Üyesi", "Opar Ege Bölge Bayiliği", "Ümraniye Merkez", "Binek & Hafif Ticari", "Kesintisiz Lojistik"];
-  const [adayForm, setAdayForm] = useState({ ad: "", firma: "", telefon: "", email: "", konu: "", mesaj: "" });
 
   return (
     <div className="do-page min-h-screen bg-white text-slate-900 overflow-x-hidden">
@@ -428,20 +427,22 @@ export function LandingPage() {
             </p>
 
             <div ref={ref} className="do-reveal do-d3 flex flex-wrap gap-4 items-center">
-              <button className="bg-[#1B3A8F] hover:bg-[#2547B5] text-white font-semibold px-8 py-4 rounded-md text-base transition-all duration-200 flex items-center gap-2.5 group shadow-[0_0_32px_rgba(27,58,143,0.3)] hover:shadow-[0_0_48px_rgba(27,58,143,0.45)]">
-                Operasyon Gücümüzü İnceleyin
-                <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </button>
+              <Link to="/iletisim">
+                <button className="bg-[#1B3A8F] hover:bg-[#2547B5] text-white font-semibold px-8 py-4 rounded-md text-base transition-all duration-200 flex items-center gap-2.5 group shadow-[0_0_32px_rgba(27,58,143,0.3)] hover:shadow-[0_0_48px_rgba(27,58,143,0.45)]">
+                  Bize Ulaşın
+                  <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </button>
+              </Link>
               <button className="text-gray-200 hover:text-white text-base font-medium flex items-center gap-2 border border-white/15 hover:border-white/30 px-8 py-4 rounded-md transition-all duration-200">
-                Hakkımızda
+                B2B Portal
               </button>
             </div>
 
             <div ref={ref} className="do-reveal do-d4 mt-16 flex flex-wrap gap-6">
               {[
-                { Icon: Shield, text: "ISO Sertifikalı" },
                 { Icon: Globe, text: "Groupauto Üyesi" },
                 { Icon: Truck, text: "81 İl + İhracat" },
+                { Icon: Network, text: "50 Yıllık Deneyim" },
               ].map(({ Icon, text }) => (
                 <div key={text} className="flex items-center gap-2.5 text-gray-400 text-sm">
                   <Icon className="w-4 h-4 text-[#7d9bea]" />
@@ -488,13 +489,13 @@ export function LandingPage() {
                 Uluslararası Güç,<br/>Yerel Hakimiyet.
               </h2>
               <p ref={ref} className="do-reveal do-d2 text-[17px] text-blue-100/80 leading-[1.8] font-light">
-                Dünyanın en büyük bağımsız yedek parça organizasyonlarından Groupauto'nun üyesi olarak, optimize edilmiş global satın alma kapasitesini yerel pazar bilgisiyle birleştiriyoruz. Bu yapı, tedarik ettiğimiz ürünlerde rekabetçi fiyat ve geniş çeşitliliği mümkün kılıyor.
+                Groupauto International'ın Türkiye üyesiyiz. Bu üyelik; 40'tan fazla ülkedeki 3.000'i aşkın üye firma gücünü doğrudan satın alma kaldıracımıza dönüştürür. Global ağın tedarik kapasitesiyle Türkiye pazarının dinamiklerini tek bir çatı altında buluşturuyoruz.
               </p>
 
               <div ref={ref} className="do-reveal do-d3 mt-12 flex gap-12">
                 {[
-                  { target: 35, suffix: "+", label: "Global Tedarikçi" },
-                  { target: 12, suffix: "", label: "Avrupa Ülkesi" },
+                  { target: 50, suffix: "+", label: "Global Tedarikçi" },
+                  { target: 40, suffix: "+", label: "Ülke Ağı" },
                 ].map(({ target, suffix, label }) => (
                   <div key={label}>
                     <div className="flex items-baseline">
@@ -510,8 +511,8 @@ export function LandingPage() {
 
             <div className="lg:w-1/2 flex flex-col sm:flex-row gap-5 w-full">
               {[
-                { Icon: Globe, label: "Groupauto International", sub: "Global Ağ", desc: "Dünya genelinde entegre satın alma ve tedarik organizasyonu." },
-                { Icon: Network, label: "Groupauto Türkiye", sub: "Yerel Hakimiyet", desc: "Türkiye genelinde yaygın bayi ve dağıtım gücü." },
+                { Icon: Globe, label: "Groupauto International", sub: "40+ Ülke · 3.000+ Üye Firma", desc: "Dünyanın en büyük bağımsız yedek parça ağı: global satın alma gücü, ortak kalite standartları ve uluslararası tedarik kapasitesi." },
+                { Icon: Network, label: "Groupauto Türkiye", sub: "Delta Oto Bünyesinde", desc: "Türkiye'de Groupauto ağının operasyonel ayağı. Global satın alma avantajını yerel stok derinliği ve lojistik hızıyla birleştiriyoruz." },
               ].map((item, i) => (
                 <div
                   key={item.label}
@@ -543,7 +544,7 @@ export function LandingPage() {
       </section>
 
       {/* OPERATIONS & LOGISTICS (dark) */}
-      <section className="relative min-h-[640px] flex items-center overflow-hidden bg-[#0e1016] text-white">
+      <section className="relative overflow-hidden bg-[#0e1016] text-white">
         <div className="absolute inset-0">
           <img
             ref={opsParallax}
@@ -557,27 +558,33 @@ export function LandingPage() {
         <div className="absolute inset-0 do-grid-bg"></div>
 
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-20 md:py-28 relative z-10 w-full">
-          <div className="max-w-2xl">
+          <div className="max-w-2xl mb-14">
             <p ref={ref} className="do-reveal text-[#7d9bea] text-xs font-bold uppercase tracking-[0.3em] mb-5 flex items-center gap-3">
               <span className="w-8 h-[2px] bg-[#4d74d6] inline-block"></span>
-              Operasyon & Lojistik
+              Lojistik Altyapı
             </p>
             <h2 ref={ref} className="do-reveal do-d1 text-4xl md:text-5xl font-black text-white mb-8 leading-[1.1] tracking-tight">
-              Geniş Ağ,<br />
-              <span className="text-[#7d9bea]">Güvenilir Tedarik.</span>
+              Üç Merkezden,<br />
+              <span className="text-[#7d9bea]">81 İle Kesintisiz.</span>
             </h2>
-            <p ref={ref} className="do-reveal do-d2 text-[16px] text-gray-300 leading-[1.85] font-light mb-5">
-              Lojistiği stratejik bir tedarik gücü olarak yönetiyoruz. Ümraniye'deki merkezimizden Türkiye'nin tamamına ve küresel pazarlara uzanan dağıtım ağımızla, binek ve hafif ticari araç gruplarında 250'den fazla markanın tedariğini sağlıyoruz.
+            <p ref={ref} className="do-reveal do-d2 text-[16px] text-gray-300 leading-[1.85] font-light">
+              Ümraniye, Gebze ve İzmir'deki operasyon merkezlerimizden Türkiye'nin tamamına ve küresel pazarlara uzanan dağıtım ağıyla; binek ve hafif ticari araç gruplarında 250'den fazla markanın tedariğini hız ve güvenilirlik standartlarında gerçekleştiriyoruz.
             </p>
-            <p ref={ref} className="do-reveal do-d3 text-[16px] text-gray-300 leading-[1.85] font-light">
-              Opar Ege Bölge Bayiliği'ni de bünyemize katarak bölgesel erişimimizi ve stok derinliğimizi genişlettik.
-            </p>
+          </div>
 
-            <div ref={ref} className="do-reveal do-d4 mt-10 flex flex-wrap gap-3">
-              {["Tam Günlük Dağıtım", "Stok Derinliği", "Stok Optimizasyonu", "İhracat Lojistiği"].map(chip => (
-                <span key={chip} className="text-xs text-gray-300 border border-white/10 hover:border-white/25 hover:text-white rounded-md px-3 py-1.5 font-medium transition-colors duration-200">{chip}</span>
-              ))}
-            </div>
+          <div ref={ref} className="do-reveal do-d3 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {[
+              { title: "Her İş Günü Sevkiyat", desc: "Hafta içi her gün düzenli yükleme. Cumartesi sevkiyat kapasitesiyle hizmet sürekliliği korunur." },
+              { title: "Aynı Gün Sevk", desc: "14:00'a kadar iletilen siparişler, stokta olan ürünler için aynı gün yola çıkar." },
+              { title: "Derin Stok", desc: "50.000'i aşkın aktif SKU ile talep edilen ürünün büyük bölümü hazır stoktan karşılanır." },
+              { title: "İhracat Kapasitesi", desc: "Groupauto International kanallarıyla Türkiye dışı pazarlara da ürün ihracatı gerçekleştirilir." },
+            ].map((card, i) => (
+              <div key={card.title} ref={ref} className={`do-reveal ${i > 0 ? `do-d${i}` : ""} group relative border border-white/10 rounded-xl p-6 hover:border-white/30 hover:bg-white/[0.06] transition-all duration-300 cursor-default`}>
+                <div className="w-1.5 h-1.5 rounded-full bg-[#4d74d6] mb-4"></div>
+                <h3 className="text-[14px] font-bold text-white mb-2 leading-snug">{card.title}</h3>
+                <p className="text-[13px] text-gray-400 leading-relaxed group-hover:text-gray-300 transition-colors duration-300">{card.desc}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -641,74 +648,6 @@ export function LandingPage() {
               <div className="mt-8 flex items-center gap-2 text-[13px] text-[#1B3A8F] font-medium opacity-0 group-hover:opacity-100 transition-opacity">
                 Devamını Oku <ArrowRight className="w-3.5 h-3.5" />
               </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ADAY MÜŞTERİ BAŞVURUSU — light */}
-      <section className="bg-[#f8fafc] py-20 md:py-28 border-t border-slate-200">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-start">
-            <div>
-              <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F] block mb-4">Bayi & Distribütör Başvurusu</span>
-              <h2 className="text-3xl md:text-4xl font-black text-slate-900 tracking-tight mb-6">Aday Müşteri Başvurusu</h2>
-              <p className="text-slate-600 leading-[1.85] text-[15.5px] mb-8">
-                Delta Oto ile iş ortaklığına başlamak için aday müşteri formunu doldurun. Satış ekibimiz talebinizi değerlendirerek en kısa sürede geri dönüş yapacaktır.
-              </p>
-              <div className="space-y-5">
-                {[
-                  { label: "Güçlü Tedarik Altyapısı", desc: "Türkiye genelinde 81 ile kesintisiz dağıtım. Stokta olan ürünler için aynı gün sevk." },
-                  { label: "Kapsamlı Ürün Portföyü", desc: "250'den fazla marka ve 50.000'i aşkın SKU ile tek tedarikçi çözümü." },
-                  { label: "B2B Dijital Erişim", desc: "Anlık stok sorgulama ve sipariş yönetimi için 7/24 erişilebilen portal." },
-                  { label: "Rekabetçi Fiyat Yapısı", desc: "Groupauto International satın alma gücü ve SPART private label ile maliyet avantajı." },
-                ].map(({ label, desc }) => (
-                  <div key={label} className="flex gap-4">
-                    <div className="w-2 h-2 rounded-full bg-[#1B3A8F] shrink-0 mt-2" />
-                    <div>
-                      <div className="text-[14px] font-bold text-slate-900">{label}</div>
-                      <div className="text-[13.5px] text-slate-500 mt-0.5 leading-relaxed">{desc}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-8 lg:p-10">
-              <div className="mb-7">
-                <h3 className="text-xl font-black text-slate-900">Başvuru Formu</h3>
-                <p className="text-slate-500 text-[13.5px] mt-1.5">Tüm alanları eksiksiz doldurunuz. Talebiniz 1 iş günü içinde yanıtlanacaktır.</p>
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                {[
-                  { id: "ad",      label: "Ad Soyad",        ph: "Adınız ve soyadınız",  col: "col-span-2 sm:col-span-1" },
-                  { id: "firma",   label: "Firma Ünvanı",     ph: "Firma adı",            col: "col-span-2 sm:col-span-1" },
-                  { id: "telefon", label: "Telefon",          ph: "+90 5XX XXX XX XX",    col: "col-span-2 sm:col-span-1" },
-                  { id: "email",   label: "Kurumsal E-posta", ph: "ornek@firma.com.tr",   col: "col-span-2 sm:col-span-1" },
-                ].map(({ id, label, ph, col }) => (
-                  <div key={id} className={col}>
-                    <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">{label}</label>
-                    <input
-                      type="text" placeholder={ph}
-                      className="w-full border border-slate-200 rounded-lg px-4 py-3 text-[14px] text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#1B3A8F] focus:ring-1 focus:ring-[#1B3A8F]/20 transition"
-                      value={(adayForm as Record<string, string>)[id]}
-                      onChange={e => setAdayForm(f => ({ ...f, [id]: e.target.value }))}
-                    />
-                  </div>
-                ))}
-                <div className="col-span-2">
-                  <label className="block text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1.5">Faaliyet Bölgesi / Açıklama</label>
-                  <textarea
-                    rows={3} placeholder="Faaliyet bölgenizi ve mevcut durumunuzu kısaca belirtiniz..."
-                    className="w-full border border-slate-200 rounded-lg px-4 py-3 text-[14px] text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#1B3A8F] focus:ring-1 focus:ring-[#1B3A8F]/20 transition resize-none"
-                    value={adayForm.mesaj}
-                    onChange={e => setAdayForm(f => ({ ...f, mesaj: e.target.value }))}
-                  />
-                </div>
-              </div>
-              <button className="mt-5 w-full bg-[#1B3A8F] hover:bg-[#2547B5] text-white font-semibold py-4 rounded-lg transition-colors flex items-center justify-center gap-2 shadow-[0_4px_16px_rgba(27,58,143,0.2)]">
-                Başvuruyu Gönderin <ChevronRight className="w-4 h-4" />
-              </button>
-              <p className="text-center text-[12px] text-slate-400 mt-4">Verileriniz yalnızca müşteri değerlendirme sürecinde kullanılır.</p>
             </div>
           </div>
         </div>
