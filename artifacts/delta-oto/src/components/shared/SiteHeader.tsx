@@ -45,11 +45,15 @@ export function SiteHeader() {
         style={scrolled ? { background: "rgba(255,255,255,0.98)", borderColor: "rgba(15,23,42,0.1)", boxShadow: "0 4px 24px rgba(15,23,42,0.08)" } : {}}
       >
         <div className="w-full px-6 lg:px-10 xl:px-16 h-24 sm:h-28 flex items-center justify-between">
-          <div className="flex items-center gap-8 lg:gap-12">
-            <Link href="/" className="flex items-center shrink-0">
-              <img src="/images/delta-oto-logo.png" alt="Delta Oto 50. Yıl" className="h-16 sm:h-20 w-auto" />
-            </Link>
-            <nav className="hidden lg:flex items-center gap-6 xl:gap-8 text-[13.5px] font-medium tracking-tight text-slate-600">
+
+          {/* Logo — sabit solda */}
+          <Link href="/" className="flex items-center shrink-0">
+            <img src="/images/delta-oto-logo.png" alt="Delta Oto 50. Yıl" className="h-16 sm:h-20 w-auto" />
+          </Link>
+
+          {/* Sağ grup: nav + SPART + B2B */}
+          <div className="flex items-center gap-5 xl:gap-7 shrink-0">
+            <nav className="hidden lg:flex items-center gap-5 xl:gap-7 text-[13.5px] font-medium tracking-tight text-slate-600">
               {NAV.map(({ label, href }) => {
                 const isActive = location === href;
                 return (
@@ -67,21 +71,25 @@ export function SiteHeader() {
                 );
               })}
             </nav>
-          </div>
 
-          <div className="flex items-center gap-4 shrink-0">
-            <Link href="#" className="hidden lg:flex items-center rounded-md overflow-hidden ring-1 ring-slate-200 hover:ring-[#1B3A8F]/40 transition-all duration-200">
+            <span className="hidden lg:block w-px h-6 bg-slate-200 shrink-0" />
+
+            <Link
+              href="/spart"
+              className="hidden lg:flex items-center rounded-md overflow-hidden ring-1 ring-slate-200 hover:ring-[#1B3A8F]/40 transition-all duration-200 shrink-0"
+            >
               <img src="/images/spart-logo.png" alt="SPART Original Replacement" className="h-7 w-auto block" />
             </Link>
-            <span className="hidden lg:block w-px h-6 bg-slate-200" />
+
             <Link
               href="#"
-              className="bg-[#1B3A8F] hover:bg-[#2547B5] text-white text-xs sm:text-[13px] font-semibold tracking-[0.01em] px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-md transition-all duration-200 flex items-center gap-1.5 shadow-sm hover:shadow-md group whitespace-nowrap"
+              className="bg-[#1B3A8F] hover:bg-[#2547B5] text-white text-xs sm:text-[13px] font-semibold tracking-[0.01em] px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-md transition-all duration-200 flex items-center gap-1.5 shadow-sm hover:shadow-md group whitespace-nowrap shrink-0"
             >
               B2B Portal
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
             </Link>
           </div>
+
         </div>
       </header>
     </>
