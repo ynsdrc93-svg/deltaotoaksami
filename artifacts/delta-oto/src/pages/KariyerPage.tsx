@@ -166,11 +166,11 @@ export function KariyerPage() {
         </div>
       </section>
 
-      {/* YAN HAKLAR — dark */}
-      <section className="relative bg-[#0e1016] text-white py-20 overflow-hidden">
+      {/* YAN HAKLAR — navy */}
+      <section className="relative bg-[#1B3A8F] text-white py-20 overflow-hidden">
         <div className="absolute inset-0">
           <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&q=80" alt="" className="w-full h-full object-cover opacity-10" />
-          <div className="absolute inset-0 bg-[#0e1016]/80" />
+          <div className="absolute inset-0 bg-[#1B3A8F]/80" />
         </div>
         <div className="absolute inset-0 do-grid-bg opacity-25" />
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">

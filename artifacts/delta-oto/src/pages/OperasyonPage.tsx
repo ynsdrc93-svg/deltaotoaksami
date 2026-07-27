@@ -241,8 +241,8 @@ export function OperasyonPage() {
         </div>
       </section>
 
-      {/* SİPARİŞ SÜRECİ — dark */}
-      <section className="relative bg-[#0e1016] text-white py-24 overflow-hidden">
+      {/* SİPARİŞ SÜRECİ — navy */}
+      <section className="relative bg-[#1B3A8F] text-white py-24 overflow-hidden">
         <div className="absolute inset-0 do-grid-bg opacity-25" />
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
           <div className="mb-14">

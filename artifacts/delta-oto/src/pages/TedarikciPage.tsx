@@ -214,11 +214,11 @@ export function TedarikciPage() {
         </div>
       </section>
 
-      {/* CTA — dark */}
-      <section className="relative bg-[#0e1016] text-white py-20 overflow-hidden">
+      {/* CTA — navy */}
+      <section className="relative bg-[#1B3A8F] text-white py-20 overflow-hidden">
         <div className="absolute inset-0">
           <img src="https://images.unsplash.com/photo-1553413077-190dd305871c?w=1920&q=80" alt="" className="w-full h-full object-cover opacity-10" />
-          <div className="absolute inset-0 bg-[#0e1016]/85" />
+          <div className="absolute inset-0 bg-[#1B3A8F]/85" />
         </div>
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 text-center">
           <h2 className="text-3xl md:text-4xl font-black tracking-tight mb-4">Stok Sorgulama ve Sipariş için B2B Portal</h2>
