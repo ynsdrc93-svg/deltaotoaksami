@@ -98,9 +98,9 @@ export function SpartPage() {
       <section className="relative min-h-[580px] flex items-center text-white overflow-hidden bg-[#0e1016]">
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1486262715619-67b85e0b08d3?w=1920&q=80"
+            src="/images/spart-hero.jpg"
             alt=""
-            className="w-full h-full object-cover opacity-15"
+            className="w-full h-full object-cover opacity-30"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-[#0e1016] via-[#0e1016]/90 to-[#0e1016]/60" />
         </div>
@@ -195,7 +195,7 @@ export function SpartPage() {
             <div className="relative">
               <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-slate-100">
                 <img
-                  src="https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=800&q=80"
+                  src="/images/spart-quality.jpg"
                   alt="SPART kalite kontrol"
                   className="w-full h-full object-cover"
                 />
@@ -285,7 +285,7 @@ export function SpartPage() {
             <div className="relative order-2 lg:order-1">
               <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-slate-100">
                 <img
-                  src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=800&q=80"
+                  src="/images/spart-warehouse.jpg"
                   alt="Delta Oto depo"
                   className="w-full h-full object-cover"
                 />
