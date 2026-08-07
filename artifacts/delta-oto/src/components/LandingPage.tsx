@@ -222,81 +222,104 @@ export function LandingPage() {
       </header>
       <MobileDrawer open={menuOpen} onClose={() => setMenuOpen(false)} items={NAV} activeHref="/" />
 
-      {/* HERO (dark) */}
-      <section className="relative min-h-[92vh] flex items-center overflow-hidden bg-[#0e1016] text-white">
-        <div className="absolute inset-0">
-          <img
-            ref={heroParallax}
-            src="/images/delta-oto-hero.png"
-            alt=""
-            className="w-full h-full object-cover opacity-30 will-change-transform"
-            style={{ objectPosition: "center 40%" }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0e1016] via-[#0e1016]/80 to-[#0e1016]/30"></div>
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0e1016] via-transparent to-transparent"></div>
-        </div>
-        <div className="do-hero-stripe"></div>
-        <div className="absolute inset-0 do-grid-bg opacity-60"></div>
-        <div className="absolute left-0 top-0 w-[3px] h-full bg-gradient-to-b from-transparent via-[#1B3A8F] to-transparent opacity-60"></div>
-        <div className="do-beam"></div>
+      {/* HERO (dark, split panel) */}
+      <section className="relative overflow-hidden bg-[#0e1016] text-white">
+        <div className="flex flex-col lg:flex-row lg:min-h-[92vh]">
 
-        <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 relative z-10 py-24">
-          <div className="max-w-4xl">
-            <div ref={ref} className="do-reveal flex items-center gap-3 mb-8">
-              <div className="w-8 h-[2px] bg-[#4d74d6]"></div>
-              <span className="text-[#7d9bea] text-xs font-bold uppercase tracking-[0.3em]">Kuruluş 1976 · Delta Oto</span>
+          {/* LEFT — solid ink panel, oversized "50" mark, real content */}
+          <div className="relative lg:w-[57%] flex items-center px-6 sm:px-10 lg:pl-14 xl:pl-20 lg:pr-10 xl:pr-14 py-20 lg:py-28 overflow-hidden">
+            <div
+              aria-hidden
+              className="absolute -left-6 -bottom-16 sm:-bottom-24 lg:-bottom-28 text-[220px] sm:text-[320px] lg:text-[380px] font-black leading-none text-white/[0.045] select-none pointer-events-none tracking-tighter"
+            >
+              50
             </div>
+            <div className="do-grid-bg absolute inset-0 opacity-50"></div>
+            <div className="absolute left-0 top-0 w-[3px] h-full bg-gradient-to-b from-transparent via-[#1B3A8F] to-transparent opacity-60"></div>
+            <div className="do-beam"></div>
 
-            <h1
-              ref={ref}
-              className="do-reveal do-d1 text-[34px] sm:text-5xl md:text-6xl lg:text-[72px] xl:text-[80px] font-black leading-[1.05] sm:leading-[1.0] mb-6 tracking-[-0.02em] break-words"
-            >
-              <span className="do-hero-line">50 YILDIR</span>
-              <br />
-              <span className="text-white">OTOMOTİV</span>
-              <br />
-              <span className="text-white">AFTERMARKET'İN</span>
-              <br />
-              <span className="do-hero-accent">KESİNTİSİZ GÜCÜ</span>
-            </h1>
+            <div className="relative z-10 max-w-2xl">
+              <div ref={ref} className="do-reveal flex items-center gap-3 mb-8">
+                <div className="w-8 h-[2px] bg-[#4d74d6]"></div>
+                <span className="text-[#7d9bea] text-xs font-bold uppercase tracking-[0.3em]">Kuruluş 1976 · Delta Oto</span>
+              </div>
 
-            <p
-              ref={ref}
-              className="do-reveal do-d2 text-[17px] text-gray-300 leading-[1.75] max-w-2xl mb-10 font-light"
-            >
-              Binek ve hafif ticari araç yedek parça pazarında, bağımsız yenileme sektörünü 1976'dan bugüne güçlü lojistik altyapımız ve küresel tedarik ağımızla yönlendiriyoruz.
-            </p>
-
-            <div ref={ref} className="do-reveal do-d3 flex flex-wrap gap-4 items-center mb-12">
-              <Link
-                href="/iletisim"
-                className="bg-[#1B3A8F] hover:bg-[#2547B5] text-white font-semibold px-8 py-4 rounded-md text-base transition-all duration-200 flex items-center gap-2.5 group shadow-[0_0_32px_rgba(27,58,143,0.3)] hover:shadow-[0_0_48px_rgba(27,58,143,0.45)]"
+              <h1
+                ref={ref}
+                className="do-reveal do-d1 text-[32px] sm:text-5xl md:text-6xl lg:text-[58px] xl:text-[68px] font-black leading-[1.04] mb-6 tracking-[-0.02em] break-words"
               >
-                Bize Ulaşın
-                <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-              </Link>
-              <button className="text-gray-200 hover:text-white text-base font-medium flex items-center gap-2 border border-white/15 hover:border-white/30 px-8 py-4 rounded-md transition-all duration-200">
-                B2B Portal
-              </button>
-            </div>
+                <span className="do-hero-line">50 YILDIR</span>
+                <br />
+                <span className="text-white">OTOMOTİV</span>
+                <br />
+                <span className="text-white">AFTERMARKET'İN</span>
+                <br />
+                <span className="do-hero-accent">KESİNTİSİZ GÜCÜ</span>
+              </h1>
 
-            <div ref={ref} className="do-reveal do-d4 flex flex-wrap gap-3">
-              {[
-                { Icon: Globe,       text: "Groupauto Üyesi" },
-                { Icon: PackageCheck, text: "50.000+ Aktif SKU" },
-                { Icon: Truck,       text: "Cumartesi Sevkiyat" },
-                { Icon: Network,     text: "3 Operasyon Merkezi" },
-              ].map(({ Icon, text }) => (
-                <div key={text} className="flex items-center gap-2.5 text-gray-200 text-[13px] font-medium border border-white/15 bg-white/[0.04] rounded-full px-4 py-2">
-                  <Icon className="w-4 h-4 text-[#7d9bea]" />
-                  <span>{text}</span>
-                </div>
-              ))}
+              <p
+                ref={ref}
+                className="do-reveal do-d2 text-[16px] sm:text-[17px] text-gray-300 leading-[1.75] max-w-lg mb-10 font-light"
+              >
+                Binek ve hafif ticari araç yedek parça pazarında, bağımsız yenileme sektörünü 1976'dan bugüne güçlü lojistik altyapımız ve küresel tedarik ağımızla yönlendiriyoruz.
+              </p>
+
+              <div ref={ref} className="do-reveal do-d3 flex flex-wrap gap-4 items-center mb-12">
+                <Link
+                  href="/iletisim"
+                  className="bg-[#1B3A8F] hover:bg-[#2547B5] text-white font-semibold px-8 py-4 rounded-md text-base transition-all duration-200 flex items-center gap-2.5 group shadow-[0_0_32px_rgba(27,58,143,0.3)] hover:shadow-[0_0_48px_rgba(27,58,143,0.45)]"
+                >
+                  Bize Ulaşın
+                  <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                </Link>
+                <button className="text-gray-200 hover:text-white text-base font-medium flex items-center gap-2 border border-white/15 hover:border-white/30 px-8 py-4 rounded-md transition-all duration-200">
+                  B2B Portal
+                </button>
+              </div>
+
+              <div ref={ref} className="do-reveal do-d4 flex flex-wrap gap-3">
+                {[
+                  { Icon: Globe,       text: "Groupauto Üyesi" },
+                  { Icon: PackageCheck, text: "50.000+ Aktif SKU" },
+                  { Icon: Truck,       text: "Cumartesi Sevkiyat" },
+                  { Icon: Network,     text: "3 Operasyon Merkezi" },
+                ].map(({ Icon, text }) => (
+                  <div key={text} className="do-stat-tag bg-white/[0.06] border border-white/15">
+                    <span className="flex items-center gap-2 text-gray-200 text-[12.5px] font-medium px-4 py-2.5">
+                      <Icon className="w-4 h-4 text-[#7d9bea]" />
+                      {text}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+
+          {/* RIGHT — full-strength photography, not a dimmed backdrop */}
+          <div className="relative lg:w-[43%] min-h-[320px] sm:min-h-[420px] lg:min-h-0 overflow-hidden">
+            <img
+              ref={heroParallax}
+              src="/images/delta-oto-hero.png"
+              alt="Delta Oto lojistik merkezi"
+              className="w-full h-full object-cover will-change-transform"
+              style={{ objectPosition: "center 40%" }}
+            />
+            <div className="absolute inset-y-0 left-0 w-16 lg:w-28 bg-gradient-to-r from-[#0e1016] to-transparent hidden lg:block"></div>
+            <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-[#0e1016] to-transparent lg:hidden"></div>
+            <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#0e1016]/80 to-transparent"></div>
+
+            <div ref={ref} className="do-reveal do-d3 absolute bottom-6 left-6 sm:bottom-8 sm:left-8">
+              <div className="do-stat-tag bg-[#1B3A8F] shadow-2xl">
+                <span className="flex items-baseline gap-2.5 px-5 py-3.5">
+                  <span className="text-3xl font-black text-white leading-none tabular-nums">50</span>
+                  <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-blue-100 max-w-[7rem] leading-tight">Yıllık Sektör Deneyimi</span>
+                </span>
+              </div>
             </div>
           </div>
         </div>
 
-        <div className="absolute bottom-7 right-6 lg:right-8 hidden sm:flex items-center gap-2.5 text-white/40 text-[11px] font-medium uppercase tracking-[0.2em]">
+        <div className="absolute bottom-5 right-6 lg:right-8 hidden lg:flex items-center gap-2.5 text-white/40 text-[11px] font-medium uppercase tracking-[0.2em] z-10">
           Kaydırın
           <div className="w-[1px] h-8 bg-gradient-to-b from-white/60 to-transparent animate-pulse"></div>
         </div>
