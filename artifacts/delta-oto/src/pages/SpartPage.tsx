@@ -14,6 +14,9 @@ import {
   Package,
   TrendingUp,
   Award,
+  FlaskConical,
+  Layers,
+  History,
 } from "lucide-react";
 
 const CATEGORIES = [
@@ -63,18 +66,22 @@ const CATEGORIES = [
 
 const QUALITIES = [
   {
+    icon: ShieldCheck,
     title: "OEM Toleranslarında Üretim",
     desc: "Her parça, orijinal üretici spesifikasyonları esas alınarak üretilir. Boyutsal hassasiyet ve malzeme kalitesi orijinalle eşdeğerdir.",
   },
   {
+    icon: FlaskConical,
     title: "Kapsamlı Test Süreçleri",
     desc: "Ürünler; yorulma, termal döngü, titreşim ve ömür testlerinden geçirilerek sahaya çıkar. Laboratuvar onaysız hiçbir referans raflara girmez.",
   },
   {
+    icon: Layers,
     title: "Geniş Araç Kapsama Alanı",
     desc: "Binek ve hafif ticari araç pazarındaki başlıca marka ve modelleri kapsayan, sürekli büyüyen bir katalog. Doğru parçayı ilk seferinde bulun.",
   },
   {
+    icon: History,
     title: "50 Yıllık Sektör Birikimi",
     desc: "Delta Oto'nun beş on yıllık aftermarket deneyimi, SPART'ın ürün seçimi ve kalite standartlarının temelidir. Bilgi, fiyattan önce gelir.",
   },
@@ -100,9 +107,10 @@ export function SpartPage() {
           <img
             src="/images/spart-hero.jpg"
             alt=""
-            className="w-full h-full object-cover opacity-30"
+            className="w-full h-full object-cover opacity-55"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0e1016] via-[#0e1016]/90 to-[#0e1016]/60" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0e1016] via-[#0e1016]/70 to-[#0e1016]/25" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0e1016] via-[#0e1016]/10 to-transparent" />
         </div>
         <div className="absolute inset-0 do-grid-bg opacity-20" />
 
@@ -117,9 +125,9 @@ export function SpartPage() {
           <h1 className="text-4xl sm:text-5xl md:text-6xl font-black leading-[1.05] tracking-tight mb-6 max-w-2xl">
             <span className="do-hero-line">ORİJİNAL KALİTE,</span>
             <br />
-            <span className="text-[#7d9bea]">AKILLI FİYAT.</span>
+            <span className="do-hero-accent">AKILLI FİYAT.</span>
           </h1>
-          <p className="text-slate-300 text-base sm:text-lg max-w-xl leading-relaxed mb-10">
+          <p className="text-slate-200 text-base sm:text-lg max-w-xl leading-relaxed mb-10">
             Delta Oto'nun 50 yıllık aftermarket deneyimiyle geliştirilen SPART;
             OEM eşdeğeri kaliteyi, bağımsız servis ve bayi ağına rekabetçi
             fiyatla sunar.
@@ -135,7 +143,7 @@ export function SpartPage() {
             </a>
             <Link
               href="/iletisim"
-              className="inline-flex items-center gap-2 border border-white/20 hover:border-white/50 text-white font-semibold px-8 py-4 rounded-md transition-colors"
+              className="inline-flex items-center gap-2 border border-white/25 hover:border-white/50 text-white font-semibold px-8 py-4 rounded-md transition-colors"
             >
               Bayi Bilgisi Al
             </Link>
@@ -227,7 +235,7 @@ export function SpartPage() {
             {CATEGORIES.map((cat) => (
               <div
                 key={cat.title}
-                className="bg-white border border-slate-200 rounded-xl p-6 hover:border-[#1B3A8F]/30 hover:shadow-md transition-all group"
+                className="do-entity-card bg-white border border-slate-200 rounded-xl p-6 hover:border-[#1B3A8F]/30 hover:shadow-md group"
               >
                 <div className="flex items-start justify-between mb-4">
                   <div className="w-12 h-12 bg-[#1B3A8F]/[0.08] rounded-xl flex items-center justify-center text-[#1B3A8F] group-hover:bg-[#1B3A8F] group-hover:text-white transition-colors">
@@ -259,19 +267,16 @@ export function SpartPage() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">
-            {QUALITIES.map((q, i) => (
+            {QUALITIES.map(({ icon: Icon, title, desc }) => (
               <div
-                key={q.title}
-                className="bg-white/[0.07] border border-white/[0.12] rounded-xl p-7 hover:bg-white/[0.11] transition-colors"
+                key={title}
+                className="do-entity-card bg-white/[0.07] border border-white/[0.12] rounded-xl p-7 hover:bg-white/[0.11]"
               >
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="text-[11px] font-bold text-white/40 tabular-nums">
-                    0{i + 1}
-                  </span>
-                  <div className="flex-1 h-px bg-white/10" />
+                <div className="w-11 h-11 rounded-xl bg-white/10 border border-white/15 flex items-center justify-center mb-5">
+                  <Icon className="w-5 h-5 text-[#7d9bea]" />
                 </div>
-                <h3 className="font-bold text-lg mb-2">{q.title}</h3>
-                <p className="text-white/65 text-[14px] leading-relaxed">{q.desc}</p>
+                <h3 className="font-bold text-lg mb-2">{title}</h3>
+                <p className="text-white/65 text-[14px] leading-relaxed">{desc}</p>
               </div>
             ))}
           </div>

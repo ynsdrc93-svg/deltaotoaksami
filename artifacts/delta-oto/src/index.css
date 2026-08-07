@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 @import "tailwindcss";
 
 @layer base {
@@ -12,5 +13,300 @@
     color: #0f172a;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/*
+  Delta Oto shared design system.
+  Brand constraints (do not break): navy family only (#1B3A8F primary, #2547B5 hover,
+  #4d74d6 light, #7d9bea accent-on-dark) — no red, no gold, no green accents.
+  Dark section = #0e1016, footer = #0a0c11 (must stay distinct so footer reads as its
+  own band). Light section = #f8fafc. Turkish copy only, no emojis.
+*/
+
+.do-site,
+.do-page {
+  font-family: 'Inter', sans-serif;
+}
+
+/* ---------- Scroll reveal ---------- */
+
+.do-reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.65s cubic-bezier(.22,1,.36,1), transform 0.65s cubic-bezier(.22,1,.36,1);
+}
+.do-reveal.do-in { opacity: 1; transform: none; }
+.do-d1 { transition-delay: 80ms; }
+.do-d2 { transition-delay: 160ms; }
+.do-d3 { transition-delay: 240ms; }
+.do-d4 { transition-delay: 320ms; }
+
+.do-reveal-left {
+  opacity: 0;
+  transform: translateX(-32px);
+  transition: opacity 0.7s cubic-bezier(.22,1,.36,1), transform 0.7s cubic-bezier(.22,1,.36,1);
+}
+.do-reveal-left.do-in { opacity: 1; transform: none; }
+
+.do-reveal-right {
+  opacity: 0;
+  transform: translateX(32px);
+  transition: opacity 0.7s cubic-bezier(.22,1,.36,1), transform 0.7s cubic-bezier(.22,1,.36,1);
+}
+.do-reveal-right.do-in { opacity: 1; transform: none; }
+
+/* Clip-path wipe reveal — reserved for photography, not text/cards */
+.do-wipe {
+  clip-path: inset(0 100% 0 0);
+  transition: clip-path 0.9s cubic-bezier(.22,1,.36,1);
+}
+.do-wipe.do-in { clip-path: inset(0 0 0 0); }
+
+/* ---------- Headline / hero text ---------- */
+
+.do-hero-line {
+  color: #ffffff;
+}
+.do-hero-accent {
+  color: #7d9bea;
+}
+
+.do-metric-num {
+  background: linear-gradient(135deg, #0f172a 35%, #1B3A8F);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Cards ---------- */
+
+.do-card {
+  transition: transform 0.3s cubic-bezier(.22,1,.36,1), box-shadow 0.3s ease;
+  border-top: 2px solid transparent;
+}
+.do-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 48px rgba(15,23,42,0.12);
+  border-top-color: #1B3A8F;
+}
+
+/* Entity card: photo + name + stat pair + CTA (depots, business units) */
+.do-entity-card {
+  transition: transform 0.35s cubic-bezier(.22,1,.36,1), box-shadow 0.35s ease, border-color 0.35s ease;
+}
+.do-entity-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 28px 56px rgba(15,23,42,0.14);
+}
+
+/* Skewed stat tag — giant numeral + small skewed label chip, over photography */
+.do-stat-tag {
+  display: inline-block;
+  transform: skewX(-10deg);
+}
+.do-stat-tag > span {
+  display: inline-block;
+  transform: skewX(10deg);
+}
+
+.do-accent-line::before {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 3px;
+  background: #1B3A8F;
+  margin-bottom: 20px;
+}
+.do-accent-line-light::before {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 3px;
+  background: rgba(255,255,255,0.9);
+  margin-bottom: 20px;
+}
+
+/* ---------- Backgrounds ---------- */
+
+.do-grid-bg {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.028) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+.do-grid-bg-light {
+  background-image:
+    linear-gradient(rgba(15,23,42,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15,23,42,0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+
+.do-hero-stripe {
+  position: absolute;
+  top: 0; right: 0;
+  width: 42%;
+  height: 100%;
+  clip-path: polygon(18% 0, 100% 0, 100% 100%, 0% 100%);
+  background: linear-gradient(135deg, rgba(27,58,143,0.06), rgba(14,16,22,0.0));
+  pointer-events: none;
+}
+
+/* Angled wedge section break (digital/portal showcases) */
+.do-wedge-top {
+  clip-path: polygon(0 0, 100% 3.5vw, 100% 100%, 0 100%);
+}
+.do-wedge-bottom {
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - 3.5vw), 0 100%);
+}
+
+/* ---------- Nav ---------- */
+
+.do-nav-link {
+  position: relative;
+  padding-bottom: 2px;
+}
+.do-nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1.5px;
+  background: #1B3A8F;
+  transition: width 0.25s ease;
+}
+.do-nav-link:hover::after { width: 100%; }
+
+.do-page a, .do-page button,
+.do-site a, .do-site button {
+  outline: none;
+}
+.do-page a:focus-visible, .do-page button:focus-visible,
+.do-site a:focus-visible, .do-site button:focus-visible {
+  outline: 2px solid #2547B5;
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Mobile nav drawer */
+.do-drawer-backdrop {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.do-drawer-backdrop.do-open {
+  opacity: 1;
+  pointer-events: auto;
+}
+.do-drawer-panel {
+  transform: translateX(100%);
+  transition: transform 0.35s cubic-bezier(.22,1,.36,1);
+}
+.do-drawer-panel.do-open {
+  transform: translateX(0);
+}
+
+/* ---------- Motion accents ---------- */
+
+@keyframes do-sweep {
+  0% { transform: translateX(-150%) skewX(-14deg); opacity: 0; }
+  16% { opacity: 1; }
+  52% { opacity: 0; }
+  100% { transform: translateX(280%) skewX(-14deg); opacity: 0; }
+}
+.do-beam {
+  position: absolute; top: 0; bottom: 0; left: 0;
+  width: 26%;
+  background: linear-gradient(90deg, transparent, rgba(125,155,234,0.16), transparent);
+  filter: blur(8px);
+  pointer-events: none;
+  z-index: 1;
+  animation: do-sweep 9s ease-in-out infinite;
+}
+.do-beam-delay { animation-delay: 4.5s; }
+
+.do-card-beam {
+  position: absolute; top: 0; bottom: 0; left: -70%;
+  width: 55%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.14), transparent);
+  transform: skewX(-16deg);
+  pointer-events: none;
+  z-index: 1;
+  transition: left 0.75s cubic-bezier(.22,1,.36,1);
+}
+.group:hover .do-card-beam { left: 140%; }
+
+@keyframes do-ticker {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.do-ticker-inner { animation: do-ticker 22s linear infinite; display: flex; width: max-content; }
+.do-ticker-inner:hover { animation-play-state: paused; }
+
+/* Static, non-animated fallback rendered by React when the user hasn't opted
+   into motion — see useReducedMotion(). Wraps and centers instead of relying
+   on the animation being frozen mid-loop. */
+.do-ticker-static {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+/* ---------- Brand marquee (logo wall) ---------- */
+
+@keyframes do-brand-ltr { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
+@keyframes do-brand-rtl { 0% { transform: translateX(-50%); } 100% { transform: translateX(0); } }
+.do-bm-wrap {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 6%, #000 94%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0%, #000 6%, #000 94%, transparent 100%);
+}
+.do-bm-track { display: flex; width: max-content; gap: 16px; }
+.do-bm-track.do-ltr { animation: do-brand-ltr 45s linear infinite; }
+.do-bm-track.do-rtl { animation: do-brand-rtl 50s linear infinite; }
+.do-bm-wrap:hover .do-bm-track { animation-play-state: paused; }
+
+@media (prefers-reduced-motion: reduce) {
+  .do-bm-track { animation: none !important; flex-wrap: wrap; width: 100%; justify-content: center; }
+}
+
+/* ---------- Logos / filters ---------- */
+
+.do-logo-invert { filter: brightness(0) invert(1); }
+.do-spart-logo-filter { filter: brightness(0) invert(1) sepia(1) saturate(0) brightness(1.6); }
+.do-spart-dark { filter: brightness(0) saturate(0); opacity: 0.72; }
+
+.do-spart-badge {
+  background: #f1f5f9;
+  border: 1px solid rgba(15,23,42,0.1);
+  border-radius: 4px;
+  padding: 5px 10px;
+  transition: all 0.2s;
+}
+.do-spart-badge:hover {
+  background: #e8edf4;
+  border-color: rgba(27,58,143,0.4);
+}
+
+/* ---------- Reduced motion ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  .do-beam, .do-beam-delay { animation: none; opacity: 0; }
+  .do-ticker-inner { animation: none; }
+  .do-card-beam { display: none; }
+  .do-reveal, .do-reveal-left, .do-reveal-right, .do-wipe {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: inset(0 0 0 0) !important;
+    transition: none !important;
+  }
+  .do-card, .do-entity-card, .do-nav-link::after, .do-spart-badge { transition: none; }
+  .do-card:hover, .do-entity-card:hover { transform: none; }
+  .animate-pulse { animation: none; }
+  .do-page *, .do-page *::before, .do-page *::after,
+  .do-site *, .do-site *::before, .do-site *::after {
+    transition-duration: 0.001ms !important;
   }
 }

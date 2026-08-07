@@ -1,29 +1,19 @@
 import React from "react";
 import { Link } from "wouter";
-import { ChevronRight, CheckCircle2, Globe, Package, Shield, Zap } from "lucide-react";
+import { CheckCircle2, Globe, Package, Shield, Zap, Disc3, Settings2, CircleDot, Filter, Lightbulb, ArrowRight } from "lucide-react";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
-
-const MARQUEE_CSS = `
-  @keyframes brand-ltr { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-  @keyframes brand-rtl { 0% { transform: translateX(-50%); } 100% { transform: translateX(0); } }
-  .bm-wrap { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 6%, #000 94%, transparent 100%); mask-image: linear-gradient(90deg, transparent 0%, #000 6%, #000 94%, transparent 100%); }
-  .bm-track { display: flex; width: max-content; gap: 16px; }
-  .bm-track.ltr { animation: brand-ltr 45s linear infinite; }
-  .bm-track.rtl { animation: brand-rtl 50s linear infinite; }
-  .bm-wrap:hover .bm-track { animation-play-state: paused; }
-`;
 
 const ROW1 = ["bosch","valeo","hella","brembo","ngk","sachs","denso","monroe","trw","mahle","gates","skf","febi","osram","philips","delphi","ina"];
 const ROW2 = ["contitech","luk","lemforder","fag","elring","corteco","filtron","knecht","mannfilter","champion","borgwarner","swag","optimal","kale","wahler","vdo","gunsan"];
 
 const CATEGORIES = [
-  { name: "Fren & Güvenlik Sistemleri", count: "45+ Marka", brands: ["Brembo", "Bosch", "TRW", "Ferodo", "ATE"] },
-  { name: "Süspansiyon & Direksiyon",   count: "38+ Marka", brands: ["Monroe", "Sachs", "KYB", "Lemförder", "SKF"] },
-  { name: "Motor, Ateşleme & Elektrik", count: "52+ Marka", brands: ["Bosch", "Denso", "NGK", "Gates", "INA"] },
-  { name: "Rulman & Transmisyon",        count: "28+ Marka", brands: ["FAG", "SKF", "LUK", "ContiTech", "GKN"] },
-  { name: "Filtre & Periyodik Bakım",    count: "30+ Marka", brands: ["Mann+Hummel", "Mahle", "Filtron", "Hengst", "UFI"] },
-  { name: "Kaporta & Aydınlatma",        count: "35+ Marka", brands: ["Valeo", "Hella", "Osram", "Philips", "Depo"] },
+  { icon: Disc3,     name: "Fren & Güvenlik Sistemleri", count: "45+ Marka", brands: ["Brembo", "Bosch", "TRW", "Ferodo", "ATE"] },
+  { icon: Settings2,  name: "Süspansiyon & Direksiyon",   count: "38+ Marka", brands: ["Monroe", "Sachs", "KYB", "Lemförder", "SKF"] },
+  { icon: Zap,        name: "Motor, Ateşleme & Elektrik", count: "52+ Marka", brands: ["Bosch", "Denso", "NGK", "Gates", "INA"] },
+  { icon: CircleDot,  name: "Rulman & Transmisyon",        count: "28+ Marka", brands: ["FAG", "SKF", "LUK", "ContiTech", "GKN"] },
+  { icon: Filter,     name: "Filtre & Periyodik Bakım",    count: "30+ Marka", brands: ["Mann+Hummel", "Mahle", "Filtron", "Hengst", "UFI"] },
+  { icon: Lightbulb,  name: "Kaporta & Aydınlatma",        count: "35+ Marka", brands: ["Valeo", "Hella", "Osram", "Philips", "Depo"] },
 ];
 
 const QUALITY = [
@@ -44,11 +34,11 @@ const ADVANTAGES = [
 
 function BrandCard({ slug }: { slug: string }) {
   return (
-    <div className="shrink-0 w-44 h-28 bg-white rounded-xl border border-slate-200 flex items-center justify-center px-5 shadow-sm hover:shadow-md hover:border-[#1B3A8F]/25 transition-all duration-300">
+    <div className="shrink-0 w-44 h-28 bg-white rounded-xl border border-slate-200 flex items-center justify-center px-6 py-5 shadow-sm hover:shadow-md hover:border-[#1B3A8F]/25 transition-all duration-300">
       <img
         src={`/images/brands/${slug}.png`}
         alt={slug}
-        className="max-h-14 max-w-[120px] w-auto object-contain grayscale hover:grayscale-0 transition-all duration-400"
+        className="max-h-16 max-w-full w-auto object-contain grayscale hover:grayscale-0 transition-all duration-400"
       />
     </div>
   );
@@ -57,7 +47,6 @@ function BrandCard({ slug }: { slug: string }) {
 export function TedarikciPage() {
   return (
     <div className="do-site bg-white min-h-screen">
-      <style>{MARQUEE_CSS}</style>
       <SiteHeader />
 
       {/* HERO */}
@@ -83,7 +72,7 @@ export function TedarikciPage() {
           <h1 className="text-5xl md:text-6xl lg:text-[72px] font-black leading-[1.05] tracking-[-0.02em] mb-6">
             <span className="do-hero-line">GLOBAL KALİTE,</span><br />
             <span className="text-white">TEK ÇATI,</span><br />
-            <span className="text-[#7d9bea]">DERİN STOK</span>
+            <span className="do-hero-accent">DERİN STOK</span>
           </h1>
           <p className="text-[17px] text-gray-300 leading-[1.8] max-w-2xl mb-10 font-light">
             Binek ve hafif ticari araç kategorilerinde dünyanın önde gelen OEM üreticileriyle doğrudan çalışıyoruz. 250'den fazla marka ve 50.000'i aşkın SKU; tek tedarikçi ilişkisiyle eksiksiz karşılanır. Groupauto International üyeliğiyle global satın alma gücü, yerel hız ve servis kalitesiyle buluşuyor.
@@ -110,13 +99,13 @@ export function TedarikciPage() {
           </div>
         </div>
         <div className="space-y-4">
-          <div className="bm-wrap py-2">
-            <div className="bm-track ltr pl-4">
+          <div className="do-bm-wrap py-2">
+            <div className="do-bm-track do-ltr pl-4">
               {[...ROW1, ...ROW1].map((b, i) => <BrandCard key={i} slug={b} />)}
             </div>
           </div>
-          <div className="bm-wrap py-2">
-            <div className="bm-track rtl pl-4">
+          <div className="do-bm-wrap py-2">
+            <div className="do-bm-track do-rtl pl-4">
               {[...ROW2, ...ROW2].map((b, i) => <BrandCard key={i} slug={b} />)}
             </div>
           </div>
@@ -136,11 +125,14 @@ export function TedarikciPage() {
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
             {CATEGORIES.map((cat) => (
-              <div key={cat.name} className="bg-white border border-slate-200 rounded-xl p-7 hover:border-[#1B3A8F]/40 hover:shadow-lg transition-all group cursor-pointer">
-                <div className="flex items-start justify-between mb-4">
-                  <h3 className="text-[15px] font-bold text-slate-900 leading-snug">{cat.name}</h3>
-                  <span className="shrink-0 ml-3 text-[11px] font-bold text-[#1B3A8F] bg-[#1B3A8F]/[0.08] border border-[#1B3A8F]/[0.15] px-2.5 py-1 rounded">{cat.count}</span>
+              <div key={cat.name} className="do-entity-card bg-white border border-slate-200 rounded-xl p-7 hover:border-[#1B3A8F]/40 hover:shadow-lg group cursor-pointer">
+                <div className="flex items-start justify-between mb-5">
+                  <div className="w-11 h-11 bg-[#1B3A8F]/[0.08] rounded-xl flex items-center justify-center group-hover:bg-[#1B3A8F] transition-colors">
+                    <cat.icon className="w-5 h-5 text-[#1B3A8F] group-hover:text-white transition-colors" />
+                  </div>
+                  <span className="shrink-0 text-[11px] font-bold text-[#1B3A8F] bg-[#1B3A8F]/[0.08] border border-[#1B3A8F]/[0.15] px-2.5 py-1 rounded">{cat.count}</span>
                 </div>
+                <h3 className="text-[15px] font-bold text-slate-900 leading-snug mb-4">{cat.name}</h3>
                 <div className="flex flex-wrap gap-2">
                   {cat.brands.map(b => (
                     <span key={b} className="text-[12px] text-slate-500 bg-slate-100 px-2.5 py-1 rounded-md font-medium">{b}</span>
@@ -172,19 +164,15 @@ export function TedarikciPage() {
                 ))}
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
-              {[
-                { n: "250+",      l: "Aktif Marka",   d: "Sürekli büyüyen portföy" },
-                { n: "50.000+",   l: "Aktif SKU",     d: "Geniş stok derinliği" },
-                { n: "OEM",       l: "Standart",      d: "Tüm ürünlerde zorunlu" },
-                { n: "Groupauto", l: "Üyeliği",       d: "Global satın alma ağı" },
-              ].map(({ n, l, d }) => (
-                <div key={l} className="bg-white/[0.08] border border-white/[0.12] rounded-xl p-6 hover:bg-white/[0.14] transition-colors">
-                  <div className="text-2xl font-black text-white mb-1">{n}</div>
-                  <div className="text-[12px] font-bold text-[#7d9bea] uppercase tracking-wide">{l}</div>
-                  <div className="text-[12px] text-white/50 mt-1">{d}</div>
-                </div>
-              ))}
+            <div className="relative">
+              <div className="bg-white/[0.06] border border-white/[0.12] rounded-2xl p-10 text-center">
+                <Shield className="w-10 h-10 text-[#7d9bea] mx-auto mb-6" />
+                <div className="text-3xl font-black text-white mb-2">OEM / OEM Eşdeğeri</div>
+                <div className="text-[13px] text-white/60 uppercase tracking-[0.2em] mb-8">Zorunlu Kalite Standardı</div>
+                <div className="h-px bg-white/10 mb-8" />
+                <div className="text-3xl font-black text-white mb-2">Groupauto</div>
+                <div className="text-[13px] text-white/60 uppercase tracking-[0.2em]">Global Satın Alma Ağı</div>
+              </div>
             </div>
           </div>
         </div>
@@ -200,7 +188,7 @@ export function TedarikciPage() {
           </div>
           <div className="grid md:grid-cols-2 gap-5">
             {ADVANTAGES.map(({ Icon, title, desc }) => (
-              <div key={title} className="flex gap-6 border border-slate-200 rounded-xl p-8 hover:border-[#1B3A8F]/30 hover:shadow-lg transition-all group">
+              <div key={title} className="do-entity-card flex gap-6 border border-slate-200 rounded-xl p-8 hover:border-[#1B3A8F]/30 hover:shadow-lg group">
                 <div className="shrink-0 w-12 h-12 bg-[#1B3A8F]/[0.08] rounded-xl flex items-center justify-center group-hover:bg-[#1B3A8F] transition-colors">
                   <Icon className="w-5 h-5 text-[#1B3A8F] group-hover:text-white transition-colors" />
                 </div>
@@ -215,17 +203,24 @@ export function TedarikciPage() {
       </section>
 
       {/* CTA — navy */}
-      <section className="relative bg-[#1B3A8F] text-white py-20 overflow-hidden">
-        <div className="absolute inset-0">
-          <img src="https://images.unsplash.com/photo-1553413077-190dd305871c?w=1920&q=80" alt="" className="w-full h-full object-cover opacity-10" />
-          <div className="absolute inset-0 bg-[#1B3A8F]/85" />
-        </div>
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 text-center">
-          <h2 className="text-3xl md:text-4xl font-black tracking-tight mb-4">Stok Sorgulama ve Sipariş için B2B Portal</h2>
-          <p className="text-gray-300 mb-8 max-w-xl mx-auto text-[16px] font-light">Anlık stok durumu, fiyat listesi ve sipariş yönetimi; B2B portalımız üzerinden 7/24 erişilebilir.</p>
-          <button className="bg-[#1B3A8F] hover:bg-[#2547B5] text-white font-semibold px-10 py-4 rounded-md transition-colors inline-flex items-center gap-2 shadow-[0_0_32px_rgba(27,58,143,0.3)]">
-            Portala Giriş Yapın <ChevronRight className="w-5 h-5" />
-          </button>
+      <section className="relative bg-[#1B3A8F] text-white py-20 md:py-24 overflow-hidden">
+        <div className="absolute inset-0 do-grid-bg opacity-25" />
+        <div className="absolute -right-16 top-0 w-80 h-80 rounded-full bg-white/5 blur-3xl pointer-events-none" />
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 flex flex-col md:flex-row items-center justify-between gap-10">
+          <div className="text-center md:text-left">
+            <span className="inline-flex items-center gap-3 text-blue-200 text-xs font-bold uppercase tracking-[0.3em] mb-5">
+              <span className="w-8 h-[2px] bg-blue-300 inline-block hidden md:inline-block" />
+              B2B Portal
+            </span>
+            <h2 className="text-3xl md:text-4xl font-black tracking-tight mb-4 max-w-lg">Stok Sorgulama ve Sipariş için B2B Portal</h2>
+            <p className="text-gray-300 max-w-xl text-[16px] font-light">Anlık stok durumu, fiyat listesi ve sipariş yönetimi; B2B portalımız üzerinden 7/24 erişilebilir.</p>
+          </div>
+          <div className="shrink-0 flex flex-col items-center md:items-end gap-4">
+            <button className="bg-white text-[#1B3A8F] hover:bg-gray-100 font-bold px-10 py-4 rounded-md transition-colors inline-flex items-center gap-2 shadow-[0_0_32px_rgba(255,255,255,0.12)] group">
+              Portala Giriş Yapın <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+            </button>
+            <span className="text-[12px] text-blue-100/60">250+ marka · 50.000+ SKU · Anlık stok</span>
+          </div>
         </div>
       </section>
 

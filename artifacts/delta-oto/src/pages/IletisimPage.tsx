@@ -73,12 +73,12 @@ export function IletisimPage() {
       <section className="relative min-h-[480px] flex items-center text-white overflow-hidden bg-[#0e1016]">
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1527838832700-5059252407fa?w=1920&q=80"
+            src="/images/delta-oto-depot.jpg"
             alt=""
-            className="w-full h-full object-cover opacity-20"
-            style={{ objectPosition: "center 60%" }}
+            className="w-full h-full object-cover opacity-25"
+            style={{ objectPosition: "center 65%" }}
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0e1016] via-[#0e1016]/80 to-[#0e1016]/30" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0e1016] via-[#0e1016]/85 to-[#0e1016]/40" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0e1016] via-transparent to-transparent" />
         </div>
         <div className="absolute inset-0 do-grid-bg opacity-40" />
@@ -91,7 +91,7 @@ export function IletisimPage() {
           </div>
           <h1 className="text-5xl md:text-6xl lg:text-[72px] font-black leading-[1.05] tracking-[-0.02em] mb-5">
             <span className="do-hero-line">BİZE</span><br />
-            <span className="text-[#7d9bea]">ULAŞIN</span>
+            <span className="do-hero-accent">ULAŞIN</span>
           </h1>
           <p className="text-[17px] text-gray-300 max-w-xl font-light leading-[1.8]">
             Ürün sorguları, B2B portal erişimi veya kurumsal iletişim için size özel kanaldan ulaşın.
@@ -109,7 +109,7 @@ export function IletisimPage() {
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
             {DEPT_CONTACTS.map(({ icon: Icon, dept, lines, info, hours, email }) => (
-              <div key={dept} className="bg-white border border-slate-200 rounded-xl p-6 hover:border-[#1B3A8F]/30 hover:shadow-md transition-all flex flex-col">
+              <div key={dept} className="do-entity-card bg-white border border-slate-200 rounded-xl p-6 hover:border-[#1B3A8F]/30 hover:shadow-md flex flex-col">
                 <div className="w-10 h-10 bg-[#1B3A8F]/[0.08] rounded-xl flex items-center justify-center mb-4">
                   <Icon className="w-5 h-5 text-[#1B3A8F]" />
                 </div>
@@ -147,14 +147,16 @@ export function IletisimPage() {
           </div>
           <div className="grid md:grid-cols-3 gap-5">
             {LOCATIONS.map((loc) => (
-              <div key={loc.name} className="bg-white/[0.08] border border-white/[0.12] rounded-xl p-7 hover:bg-white/[0.14] transition-colors">
+              <div key={loc.name} className="do-entity-card bg-white/[0.08] border border-white/[0.12] rounded-xl p-7 hover:bg-white/[0.14]">
                 <div className="flex items-start justify-between mb-4">
                   <div>
                     <span className="text-[11px] font-bold uppercase tracking-widest text-[#7d9bea]">{loc.type}</span>
                     <h3 className="text-[16px] font-bold mt-1">{loc.name}</h3>
                     <p className="text-white/50 text-[12px] mt-0.5">{loc.city}</p>
                   </div>
-                  <MapPin className="w-5 h-5 text-[#7d9bea] shrink-0 mt-1" />
+                  <div className="w-10 h-10 rounded-xl bg-white/10 border border-white/15 flex items-center justify-center shrink-0">
+                    <MapPin className="w-5 h-5 text-[#7d9bea]" />
+                  </div>
                 </div>
                 <p className="text-white/65 text-[13px] leading-relaxed mb-3">{loc.address}</p>
                 {loc.phone && (
@@ -184,7 +186,7 @@ export function IletisimPage() {
               { Icon: Mail,   label: "Kurumsal E-posta", lines: ["info@deltaoto.com", "b2b@deltaoto.com"] },
               { Icon: Globe,  label: "Dijital Kanallar", lines: ["www.deltaoto.com.tr", "b2b.deltaoto.com.tr (B2B Portal)"] },
             ].map(({ Icon, label, lines }) => (
-              <div key={label} className="flex gap-4 bg-white rounded-xl p-5 border border-slate-200 shadow-sm hover:border-[#1B3A8F]/30 transition-colors">
+              <div key={label} className="do-entity-card flex gap-4 bg-white rounded-xl p-5 border border-slate-200 shadow-sm hover:border-[#1B3A8F]/30">
                 <div className="shrink-0 w-10 h-10 bg-[#1B3A8F]/[0.08] rounded-lg flex items-center justify-center">
                   <Icon className="w-5 h-5 text-[#1B3A8F]" />
                 </div>

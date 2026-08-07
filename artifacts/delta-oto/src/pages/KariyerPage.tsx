@@ -1,30 +1,30 @@
 import React from "react";
-import { ExternalLink, Quote, Linkedin } from "lucide-react";
+import { ExternalLink, Quote, Linkedin, Target, Users, GraduationCap, ShieldCheck, HeartPulse, UtensilsCrossed, CalendarClock, Award, Bus, BadgeCheck, UserCheck, Mail, ArrowRight } from "lucide-react";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
 
 const CULTURE = [
-  { title: "Performans Odaklılık", desc: "Sonuçlar ve taahhüt bütünlüğü temel değerlendirme kriterleridir. Hedefler netleştirilir, takip edilir ve gerçekleştirilir." },
-  { title: "Kolektif Başarı", desc: "Bireysel yetkinlik, takım dinamikleriyle pekiştirilir. Bilgi paylaşımı ve iş birliği kurumsal kültürün temel bileşenidir." },
-  { title: "Sürekli Yetkinlik Gelişimi", desc: "Sektör bilgisini güncel tutmak için eğitim programları, mentorluk ve konferans katılım desteği sunulmaktadır." },
-  { title: "Kurumsal Dürüstlük", desc: "Müşterilere, tedarikçilere ve birbirimize karşı şeffaf, tutarlı ve dürüst ilişki standartları istisnasız korunur." },
+  { icon: Target,        title: "Performans Odaklılık", desc: "Sonuçlar ve taahhüt bütünlüğü temel değerlendirme kriterleridir. Hedefler netleştirilir, takip edilir ve gerçekleştirilir." },
+  { icon: Users,         title: "Kolektif Başarı", desc: "Bireysel yetkinlik, takım dinamikleriyle pekiştirilir. Bilgi paylaşımı ve iş birliği kurumsal kültürün temel bileşenidir." },
+  { icon: GraduationCap, title: "Sürekli Yetkinlik Gelişimi", desc: "Sektör bilgisini güncel tutmak için eğitim programları, mentorluk ve konferans katılım desteği sunulmaktadır." },
+  { icon: ShieldCheck,   title: "Kurumsal Dürüstlük", desc: "Müşterilere, tedarikçilere ve birbirimize karşı şeffaf, tutarlı ve dürüst ilişki standartları istisnasız korunur." },
 ];
 
 const TESTIMONIALS = [
-  { quote: "Delta Oto'da geçen yıllar, sektörün derinliklerini keşfetmemi sağladı. Hem ürün bilgisi hem de ticari ilişki yönetimi açısından kendimi buraya borçluyum.", name: "Satış & Müşteri Yönetimi", yrs: "9 Yıl" },
-  { quote: "Lojistik ve tedarik zinciri alanında sıfırdan öğrenmek için doğru adres. Ekip olarak hedeflerimizi paylaşıyor, başarıyı birlikte inşa ediyoruz.", name: "Operasyon & Planlama", yrs: "5 Yıl" },
-  { quote: "Ürün portföyünü yönetmek; hem teknik hem de stratejik yetkinlik gerektiriyor. Delta Oto bu ikisini bir arada geliştirme fırsatı sunuyor.", name: "Ürün & Portföy Yönetimi", yrs: "7 Yıl" },
+  { initials: "SM", quote: "Delta Oto'da geçen yıllar, sektörün derinliklerini keşfetmemi sağladı. Hem ürün bilgisi hem de ticari ilişki yönetimi açısından kendimi buraya borçluyum.", name: "Satış & Müşteri Yönetimi", yrs: "9 Yıl" },
+  { initials: "OP", quote: "Lojistik ve tedarik zinciri alanında sıfırdan öğrenmek için doğru adres. Ekip olarak hedeflerimizi paylaşıyor, başarıyı birlikte inşa ediyoruz.", name: "Operasyon & Planlama", yrs: "5 Yıl" },
+  { initials: "ÜP", quote: "Ürün portföyünü yönetmek; hem teknik hem de stratejik yetkinlik gerektiriyor. Delta Oto bu ikisini bir arada geliştirme fırsatı sunuyor.", name: "Ürün & Portföy Yönetimi", yrs: "7 Yıl" },
 ];
 
 const BENEFITS = [
-  { label: "Özel sağlık sigortası",           sub: "Tüm çalışanlar için" },
-  { label: "Yemek kartı katkısı",              sub: "Günlük katkı desteği" },
-  { label: "Sektörel eğitim bütçesi",          sub: "Yıllık gelişim programı" },
-  { label: "Esnek çalışma saatleri",           sub: "Pozisyona göre uygulanır" },
-  { label: "Yıllık kariyer görüşmesi",         sub: "Şeffaf performans değerlendirmesi" },
-  { label: "Ulaşım desteği",                   sub: "Servis veya ulaşım katkısı" },
-  { label: "Marka ve ürün eğitimleri",         sub: "Tedarikçi işbirliğiyle" },
-  { label: "Mentörlük programı",               sub: "Kıdemli çalışan rehberliği" },
+  { icon: HeartPulse,      label: "Özel sağlık sigortası",           sub: "Tüm çalışanlar için" },
+  { icon: UtensilsCrossed, label: "Yemek kartı katkısı",              sub: "Günlük katkı desteği" },
+  { icon: GraduationCap,   label: "Sektörel eğitim bütçesi",          sub: "Yıllık gelişim programı" },
+  { icon: CalendarClock,   label: "Esnek çalışma saatleri",           sub: "Pozisyona göre uygulanır" },
+  { icon: Award,           label: "Yıllık kariyer görüşmesi",         sub: "Şeffaf performans değerlendirmesi" },
+  { icon: Bus,             label: "Ulaşım desteği",                   sub: "Servis veya ulaşım katkısı" },
+  { icon: BadgeCheck,      label: "Marka ve ürün eğitimleri",         sub: "Tedarikçi işbirliğiyle" },
+  { icon: UserCheck,       label: "Mentörlük programı",               sub: "Kıdemli çalışan rehberliği" },
 ];
 
 const JOB_PLATFORMS = [
@@ -33,7 +33,6 @@ const JOB_PLATFORMS = [
     desc: "Delta Oto'nun LinkedIn sayfasını takip ederek açık pozisyonlara başvurabilir, şirket güncellemelerini ve sektör haberlerini takip edebilirsiniz.",
     url: "https://www.linkedin.com/company/delta-oto",
     label: "LinkedIn'de Pozisyonları İnceleyin",
-    color: "#0A66C2",
     Icon: Linkedin,
   },
   {
@@ -41,7 +40,6 @@ const JOB_PLATFORMS = [
     desc: "Güncel iş ilanlarımızı Kariyer.net üzerinden inceleyebilir, online başvurunuzu kolayca tamamlayabilirsiniz.",
     url: "https://www.kariyer.net",
     label: "Kariyer.net'te İlanları Görün",
-    color: "#1B3A8F",
     Icon: ExternalLink,
   },
 ];
@@ -74,7 +72,7 @@ export function KariyerPage() {
           <h1 className="text-5xl md:text-6xl lg:text-[72px] font-black leading-[1.05] tracking-[-0.02em] mb-6">
             <span className="do-hero-line">GELECEĞİ</span><br />
             <span className="text-white">BİZİMLE</span><br />
-            <span className="text-[#7d9bea]">İNŞA EDİN</span>
+            <span className="do-hero-accent">İNŞA EDİN</span>
           </h1>
           <p className="text-[17px] text-gray-300 leading-[1.8] max-w-2xl mb-10 font-light">
             50 yıllık kurumsal birikimin parçası olun. Delta Oto'da kariyer; güçlü sektör yetkinliği, dinamik bir ekip yapısı ve uzun vadeli profesyonel gelişim fırsatı anlamına gelir.
@@ -91,10 +89,13 @@ export function KariyerPage() {
             <p className="text-slate-500 mt-3 text-[15px] max-w-2xl">Delta Oto'da başarı bireysel değil, kolektiftir. Sonuç odaklı, dürüst ve gelişime açık bir ortamda çalışıyoruz.</p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
-            {CULTURE.map((v) => (
-              <div key={v.title} className="border border-slate-200 rounded-xl p-7 hover:border-[#1B3A8F]/30 hover:shadow-lg transition-all">
-                <h3 className="text-[15px] font-bold text-slate-900 mb-3 leading-snug">{v.title}</h3>
-                <p className="text-slate-500 text-[13.5px] leading-relaxed">{v.desc}</p>
+            {CULTURE.map(({ icon: Icon, title, desc }) => (
+              <div key={title} className="do-entity-card border border-slate-200 rounded-xl p-7 hover:border-[#1B3A8F]/30 hover:shadow-lg group">
+                <div className="w-11 h-11 bg-[#1B3A8F]/[0.07] rounded-xl flex items-center justify-center mb-5 group-hover:bg-[#1B3A8F] transition-colors">
+                  <Icon className="w-5 h-5 text-[#1B3A8F] group-hover:text-white transition-colors" />
+                </div>
+                <h3 className="text-[15px] font-bold text-slate-900 mb-3 leading-snug">{title}</h3>
+                <p className="text-slate-500 text-[13.5px] leading-relaxed">{desc}</p>
               </div>
             ))}
           </div>
@@ -111,12 +112,17 @@ export function KariyerPage() {
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             {TESTIMONIALS.map((t) => (
-              <div key={t.name} className="bg-white/[0.08] border border-white/[0.12] rounded-xl p-8 hover:bg-white/[0.14] transition-colors flex flex-col">
+              <div key={t.name} className="do-entity-card bg-white/[0.08] border border-white/[0.12] rounded-xl p-8 hover:bg-white/[0.14] flex flex-col">
                 <Quote className="w-5 h-5 text-[#7d9bea] mb-5 shrink-0" />
                 <p className="text-white/75 text-[14px] leading-[1.85] flex-1 italic">"{t.quote}"</p>
-                <div className="mt-6 pt-5 border-t border-white/10">
-                  <div className="text-[13px] font-bold text-white">{t.name}</div>
-                  <div className="text-[12px] text-[#7d9bea] mt-0.5">{t.yrs} Deneyim</div>
+                <div className="mt-6 pt-5 border-t border-white/10 flex items-center gap-3">
+                  <div className="w-10 h-10 rounded-full bg-white/10 border border-white/15 flex items-center justify-center shrink-0">
+                    <span className="text-[12px] font-black text-[#7d9bea]">{t.initials}</span>
+                  </div>
+                  <div>
+                    <div className="text-[13px] font-bold text-white">{t.name}</div>
+                    <div className="text-[12px] text-[#7d9bea] mt-0.5">{t.yrs} Deneyim</div>
+                  </div>
                 </div>
               </div>
             ))}
@@ -157,21 +163,28 @@ export function KariyerPage() {
               </a>
             ))}
           </div>
-          <div className="p-7 bg-slate-50 border border-slate-200 rounded-xl text-center">
-            <p className="text-slate-600 text-[14px]">Proaktif başvuru yapmak ister misiniz?</p>
-            <p className="text-slate-900 font-semibold text-[14px] mt-1">
-              CV'nizi ve ilgilendiğiniz departmanı <a href="mailto:ik@deltaoto.com" className="text-[#1B3A8F] hover:underline">ik@deltaoto.com</a> adresine iletebilirsiniz.
-            </p>
-          </div>
+          <a
+            href="mailto:ik@deltaoto.com"
+            className="group flex flex-col sm:flex-row items-center justify-between gap-5 p-7 bg-[#f8fafc] border border-slate-200 rounded-xl hover:border-[#1B3A8F]/30 hover:shadow-md transition-all"
+          >
+            <div className="flex items-center gap-4">
+              <div className="w-11 h-11 rounded-xl bg-[#1B3A8F]/[0.08] flex items-center justify-center shrink-0 group-hover:bg-[#1B3A8F] transition-colors">
+                <Mail className="w-5 h-5 text-[#1B3A8F] group-hover:text-white transition-colors" />
+              </div>
+              <div className="text-center sm:text-left">
+                <p className="text-slate-900 font-bold text-[14.5px]">Proaktif başvuru yapmak ister misiniz?</p>
+                <p className="text-slate-500 text-[13.5px] mt-0.5">CV'nizi ve ilgilendiğiniz departmanı ik@deltaoto.com adresine iletebilirsiniz.</p>
+              </div>
+            </div>
+            <span className="shrink-0 inline-flex items-center gap-2 bg-[#1B3A8F] group-hover:bg-[#2547B5] text-white font-semibold px-6 py-3 rounded-md transition-colors text-[13px] whitespace-nowrap">
+              CV Gönder <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+            </span>
+          </a>
         </div>
       </section>
 
       {/* YAN HAKLAR — navy */}
       <section className="relative bg-[#1B3A8F] text-white py-20 overflow-hidden">
-        <div className="absolute inset-0">
-          <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&q=80" alt="" className="w-full h-full object-cover opacity-10" />
-          <div className="absolute inset-0 bg-[#1B3A8F]/80" />
-        </div>
         <div className="absolute inset-0 do-grid-bg opacity-25" />
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
           <div className="mb-10">
@@ -180,11 +193,13 @@ export function KariyerPage() {
             <p className="text-white/55 mt-3 text-[15px] max-w-xl">Uzun vadeli kurumsal ilişkilerde çalışanların gelişimine yatırım yapıyoruz.</p>
           </div>
           <div className="grid md:grid-cols-4 gap-4">
-            {BENEFITS.map((b) => (
-              <div key={b.label} className="bg-white/[0.06] border border-white/[0.1] rounded-xl px-5 py-5 hover:bg-white/[0.1] transition-colors">
-                <div className="w-2 h-2 rounded-full bg-[#7d9bea] mb-4" />
-                <div className="text-[13.5px] font-semibold text-gray-200">{b.label}</div>
-                <div className="text-[12px] text-white/40 mt-1">{b.sub}</div>
+            {BENEFITS.map(({ icon: Icon, label, sub }) => (
+              <div key={label} className="do-entity-card bg-white/[0.06] border border-white/[0.1] rounded-xl px-5 py-5 hover:bg-white/[0.1]">
+                <div className="w-9 h-9 rounded-lg bg-white/10 flex items-center justify-center mb-4">
+                  <Icon className="w-4 h-4 text-[#7d9bea]" />
+                </div>
+                <div className="text-[13.5px] font-semibold text-gray-200">{label}</div>
+                <div className="text-[12px] text-white/40 mt-1">{sub}</div>
               </div>
             ))}
           </div>

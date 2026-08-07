@@ -1,5 +1,5 @@
 import React from "react";
-import { Truck, Shield, Zap, Network, PackageCheck, Clock, BarChart3, ChevronRight, Calendar } from "lucide-react";
+import { Truck, Shield, Zap, Network, PackageCheck, BarChart3, ChevronRight, Calendar, MapPinned } from "lucide-react";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
 
@@ -14,8 +14,6 @@ const INFRA_STATS = [
 
 const OPS_FEATURES = [
   { icon: Truck,        title: "Üç Merkezden Ulusal Dağıtım",    desc: "Ümraniye, Gebze ve İzmir'deki operasyon merkezlerimizden Türkiye'nin 81 iline anlaşmalı lojistik partnerleriyle düzenli teslimat." },
-  { icon: Zap,         title: "Aynı Gün Sevkiyat Garantisi",     desc: "Saat 14:00'a kadar iletilen siparişler, stokta olan ürünler için aynı gün yüklenir. Acil ihtiyaçta servis sürekliliği önceliğimizdir." },
-  { icon: Calendar,    title: "Cumartesi de Çalışıyoruz",        desc: "Hafta sonu operasyonumuzu sürdürüyoruz. Cumartesi sevkiyat kapasitesiyle servis noktaları kritik dönemlerde de tedarik kesintisi yaşamaz." },
   { icon: Shield,      title: "WMS Destekli Depo Yönetimi",      desc: "Ambar yönetim sistemi stok doğruluğunu ve sipariş hazırlık sürecini kontrol altında tutar; hata payı sistem düzeyinde sıfıra yakın tutulur." },
   { icon: BarChart3,   title: "Stok Derinliği & Planlama",       desc: "Talep bazlı envanter planlaması ve dönemsel analiz ile kritik ürünlerde yüksek doluluk oranı sürdürülür. Stokta yok cevabı istisnai kalır." },
   { icon: PackageCheck, title: "Sevkiyat Kalite Kontrolü",       desc: "Her sipariş çıkışı WMS kontrolünden ardından fiziksel doğrulamadan geçer; hasarlı ve eksik gönderim oranı operasyonel sıfır hedefinde tutulur." },
@@ -60,7 +58,7 @@ export function OperasyonPage() {
       <section className="relative min-h-[560px] flex items-center text-white overflow-hidden bg-[#0e1016]">
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1920&q=80"
+            src="/images/delta-oto-ops.png"
             alt=""
             className="w-full h-full object-cover opacity-30"
             style={{ objectPosition: "center 40%" }}
@@ -79,7 +77,7 @@ export function OperasyonPage() {
           <h1 className="text-5xl md:text-6xl lg:text-[72px] font-black leading-[1.05] tracking-[-0.02em] mb-6">
             <span className="do-hero-line">ÜÇ MERKEZDEN</span><br />
             <span className="text-white">81 İLE</span><br />
-            <span className="text-[#7d9bea]">KESİNTİSİZ</span>
+            <span className="do-hero-accent">KESİNTİSİZ</span>
           </h1>
           <p className="text-[17px] text-gray-300 leading-[1.8] max-w-2xl mb-10 font-light">
             Ümraniye, Gebze ve İzmir'deki operasyon merkezlerimizden yönetilen lojistik ağımız; sipariş hazırlıktan son mile kadar her aşamada hız, güvenilirlik ve servis sürekliliği sağlar. Cumartesi dahil, kesintisiz.
@@ -106,7 +104,7 @@ export function OperasyonPage() {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
             {INFRA_STATS.map(({ value, label, sub }) => (
-              <div key={label} className="text-center p-6 rounded-xl border border-slate-200 hover:border-[#1B3A8F]/30 hover:shadow-md transition-all">
+              <div key={label} className="do-entity-card text-center p-6 rounded-xl border border-slate-200 hover:border-[#1B3A8F]/30 hover:shadow-md">
                 <div className="text-[22px] font-black text-[#1B3A8F] leading-tight">{value}</div>
                 <div className="text-[12px] font-bold text-slate-900 uppercase tracking-wide mt-1.5">{label}</div>
                 <div className="text-[11px] text-slate-400 mt-1 leading-snug">{sub}</div>
@@ -128,12 +126,12 @@ export function OperasyonPage() {
           </div>
           <div className="grid md:grid-cols-3 gap-5">
             {DELIVERY_CARDS.map(({ Icon, title, highlight, desc }) => (
-              <div key={title} className="bg-white/[0.08] border border-white/[0.12] rounded-xl p-7 flex flex-col gap-4 hover:bg-white/[0.14] transition-colors">
+              <div key={title} className="do-entity-card bg-white/[0.08] border border-white/[0.12] rounded-xl p-7 flex flex-col gap-4 hover:bg-white/[0.14]">
                 <div className="flex items-start justify-between">
                   <div className="w-11 h-11 rounded-xl bg-white/10 border border-white/15 flex items-center justify-center">
                     <Icon className="w-5 h-5 text-[#7d9bea]" />
                   </div>
-                  <span className="text-[10px] font-bold text-[#7d9bea] bg-white/10 border border-white/15 px-2.5 py-1 rounded-md uppercase tracking-wider">{highlight}</span>
+                  <span className="do-stat-tag text-[10px] font-bold text-[#7d9bea] bg-white/10 border border-white/15 px-2.5 py-1 rounded-md uppercase tracking-wider"><span>{highlight}</span></span>
                 </div>
                 <div>
                   <h3 className="font-bold text-[15px] mb-2">{title}</h3>
@@ -153,7 +151,7 @@ export function OperasyonPage() {
             <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-2 tracking-tight">Lojistik Merkezlerimiz</h2>
             <p className="text-slate-500 mt-3 max-w-xl text-[15px]">Yanınızda ve yakınınızdayız. Üç operasyon merkezi üzerinden Türkiye'nin tamamına kesintisiz hizmet sunuyoruz.</p>
           </div>
-          <div className="grid md:grid-cols-3 gap-6 mb-10">
+          <div className="grid md:grid-cols-3 gap-6 mb-6">
             {[
               {
                 label: "Merkez",
@@ -180,7 +178,7 @@ export function OperasyonPage() {
                 hizlar: ["Bölgesel Stok Derinliği","Ege İlleri Öncelikli Teslimat","Groupauto Bölge Temsilciliği"],
               },
             ].map(({ label, name, city, address, kapsam, hizlar }) => (
-              <div key={name} className="border border-slate-200 rounded-xl p-7 hover:border-[#1B3A8F]/30 hover:shadow-lg transition-all">
+              <div key={name} className="do-entity-card border border-slate-200 rounded-xl p-7 hover:border-[#1B3A8F]/30 hover:shadow-lg">
                 <div className="flex items-start justify-between mb-5">
                   <div>
                     <span className="text-[10px] font-bold uppercase tracking-widest text-[#1B3A8F]">{label} Operasyon</span>
@@ -188,7 +186,7 @@ export function OperasyonPage() {
                     <p className="text-slate-400 text-[13px] mt-0.5">{city}</p>
                   </div>
                   <div className="w-10 h-10 rounded-xl bg-[#1B3A8F]/[0.08] border border-[#1B3A8F]/[0.12] flex items-center justify-center shrink-0">
-                    <svg className="w-5 h-5 text-[#1B3A8F]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                    <MapPinned className="w-5 h-5 text-[#1B3A8F]" />
                   </div>
                 </div>
                 <p className="text-slate-500 text-[13px] mb-4 leading-relaxed">{address}</p>
@@ -204,10 +202,15 @@ export function OperasyonPage() {
               </div>
             ))}
           </div>
-          <div className="bg-[#1B3A8F]/[0.05] border border-[#1B3A8F]/[0.12] rounded-xl px-8 py-6 flex flex-col sm:flex-row items-center gap-6 justify-between">
-            <div>
-              <div className="text-[15px] font-bold text-slate-900">Tüm Türkiye'ye Kesintisiz Erişim — Haftanın 6 Günü</div>
-              <p className="text-slate-500 text-[13.5px] mt-1">Üç operasyon merkezimiz ve anlaşmalı lojistik partnerlerimiz aracılığıyla 81 ile düzenli teslimat. Cumartesi dahil.</p>
+          <div className="do-entity-card bg-[#1B3A8F]/[0.05] border border-[#1B3A8F]/[0.12] rounded-xl px-8 py-6 flex flex-col sm:flex-row items-center gap-6 justify-between">
+            <div className="flex items-center gap-4">
+              <div className="w-11 h-11 rounded-xl bg-[#1B3A8F]/[0.1] border border-[#1B3A8F]/[0.15] flex items-center justify-center shrink-0">
+                <Network className="w-5 h-5 text-[#1B3A8F]" />
+              </div>
+              <div>
+                <div className="text-[15px] font-bold text-slate-900">Tüm Türkiye'ye Kesintisiz Erişim — Haftanın 6 Günü</div>
+                <p className="text-slate-500 text-[13.5px] mt-1">Üç operasyon merkezimiz ve anlaşmalı lojistik partnerlerimiz aracılığıyla 81 ile düzenli teslimat. Cumartesi dahil.</p>
+              </div>
             </div>
             <div className="shrink-0 text-center">
               <div className="text-4xl font-black text-[#1B3A8F]">81</div>
@@ -225,15 +228,15 @@ export function OperasyonPage() {
             <h2 className="text-3xl md:text-4xl font-black mt-2 tracking-tight">Operasyonel Yetkinliklerimiz</h2>
             <p className="text-white/60 mt-3 max-w-2xl text-[15px]">Her operasyonel süreç, müşteri teslimat deneyimini optimize etmek amacıyla yapılandırılmıştır.</p>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {OPS_FEATURES.map((f) => (
-              <div key={f.title} className="flex flex-col gap-4 p-6 rounded-xl border border-white/[0.12] bg-white/[0.05] hover:bg-white/[0.10] transition-all">
-                <div className="shrink-0 w-11 h-11 bg-white/10 rounded-xl flex items-center justify-center">
+              <div key={f.title} className="do-entity-card flex flex-col gap-4 p-7 rounded-xl border border-white/[0.12] bg-white/[0.05] hover:bg-white/[0.10]">
+                <div className="shrink-0 w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center">
                   <f.icon className="w-5 h-5 text-[#7d9bea]" />
                 </div>
                 <div>
-                  <h3 className="text-[14px] font-bold mb-1.5 leading-snug">{f.title}</h3>
-                  <p className="text-white/55 text-[13px] leading-relaxed">{f.desc}</p>
+                  <h3 className="text-[15px] font-bold mb-2 leading-snug">{f.title}</h3>
+                  <p className="text-white/55 text-[13.5px] leading-relaxed">{f.desc}</p>
                 </div>
               </div>
             ))}

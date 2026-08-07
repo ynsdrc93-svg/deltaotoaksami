@@ -1,12 +1,12 @@
 import React from "react";
 import { Link } from "wouter";
-import { MapPin, Mail, Phone } from "lucide-react";
+import { MapPin, Mail, Phone, Globe } from "lucide-react";
 
 export function SiteFooter() {
   return (
-    <footer className="bg-[#0a0c11] pt-16 md:pt-20 pb-10 border-t border-white/5 text-white">
+    <footer className="bg-[#0a0c11] pt-16 md:pt-20 pb-8 border-t border-white/5 text-white">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-14 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-14 mb-14">
 
           <div>
             <img
@@ -36,6 +36,7 @@ export function SiteFooter() {
               {[
                 { label: "Hakkımızda",   href: "/hakkimizda"  },
                 { label: "Tedarikçiler", href: "/tedarikciler" },
+                { label: "Operasyon ve Lojistik", href: "/operasyon" },
                 { label: "Kariyer",      href: "/kariyer"     },
                 { label: "İletişim",     href: "/iletisim"    },
               ].map(({ label, href }) => (
@@ -49,27 +50,43 @@ export function SiteFooter() {
             </ul>
             <div className="mt-10">
               <h4 className="text-white text-xs font-bold tracking-[0.2em] mb-5">Private Label</h4>
-              <img src="/images/spart-logo.png" alt="SPART Original Replacement" className="h-9 w-auto rounded-md opacity-90 hover:opacity-100 transition-opacity" />
+              <Link href="/spart" className="inline-block">
+                <img src="/images/spart-logo.png" alt="SPART Original Replacement" className="h-9 w-auto rounded-md opacity-90 hover:opacity-100 transition-opacity" />
+              </Link>
             </div>
           </div>
 
           <div>
-            <h4 className="text-white text-xs font-bold uppercase tracking-[0.2em] mb-7">Sertifikalar & Üyelikler</h4>
-            <div className="flex gap-4 mb-8">
-              {["OSS\nDerneği", "ISO\n9001", "TS\nEN"].map(cert => (
-                <div key={cert} className="w-20 h-16 border border-white/8 rounded-lg flex items-center justify-center bg-white/3 hover:border-white/15 transition-colors">
-                  <span className="text-[10px] text-gray-400 font-bold text-center whitespace-pre-line leading-tight">{cert}</span>
-                </div>
-              ))}
+            <h4 className="text-white text-xs font-bold uppercase tracking-[0.2em] mb-7">Küresel Ağ & Üyelikler</h4>
+            <div className="flex items-center gap-3 mb-5 bg-white/[0.04] border border-white/[0.08] rounded-lg px-4 py-3.5">
+              <div className="w-9 h-9 rounded-md bg-white/[0.08] flex items-center justify-center shrink-0">
+                <Globe className="w-4 h-4 text-[#7d9bea]" />
+              </div>
+              <div>
+                <div className="text-[13px] font-semibold text-gray-200">Groupauto International</div>
+                <div className="text-[11px] text-gray-500 mt-0.5">Türkiye Üyesi · 40+ Ülke Ağı</div>
+              </div>
             </div>
             <p className="text-xs text-gray-500 leading-relaxed max-w-xs">
-              Kalite standartlarımız ve sektörel üyeliklerimizle güvenilir iş ortaklığının güvencesini sunuyoruz.
+              Portföydeki tüm markalar OEM veya OEM eşdeğeri kalite standardındadır; tedarik sürecimiz Groupauto International'ın global satın alma ve kalite protokolleriyle yürütülür.
             </p>
           </div>
 
         </div>
 
-        <div className="pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
+        <div className="pt-6 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11.5px] text-gray-600">
+          <div className="flex flex-wrap items-center justify-center gap-x-2.5 gap-y-1.5 text-center sm:text-left">
+            <span>Delta Oto</span>
+            <span className="opacity-40">·</span>
+            <span>Barbaros Cd. Beyit Sk. No:17, Yukarı Dudullu — Ümraniye / İstanbul</span>
+            <span className="opacity-40">·</span>
+            <a href="tel:02165266464" className="hover:text-gray-300 transition-colors">0216 526 64 64</a>
+            <span className="opacity-40">·</span>
+            <a href="mailto:info@deltaoto.com" className="hover:text-gray-300 transition-colors">info@deltaoto.com</a>
+          </div>
+        </div>
+
+        <div className="pt-5 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
           <span>© 2026 Delta Oto. Tüm hakları saklıdır.</span>
           <div className="flex items-center gap-1.5">
             <div className="w-1.5 h-1.5 rounded-full bg-[#1B3A8F] animate-pulse" />
