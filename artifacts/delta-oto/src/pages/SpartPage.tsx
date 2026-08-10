@@ -4,11 +4,7 @@ import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
 import {
   ShieldCheck,
-  Gauge,
   Wrench,
-  Zap,
-  Droplets,
-  Settings2,
   ArrowRight,
   CheckCircle2,
   Package,
@@ -16,47 +12,46 @@ import {
   Award,
   FlaskConical,
   Layers,
-  History,
 } from "lucide-react";
 
 const CATEGORIES = [
   {
-    icon: <Gauge className="w-6 h-6" />,
+    image: "/images/brake-systems.png",
     title: "Fren Sistemi",
     desc: "Balatalar, diskler, kampanalar ve hidrolik bileşenler. OEM toleranslarında üretim.",
     count: "200+",
     unit: "referans",
   },
   {
-    icon: <Settings2 className="w-6 h-6" />,
+    image: "/images/suspension-steering.png",
     title: "Süspansiyon & Direksiyon",
     desc: "Amortisörler, rotiller, rot başları, salıncaklar. Sürüş güvenliğinde taviz yok.",
     count: "150+",
     unit: "referans",
   },
   {
-    icon: <Droplets className="w-6 h-6" />,
+    image: "/images/filters.png",
     title: "Motor & Filtreler",
     desc: "Yağ, hava, yakıt ve Polen filtreleri. Motor ömrünü koruyan doğru filtrasyon.",
     count: "120+",
     unit: "referans",
   },
   {
-    icon: <Zap className="w-6 h-6" />,
+    image: "/images/electrical-lighting.png",
     title: "Elektrik & Ateşleme",
     desc: "Bujiler, bobinler, marş motorları, alternatörler. Güvenilir start, kesintisiz güç.",
     count: "180+",
     unit: "referans",
   },
   {
-    icon: <Wrench className="w-6 h-6" />,
+    image: "/images/heavy-duty.png",
     title: "Aktarma Organları",
     desc: "Debriyaj setleri, rot milleri, diferansiyel parçaları. Güç aktarımında dayanıklılık.",
     count: "90+",
     unit: "referans",
   },
   {
-    icon: <Package className="w-6 h-6" />,
+    image: "/images/engine-parts.png",
     title: "Soğutma Sistemi",
     desc: "Radyatörler, su pompaları, termostatlar, V-kayışları. Motorunuzu serin tutun.",
     count: "80+",
@@ -80,11 +75,6 @@ const QUALITIES = [
     title: "Geniş Araç Kapsama Alanı",
     desc: "Binek ve hafif ticari araç pazarındaki başlıca marka ve modelleri kapsayan, sürekli büyüyen bir katalog. Doğru parçayı ilk seferinde bulun.",
   },
-  {
-    icon: History,
-    title: "50 Yıllık Sektör Birikimi",
-    desc: "Delta Oto'nun beş on yıllık aftermarket deneyimi, SPART'ın ürün seçimi ve kalite standartlarının temelidir. Bilgi, fiyattan önce gelir.",
-  },
 ];
 
 const ADVANTAGES = [
@@ -101,71 +91,100 @@ export function SpartPage() {
     <div className="do-site bg-white min-h-screen flex flex-col">
       <SiteHeader />
 
-      {/* HERO */}
-      <section className="relative min-h-[580px] flex items-center text-white overflow-hidden bg-[#0e1016]">
-        <div className="absolute inset-0">
-          <img
-            src="/images/spart-hero.jpg"
-            alt=""
-            className="w-full h-full object-cover opacity-55"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0e1016] via-[#0e1016]/70 to-[#0e1016]/25" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0e1016] via-[#0e1016]/10 to-transparent" />
-        </div>
-        <div className="absolute inset-0 do-grid-bg opacity-20" />
+      {/* HERO (dark, split panel) */}
+      <section className="relative overflow-hidden bg-[#0e1016] text-white">
+        <div className="flex flex-col lg:flex-row lg:min-h-[80vh]">
 
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 py-24">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="w-8 h-[2px] bg-[#4d74d6]" />
-            <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea]">
-              Delta Oto Özel Markası
-            </span>
+          {/* LEFT — solid ink panel, real content */}
+          <div className="relative lg:w-[57%] flex items-center px-6 sm:px-10 lg:pl-14 xl:pl-20 lg:pr-10 xl:pr-14 py-20 lg:py-28 overflow-hidden">
+            <div className="do-grid-bg absolute inset-0 opacity-50"></div>
+            <div className="absolute left-0 top-0 w-[3px] h-full bg-gradient-to-b from-transparent via-[#1B3A8F] to-transparent opacity-60"></div>
+            <div className="do-beam"></div>
+
+            <div className="relative z-10 max-w-2xl">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-8 h-[2px] bg-[#4d74d6]" />
+                <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea]">
+                  Delta Oto Özel Markası
+                </span>
+              </div>
+
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[58px] xl:text-[64px] font-black leading-[1.05] tracking-tight mb-6 max-w-2xl">
+                <span className="do-hero-line">ORİJİNAL KALİTE,</span>
+                <br />
+                <span className="do-hero-accent">AKILLI FİYAT.</span>
+              </h1>
+              <p className="text-slate-300 text-base sm:text-lg max-w-xl leading-relaxed mb-10">
+                Delta Oto'nun 50 yıllık aftermarket deneyimiyle geliştirilen SPART;
+                OEM eşdeğeri kaliteyi, bağımsız servis ve bayi ağına rekabetçi
+                fiyatla sunar.
+              </p>
+
+              <div className="flex flex-wrap gap-4">
+                <a
+                  href="#kategoriler"
+                  className="inline-flex items-center gap-2 bg-[#1B3A8F] hover:bg-[#2547B5] text-white font-semibold px-8 py-4 rounded-md transition-colors shadow-[0_0_32px_rgba(27,58,143,0.3)] group"
+                >
+                  Ürün Kategorileri
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                </a>
+                <Link
+                  href="/iletisim"
+                  className="inline-flex items-center gap-2 border border-white/25 hover:border-white/50 text-white font-semibold px-8 py-4 rounded-md transition-colors"
+                >
+                  Bayi Bilgisi Al
+                </Link>
+              </div>
+            </div>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-black leading-[1.05] tracking-tight mb-6 max-w-2xl">
-            <span className="do-hero-line">ORİJİNAL KALİTE,</span>
-            <br />
-            <span className="do-hero-accent">AKILLI FİYAT.</span>
-          </h1>
-          <p className="text-slate-200 text-base sm:text-lg max-w-xl leading-relaxed mb-10">
-            Delta Oto'nun 50 yıllık aftermarket deneyimiyle geliştirilen SPART;
-            OEM eşdeğeri kaliteyi, bağımsız servis ve bayi ağına rekabetçi
-            fiyatla sunar.
-          </p>
+          {/* RIGHT — full-strength photography, not a dimmed backdrop */}
+          <div className="relative lg:w-[43%] min-h-[320px] sm:min-h-[420px] lg:min-h-0 overflow-hidden">
+            <img
+              src="/images/spart-hero.jpg"
+              alt="SPART yedek parça ürün grubu"
+              className="w-full h-full object-cover"
+              style={{ objectPosition: "60% 40%" }}
+            />
+            <div className="absolute inset-y-0 left-0 w-16 lg:w-28 bg-gradient-to-r from-[#0e1016] to-transparent hidden lg:block"></div>
+            <div className="absolute inset-x-0 top-0 h-20 bg-gradient-to-b from-[#0e1016] to-transparent lg:hidden"></div>
+            <div className="absolute inset-x-0 bottom-0 h-28 bg-gradient-to-t from-[#0e1016]/80 to-transparent"></div>
 
-          <div className="flex flex-wrap gap-4">
-            <a
-              href="#kategoriler"
-              className="inline-flex items-center gap-2 bg-[#1B3A8F] hover:bg-[#2547B5] text-white font-semibold px-8 py-4 rounded-md transition-colors shadow-[0_0_32px_rgba(27,58,143,0.3)] group"
-            >
-              Ürün Kategorileri
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-            </a>
-            <Link
-              href="/iletisim"
-              className="inline-flex items-center gap-2 border border-white/25 hover:border-white/50 text-white font-semibold px-8 py-4 rounded-md transition-colors"
-            >
-              Bayi Bilgisi Al
-            </Link>
+            <div className="absolute bottom-6 left-6 sm:bottom-8 sm:left-8">
+              <div className="do-stat-tag bg-[#1B3A8F] shadow-2xl">
+                <span className="flex items-baseline gap-2.5 px-5 py-3.5">
+                  <span className="text-3xl font-black text-white leading-none tabular-nums">800+</span>
+                  <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-blue-100 max-w-[7rem] leading-tight">Aktif Referans</span>
+                </span>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* STAT BAR */}
-      <section className="bg-[#1B3A8F] py-10 text-white">
+      {/* STAT BAR — asymmetric: warranty claim leads, three supporting figures follow */}
+      <section className="bg-[#1B3A8F] py-14 md:py-16 text-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            {[
-              { value: "800+", label: "Aktif Referans" },
-              { value: "50+", label: "Araç Markası Kapsama" },
-              { value: "2 Yıl", label: "Ürün Garantisi" },
-              { value: "3 Depo", label: "Hızlı Sevkiyat Merkezi" },
-            ].map((s) => (
-              <div key={s.label}>
-                <div className="text-3xl font-black tracking-tight mb-1">{s.value}</div>
-                <div className="text-[13px] text-white/65 font-medium uppercase tracking-wider">{s.label}</div>
+          <div className="flex flex-col lg:flex-row items-center gap-10 lg:gap-16">
+            <div className="lg:w-[34%] text-center lg:text-left shrink-0">
+              <div className="text-6xl sm:text-7xl font-black leading-none tracking-tighter tabular-nums">2 Yıl</div>
+              <div className="text-white/70 text-[12.5px] font-bold tracking-[0.16em] uppercase mt-3 max-w-[220px] mx-auto lg:mx-0">
+                Ürün Garantisi — Bayi ve Servis Güvencesi
               </div>
-            ))}
+            </div>
+            <div className="hidden lg:block w-px self-stretch bg-white/15"></div>
+            <div className="w-full grid grid-cols-3 gap-6 sm:gap-10">
+              {[
+                { value: "800+", label: "Aktif Referans" },
+                { value: "50+", label: "Araç Markası Kapsama" },
+                { value: "3 Depo", label: "Hızlı Sevkiyat Merkezi" },
+              ].map((s) => (
+                <div key={s.label} className="text-center lg:text-left">
+                  <div className="text-2xl sm:text-3xl font-black tracking-tight mb-1.5">{s.value}</div>
+                  <div className="text-[11px] text-white/60 font-semibold uppercase tracking-wider leading-snug">{s.label}</div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -208,9 +227,13 @@ export function SpartPage() {
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="absolute -bottom-6 -left-6 bg-[#1B3A8F] text-white rounded-xl p-5 shadow-xl">
-                <div className="text-2xl font-black">50 Yıl</div>
-                <div className="text-[12px] text-white/75 mt-0.5">Sektör Deneyimi</div>
+              <div className="absolute -bottom-7 -left-7 sm:-bottom-8 sm:-left-8">
+                <div className="do-stat-tag bg-[#1B3A8F] shadow-2xl">
+                  <span className="flex items-baseline gap-3 px-6 py-4">
+                    <span className="text-4xl sm:text-5xl font-black text-white leading-none tabular-nums">50</span>
+                    <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-blue-100 max-w-[6.5rem] leading-tight">Yıllık Sektör Deneyimi</span>
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -231,23 +254,49 @@ export function SpartPage() {
             </p>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {CATEGORIES.map((cat) => (
+          {/* Flagship category — Fren Sistemi carries real weight; the rest are supporting tiles */}
+          <div className="do-entity-card relative rounded-2xl overflow-hidden mb-6 group">
+            <div className="aspect-[4/3] sm:aspect-[16/9] lg:aspect-[2/1]">
+              <img
+                src={CATEGORIES[0].image}
+                alt={`${CATEGORIES[0].title} — SPART ürün grubu`}
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.03]"
+              />
+            </div>
+            <div className="absolute inset-0 bg-gradient-to-t from-[#0e1016] via-[#0e1016]/30 to-transparent"></div>
+
+            <div className="absolute inset-x-0 bottom-0 p-6 sm:p-9 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-5">
+              <div className="max-w-md">
+                <span className="text-[11px] font-bold uppercase tracking-[0.25em] text-[#7d9bea]">En Geniş Kapsam</span>
+                <h3 className="text-2xl sm:text-3xl font-black text-white mt-2 mb-2 tracking-tight">{CATEGORIES[0].title}</h3>
+                <p className="text-white/70 text-[13.5px] leading-relaxed">{CATEGORIES[0].desc}</p>
+              </div>
+              <div className="do-stat-tag bg-[#1B3A8F] shadow-2xl shrink-0">
+                <span className="flex items-baseline gap-2 px-5 py-3">
+                  <span className="text-3xl font-black text-white leading-none tabular-nums">{CATEGORIES[0].count}</span>
+                  <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-blue-100">{CATEGORIES[0].unit}</span>
+                </span>
+              </div>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-5">
+            {CATEGORIES.slice(1).map((cat, i) => (
               <div
                 key={cat.title}
-                className="do-entity-card bg-white border border-slate-200 rounded-xl p-6 hover:border-[#1B3A8F]/30 hover:shadow-md group"
+                className={`do-entity-card bg-white border border-slate-200 rounded-xl overflow-hidden hover:border-[#1B3A8F]/30 hover:shadow-md group ${i === 4 ? "col-span-2 sm:col-span-1" : ""}`}
               >
-                <div className="flex items-start justify-between mb-4">
-                  <div className="w-12 h-12 bg-[#1B3A8F]/[0.08] rounded-xl flex items-center justify-center text-[#1B3A8F] group-hover:bg-[#1B3A8F] group-hover:text-white transition-colors">
-                    {cat.icon}
-                  </div>
-                  <div className="text-right">
-                    <span className="text-xl font-black text-[#1B3A8F]">{cat.count}</span>
-                    <div className="text-[11px] text-slate-400 font-medium">{cat.unit}</div>
-                  </div>
+                <div className="h-24 sm:h-28 overflow-hidden">
+                  <img
+                    src={cat.image}
+                    alt={`${cat.title} — SPART ürün grubu`}
+                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  />
                 </div>
-                <h3 className="font-bold text-slate-900 mb-2">{cat.title}</h3>
-                <p className="text-[13.5px] text-slate-500 leading-relaxed">{cat.desc}</p>
+                <div className="p-3.5">
+                  <h3 className="font-bold text-slate-900 text-[12.5px] leading-snug mb-1">{cat.title}</h3>
+                  <div className="text-[10.5px] text-[#1B3A8F] font-bold uppercase tracking-wide">{cat.count} {cat.unit}</div>
+                </div>
               </div>
             ))}
           </div>
@@ -266,7 +315,7 @@ export function SpartPage() {
             </h2>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-6">
+          <div className="grid md:grid-cols-3 gap-6">
             {QUALITIES.map(({ icon: Icon, title, desc }) => (
               <div
                 key={title}
@@ -295,15 +344,19 @@ export function SpartPage() {
                   className="w-full h-full object-cover"
                 />
               </div>
-              <div className="absolute -top-5 -right-5 bg-white border border-slate-200 rounded-xl p-4 shadow-lg">
-                <div className="text-2xl font-black text-[#1B3A8F]">81 İl</div>
-                <div className="text-[12px] text-slate-500 mt-0.5">Teslimat Ağı</div>
-              </div>
             </div>
 
             <div className="order-1 lg:order-2">
-              <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">Dağıtım Ağı</span>
-              <h2 className="text-3xl md:text-4xl font-black mt-3 mb-6 tracking-tight text-slate-900">
+              <div className="flex items-center gap-3 mb-3">
+                <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">Dağıtım Ağı</span>
+                <div className="do-stat-tag bg-[#1B3A8F]">
+                  <span className="flex items-baseline gap-1.5 px-3.5 py-1.5">
+                    <span className="text-sm font-black text-white leading-none">81</span>
+                    <span className="text-[9px] font-bold uppercase tracking-wider text-blue-100 leading-none">İl</span>
+                  </span>
+                </div>
+              </div>
+              <h2 className="text-3xl md:text-4xl font-black mb-6 tracking-tight text-slate-900">
                 Delta Oto Gücüyle<br />Her Yere Ulaşır
               </h2>
               <p className="text-slate-600 leading-relaxed mb-8">
@@ -326,9 +379,9 @@ export function SpartPage() {
                 ))}
               </div>
 
-              <div className="mt-8 bg-[#1B3A8F]/[0.05] border border-[#1B3A8F]/[0.12] rounded-xl px-6 py-4 flex items-center gap-4">
-                <CheckCircle2 className="w-5 h-5 text-[#1B3A8F] shrink-0" />
-                <p className="text-[13.5px] text-slate-700">
+              <div className="mt-8 bg-[#1B3A8F] rounded-xl px-6 py-5 flex items-center gap-4 shadow-lg">
+                <CheckCircle2 className="w-5 h-5 text-white shrink-0" />
+                <p className="text-[13.5px] text-white font-medium">
                   Cumartesi operasyonu dahil — hafta sonunu beklemeyin.
                 </p>
               </div>
@@ -337,32 +390,45 @@ export function SpartPage() {
         </div>
       </section>
 
-      {/* CTA — navy */}
+      {/* CTA — navy, asymmetric with product photography */}
       <section className="relative bg-[#1B3A8F] text-white py-24 overflow-hidden">
         <div className="absolute inset-0 do-grid-bg opacity-20" />
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 text-center">
-          <span className="inline-block text-xs font-bold uppercase tracking-[0.25em] text-white/50 mb-6">SPART Original Replacement</span>
-          <h2 className="text-3xl md:text-4xl font-black tracking-tight mb-4">
-            SPART Bayisi Olmak İster Misiniz?
-          </h2>
-          <p className="text-white/65 max-w-xl mx-auto mb-10 text-[15px] leading-relaxed">
-            Delta Oto'nun B2B platformu üzerinden SPART ürünlerine erişin;
-            rekabetçi fiyatları, anlık stok görünümünü ve online sipariş kolaylığını keşfedin.
-          </p>
-          <div className="flex flex-wrap justify-center gap-4">
-            <a
-              href="#"
-              className="inline-flex items-center gap-2 bg-white text-[#1B3A8F] hover:bg-white/90 font-bold px-10 py-4 rounded-md transition-colors group"
-            >
-              B2B Portala Giriş
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-            </a>
-            <Link
-              href="/iletisim"
-              className="inline-flex items-center gap-2 border border-white/25 hover:border-white/60 text-white font-semibold px-10 py-4 rounded-md transition-colors"
-            >
-              Bize Ulaşın
-            </Link>
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+          <div className="grid lg:grid-cols-[1fr_360px] gap-12 lg:gap-16 items-center">
+            <div className="text-center lg:text-left">
+              <span className="inline-block text-xs font-bold uppercase tracking-[0.25em] text-white/50 mb-6">SPART Original Replacement</span>
+              <h2 className="text-3xl md:text-4xl font-black tracking-tight mb-4">
+                SPART Bayisi Olmak İster Misiniz?
+              </h2>
+              <p className="text-white/65 max-w-xl mx-auto lg:mx-0 mb-10 text-[15px] leading-relaxed">
+                Delta Oto'nun B2B platformu üzerinden SPART ürünlerine erişin;
+                rekabetçi fiyatları, anlık stok görünümünü ve online sipariş kolaylığını keşfedin.
+              </p>
+              <div className="flex flex-wrap justify-center lg:justify-start gap-4">
+                <a
+                  href="#"
+                  className="inline-flex items-center gap-2 bg-white text-[#1B3A8F] hover:bg-white/90 font-bold px-10 py-4 rounded-md transition-colors group"
+                >
+                  B2B Portala Giriş
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+                </a>
+                <Link
+                  href="/iletisim"
+                  className="inline-flex items-center gap-2 border border-white/25 hover:border-white/60 text-white font-semibold px-10 py-4 rounded-md transition-colors"
+                >
+                  Bize Ulaşın
+                </Link>
+              </div>
+            </div>
+
+            <div className="hidden lg:block relative rounded-2xl overflow-hidden aspect-[4/3] shadow-2xl">
+              <img
+                src="/images/brake-systems.png"
+                alt="SPART fren sistemi ürün grubu"
+                className="w-full h-full object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-br from-[#1B3A8F]/25 via-transparent to-transparent"></div>
+            </div>
           </div>
         </div>
       </section>
