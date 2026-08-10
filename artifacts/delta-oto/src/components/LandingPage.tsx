@@ -2,6 +2,11 @@ import React, { useEffect, useRef, useState } from "react";
 import { Link } from "wouter";
 import { ChevronRight, ArrowRight, MapPin, Mail, Phone, Globe, Zap, Network, Menu, X } from "lucide-react";
 import { useReveal, useScrolled, useCounter, useScrollProgress, useParallax, useEscapeKey } from "../hooks/use-motion";
+import TurkeyMap from "turkey-map-react";
+import { cities as turkeyCities } from "turkey-map-react/lib/data";
+
+const OPS_HUB_PLATES = [34, 41, 35]; // İstanbul (Ümraniye), Kocaeli (Gebze), İzmir
+const OPS_HUB_PATHS = turkeyCities.filter((c) => OPS_HUB_PLATES.includes(c.plateNumber));
 
 function MetricItem({ number, suffix = "", label, delay = "0ms", plus = false, animate = true }: { number: number; suffix?: string; label: string; delay?: string; plus?: boolean; animate?: boolean }) {
   const [started, setStarted] = useState(false);
@@ -50,7 +55,6 @@ export function LandingPage() {
   const scrolled = useScrolled();
   const progress = useScrollProgress();
   const heroParallax = useParallax<HTMLImageElement>(0.12);
-  const opsParallax = useParallax<HTMLImageElement>(0.1);
   const [mobileOpen, setMobileOpen] = useState(false);
   useEscapeKey(() => setMobileOpen(false), mobileOpen);
 
@@ -284,31 +288,54 @@ export function LandingPage() {
 
       {/* OPERATIONS & LOGISTICS (dark) */}
       <section className="relative overflow-hidden bg-[#0e1016] text-white">
-        <div className="absolute inset-0">
-          <img
-            ref={opsParallax}
-            src="/images/delta-oto-ops.png"
-            alt="Operations"
-            className="w-full h-full object-cover opacity-25 will-change-transform"
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0e1016] via-[#0e1016]/85 to-[#0e1016]/40"></div>
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0e1016] via-transparent to-transparent"></div>
-        </div>
         <div className="absolute inset-0 do-grid-bg"></div>
 
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-20 md:py-28 relative z-10 w-full">
-          <div className="max-w-2xl mb-14">
-            <p ref={ref} className="do-reveal text-[#7d9bea] text-xs font-bold uppercase tracking-[0.3em] mb-5 flex items-center gap-3">
-              <span className="w-8 h-[2px] bg-[#4d74d6] inline-block"></span>
-              Lojistik Altyapı
-            </p>
-            <h2 ref={ref} className="do-reveal do-d1 text-4xl md:text-5xl font-black text-white mb-8 leading-[1.1] tracking-tight">
-              Üç Merkezden,<br />
-              <span className="text-[#7d9bea]">81 İle Kesintisiz.</span>
-            </h2>
-            <p ref={ref} className="do-reveal do-d2 text-[16px] text-gray-300 leading-[1.85] font-light">
-              Ümraniye, Gebze ve İzmir'deki operasyon merkezlerimizden Türkiye'nin tamamına ve küresel pazarlara uzanan dağıtım ağıyla; binek ve hafif ticari araç gruplarında 250'den fazla markanın tedariğini hız ve güvenilirlik standartlarında gerçekleştiriyoruz.
-            </p>
+          <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16 mb-14">
+            <div className="lg:w-[44%] shrink-0">
+              <p ref={ref} className="do-reveal text-[#7d9bea] text-xs font-bold uppercase tracking-[0.3em] mb-5 flex items-center gap-3">
+                <span className="w-8 h-[2px] bg-[#4d74d6] inline-block"></span>
+                Lojistik Altyapı
+              </p>
+              <h2 ref={ref} className="do-reveal do-d1 text-4xl md:text-5xl font-black text-white mb-8 leading-[1.1] tracking-tight">
+                Üç Merkezden,<br />
+                <span className="text-[#7d9bea]">81 İle Kesintisiz.</span>
+              </h2>
+              <p ref={ref} className="do-reveal do-d2 text-[16px] text-gray-300 leading-[1.85] font-light">
+                Ümraniye, Gebze ve İzmir'deki operasyon merkezlerimizden Türkiye'nin tamamına ve küresel pazarlara uzanan dağıtım ağıyla; binek ve hafif ticari araç gruplarında 250'den fazla markanın tedariğini hız ve güvenilirlik standartlarında gerçekleştiriyoruz.
+              </p>
+              <div ref={ref} className="do-reveal do-d3 flex flex-wrap gap-x-6 gap-y-2 mt-8">
+                {[
+                  { label: "Ümraniye", plate: 34 },
+                  { label: "Gebze", plate: 41 },
+                  { label: "İzmir", plate: 35 },
+                ].map((h) => (
+                  <div key={h.plate} className="flex items-center gap-2 text-[13px] text-gray-300">
+                    <span className="w-2 h-2 rounded-full bg-[#7d9bea] inline-block"></span>
+                    {h.label}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <div ref={ref} className="do-reveal do-d2 lg:w-[56%] w-full relative">
+              <TurkeyMap
+                hoverable
+                showTooltip
+                customStyle={{ idleColor: "#1B3A8F", hoverColor: "#4d74d6" }}
+              />
+              {/* turkey-map-react has no per-city color prop; overlay the 3 hub
+                  provinces' own path data (same viewBox) with the accent fill. */}
+              <svg
+                viewBox="0 80 1050 585"
+                className="absolute inset-0 w-full h-full pointer-events-none"
+                aria-hidden="true"
+              >
+                {OPS_HUB_PATHS.map((c) => (
+                  <path key={c.id} d={c.path} fill="#7d9bea" />
+                ))}
+              </svg>
+            </div>
           </div>
 
           <div ref={ref} className="do-reveal do-d3 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">

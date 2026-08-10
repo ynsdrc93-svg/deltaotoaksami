@@ -104,7 +104,7 @@ export function HakkimizdaPage() {
       <section className="relative min-h-[560px] flex items-center text-white overflow-hidden bg-[#0e1016]">
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=1920&q=80"
+            src="/images/delta-oto-hero.png"
             alt=""
             className="w-full h-full object-cover opacity-25"
             style={{ objectPosition: "center 40%" }}
@@ -233,7 +233,7 @@ export function HakkimizdaPage() {
       {/* GROUPAUTO — dark */}
       <section className="relative bg-[#0e1016] text-white py-24 overflow-hidden">
         <div className="absolute inset-0">
-          <img src="https://images.unsplash.com/photo-1566576912321-d58ddd7a6088?w=1920&q=80" alt="" className="w-full h-full object-cover opacity-10" />
+          <img src="/images/delta-oto-ops.png" alt="" className="w-full h-full object-cover opacity-10" />
           <div className="absolute inset-0 bg-[#0e1016]/80" />
         </div>
         <div className="absolute inset-0 do-grid-bg opacity-30" />
