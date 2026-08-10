@@ -108,14 +108,14 @@ export function OperasyonPage() {
           <p ref={ref} className="do-reveal do-d2 text-[17px] text-gray-300 leading-[1.8] max-w-2xl mb-10 font-light">
             Ümraniye, Gebze ve İzmir'deki operasyon merkezlerimizden yönetilen lojistik ağımız; sipariş hazırlıktan son mile kadar her aşamada hız, güvenilirlik ve servis sürekliliği sağlar. Cumartesi dahil, kesintisiz.
           </p>
-          <div ref={ref} className="do-reveal do-d3 flex flex-wrap gap-5">
+          <div ref={ref} className="do-reveal do-d3 flex flex-wrap border-t border-b border-white/15 divide-x divide-white/10">
             {HERO_STATS.map(({ target, suffix, value, label, sub }) => (
-              <div key={label} className="border border-white/15 rounded-xl px-6 py-4 bg-white/5">
-                <div className="text-2xl font-black text-white tabular-nums">
+              <div key={label} className="px-6 py-5 first:pl-0 min-w-[132px]">
+                <div className="text-3xl md:text-4xl font-black text-white tabular-nums leading-none">
                   {target !== undefined ? <CountUp target={target} suffix={suffix} /> : value}
                 </div>
-                <div className="text-[12px] font-bold text-[#7d9bea] uppercase tracking-wide mt-0.5">{label}</div>
-                <div className="text-[11px] text-gray-400 mt-1">{sub}</div>
+                <div className="text-[11px] font-bold text-[#7d9bea] uppercase tracking-[0.15em] mt-2.5">{label}</div>
+                <div className="text-[11px] text-gray-500 mt-1">{sub}</div>
               </div>
             ))}
           </div>

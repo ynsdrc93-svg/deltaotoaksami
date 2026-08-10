@@ -8,28 +8,6 @@ import { cities as turkeyCities } from "turkey-map-react/lib/data";
 const OPS_HUB_PLATES = [34, 41, 35]; // İstanbul (Ümraniye), Kocaeli (Gebze), İzmir
 const OPS_HUB_PATHS = turkeyCities.filter((c) => OPS_HUB_PLATES.includes(c.plateNumber));
 
-function MetricItem({ number, suffix = "", label, delay = "0ms", plus = false, animate = true }: { number: number; suffix?: string; label: string; delay?: string; plus?: boolean; animate?: boolean }) {
-  const [started, setStarted] = useState(false);
-  const divRef = useRef<HTMLDivElement>(null);
-  const count = useCounter(number, 1800, animate && started);
-  useEffect(() => {
-    if (!animate) return;
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setStarted(true); obs.disconnect(); } }, { threshold: 0.3 });
-    if (divRef.current) obs.observe(divRef.current);
-    return () => obs.disconnect();
-  }, [animate]);
-  const shown = animate ? (started ? count : 0) : number;
-  return (
-    <div ref={divRef} className="text-center px-10 py-10 md:py-0 relative" style={{ transitionDelay: delay }}>
-      <div className="do-metric-num text-6xl md:text-7xl xl:text-8xl font-black mb-3 leading-none tracking-tighter">
-        {suffix}{shown}
-        {plus && "+"}
-      </div>
-      <div className="text-slate-600 text-sm font-medium tracking-widest uppercase leading-relaxed max-w-[180px] mx-auto">{label}</div>
-    </div>
-  );
-}
-
 function CountUp({ target, suffix = "", duration = 1600, className = "" }: { target: number; suffix?: string; duration?: number; className?: string }) {
   const [started, setStarted] = useState(false);
   const ref = useRef<HTMLSpanElement>(null);
@@ -207,17 +185,21 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* POWER METRICS (light) */}
-      <section className="relative bg-[#f4f6f9] border-y border-slate-200 py-16 md:py-20 overflow-hidden">
+      {/* POWER METRICS (light) — tek akan cümle olarak, 3 ayrı istatistik kutusu yerine */}
+      <section className="relative bg-[#f4f6f9] border-y border-slate-200 py-24 md:py-32 overflow-hidden">
         <div className="absolute inset-0 do-grid-bg-light"></div>
         <div className="absolute left-0 top-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#1B3A8F]/40 to-transparent"></div>
 
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate-200">
-            <MetricItem number={250} plus label="Aktif Marka" delay="0ms" />
-            <MetricItem number={81} plus label="İl + İhracat" delay="80ms" />
-            <MetricItem number={1976} label="Kuruluş Yılı" delay="160ms" animate={false} />
-          </div>
+        <div ref={ref} className="do-reveal max-w-5xl mx-auto px-6 lg:px-8 relative z-10 text-center">
+          <span className="text-xs font-bold uppercase tracking-[0.3em] text-[#1B3A8F]/60">Rakamlarla Güç</span>
+          <p className="mt-6 font-black tracking-tight leading-[1.2] text-slate-900 text-2xl sm:text-3xl md:text-[40px]">
+            <span className="do-metric-num text-6xl sm:text-7xl md:text-8xl tabular-nums align-middle"><CountUp target={250} suffix="+" /></span>
+            {" "}marka,{" "}
+            <span className="do-metric-num text-6xl sm:text-7xl md:text-8xl tabular-nums align-middle"><CountUp target={81} suffix="+" /></span>
+            {" "}il,{" "}
+            <span className="do-metric-num text-6xl sm:text-7xl md:text-8xl tabular-nums align-middle">1976</span>
+            {"'dan beri kesintisiz güç."}
+          </p>
         </div>
       </section>
 

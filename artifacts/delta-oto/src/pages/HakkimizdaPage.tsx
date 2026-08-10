@@ -22,12 +22,17 @@ import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
 import { useCounter } from "../hooks/use-motion";
 
+// `pending: true` kayıtlar gerçek bir tarih ama henüz yazılmamış içerik demektir —
+// uydurma olay eklemek yerine dürüstçe "detaylar ekleniyor" olarak işaretlenir.
 const MILESTONES = [
-  { year: "1976", label: "Kuruluş", desc: "Ümraniye'de temelleri atılan şirket, otomotiv aftermarket sektörünün kurucu distribütörleri arasında yerini aldı." },
-  { year: "1990", label: "Portföy Genişlemesi", desc: "Tedarik ağının derinleşmesiyle birlikte İstanbul bölgesinde lider distribütör konumuna ulaşıldı; ürün kategorileri sistematik biçimde genişletildi." },
-  { year: "2005", label: "Groupauto International Üyeliği", desc: "Avrupa merkezli bağımsız aftermarket ağına tam üye olunarak küresel tedarik kanallarına, üretici anlaşmalarına ve piyasa bilgisine erişim sağlandı." },
-  { year: "2015", label: "Ulusal Lojistik Ağı", desc: "Türkiye'nin 81 iline kesintisiz teslimat kapasitesi kuruldu. Opar Ege bölge operasyonuyla dağıtım coğrafyası İzmir ve Ege'ye yayıldı; ihracat operasyonu faaliyete geçti." },
-  { year: "2026", label: "50. Kuruluş Yılı", desc: "250'den fazla aktif marka, binlerce müşteri ilişkisi ve yarım asrın kurumsal birikimiyle sektördeki yapıcı konumunu pekiştiriyor." },
+  { year: "1976", label: "Kuruluş", desc: "Ümraniye'de temelleri atılan şirket, otomotiv aftermarket sektörünün kurucu distribütörleri arasında yerini aldı.", pending: false },
+  { year: "1990", label: "Portföy Genişlemesi", desc: "Tedarik ağının derinleşmesiyle birlikte İstanbul bölgesinde lider distribütör konumuna ulaşıldı; ürün kategorileri sistematik biçimde genişletildi.", pending: false },
+  { year: "1998", label: "", desc: "", pending: true },
+  { year: "2005", label: "Groupauto International Üyeliği", desc: "Avrupa merkezli bağımsız aftermarket ağına tam üye olunarak küresel tedarik kanallarına, üretici anlaşmalarına ve piyasa bilgisine erişim sağlandı.", pending: false },
+  { year: "2010", label: "", desc: "", pending: true },
+  { year: "2015", label: "Ulusal Lojistik Ağı", desc: "Türkiye'nin 81 iline kesintisiz teslimat kapasitesi kuruldu. Opar Ege bölge operasyonuyla dağıtım coğrafyası İzmir ve Ege'ye yayıldı; ihracat operasyonu faaliyete geçti.", pending: false },
+  { year: "2020", label: "", desc: "", pending: true },
+  { year: "2026", label: "50. Kuruluş Yılı", desc: "250'den fazla aktif marka, binlerce müşteri ilişkisi ve yarım asrın kurumsal birikimiyle sektördeki yapıcı konumunu pekiştiriyor.", pending: false },
 ];
 
 // grouped: tr-TR binlik ayraç (nokta) uygulanır — sadece 1000 ve üzeri gerçek miktarlarda kullanılır (1976 bir yıl, ayraç almaz).
@@ -164,17 +169,23 @@ export function HakkimizdaPage() {
             <div className="absolute left-[7.5rem] top-0 bottom-0 w-px bg-white/15 hidden md:block" />
             {/* Basitleştirilmiş mobil rayı: masaüstündeki bağlantı çizgisi mobilde tamamen kaybolmasın diye küçük bir sol ray + nokta bırakılır. */}
             <div className="absolute left-[5px] top-1 bottom-1 w-px bg-white/15 md:hidden" />
-            <div className="space-y-10">
+            <div className="space-y-7">
               {MILESTONES.map((m) => (
-                <div key={m.year} className="relative flex flex-col md:flex-row md:items-start gap-2 md:gap-10 pl-6 md:pl-0">
-                  <div className="md:hidden absolute left-0 top-1 w-[11px] h-[11px] rounded-full bg-[#7d9bea] border-2 border-[#1B3A8F]" />
+                <div key={m.year} className={`relative flex flex-col md:flex-row md:items-start gap-2 md:gap-10 pl-6 md:pl-0 ${m.pending ? "opacity-60" : ""}`}>
+                  <div className={`md:hidden absolute left-0 top-1 w-[11px] h-[11px] rounded-full ${m.pending ? "bg-transparent border-2 border-dashed border-white/40" : "bg-[#7d9bea] border-2 border-[#1B3A8F]"}`} />
                   <div className="md:w-28 md:text-right shrink-0">
-                    <span className="text-2xl font-black text-white">{m.year}</span>
+                    <span className={`font-black ${m.pending ? "text-lg text-white/50" : "text-2xl text-white"}`}>{m.year}</span>
                   </div>
                   <div className="relative pt-0 md:pt-1">
-                    <div className="hidden md:block absolute -left-[1.65rem] top-2.5 w-3 h-3 rounded-full bg-[#7d9bea] border-2 border-[#1B3A8F] shadow" />
-                    <h3 className="text-[15px] font-bold mb-1.5">{m.label}</h3>
-                    <p className="text-white/75 text-sm leading-relaxed max-w-2xl">{m.desc}</p>
+                    <div className={`hidden md:block absolute -left-[1.65rem] top-2.5 w-3 h-3 rounded-full ${m.pending ? "bg-transparent border-2 border-dashed border-white/40" : "bg-[#7d9bea] border-2 border-[#1B3A8F] shadow"}`} />
+                    {m.pending ? (
+                      <p className="text-white/40 text-[13px] italic leading-relaxed">Bu döneme ait detaylar yakında eklenecek.</p>
+                    ) : (
+                      <>
+                        <h3 className="text-[15px] font-bold mb-1.5">{m.label}</h3>
+                        <p className="text-white/75 text-sm leading-relaxed max-w-2xl">{m.desc}</p>
+                      </>
+                    )}
                   </div>
                 </div>
               ))}
