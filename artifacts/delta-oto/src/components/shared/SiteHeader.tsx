@@ -1,23 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "wouter";
-import { ArrowRight } from "lucide-react";
-
-const SITE_CSS = `
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-  .do-site { font-family: 'Inter', sans-serif; }
-  .do-grid-bg {
-    background-image: linear-gradient(rgba(255,255,255,.03) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,.03) 1px, transparent 1px);
-    background-size: 40px 40px;
-  }
-  .do-hero-line {
-    background: linear-gradient(90deg, #fff 60%, rgba(255,255,255,0.55));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-  .do-logo-invert { filter: brightness(0) invert(1); }
-`;
+import { ArrowRight, Menu, X } from "lucide-react";
+import { useEscapeKey } from "../../hooks/use-motion";
 
 const NAV: { label: string; href: string }[] = [
   { label: "Hakkımızda",           href: "/hakkimizda"  },
@@ -29,6 +13,7 @@ const NAV: { label: string; href: string }[] = [
 
 export function SiteHeader() {
   const [scrolled, setScrolled] = useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
   const [location] = useLocation();
 
   useEffect(() => {
@@ -37,9 +22,11 @@ export function SiteHeader() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => { setMobileOpen(false); }, [location]);
+  useEscapeKey(() => setMobileOpen(false), mobileOpen);
+
   return (
     <>
-      <style>{SITE_CSS}</style>
       <header
         className="sticky top-0 z-50 transition-all duration-300 bg-white/90 backdrop-blur-md border-b border-slate-200"
         style={scrolled ? { background: "rgba(255,255,255,0.98)", borderColor: "rgba(15,23,42,0.1)", boxShadow: "0 4px 24px rgba(15,23,42,0.08)" } : {}}
@@ -88,8 +75,43 @@ export function SiteHeader() {
               B2B Portal
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
             </Link>
+
+            <button
+              type="button"
+              aria-label={mobileOpen ? "Menüyü kapat" : "Menüyü aç"}
+              aria-expanded={mobileOpen}
+              aria-controls="do-site-mobile-nav"
+              onClick={() => setMobileOpen(o => !o)}
+              className="lg:hidden inline-flex items-center justify-center w-10 h-10 -mr-2 rounded-md text-slate-700 hover:bg-slate-100 transition-colors shrink-0"
+            >
+              {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
           </div>
 
+        </div>
+
+        {/* Mobile nav panel */}
+        <div id="do-site-mobile-nav" className={`do-mobile-panel lg:hidden border-slate-200 ${mobileOpen ? "do-open border-t" : ""}`}>
+          <div>
+            <nav className="w-full px-6 py-3 flex flex-col">
+              {NAV.map(({ label, href }) => {
+                const isActive = location === href;
+                return (
+                  <Link
+                    key={href}
+                    href={href}
+                    className={`py-3 text-[15px] font-medium border-b border-slate-100 last:border-b-0 ${isActive ? "text-[#1B3A8F] font-semibold" : "text-slate-700 hover:text-[#1B3A8F]"}`}
+                  >
+                    {label}
+                  </Link>
+                );
+              })}
+              <Link href="/spart" className="py-3 text-[15px] font-medium text-slate-700 hover:text-[#1B3A8F] flex items-center gap-2">
+                SPART
+                <img src="/images/spart-logo.png" alt="" className="h-5 w-auto" />
+              </Link>
+            </nav>
+          </div>
         </div>
       </header>
     </>

@@ -1,4 +1,5 @@
 @import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
 
 @layer base {
   * {
@@ -12,5 +13,220 @@
     color: #0f172a;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* ---------------------------------------------------------------------
+   Delta Oto shared design system
+   Originally defined only inside LandingPage.tsx's own <style> tag;
+   centralized here so every page and SiteHeader/SiteFooter can use the
+   same reveal/card/motion language. See CLAUDE.md section 2.
+   ------------------------------------------------------------------- */
+
+.do-page, .do-site { font-family: 'Inter', sans-serif; }
+
+/* Scroll reveal */
+.do-reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.65s cubic-bezier(.22,1,.36,1), transform 0.65s cubic-bezier(.22,1,.36,1);
+}
+.do-reveal.do-in { opacity: 1; transform: none; }
+.do-d1 { transition-delay: 80ms; }
+.do-d2 { transition-delay: 160ms; }
+.do-d3 { transition-delay: 240ms; }
+.do-d4 { transition-delay: 320ms; }
+
+.do-reveal-left {
+  opacity: 0;
+  transform: translateX(-32px);
+  transition: opacity 0.7s cubic-bezier(.22,1,.36,1), transform 0.7s cubic-bezier(.22,1,.36,1);
+}
+.do-reveal-left.do-in { opacity: 1; transform: none; }
+
+.do-reveal-right {
+  opacity: 0;
+  transform: translateX(32px);
+  transition: opacity 0.7s cubic-bezier(.22,1,.36,1), transform 0.7s cubic-bezier(.22,1,.36,1);
+}
+.do-reveal-right.do-in { opacity: 1; transform: none; }
+
+/* Cards */
+.do-card {
+  transition: transform 0.3s cubic-bezier(.22,1,.36,1), box-shadow 0.3s ease;
+  border-top: 2px solid transparent;
+}
+.do-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 24px 48px rgba(15,23,42,0.12);
+  border-top-color: #1B3A8F;
+}
+
+.do-card-beam {
+  position: absolute; top: 0; bottom: 0; left: -70%;
+  width: 55%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.14), transparent);
+  transform: skewX(-16deg);
+  pointer-events: none;
+  z-index: 1;
+  transition: left 0.75s cubic-bezier(.22,1,.36,1);
+}
+.group:hover .do-card-beam { left: 140%; }
+
+.do-spart-badge {
+  background: #f1f5f9;
+  border: 1px solid rgba(15,23,42,0.1);
+  border-radius: 4px;
+  padding: 5px 10px;
+  transition: all 0.2s;
+}
+.do-spart-badge:hover {
+  background: #e8edf4;
+  border-color: rgba(27,58,143,0.4);
+}
+
+/* Text treatments */
+.do-hero-line {
+  background: linear-gradient(90deg, #fff 60%, rgba(255,255,255,0.55));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.do-metric-num {
+  background: linear-gradient(135deg, #0f172a 35%, #1B3A8F);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  font-variant-numeric: tabular-nums;
+}
+.do-accent-line::before {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 3px;
+  background: #1B3A8F;
+  margin-bottom: 20px;
+}
+.do-accent-line-light::before {
+  content: '';
+  display: block;
+  width: 40px;
+  height: 3px;
+  background: rgba(255,255,255,0.9);
+  margin-bottom: 20px;
+}
+
+/* Backgrounds */
+.do-grid-bg {
+  background-image:
+    linear-gradient(rgba(255,255,255,0.028) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255,255,255,0.028) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+.do-grid-bg-light {
+  background-image:
+    linear-gradient(rgba(15,23,42,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15,23,42,0.04) 1px, transparent 1px);
+  background-size: 48px 48px;
+}
+.do-hero-stripe {
+  position: absolute;
+  top: 0; right: 0;
+  width: 42%;
+  height: 100%;
+  clip-path: polygon(18% 0, 100% 0, 100% 100%, 0% 100%);
+  background: linear-gradient(135deg, rgba(27,58,143,0.06), rgba(14,16,22,0.0));
+  pointer-events: none;
+}
+
+/* Nav underline */
+.do-nav-link {
+  position: relative;
+  padding-bottom: 2px;
+}
+.do-nav-link::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1.5px;
+  background: #1B3A8F;
+  transition: width 0.25s ease;
+}
+.do-nav-link:hover::after { width: 100%; }
+
+/* Beams */
+@keyframes do-sweep {
+  0% { transform: translateX(-150%) skewX(-14deg); opacity: 0; }
+  16% { opacity: 1; }
+  52% { opacity: 0; }
+  100% { transform: translateX(280%) skewX(-14deg); opacity: 0; }
+}
+.do-beam {
+  position: absolute; top: 0; bottom: 0; left: 0;
+  width: 26%;
+  background: linear-gradient(90deg, transparent, rgba(125,155,234,0.16), transparent);
+  filter: blur(8px);
+  pointer-events: none;
+  z-index: 1;
+  animation: do-sweep 9s ease-in-out infinite;
+}
+.do-beam-delay { animation-delay: 4.5s; }
+
+/* Ticker */
+@keyframes do-ticker {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+.do-ticker-inner { animation: do-ticker 22s linear infinite; display: flex; width: max-content; }
+.do-ticker-inner:hover { animation-play-state: paused; }
+
+/* Logo filters */
+.do-logo-invert { filter: brightness(0) invert(1); }
+.do-spart-logo-filter { filter: brightness(0) invert(1) sepia(1) saturate(0) brightness(1.6); }
+.do-spart-dark { filter: brightness(0) saturate(0); opacity: 0.72; }
+
+/* Mobile nav panel (SiteHeader + LandingPage headers). Plain CSS (not
+   inside Tailwind's @layer) always wins over layered utilities regardless
+   of breakpoint, so the >=lg hide can't be left to the `lg:hidden` class
+   on the same element — it has to be enforced here too. */
+.do-mobile-panel {
+  overflow: hidden;
+  transition: grid-template-rows 0.3s cubic-bezier(.22,1,.36,1);
+  display: grid;
+  grid-template-rows: 0fr;
+}
+.do-mobile-panel.do-open { grid-template-rows: 1fr; }
+.do-mobile-panel > div { overflow: hidden; }
+@media (min-width: 1024px) {
+  .do-mobile-panel { display: none; }
+}
+
+/* Keyboard focus, global */
+:where(a, button, [tabindex]):focus-visible {
+  outline: 2px solid #2547B5;
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+/* Respect prefers-reduced-motion everywhere, not just one page */
+@media (prefers-reduced-motion: reduce) {
+  .do-beam, .do-beam-delay { animation: none; opacity: 0; }
+  .do-ticker-inner { animation: none; }
+  .do-card-beam { display: none; }
+  .do-reveal, .do-reveal-left, .do-reveal-right {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+  .do-card, .do-nav-link::after, .do-spart-badge { transition: none; }
+  .do-card:hover { transform: none; }
+  .do-mobile-panel { transition: none; }
+  .animate-pulse { animation: none; }
+  *, *::before, *::after {
+    transition-duration: 0.001ms !important;
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
   }
 }

@@ -39,9 +39,10 @@ Her sayfa şu sırayla alternates: `dark (#0e1016)` → `white` → `navy (#1B3A
 
 **Kural:** Footer'dan önce gelen son bölüm `bg-[#1B3A8F]` (navy) olmalı — footer `#0a0c11` siyahtır, ayrımı sağlamak için.
 
-### CSS Utility Classes (global, `SiteHeader` style tag'inde tanımlı)
+### CSS Utility Classes (global, `src/index.css`'te tanımlı)
+Eskiden LandingPage.tsx'in kendi `<style>` tag'inde tanımlıydı (iç sayfalar erişemiyordu); artık `index.css`'te merkezi — tüm sayfalar ve `SiteHeader`/`SiteFooter` aynı sınıflara erişebiliyor.
 ```css
-.do-site            /* font-family: Inter */
+.do-page, .do-site  /* font-family: Inter */
 .do-grid-bg         /* ince grid arka plan (koyu bg'lerde) */
 .do-hero-line       /* gradient text: beyazdan yarı saydama */
 .do-logo-invert     /* filter: brightness(0) invert(1) — logoyu koyu bg'de beyaza çevirir */
@@ -53,9 +54,13 @@ Her sayfa şu sırayla alternates: `dark (#0e1016)` → `white` → `navy (#1B3A
 .do-card            /* hover: translateY(-6px), shadow, border-top mavi */
 .do-beam            /* sweep animasyon efekti */
 .do-ticker-inner    /* yatay kayan ticker animasyonu */
+.do-mobile-panel    /* mobil nav paneli: grid-template-rows 0fr→1fr açılır, >=1024px'te her zaman display:none (bkz. not) */
 ```
+Reveal/counter/parallax hook'ları (`useReveal`, `useCounter`, `useParallax`, `useScrolled`, `useScrollProgress`, `useEscapeKey`) `src/hooks/use-motion.ts`'te — aynı şekilde merkezi, her sayfa import edebilir.
 
-**Kritik:** `@media (prefers-reduced-motion: reduce)` tüm animasyonlar disable edilmiş — bu kuralı koruyun.
+**Kritik:** `@media (prefers-reduced-motion: reduce)` tüm animasyonlar disable edilmiş — bu kuralı koruyun. Global blok artık `.do-page *` ile sınırlı değil, `*` — her sayfayı kapsıyor.
+
+**Cascade layer notu:** `index.css`'teki bu kurallar Tailwind'in `@layer`'ının DIŞINDA (katmansız) yazılıyor — CSS Cascade Layers kuralı gereği katmansız kurallar breakpoint/specificity farketmeksizin HER ZAMAN Tailwind'in katmanlı utility'lerini (`lg:hidden` dahil) ezer. Bir öğeye hem özel bir `.do-*` sınıfı hem de görünürlüğü kontrol eden bir Tailwind responsive utility'si (`lg:hidden`, `md:flex` vb.) birlikte uygulanacaksa, görünürlük mantığını Tailwind'e bırakmayın — `.do-mobile-panel`'deki `@media (min-width: 1024px) { display: none; }` gibi kendi media query'nizle kendi CSS'inizde de zorunlu kılın.
 
 ---
 
@@ -90,11 +95,11 @@ artifacts/delta-oto/
 ├── src/
 │   ├── App.tsx                       # Router
 │   ├── main.tsx                      # Entry point
-│   ├── index.css                     # Tailwind @import
+│   ├── index.css                     # Tailwind @import + paylaşılan .do-* tasarım sistemi (bkz. bölüm 2)
 │   ├── components/
-│   │   ├── LandingPage.tsx           # Ana sayfa (754 satır, kendi header'ı var)
+│   │   ├── LandingPage.tsx           # Ana sayfa (kendi header'ı var, mobil hamburger dahil)
 │   │   ├── shared/
-│   │   │   ├── SiteHeader.tsx        # İç sayfalarda kullanılan header
+│   │   │   ├── SiteHeader.tsx        # İç sayfalarda kullanılan header (mobil hamburger dahil)
 │   │   │   └── SiteFooter.tsx        # Tüm iç sayfalarda kullanılan footer
 │   │   └── ui/                       # shadcn/ui bileşenleri (54 dosya)
 │   ├── pages/
@@ -105,7 +110,9 @@ artifacts/delta-oto/
 │   │   ├── IletisimPage.tsx          # /iletisim
 │   │   ├── SpartPage.tsx             # /spart
 │   │   └── not-found.tsx
-│   ├── hooks/                        # shadcn hooks
+│   ├── hooks/
+│   │   ├── use-motion.ts             # useReveal/useCounter/useParallax/useScrolled/useScrollProgress/useEscapeKey — paylaşılan
+│   │   └── ...                       # shadcn hooks (use-mobile, use-toast)
 │   └── lib/                          # shadcn utils
 ├── vite.config.ts
 ├── tsconfig.json
@@ -141,6 +148,9 @@ artifacts/delta-oto/
 - **Aktif sayfa:** `border-b-2 border-[#1B3A8F]` ile vurgulanan link
 - **Scroll:** Scroll > 30px'de `bg-white/0.98` + box-shadow
 - **Nav öğeleri:** Hakkımızda · Tedarikçiler · Operasyon ve Lojistik · Kariyer · İletişim
+- **Masaüstü/mobil eşiği:** Nav + SPART + B2B `lg` (1024px) altında gizlenir; `<1024px`'te logo yanında hamburger (`lucide-react` `Menu`/`X`) açılır, aynı 5 link + SPART'ı dikey panelde gösterir (`.do-mobile-panel`, bkz. bölüm 2). Route değişince otomatik kapanır (`useLocation` + `useEffect`), Escape ile de kapanır (`useEscapeKey`).
+
+**LandingPage'in kendi header'ı da aynı mobil davranışa sahip** (kendi `mobileOpen` state'i + aynı `.do-mobile-panel` sınıfı) — iki header dosyası ayrı ama artık ikisi de `<1024px`'te gezinme sağlıyor.
 
 ### SiteFooter
 - **Arkaplan:** `bg-[#0a0c11]` (footer siyahı)

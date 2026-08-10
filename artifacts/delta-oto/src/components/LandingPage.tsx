@@ -1,240 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "wouter";
-import { ChevronRight, ArrowRight, MapPin, Mail, Phone, Globe, Truck, Zap, Network } from "lucide-react";
-
-const CSS = `
-  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
-
-  .do-page { font-family: 'Inter', sans-serif; }
-
-  .do-reveal {
-    opacity: 0;
-    transform: translateY(28px);
-    transition: opacity 0.65s cubic-bezier(.22,1,.36,1), transform 0.65s cubic-bezier(.22,1,.36,1);
-  }
-  .do-reveal.do-in { opacity: 1; transform: none; }
-  .do-d1 { transition-delay: 80ms; }
-  .do-d2 { transition-delay: 160ms; }
-  .do-d3 { transition-delay: 240ms; }
-  .do-d4 { transition-delay: 320ms; }
-
-  .do-reveal-left {
-    opacity: 0;
-    transform: translateX(-32px);
-    transition: opacity 0.7s cubic-bezier(.22,1,.36,1), transform 0.7s cubic-bezier(.22,1,.36,1);
-  }
-  .do-reveal-left.do-in { opacity: 1; transform: none; }
-
-  .do-reveal-right {
-    opacity: 0;
-    transform: translateX(32px);
-    transition: opacity 0.7s cubic-bezier(.22,1,.36,1), transform 0.7s cubic-bezier(.22,1,.36,1);
-  }
-  .do-reveal-right.do-in { opacity: 1; transform: none; }
-
-  .do-spart-badge {
-    background: #f1f5f9;
-    border: 1px solid rgba(15,23,42,0.1);
-    border-radius: 4px;
-    padding: 5px 10px;
-    transition: all 0.2s;
-  }
-  .do-spart-badge:hover {
-    background: #e8edf4;
-    border-color: rgba(27,58,143,0.4);
-  }
-
-  .do-hero-line {
-    background: linear-gradient(90deg, #fff 60%, rgba(255,255,255,0.55));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  .do-metric-num {
-    background: linear-gradient(135deg, #0f172a 35%, #1B3A8F);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    font-variant-numeric: tabular-nums;
-  }
-
-  .do-card {
-    transition: transform 0.3s cubic-bezier(.22,1,.36,1), box-shadow 0.3s ease;
-    border-top: 2px solid transparent;
-  }
-  .do-card:hover {
-    transform: translateY(-6px);
-    box-shadow: 0 24px 48px rgba(15,23,42,0.12);
-    border-top-color: #1B3A8F;
-  }
-
-  .do-accent-line::before {
-    content: '';
-    display: block;
-    width: 40px;
-    height: 3px;
-    background: #1B3A8F;
-    margin-bottom: 20px;
-  }
-  .do-accent-line-light::before {
-    content: '';
-    display: block;
-    width: 40px;
-    height: 3px;
-    background: rgba(255,255,255,0.9);
-    margin-bottom: 20px;
-  }
-
-  .do-grid-bg {
-    background-image:
-      linear-gradient(rgba(255,255,255,0.028) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255,255,255,0.028) 1px, transparent 1px);
-    background-size: 48px 48px;
-  }
-  .do-grid-bg-light {
-    background-image:
-      linear-gradient(rgba(15,23,42,0.04) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(15,23,42,0.04) 1px, transparent 1px);
-    background-size: 48px 48px;
-  }
-
-  .do-nav-link {
-    position: relative;
-    padding-bottom: 2px;
-  }
-  .do-nav-link::after {
-    content: '';
-    position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 0;
-    height: 1.5px;
-    background: #1B3A8F;
-    transition: width 0.25s ease;
-  }
-  .do-nav-link:hover::after { width: 100%; }
-
-  .do-page a, .do-page button { outline: none; }
-  .do-page a:focus-visible,
-  .do-page button:focus-visible {
-    outline: 2px solid #2547B5;
-    outline-offset: 3px;
-    border-radius: 6px;
-  }
-
-  @keyframes do-sweep {
-    0% { transform: translateX(-150%) skewX(-14deg); opacity: 0; }
-    16% { opacity: 1; }
-    52% { opacity: 0; }
-    100% { transform: translateX(280%) skewX(-14deg); opacity: 0; }
-  }
-  .do-beam {
-    position: absolute; top: 0; bottom: 0; left: 0;
-    width: 26%;
-    background: linear-gradient(90deg, transparent, rgba(125,155,234,0.16), transparent);
-    filter: blur(8px);
-    pointer-events: none;
-    z-index: 1;
-    animation: do-sweep 9s ease-in-out infinite;
-  }
-  .do-beam-delay { animation-delay: 4.5s; }
-
-  .do-card-beam {
-    position: absolute; top: 0; bottom: 0; left: -70%;
-    width: 55%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.14), transparent);
-    transform: skewX(-16deg);
-    pointer-events: none;
-    z-index: 1;
-    transition: left 0.75s cubic-bezier(.22,1,.36,1);
-  }
-  .group:hover .do-card-beam { left: 140%; }
-
-  @media (prefers-reduced-motion: reduce) {
-    .do-beam, .do-beam-delay { animation: none; opacity: 0; }
-    .do-ticker-inner { animation: none; }
-    .do-card-beam { display: none; }
-    .do-reveal, .do-reveal-left, .do-reveal-right {
-      opacity: 1 !important;
-      transform: none !important;
-      transition: none !important;
-    }
-    .do-card, .do-nav-link::after, .do-spart-badge { transition: none; }
-    .do-card:hover { transform: none; }
-    .animate-pulse { animation: none; }
-    .do-page *, .do-page *::before, .do-page *::after {
-      transition-duration: 0.001ms !important;
-    }
-  }
-
-  .do-hero-stripe {
-    position: absolute;
-    top: 0; right: 0;
-    width: 42%;
-    height: 100%;
-    clip-path: polygon(18% 0, 100% 0, 100% 100%, 0% 100%);
-    background: linear-gradient(135deg, rgba(27,58,143,0.06), rgba(14,16,22,0.0));
-    pointer-events: none;
-  }
-
-  @keyframes do-ticker {
-    0% { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-  }
-  .do-ticker-inner { animation: do-ticker 22s linear infinite; display: flex; width: max-content; }
-  .do-ticker-inner:hover { animation-play-state: paused; }
-
-  .do-logo-invert { filter: brightness(0) invert(1); }
-  .do-spart-logo-filter { filter: brightness(0) invert(1) sepia(1) saturate(0) brightness(1.6); }
-  .do-spart-dark { filter: brightness(0) saturate(0); opacity: 0.72; }
-`;
-
-function useReveal() {
-  const refs = useRef<(HTMLElement | null)[]>([]);
-  useEffect(() => {
-    const obs = new IntersectionObserver(
-      (entries) => entries.forEach(e => { if (e.isIntersecting) { (e.target as HTMLElement).classList.add("do-in"); obs.unobserve(e.target); } }),
-      { threshold: 0.12 }
-    );
-    refs.current.forEach(el => el && obs.observe(el));
-    return () => obs.disconnect();
-  }, []);
-  const ref = (el: HTMLElement | null) => { if (el && !refs.current.includes(el)) refs.current.push(el); };
-  return ref;
-}
-
-function useScrolled(threshold = 40) {
-  const [scrolled, setScrolled] = useState(false);
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > threshold);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, [threshold]);
-  return scrolled;
-}
-
-function useCounter(target: number, duration = 1600, start = false) {
-  const [val, setVal] = useState(0);
-  useEffect(() => {
-    if (!start) return;
-    if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setVal(target);
-      return;
-    }
-    let raf: number;
-    const startTime = performance.now();
-    const step = (now: number) => {
-      const p = Math.min((now - startTime) / duration, 1);
-      const eased = 1 - Math.pow(1 - p, 3);
-      setVal(Math.round(eased * target));
-      if (p < 1) raf = requestAnimationFrame(step);
-    };
-    raf = requestAnimationFrame(step);
-    return () => cancelAnimationFrame(raf);
-  }, [start, target, duration]);
-  return val;
-}
+import { ChevronRight, ArrowRight, MapPin, Mail, Phone, Globe, Truck, Zap, Network, Menu, X } from "lucide-react";
+import { useReveal, useScrolled, useCounter, useScrollProgress, useParallax, useEscapeKey } from "../hooks/use-motion";
 
 function MetricItem({ number, suffix = "", label, delay = "0ms", plus = false }: { number: number; suffix?: string; label: string; delay?: string; plus?: boolean }) {
   const [started, setStarted] = useState(false);
@@ -256,47 +23,6 @@ function MetricItem({ number, suffix = "", label, delay = "0ms", plus = false }:
   );
 }
 
-function useScrollProgress() {
-  const [p, setP] = useState(0);
-  useEffect(() => {
-    let raf = 0;
-    const update = () => {
-      const h = document.documentElement.scrollHeight - window.innerHeight;
-      setP(h > 0 ? Math.min(window.scrollY / h, 1) : 0);
-      raf = 0;
-    };
-    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => { window.removeEventListener("scroll", onScroll); window.removeEventListener("resize", onScroll); cancelAnimationFrame(raf); };
-  }, []);
-  return p;
-}
-
-function useParallax<T extends HTMLElement>(speed = 0.12) {
-  const ref = useRef<T | null>(null);
-  useEffect(() => {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    let raf = 0;
-    const update = () => {
-      const el = ref.current;
-      if (el) {
-        const rect = el.getBoundingClientRect();
-        const offset = (rect.top + rect.height / 2 - window.innerHeight / 2) * speed;
-        el.style.transform = `translate3d(0, ${(-offset).toFixed(1)}px, 0) scale(1.16)`;
-      }
-      raf = 0;
-    };
-    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update); };
-    update();
-    window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("resize", onScroll);
-    return () => { window.removeEventListener("scroll", onScroll); window.removeEventListener("resize", onScroll); cancelAnimationFrame(raf); };
-  }, [speed]);
-  return ref;
-}
-
 function CountUp({ target, suffix = "", duration = 1600, className = "" }: { target: number; suffix?: string; duration?: number; className?: string }) {
   const [started, setStarted] = useState(false);
   const ref = useRef<HTMLSpanElement>(null);
@@ -309,19 +35,27 @@ function CountUp({ target, suffix = "", duration = 1600, className = "" }: { tar
   return <span ref={ref} className={className}>{started ? count : 0}{suffix}</span>;
 }
 
+const NAV_LINKS = [
+  { label: "Hakkımızda",           href: "/hakkimizda"  },
+  { label: "Tedarikçiler",          href: "/tedarikciler" },
+  { label: "Operasyon ve Lojistik", href: "/operasyon"   },
+  { label: "Kariyer",               href: "/kariyer"     },
+  { label: "İletişim",              href: "/iletisim"    },
+];
+
 export function LandingPage() {
   const ref = useReveal();
   const scrolled = useScrolled();
   const progress = useScrollProgress();
   const heroParallax = useParallax<HTMLImageElement>(0.12);
   const opsParallax = useParallax<HTMLImageElement>(0.1);
+  const [mobileOpen, setMobileOpen] = useState(false);
+  useEscapeKey(() => setMobileOpen(false), mobileOpen);
 
   const tickerItems = ["250+ Marka", "81 İl + İhracat", "Kuruluş 1976", "Groupauto Üyesi", "Opar Ege Bölge Bayiliği", "Ümraniye Merkez", "Binek & Hafif Ticari", "Kesintisiz Lojistik"];
 
   return (
     <div className="do-page min-h-screen bg-white text-slate-900 overflow-x-hidden">
-      <style>{CSS}</style>
-
       {/* SCROLL PROGRESS */}
       <div className="fixed top-0 left-0 right-0 z-[60] h-[3px] bg-transparent pointer-events-none">
         <div className="h-full bg-gradient-to-r from-[#1B3A8F] via-[#2547B5] to-[#7d9bea]" style={{ width: `${progress * 100}%` }}></div>
@@ -355,19 +89,13 @@ export function LandingPage() {
               />
             </a>
             <nav className="hidden lg:flex items-center gap-6 xl:gap-8 text-[13.5px] font-medium tracking-tight text-slate-600">
-              {[
-                { label: "Hakkımızda",           href: "/hakkimizda"  },
-                { label: "Tedarikçiler",          href: "/tedarikciler" },
-                { label: "Operasyon ve Lojistik", href: "/operasyon"   },
-                { label: "Kariyer",               href: "/kariyer"     },
-                { label: "İletişim",              href: "/iletisim"    },
-              ].map(({ label, href }) => (
-                <Link key={href} href={href} className="whitespace-nowrap hover:text-[#1B3A8F] transition-colors duration-200 border-b-2 border-transparent pb-0.5">{label}</Link>
+              {NAV_LINKS.map(({ label, href }) => (
+                <Link key={href} href={href} className="do-nav-link whitespace-nowrap hover:text-[#1B3A8F] transition-colors duration-200">{label}</Link>
               ))}
             </nav>
           </div>
 
-          {/* Right: SPART + B2B */}
+          {/* Right: SPART + B2B + mobile toggle */}
           <div className="flex items-center gap-4 shrink-0">
             <a href="#" className="hidden lg:flex items-center rounded-md overflow-hidden ring-1 ring-slate-200 hover:ring-[#1B3A8F]/40 transition-all duration-200">
               <img src="/images/spart-logo.png" alt="SPART Original Replacement" className="h-7 w-auto block" />
@@ -377,6 +105,38 @@ export function LandingPage() {
               B2B Portal
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
             </a>
+            <button
+              type="button"
+              aria-label={mobileOpen ? "Menüyü kapat" : "Menüyü aç"}
+              aria-expanded={mobileOpen}
+              aria-controls="do-landing-mobile-nav"
+              onClick={() => setMobileOpen(o => !o)}
+              className="lg:hidden inline-flex items-center justify-center w-10 h-10 -mr-2 rounded-md text-slate-700 hover:bg-slate-100 transition-colors"
+            >
+              {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
+        </div>
+
+        {/* Mobile nav panel */}
+        <div id="do-landing-mobile-nav" className={`do-mobile-panel lg:hidden border-slate-200 ${mobileOpen ? "do-open border-t" : ""}`}>
+          <div>
+            <nav className="max-w-7xl mx-auto px-4 sm:px-6 py-3 flex flex-col">
+              {NAV_LINKS.map(({ label, href }) => (
+                <Link
+                  key={href}
+                  href={href}
+                  onClick={() => setMobileOpen(false)}
+                  className="py-3 text-[15px] font-medium text-slate-700 hover:text-[#1B3A8F] border-b border-slate-100 last:border-b-0"
+                >
+                  {label}
+                </Link>
+              ))}
+              <a href="#" onClick={() => setMobileOpen(false)} className="py-3 text-[15px] font-medium text-slate-700 hover:text-[#1B3A8F] flex items-center gap-2">
+                SPART
+                <img src="/images/spart-logo.png" alt="" className="h-5 w-auto" />
+              </a>
+            </nav>
           </div>
         </div>
       </header>
