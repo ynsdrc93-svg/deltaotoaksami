@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Truck, Shield, Zap, Network, PackageCheck, MapPin, BarChart3, ChevronRight, Calendar, ArrowRight } from "lucide-react";
+import { Truck, Shield, Zap, Network, PackageCheck, MapPin, BarChart3, ChevronRight, Calendar, ArrowRight, Handshake } from "lucide-react";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
 import { useReveal, useCounter } from "../hooks/use-motion";
@@ -21,7 +21,7 @@ const HERO_STATS: { target?: number; suffix?: string; value?: string; label: str
   { target: 3,     label: "Operasyon Merkezi", sub: "Ümraniye · Gebze · İzmir" },
   { target: 50000, suffix: "+", label: "SKU",  sub: "Sürekli stok derinliği" },
   { value: "14:00", label: "Kesim Saati",      sub: "Aynı gün sevkiyat" },
-  { value: "Cumartesi", label: "Dahil",        sub: "Hafta sonu operasyon" },
+  { target: 81,    label: "İl",                sub: "Ulusal dağıtım kapsamı" },
 ];
 
 const INFRA_STATS: { target?: number; suffix?: string; value?: string; label: string; sub: string }[] = [
@@ -33,7 +33,7 @@ const INFRA_STATS: { target?: number; suffix?: string; value?: string; label: st
 const OPS_FEATURES = [
   { icon: Truck,        title: "Üç Merkezden Ulusal Dağıtım",    desc: "Ümraniye, Gebze ve İzmir'deki operasyon merkezlerimizden Türkiye'nin 81 iline anlaşmalı lojistik partnerleriyle düzenli teslimat." },
   { icon: Zap,         title: "Aynı Gün Sevkiyat Garantisi",     desc: "Saat 14:00'a kadar iletilen siparişler, stokta olan ürünler için aynı gün yüklenir. Acil ihtiyaçta servis sürekliliği önceliğimizdir." },
-  { icon: Calendar,    title: "Cumartesi de Çalışıyoruz",        desc: "Hafta sonu operasyonumuzu sürdürüyoruz. Cumartesi sevkiyat kapasitesiyle servis noktaları kritik dönemlerde de tedarik kesintisi yaşamaz." },
+  { icon: Handshake,   title: "Opar Ege Bölge Bayiliği",         desc: "Opar'ın Ege bölgesi operasyonunu devralarak İzmir merkezli bölgesel stok derinliğimizi ve teslimat kapasitemizi genişlettik." },
   { icon: Shield,      title: "WMS Destekli Depo Yönetimi",      desc: "Ambar yönetim sistemi stok doğruluğunu ve sipariş hazırlık sürecini kontrol altında tutar; hata payı sistem düzeyinde sıfıra yakın tutulur." },
   { icon: BarChart3,   title: "Stok Derinliği & Planlama",       desc: "Talep bazlı envanter planlaması ve dönemsel analiz ile kritik ürünlerde yüksek doluluk oranı sürdürülür. Stokta yok cevabı istisnai kalır." },
   { icon: PackageCheck, title: "Sevkiyat Kalite Kontrolü",       desc: "Her sipariş çıkışı WMS kontrolünden ardından fiziksel doğrulamadan geçer; hasarlı ve eksik gönderim oranı operasyonel sıfır hedefinde tutulur." },
@@ -262,7 +262,7 @@ export function OperasyonPage() {
           <div className="bg-[#1B3A8F]/[0.05] border border-[#1B3A8F]/[0.12] rounded-xl px-8 py-6 flex flex-col sm:flex-row items-center gap-6 justify-between">
             <div>
               <div className="text-[15px] font-bold text-slate-900">Tüm Türkiye'ye Kesintisiz Erişim — Haftanın 6 Günü</div>
-              <p className="text-slate-500 text-[13.5px] mt-1">Üç operasyon merkezimiz ve anlaşmalı lojistik partnerlerimiz aracılığıyla 81 ile düzenli teslimat. Cumartesi dahil.</p>
+              <p className="text-slate-500 text-[13.5px] mt-1">Üç operasyon merkezimiz ve anlaşmalı lojistik partnerlerimiz aracılığıyla 81 ile düzenli teslimat.</p>
             </div>
             <div className="shrink-0 text-center">
               <div className="text-4xl font-black text-[#1B3A8F]">81</div>
@@ -272,9 +272,10 @@ export function OperasyonPage() {
         </div>
       </section>
 
-      {/* OPERASYONEL GÜÇLER — navy */}
-      <section className="bg-[#1B3A8F] py-24 text-white">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+      {/* OPERASYONEL GÜÇLER — dark (bir önceki ve sonraki bölüm navy; iki navy'nin arasına aynı tonu tekrarlamamak için koyu zemin) */}
+      <section className="relative bg-[#0e1016] py-24 text-white overflow-hidden">
+        <div className="absolute inset-0 do-grid-bg opacity-40" />
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
           <div className="mb-14">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea]">Lojistik Altyapı</span>
             <h2 className="text-3xl md:text-4xl font-black mt-2 tracking-tight">Operasyonel Yetkinliklerimiz</h2>
@@ -282,7 +283,7 @@ export function OperasyonPage() {
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
             {OPS_FEATURES.map((f) => (
-              <div key={f.title} className="flex flex-col gap-4 p-6 rounded-xl border border-white/[0.12] bg-white/[0.05] hover:bg-white/[0.10] transition-all">
+              <div key={f.title} className="flex flex-col gap-4 p-6 rounded-xl border border-white/10 bg-white/[0.04] hover:border-white/25 hover:bg-white/[0.08] transition-all">
                 <div className="shrink-0 w-11 h-11 bg-white/10 rounded-xl flex items-center justify-center">
                   <f.icon className="w-5 h-5 text-[#7d9bea]" />
                 </div>
