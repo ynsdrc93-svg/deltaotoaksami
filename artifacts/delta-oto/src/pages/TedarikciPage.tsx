@@ -11,7 +11,7 @@ import { useEscapeKey, useReveal } from "../hooks/use-motion";
 // göstermeye çalışmasına gerek yok.
 const FLAGSHIP_BRANDS = [
   { slug: "bosch", featured: true },
-  { slug: "contitech", featured: true },
+  { slug: "continental", featured: true },
   { slug: "brembo", featured: true },
   { slug: "valeo", featured: false },
   { slug: "hella", featured: false },
@@ -27,8 +27,8 @@ const FLAGSHIP_BRANDS = [
 const BRAND_LABELS: Record<string, string> = {
   bosch: "Bosch", valeo: "Valeo", hella: "Hella", brembo: "Brembo", ngk: "NGK", sachs: "Sachs",
   denso: "Denso", monroe: "Monroe", trw: "TRW", mahle: "Mahle", gates: "Gates", skf: "SKF",
-  febi: "Febi", osram: "Osram", philips: "Philips", delphi: "Delphi", ina: "INA",
-  contitech: "ContiTech", luk: "LuK", lemforder: "Lemförder", fag: "FAG", elring: "Elring",
+  febi: "Febi", osram: "Osram", philips: "Philips", delphi: "Delphi Technologies", ina: "INA",
+  continental: "Continental", luk: "LuK", lemforder: "Lemförder", fag: "FAG", elring: "Elring",
   corteco: "Corteco", filtron: "Filtron", knecht: "Knecht", mannfilter: "Mann-Filter",
   champion: "Champion", borgwarner: "BorgWarner", swag: "SWAG", optimal: "Optimal", kale: "Kale",
   wahler: "Wahler", vdo: "VDO", gunsan: "Gunsan",
