@@ -1,15 +1,33 @@
-import React from "react";
-import { Truck, Shield, Zap, Network, PackageCheck, Clock, BarChart3, ChevronRight, Calendar } from "lucide-react";
+import React, { useEffect, useRef, useState } from "react";
+import { Truck, Shield, Zap, Network, PackageCheck, MapPin, BarChart3, ChevronRight, Calendar, ArrowRight } from "lucide-react";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
+import { useReveal, useCounter } from "../hooks/use-motion";
 
-const INFRA_STATS = [
-  { value: "Ümraniye", label: "Merkez Depo",      sub: "İstanbul — Marmara, Trakya ve ulusal sevkiyat merkezi" },
-  { value: "Gebze",    label: "Kocaeli Depo",      sub: "Gebze — Doğu Marmara ve İç Anadolu erişim noktası" },
-  { value: "İzmir",   label: "Ege Bölge Operasyonu", sub: "Opar Ege — İzmir, Ege ve çevre iller" },
-  { value: "50.000+", label: "Aktif SKU",          sub: "Sürekli güncellenen stok" },
-  { value: "7/24",    label: "B2B Erişimi",        sub: "Dijital sipariş kanalı" },
-  { value: "WMS",     label: "Depo Yönetimi",      sub: "Yazılım destekli operasyon" },
+/** Counts up from 0 once scrolled into view; snaps straight to target under prefers-reduced-motion (see useCounter). Adapted from LandingPage's CountUp. */
+function CountUp({ target, suffix = "", duration = 1600, className = "" }: { target: number; suffix?: string; duration?: number; className?: string }) {
+  const [started, setStarted] = useState(false);
+  const spanRef = useRef<HTMLSpanElement>(null);
+  const count = useCounter(target, duration, started);
+  useEffect(() => {
+    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setStarted(true); obs.disconnect(); } }, { threshold: 0.4 });
+    if (spanRef.current) obs.observe(spanRef.current);
+    return () => obs.disconnect();
+  }, []);
+  return <span ref={spanRef} className={className}>{(started ? count : 0).toLocaleString("tr-TR")}{suffix}</span>;
+}
+
+const HERO_STATS: { target?: number; suffix?: string; value?: string; label: string; sub: string }[] = [
+  { target: 3,     label: "Operasyon Merkezi", sub: "Ümraniye · Gebze · İzmir" },
+  { target: 50000, suffix: "+", label: "SKU",  sub: "Sürekli stok derinliği" },
+  { value: "14:00", label: "Kesim Saati",      sub: "Aynı gün sevkiyat" },
+  { value: "Cumartesi", label: "Dahil",        sub: "Hafta sonu operasyon" },
+];
+
+const INFRA_STATS: { target?: number; suffix?: string; value?: string; label: string; sub: string }[] = [
+  { target: 50000, suffix: "+", label: "Aktif SKU", sub: "Sürekli güncellenen stok" },
+  { value: "7/24", label: "B2B Erişimi",             sub: "Dijital sipariş kanalı" },
+  { value: "WMS",  label: "Depo Yönetimi",           sub: "Yazılım destekli operasyon" },
 ];
 
 const OPS_FEATURES = [
@@ -36,22 +54,27 @@ const DELIVERY_CARDS = [
     title: "Aynı Gün Sevkiyat",
     highlight: "14:00 Kesim Saati",
     desc: "Stokta olan ürünler için 14:00'a kadar iletilen siparişler aynı gün yüklenir. Sabahın erken saatlerinde sipariş verenler için en hızlı çözüm.",
+    featured: true,
   },
   {
     Icon: Truck,
     title: "Ertesi Gün Teslimat",
     highlight: "İstanbul ve Çevre İller",
     desc: "Standart siparişlerde İstanbul ve yakın il müşterilerimiz için ertesi iş günü teslimat hedeflenir. Güvenilir ve öngörülebilir bir deneyim.",
+    featured: false,
   },
   {
     Icon: Calendar,
     title: "Cumartesi Operasyonu",
     highlight: "Hafta Sonu Kesintisiz",
     desc: "Cumartesi günleri de sevkiyat kapasitemiz açıktır. Hafta içi geç saatte gelen siparişler için Cumartesi yükleme seçeneğiyle müşterilerinizi korumuş olursunuz.",
+    featured: false,
   },
 ];
 
 export function OperasyonPage() {
+  const ref = useReveal();
+
   return (
     <div className="do-site bg-white min-h-screen">
       <SiteHeader />
@@ -60,36 +83,39 @@ export function OperasyonPage() {
       <section className="relative min-h-[560px] flex items-center text-white overflow-hidden bg-[#0e1016]">
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=1920&q=80"
+            src="/images/delta-oto-depot.jpg"
             alt=""
-            className="w-full h-full object-cover opacity-30"
-            style={{ objectPosition: "center 40%" }}
+            className="w-full h-full object-cover opacity-20"
+            style={{ objectPosition: "center 42%" }}
           />
           <div className="absolute inset-0 bg-gradient-to-r from-[#0e1016] via-[#0e1016]/80 to-[#0e1016]/30" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0e1016] via-transparent to-transparent" />
         </div>
         <div className="absolute inset-0 do-grid-bg opacity-40" />
         <div className="absolute left-0 top-0 w-[3px] h-full bg-gradient-to-b from-transparent via-[#1B3A8F] to-transparent opacity-60" />
+        <div className="do-beam" />
 
         <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 relative z-10 py-28">
-          <div className="flex items-center gap-3 mb-7">
+          <div ref={ref} className="do-reveal flex items-center gap-3 mb-7">
             <div className="w-8 h-[2px] bg-[#4d74d6]" />
             <span className="text-[#7d9bea] text-xs font-bold uppercase tracking-[0.3em]">Lojistik & Operasyon Altyapısı</span>
           </div>
-          <h1 className="text-5xl md:text-6xl lg:text-[72px] font-black leading-[1.05] tracking-[-0.02em] mb-6">
+          <h1 ref={ref} className="do-reveal do-d1 text-5xl md:text-6xl lg:text-[72px] font-black leading-[1.05] tracking-[-0.02em] mb-6">
             <span className="do-hero-line">ÜÇ MERKEZDEN</span><br />
             <span className="text-white">81 İLE</span><br />
             <span className="text-[#7d9bea]">KESİNTİSİZ</span>
           </h1>
-          <p className="text-[17px] text-gray-300 leading-[1.8] max-w-2xl mb-10 font-light">
+          <p ref={ref} className="do-reveal do-d2 text-[17px] text-gray-300 leading-[1.8] max-w-2xl mb-10 font-light">
             Ümraniye, Gebze ve İzmir'deki operasyon merkezlerimizden yönetilen lojistik ağımız; sipariş hazırlıktan son mile kadar her aşamada hız, güvenilirlik ve servis sürekliliği sağlar. Cumartesi dahil, kesintisiz.
           </p>
-          <div className="flex flex-wrap gap-5">
-            {[["3","Operasyon Merkezi","Ümraniye · Gebze · İzmir"],["50.000+","SKU","Sürekli stok derinliği"],["14:00","Kesim Saati","Aynı gün sevkiyat"],["Cumartesi","Dahil","Hafta sonu operasyon"]].map(([n,l,d]) => (
-              <div key={l} className="border border-white/15 rounded-xl px-6 py-4 bg-white/5">
-                <div className="text-2xl font-black text-white">{n}</div>
-                <div className="text-[12px] font-bold text-[#7d9bea] uppercase tracking-wide mt-0.5">{l}</div>
-                <div className="text-[11px] text-gray-400 mt-1">{d}</div>
+          <div ref={ref} className="do-reveal do-d3 flex flex-wrap gap-5">
+            {HERO_STATS.map(({ target, suffix, value, label, sub }) => (
+              <div key={label} className="border border-white/15 rounded-xl px-6 py-4 bg-white/5">
+                <div className="text-2xl font-black text-white tabular-nums">
+                  {target !== undefined ? <CountUp target={target} suffix={suffix} /> : value}
+                </div>
+                <div className="text-[12px] font-bold text-[#7d9bea] uppercase tracking-wide mt-0.5">{label}</div>
+                <div className="text-[11px] text-gray-400 mt-1">{sub}</div>
               </div>
             ))}
           </div>
@@ -104,10 +130,12 @@ export function OperasyonPage() {
             <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-2 tracking-tight">Operasyonel Ağ Yapımız</h2>
             <p className="text-slate-500 mt-3 max-w-2xl text-[15px]">Üç operasyon merkezinden yönetilen lojistik ağımız, bölgeden bölgeye değişen teslimat takvimi taahhütleriyle çalışır.</p>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {INFRA_STATS.map(({ value, label, sub }) => (
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 max-w-2xl">
+            {INFRA_STATS.map(({ target, suffix, value, label, sub }) => (
               <div key={label} className="text-center p-6 rounded-xl border border-slate-200 hover:border-[#1B3A8F]/30 hover:shadow-md transition-all">
-                <div className="text-[22px] font-black text-[#1B3A8F] leading-tight">{value}</div>
+                <div className="text-[22px] font-black text-[#1B3A8F] leading-tight tabular-nums">
+                  {target !== undefined ? <CountUp target={target} suffix={suffix} /> : value}
+                </div>
                 <div className="text-[12px] font-bold text-slate-900 uppercase tracking-wide mt-1.5">{label}</div>
                 <div className="text-[11px] text-slate-400 mt-1 leading-snug">{sub}</div>
               </div>
@@ -121,23 +149,35 @@ export function OperasyonPage() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="mb-14">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea] block mb-3">Teslimat Taahhüdü</span>
-            <h2 className="text-3xl md:text-4xl font-black tracking-tight mb-4">Müşterinize Söz Verebilirsiniz</h2>
+            <h2 className="text-4xl md:text-5xl font-black tracking-tight mb-5 leading-[1.1]">Müşterinize Söz Verebilirsiniz</h2>
             <p className="text-white/65 leading-[1.85] text-[15.5px] max-w-2xl">
               Stok derinliğimiz ve geniş lojistik ağımız; acil ihtiyaçta aynı gün, standart siparişlerde ertesi iş günü teslimatı mümkün kılar. Cumartesi sevkiyat kapasitemizle hafta sonu da yanınızdayız.
             </p>
           </div>
-          <div className="grid md:grid-cols-3 gap-5">
-            {DELIVERY_CARDS.map(({ Icon, title, highlight, desc }) => (
-              <div key={title} className="bg-white/[0.08] border border-white/[0.12] rounded-xl p-7 flex flex-col gap-4 hover:bg-white/[0.14] transition-colors">
+          <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-5">
+            {DELIVERY_CARDS.map(({ Icon, title, highlight, desc, featured }) => (
+              <div
+                key={title}
+                className={`relative flex flex-col gap-4 rounded-xl p-7 transition-colors ${
+                  featured
+                    ? "lg:col-span-2 border border-[#7d9bea]/50 bg-white/[0.12] hover:bg-white/[0.16] shadow-[0_20px_60px_rgba(125,155,234,0.18)]"
+                    : "border border-white/[0.12] bg-white/[0.08] hover:bg-white/[0.14]"
+                }`}
+              >
+                {featured && (
+                  <span className="absolute -top-3 left-7 text-[10px] font-black uppercase tracking-widest text-[#0e1016] bg-[#7d9bea] px-3 py-1 rounded-full">
+                    Öne Çıkan
+                  </span>
+                )}
                 <div className="flex items-start justify-between">
-                  <div className="w-11 h-11 rounded-xl bg-white/10 border border-white/15 flex items-center justify-center">
-                    <Icon className="w-5 h-5 text-[#7d9bea]" />
+                  <div className={`rounded-xl border flex items-center justify-center ${featured ? "w-12 h-12 bg-[#7d9bea]/20 border-[#7d9bea]/40" : "w-11 h-11 bg-white/10 border-white/15"}`}>
+                    <Icon className={`${featured ? "w-6 h-6" : "w-5 h-5"} text-[#7d9bea]`} />
                   </div>
-                  <span className="text-[10px] font-bold text-[#7d9bea] bg-white/10 border border-white/15 px-2.5 py-1 rounded-md uppercase tracking-wider">{highlight}</span>
+                  <span className={`text-[10px] font-bold uppercase tracking-wider px-2.5 py-1 rounded-md ${featured ? "bg-[#7d9bea] text-[#0e1016]" : "text-[#7d9bea] bg-white/10 border border-white/15"}`}>{highlight}</span>
                 </div>
                 <div>
-                  <h3 className="font-bold text-[15px] mb-2">{title}</h3>
-                  <p className="text-white/60 text-[13.5px] leading-relaxed">{desc}</p>
+                  <h3 className={`font-bold mb-2 ${featured ? "text-[17px]" : "text-[15px]"}`}>{title}</h3>
+                  <p className={`leading-relaxed ${featured ? "text-white/70 text-[14px]" : "text-white/60 text-[13.5px]"}`}>{desc}</p>
                 </div>
               </div>
             ))}
@@ -153,7 +193,7 @@ export function OperasyonPage() {
             <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-2 tracking-tight">Lojistik Merkezlerimiz</h2>
             <p className="text-slate-500 mt-3 max-w-xl text-[15px]">Yanınızda ve yakınınızdayız. Üç operasyon merkezi üzerinden Türkiye'nin tamamına kesintisiz hizmet sunuyoruz.</p>
           </div>
-          <div className="grid md:grid-cols-3 gap-6 mb-10">
+          <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-6 mb-10">
             {[
               {
                 label: "Merkez",
@@ -162,6 +202,7 @@ export function OperasyonPage() {
                 address: "Barbaros Cd. Beyit Sk. No:17, Yukarı Dudullu — Ümraniye / İstanbul",
                 kapsam: "İstanbul, Marmara, Trakya ve Türkiye geneli ulusal sevkiyat merkezi",
                 hizlar: ["Aynı Gün Sevkiyat (14:00 kesim saati)","Ertesi Gün İstanbul İçi","Cumartesi Sevkiyat Kapasitesi","Tüm 81 İle Ulusal Dağıtım"],
+                featured: true,
               },
               {
                 label: "Kocaeli",
@@ -170,6 +211,7 @@ export function OperasyonPage() {
                 address: "Barış, 1804. Sk. No:4, 41400 Gebze / Kocaeli",
                 kapsam: "Doğu Marmara, Kocaeli, Sakarya ve İç Anadolu'ya erişim güzergahında stratejik stok noktası",
                 hizlar: ["Bölgesel Stok Noktası","Doğu Marmara Öncelikli Teslimat","Aynı Gün Sevk Kapasitesi"],
+                featured: false,
               },
               {
                 label: "Ege Bölge",
@@ -178,17 +220,30 @@ export function OperasyonPage() {
                 address: "Kemalpaşa Kızılüzüm Kırovası Kümeevleri No: 12/1, Kemalpaşa / İzmir",
                 kapsam: "İzmir, Manisa, Aydın, Muğla ve çevre iller bölgesel tedarik ve dağıtım üssü",
                 hizlar: ["Bölgesel Stok Derinliği","Ege İlleri Öncelikli Teslimat","Groupauto Bölge Temsilciliği"],
+                featured: false,
               },
-            ].map(({ label, name, city, address, kapsam, hizlar }) => (
-              <div key={name} className="border border-slate-200 rounded-xl p-7 hover:border-[#1B3A8F]/30 hover:shadow-lg transition-all">
+            ].map(({ label, name, city, address, kapsam, hizlar, featured }) => (
+              <div
+                key={name}
+                className={`rounded-xl p-7 transition-all ${
+                  featured
+                    ? "lg:col-span-2 border border-[#1B3A8F]/30 bg-[#1B3A8F]/[0.03] shadow-[0_20px_50px_rgba(27,58,143,0.12)] hover:border-[#1B3A8F]/50 hover:shadow-xl"
+                    : "border border-slate-200 hover:border-[#1B3A8F]/30 hover:shadow-lg"
+                }`}
+              >
                 <div className="flex items-start justify-between mb-5">
                   <div>
-                    <span className="text-[10px] font-bold uppercase tracking-widest text-[#1B3A8F]">{label} Operasyon</span>
-                    <h3 className="text-[17px] font-black text-slate-900 mt-1">{name}</h3>
+                    <div className="flex items-center gap-2">
+                      <span className="text-[10px] font-bold uppercase tracking-widest text-[#1B3A8F]">{label} Operasyon</span>
+                      {featured && (
+                        <span className="text-[9px] font-black uppercase tracking-widest text-white bg-[#1B3A8F] px-2 py-0.5 rounded-full">Ana Depo</span>
+                      )}
+                    </div>
+                    <h3 className={`font-black text-slate-900 mt-1 ${featured ? "text-[19px]" : "text-[17px]"}`}>{name}</h3>
                     <p className="text-slate-400 text-[13px] mt-0.5">{city}</p>
                   </div>
-                  <div className="w-10 h-10 rounded-xl bg-[#1B3A8F]/[0.08] border border-[#1B3A8F]/[0.12] flex items-center justify-center shrink-0">
-                    <svg className="w-5 h-5 text-[#1B3A8F]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                  <div className={`rounded-xl border flex items-center justify-center shrink-0 ${featured ? "w-11 h-11 bg-[#1B3A8F] border-[#1B3A8F]" : "w-10 h-10 bg-[#1B3A8F]/[0.08] border-[#1B3A8F]/[0.12]"}`}>
+                    <MapPin className={`w-5 h-5 ${featured ? "text-white" : "text-[#1B3A8F]"}`} />
                   </div>
                 </div>
                 <p className="text-slate-500 text-[13px] mb-4 leading-relaxed">{address}</p>
@@ -233,7 +288,7 @@ export function OperasyonPage() {
                 </div>
                 <div>
                   <h3 className="text-[14px] font-bold mb-1.5 leading-snug">{f.title}</h3>
-                  <p className="text-white/55 text-[13px] leading-relaxed">{f.desc}</p>
+                  <p className="text-white/70 text-[13px] leading-relaxed">{f.desc}</p>
                 </div>
               </div>
             ))}
@@ -248,14 +303,14 @@ export function OperasyonPage() {
           <div className="mb-14">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea]">İş Akışı</span>
             <h2 className="text-3xl md:text-4xl font-black mt-2 tracking-tight">Siparişten Teslimata Dört Adım</h2>
-            <p className="text-white/55 mt-3 max-w-xl text-[15px]">Standartlaştırılmış süreç; her siparişte öngörülebilir, izlenebilir ve şeffaf bir deneyim sağlar.</p>
+            <p className="text-white/70 mt-3 max-w-xl text-[15px]">Standartlaştırılmış süreç; her siparişte öngörülebilir, izlenebilir ve şeffaf bir deneyim sağlar.</p>
           </div>
           <div className="grid md:grid-cols-4 gap-6">
             {PROCESS.map((s, i) => (
               <div key={s.num} className="relative">
                 <div className="text-7xl font-black text-white/[0.07] mb-4 leading-none select-none">{s.num}</div>
                 <h3 className="text-[15px] font-bold mb-2 leading-snug">{s.title}</h3>
-                <p className="text-white/55 text-[13.5px] leading-relaxed">{s.desc}</p>
+                <p className="text-white/70 text-[13.5px] leading-relaxed">{s.desc}</p>
                 {i < 3 && (
                   <div className="hidden md:block absolute top-8 -right-3 text-white/15">
                     <ChevronRight className="w-5 h-5" />
@@ -263,6 +318,16 @@ export function OperasyonPage() {
                 )}
               </div>
             ))}
+          </div>
+
+          <div className="mt-16 pt-10 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-6">
+            <p className="text-white/70 text-[15px] max-w-md">
+              Sipariş sürecinizi bugün başlatın — B2B portalımız üzerinden anlık stok ve fiyat bilgisine ulaşın.
+            </p>
+            <button className="shrink-0 bg-white text-[#1B3A8F] font-bold px-8 py-4 rounded-md hover:bg-gray-100 transition-colors text-sm flex items-center gap-2 group">
+              B2B Portal
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+            </button>
           </div>
         </div>
       </section>

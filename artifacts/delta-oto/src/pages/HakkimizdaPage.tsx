@@ -1,8 +1,26 @@
 import React from "react";
 import { Link } from "wouter";
-import { ChevronRight, Globe, Award, Users, TrendingUp } from "lucide-react";
+import {
+  ChevronRight,
+  Globe,
+  Award,
+  Users,
+  TrendingUp,
+  ShieldCheck,
+  BadgeCheck,
+  Gauge,
+  Sprout,
+  Package,
+  Tag,
+  Truck,
+  Network,
+  Route,
+  Recycle,
+  Laptop,
+} from "lucide-react";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
+import { useCounter } from "../hooks/use-motion";
 
 const MILESTONES = [
   { year: "1976", label: "Kuruluş", desc: "Ümraniye'de temelleri atılan şirket, otomotiv aftermarket sektörünün kurucu distribütörleri arasında yerini aldı." },
@@ -12,25 +30,70 @@ const MILESTONES = [
   { year: "2026", label: "50. Kuruluş Yılı", desc: "250'den fazla aktif marka, binlerce müşteri ilişkisi ve yarım asrın kurumsal birikimiyle sektördeki yapıcı konumunu pekiştiriyor." },
 ];
 
+// grouped: tr-TR binlik ayraç (nokta) uygulanır — sadece 1000 ve üzeri gerçek miktarlarda kullanılır (1976 bir yıl, ayraç almaz).
 const FACT_STATS = [
-  { icon: Award,     value: "1976", label: "Kuruluş Yılı",       sub: "50 yıl sektör deneyimi" },
-  { icon: Globe,     value: "40+",  label: "Ülke Ağı",           sub: "Groupauto International" },
-  { icon: Users,     value: "3.000+", label: "Groupauto Üyesi", sub: "Küresel distribütör ağı" },
-  { icon: TrendingUp, value: "250+", label: "Aktif Marka",       sub: "Sürekli güncellenen portföy" },
+  { icon: Award,      target: 1976, plus: false, grouped: false, label: "Kuruluş Yılı",     sub: "50 yıl sektör deneyimi" },
+  { icon: Globe,      target: 40,   plus: true,  grouped: false, label: "Ülke Ağı",         sub: "Groupauto International" },
+  { icon: Users,      target: 3000, plus: true,  grouped: true,  label: "Groupauto Üyesi",  sub: "Küresel distribütör ağı" },
+  { icon: TrendingUp, target: 250,  plus: true,  grouped: false, label: "Aktif Marka",      sub: "Sürekli güncellenen portföy" },
 ];
 
 const VALUES = [
-  { title: "Kurumsal Güvenilirlik", desc: "Ticari ilişkilerde öngörülebilirlik ve taahhüt bütünlüğü, Delta Oto'nun temel kurumsal kimliğini oluşturur. Her sipariş ve her iş birliği bu güven çerçevesinde yürütülür." },
-  { title: "Ürün Kalite Güvencesi", desc: "Portföydeki her marka, denetimli kaynak doğrulamasından geçer. Kayıt dışı ve sahte ürün sıfır toleranstır; OEM ve OEM eşdeğeri standart zorunluluğu istisnasız uygulanır." },
-  { title: "Operasyonel Mükemmellik", desc: "Siparişten teslimata uzanan sürecin her halkasında performans standardı titizlikle korunur. WMS destekli süreçler, stok doğruluğunu ve hız taahhüdünü güvence altına alır." },
-  { title: "Sürdürülebilir Büyüme", desc: "Müşteri portföyünün rekabet gücünü artırmak ve uzun vadeli iş ortaklıkları kurmak, Delta Oto'nun büyüme stratejisinin merkezindedir. Kısa vadeli kâr yerine ilişki kalitesi önceliklidir." },
+  { icon: ShieldCheck, title: "Kurumsal Güvenilirlik", desc: "Ticari ilişkilerde öngörülebilirlik ve taahhüt bütünlüğü, Delta Oto'nun temel kurumsal kimliğini oluşturur. Her sipariş ve her iş birliği bu güven çerçevesinde yürütülür." },
+  { icon: BadgeCheck,  title: "Ürün Kalite Güvencesi", desc: "Portföydeki her marka, denetimli kaynak doğrulamasından geçer. Kayıt dışı ve sahte ürün sıfır toleranstır; OEM ve OEM eşdeğeri standart zorunluluğu istisnasız uygulanır." },
+  { icon: Gauge,       title: "Operasyonel Mükemmellik", desc: "Siparişten teslimata uzanan sürecin her halkasında performans standardı titizlikle korunur. WMS destekli süreçler, stok doğruluğunu ve hız taahhüdünü güvence altına alır." },
+  { icon: Sprout,      title: "Sürdürülebilir Büyüme", desc: "Müşteri portföyünün rekabet gücünü artırmak ve uzun vadeli iş ortaklıkları kurmak, Delta Oto'nun büyüme stratejisinin merkezindedir. Kısa vadeli kâr yerine ilişki kalitesi önceliklidir." },
+];
+
+const BUSINESS_UNITS = [
+  { icon: Package, title: "Aftermarket Dağıtım", desc: "Binek ve hafif ticari araç kategorilerinde 250'den fazla küresel ve yerel marka distribütörlüğü. Türkiye'nin tamamına B2B kanalı üzerinden tedarik.", tags: ["250+ Marka", "50.000+ SKU", "B2B Portal"] },
+  { icon: Tag,     title: "SPART Private Label", desc: "Delta Oto'nun özel dağıtım markası SPART; OEM eşdeğeri kaliteyi rekabetçi fiyat yapısıyla sunar. Fren, süspansiyon, motor ve kaporta kategorilerinde aktif portföy.", tags: ["OEM Eşdeğeri", "Rekabetçi Fiyat", "Geniş SKU Gamı"] },
+  { icon: Truck,   title: "Ağır Vasıta Grubu", desc: "Kamyon, otobüs ve iş makinesi kategorilerinde seçilmiş marka ve ürün gamıyla ağır vasıta segmentine özel tedarik hizmeti.", tags: ["Kamyon", "Otobüs", "İş Makinesi"] },
+  { icon: Network, title: "B2B Dijital Kanal", desc: "7/24 erişilebilen B2B portalı üzerinden anlık stok sorgulama, fiyat listeleri ve sipariş yönetimi. Müşteri operasyonlarına entegre dijital tedarik deneyimi.", tags: ["7/24 Erişim", "Anlık Stok", "Dijital Sipariş"] },
 ];
 
 const ESG_ITEMS = [
-  { title: "Lojistik Optimizasyonu", desc: "Rota planlaması ve yük konsolidasyonuyla teslimat başına karbon ayak izinin azaltılması hedeflenmektedir." },
-  { title: "Ambalaj ve Atık Yönetimi", desc: "Tedarikçilerle birlikte yürütülen ambalaj azaltım çalışmaları ile depo atık yönetimi süreçleri hayata geçirilmiştir." },
-  { title: "Sayısal Dönüşüm", desc: "Kağıtsız sipariş ve fatura süreçleri, B2B portal entegrasyonuyla müşteri operasyonlarına sunulmaktadır." },
+  { icon: Route,   title: "Lojistik Optimizasyonu", desc: "Rota planlaması ve yük konsolidasyonuyla teslimat başına karbon ayak izinin azaltılması hedeflenmektedir." },
+  { icon: Recycle, title: "Ambalaj ve Atık Yönetimi", desc: "Tedarikçilerle birlikte yürütülen ambalaj azaltım çalışmaları ile depo atık yönetimi süreçleri hayata geçirilmiştir." },
+  { icon: Laptop,  title: "Sayısal Dönüşüm", desc: "Kağıtsız sipariş ve fatura süreçleri, B2B portal entegrasyonuyla müşteri operasyonlarına sunulmaktadır." },
 ];
+
+/** Kurumsal Rakamlar kartı: kart görünüre girince hedef değere sayarak ulaşır (LandingPage'deki MetricItem/CountUp desenine benzer, bu sayfaya özgü sadeleştirilmiş hali). */
+function StatCard({ icon: Icon, target, plus, grouped, label, sub }: {
+  icon: React.ElementType;
+  target: number;
+  plus: boolean;
+  grouped: boolean;
+  label: string;
+  sub: string;
+}) {
+  const [started, setStarted] = React.useState(false);
+  const ref = React.useRef<HTMLDivElement>(null);
+  const count = useCounter(target, 1600, started);
+
+  React.useEffect(() => {
+    const obs = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) { setStarted(true); obs.disconnect(); }
+    }, { threshold: 0.4 });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+
+  const display = grouped ? count.toLocaleString("tr-TR") : String(count);
+
+  return (
+    <div ref={ref} className="border border-slate-200 rounded-xl p-7 hover:border-[#1B3A8F]/30 hover:shadow-md transition-all group">
+      <div className="w-11 h-11 bg-[#1B3A8F]/[0.07] rounded-xl flex items-center justify-center mb-4 group-hover:bg-[#1B3A8F]/[0.12] transition-colors">
+        <Icon className="w-5 h-5 text-[#1B3A8F]" />
+      </div>
+      <div className="text-5xl md:text-6xl font-black text-slate-900 leading-tight tabular-nums">
+        {display}{plus ? "+" : ""}
+      </div>
+      <div className="text-[12px] font-bold text-[#1B3A8F] uppercase tracking-wider mt-2">{label}</div>
+      <div className="text-[12px] text-slate-400 mt-1 leading-snug">{sub}</div>
+    </div>
+  );
+}
 
 export function HakkimizdaPage() {
   return (
@@ -62,7 +125,7 @@ export function HakkimizdaPage() {
             <span className="text-white">KURUMSAL</span><br />
             <span className="text-[#7d9bea]">BİRİKİMİ</span>
           </h1>
-          <p className="text-[17px] text-gray-300 leading-[1.8] max-w-2xl mb-10 font-light">
+          <p className="text-base text-gray-300 leading-[1.8] max-w-2xl mb-10 font-light">
             1976'dan bu yana otomotiv yedek parça dağıtım sektöründe faaliyet gösteren Delta Oto; güçlü tedarik altyapısı, geniş marka portföyü ve Groupauto International üyeliğiyle sektörün yapıcı güçlerinden biri olmaya devam etmektedir.
           </p>
           <Link
@@ -82,15 +145,8 @@ export function HakkimizdaPage() {
             <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-2 tracking-tight">Kurumsal Ölçek ve Erişim</h2>
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
-            {FACT_STATS.map(({ icon: Icon, value, label, sub }) => (
-              <div key={label} className="border border-slate-200 rounded-xl p-7 hover:border-[#1B3A8F]/30 hover:shadow-md transition-all group">
-                <div className="w-11 h-11 bg-[#1B3A8F]/[0.07] rounded-xl flex items-center justify-center mb-4 group-hover:bg-[#1B3A8F]/[0.12] transition-colors">
-                  <Icon className="w-5 h-5 text-[#1B3A8F]" />
-                </div>
-                <div className="text-3xl font-black text-slate-900 leading-tight">{value}</div>
-                <div className="text-[12px] font-bold text-[#1B3A8F] uppercase tracking-wider mt-1.5">{label}</div>
-                <div className="text-[12px] text-slate-400 mt-1 leading-snug">{sub}</div>
-              </div>
+            {FACT_STATS.map((stat) => (
+              <StatCard key={stat.label} {...stat} />
             ))}
           </div>
         </div>
@@ -102,20 +158,23 @@ export function HakkimizdaPage() {
           <div className="mb-14">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea]">Kurumsal Tarihçe</span>
             <h2 className="text-3xl md:text-4xl font-black mt-2 tracking-tight">50 Yıllık Gelişim Kronolojisi</h2>
-            <p className="text-white/60 mt-3 max-w-2xl text-[15px]">Kuruluştan bugüne kat edilen mesafe; stratejik kararların, güçlü ortaklıkların ve disiplinli operasyonun bir ürünüdür.</p>
+            <p className="text-white/75 mt-3 max-w-2xl text-[15px]">Kuruluştan bugüne kat edilen mesafe; stratejik kararların, güçlü ortaklıkların ve disiplinli operasyonun bir ürünüdür.</p>
           </div>
           <div className="relative">
             <div className="absolute left-[7.5rem] top-0 bottom-0 w-px bg-white/15 hidden md:block" />
+            {/* Basitleştirilmiş mobil rayı: masaüstündeki bağlantı çizgisi mobilde tamamen kaybolmasın diye küçük bir sol ray + nokta bırakılır. */}
+            <div className="absolute left-[5px] top-1 bottom-1 w-px bg-white/15 md:hidden" />
             <div className="space-y-10">
               {MILESTONES.map((m) => (
-                <div key={m.year} className="flex flex-col md:flex-row md:items-start gap-4 md:gap-10">
+                <div key={m.year} className="relative flex flex-col md:flex-row md:items-start gap-2 md:gap-10 pl-6 md:pl-0">
+                  <div className="md:hidden absolute left-0 top-1 w-[11px] h-[11px] rounded-full bg-[#7d9bea] border-2 border-[#1B3A8F]" />
                   <div className="md:w-28 md:text-right shrink-0">
                     <span className="text-2xl font-black text-white">{m.year}</span>
                   </div>
                   <div className="relative pt-0 md:pt-1">
                     <div className="hidden md:block absolute -left-[1.65rem] top-2.5 w-3 h-3 rounded-full bg-[#7d9bea] border-2 border-[#1B3A8F] shadow" />
-                    <h3 className="text-[16px] font-bold mb-1.5">{m.label}</h3>
-                    <p className="text-white/60 text-[14px] leading-relaxed max-w-2xl">{m.desc}</p>
+                    <h3 className="text-[15px] font-bold mb-1.5">{m.label}</h3>
+                    <p className="text-white/75 text-sm leading-relaxed max-w-2xl">{m.desc}</p>
                   </div>
                 </div>
               ))}
@@ -133,10 +192,13 @@ export function HakkimizdaPage() {
             <p className="text-slate-500 mt-3 max-w-xl text-[15px]">50 yıllık deneyim, dört temel kurumsal ilke üzerine inşa edilmiştir. Bu ilkeler her karar sürecinde referans alınır.</p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
-            {VALUES.map((v) => (
-              <div key={v.title} className="border border-slate-200 rounded-xl p-7 hover:border-[#1B3A8F]/30 hover:shadow-lg transition-all">
-                <h3 className="text-[15px] font-bold text-slate-900 mb-3 leading-snug">{v.title}</h3>
-                <p className="text-slate-500 text-[13.5px] leading-relaxed">{v.desc}</p>
+            {VALUES.map(({ icon: Icon, title, desc }) => (
+              <div key={title} className="group border border-slate-200 rounded-xl p-7 hover:border-[#1B3A8F]/30 hover:shadow-lg transition-all">
+                <div className="w-11 h-11 bg-[#1B3A8F]/[0.07] rounded-xl flex items-center justify-center mb-5 group-hover:bg-[#1B3A8F]/[0.12] transition-colors">
+                  <Icon className="w-5 h-5 text-[#1B3A8F]" />
+                </div>
+                <h3 className="text-[15px] font-bold text-slate-900 mb-3 leading-snug">{title}</h3>
+                <p className="text-slate-500 text-sm leading-relaxed">{desc}</p>
               </div>
             ))}
           </div>
@@ -149,19 +211,16 @@ export function HakkimizdaPage() {
           <div className="mb-14">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea]">Faaliyet Alanları</span>
             <h2 className="text-3xl md:text-4xl font-black mt-2 tracking-tight">İş Birimlerimiz</h2>
-            <p className="text-white/60 mt-3 max-w-xl text-[15px]">Delta Oto, birbirini tamamlayan iş kollarıyla otomotiv satış sonrası sektöründe kapsamlı bir tedarik gücü sunmaktadır.</p>
+            <p className="text-white/75 mt-3 max-w-xl text-[15px]">Delta Oto, birbirini tamamlayan iş kollarıyla otomotiv satış sonrası sektöründe kapsamlı bir tedarik gücü sunmaktadır.</p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
-            {[
-              { num: "01", title: "Aftermarket Dağıtım", desc: "Binek ve hafif ticari araç kategorilerinde 250'den fazla küresel ve yerel marka distribütörlüğü. Türkiye'nin tamamına B2B kanalı üzerinden tedarik.", tags: ["250+ Marka","50.000+ SKU","B2B Portal"] },
-              { num: "02", title: "SPART Private Label", desc: "Delta Oto'nun özel dağıtım markası SPART; OEM eşdeğeri kaliteyi rekabetçi fiyat yapısıyla sunar. Fren, süspansiyon, motor ve kaporta kategorilerinde aktif portföy.", tags: ["OEM Eşdeğeri","Rekabetçi Fiyat","Geniş SKU Gamı"] },
-              { num: "03", title: "Ağır Vasıta Grubu", desc: "Kamyon, otobüs ve iş makinesi kategorilerinde seçilmiş marka ve ürün gamıyla ağır vasıta segmentine özel tedarik hizmeti.", tags: ["Kamyon","Otobüs","İş Makinesi"] },
-              { num: "04", title: "B2B Dijital Kanal", desc: "7/24 erişilebilen B2B portalı üzerinden anlık stok sorgulama, fiyat listeleri ve sipariş yönetimi. Müşteri operasyonlarına entegre dijital tedarik deneyimi.", tags: ["7/24 Erişim","Anlık Stok","Dijital Sipariş"] },
-            ].map(({ num, title, desc, tags }) => (
-              <div key={num} className="bg-white/[0.08] border border-white/[0.12] rounded-xl p-7 hover:bg-white/[0.14] transition-colors flex flex-col">
-                <div className="text-5xl font-black text-white/10 mb-4 leading-none select-none">{num}</div>
+            {BUSINESS_UNITS.map(({ icon: Icon, title, desc, tags }) => (
+              <div key={title} className="group bg-white/[0.08] border border-white/[0.12] rounded-xl p-7 hover:bg-white/[0.14] transition-colors flex flex-col">
+                <div className="w-11 h-11 bg-white/10 border border-white/15 rounded-xl flex items-center justify-center mb-5 group-hover:bg-white/[0.18] transition-colors">
+                  <Icon className="w-5 h-5 text-[#7d9bea]" />
+                </div>
                 <h3 className="text-[15px] font-bold mb-3 leading-snug">{title}</h3>
-                <p className="text-white/60 text-[13.5px] leading-relaxed flex-1">{desc}</p>
+                <p className="text-white/75 text-sm leading-relaxed flex-1">{desc}</p>
                 <div className="flex flex-wrap gap-1.5 mt-5">
                   {tags.map(t => <span key={t} className="text-[11px] bg-white/10 border border-white/15 text-white/70 px-2.5 py-1 rounded-full">{t}</span>)}
                 </div>
@@ -183,11 +242,11 @@ export function HakkimizdaPage() {
             <div>
               <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea] block mb-4">Uluslararası Ağ</span>
               <h2 className="text-3xl md:text-4xl font-black tracking-tight mb-6">Groupauto International Üyesi</h2>
-              <p className="text-gray-300 leading-[1.85] text-[15.5px] mb-8 max-w-lg">
+              <p className="text-gray-300 leading-[1.85] text-base mb-8 max-w-lg">
                 Avrupa merkezli Groupauto International ağının Türkiye üyesi sıfatıyla, 40'tan fazla ülkedeki distribütörler ve küresel üreticilerle doğrudan bağlantı içindeyiz. Bu üyelik; ürün erişimini, tedarik koşullarını ve piyasa bilgisini rakiplerimizin önünde konumlandırır.
               </p>
               <div className="grid grid-cols-3 gap-6 mb-10">
-                {[["40+","Ülke"],["3.000+","Üye Firma"],["Top Tier","Tedarikçi Erişimi"]].map(([n,l]) => (
+                {[["50+", "Global Tedarikçi"], ["Top Tier", "Tedarikçi Erişimi"], ["İhracat", "Kapasitesi"]].map(([n, l]) => (
                   <div key={l} className="bg-white/[0.06] border border-white/[0.1] rounded-xl p-5 text-center">
                     <div className="text-2xl font-black text-white mb-1">{n}</div>
                     <div className="text-[11px] text-gray-400 uppercase tracking-wide">{l}</div>
@@ -207,8 +266,8 @@ export function HakkimizdaPage() {
                 { t: "Kalite Protokolleri",       d: "Groupauto tedarikçi kalite standartları, ürün doğrulama ve katalog yönetim süreçlerine doğrudan entegre edilmektedir." },
               ].map(item => (
                 <div key={item.t} className="bg-white/[0.06] border border-white/[0.1] rounded-xl p-5 hover:bg-white/[0.1] transition-colors">
-                  <h4 className="text-[14px] font-bold mb-1.5">{item.t}</h4>
-                  <p className="text-white/55 text-[13px] leading-relaxed">{item.d}</p>
+                  <h4 className="text-[15px] font-bold mb-1.5">{item.t}</h4>
+                  <p className="text-white/75 text-sm leading-relaxed">{item.d}</p>
                 </div>
               ))}
             </div>
@@ -225,13 +284,34 @@ export function HakkimizdaPage() {
             <p className="text-slate-500 mt-3 max-w-2xl text-[15px]">Lojistik ve operasyon süreçlerimizde çevresel etkiyi azaltmaya yönelik uygulamalar hayata geçirilmektedir.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-5">
-            {ESG_ITEMS.map(item => (
-              <div key={item.title} className="bg-white border border-slate-200 rounded-xl p-7 hover:border-[#1B3A8F]/30 hover:shadow-md transition-all">
-                <div className="w-3 h-3 rounded-full bg-[#1B3A8F] mb-5" />
-                <h3 className="text-[15px] font-bold text-slate-900 mb-2 leading-snug">{item.title}</h3>
-                <p className="text-slate-500 text-[13.5px] leading-relaxed">{item.desc}</p>
+            {ESG_ITEMS.map(({ icon: Icon, title, desc }) => (
+              <div key={title} className="group bg-white border border-slate-200 rounded-xl p-7 hover:border-[#1B3A8F]/30 hover:shadow-md transition-all">
+                <div className="w-11 h-11 bg-[#1B3A8F]/[0.07] rounded-xl flex items-center justify-center mb-5 group-hover:bg-[#1B3A8F]/[0.12] transition-colors">
+                  <Icon className="w-5 h-5 text-[#1B3A8F]" />
+                </div>
+                <h3 className="text-[15px] font-bold text-slate-900 mb-2 leading-snug">{title}</h3>
+                <p className="text-slate-500 text-sm leading-relaxed">{desc}</p>
               </div>
             ))}
+          </div>
+        </div>
+      </section>
+
+      {/* KAPANIŞ CTA — navy (footer öncesi son bölüm daima #1B3A8F olmalı; ESG'nin rengi değişmedi, araya yeni bant eklendi) */}
+      <section className="bg-[#1B3A8F] py-16 text-white">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
+          <div>
+            <h2 className="text-3xl md:text-4xl font-black tracking-tight">Delta Oto ile İş Ortaklığına Başlayın</h2>
+            <p className="text-white/75 text-sm mt-2 max-w-lg">50 yıllık kurumsal birikimimizle tanışın; B2B portalımızdan sipariş verin veya ekibimizle doğrudan iletişime geçin.</p>
+          </div>
+          <div className="flex gap-4 shrink-0">
+            <a href="#" className="bg-white text-[#1B3A8F] font-bold px-7 py-3.5 rounded-md hover:bg-gray-100 transition-colors text-sm inline-flex items-center gap-2 group">
+              B2B Portal
+              <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+            </a>
+            <Link href="/iletisim" className="border border-white/30 hover:border-white/60 text-white font-medium px-7 py-3.5 rounded-md transition-colors text-sm">
+              İletişim
+            </Link>
           </div>
         </div>
       </section>

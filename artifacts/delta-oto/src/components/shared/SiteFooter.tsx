@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "wouter";
-import { MapPin, Mail, Phone } from "lucide-react";
+import { MapPin, Mail, Phone, BadgeCheck } from "lucide-react";
 
 export function SiteFooter() {
   return (
@@ -34,10 +34,11 @@ export function SiteFooter() {
             <h4 className="text-white text-xs font-bold uppercase tracking-[0.2em] mb-7">Hızlı Bağlantılar</h4>
             <ul className="space-y-3.5">
               {[
-                { label: "Hakkımızda",   href: "/hakkimizda"  },
-                { label: "Tedarikçiler", href: "/tedarikciler" },
-                { label: "Kariyer",      href: "/kariyer"     },
-                { label: "İletişim",     href: "/iletisim"    },
+                { label: "Hakkımızda",           href: "/hakkimizda"  },
+                { label: "Tedarikçiler",          href: "/tedarikciler" },
+                { label: "Operasyon ve Lojistik", href: "/operasyon"    },
+                { label: "Kariyer",               href: "/kariyer"     },
+                { label: "İletişim",              href: "/iletisim"    },
               ].map(({ label, href }) => (
                 <li key={href}>
                   <Link href={href} className="text-sm text-gray-500 hover:text-white transition-colors flex items-center gap-2 group">
@@ -57,7 +58,8 @@ export function SiteFooter() {
             <h4 className="text-white text-xs font-bold uppercase tracking-[0.2em] mb-7">Sertifikalar & Üyelikler</h4>
             <div className="flex gap-4 mb-8">
               {["OSS\nDerneği", "ISO\n9001", "TS\nEN"].map(cert => (
-                <div key={cert} className="w-20 h-16 border border-white/8 rounded-lg flex items-center justify-center bg-white/3 hover:border-white/15 transition-colors">
+                <div key={cert} className="w-20 h-16 border border-white/8 rounded-lg flex flex-col items-center justify-center gap-1 bg-white/3 hover:border-white/15 transition-colors">
+                  <BadgeCheck className="w-3.5 h-3.5 text-gray-500" />
                   <span className="text-[10px] text-gray-400 font-bold text-center whitespace-pre-line leading-tight">{cert}</span>
                 </div>
               ))}

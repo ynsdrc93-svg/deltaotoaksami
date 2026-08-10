@@ -1,5 +1,5 @@
-@import "tailwindcss";
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import "tailwindcss";
 
 @layer base {
   * {
@@ -154,7 +154,7 @@
   background: #1B3A8F;
   transition: width 0.25s ease;
 }
-.do-nav-link:hover::after { width: 100%; }
+.do-nav-link:hover::after, .do-nav-link.do-active::after { width: 100%; }
 
 /* Beams */
 @keyframes do-sweep {
@@ -199,7 +199,7 @@
 }
 .do-mobile-panel.do-open { grid-template-rows: 1fr; }
 .do-mobile-panel > div { overflow: hidden; }
-@media (min-width: 1024px) {
+@media (min-width: 1280px) {
   .do-mobile-panel { display: none; }
 }
 

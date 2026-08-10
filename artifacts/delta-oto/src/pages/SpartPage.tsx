@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "wouter";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
+import { useCounter } from "../hooks/use-motion";
 import {
   ShieldCheck,
   Gauge,
@@ -14,6 +15,11 @@ import {
   Package,
   TrendingUp,
   Award,
+  Ruler,
+  FlaskConical,
+  Car,
+  History,
+  MapPin,
 } from "lucide-react";
 
 const CATEGORIES = [
@@ -63,18 +69,22 @@ const CATEGORIES = [
 
 const QUALITIES = [
   {
+    icon: <Ruler className="w-5 h-5" />,
     title: "OEM Toleranslarında Üretim",
     desc: "Her parça, orijinal üretici spesifikasyonları esas alınarak üretilir. Boyutsal hassasiyet ve malzeme kalitesi orijinalle eşdeğerdir.",
   },
   {
+    icon: <FlaskConical className="w-5 h-5" />,
     title: "Kapsamlı Test Süreçleri",
     desc: "Ürünler; yorulma, termal döngü, titreşim ve ömür testlerinden geçirilerek sahaya çıkar. Laboratuvar onaysız hiçbir referans raflara girmez.",
   },
   {
+    icon: <Car className="w-5 h-5" />,
     title: "Geniş Araç Kapsama Alanı",
     desc: "Binek ve hafif ticari araç pazarındaki başlıca marka ve modelleri kapsayan, sürekli büyüyen bir katalog. Doğru parçayı ilk seferinde bulun.",
   },
   {
+    icon: <History className="w-5 h-5" />,
     title: "50 Yıllık Sektör Birikimi",
     desc: "Delta Oto'nun beş on yıllık aftermarket deneyimi, SPART'ın ürün seçimi ve kalite standartlarının temelidir. Bilgi, fiyattan önce gelir.",
   },
@@ -89,6 +99,58 @@ const ADVANTAGES = [
   { icon: <Wrench className="w-5 h-5" />, text: "OEM Eşdeğer Performans" },
 ];
 
+const STATS = [
+  { target: 800, suffix: "+", label: "Aktif Referans" },
+  { target: 50, suffix: "+", label: "Araç Markası Kapsama" },
+  { target: 2, suffix: " Yıl", label: "Ürün Garantisi" },
+  { target: 3, suffix: " Depo", label: "Hızlı Sevkiyat Merkezi" },
+];
+
+const DEPOTS = [
+  {
+    label: "Merkez",
+    name: "Ümraniye Merkez Depo",
+    city: "İstanbul",
+    address: "Barbaros Cd. Beyit Sk. No:17, Yukarı Dudullu — Ümraniye / İstanbul",
+  },
+  {
+    label: "Kocaeli",
+    name: "Gebze Deposu",
+    city: "Kocaeli",
+    address: "Barış, 1804. Sk. No:4, 41400 Gebze / Kocaeli",
+  },
+  {
+    label: "Ege Bölge",
+    name: "Opar Ege Operasyonu",
+    city: "İzmir",
+    address: "Kemalpaşa Kızılüzüm Kırovası Kümeevleri No: 12/1, Kemalpaşa / İzmir",
+  },
+];
+
+/** Stat şeridi sayacı: görünüre girince hedefe sayar; prefers-reduced-motion'da doğrudan hedefe atlar (bkz. HakkimizdaPage StatCard / LandingPage MetricItem, useCounter). */
+function StatCount({ target, suffix = "", label }: { target: number; suffix?: string; label: string }) {
+  const [started, setStarted] = React.useState(false);
+  const ref = React.useRef<HTMLDivElement>(null);
+  const count = useCounter(target, 1600, started);
+
+  React.useEffect(() => {
+    const obs = new IntersectionObserver(([entry]) => {
+      if (entry.isIntersecting) { setStarted(true); obs.disconnect(); }
+    }, { threshold: 0.4 });
+    if (ref.current) obs.observe(ref.current);
+    return () => obs.disconnect();
+  }, []);
+
+  return (
+    <div ref={ref}>
+      <div className="text-3xl font-black tracking-tight mb-1 tabular-nums">
+        {started ? count : 0}{suffix}
+      </div>
+      <div className="text-[13px] text-white/65 font-medium uppercase tracking-wider">{label}</div>
+    </div>
+  );
+}
+
 export function SpartPage() {
   return (
     <div className="do-site bg-white min-h-screen flex flex-col">
@@ -100,9 +162,9 @@ export function SpartPage() {
           <img
             src="/images/spart-hero.jpg"
             alt=""
-            className="w-full h-full object-cover opacity-30"
+            className="w-full h-full object-cover opacity-50"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0e1016] via-[#0e1016]/90 to-[#0e1016]/60" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0e1016] via-[#0e1016]/80 to-[#0e1016]/35" />
         </div>
         <div className="absolute inset-0 do-grid-bg opacity-20" />
 
@@ -137,26 +199,23 @@ export function SpartPage() {
               href="/iletisim"
               className="inline-flex items-center gap-2 border border-white/20 hover:border-white/50 text-white font-semibold px-8 py-4 rounded-md transition-colors"
             >
-              Bayi Bilgisi Al
+              Bayilik İçin Bize Ulaşın
             </Link>
           </div>
         </div>
       </section>
 
+      {/* SEPARATOR — breathing room before the stat strip */}
+      <div className="relative h-10 md:h-14 bg-[#0e1016] overflow-hidden">
+        <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-[#4d74d6]/70 to-transparent" />
+      </div>
+
       {/* STAT BAR */}
       <section className="bg-[#1B3A8F] py-10 text-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            {[
-              { value: "800+", label: "Aktif Referans" },
-              { value: "50+", label: "Araç Markası Kapsama" },
-              { value: "2 Yıl", label: "Ürün Garantisi" },
-              { value: "3 Depo", label: "Hızlı Sevkiyat Merkezi" },
-            ].map((s) => (
-              <div key={s.label}>
-                <div className="text-3xl font-black tracking-tight mb-1">{s.value}</div>
-                <div className="text-[13px] text-white/65 font-medium uppercase tracking-wider">{s.label}</div>
-              </div>
+            {STATS.map((s) => (
+              <StatCount key={s.label} target={s.target} suffix={s.suffix} label={s.label} />
             ))}
           </div>
         </div>
@@ -250,7 +309,7 @@ export function SpartPage() {
       <section className="bg-[#1B3A8F] py-24 text-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="mb-14">
-            <span className="text-xs font-bold uppercase tracking-[0.25em] text-white/50">
+            <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea]">
               Neden SPART?
             </span>
             <h2 className="text-3xl md:text-4xl font-black mt-3 tracking-tight">
@@ -259,16 +318,13 @@ export function SpartPage() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-6">
-            {QUALITIES.map((q, i) => (
+            {QUALITIES.map((q) => (
               <div
                 key={q.title}
                 className="bg-white/[0.07] border border-white/[0.12] rounded-xl p-7 hover:bg-white/[0.11] transition-colors"
               >
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="text-[11px] font-bold text-white/40 tabular-nums">
-                    0{i + 1}
-                  </span>
-                  <div className="flex-1 h-px bg-white/10" />
+                <div className="w-11 h-11 rounded-xl bg-white/10 border border-white/15 flex items-center justify-center mb-5">
+                  {q.icon}
                 </div>
                 <h3 className="font-bold text-lg mb-2">{q.title}</h3>
                 <p className="text-white/65 text-[14px] leading-relaxed">{q.desc}</p>
@@ -281,53 +337,42 @@ export function SpartPage() {
       {/* DAĞITIM ALTYAPISI */}
       <section className="bg-white py-24 border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div className="relative order-2 lg:order-1">
-              <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-slate-100">
-                <img
-                  src="/images/spart-warehouse.jpg"
-                  alt="Delta Oto depo"
-                  className="w-full h-full object-cover"
-                />
-              </div>
-              <div className="absolute -top-5 -right-5 bg-white border border-slate-200 rounded-xl p-4 shadow-lg">
-                <div className="text-2xl font-black text-[#1B3A8F]">81 İl</div>
-                <div className="text-[12px] text-slate-500 mt-0.5">Teslimat Ağı</div>
-              </div>
-            </div>
+          <div className="mb-14 max-w-2xl">
+            <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">Dağıtım Ağı</span>
+            <h2 className="text-3xl md:text-4xl font-black mt-3 mb-6 tracking-tight text-slate-900">
+              Delta Oto Gücüyle Her Yere Ulaşır
+            </h2>
+            <p className="text-slate-600 leading-relaxed">
+              SPART ürünleri, Delta Oto'nun Ümraniye, Gebze ve İzmir'deki üç
+              operasyon merkezinden stoklanır ve sevk edilir. Haftanın altı günü
+              çalışan lojistik ağı, sipariş kesim saatine kadar verilen emirleri
+              aynı gün veya ertesi gün teslim eder.
+            </p>
+          </div>
 
-            <div className="order-1 lg:order-2">
-              <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">Dağıtım Ağı</span>
-              <h2 className="text-3xl md:text-4xl font-black mt-3 mb-6 tracking-tight text-slate-900">
-                Delta Oto Gücüyle<br />Her Yere Ulaşır
-              </h2>
-              <p className="text-slate-600 leading-relaxed mb-8">
-                SPART ürünleri, Delta Oto'nun Ümraniye, Gebze ve İzmir'deki üç
-                operasyon merkezinden stoklanır ve sevk edilir. Haftanın altı günü
-                çalışan lojistik ağı, sipariş kesim saatine kadar verilen emirleri
-                aynı gün veya ertesi gün teslim eder.
-              </p>
-
-              <div className="space-y-3">
-                {[
-                  "Ümraniye — İstanbul Merkez Depo",
-                  "Gebze — Kocaeli Bölge Deposu",
-                  "Opar Ege — Kemalpaşa / İzmir Deposu",
-                ].map((loc) => (
-                  <div key={loc} className="flex items-center gap-3 text-[14px] text-slate-700">
-                    <div className="w-2 h-2 rounded-full bg-[#1B3A8F] shrink-0" />
-                    {loc}
+          <div className="grid md:grid-cols-3 gap-6 mb-10">
+            {DEPOTS.map((depot) => (
+              <div key={depot.name} className="do-card bg-white border border-slate-200 rounded-xl p-7">
+                <div className="flex items-start justify-between mb-5">
+                  <div className="w-10 h-10 rounded-xl bg-[#1B3A8F]/[0.08] border border-[#1B3A8F]/[0.12] flex items-center justify-center shrink-0">
+                    <MapPin className="w-5 h-5 text-[#1B3A8F]" />
                   </div>
-                ))}
+                  <span className="text-[10px] font-bold uppercase tracking-widest text-[#1B3A8F] bg-[#1B3A8F]/[0.08] px-2.5 py-1 rounded">
+                    {depot.label}
+                  </span>
+                </div>
+                <h3 className="text-[17px] font-black text-slate-900 mb-1">{depot.name}</h3>
+                <p className="text-slate-400 text-[13px] mb-4">{depot.city}</p>
+                <p className="text-slate-500 text-[13px] leading-relaxed border-t border-slate-100 pt-4">{depot.address}</p>
               </div>
+            ))}
+          </div>
 
-              <div className="mt-8 bg-[#1B3A8F]/[0.05] border border-[#1B3A8F]/[0.12] rounded-xl px-6 py-4 flex items-center gap-4">
-                <CheckCircle2 className="w-5 h-5 text-[#1B3A8F] shrink-0" />
-                <p className="text-[13.5px] text-slate-700">
-                  Cumartesi operasyonu dahil — hafta sonunu beklemeyin.
-                </p>
-              </div>
-            </div>
+          <div className="bg-[#1B3A8F]/[0.05] border border-[#1B3A8F]/[0.12] rounded-xl px-6 py-4 flex items-center gap-4">
+            <CheckCircle2 className="w-5 h-5 text-[#1B3A8F] shrink-0" />
+            <p className="text-[13.5px] text-slate-700">
+              Cumartesi operasyonu dahil — hafta sonunu beklemeyin.
+            </p>
           </div>
         </div>
       </section>
@@ -336,7 +381,7 @@ export function SpartPage() {
       <section className="relative bg-[#1B3A8F] text-white py-24 overflow-hidden">
         <div className="absolute inset-0 do-grid-bg opacity-20" />
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 text-center">
-          <span className="inline-block text-xs font-bold uppercase tracking-[0.25em] text-white/50 mb-6">SPART Original Replacement</span>
+          <span className="inline-block text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea] mb-6">SPART Original Replacement</span>
           <h2 className="text-3xl md:text-4xl font-black tracking-tight mb-4">
             SPART Bayisi Olmak İster Misiniz?
           </h2>

@@ -1,7 +1,21 @@
 import React from "react";
-import { ExternalLink, Quote, Linkedin } from "lucide-react";
+import {
+  ExternalLink,
+  Quote,
+  Linkedin,
+  ChevronDown,
+  HeartPulse,
+  Utensils,
+  GraduationCap,
+  Clock,
+  CalendarCheck,
+  Bus,
+  BookOpen,
+  Users,
+} from "lucide-react";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
+import { useReveal } from "../hooks/use-motion";
 
 const CULTURE = [
   { title: "Performans Odaklılık", desc: "Sonuçlar ve taahhüt bütünlüğü temel değerlendirme kriterleridir. Hedefler netleştirilir, takip edilir ve gerçekleştirilir." },
@@ -17,14 +31,14 @@ const TESTIMONIALS = [
 ];
 
 const BENEFITS = [
-  { label: "Özel sağlık sigortası",           sub: "Tüm çalışanlar için" },
-  { label: "Yemek kartı katkısı",              sub: "Günlük katkı desteği" },
-  { label: "Sektörel eğitim bütçesi",          sub: "Yıllık gelişim programı" },
-  { label: "Esnek çalışma saatleri",           sub: "Pozisyona göre uygulanır" },
-  { label: "Yıllık kariyer görüşmesi",         sub: "Şeffaf performans değerlendirmesi" },
-  { label: "Ulaşım desteği",                   sub: "Servis veya ulaşım katkısı" },
-  { label: "Marka ve ürün eğitimleri",         sub: "Tedarikçi işbirliğiyle" },
-  { label: "Mentörlük programı",               sub: "Kıdemli çalışan rehberliği" },
+  { label: "Özel sağlık sigortası",     sub: "Tüm çalışanlar için",               Icon: HeartPulse },
+  { label: "Yemek kartı katkısı",        sub: "Günlük katkı desteği",              Icon: Utensils },
+  { label: "Sektörel eğitim bütçesi",    sub: "Yıllık gelişim programı",           Icon: GraduationCap },
+  { label: "Esnek çalışma saatleri",     sub: "Pozisyona göre uygulanır",          Icon: Clock },
+  { label: "Yıllık kariyer görüşmesi",   sub: "Şeffaf performans değerlendirmesi", Icon: CalendarCheck },
+  { label: "Ulaşım desteği",             sub: "Servis veya ulaşım katkısı",        Icon: Bus },
+  { label: "Marka ve ürün eğitimleri",   sub: "Tedarikçi işbirliğiyle",            Icon: BookOpen },
+  { label: "Mentörlük programı",         sub: "Kıdemli çalışan rehberliği",        Icon: Users },
 ];
 
 const JOB_PLATFORMS = [
@@ -47,6 +61,15 @@ const JOB_PLATFORMS = [
 ];
 
 export function KariyerPage() {
+  const reveal = useReveal();
+
+  const scrollToPlatforms = () => {
+    const target = document.getElementById("kariyer-platformlari");
+    if (!target) return;
+    const reduceMotion = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    target.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", block: "start" });
+  };
+
   return (
     <div className="do-site bg-white min-h-screen">
       <SiteHeader />
@@ -79,20 +102,32 @@ export function KariyerPage() {
           <p className="text-[17px] text-gray-300 leading-[1.8] max-w-2xl mb-10 font-light">
             50 yıllık kurumsal birikimin parçası olun. Delta Oto'da kariyer; güçlü sektör yetkinliği, dinamik bir ekip yapısı ve uzun vadeli profesyonel gelişim fırsatı anlamına gelir.
           </p>
+          <button
+            type="button"
+            onClick={scrollToPlatforms}
+            className="inline-flex items-center gap-2.5 bg-[#1B3A8F] hover:bg-[#2547B5] text-white font-semibold px-8 py-4 rounded-md transition-colors shadow-[0_0_32px_rgba(27,58,143,0.3)] group"
+          >
+            Açık Pozisyonları Gör
+            <ChevronDown className="w-5 h-5 group-hover:translate-y-0.5 transition-transform" />
+          </button>
         </div>
       </section>
 
       {/* KÜLTÜR — light */}
       <section className="bg-white py-24">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="mb-14">
+          <div ref={reveal} className="do-reveal mb-14">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">Çalışma Kültürü</span>
             <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-2 tracking-tight">Kurumsal Kültür Değerlerimiz</h2>
             <p className="text-slate-500 mt-3 text-[15px] max-w-2xl">Delta Oto'da başarı bireysel değil, kolektiftir. Sonuç odaklı, dürüst ve gelişime açık bir ortamda çalışıyoruz.</p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
-            {CULTURE.map((v) => (
-              <div key={v.title} className="border border-slate-200 rounded-xl p-7 hover:border-[#1B3A8F]/30 hover:shadow-lg transition-all">
+            {CULTURE.map((v, i) => (
+              <div
+                key={v.title}
+                ref={reveal}
+                className={`do-reveal do-d${(i % 4) + 1} border border-slate-200 rounded-xl p-7 hover:border-[#1B3A8F]/30 hover:shadow-lg transition-all`}
+              >
                 <h3 className="text-[15px] font-bold text-slate-900 mb-3 leading-snug">{v.title}</h3>
                 <p className="text-slate-500 text-[13.5px] leading-relaxed">{v.desc}</p>
               </div>
@@ -104,19 +139,23 @@ export function KariyerPage() {
       {/* ÇALIŞAN SESİ — navy */}
       <section className="bg-[#1B3A8F] py-24 text-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="mb-14">
+          <div ref={reveal} className="do-reveal mb-14">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea]">Çalışan Deneyimi</span>
             <h2 className="text-3xl md:text-4xl font-black mt-2 tracking-tight">Delta Oto'da Olmak</h2>
             <p className="text-white/60 mt-3 max-w-xl text-[15px]">Farklı departmanlardan çalışanların Delta Oto deneyimi.</p>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
-            {TESTIMONIALS.map((t) => (
-              <div key={t.name} className="bg-white/[0.08] border border-white/[0.12] rounded-xl p-8 hover:bg-white/[0.14] transition-colors flex flex-col">
+            {TESTIMONIALS.map((t, i) => (
+              <div
+                key={t.name}
+                ref={reveal}
+                className={`do-reveal do-d${(i % 4) + 1} bg-white/[0.08] border border-white/[0.12] rounded-xl p-8 hover:bg-white/[0.14] transition-colors flex flex-col`}
+              >
                 <Quote className="w-5 h-5 text-[#7d9bea] mb-5 shrink-0" />
                 <p className="text-white/75 text-[14px] leading-[1.85] flex-1 italic">"{t.quote}"</p>
                 <div className="mt-6 pt-5 border-t border-white/10">
                   <div className="text-[13px] font-bold text-white">{t.name}</div>
-                  <div className="text-[12px] text-[#7d9bea] mt-0.5">{t.yrs} Deneyim</div>
+                  <div className="text-[12px] text-blue-100 mt-0.5">{t.yrs} Deneyim</div>
                 </div>
               </div>
             ))}
@@ -125,9 +164,9 @@ export function KariyerPage() {
       </section>
 
       {/* KARİYER PLATFORMLARI — white */}
-      <section className="bg-white py-24">
+      <section id="kariyer-platformlari" className="bg-white py-24 scroll-mt-24 sm:scroll-mt-28">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="mb-14">
+          <div ref={reveal} className="do-reveal mb-14">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">Açık Pozisyonlar</span>
             <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-2 tracking-tight">Kariyer Fırsatları</h2>
             <p className="text-slate-500 mt-3 max-w-xl text-[15px]">
@@ -135,13 +174,14 @@ export function KariyerPage() {
             </p>
           </div>
           <div className="grid md:grid-cols-2 gap-6 mb-10">
-            {JOB_PLATFORMS.map(({ name, desc, url, label, Icon }) => (
+            {JOB_PLATFORMS.map(({ name, desc, url, label, Icon }, i) => (
               <a
                 key={name}
                 href={url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group border border-slate-200 rounded-2xl p-8 hover:border-[#1B3A8F]/40 hover:shadow-xl transition-all block"
+                ref={reveal}
+                className={`do-reveal do-d${(i % 4) + 1} group border border-slate-200 rounded-2xl p-8 hover:border-[#1B3A8F]/40 hover:shadow-xl transition-all block`}
               >
                 <div className="flex items-start justify-between mb-6">
                   <div className="w-14 h-14 bg-[#1B3A8F]/[0.08] rounded-xl flex items-center justify-center group-hover:bg-[#1B3A8F] transition-colors">
@@ -167,24 +207,30 @@ export function KariyerPage() {
       </section>
 
       {/* YAN HAKLAR — navy */}
-      <section className="relative bg-[#1B3A8F] text-white py-20 overflow-hidden">
+      <section className="relative bg-[#1B3A8F] text-white py-24 overflow-hidden">
         <div className="absolute inset-0">
           <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&q=80" alt="" className="w-full h-full object-cover opacity-10" />
           <div className="absolute inset-0 bg-[#1B3A8F]/80" />
         </div>
         <div className="absolute inset-0 do-grid-bg opacity-25" />
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-          <div className="mb-10">
+          <div ref={reveal} className="do-reveal mb-14">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea] block mb-3">Çalışan Avantajları</span>
             <h2 className="text-3xl font-black tracking-tight">Yan Haklar ve İmkânlar</h2>
             <p className="text-white/55 mt-3 text-[15px] max-w-xl">Uzun vadeli kurumsal ilişkilerde çalışanların gelişimine yatırım yapıyoruz.</p>
           </div>
-          <div className="grid md:grid-cols-4 gap-4">
-            {BENEFITS.map((b) => (
-              <div key={b.label} className="bg-white/[0.06] border border-white/[0.1] rounded-xl px-5 py-5 hover:bg-white/[0.1] transition-colors">
-                <div className="w-2 h-2 rounded-full bg-[#7d9bea] mb-4" />
+          <div className="grid md:grid-cols-4 gap-5">
+            {BENEFITS.map((b, i) => (
+              <div
+                key={b.label}
+                ref={reveal}
+                className={`do-reveal do-d${(i % 4) + 1} bg-white/[0.06] border border-white/[0.1] rounded-xl px-5 py-5 hover:bg-white/[0.1] transition-colors`}
+              >
+                <div className="w-11 h-11 rounded-xl bg-white/10 flex items-center justify-center mb-4">
+                  <b.Icon className="w-5 h-5 text-[#7d9bea]" />
+                </div>
                 <div className="text-[13.5px] font-semibold text-gray-200">{b.label}</div>
-                <div className="text-[12px] text-white/40 mt-1">{b.sub}</div>
+                <div className="text-[12px] text-white/70 mt-1">{b.sub}</div>
               </div>
             ))}
           </div>

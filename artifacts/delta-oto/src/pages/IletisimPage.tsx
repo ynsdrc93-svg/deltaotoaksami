@@ -114,7 +114,7 @@ export function IletisimPage() {
                   <Icon className="w-5 h-5 text-[#1B3A8F]" />
                 </div>
                 <h3 className="text-[14px] font-bold text-slate-900 mb-2 leading-snug">{dept}</h3>
-                <p className="text-slate-400 text-[12.5px] leading-relaxed mb-3 flex-1">{info}</p>
+                <p className="text-slate-500 text-[12.5px] leading-relaxed mb-3 flex-1">{info}</p>
                 <div className="border-t border-slate-100 pt-3 space-y-1.5">
                   {lines.map(l => (
                     <div key={l} className="flex items-center gap-2">
@@ -128,7 +128,7 @@ export function IletisimPage() {
                   </div>
                   <div className="flex items-start gap-2 mt-1">
                     <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0 mt-0.5" />
-                    <span className="text-[11.5px] text-slate-400 leading-snug">{hours}</span>
+                    <span className="text-[11.5px] text-slate-500 leading-snug">{hours}</span>
                   </div>
                 </div>
               </div>
@@ -137,39 +137,9 @@ export function IletisimPage() {
         </div>
       </section>
 
-      {/* LOKASYONLAR — navy */}
-      <section className="bg-[#1B3A8F] py-20 text-white">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="mb-10">
-            <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea] block mb-3">Operasyon Merkezlerimiz</span>
-            <h2 className="text-3xl font-black tracking-tight">Bizi Nerede Bulabilirsiniz</h2>
-            <p className="text-white/55 mt-3 text-[15px]">Ümraniye, Gebze ve İzmir'deki üç merkezimizden Türkiye'nin tamamına hizmet veriyoruz.</p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-5">
-            {LOCATIONS.map((loc) => (
-              <div key={loc.name} className="bg-white/[0.08] border border-white/[0.12] rounded-xl p-7 hover:bg-white/[0.14] transition-colors">
-                <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <span className="text-[11px] font-bold uppercase tracking-widest text-[#7d9bea]">{loc.type}</span>
-                    <h3 className="text-[16px] font-bold mt-1">{loc.name}</h3>
-                    <p className="text-white/50 text-[12px] mt-0.5">{loc.city}</p>
-                  </div>
-                  <MapPin className="w-5 h-5 text-[#7d9bea] shrink-0 mt-1" />
-                </div>
-                <p className="text-white/65 text-[13px] leading-relaxed mb-3">{loc.address}</p>
-                {loc.phone && (
-                  <div className="flex items-center gap-2 mt-2">
-                    <Phone className="w-3.5 h-3.5 text-[#7d9bea] shrink-0" />
-                    <span className="text-[13px] text-white/80">{loc.phone}</span>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* FORM — light */}
+      {/* FORM + ADRES — light. Lokasyonlar'dan önceye taşındı: footer'dan hemen önceki bölüm
+          proje kuralı gereği navy olmalı, bu da yalnızca burada zaten navy olan Lokasyonlar'ı
+          en sona almakla (bkz. CLAUDE.md §9.2) en az müdahaleyle sağlanıyor. */}
       <section className="bg-[#f8fafc] py-20">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-5 gap-12 items-start">
 
@@ -178,24 +148,28 @@ export function IletisimPage() {
               <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">Merkez Adres</span>
               <h2 className="text-2xl font-black text-slate-900 mt-2">Genel İletişim</h2>
             </div>
-            {[
-              { Icon: MapPin, label: "Merkez Ofis",     lines: ["Barbaros Cd. Beyit Sk. No:17,", "Yukarı Dudullu — Ümraniye / İstanbul"] },
-              { Icon: Phone,  label: "Santral",          lines: ["0216 526 64 64 / 0216 526 33 44", "Pazartesi – Cumartesi, 08:30 – 18:00"] },
-              { Icon: Mail,   label: "Kurumsal E-posta", lines: ["info@deltaoto.com", "b2b@deltaoto.com"] },
-              { Icon: Globe,  label: "Dijital Kanallar", lines: ["www.deltaoto.com.tr", "b2b.deltaoto.com.tr (B2B Portal)"] },
-            ].map(({ Icon, label, lines }) => (
-              <div key={label} className="flex gap-4 bg-white rounded-xl p-5 border border-slate-200 shadow-sm hover:border-[#1B3A8F]/30 transition-colors">
-                <div className="shrink-0 w-10 h-10 bg-[#1B3A8F]/[0.08] rounded-lg flex items-center justify-center">
-                  <Icon className="w-5 h-5 text-[#1B3A8F]" />
+            {/* Tek, yoğun özet kart — Departman İletişim'deki ikon-kart ızgarasının bir
+                tekrarı olmasın diye satır bölmeli tek kart olarak tasarlandı. */}
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm divide-y divide-slate-100 overflow-hidden">
+              {[
+                { Icon: MapPin, label: "Merkez Ofis",     lines: ["Barbaros Cd. Beyit Sk. No:17,", "Yukarı Dudullu — Ümraniye / İstanbul"] },
+                { Icon: Phone,  label: "Santral",          lines: ["0216 526 64 64 / 0216 526 33 44", "Pazartesi – Cumartesi, 08:30 – 18:00"] },
+                { Icon: Mail,   label: "Kurumsal E-posta", lines: ["info@deltaoto.com", "b2b@deltaoto.com"] },
+                { Icon: Globe,  label: "Dijital Kanallar", lines: ["www.deltaoto.com.tr", "b2b.deltaoto.com.tr (B2B Portal)"] },
+              ].map(({ Icon, label, lines }) => (
+                <div key={label} className="flex items-center gap-3.5 px-5 py-4 hover:bg-slate-50 transition-colors">
+                  <div className="shrink-0 w-8 h-8 bg-[#1B3A8F]/[0.08] rounded-xl flex items-center justify-center">
+                    <Icon className="w-4 h-4 text-[#1B3A8F]" />
+                  </div>
+                  <div>
+                    <div className="text-[10.5px] font-bold uppercase tracking-wider text-slate-500 mb-0.5">{label}</div>
+                    {lines.map((l, i) => (
+                      <div key={i} className={`text-[12.5px] leading-snug ${i === 0 ? "text-slate-900 font-semibold" : "text-slate-500"}`}>{l}</div>
+                    ))}
+                  </div>
                 </div>
-                <div>
-                  <div className="text-[11px] font-bold uppercase tracking-wider text-slate-400 mb-1.5">{label}</div>
-                  {lines.map((l, i) => (
-                    <div key={i} className={`text-[13.5px] ${i === 0 ? "text-slate-900 font-semibold" : "text-slate-500"}`}>{l}</div>
-                  ))}
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
           </div>
 
           <div className="lg:col-span-3 bg-white rounded-2xl border border-slate-200 shadow-sm p-10">
@@ -254,6 +228,52 @@ export function IletisimPage() {
               Talep Gönderin <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
             </button>
             <p className="text-center text-[12px] text-slate-400 mt-4">Verileriniz yalnızca talebinizi karşılamak amacıyla kullanılır.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* LOKASYONLAR — navy. Footer'dan hemen önceki bölüm olduğu için proje kuralı
+          gereği navy (#1B3A8F) kalıyor; sırası Form+Adres ile değiştirildi. */}
+      <section className="bg-[#1B3A8F] py-20 text-white">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="mb-10">
+            <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea] block mb-3">Operasyon Merkezlerimiz</span>
+            <h2 className="text-3xl font-black tracking-tight">Bizi Nerede Bulabilirsiniz</h2>
+            <p className="text-white/55 mt-3 text-[15px]">Ümraniye, Gebze ve İzmir'deki üç merkezimizden Türkiye'nin tamamına hizmet veriyoruz.</p>
+          </div>
+          <div className="grid md:grid-cols-3 gap-5">
+            {LOCATIONS.map((loc) => {
+              const isPrimary = Boolean(loc.phone);
+              return (
+                <div
+                  key={loc.name}
+                  className={`do-card bg-white/[0.08] border rounded-xl p-7 ${isPrimary ? "border-[#7d9bea]/40" : "border-white/[0.12]"}`}
+                >
+                  <div className="flex items-start justify-between mb-4">
+                    <div>
+                      <span className="text-[11px] font-bold uppercase tracking-widest text-[#7d9bea]">{loc.type}</span>
+                      <h3 className="text-[16px] font-bold mt-1">{loc.name}</h3>
+                      <p className="text-white/50 text-[12px] mt-0.5">{loc.city}</p>
+                    </div>
+                    <div className="flex flex-col items-end gap-2 shrink-0 mt-1">
+                      {isPrimary && (
+                        <span className="text-[9.5px] font-bold uppercase tracking-wider text-[#0e1016] bg-[#7d9bea] rounded-full px-2.5 py-1">
+                          {loc.type}
+                        </span>
+                      )}
+                      <MapPin className="w-5 h-5 text-[#7d9bea]" />
+                    </div>
+                  </div>
+                  <p className="text-white/65 text-[13px] leading-relaxed mb-3">{loc.address}</p>
+                  {loc.phone && (
+                    <div className="flex items-center gap-2 mt-2">
+                      <Phone className="w-3.5 h-3.5 text-[#7d9bea] shrink-0" />
+                      <span className="text-[13px] text-white/80">{loc.phone}</span>
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
