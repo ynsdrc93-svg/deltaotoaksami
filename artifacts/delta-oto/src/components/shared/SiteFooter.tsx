@@ -74,22 +74,10 @@ export function SiteFooter() {
 
         </div>
 
-        <div className="pt-6 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-3 text-[11.5px] text-gray-600">
-          <div className="flex flex-wrap items-center justify-center gap-x-2.5 gap-y-1.5 text-center sm:text-left">
-            <span>Delta Oto</span>
-            <span className="opacity-40">·</span>
-            <span>Barbaros Cd. Beyit Sk. No:17, Yukarı Dudullu — Ümraniye / İstanbul</span>
-            <span className="opacity-40">·</span>
-            <a href="tel:02165266464" className="hover:text-gray-300 transition-colors">0216 526 64 64</a>
-            <span className="opacity-40">·</span>
-            <a href="mailto:info@deltaoto.com" className="hover:text-gray-300 transition-colors">info@deltaoto.com</a>
-          </div>
-        </div>
-
-        <div className="pt-5 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
+        <div className="pt-6 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
           <span>© 2026 Delta Oto. Tüm hakları saklıdır.</span>
           <div className="flex items-center gap-1.5">
-            <div className="w-1.5 h-1.5 rounded-full bg-[#1B3A8F] animate-pulse" />
+            <div className="w-1.5 h-1.5 rounded-full bg-[#1B3A8F]" />
             <span>Delta Oto · Kuruluş 1976</span>
           </div>
         </div>

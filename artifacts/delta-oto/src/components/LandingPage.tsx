@@ -61,26 +61,6 @@ function useCounter(target: number, duration = 1600, start = false) {
   return val;
 }
 
-function MetricItem({ number, suffix = "", label, delay = "0ms", plus = false }: { number: number; suffix?: string; label: string; delay?: string; plus?: boolean }) {
-  const [started, setStarted] = useState(false);
-  const divRef = useRef<HTMLDivElement>(null);
-  const count = useCounter(number, 1800, started);
-  useEffect(() => {
-    const obs = new IntersectionObserver(([e]) => { if (e.isIntersecting) { setStarted(true); obs.disconnect(); } }, { threshold: 0.3 });
-    if (divRef.current) obs.observe(divRef.current);
-    return () => obs.disconnect();
-  }, []);
-  return (
-    <div ref={divRef} className="text-center px-10 py-10 md:py-0 relative" style={{ transitionDelay: delay }}>
-      <div className="do-metric-num text-6xl md:text-7xl xl:text-8xl font-black mb-3 leading-none tracking-tighter">
-        {started ? `${suffix}${count}` : `${suffix}0`}
-        {plus && "+"}
-      </div>
-      <div className="text-slate-600 text-sm font-medium tracking-widest uppercase leading-relaxed max-w-[180px] mx-auto">{label}</div>
-    </div>
-  );
-}
-
 function useScrollProgress() {
   const [p, setP] = useState(0);
   useEffect(() => {
@@ -326,15 +306,28 @@ export function LandingPage() {
       </section>
 
       {/* POWER METRICS (light) */}
-      <section className="relative bg-[#f8fafc] border-y border-slate-200 py-16 md:py-20 overflow-hidden">
+      <section className="relative bg-[#f8fafc] border-y border-slate-200 py-20 md:py-24 overflow-hidden">
         <div className="absolute inset-0 do-grid-bg-light"></div>
         <div className="absolute left-0 top-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#1B3A8F]/40 to-transparent"></div>
 
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-slate-200">
-            <MetricItem number={250} plus label="Ulusal ve Uluslararası Marka Referansı" delay="0ms" />
-            <MetricItem number={81} plus label="Kesintisiz Dağıtım ve Lojistik Ağı" delay="80ms" />
-            <MetricItem number={1976} label="Kuruluş ve Sektörel Liderlik" delay="160ms" />
+          <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-16">
+            <div className="lg:w-[48%] text-center lg:text-left">
+              <CountUp target={1976} className="do-metric-num block text-7xl sm:text-8xl lg:text-[128px] font-black leading-none tracking-tighter tabular-nums" />
+              <div className="text-slate-600 text-sm font-bold tracking-[0.18em] uppercase mt-4">Kuruluş ve Sektörel Liderlik</div>
+            </div>
+            <div className="hidden lg:block w-px self-stretch bg-slate-300"></div>
+            <div className="lg:w-[48%] w-full grid grid-cols-2 gap-8 sm:gap-12">
+              {[
+                { target: 250, suffix: "+", label: "Ulusal ve Uluslararası Marka Referansı" },
+                { target: 81, suffix: "+", label: "Kesintisiz Dağıtım ve Lojistik Ağı" },
+              ].map(({ target, suffix, label }) => (
+                <div key={label} className="text-center lg:text-left">
+                  <CountUp target={target} suffix={suffix} className="do-metric-num block text-5xl sm:text-6xl font-black leading-none tracking-tighter tabular-nums" />
+                  <div className="text-slate-500 text-[11px] font-semibold tracking-[0.15em] uppercase mt-4 leading-relaxed max-w-[170px] mx-auto lg:mx-0">{label}</div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -376,35 +369,32 @@ export function LandingPage() {
               </div>
             </div>
 
-            <div className="lg:w-1/2 flex flex-col sm:flex-row gap-5 w-full">
-              {[
-                { Icon: Globe, label: "Groupauto International", sub: "40+ Ülke · 3.000+ Üye Firma", desc: "Dünyanın en büyük bağımsız yedek parça ağı: global satın alma gücü, ortak kalite standartları ve uluslararası tedarik kapasitesi." },
-                { Icon: Network, label: "Groupauto Türkiye", sub: "Delta Oto Bünyesinde", desc: "Türkiye'de Groupauto ağının operasyonel ayağı. Global satın alma avantajını yerel stok derinliği ve lojistik hızıyla birleştiriyoruz." },
-              ].map((item, i) => (
-                <div
-                  key={item.label}
-                  ref={ref}
-                  className={`do-reveal ${i === 1 ? "do-d2" : "do-d1"} group relative flex-1 overflow-hidden rounded-xl border border-white/15 bg-white/[0.06] backdrop-blur-sm p-8 transition-all duration-500 hover:border-white/40 hover:bg-white/[0.1] hover:-translate-y-1.5 hover:shadow-[0_24px_60px_rgba(0,0,0,0.35)] min-h-[230px]`}
-                >
-                  <div className="do-card-beam"></div>
-                  <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-white/10 to-transparent rounded-bl-[100%] opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
-                  <div className="relative z-10 flex flex-col h-full">
-                    <div className="flex items-center justify-between mb-7">
-                      <div className="w-12 h-12 rounded-lg bg-white/10 border border-white/15 flex items-center justify-center group-hover:bg-[#2547B5] group-hover:border-[#2547B5] group-hover:scale-105 transition-all duration-300">
-                        <item.Icon className="w-6 h-6 text-white" />
-                      </div>
-                      <span className="text-[11px] font-black tracking-[0.3em] text-blue-200/40 tabular-nums">0{i + 1}</span>
+            <div className="lg:w-1/2 w-full">
+              <div
+                ref={ref}
+                className="do-reveal do-d1 group relative overflow-hidden rounded-xl border border-white/15 bg-white/[0.06] backdrop-blur-sm p-8 sm:p-10 transition-all duration-500 hover:border-white/40 hover:bg-white/[0.1] hover:-translate-y-1.5 hover:shadow-[0_24px_60px_rgba(0,0,0,0.35)]"
+              >
+                <div className="do-card-beam"></div>
+                <div className="relative z-10">
+                  <div className="w-12 h-12 rounded-lg bg-white/10 border border-white/15 flex items-center justify-center mb-6 group-hover:bg-[#2547B5] group-hover:border-[#2547B5] group-hover:scale-105 transition-all duration-300">
+                    <Globe className="w-6 h-6 text-white" />
+                  </div>
+                  <div className="font-bold text-white text-xl leading-tight mb-2">Groupauto Ağı</div>
+                  <p className="text-sm text-blue-100/70 leading-relaxed font-light mb-8">
+                    Groupauto International'ın Türkiye üyesi olarak; global ağın satın alma gücünü, Delta Oto'nun yerel stok derinliği ve lojistik hızıyla birleştiren tek, entegre bir tedarik yapısı işletiyoruz.
+                  </p>
+                  <div className="grid grid-cols-2 gap-6 pt-6 border-t border-white/10">
+                    <div>
+                      <div className="text-[11px] font-black tracking-[0.2em] text-[#7d9bea] uppercase mb-2">International</div>
+                      <p className="text-[13px] text-blue-100/60 leading-relaxed">40+ ülke, 3.000+ üye firma ile dünyanın en büyük bağımsız yedek parça ağı.</p>
                     </div>
-                    <div className="font-bold text-white text-lg leading-tight">{item.label}</div>
-                    <div className="text-[11px] text-[#7d9bea] mt-1.5 uppercase tracking-[0.2em] font-semibold">{item.sub}</div>
-                    <p className="text-sm text-blue-100/65 leading-relaxed font-light mt-4">{item.desc}</p>
-                    <div className="mt-auto pt-5 flex items-center gap-2 text-[12px] text-blue-200/50 group-hover:text-white transition-colors duration-300">
-                      <span className="w-5 h-[1.5px] bg-current"></span>
-                      Detaylı Bilgi
+                    <div className="pl-6 border-l border-white/10">
+                      <div className="text-[11px] font-black tracking-[0.2em] text-[#7d9bea] uppercase mb-2">Türkiye</div>
+                      <p className="text-[13px] text-blue-100/60 leading-relaxed">Delta Oto bünyesinde yürütülen operasyonel ayak; yerel hız ve stok gücü.</p>
                     </div>
                   </div>
                 </div>
-              ))}
+              </div>
             </div>
           </div>
         </div>
@@ -416,13 +406,12 @@ export function LandingPage() {
           <img
             ref={opsParallax}
             src="/images/delta-oto-ops.png"
-            alt="Operations"
-            className="w-full h-full object-cover opacity-25 will-change-transform"
+            alt="Delta Oto operasyon merkezi"
+            className="w-full h-full object-cover opacity-60 will-change-transform"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0e1016] via-[#0e1016]/85 to-[#0e1016]/40"></div>
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0e1016] via-transparent to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0e1016] via-[#0e1016]/55 to-[#0e1016]/10"></div>
         </div>
-        <div className="absolute inset-0 do-grid-bg"></div>
+        <div className="absolute inset-0 do-grid-bg opacity-50"></div>
 
         <div className="max-w-7xl mx-auto px-6 lg:px-8 py-20 md:py-28 relative z-10 w-full">
           <div className="max-w-2xl mb-14">
@@ -491,9 +480,6 @@ export function LandingPage() {
               <p className="text-[15px] text-slate-600 leading-[1.8] font-light">
                 Mayıs 2026 itibarıyla Opar Ege Bölge Bayiliği operasyonunu devralarak Ege bölgesindeki tedarik ağımızı doğrudan genişlettik. Bu adımla birlikte bölgeye yönelik ürün çeşitliliğimiz ve teslimat kapasitemiz önemli ölçüde güçlendi.
               </p>
-              <div className="mt-8 flex items-center gap-2 text-[13px] text-[#1B3A8F] font-medium opacity-0 group-hover:opacity-100 transition-opacity">
-                Devamını Oku <ArrowRight className="w-3.5 h-3.5" />
-              </div>
             </div>
 
             <div
@@ -512,9 +498,6 @@ export function LandingPage() {
               <p className="text-[15px] text-slate-600 leading-[1.8] font-light">
                 Dubai'de düzenlenen Groupauto International O2O Tedarikçi Günleri'nde Türkiye'yi ve Delta Oto'yu temsil ettik. 35'ten fazla global üreticiyle gerçekleştirilen görüşmelerde tedarik portföyümüzü ve piyasa trendlerini ele aldık.
               </p>
-              <div className="mt-8 flex items-center gap-2 text-[13px] text-[#1B3A8F] font-medium opacity-0 group-hover:opacity-100 transition-opacity">
-                Devamını Oku <ArrowRight className="w-3.5 h-3.5" />
-              </div>
             </div>
           </div>
         </div>
@@ -566,23 +549,15 @@ export function LandingPage() {
             </div>
             <div ref={ref} className="do-reveal do-d3 flex flex-col gap-4 shrink-0 w-full sm:w-auto">
               <div className="flex gap-4">
-                <button className="bg-white text-[#1B3A8F] font-bold px-8 py-4 rounded-md hover:bg-gray-100 transition-colors text-sm flex items-center gap-2 group">
+                <Link href="#" className="bg-white text-[#1B3A8F] font-bold px-8 py-4 rounded-md hover:bg-gray-100 transition-colors text-sm flex items-center gap-2 group">
                   B2B Portal
                   <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-                </button>
+                </Link>
                 <Link href="/iletisim" className="border border-white/30 hover:border-white/60 text-white font-medium px-8 py-4 rounded-md transition-colors text-sm inline-flex items-center">
                   İletişim
                 </Link>
               </div>
             </div>
-          </div>
-          <div ref={ref} className="do-reveal do-d4 flex flex-wrap gap-6 pt-8 border-t border-white/10 text-[13px] text-blue-100/70">
-            {["Aynı gün sevkiyat · 14:00 kesim saati", "50.000+ aktif SKU", "81 il + ihracat kapsamı"].map(t => (
-              <span key={t} className="flex items-center gap-2">
-                <span className="w-1.5 h-1.5 rounded-full bg-[#7d9bea]"></span>
-                {t}
-              </span>
-            ))}
           </div>
         </div>
       </section>
