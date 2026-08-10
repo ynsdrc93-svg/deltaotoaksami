@@ -3,23 +3,26 @@ import { Link } from "wouter";
 import { ChevronRight, ArrowRight, CheckCircle2, Globe, Package, Shield, Zap, Handshake, X } from "lucide-react";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
-import { useEscapeKey } from "../hooks/use-motion";
+import { useEscapeKey, useReveal } from "../hooks/use-motion";
 
-const MARQUEE_CSS = `
-  @keyframes brand-ltr { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
-  @keyframes brand-rtl { 0% { transform: translateX(-50%); } 100% { transform: translateX(0); } }
-  .bm-wrap { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 6%, #000 94%, transparent 100%); mask-image: linear-gradient(90deg, transparent 0%, #000 6%, #000 94%, transparent 100%); }
-  .bm-track { display: flex; width: max-content; gap: 16px; }
-  .bm-track.ltr { animation: brand-ltr 45s linear infinite; }
-  .bm-track.rtl { animation: brand-rtl 50s linear infinite; }
-  .bm-wrap:hover .bm-track { animation-play-state: paused; }
-  @media (prefers-reduced-motion: reduce) {
-    .bm-track.ltr, .bm-track.rtl { animation: none; }
-  }
-`;
-
-const ROW1 = ["bosch","valeo","hella","brembo","ngk","sachs","denso","monroe","trw","mahle","gates","skf","febi","osram","philips","delphi","ina"];
-const ROW2 = ["contitech","luk","lemforder","fag","elring","corteco","filtron","knecht","mannfilter","champion","borgwarner","swag","optimal","kale","wahler","vdo","gunsan"];
+// Sonsuz kayan logo bandı yerine: küratörlü, hiyerarşili statik sergi.
+// 3 "featured" marka 2x2 büyük karo, geri kalanı standart karo — bento-grid.
+// Kapsamlılık işini artık kategori panelleri üstleniyor, bu bölümün her şeyi
+// göstermeye çalışmasına gerek yok.
+const FLAGSHIP_BRANDS = [
+  { slug: "bosch", featured: true },
+  { slug: "contitech", featured: true },
+  { slug: "brembo", featured: true },
+  { slug: "valeo", featured: false },
+  { slug: "hella", featured: false },
+  { slug: "denso", featured: false },
+  { slug: "skf", featured: false },
+  { slug: "mahle", featured: false },
+  { slug: "trw", featured: false },
+  { slug: "ngk", featured: false },
+  { slug: "philips", featured: false },
+  { slug: "osram", featured: false },
+];
 
 const BRAND_LABELS: Record<string, string> = {
   bosch: "Bosch", valeo: "Valeo", hella: "Hella", brembo: "Brembo", ngk: "NGK", sachs: "Sachs",
@@ -59,19 +62,8 @@ const ADVANTAGES = [
   { Icon: Handshake, title: "Opar Ege Bölge Bayiliği", desc: "Opar'ın Ege bölgesi operasyonunu devralarak İzmir ve çevresinde bölgesel stok derinliğimizi ve teslimat hızımızı doğrudan güçlendirdik." },
 ];
 
-function BrandCard({ slug }: { slug: string }) {
-  return (
-    <div className="shrink-0 w-44 h-28 bg-white rounded-xl border border-slate-200 flex items-center justify-center px-5 shadow-sm hover:shadow-md hover:border-[#1B3A8F]/25 transition-all duration-300">
-      <img
-        src={`/images/brands/${slug}.png`}
-        alt={slug}
-        className="max-h-14 max-w-[120px] w-auto object-contain grayscale hover:grayscale-0 transition-all duration-400"
-      />
-    </div>
-  );
-}
-
 export function TedarikciPage() {
+  const ref = useReveal();
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const active = CATEGORIES.find((c) => c.name === activeCategory) ?? null;
   useEscapeKey(() => setActiveCategory(null), !!active);
@@ -82,7 +74,6 @@ export function TedarikciPage() {
 
   return (
     <div className="do-site bg-white min-h-screen">
-      <style>{MARQUEE_CSS}</style>
       <SiteHeader />
 
       {/* HERO */}
@@ -123,27 +114,33 @@ export function TedarikciPage() {
         </div>
       </section>
 
-      {/* MARKA DUVARI — navy */}
-      <section className="bg-[#1B3A8F] py-20 border-b border-white/[0.06]">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 mb-12">
-          <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea]">Global Marka Portföyü</span>
-          <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight mt-2">Güvenilir Markaların Tek Çatısı</h2>
-          <p className="text-white/45 text-[14px] max-w-2xl mt-3 leading-relaxed">Dünyanın önde gelen OEM tedarikçilerinin Türkiye distribütörü olarak, bayilerimize global kaliteyi yerel hızla ulaştırıyoruz.</p>
-        </div>
-        <div className="space-y-4">
-          <div className="bm-wrap py-2">
-            <div className="bm-track ltr pl-4">
-              {[...ROW1, ...ROW1].map((b, i) => <BrandCard key={i} slug={b} />)}
-            </div>
+      {/* MARKA DUVARI — navy, küratörlü statik bento-sergi (kayan bant değil) */}
+      <section className="relative bg-[#1B3A8F] py-20 md:py-24 border-b border-white/[0.06] overflow-hidden">
+        <div className="absolute inset-0 do-grid-bg opacity-25" />
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
+          <div className="mb-12">
+            <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea]">Global Marka Portföyü</span>
+            <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight mt-2">Güvenilir Markaların Tek Çatısı</h2>
+            <p className="text-white/45 text-[14px] max-w-2xl mt-3 leading-relaxed">Dünyanın önde gelen OEM tedarikçilerinin Türkiye distribütörü olarak, bayilerimize global kaliteyi yerel hızla ulaştırıyoruz. Aşağıda öne çıkan birkaç ortağımız; kategoriye göre tam listeyi yukarıdaki kartlardan görebilirsiniz.</p>
           </div>
-          <div className="bm-wrap py-2">
-            <div className="bm-track rtl pl-4">
-              {[...ROW2, ...ROW2].map((b, i) => <BrandCard key={i} slug={b} />)}
-            </div>
+
+          <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-4 auto-rows-[84px] sm:auto-rows-[96px]" style={{ gridAutoFlow: "dense" }}>
+            {FLAGSHIP_BRANDS.map((b, i) => (
+              <div
+                key={b.slug}
+                ref={ref}
+                className={`do-reveal do-d${(i % 4) + 1} ${b.featured ? "col-span-2 row-span-2" : "col-span-1 row-span-1"} bg-white rounded-xl flex items-center justify-center p-4 sm:p-6 shadow-sm hover:shadow-xl transition-all duration-300`}
+              >
+                <img
+                  src={`/images/brands/${b.slug}.png`}
+                  alt={BRAND_LABELS[b.slug]}
+                  className={`object-contain w-auto grayscale hover:grayscale-0 transition-all duration-400 ${b.featured ? "max-h-16 sm:max-h-20 max-w-[75%]" : "max-h-8 sm:max-h-10 max-w-[80%]"}`}
+                />
+              </div>
+            ))}
           </div>
-        </div>
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 mt-10 text-center">
-          <p className="text-white/30 text-[13px]">Portföydeki tüm markalar OEM veya OEM eşdeğeri sertifikasyon standardındadır. Gösterilen markalar temsili seçimdir; tam liste için B2B portalına giriş yapınız.</p>
+
+          <p className="text-white/30 text-[13px] mt-10 text-center">Portföydeki tüm markalar OEM veya OEM eşdeğeri sertifikasyon standardındadır. Gösterilen markalar temsili bir seçimdir; tam liste için B2B portalına giriş yapınız.</p>
         </div>
       </section>
 
