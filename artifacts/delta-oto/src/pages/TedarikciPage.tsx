@@ -1,8 +1,9 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "wouter";
-import { ChevronRight, ArrowRight, CheckCircle2, Globe, Package, Shield, Zap, Handshake } from "lucide-react";
+import { ChevronRight, ArrowRight, CheckCircle2, Globe, Package, Shield, Zap, Handshake, X } from "lucide-react";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
+import { useEscapeKey } from "../hooks/use-motion";
 
 const MARQUEE_CSS = `
   @keyframes brand-ltr { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
@@ -20,13 +21,25 @@ const MARQUEE_CSS = `
 const ROW1 = ["bosch","valeo","hella","brembo","ngk","sachs","denso","monroe","trw","mahle","gates","skf","febi","osram","philips","delphi","ina"];
 const ROW2 = ["contitech","luk","lemforder","fag","elring","corteco","filtron","knecht","mannfilter","champion","borgwarner","swag","optimal","kale","wahler","vdo","gunsan"];
 
+const BRAND_LABELS: Record<string, string> = {
+  bosch: "Bosch", valeo: "Valeo", hella: "Hella", brembo: "Brembo", ngk: "NGK", sachs: "Sachs",
+  denso: "Denso", monroe: "Monroe", trw: "TRW", mahle: "Mahle", gates: "Gates", skf: "SKF",
+  febi: "Febi", osram: "Osram", philips: "Philips", delphi: "Delphi", ina: "INA",
+  contitech: "ContiTech", luk: "LuK", lemforder: "Lemförder", fag: "FAG", elring: "Elring",
+  corteco: "Corteco", filtron: "Filtron", knecht: "Knecht", mannfilter: "Mann-Filter",
+  champion: "Champion", borgwarner: "BorgWarner", swag: "SWAG", optimal: "Optimal", kale: "Kale",
+  wahler: "Wahler", vdo: "VDO", gunsan: "Gunsan",
+};
+
+// brandSlugs: her kategori gerçek endüstri uzmanlığına göre eşleştirilmiş, /images/brands/'ta
+// karşılığı olan gerçek logo dosyaları — kart üstündeki "+ daha fazla" popup'ta bunları gösterir.
 const CATEGORIES = [
-  { name: "Fren & Güvenlik Sistemleri", count: "45+ Marka", brands: ["Brembo", "Bosch", "TRW", "Ferodo", "ATE"], image: "/images/brake-systems.png" },
-  { name: "Süspansiyon & Direksiyon",   count: "38+ Marka", brands: ["Monroe", "Sachs", "KYB", "Lemförder", "SKF"], image: "/images/suspension-steering.png" },
-  { name: "Motor, Ateşleme & Elektrik", count: "52+ Marka", brands: ["Bosch", "Denso", "NGK", "Gates", "INA"], image: "/images/engine-parts.png" },
-  { name: "Rulman & Transmisyon",        count: "28+ Marka", brands: ["FAG", "SKF", "LUK", "ContiTech", "GKN"], image: undefined },
-  { name: "Filtre & Periyodik Bakım",    count: "30+ Marka", brands: ["Mann+Hummel", "Mahle", "Filtron", "Hengst", "UFI"], image: "/images/filters.png" },
-  { name: "Kaporta & Aydınlatma",        count: "35+ Marka", brands: ["Valeo", "Hella", "Osram", "Philips", "Depo"], image: "/images/electrical-lighting.png" },
+  { name: "Fren & Güvenlik Sistemleri", count: "45+ Marka", brandSlugs: ["brembo", "trw", "bosch", "delphi", "febi"], image: "/images/brake-systems.png", desc: "Fren balata/disk sistemleri, ABS ve araç güvenlik elektroniğinde OEM ve OEM eşdeğeri portföy." },
+  { name: "Süspansiyon & Direksiyon",   count: "38+ Marka", brandSlugs: ["sachs", "monroe", "trw", "lemforder", "skf"], image: "/images/suspension-steering.png", desc: "Amortisör, rotil, salıncak ve direksiyon sistemi bileşenlerinde geniş marka alternatifi." },
+  { name: "Motor, Ateşleme & Elektrik", count: "52+ Marka", brandSlugs: ["bosch", "denso", "ngk", "delphi", "borgwarner", "vdo"], image: "/images/engine-parts.png", desc: "Ateşleme, yakıt enjeksiyonu, turbo ve araç elektroniğinde küresel OEM tedarikçileri." },
+  { name: "Rulman & Transmisyon",        count: "28+ Marka", brandSlugs: ["skf", "fag", "ina", "luk", "optimal"], image: undefined, desc: "Rulman, debriyaj ve şanzıman gruplarında hassas mühendislik gerektiren kategoriler." },
+  { name: "Filtre & Periyodik Bakım",    count: "30+ Marka", brandSlugs: ["mannfilter", "knecht", "filtron", "champion", "gunsan"], image: "/images/filters.png", desc: "Yağ, hava, yakıt ve kabin filtrelerinde periyodik bakım döngüsüne uygun geniş kapsam." },
+  { name: "Kaporta & Aydınlatma",        count: "35+ Marka", brandSlugs: ["valeo", "hella", "osram", "philips"], image: "/images/electrical-lighting.png", desc: "Far, arka lamba ve kaporta/aydınlatma sistemlerinde orijinal görünüm ve performans." },
 ];
 
 const QUALITY = [
@@ -59,6 +72,14 @@ function BrandCard({ slug }: { slug: string }) {
 }
 
 export function TedarikciPage() {
+  const [activeCategory, setActiveCategory] = useState<string | null>(null);
+  const active = CATEGORIES.find((c) => c.name === activeCategory) ?? null;
+  useEscapeKey(() => setActiveCategory(null), !!active);
+  useEffect(() => {
+    document.body.style.overflow = active ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [active]);
+
   return (
     <div className="do-site bg-white min-h-screen">
       <style>{MARQUEE_CSS}</style>
@@ -136,7 +157,12 @@ export function TedarikciPage() {
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
             {CATEGORIES.map((cat) => (
-              <div key={cat.name} className="do-card bg-white border border-slate-200 rounded-xl overflow-hidden group cursor-pointer">
+              <button
+                key={cat.name}
+                type="button"
+                onClick={() => setActiveCategory(cat.name)}
+                className="do-card bg-white border border-slate-200 rounded-xl overflow-hidden group cursor-pointer text-left w-full"
+              >
                 {cat.image && (
                   <div className="aspect-[16/9] overflow-hidden bg-slate-100">
                     <img src={cat.image} alt="" className="w-full h-full object-cover" />
@@ -148,13 +174,15 @@ export function TedarikciPage() {
                     <span className="shrink-0 ml-3 text-[11px] font-bold text-[#1B3A8F] bg-[#1B3A8F]/[0.08] border border-[#1B3A8F]/[0.15] px-2.5 py-1 rounded">{cat.count}</span>
                   </div>
                   <div className="flex flex-wrap gap-2">
-                    {cat.brands.map(b => (
-                      <span key={b} className="text-[12px] text-slate-500 bg-slate-100 px-2.5 py-1 rounded-md font-medium">{b}</span>
+                    {cat.brandSlugs.slice(0, 4).map(s => (
+                      <span key={s} className="text-[12px] text-slate-500 bg-slate-100 px-2.5 py-1 rounded-md font-medium">{BRAND_LABELS[s]}</span>
                     ))}
-                    <span className="text-[12px] text-[#1B3A8F] font-semibold px-2.5 py-1">+ daha fazla</span>
+                    <span className="text-[12px] text-[#1B3A8F] font-semibold px-2.5 py-1 inline-flex items-center gap-1 group-hover:gap-1.5 transition-all">
+                      + daha fazla <ChevronRight className="w-3 h-3" />
+                    </span>
                   </div>
                 </div>
-              </div>
+              </button>
             ))}
           </div>
         </div>
@@ -234,6 +262,53 @@ export function TedarikciPage() {
       </section>
 
       <SiteFooter />
+
+      {/* Kategori marka paneli — "+ daha fazla" vaadini gerçek logo setiyle karşılayan sağdan panel */}
+      <div
+        className={`fixed inset-0 z-[70] transition-opacity duration-300 ${active ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`}
+        aria-hidden={!active}
+      >
+        <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setActiveCategory(null)} />
+        <div
+          className={`absolute top-0 right-0 h-full w-full sm:w-[440px] bg-white shadow-2xl transition-transform duration-300 ease-out flex flex-col ${active ? "translate-x-0" : "translate-x-full"}`}
+          role="dialog"
+          aria-modal="true"
+          aria-label={active?.name}
+        >
+          <div className="flex items-start justify-between gap-4 p-7 border-b border-slate-100">
+            <div>
+              <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#1B3A8F]">{active?.count}</span>
+              <h3 className="text-xl font-black text-slate-900 mt-1 leading-snug">{active?.name}</h3>
+            </div>
+            <button
+              type="button"
+              onClick={() => setActiveCategory(null)}
+              aria-label="Kapat"
+              className="shrink-0 w-9 h-9 rounded-full flex items-center justify-center text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+          <div className="flex-1 overflow-y-auto p-7">
+            <p className="text-slate-500 text-[14px] leading-relaxed mb-7">{active?.desc}</p>
+            <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-400 block mb-4">Öne Çıkan Tedarikçiler</span>
+            <div className="grid grid-cols-2 gap-3">
+              {active?.brandSlugs.map((s) => (
+                <div key={s} className="border border-slate-200 rounded-xl h-20 flex items-center justify-center px-4 bg-white hover:border-[#1B3A8F]/30 hover:shadow-md transition-all">
+                  <img src={`/images/brands/${s}.png`} alt={BRAND_LABELS[s]} className="max-h-9 max-w-[100px] w-auto object-contain" />
+                </div>
+              ))}
+            </div>
+            <p className="text-slate-400 text-[12px] leading-relaxed mt-7">Gösterilen markalar bu kategorideki öne çıkan tedarikçilerimizden temsili bir seçimdir; tam liste ve stok durumu için B2B portalına giriş yapınız.</p>
+          </div>
+          <div className="p-7 border-t border-slate-100">
+            <a href="#" className="w-full bg-[#1B3A8F] hover:bg-[#2547B5] active:scale-[0.98] text-white font-semibold px-6 py-3.5 rounded-md transition-all flex items-center justify-center gap-2 group">
+              B2B Portal'da İncele
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
