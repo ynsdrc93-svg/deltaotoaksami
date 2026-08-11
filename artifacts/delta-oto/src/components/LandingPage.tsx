@@ -202,26 +202,26 @@ export function LandingPage() {
         <div ref={ref} className="do-reveal max-w-5xl mx-auto px-6 lg:px-8 relative z-10 text-center">
           <span className="text-xs font-bold uppercase tracking-[0.3em] text-[#1B3A8F]/60">Rakamlarla Güç</span>
 
-          <div className="mt-12 flex flex-col sm:flex-row items-center justify-center divide-y sm:divide-y-0 sm:divide-x divide-slate-300/70">
-            <div className="px-4 sm:px-12 pb-10 sm:pb-0 first:pt-0">
+          <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-10 sm:gap-0">
+            <div className="px-4 sm:px-12">
               <div className="do-metric-num text-7xl md:text-8xl font-black text-slate-900 tabular-nums leading-none">
                 <CountUp target={250} suffix="+" />
               </div>
               <div className="mt-3 text-[13px] font-bold uppercase tracking-[0.2em] text-slate-500">Marka</div>
             </div>
-            <div className="px-4 sm:px-12 py-10 sm:py-0">
+            <div className="px-4 sm:px-12">
               <div className="do-metric-num text-7xl md:text-8xl font-black text-[#1B3A8F] tabular-nums leading-none">
                 <CountUp target={81} suffix="+" />
               </div>
               <div className="mt-3 text-[13px] font-bold uppercase tracking-[0.2em] text-slate-500">İl</div>
             </div>
-            <div className="px-4 sm:px-12 pt-10 sm:pt-0 last:pb-0">
+            <div className="px-4 sm:px-12">
               <div className="do-metric-num text-7xl md:text-8xl font-black text-slate-900 tabular-nums leading-none">1976</div>
               <div className="mt-3 text-[13px] font-bold uppercase tracking-[0.2em] text-slate-500">Kuruluş</div>
             </div>
           </div>
 
-          <p className="mt-12 text-slate-500 text-[15px] max-w-md mx-auto">1976'dan bu yana otomotiv yedek parça dağıtımında kesintisiz güç.</p>
+          <p className="mt-12 text-slate-800 text-base sm:text-xl md:text-2xl font-bold tracking-tight sm:whitespace-nowrap">1976'dan bu yana otomotiv yedek parça dağıtımında kesintisiz güç.</p>
         </div>
       </section>
 

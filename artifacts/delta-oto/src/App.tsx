@@ -7,19 +7,23 @@ import { KariyerPage } from "@/pages/KariyerPage";
 import { IletisimPage } from "@/pages/IletisimPage";
 import { SpartPage } from "@/pages/SpartPage";
 import NotFound from "@/pages/not-found";
+import { ScrollToTopButton } from "@/components/shared/ScrollToTopButton";
 
 function App() {
   return (
-    <Switch>
-      <Route path="/" component={LandingPage} />
-      <Route path="/hakkimizda" component={HakkimizdaPage} />
-      <Route path="/tedarikciler" component={TedarikciPage} />
-      <Route path="/operasyon" component={OperasyonPage} />
-      <Route path="/kariyer" component={KariyerPage} />
-      <Route path="/iletisim" component={IletisimPage} />
-      <Route path="/spart" component={SpartPage} />
-      <Route component={NotFound} />
-    </Switch>
+    <>
+      <Switch>
+        <Route path="/" component={LandingPage} />
+        <Route path="/hakkimizda" component={HakkimizdaPage} />
+        <Route path="/tedarikciler" component={TedarikciPage} />
+        <Route path="/operasyon" component={OperasyonPage} />
+        <Route path="/kariyer" component={KariyerPage} />
+        <Route path="/iletisim" component={IletisimPage} />
+        <Route path="/spart" component={SpartPage} />
+        <Route component={NotFound} />
+      </Switch>
+      <ScrollToTopButton />
+    </>
   );
 }
 

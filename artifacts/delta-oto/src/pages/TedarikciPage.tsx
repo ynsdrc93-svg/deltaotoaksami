@@ -76,7 +76,7 @@ const CATEGORIES = [
   { name: "Fren & Güvenlik Sistemleri", count: "45+ Marka", brandSlugs: ["brembo", "trw", "bosch", "delphi", "febi"], image: "/images/brake-systems.png", desc: "Fren balata/disk sistemleri, ABS ve araç güvenlik elektroniğinde OEM ve OEM eşdeğeri portföy." },
   { name: "Süspansiyon & Direksiyon",   count: "38+ Marka", brandSlugs: ["sachs", "monroe", "trw", "lemforder", "skf"], image: "/images/suspension-steering.png", desc: "Amortisör, rotil, salıncak ve direksiyon sistemi bileşenlerinde geniş marka alternatifi." },
   { name: "Motor, Ateşleme & Elektrik", count: "52+ Marka", brandSlugs: ["bosch", "denso", "ngk", "delphi", "borgwarner", "vdo"], image: "/images/engine-parts.png", desc: "Ateşleme, yakıt enjeksiyonu, turbo ve araç elektroniğinde küresel OEM tedarikçileri." },
-  { name: "Rulman & Transmisyon",        count: "28+ Marka", brandSlugs: ["skf", "fag", "ina", "luk", "optimal"], image: undefined, desc: "Rulman, debriyaj ve şanzıman gruplarında hassas mühendislik gerektiren kategoriler." },
+  { name: "Rulman & Transmisyon",        count: "28+ Marka", brandSlugs: ["skf", "fag", "ina", "luk", "optimal"], image: "/images/heavy-duty.png", desc: "Rulman, debriyaj ve şanzıman gruplarında hassas mühendislik gerektiren kategoriler." },
   { name: "Filtre & Periyodik Bakım",    count: "30+ Marka", brandSlugs: ["mannfilter", "knecht", "filtron", "champion", "gunsan"], image: "/images/filters.png", desc: "Yağ, hava, yakıt ve kabin filtrelerinde periyodik bakım döngüsüne uygun geniş kapsam." },
   { name: "Kaporta & Aydınlatma",        count: "35+ Marka", brandSlugs: ["valeo", "hella", "osram", "philips"], image: "/images/electrical-lighting.png", desc: "Far, arka lamba ve kaporta/aydınlatma sistemlerinde orijinal görünüm ve performans." },
 ];
@@ -193,7 +193,7 @@ export function TedarikciPage() {
                   <img
                     src={`/images/brands/${b.slug}.png`}
                     alt={b.name}
-                    className="max-h-9 max-w-[85%] w-auto object-contain grayscale hover:grayscale-0 transition-all duration-400"
+                    className="max-h-8 max-w-[104px] w-auto h-auto object-contain grayscale hover:grayscale-0 transition-all duration-400"
                   />
                 </div>
               ))}
@@ -364,7 +364,7 @@ export function TedarikciPage() {
             <div className="grid grid-cols-2 gap-3">
               {active?.brandSlugs.map((s) => (
                 <div key={s} className="border border-slate-200 rounded-xl h-20 flex items-center justify-center px-4 bg-white hover:border-[#1B3A8F]/30 hover:shadow-md transition-all">
-                  <img src={`/images/brands/${s}.png`} alt={BRAND_LABELS[s]} className="max-h-9 max-w-[100px] w-auto object-contain" />
+                  <img src={`/images/brands/${s}.png`} alt={BRAND_LABELS[s]} className="max-h-8 max-w-[100px] w-auto h-auto object-contain" />
                 </div>
               ))}
             </div>

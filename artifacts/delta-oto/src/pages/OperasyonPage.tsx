@@ -60,7 +60,7 @@ const DELIVERY_CARDS = [
     Icon: Zap,
     title: "Aynı Gün Sevkiyat",
     highlight: "14:00 Son Sipariş Saati",
-    desc: "Stokta olan ürünler için 14:00'a kadar iletilen siparişler aynı gün yüklenir. Sabahın erken saatlerinde sipariş verenler için en hızlı çözüm.",
+    desc: "Stokta olan ürünler için 14:00'a kadar iletilen siparişler, sipariş saatine bakılmaksızın aynı gün kargoya verilir. Acil ihtiyaçlarınızda net ve güvenilir bir taahhüt.",
     featured: true,
   },
   {
