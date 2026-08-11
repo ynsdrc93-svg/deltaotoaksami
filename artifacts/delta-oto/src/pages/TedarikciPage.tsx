@@ -1,27 +1,63 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "wouter";
-import { ChevronRight, ArrowRight, CheckCircle2, Globe, Package, Shield, Zap, Handshake, X, Cog } from "lucide-react";
+import { ChevronRight, ArrowRight, CheckCircle2, Globe, Package, Shield, Zap, Handshake, X, Cog, Search } from "lucide-react";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
-import { useEscapeKey, useReveal } from "../hooks/use-motion";
+import { useEscapeKey } from "../hooks/use-motion";
 
-// Sonsuz kayan logo bandı yerine: küratörlü, hiyerarşili statik sergi.
-// 3 "featured" marka 2x2 büyük karo, geri kalanı standart karo — bento-grid.
-// Kapsamlılık işini artık kategori panelleri üstleniyor, bu bölümün her şeyi
-// göstermeye çalışmasına gerek yok.
-const FLAGSHIP_BRANDS = [
-  { slug: "bosch", featured: true },
-  { slug: "continental", featured: true },
-  { slug: "brembo", featured: true },
-  { slug: "valeo", featured: false },
-  { slug: "hella", featured: false },
-  { slug: "denso", featured: false },
-  { slug: "skf", featured: false },
-  { slug: "mahle", featured: false },
-  { slug: "trw", featured: false },
-  { slug: "ngk", featured: false },
-  { slug: "philips", featured: false },
-  { slug: "osram", featured: false },
+// Tedarikçinin kendi resmi marka sunumundan (50 marka) alınan tam liste —
+// arama/filtreleme ile tüm portföyü tarayan dinamik bir dizin. Alfabetik.
+const ALL_BRANDS = [
+  { slug: "ajusa", name: "Ajusa" },
+  { slug: "akzonobel", name: "AkzoNobel" },
+  { slug: "bilsteingroup", name: "Bilstein Group" },
+  { slug: "borgwarner", name: "BorgWarner" },
+  { slug: "bosch", name: "Bosch" },
+  { slug: "brembo", name: "Brembo" },
+  { slug: "clarios", name: "Clarios" },
+  { slug: "cojali", name: "Cojali" },
+  { slug: "continental", name: "Continental" },
+  { slug: "corteco", name: "Corteco" },
+  { slug: "denso", name: "Denso" },
+  { slug: "dinex", name: "Dinex" },
+  { slug: "dolz", name: "Dolz" },
+  { slug: "driv", name: "DRiV" },
+  { slug: "elring", name: "Elring" },
+  { slug: "forvia", name: "Forvia (Hella)" },
+  { slug: "gates", name: "Gates" },
+  { slug: "gkn", name: "GKN" },
+  { slug: "haynespro", name: "HaynesPro" },
+  { slug: "hengst", name: "Hengst Filtration" },
+  { slug: "herthbuss", name: "Herth+Buss" },
+  { slug: "hlmando", name: "HL Mando" },
+  { slug: "kyb", name: "KYB" },
+  { slug: "liquimoly", name: "Liqui Moly" },
+  { slug: "mahle", name: "Mahle" },
+  { slug: "mannhummel", name: "Mann+Hummel" },
+  { slug: "marelli", name: "Marelli" },
+  { slug: "meritor", name: "Meritor" },
+  { slug: "monroe", name: "Monroe" },
+  { slug: "nissens", name: "Nissens" },
+  { slug: "niterra", name: "Niterra (NGK)" },
+  { slug: "nrf", name: "NRF" },
+  { slug: "osram", name: "Osram" },
+  { slug: "philips", name: "Philips" },
+  { slug: "phinia", name: "Phinia (Delphi)" },
+  { slug: "purflux", name: "Purflux Group" },
+  { slug: "schaeffler", name: "Schaeffler" },
+  { slug: "segautomotive", name: "SEG Automotive" },
+  { slug: "skf", name: "SKF" },
+  { slug: "stabilus", name: "Stabilus" },
+  { slug: "tecalliance", name: "TecAlliance" },
+  { slug: "titanx", name: "TitanX" },
+  { slug: "tmdfriction", name: "TMD Friction (Textar)" },
+  { slug: "totalenergies", name: "TotalEnergies" },
+  { slug: "trucktec", name: "Trucktec Automotive" },
+  { slug: "ufifilters", name: "UFI Filters" },
+  { slug: "valeo", name: "Valeo" },
+  { slug: "vitesco", name: "Vitesco Technologies" },
+  { slug: "wolflubricants", name: "Wolf Lubricants" },
+  { slug: "zfaftermarket", name: "ZF Aftermarket" },
 ];
 
 const BRAND_LABELS: Record<string, string> = {
@@ -63,7 +99,8 @@ const ADVANTAGES = [
 ];
 
 export function TedarikciPage() {
-  const ref = useReveal();
+  const [brandSearch, setBrandSearch] = useState("");
+  const filteredBrands = ALL_BRANDS.filter((b) => b.name.toLowerCase().includes(brandSearch.trim().toLowerCase()));
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const active = CATEGORIES.find((c) => c.name === activeCategory) ?? null;
   const closeButtonRef = useRef<HTMLButtonElement>(null);
@@ -123,33 +160,54 @@ export function TedarikciPage() {
         </div>
       </section>
 
-      {/* MARKA DUVARI — navy, küratörlü statik bento-sergi (kayan bant değil) */}
+      {/* MARKA DUVARI — navy, aranabilir/filtrelenebilir tam marka dizini (50 marka) */}
       <section className="relative bg-[#1B3A8F] py-20 md:py-24 border-b border-white/[0.06] overflow-hidden">
         <div className="absolute inset-0 do-grid-bg opacity-25" />
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-          <div className="mb-12">
-            <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea]">Global Marka Portföyü</span>
-            <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight mt-2">Güvenilir Markaların Tek Çatısı</h2>
-            <p className="text-white/45 text-[14px] max-w-2xl mt-3 leading-relaxed">Dünyanın önde gelen OEM tedarikçilerinin Türkiye distribütörü olarak, bayilerimize global kaliteyi yerel hızla ulaştırıyoruz. Aşağıda öne çıkan birkaç ortağımız yer alıyor; kategoriye göre tam listeyi az sonraki kartlardan görebilirsiniz.</p>
+          <div className="mb-10 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea]">Global Marka Portföyü</span>
+              <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight mt-2">{ALL_BRANDS.length}+ Markanın Tek Çatısı</h2>
+              <p className="text-white/45 text-[14px] max-w-xl mt-3 leading-relaxed">Dünyanın önde gelen OEM tedarikçilerinin Türkiye distribütörü olarak, bayilerimize global kaliteyi yerel hızla ulaştırıyoruz.</p>
+            </div>
+            <div className="relative w-full lg:w-72 shrink-0">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40 pointer-events-none" />
+              <input
+                type="text"
+                value={brandSearch}
+                onChange={(e) => setBrandSearch(e.target.value)}
+                placeholder="Marka ara..."
+                aria-label="Marka ara"
+                className="w-full bg-white/[0.08] border border-white/15 rounded-lg pl-11 pr-4 py-3 text-[14px] text-white placeholder:text-white/40 focus:outline-none focus:border-[#7d9bea]/60 focus:bg-white/[0.12] transition-colors"
+              />
+            </div>
           </div>
 
-          <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-4 auto-rows-[84px] sm:auto-rows-[96px]" style={{ gridAutoFlow: "dense" }}>
-            {FLAGSHIP_BRANDS.map((b, i) => (
-              <div
-                key={b.slug}
-                ref={ref}
-                className={`do-reveal do-d${(i % 4) + 1} ${b.featured ? "col-span-2 row-span-2" : "col-span-1 row-span-1"} bg-white rounded-xl flex items-center justify-center p-4 sm:p-6 shadow-sm hover:shadow-xl transition-all duration-300`}
-              >
-                <img
-                  src={`/images/brands/${b.slug}.png`}
-                  alt={BRAND_LABELS[b.slug]}
-                  className={`object-contain w-auto grayscale hover:grayscale-0 transition-all duration-400 ${b.featured ? "max-h-16 sm:max-h-20 max-w-[75%]" : "max-h-8 sm:max-h-10 max-w-[80%]"}`}
-                />
-              </div>
-            ))}
-          </div>
+          {filteredBrands.length > 0 ? (
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+              {filteredBrands.map((b) => (
+                <div
+                  key={b.slug}
+                  className="bg-white rounded-xl flex items-center justify-center p-4 h-24 shadow-sm hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
+                >
+                  <img
+                    src={`/images/brands/${b.slug}.png`}
+                    alt={b.name}
+                    className="max-h-9 max-w-[85%] w-auto object-contain grayscale hover:grayscale-0 transition-all duration-400"
+                  />
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className="text-white/50 text-[14px] py-16 text-center">"{brandSearch}" ile eşleşen marka bulunamadı.</p>
+          )}
 
-          <p className="text-white/50 text-[13px] mt-10 text-center">Portföydeki tüm markalar OEM veya OEM eşdeğeri sertifikasyon standardındadır. Gösterilen markalar temsili bir seçimdir; tam liste için B2B portalına giriş yapınız.</p>
+          <p className="text-white/50 text-[13px] mt-10 text-center">
+            {filteredBrands.length === ALL_BRANDS.length
+              ? `Portföydeki ${ALL_BRANDS.length} markanın tamamı OEM veya OEM eşdeğeri sertifikasyon standardındadır.`
+              : `${filteredBrands.length} / ${ALL_BRANDS.length} marka gösteriliyor.`}
+            {" "}Kategoriye göre tam liste için aşağıdaki kartları, stok durumu için B2B portalını inceleyebilirsiniz.
+          </p>
         </div>
       </section>
 

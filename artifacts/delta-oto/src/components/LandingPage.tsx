@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "wouter";
-import { ChevronRight, ArrowRight, Globe, Zap, Network, Menu, X } from "lucide-react";
+import { ChevronRight, ArrowRight, Globe, Zap, Network, Menu, X, Handshake } from "lucide-react";
 import { useReveal, useScrolled, useCounter, useScrollProgress, useParallax, useEscapeKey } from "../hooks/use-motion";
 import { SiteFooter } from "./shared/SiteFooter";
 import TurkeyMap from "turkey-map-react";
@@ -194,21 +194,34 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* POWER METRICS (light) — tek akan cümle olarak, 3 ayrı istatistik kutusu yerine */}
+      {/* POWER METRICS (light) — üç bağımsız rakam birimi, kart değil; tipografi ve boşlukla ayrışıyor */}
       <section className="relative bg-[#f4f6f9] border-y border-slate-200 py-24 md:py-32 overflow-hidden">
         <div className="absolute inset-0 do-grid-bg-light"></div>
         <div className="absolute left-0 top-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#1B3A8F]/40 to-transparent"></div>
 
         <div ref={ref} className="do-reveal max-w-5xl mx-auto px-6 lg:px-8 relative z-10 text-center">
           <span className="text-xs font-bold uppercase tracking-[0.3em] text-[#1B3A8F]/60">Rakamlarla Güç</span>
-          <p className="mt-6 font-black tracking-tight leading-[1.2] text-slate-900 text-2xl sm:text-3xl md:text-[40px]">
-            <span className="do-metric-num text-6xl sm:text-7xl md:text-8xl tabular-nums align-middle"><CountUp target={250} suffix="+" /></span>
-            {" "}marka,{" "}
-            <span className="do-metric-num text-6xl sm:text-7xl md:text-8xl tabular-nums align-middle"><CountUp target={81} suffix="+" /></span>
-            {" "}il,{" "}
-            <span className="do-metric-num text-6xl sm:text-7xl md:text-8xl tabular-nums align-middle">1976</span>
-            {"'dan beri kesintisiz güç."}
-          </p>
+
+          <div className="mt-12 flex flex-col sm:flex-row items-center justify-center divide-y sm:divide-y-0 sm:divide-x divide-slate-300/70">
+            <div className="px-4 sm:px-12 pb-10 sm:pb-0 first:pt-0">
+              <div className="do-metric-num text-7xl md:text-8xl font-black text-slate-900 tabular-nums leading-none">
+                <CountUp target={250} suffix="+" />
+              </div>
+              <div className="mt-3 text-[13px] font-bold uppercase tracking-[0.2em] text-slate-500">Marka</div>
+            </div>
+            <div className="px-4 sm:px-12 py-10 sm:py-0">
+              <div className="do-metric-num text-7xl md:text-8xl font-black text-[#1B3A8F] tabular-nums leading-none">
+                <CountUp target={81} suffix="+" />
+              </div>
+              <div className="mt-3 text-[13px] font-bold uppercase tracking-[0.2em] text-slate-500">İl</div>
+            </div>
+            <div className="px-4 sm:px-12 pt-10 sm:pt-0 last:pb-0">
+              <div className="do-metric-num text-7xl md:text-8xl font-black text-slate-900 tabular-nums leading-none">1976</div>
+              <div className="mt-3 text-[13px] font-bold uppercase tracking-[0.2em] text-slate-500">Kuruluş</div>
+            </div>
+          </div>
+
+          <p className="mt-12 text-slate-500 text-[15px] max-w-md mx-auto">1976'dan bu yana otomotiv yedek parça dağıtımında kesintisiz güç.</p>
         </div>
       </section>
 
@@ -229,7 +242,7 @@ export function LandingPage() {
                 Uluslararası Güç,<br/>Yerel Hakimiyet.
               </h2>
               <p ref={ref} className="do-reveal do-d2 text-[17px] text-blue-100/80 leading-[1.8] font-light">
-                Groupauto International'ın Türkiye üyesiyiz. Bu üyelik; 40'tan fazla ülkedeki 3.000'i aşkın üye firma gücünü doğrudan satın alma kaldıracımıza dönüştürür. Global ağın tedarik kapasitesiyle Türkiye pazarının dinamiklerini tek bir çatı altında buluşturuyoruz.
+                Groupauto International'ın Türkiye üyesiyiz. Bu üyelik; 40'tan fazla ülkedeki 3.000'i aşkın üye firma gücünü doğrudan satın alma kaldıracımıza dönüştürür. Merkezi müzakere edilen tedarik koşulları, ortak kalite standartları ve üye ağı çapında paylaşılan know-how; Türkiye pazarının hızını küresel ağın gücüyle birleştiriyor.
               </p>
 
               <div ref={ref} className="do-reveal do-d3 mt-12 flex gap-12">
@@ -249,31 +262,54 @@ export function LandingPage() {
               </div>
             </div>
 
-            <div
-              ref={ref}
-              className="do-reveal do-d1 lg:w-1/2 w-full relative rounded-xl border border-white/15 bg-white/[0.06] backdrop-blur-sm overflow-hidden group"
-            >
-              <div className="do-card-beam"></div>
-              <div className="relative z-10 p-8">
-                <div className="flex items-center justify-between mb-7">
-                  <div className="w-12 h-12 rounded-lg bg-white/10 border border-white/15 flex items-center justify-center group-hover:bg-[#2547B5] group-hover:border-[#2547B5] group-hover:scale-105 transition-all duration-300">
-                    <Globe className="w-6 h-6 text-white" />
+            <div ref={ref} className="do-reveal do-d1 lg:w-1/2 w-full flex flex-col gap-5">
+              <div className="relative rounded-xl border border-white/15 bg-white/[0.06] backdrop-blur-sm overflow-hidden group">
+                <div className="do-card-beam"></div>
+                <div className="relative z-10 p-8">
+                  <div className="flex items-center justify-between mb-7">
+                    <div className="w-12 h-12 rounded-lg bg-white/10 border border-white/15 flex items-center justify-center group-hover:bg-[#2547B5] group-hover:border-[#2547B5] group-hover:scale-105 transition-all duration-300">
+                      <Globe className="w-6 h-6 text-white" />
+                    </div>
+                    <span className="text-[10px] font-black tracking-[0.25em] text-blue-200/50 uppercase">Global Ağ</span>
                   </div>
-                  <span className="text-[10px] font-black tracking-[0.25em] text-blue-200/50 uppercase">Global Ağ</span>
+                  <div className="font-bold text-white text-lg leading-tight">Groupauto International</div>
+                  <div className="text-[11px] text-[#7d9bea] mt-1.5 uppercase tracking-[0.2em] font-semibold">40+ Ülke · 3.000+ Üye Firma</div>
+                  <p className="text-sm text-blue-100/65 leading-relaxed font-light mt-4">
+                    Dünyanın en büyük bağımsız yedek parça ağı: global satın alma gücü, ortak kalite standartları ve uluslararası tedarik kapasitesi.
+                  </p>
+                  <ul className="mt-5 space-y-2.5">
+                    {[
+                      "Merkezi müzakere edilen satın alma koşulları",
+                      "OEM eşdeğeri ortak kalite standartları",
+                      "Üye ağı çapında teknik eğitim ve know-how paylaşımı",
+                    ].map((item) => (
+                      <li key={item} className="flex items-start gap-2.5 text-[13px] text-blue-100/75">
+                        <span className="w-1 h-1 rounded-full bg-[#7d9bea] mt-2 shrink-0" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-                <div className="font-bold text-white text-lg leading-tight">Groupauto International</div>
-                <div className="text-[11px] text-[#7d9bea] mt-1.5 uppercase tracking-[0.2em] font-semibold">40+ Ülke · 3.000+ Üye Firma</div>
-                <p className="text-sm text-blue-100/65 leading-relaxed font-light mt-4">
-                  Dünyanın en büyük bağımsız yedek parça ağı: global satın alma gücü, ortak kalite standartları ve uluslararası tedarik kapasitesi.
-                </p>
+                <div className="relative z-10 border-t border-white/10 bg-black/10 px-8 py-5 flex items-center gap-4">
+                  <div className="w-9 h-9 rounded-lg bg-white/10 border border-white/15 flex items-center justify-center shrink-0">
+                    <Network className="w-4 h-4 text-[#7d9bea]" />
+                  </div>
+                  <p className="text-[13px] text-blue-100/75 leading-snug">
+                    <span className="text-white font-semibold">Delta Oto</span>, bu ağın Türkiye'deki resmi üyesi olarak global satın alma gücünü yerel stok derinliği ve lojistik hızıyla buluşturuyor.
+                  </p>
+                </div>
               </div>
-              <div className="relative z-10 border-t border-white/10 bg-black/10 px-8 py-5 flex items-center gap-4">
-                <div className="w-9 h-9 rounded-lg bg-white/10 border border-white/15 flex items-center justify-center shrink-0">
-                  <Network className="w-4 h-4 text-[#7d9bea]" />
+
+              <div className="relative rounded-xl border border-white/15 bg-white/[0.06] backdrop-blur-sm overflow-hidden group p-6 flex items-center gap-5">
+                <div className="do-card-beam"></div>
+                <div className="relative z-10 w-11 h-11 rounded-lg bg-white/10 border border-white/15 flex items-center justify-center shrink-0 group-hover:bg-[#2547B5] group-hover:border-[#2547B5] transition-all duration-300">
+                  <Handshake className="w-5 h-5 text-white" />
                 </div>
-                <p className="text-[13px] text-blue-100/75 leading-snug">
-                  <span className="text-white font-semibold">Delta Oto</span>, bu ağın Türkiye'deki resmi üyesi olarak global satın alma gücünü yerel stok derinliği ve lojistik hızıyla buluşturuyor.
-                </p>
+                <div className="relative z-10">
+                  <span className="text-[10px] font-black tracking-[0.25em] text-blue-200/50 uppercase">Bölgesel Ortaklık</span>
+                  <div className="font-bold text-white text-[15px] leading-tight mt-1">Opar Ege Bölge Bayiliği</div>
+                  <p className="text-[13px] text-blue-100/65 leading-snug mt-1.5">İzmir ve çevresinde devraldığımız bölgesel operasyonla stok derinliğimizi ve teslimat hızımızı güçlendirdik.</p>
+                </div>
               </div>
             </div>
           </div>
@@ -312,15 +348,10 @@ export function LandingPage() {
               </div>
             </div>
 
-            <div
-              ref={ref}
-              className="do-reveal do-d2 lg:w-[56%] w-full relative"
-              style={{ background: "radial-gradient(ellipse 68% 42% at 58% 50%, rgba(27,58,143,0.8) 55%, transparent 92%)" }}
-            >
-              {/* Harita path verisindeki göl/iç su boşlukları (ör. Tuz Gölü) dolgu almıyor;
-                  koyu section arkaplanında düz siyah leke gibi görünüyordu. Arkaplana
-                  idleColor tonunda bir radial gradient koyup boşlukların "su" gibi
-                  okunmasını sağlıyoruz. */}
+            <div ref={ref} className="do-reveal do-d2 lg:w-[56%] w-full relative">
+              {/* Not: haritanın path verisinde birkaç ilde küçük iç-su (göl) boşlukları var
+                  (ör. Tuz Gölü) — arkaplana glow/gradient eklemek silüetin dışına taşıp
+                  bozuk görünüyordu, bu yüzden haritayı olduğu gibi (temiz) bırakıyoruz. */}
               <TurkeyMap
                 hoverable
                 showTooltip
