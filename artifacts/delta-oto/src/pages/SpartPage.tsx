@@ -345,7 +345,7 @@ export function SpartPage() {
             <p className="text-slate-600 leading-relaxed">
               SPART ürünleri, Delta Oto'nun Ümraniye, Gebze ve İzmir'deki üç
               operasyon merkezinden stoklanır ve sevk edilir. Haftanın altı günü
-              çalışan lojistik ağı, sipariş kesim saatine kadar verilen emirleri
+              çalışan lojistik ağı, son sipariş saatine kadar verilen emirleri
               aynı gün veya ertesi gün teslim eder.
             </p>
           </div>
