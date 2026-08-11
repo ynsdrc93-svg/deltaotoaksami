@@ -30,15 +30,29 @@ const TESTIMONIALS = [
   { quote: "Ürün portföyünü yönetmek; hem teknik hem de stratejik yetkinlik gerektiriyor. Delta Oto bu ikisini bir arada geliştirme fırsatı sunuyor.", name: "Ürün & Portföy Yönetimi", yrs: "7 Yıl" },
 ];
 
-const BENEFITS = [
-  { label: "Özel sağlık sigortası",     sub: "Tüm çalışanlar için",               Icon: HeartPulse },
-  { label: "Yemek kartı katkısı",        sub: "Her iş günü için sağlanır",         Icon: Utensils },
-  { label: "Sektörel eğitim bütçesi",    sub: "Yıllık gelişim programı",           Icon: GraduationCap },
-  { label: "Esnek çalışma saatleri",     sub: "Pozisyona göre uygulanır",          Icon: Clock },
-  { label: "Yıllık kariyer görüşmesi",   sub: "Şeffaf performans değerlendirmesi", Icon: CalendarCheck },
-  { label: "Ulaşım desteği",             sub: "Servis hattı veya yol bedeli",      Icon: Bus },
-  { label: "Marka ve ürün eğitimleri",   sub: "Tedarikçi işbirliğiyle",            Icon: BookOpen },
-  { label: "Mentorluk programı",         sub: "Kıdemli çalışan rehberliği",        Icon: Users },
+// Aynı 8 gerçek yan hak; sunumu daha anlamlı kılmak için iki başlık altında gruplandı
+// (sağlık/beslenme/gündelik ritim vs. bilgi/kariyer gelişimi). İçerik değişmedi, sadece düzen.
+const BENEFIT_GROUPS = [
+  {
+    title: "Yaşam Dengesi",
+    desc: "Sağlığınız, beslenmeniz ve günlük ritminiz için sunduğumuz destekler.",
+    featured: { label: "Özel sağlık sigortası", sub: "Tüm çalışanlar için", Icon: HeartPulse },
+    rest: [
+      { label: "Yemek kartı katkısı",    sub: "Her iş günü için sağlanır",    Icon: Utensils },
+      { label: "Esnek çalışma saatleri", sub: "Pozisyona göre uygulanır",     Icon: Clock },
+      { label: "Ulaşım desteği",         sub: "Servis hattı veya yol bedeli", Icon: Bus },
+    ],
+  },
+  {
+    title: "Kariyer Yatırımı",
+    desc: "Bilginize, becerinize ve kariyer yolculuğunuza yaptığımız yatırımlar.",
+    featured: { label: "Sektörel eğitim bütçesi", sub: "Yıllık gelişim programı", Icon: GraduationCap },
+    rest: [
+      { label: "Yıllık kariyer görüşmesi",  sub: "Şeffaf performans değerlendirmesi", Icon: CalendarCheck },
+      { label: "Marka ve ürün eğitimleri",  sub: "Tedarikçi işbirliğiyle",            Icon: BookOpen },
+      { label: "Mentorluk programı",        sub: "Kıdemli çalışan rehberliği",        Icon: Users },
+    ],
+  },
 ];
 
 const JOB_PLATFORMS = [
@@ -206,7 +220,9 @@ export function KariyerPage() {
         </div>
       </section>
 
-      {/* YAN HAKLAR — navy */}
+      {/* YAN HAKLAR — navy. İki anlamlı kategoriye ayrılmış editoryal bento düzeni: her panelde
+          1 öne çıkan hak (yatay, büyük tipografi) + 3 destekleyici hak (kompakt 3'lü sıra).
+          Tüm 8 gerçek hak korunuyor — değişen yalnızca sunum. */}
       <section className="relative bg-[#1B3A8F] text-white py-24 overflow-hidden">
         <div className="absolute inset-0">
           <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&q=80" alt="" className="w-full h-full object-cover opacity-10" />
@@ -216,21 +232,56 @@ export function KariyerPage() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
           <div ref={reveal} className="do-reveal mb-14">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea] block mb-3">Çalışan Avantajları</span>
-            <h2 className="text-3xl font-black tracking-tight">Yan Haklar ve İmkânlar</h2>
-            <p className="text-white/55 mt-3 text-[15px] max-w-xl">Uzun vadeli kurumsal ilişkilerde çalışanların gelişimine yatırım yapıyoruz.</p>
+            <h2 className="text-4xl md:text-5xl font-black tracking-tight leading-[1.1]">Yan Haklar ve İmkânlar</h2>
+            <p className="text-white/60 mt-4 text-[15px] leading-relaxed max-w-xl">
+              Uzun vadeli kurumsal ilişkilerde çalışanların gelişimine yatırım yapıyoruz. Sekiz destek, iki ana başlıkta toplanıyor: yaşam dengesi ve kariyer yatırımı.
+            </p>
           </div>
-          <div className="grid md:grid-cols-4 gap-5">
-            {BENEFITS.map((b, i) => (
+
+          <div className="grid lg:grid-cols-2 gap-6 lg:gap-8">
+            {BENEFIT_GROUPS.map(({ title, desc, featured, rest }, gi) => (
               <div
-                key={b.label}
+                key={title}
                 ref={reveal}
-                className={`do-reveal do-d${(i % 4) + 1} bg-white/[0.06] border border-white/[0.1] rounded-xl px-5 py-5 hover:bg-white/[0.1] transition-colors`}
+                className={`do-reveal do-d${gi + 1} relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.045] p-7 md:p-8 transition-colors duration-300 hover:border-white/20`}
               >
-                <div className="w-11 h-11 rounded-xl bg-white/10 flex items-center justify-center mb-4">
-                  <b.Icon className="w-5 h-5 text-[#7d9bea]" />
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none select-none absolute -top-5 -right-2 md:-right-3 text-[120px] md:text-[140px] font-black leading-none text-white/[0.06] tabular-nums"
+                >
+                  0{gi + 1}
+                </span>
+
+                <div className="relative mb-7">
+                  <h3 className="text-xl md:text-2xl font-black tracking-tight text-white">{title}</h3>
+                  <p className="text-white/60 text-[13px] mt-2 max-w-xs leading-relaxed">{desc}</p>
                 </div>
-                <div className="text-[13.5px] font-semibold text-gray-200">{b.label}</div>
-                <div className="text-[12px] text-white/70 mt-1">{b.sub}</div>
+
+                {/* Öne çıkan hak */}
+                <div className="group relative flex items-center gap-5 rounded-xl border border-white/10 bg-white/[0.05] p-5 mb-4 overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:border-[#7d9bea]/40 hover:bg-white/[0.08] hover:shadow-[0_20px_45px_rgba(125,155,234,0.16)]">
+                  <div className="do-card-beam" />
+                  <div className="relative z-10 shrink-0 w-14 h-14 rounded-full bg-white/10 border border-white/10 flex items-center justify-center transition-colors duration-300 group-hover:bg-[#7d9bea]/20 group-hover:border-[#7d9bea]/30">
+                    <featured.Icon className="w-6 h-6 text-[#7d9bea]" />
+                  </div>
+                  <div className="relative z-10 min-w-0">
+                    <div className="text-base md:text-lg font-black text-white leading-snug">{featured.label}</div>
+                    <div className="text-white/60 text-[13px] mt-1">{featured.sub}</div>
+                  </div>
+                </div>
+
+                {/* Destekleyici haklar */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+                  {rest.map(({ label, sub, Icon }) => (
+                    <div
+                      key={label}
+                      className="rounded-xl border border-white/10 bg-white/[0.035] p-4 transition-all duration-300 hover:-translate-y-1 hover:bg-white/[0.08] hover:border-white/20"
+                    >
+                      <Icon className="w-4 h-4 text-[#7d9bea] mb-2.5" />
+                      <div className="text-[12.5px] font-bold text-white leading-snug">{label}</div>
+                      <div className="text-[11px] text-white/60 mt-1 leading-snug">{sub}</div>
+                    </div>
+                  ))}
+                </div>
               </div>
             ))}
           </div>
