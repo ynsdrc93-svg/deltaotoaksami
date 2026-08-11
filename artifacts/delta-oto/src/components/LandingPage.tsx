@@ -19,11 +19,31 @@ const OPS_HUB_POINTS: [number, number][] = [
 // (bounding-box centroid), haritayla aynı viewBox ("0 80 1050 585") üzerinde.
 const DISTRIBUTION_ROUTES: { from: [number, number]; to: [number, number] }[] = [
   { from: [193.6, 211.0], to: [555.7, 218.6] }, // Ümraniye -> Samsun (Karadeniz)
+  { from: [193.6, 211.0], to: [750.7, 246.5] }, // Ümraniye -> Trabzon (Doğu Karadeniz)
+  { from: [193.6, 211.0], to: [911.6, 256.6] }, // Ümraniye -> Kars (uç kuzeydoğu)
   { from: [193.6, 211.0], to: [836.8, 293.1] }, // Ümraniye -> Erzurum (Doğu Anadolu)
+  { from: [193.6, 211.0], to: [959.2, 387.8] }, // Ümraniye -> Van (uç doğu)
+  { from: [193.6, 211.0], to: [365.1, 325.1] }, // Ümraniye -> Ankara (İç Anadolu)
+  { from: [193.6, 211.0], to: [550.4, 406.2] }, // Ümraniye -> Kayseri (İç Anadolu)
+  { from: [193.6, 211.0], to: [623.3, 336.2] }, // Ümraniye -> Sivas (İç/Doğu geçiş)
   { from: [193.6, 211.0], to: [621.8, 498.8] }, // Ümraniye -> Gaziantep (Güneydoğu Anadolu)
-  { from: [241.0, 236.5], to: [365.1, 325.1] }, // Gebze -> Ankara (İç Anadolu)
+  { from: [193.6, 211.0], to: [780.0, 425.9] }, // Ümraniye -> Diyarbakır (Güneydoğu Anadolu)
+  { from: [193.6, 211.0], to: [717.9, 480.5] }, // Ümraniye -> Şanlıurfa (Güneydoğu Anadolu)
+  { from: [193.6, 211.0], to: [533.1, 476.7] }, // Ümraniye -> Adana (Akdeniz/Çukurova)
+  { from: [241.0, 236.5], to: [195.1, 287.0] }, // Gebze -> Bursa (yakın Marmara)
+  { from: [241.0, 236.5], to: [295.8, 323.5] }, // Gebze -> Eskişehir (İç Anadolu batı)
+  { from: [241.0, 236.5], to: [437.4, 207.8] }, // Gebze -> Kastamonu (Batı Karadeniz)
+  { from: [241.0, 236.5], to: [387.5, 437.6] }, // Gebze -> Konya (İç Anadolu güney)
   { from: [96.7, 376.5],  to: [277.6, 519.5] }, // İzmir -> Antalya (Akdeniz)
+  { from: [96.7, 376.5],  to: [149.2, 495.1] }, // İzmir -> Muğla (Ege güney)
 ];
+
+// Her rotaya hafif rastgele bir gecikme/süre ata — hepsi aynı anda değil,
+// organik/dağınık bir ritimde art arda "uçar" gibi görünsün.
+const ROUTE_TIMING = DISTRIBUTION_ROUTES.map(() => ({
+  delay: +(Math.random() * 9).toFixed(2),
+  duration: +(9 + Math.random() * 4).toFixed(2),
+}));
 
 /** İki nokta arasında hafif yukarı kavisli bir uçuş-rotası eğrisi (quadratic bezier). */
 function routeArcPath([x1, y1]: [number, number], [x2, y2]: [number, number]) {
@@ -191,7 +211,7 @@ export function LandingPage() {
               ref={ref}
               className="do-reveal do-d1 text-[34px] sm:text-5xl md:text-6xl lg:text-[72px] xl:text-[80px] font-black leading-[1.05] sm:leading-[1.0] mb-6 tracking-[-0.02em] break-words"
             >
-              <span className="text-white">50 YILDIR OTOMOTİV AFTERMARKET'İN</span>
+              <span className="do-hero-line">50 YILDIR OTOMOTİV AFTERMARKET'İN</span>
               <br />
               <span className="text-[#7d9bea]">KESİNTİSİZ GÜCÜ</span>
             </h1>
@@ -418,9 +438,8 @@ export function LandingPage() {
                     stroke="#7d9bea"
                     strokeWidth={1.75}
                     strokeDasharray={1400}
-                    strokeDashoffset={1400}
                     markerEnd="url(#do-route-arrow)"
-                    style={{ transitionDelay: `${450 + i * 180}ms` }}
+                    style={{ animationDelay: `${ROUTE_TIMING[i].delay}s`, animationDuration: `${ROUTE_TIMING[i].duration}s` }}
                   />
                 ))}
                 {DISTRIBUTION_ROUTES.map((r, i) => (
@@ -431,7 +450,7 @@ export function LandingPage() {
                     cy={r.to[1]}
                     r={3.5}
                     fill="#7d9bea"
-                    style={{ transitionDelay: `${1900 + i * 180}ms` }}
+                    style={{ animationDelay: `${ROUTE_TIMING[i].delay}s`, animationDuration: `${ROUTE_TIMING[i].duration}s` }}
                   />
                 ))}
                 {OPS_HUB_POINTS.map((p, i) => (

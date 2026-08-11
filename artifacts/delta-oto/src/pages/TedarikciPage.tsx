@@ -60,25 +60,20 @@ const ALL_BRANDS = [
   { slug: "zfaftermarket", name: "ZF Aftermarket" },
 ];
 
-const BRAND_LABELS: Record<string, string> = {
-  bosch: "Bosch", valeo: "Valeo", hella: "Hella", brembo: "Brembo", ngk: "NGK", sachs: "Sachs",
-  denso: "Denso", monroe: "Monroe", trw: "TRW", mahle: "Mahle", gates: "Gates", skf: "SKF",
-  febi: "Febi", osram: "Osram", philips: "Philips", delphi: "Delphi Technologies", ina: "INA",
-  continental: "Continental", luk: "LuK", lemforder: "Lemförder", fag: "FAG", elring: "Elring",
-  corteco: "Corteco", filtron: "Filtron", knecht: "Knecht", mannfilter: "Mann-Filter",
-  champion: "Champion", borgwarner: "BorgWarner", swag: "SWAG", optimal: "Optimal", kale: "Kale",
-  wahler: "Wahler", vdo: "VDO", gunsan: "Gunsan",
-};
+// Kategori popup'larındaki logo isimleri ALL_BRANDS'ten çözülür — ayrı bir
+// isim haritası tutmak eski/silinmiş marka slug'larıyla senkron kaymasına yol açtı.
+const ALL_BRAND_NAMES: Record<string, string> = Object.fromEntries(ALL_BRANDS.map((b) => [b.slug, b.name]));
 
-// brandSlugs: her kategori gerçek endüstri uzmanlığına göre eşleştirilmiş, /images/brands/'ta
-// karşılığı olan gerçek logo dosyaları — kart üstündeki "+ daha fazla" popup'ta bunları gösterir.
+// brandSlugs: her kategori gerçek endüstri uzmanlığına göre eşleştirilmiş, hepsi
+// ALL_BRANDS içindeki 50 markadan (yalnızca yüksek çözünürlüklü, temiz logo dosyası
+// garantili markalar) — kart üstündeki "+ daha fazla" popup'ta bunları gösterir.
 const CATEGORIES = [
-  { name: "Fren & Güvenlik Sistemleri", count: "45+ Marka", brandSlugs: ["brembo", "trw", "bosch", "delphi", "febi"], image: "/images/brake-systems.png", desc: "Fren balata/disk sistemleri, ABS ve araç güvenlik elektroniğinde OEM ve OEM eşdeğeri portföy." },
-  { name: "Süspansiyon & Direksiyon",   count: "38+ Marka", brandSlugs: ["sachs", "monroe", "trw", "lemforder", "skf"], image: "/images/suspension-steering.png", desc: "Amortisör, rotil, salıncak ve direksiyon sistemi bileşenlerinde geniş marka alternatifi." },
-  { name: "Motor, Ateşleme & Elektrik", count: "52+ Marka", brandSlugs: ["bosch", "denso", "ngk", "delphi", "borgwarner", "vdo"], image: "/images/engine-parts.png", desc: "Ateşleme, yakıt enjeksiyonu, turbo ve araç elektroniğinde küresel OEM tedarikçileri." },
-  { name: "Rulman & Transmisyon",        count: "28+ Marka", brandSlugs: ["skf", "fag", "ina", "luk", "optimal"], image: "/images/heavy-duty.png", desc: "Rulman, debriyaj ve şanzıman gruplarında hassas mühendislik gerektiren kategoriler." },
-  { name: "Filtre & Periyodik Bakım",    count: "30+ Marka", brandSlugs: ["mannfilter", "knecht", "filtron", "champion", "gunsan"], image: "/images/filters.png", desc: "Yağ, hava, yakıt ve kabin filtrelerinde periyodik bakım döngüsüne uygun geniş kapsam." },
-  { name: "Kaporta & Aydınlatma",        count: "35+ Marka", brandSlugs: ["valeo", "hella", "osram", "philips"], image: "/images/electrical-lighting.png", desc: "Far, arka lamba ve kaporta/aydınlatma sistemlerinde orijinal görünüm ve performans." },
+  { name: "Fren & Güvenlik Sistemleri", count: "45+ Marka", brandSlugs: ["brembo", "tmdfriction", "bosch", "continental", "corteco"], image: "/images/brake-systems.png", desc: "Fren balata/disk sistemleri, ABS ve araç güvenlik elektroniğinde OEM ve OEM eşdeğeri portföy." },
+  { name: "Süspansiyon & Direksiyon",   count: "38+ Marka", brandSlugs: ["monroe", "skf", "stabilus", "hlmando", "kyb"], image: "/images/suspension-steering.png", desc: "Amortisör, rotil, salıncak ve direksiyon sistemi bileşenlerinde geniş marka alternatifi." },
+  { name: "Motor, Ateşleme & Elektrik", count: "52+ Marka", brandSlugs: ["bosch", "denso", "phinia", "vitesco", "segautomotive"], image: "/images/engine-parts.png", desc: "Ateşleme, yakıt enjeksiyonu, turbo ve araç elektroniğinde küresel OEM tedarikçileri." },
+  { name: "Rulman & Transmisyon",        count: "28+ Marka", brandSlugs: ["skf", "schaeffler", "meritor", "gkn", "driv"], image: "/images/heavy-duty.png", desc: "Rulman, debriyaj ve şanzıman gruplarında hassas mühendislik gerektiren kategoriler." },
+  { name: "Filtre & Periyodik Bakım",    count: "30+ Marka", brandSlugs: ["mannhummel", "purflux", "liquimoly", "hengst", "totalenergies"], image: "/images/filters.png", desc: "Yağ, hava, yakıt ve kabin filtrelerinde periyodik bakım döngüsüne uygun geniş kapsam." },
+  { name: "Kaporta & Aydınlatma",        count: "35+ Marka", brandSlugs: ["valeo", "osram", "philips", "forvia"], image: "/images/electrical-lighting.png", desc: "Far, arka lamba ve kaporta/aydınlatma sistemlerinde orijinal görünüm ve performans." },
 ];
 
 const QUALITY = [
@@ -184,7 +179,7 @@ export function TedarikciPage() {
           </div>
 
           {filteredBrands.length > 0 ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
               {filteredBrands.map((b) => (
                 <div
                   key={b.slug}
@@ -193,7 +188,7 @@ export function TedarikciPage() {
                   <img
                     src={`/images/brands/${b.slug}.png`}
                     alt={b.name}
-                    className="max-h-8 max-w-[104px] w-auto h-auto object-contain grayscale hover:grayscale-0 transition-all duration-400"
+                    className="max-h-11 max-w-[180px] w-auto h-auto object-contain grayscale hover:grayscale-0 transition-all duration-400"
                   />
                 </div>
               ))}
@@ -243,7 +238,7 @@ export function TedarikciPage() {
                   </div>
                   <div className="flex flex-wrap gap-2">
                     {cat.brandSlugs.slice(0, 4).map(s => (
-                      <span key={s} className="text-[12px] text-slate-500 bg-slate-100 px-2.5 py-1 rounded-md font-medium">{BRAND_LABELS[s]}</span>
+                      <span key={s} className="text-[12px] text-slate-500 bg-slate-100 px-2.5 py-1 rounded-md font-medium">{ALL_BRAND_NAMES[s]}</span>
                     ))}
                     <span className="text-[12px] text-[#1B3A8F] font-semibold px-2.5 py-1 inline-flex items-center gap-1 group-hover:gap-1.5 transition-all">
                       + daha fazla <ChevronRight className="w-3 h-3" />
@@ -364,7 +359,7 @@ export function TedarikciPage() {
             <div className="grid grid-cols-2 gap-3">
               {active?.brandSlugs.map((s) => (
                 <div key={s} className="border border-slate-200 rounded-xl h-20 flex items-center justify-center px-4 bg-white hover:border-[#1B3A8F]/30 hover:shadow-md transition-all">
-                  <img src={`/images/brands/${s}.png`} alt={BRAND_LABELS[s]} className="max-h-8 max-w-[100px] w-auto h-auto object-contain" />
+                  <img src={`/images/brands/${s}.png`} alt={ALL_BRAND_NAMES[s]} className="max-h-11 max-w-[140px] w-auto h-auto object-contain" />
                 </div>
               ))}
             </div>

@@ -174,19 +174,46 @@
 }
 .do-beam-delay { animation-delay: 4.5s; }
 
-/* Distribution route arrows (ana sayfa Türkiye haritası) — kendini çizen
-   rota çizgileri, scroll'da .do-route-layer'a do-in eklenince tetiklenir. */
+/* Distribution route arrows (ana sayfa Türkiye haritası) — .do-route-layer'a
+   scroll'da do-in eklenince, her ok kendi gecikme/süresiyle sonsuz döngüde
+   "uçuyor": belirir, çizilir, bir süre durur, söner, tekrar başlar. */
+@keyframes do-route-flow {
+  0%   { stroke-dashoffset: 1400; opacity: 0; }
+  40%  { stroke-dashoffset: 1400; opacity: 0; }
+  48%  { opacity: 1; }
+  62%  { stroke-dashoffset: 0; opacity: 1; }
+  75%  { stroke-dashoffset: 0; opacity: 1; }
+  85%  { stroke-dashoffset: 0; opacity: 0; }
+  100% { stroke-dashoffset: 1400; opacity: 0; }
+}
+@keyframes do-route-dest-pulse {
+  0%, 58% { opacity: 0; transform: scale(0.5); }
+  64%     { opacity: 1; transform: scale(1); }
+  75%     { opacity: 1; transform: scale(1); }
+  85%     { opacity: 0; transform: scale(0.5); }
+  100%    { opacity: 0; transform: scale(0.5); }
+}
 .do-route-line {
   fill: none;
   stroke-linecap: round;
-  transition: stroke-dashoffset 1.6s cubic-bezier(.22,1,.36,1);
+  stroke-dashoffset: 1400;
+  opacity: 0;
 }
-.do-route-layer.do-in .do-route-line { stroke-dashoffset: 0 !important; }
+.do-route-layer.do-in .do-route-line {
+  animation-name: do-route-flow;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
 .do-route-dest {
   opacity: 0;
-  transition: opacity 0.5s ease-out;
+  transform-box: fill-box;
+  transform-origin: center;
 }
-.do-route-layer.do-in .do-route-dest { opacity: 1; }
+.do-route-layer.do-in .do-route-dest {
+  animation-name: do-route-dest-pulse;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+}
 
 /* Hide native scrollbar on custom horizontal scroll-snap rails (HakkimizdaPage
    zaman çizelgesi) — the rail ships its own prev/next buttons + dot rail as the
@@ -245,6 +272,10 @@
   .do-card:hover { transform: none; }
   .do-mobile-panel { transition: none; }
   .animate-pulse { animation: none; }
+  /* Sonsuz döngü burada 1 iterasyonda anlık bitip görünmez (idle) karede
+     kalır — rota okları için bunu ezip sabit/tam görünür bırakıyoruz. */
+  .do-route-line { animation: none !important; stroke-dashoffset: 0 !important; opacity: 1 !important; }
+  .do-route-dest { animation: none !important; opacity: 1 !important; transform: none !important; }
   *, *::before, *::after {
     transition-duration: 0.001ms !important;
     animation-duration: 0.001ms !important;
