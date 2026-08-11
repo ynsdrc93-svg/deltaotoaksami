@@ -141,16 +141,19 @@ export function IletisimPage() {
           proje kuralı gereği navy olmalı, bu da yalnızca burada zaten navy olan Lokasyonlar'ı
           en sona almakla (bkz. CLAUDE.md §9.2) en az müdahaleyle sağlanıyor. */}
       <section className="bg-[#f8fafc] py-20">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-5 gap-12">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-5 gap-12 items-start">
 
-          <div className="lg:col-span-2 flex flex-col space-y-4">
+          <div className="lg:col-span-2">
             <div className="mb-6">
               <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">Merkez Adres</span>
               <h2 className="text-2xl font-black text-slate-900 mt-2">Genel İletişim</h2>
             </div>
             {/* Tek, yoğun özet kart — Departman İletişim'deki ikon-kart ızgarasının bir
-                tekrarı olmasın diye satır bölmeli tek kart olarak tasarlandı. */}
-            <div className="flex-1 flex flex-col justify-between bg-white rounded-2xl border border-slate-200 shadow-sm divide-y divide-slate-100 overflow-hidden">
+                tekrarı olmasın diye satır bölmeli tek kart olarak tasarlandı. Doğal
+                (zorlanmamış) yükseklik: içerik ne kadar yer kaplıyorsa o kadar —
+                önceki versiyon sağdaki form kartıyla eşit yükseklik için satırlar
+                arasına yapay boşluk ekliyordu, dağınık görünüyordu. */}
+            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm divide-y divide-slate-100 overflow-hidden">
               {[
                 { Icon: MapPin, label: "Merkez Ofis",     lines: ["Barbaros Cd. Beyit Sk. No:17,", "Yukarı Dudullu — Ümraniye / İstanbul"] },
                 { Icon: Phone,  label: "Santral",          lines: ["0216 526 64 64 / 0216 526 33 44", "Satış: Pzt–Cmt 08:30–18:00 · B2B: Pzt–Cuma 09:00–17:30"] },
