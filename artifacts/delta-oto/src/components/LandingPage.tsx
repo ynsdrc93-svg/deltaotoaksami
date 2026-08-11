@@ -8,6 +8,34 @@ import { cities as turkeyCities } from "turkey-map-react/lib/data";
 
 const OPS_HUB_PLATES = [34, 41, 35]; // İstanbul (Ümraniye), Kocaeli (Gebze), İzmir
 const OPS_HUB_PATHS = turkeyCities.filter((c) => OPS_HUB_PLATES.includes(c.plateNumber));
+const OPS_HUB_POINTS: [number, number][] = [
+  [193.6, 211.0], // Ümraniye / İstanbul
+  [241.0, 236.5], // Gebze / Kocaeli
+  [96.7, 376.5],  // İzmir
+];
+
+// Dağıtım rotaları: 3 merkezden ülke geneline uzanan ok çizgileri.
+// Uçlar turkey-map-react'in path verisinden hesaplanan yaklaşık il merkezleri
+// (bounding-box centroid), haritayla aynı viewBox ("0 80 1050 585") üzerinde.
+const DISTRIBUTION_ROUTES: { from: [number, number]; to: [number, number] }[] = [
+  { from: [193.6, 211.0], to: [555.7, 218.6] }, // Ümraniye -> Samsun (Karadeniz)
+  { from: [193.6, 211.0], to: [836.8, 293.1] }, // Ümraniye -> Erzurum (Doğu Anadolu)
+  { from: [193.6, 211.0], to: [621.8, 498.8] }, // Ümraniye -> Gaziantep (Güneydoğu Anadolu)
+  { from: [241.0, 236.5], to: [365.1, 325.1] }, // Gebze -> Ankara (İç Anadolu)
+  { from: [96.7, 376.5],  to: [277.6, 519.5] }, // İzmir -> Antalya (Akdeniz)
+];
+
+/** İki nokta arasında hafif yukarı kavisli bir uçuş-rotası eğrisi (quadratic bezier). */
+function routeArcPath([x1, y1]: [number, number], [x2, y2]: [number, number]) {
+  const dx = x2 - x1, dy = y2 - y1;
+  const len = Math.hypot(dx, dy);
+  const candidates: [number, number][] = [[-dy / len, dx / len], [dy / len, -dx / len]];
+  const [px, py] = candidates[0][1] < candidates[1][1] ? candidates[0] : candidates[1];
+  const bow = len * 0.16;
+  const mx = (x1 + x2) / 2 + px * bow;
+  const my = (y1 + y2) / 2 + py * bow;
+  return `M ${x1},${y1} Q ${mx.toFixed(1)},${my.toFixed(1)} ${x2},${y2}`;
+}
 
 function CountUp({ target, suffix = "", duration = 1600, className = "" }: { target: number; suffix?: string; duration?: number; className?: string }) {
   const [started, setStarted] = useState(false);
@@ -366,6 +394,48 @@ export function LandingPage() {
               >
                 {OPS_HUB_PATHS.map((c) => (
                   <path key={c.id} d={c.path} fill="#7d9bea" />
+                ))}
+              </svg>
+              {/* 3 merkezden ülke geneline dağıtımı görselleştiren, scroll'da
+                  kendini çizen rota okları — "sadece batıda 3 nokta" algısını
+                  "buradan tüm ülkeye" hikayesine dönüştürür. */}
+              <svg
+                ref={ref}
+                viewBox="0 80 1050 585"
+                className="do-route-layer absolute inset-0 w-full h-full pointer-events-none"
+                aria-hidden="true"
+              >
+                <defs>
+                  <marker id="do-route-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+                    <path d="M0,0 L10,5 L0,10 Z" fill="#7d9bea" />
+                  </marker>
+                </defs>
+                {DISTRIBUTION_ROUTES.map((r, i) => (
+                  <path
+                    key={i}
+                    className="do-route-line"
+                    d={routeArcPath(r.from, r.to)}
+                    stroke="#7d9bea"
+                    strokeWidth={1.75}
+                    strokeDasharray={1400}
+                    strokeDashoffset={1400}
+                    markerEnd="url(#do-route-arrow)"
+                    style={{ transitionDelay: `${450 + i * 180}ms` }}
+                  />
+                ))}
+                {DISTRIBUTION_ROUTES.map((r, i) => (
+                  <circle
+                    key={`d${i}`}
+                    className="do-route-dest"
+                    cx={r.to[0]}
+                    cy={r.to[1]}
+                    r={3.5}
+                    fill="#7d9bea"
+                    style={{ transitionDelay: `${1900 + i * 180}ms` }}
+                  />
+                ))}
+                {OPS_HUB_POINTS.map((p, i) => (
+                  <circle key={`h${i}`} cx={p[0]} cy={p[1]} r={4.5} fill="#7d9bea" stroke="#0e1016" strokeWidth={1.5} />
                 ))}
               </svg>
             </div>

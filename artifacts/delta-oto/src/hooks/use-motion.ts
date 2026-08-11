@@ -2,16 +2,16 @@ import * as React from "react"
 
 /** Adds `.do-in` to observed elements once they scroll into view, pairs with `.do-reveal*` CSS. */
 export function useReveal() {
-  const refs = React.useRef<(HTMLElement | null)[]>([])
+  const refs = React.useRef<(Element | null)[]>([])
   React.useEffect(() => {
     const obs = new IntersectionObserver(
-      (entries) => entries.forEach(e => { if (e.isIntersecting) { (e.target as HTMLElement).classList.add("do-in"); obs.unobserve(e.target) } }),
+      (entries) => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add("do-in"); obs.unobserve(e.target) } }),
       { threshold: 0.12 }
     )
     refs.current.forEach(el => el && obs.observe(el))
     return () => obs.disconnect()
   }, [])
-  return (el: HTMLElement | null) => { if (el && !refs.current.includes(el)) refs.current.push(el) }
+  return (el: Element | null) => { if (el && !refs.current.includes(el)) refs.current.push(el) }
 }
 
 export function useScrolled(threshold = 40) {

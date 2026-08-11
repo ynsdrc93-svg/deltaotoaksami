@@ -174,6 +174,20 @@
 }
 .do-beam-delay { animation-delay: 4.5s; }
 
+/* Distribution route arrows (ana sayfa Türkiye haritası) — kendini çizen
+   rota çizgileri, scroll'da .do-route-layer'a do-in eklenince tetiklenir. */
+.do-route-line {
+  fill: none;
+  stroke-linecap: round;
+  transition: stroke-dashoffset 1.6s cubic-bezier(.22,1,.36,1);
+}
+.do-route-layer.do-in .do-route-line { stroke-dashoffset: 0 !important; }
+.do-route-dest {
+  opacity: 0;
+  transition: opacity 0.5s ease-out;
+}
+.do-route-layer.do-in .do-route-dest { opacity: 1; }
+
 /* Hide native scrollbar on custom horizontal scroll-snap rails (HakkimizdaPage
    zaman çizelgesi) — the rail ships its own prev/next buttons + dot rail as the
    visible scroll affordance, so the native bar is just noise. Not an animation,
