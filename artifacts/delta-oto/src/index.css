@@ -230,6 +230,14 @@
 .do-ticker-inner { animation: do-ticker 22s linear infinite; display: flex; width: max-content; }
 .do-ticker-inner:hover { animation-play-state: paused; }
 
+/* Ters yönlü şerit (ana sayfa Tedarikçilerimiz — soldan sağa kayan satırlar) */
+@keyframes do-ticker-reverse {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
+}
+.do-ticker-inner-reverse { animation: do-ticker-reverse 26s linear infinite; display: flex; width: max-content; }
+.do-ticker-inner-reverse:hover { animation-play-state: paused; }
+
 /* Logo filters */
 .do-logo-invert { filter: brightness(0) invert(1); }
 .do-spart-logo-filter { filter: brightness(0) invert(1) sepia(1) saturate(0) brightness(1.6); }
@@ -261,7 +269,7 @@
 /* Respect prefers-reduced-motion everywhere, not just one page */
 @media (prefers-reduced-motion: reduce) {
   .do-beam, .do-beam-delay { animation: none; opacity: 0; }
-  .do-ticker-inner { animation: none; }
+  .do-ticker-inner, .do-ticker-inner-reverse { animation: none; }
   .do-card-beam { display: none; }
   .do-reveal, .do-reveal-left, .do-reveal-right {
     opacity: 1 !important;

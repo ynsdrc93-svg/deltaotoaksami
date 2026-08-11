@@ -5,6 +5,13 @@ import { useReveal, useScrolled, useCounter, useScrollProgress, useParallax, use
 import { SiteFooter } from "./shared/SiteFooter";
 import TurkeyMap from "turkey-map-react";
 import { cities as turkeyCities } from "turkey-map-react/lib/data";
+import { ALL_BRANDS } from "../lib/brands";
+
+const BRAND_STRIPS = [
+  ALL_BRANDS.slice(0, 17),
+  ALL_BRANDS.slice(17, 34),
+  ALL_BRANDS.slice(34, 50),
+];
 
 const OPS_HUB_PLATES = [34, 41, 35]; // İstanbul (Ümraniye), Kocaeli (Gebze), İzmir
 const OPS_HUB_PATHS = turkeyCities.filter((c) => OPS_HUB_PLATES.includes(c.plateNumber));
@@ -474,6 +481,52 @@ export function LandingPage() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* TEDARİKÇİLERİMİZ (navy) — 3 şerit, dönüşümlü yönlerde kayan marka logoları */}
+      <section className="bg-[#1B3A8F] py-20 md:py-24 overflow-hidden relative">
+        <div className="absolute inset-0 do-grid-bg opacity-20"></div>
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 mb-14">
+          <p ref={ref} className="do-reveal text-[#7d9bea] text-xs font-bold uppercase tracking-[0.3em] mb-4 flex items-center gap-3">
+            <span className="w-8 h-[2px] bg-[#7d9bea] inline-block"></span>
+            Global Marka Portföyü
+          </p>
+          <h2 ref={ref} className="do-reveal do-d1 text-4xl md:text-5xl font-black text-white tracking-tight leading-tight mb-4">
+            Tedarikçilerimiz
+          </h2>
+          <p ref={ref} className="do-reveal do-d2 text-white/60 text-sm max-w-xl leading-relaxed">
+            Dünyanın önde gelen {ALL_BRANDS.length}+ OEM tedarikçisiyle çalışıyoruz; tam listeyi ve kategoriye göre filtrelemeyi Tedarikçiler sayfamızda inceleyebilirsiniz.
+          </p>
+        </div>
+
+        <div className="relative z-10 flex flex-col gap-5">
+          {BRAND_STRIPS.map((strip, rowIndex) => (
+            <div key={rowIndex} className="overflow-hidden">
+              <div className={rowIndex === 1 ? "do-ticker-inner" : "do-ticker-inner-reverse"}>
+                {[...strip, ...strip].map((b, i) => (
+                  <div
+                    key={`${b.slug}-${i}`}
+                    aria-hidden={i >= strip.length}
+                    className="shrink-0 mx-2.5 bg-white rounded-lg h-16 px-6 flex items-center justify-center shadow-sm"
+                  >
+                    <img
+                      src={`/images/brands/${b.slug}.png`}
+                      alt={b.name}
+                      className="max-h-7 max-w-[110px] w-auto h-auto object-contain grayscale hover:grayscale-0 transition-all duration-300"
+                    />
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 mt-12 text-center">
+          <Link href="/tedarikciler" className="inline-flex items-center gap-2 text-white font-semibold text-sm hover:text-[#7d9bea] transition-colors group">
+            Tüm tedarikçilerimizi inceleyin
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </Link>
         </div>
       </section>
 

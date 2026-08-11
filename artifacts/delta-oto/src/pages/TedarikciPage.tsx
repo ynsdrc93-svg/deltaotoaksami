@@ -4,61 +4,7 @@ import { ChevronRight, ArrowRight, CheckCircle2, Globe, Package, Shield, Zap, Ha
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
 import { useEscapeKey } from "../hooks/use-motion";
-
-// Tedarikçinin kendi resmi marka sunumundan (50 marka) alınan tam liste —
-// arama/filtreleme ile tüm portföyü tarayan dinamik bir dizin. Alfabetik.
-const ALL_BRANDS = [
-  { slug: "ajusa", name: "Ajusa" },
-  { slug: "akzonobel", name: "AkzoNobel" },
-  { slug: "bilsteingroup", name: "Bilstein Group" },
-  { slug: "borgwarner", name: "BorgWarner" },
-  { slug: "bosch", name: "Bosch" },
-  { slug: "brembo", name: "Brembo" },
-  { slug: "clarios", name: "Clarios" },
-  { slug: "cojali", name: "Cojali" },
-  { slug: "continental", name: "Continental" },
-  { slug: "corteco", name: "Corteco" },
-  { slug: "denso", name: "Denso" },
-  { slug: "dinex", name: "Dinex" },
-  { slug: "dolz", name: "Dolz" },
-  { slug: "driv", name: "DRiV" },
-  { slug: "elring", name: "Elring" },
-  { slug: "forvia", name: "Forvia (Hella)" },
-  { slug: "gates", name: "Gates" },
-  { slug: "gkn", name: "GKN" },
-  { slug: "haynespro", name: "HaynesPro" },
-  { slug: "hengst", name: "Hengst Filtration" },
-  { slug: "herthbuss", name: "Herth+Buss" },
-  { slug: "hlmando", name: "HL Mando" },
-  { slug: "kyb", name: "KYB" },
-  { slug: "liquimoly", name: "Liqui Moly" },
-  { slug: "mahle", name: "Mahle" },
-  { slug: "mannhummel", name: "Mann+Hummel" },
-  { slug: "marelli", name: "Marelli" },
-  { slug: "meritor", name: "Meritor" },
-  { slug: "monroe", name: "Monroe" },
-  { slug: "nissens", name: "Nissens" },
-  { slug: "niterra", name: "Niterra (NGK)" },
-  { slug: "nrf", name: "NRF" },
-  { slug: "osram", name: "Osram" },
-  { slug: "philips", name: "Philips" },
-  { slug: "phinia", name: "Phinia (Delphi)" },
-  { slug: "purflux", name: "Purflux Group" },
-  { slug: "schaeffler", name: "Schaeffler" },
-  { slug: "segautomotive", name: "SEG Automotive" },
-  { slug: "skf", name: "SKF" },
-  { slug: "stabilus", name: "Stabilus" },
-  { slug: "tecalliance", name: "TecAlliance" },
-  { slug: "titanx", name: "TitanX" },
-  { slug: "tmdfriction", name: "TMD Friction (Textar)" },
-  { slug: "totalenergies", name: "TotalEnergies" },
-  { slug: "trucktec", name: "Trucktec Automotive" },
-  { slug: "ufifilters", name: "UFI Filters" },
-  { slug: "valeo", name: "Valeo" },
-  { slug: "vitesco", name: "Vitesco Technologies" },
-  { slug: "wolflubricants", name: "Wolf Lubricants" },
-  { slug: "zfaftermarket", name: "ZF Aftermarket" },
-];
+import { ALL_BRANDS } from "@/lib/brands";
 
 // Kategori popup'larındaki logo isimleri ALL_BRANDS'ten çözülür — ayrı bir
 // isim haritası tutmak eski/silinmiş marka slug'larıyla senkron kaymasına yol açtı.
