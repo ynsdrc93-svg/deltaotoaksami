@@ -15,7 +15,7 @@ const ALL_BRAND_NAMES: Record<string, string> = Object.fromEntries(ALL_BRANDS.ma
 // garantili markalar) — kart üstündeki "+ daha fazla" popup'ta bunları gösterir.
 const CATEGORIES = [
   { name: "Fren & Güvenlik Sistemleri", count: "45+ Marka", brandSlugs: ["brembo", "tmdfriction", "bosch", "continental", "corteco"], image: "/images/brake-systems.png", desc: "Fren balata/disk sistemleri, ABS ve araç güvenlik elektroniğinde OEM ve OEM eşdeğeri portföy." },
-  { name: "Süspansiyon & Direksiyon",   count: "38+ Marka", brandSlugs: ["monroe", "skf", "stabilus", "hlmando", "kyb"], image: "/images/suspension-steering.png", desc: "Amortisör, rotil, salıncak ve direksiyon sistemi bileşenlerinde geniş marka alternatifi." },
+  { name: "Süspansiyon & Direksiyon",   count: "38+ Marka", brandSlugs: ["monroe", "skf", "trucktec", "hlmando", "kyb"], image: "/images/suspension-steering.png", desc: "Amortisör, rotil, salıncak ve direksiyon sistemi bileşenlerinde geniş marka alternatifi." },
   { name: "Motor, Ateşleme & Elektrik", count: "52+ Marka", brandSlugs: ["bosch", "denso", "phinia", "vitesco", "segautomotive"], image: "/images/engine-parts.png", desc: "Ateşleme, yakıt enjeksiyonu, turbo ve araç elektroniğinde küresel OEM tedarikçileri." },
   { name: "Rulman & Transmisyon",        count: "28+ Marka", brandSlugs: ["skf", "schaeffler", "meritor", "gkn", "driv"], image: "/images/heavy-duty.png", desc: "Rulman, debriyaj ve şanzıman gruplarında hassas mühendislik gerektiren kategoriler." },
   { name: "Filtre & Periyodik Bakım",    count: "30+ Marka", brandSlugs: ["mannhummel", "purflux", "liquimoly", "hengst", "totalenergies"], image: "/images/filters.png", desc: "Yağ, hava, yakıt ve kabin filtrelerinde periyodik bakım döngüsüne uygun geniş kapsam." },
@@ -125,19 +125,23 @@ export function TedarikciPage() {
           </div>
 
           {filteredBrands.length > 0 ? (
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-3">
-              {filteredBrands.map((b) => (
-                <div
-                  key={b.slug}
-                  className="bg-white rounded-xl flex items-center justify-center p-4 h-24 shadow-sm hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
-                >
-                  <img
-                    src={`/images/brands/${b.slug}.png`}
-                    alt={b.name}
-                    className="max-h-11 max-w-[180px] w-auto h-auto object-contain grayscale hover:grayscale-0 transition-all duration-400"
-                  />
-                </div>
-              ))}
+            <div className="flex flex-wrap gap-3">
+              {filteredBrands.map((b) => {
+                const Tile = b.website ? "a" : "div";
+                return (
+                  <Tile
+                    key={b.slug}
+                    {...(b.website ? { href: b.website, target: "_blank", rel: "noopener noreferrer" } : {})}
+                    className="bg-white rounded-xl flex items-center justify-center px-7 h-24 shadow-sm hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
+                  >
+                    <img
+                      src={`/images/brands/${b.slug}.png`}
+                      alt={b.name}
+                      className="max-h-11 w-auto h-auto object-contain grayscale hover:grayscale-0 transition-all duration-400"
+                    />
+                  </Tile>
+                );
+              })}
             </div>
           ) : (
             <p className="text-white/50 text-[14px] py-16 text-center">"{brandSearch}" ile eşleşen marka bulunamadı.</p>
@@ -302,10 +306,10 @@ export function TedarikciPage() {
           <div className="flex-1 overflow-y-auto p-7">
             <p className="text-slate-500 text-[14px] leading-relaxed mb-7">{active?.desc}</p>
             <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-400 block mb-4">Öne Çıkan Tedarikçiler</span>
-            <div className="grid grid-cols-2 gap-3">
+            <div className="flex flex-wrap gap-3">
               {active?.brandSlugs.map((s) => (
-                <div key={s} className="border border-slate-200 rounded-xl h-20 flex items-center justify-center px-4 bg-white hover:border-[#1B3A8F]/30 hover:shadow-md transition-all">
-                  <img src={`/images/brands/${s}.png`} alt={ALL_BRAND_NAMES[s]} className="max-h-11 max-w-[140px] w-auto h-auto object-contain" />
+                <div key={s} className="border border-slate-200 rounded-xl h-20 flex items-center justify-center px-6 bg-white hover:border-[#1B3A8F]/30 hover:shadow-md transition-all">
+                  <img src={`/images/brands/${s}.png`} alt={ALL_BRAND_NAMES[s]} className="max-h-11 w-auto h-auto object-contain" />
                 </div>
               ))}
             </div>

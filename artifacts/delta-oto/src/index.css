@@ -91,6 +91,11 @@
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  /* Span birden fazla satıra sarınca (ör. ana sayfa hero'su) her satır
+     kendi gradyanını alsın diye — aksi halde gradyan tüm span'e tek
+     parça uygulanıp dilimleniyor, ilk satır tamamen beyaz kalıyordu. */
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
 }
 .do-metric-num {
   background: linear-gradient(135deg, #0f172a 35%, #1B3A8F);

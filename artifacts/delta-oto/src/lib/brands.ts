@@ -1,12 +1,13 @@
 // Tedarikçinin kendi resmi marka sunumundan (50 marka) alınan tam liste —
 // Tedarikçiler sayfasındaki aranabilir dizin ve ana sayfadaki logo şeritleri
 // aynı kaynağı paylaşır. Alfabetik. Logo dosyaları: /images/brands/{slug}.png
-export const ALL_BRANDS = [
+// website: marka resmi sitesi — henüz sadece örnek olarak Bosch'ta dolu.
+export const ALL_BRANDS: { slug: string; name: string; website?: string }[] = [
   { slug: "ajusa", name: "Ajusa" },
   { slug: "akzonobel", name: "AkzoNobel" },
   { slug: "bilsteingroup", name: "Bilstein Group" },
   { slug: "borgwarner", name: "BorgWarner" },
-  { slug: "bosch", name: "Bosch" },
+  { slug: "bosch", name: "Bosch", website: "https://www.boschaftermarket.com/" },
   { slug: "brembo", name: "Brembo" },
   { slug: "clarios", name: "Clarios" },
   { slug: "cojali", name: "Cojali" },
@@ -52,4 +53,4 @@ export const ALL_BRANDS = [
   { slug: "vitesco", name: "Vitesco Technologies" },
   { slug: "wolflubricants", name: "Wolf Lubricants" },
   { slug: "zfaftermarket", name: "ZF Aftermarket" },
-] as const;
+];
