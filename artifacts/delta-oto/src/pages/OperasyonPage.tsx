@@ -20,7 +20,7 @@ function CountUp({ target, suffix = "", duration = 1600, className = "" }: { tar
 const HERO_STATS: { target?: number; suffix?: string; value?: string; label: string; sub: string }[] = [
   { target: 3,     label: "Operasyon Merkezi", sub: "Ümraniye · Gebze · İzmir" },
   { target: 50000, suffix: "+", label: "SKU",  sub: "Sürekli stok derinliği" },
-  { value: "14:00", label: "Kesim Saati",      sub: "Aynı gün sevkiyat" },
+  { value: "14:00", label: "Son Sipariş Saati", sub: "Aynı gün sevkiyat" },
   { target: 81,    label: "İl",                sub: "Ulusal dağıtım kapsamı" },
 ];
 
@@ -41,6 +41,13 @@ const OPS_FEATURES = [
   { icon: Shield,      title: "Tek Tedarikçi Kolaylığı",         desc: "250'den fazla marka tek çatı altında. Çoklu tedarikçi yönetiminin operasyonel yükü ortadan kalkar, müşteri enerjisi satışa odaklanır." },
 ];
 
+// Operasyonel Yetkinlikler'i iki tematik başlık altında sunmak için OPS_FEATURES'tan türetilen
+// görünüm gruplaması — 8 yetkinliğin içeriği (title/desc) birebir korunur, yalnızca sunum kümeleniyor.
+const OPS_GROUPS = [
+  { label: "Dağıtım & Kapsama",        items: [OPS_FEATURES[0], OPS_FEATURES[1], OPS_FEATURES[2], OPS_FEATURES[6]] },
+  { label: "Sistem, Kalite & Güvence", items: [OPS_FEATURES[3], OPS_FEATURES[4], OPS_FEATURES[5], OPS_FEATURES[7]] },
+];
+
 const PROCESS = [
   { num: "01", title: "Talep İletimi",              desc: "B2B portalı veya yetkili satış temsilcisi aracılığıyla sipariş kaydı oluşturulur." },
   { num: "02", title: "Anlık Stok Doğrulama",       desc: "Envanter sistemi ürün varlığını gerçek zamanlı teyit eder; alternatif ürün gerekiyorsa satış temsilcisi devreye girer." },
@@ -52,7 +59,7 @@ const DELIVERY_CARDS = [
   {
     Icon: Zap,
     title: "Aynı Gün Sevkiyat",
-    highlight: "14:00 Kesim Saati",
+    highlight: "14:00 Son Sipariş Saati",
     desc: "Stokta olan ürünler için 14:00'a kadar iletilen siparişler aynı gün yüklenir. Sabahın erken saatlerinde sipariş verenler için en hızlı çözüm.",
     featured: true,
   },
@@ -201,7 +208,7 @@ export function OperasyonPage() {
                 city: "İstanbul",
                 address: "Barbaros Cd. Beyit Sk. No:17, Yukarı Dudullu — Ümraniye / İstanbul",
                 kapsam: "İstanbul, Marmara, Trakya ve Türkiye geneli ulusal sevkiyat merkezi",
-                hizlar: ["Aynı Gün Sevkiyat (14:00 kesim saati)","Ertesi Gün İstanbul İçi","Cumartesi Sevkiyat Kapasitesi","Tüm 81 İle Ulusal Dağıtım"],
+                hizlar: ["Aynı Gün Sevkiyat (14:00 son sipariş saati)","Ertesi Gün İstanbul İçi","Cumartesi Sevkiyat Kapasitesi","Tüm 81 İle Ulusal Dağıtım"],
                 featured: true,
               },
               {
@@ -281,16 +288,33 @@ export function OperasyonPage() {
             <h2 className="text-3xl md:text-4xl font-black mt-2 tracking-tight">Operasyonel Yetkinliklerimiz</h2>
             <p className="text-white/60 mt-3 max-w-2xl text-[15px]">Her operasyonel süreç, müşteri teslimat deneyimini optimize etmek amacıyla yapılandırılmıştır.</p>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
-            {OPS_FEATURES.map((f) => (
-              <div key={f.title} className="flex flex-col gap-4 p-6 rounded-xl border border-white/10 bg-white/[0.04] hover:border-white/25 hover:bg-white/[0.08] transition-all">
-                <div className="shrink-0 w-11 h-11 bg-white/10 rounded-xl flex items-center justify-center">
-                  <f.icon className="w-5 h-5 text-[#7d9bea]" />
+          {/* 8 yetkinlik, iki tematik başlık altında büyük indeks numaralı satırlar halinde —
+              kart ızgarası yerine editoryal bir liste; içerik (title/desc) aynen korunuyor. */}
+          <div className="grid lg:grid-cols-2 gap-x-16 gap-y-4">
+            {OPS_GROUPS.map((group, gi) => (
+              <div key={group.label} ref={ref} className={gi === 0 ? "do-reveal-left" : "do-reveal-right"}>
+                <div className="flex items-center gap-3 pb-4 mb-1 border-b border-white/15">
+                  <span className="text-[11px] font-black text-[#7d9bea] tabular-nums">{gi === 0 ? "01—04" : "05—08"}</span>
+                  <span className="w-1 h-1 rounded-full bg-white/25" />
+                  <h3 className="text-[12px] font-bold uppercase tracking-[0.22em] text-white/85">{group.label}</h3>
                 </div>
-                <div>
-                  <h3 className="text-[14px] font-bold mb-1.5 leading-snug">{f.title}</h3>
-                  <p className="text-white/70 text-[13px] leading-relaxed">{f.desc}</p>
-                </div>
+                {group.items.map((f, i) => (
+                  <div
+                    key={f.title}
+                    className="group/row flex items-start gap-5 py-6 border-b border-white/10 last:border-b-0 hover:bg-white/[0.03] transition-colors rounded-lg -mx-3 px-3"
+                  >
+                    <span className="shrink-0 w-11 pt-0.5 text-4xl font-black text-white/[0.15] group-hover/row:text-[#7d9bea]/50 tabular-nums leading-none transition-colors">
+                      {String(gi * 4 + i + 1).padStart(2, "0")}
+                    </span>
+                    <div className="shrink-0 w-10 h-10 mt-0.5 rounded-lg bg-white/[0.06] border border-white/10 flex items-center justify-center group-hover/row:bg-[#7d9bea]/15 group-hover/row:border-[#7d9bea]/30 transition-colors">
+                      <f.icon className="w-[18px] h-[18px] text-[#7d9bea]" />
+                    </div>
+                    <div className="min-w-0">
+                      <h4 className="text-[15px] font-bold mb-1.5 leading-snug">{f.title}</h4>
+                      <p className="text-white/60 text-[13.5px] leading-relaxed">{f.desc}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
             ))}
           </div>
@@ -321,14 +345,31 @@ export function OperasyonPage() {
             ))}
           </div>
 
-          <div className="mt-16 pt-10 border-t border-white/10 flex flex-col sm:flex-row items-center justify-between gap-6">
-            <p className="text-white/70 text-[15px] max-w-md">
-              Sipariş sürecinizi bugün başlatın — B2B portalımız üzerinden anlık stok ve fiyat bilgisine ulaşın.
-            </p>
-            <button className="shrink-0 bg-white text-[#1B3A8F] font-bold px-8 py-4 rounded-md hover:bg-gray-100 transition-colors text-sm flex items-center gap-2 group">
-              B2B Portal
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-            </button>
+          {/* Kapanış CTA'sı — aynı navy section içinde ama kendi çerçeveli paneliyle net şekilde
+              ayrışan, sayfanın son çağrı anını taşıyan bir alt-blok (bkz. TedarikciPage/SpartPage
+              kapanış CTA deseni; burada ayrı bir navy section açmak yerine sub-block tercih edildi,
+              çünkü bu section zaten navy ve hemen üstündeki bölüm de navy — iki navy section'ı
+              art arda getirmek üstteki "OPERASYONEL GÜÇLER" dark ara-katmanının amacını bozardı). */}
+          <div ref={ref} className="do-reveal mt-16 md:mt-20 relative overflow-hidden rounded-2xl border border-white/15 bg-white/[0.06] p-8 sm:p-10 md:p-12">
+            <div className="absolute -right-24 -top-24 w-72 h-72 rounded-full bg-[#7d9bea]/10 blur-3xl pointer-events-none" />
+            <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-8">
+              <div className="max-w-xl">
+                <span className="inline-flex items-center gap-2.5 text-[11px] font-bold uppercase tracking-[0.25em] text-[#7d9bea] mb-4">
+                  <span className="w-6 h-[2px] bg-[#7d9bea] inline-block" />
+                  Hemen Başlayın
+                </span>
+                <h3 className="text-2xl sm:text-[28px] md:text-3xl font-black tracking-tight leading-[1.15] mb-3">
+                  Sipariş Sürecinizi Bugün Başlatın
+                </h3>
+                <p className="text-white/70 text-[15.5px] leading-relaxed">
+                  B2B portalımız üzerinden anlık stok ve fiyat bilgisine ulaşın.
+                </p>
+              </div>
+              <button className="shrink-0 bg-white text-[#1B3A8F] font-bold px-8 md:px-10 py-4 rounded-md hover:bg-gray-100 active:scale-[0.98] transition-colors text-sm flex items-center gap-2 group">
+                B2B Portal
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+              </button>
+            </div>
           </div>
         </div>
       </section>
