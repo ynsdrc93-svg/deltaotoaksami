@@ -1,7 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
 import { Link } from "wouter";
-import { ChevronRight, ArrowRight, MapPin, Mail, Phone, Globe, Zap, Network, Menu, X } from "lucide-react";
+import { ChevronRight, ArrowRight, Globe, Zap, Network, Menu, X } from "lucide-react";
 import { useReveal, useScrolled, useCounter, useScrollProgress, useParallax, useEscapeKey } from "../hooks/use-motion";
+import { SiteFooter } from "./shared/SiteFooter";
 import TurkeyMap from "turkey-map-react";
 import { cities as turkeyCities } from "turkey-map-react/lib/data";
 
@@ -49,7 +50,7 @@ export function LandingPage() {
       <div className="bg-[#1B3A8F] py-2 overflow-hidden">
         <div className="do-ticker-inner">
           {[...tickerItems, ...tickerItems].map((item, i) => (
-            <span key={i} className="px-8 text-xs font-bold uppercase tracking-[0.2em] text-white/90 flex items-center gap-8">
+            <span key={i} aria-hidden={i >= tickerItems.length} className="px-8 text-xs font-bold uppercase tracking-[0.2em] text-white/90 flex items-center gap-8">
               {item}
               <span className="w-1 h-1 rounded-full bg-white/40 inline-block"></span>
             </span>
@@ -62,16 +63,16 @@ export function LandingPage() {
         className="sticky top-0 z-50 transition-all duration-300 bg-white/90 backdrop-blur-md border-b border-slate-200"
         style={{ ...(scrolled ? { background: "rgba(255,255,255,0.98)", borderColor: "rgba(15,23,42,0.1)", boxShadow: "0 4px 24px rgba(15,23,42,0.08)" } : {}) }}
       >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-24 sm:h-28 flex items-center justify-between">
+        <div className={`max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between transition-[height] duration-300 ${scrolled ? "h-16 sm:h-[68px]" : "h-24 sm:h-28"}`}>
           {/* Left: logo + nav */}
           <div className="flex items-center gap-8 lg:gap-12">
-            <a href="#" className="flex items-center shrink-0">
+            <Link href="/" className="flex items-center shrink-0">
               <img
                 src="/images/delta-oto-logo.png"
                 alt="Delta Oto 50. Yıl"
-                className="h-16 sm:h-20 w-auto"
+                className={`w-auto transition-[height] duration-300 ${scrolled ? "h-10 sm:h-12" : "h-16 sm:h-20"}`}
               />
-            </a>
+            </Link>
             <nav className="hidden xl:flex items-center gap-6 xl:gap-8 text-[13.5px] font-medium tracking-tight text-slate-600">
               {NAV_LINKS.map(({ label, href }) => (
                 <Link key={href} href={href} className="do-nav-link whitespace-nowrap hover:text-[#1B3A8F] transition-colors duration-200">{label}</Link>
@@ -81,14 +82,14 @@ export function LandingPage() {
 
           {/* Right: SPART + B2B + mobile toggle */}
           <div className="flex items-center gap-4 shrink-0">
-            <a href="#" className="hidden xl:flex items-center rounded-md overflow-hidden ring-1 ring-slate-200 hover:ring-[#1B3A8F]/40 transition-all duration-200">
+            <Link href="/spart" className="hidden xl:flex items-center rounded-md overflow-hidden ring-1 ring-slate-200 hover:ring-[#1B3A8F]/40 transition-all duration-200">
               <img src="/images/spart-logo.png" alt="SPART Original Replacement" className="h-7 w-auto block" />
-            </a>
+            </Link>
             <span className="hidden xl:block w-px h-6 bg-slate-200"></span>
-            <a href="#" className="bg-[#1B3A8F] hover:bg-[#2547B5] active:scale-[0.98] text-white text-xs sm:text-[13px] font-semibold tracking-[0.01em] px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-md transition-all duration-200 flex items-center gap-1.5 shadow-sm hover:shadow-md group whitespace-nowrap">
+            <Link href="#" className="hidden xl:flex bg-[#1B3A8F] hover:bg-[#2547B5] active:scale-[0.98] text-white text-xs sm:text-[13px] font-semibold tracking-[0.01em] px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-md transition-all duration-200 items-center gap-1.5 shadow-sm hover:shadow-md group whitespace-nowrap">
               B2B Portal
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-            </a>
+            </Link>
             <button
               type="button"
               aria-label={mobileOpen ? "Menüyü kapat" : "Menüyü aç"}
@@ -116,10 +117,18 @@ export function LandingPage() {
                   {label}
                 </Link>
               ))}
-              <a href="#" onClick={() => setMobileOpen(false)} className="py-3 text-[15px] font-medium text-slate-700 hover:text-[#1B3A8F] flex items-center gap-2">
+              <Link href="/spart" onClick={() => setMobileOpen(false)} className="py-3 text-[15px] font-medium text-slate-700 hover:text-[#1B3A8F] flex items-center gap-2">
                 SPART
                 <img src="/images/spart-logo.png" alt="" className="h-5 w-auto" />
-              </a>
+              </Link>
+              <Link
+                href="#"
+                onClick={() => setMobileOpen(false)}
+                className="mt-3 bg-[#1B3A8F] hover:bg-[#2547B5] active:scale-[0.98] text-white text-[15px] font-semibold px-5 py-3 rounded-md transition-all duration-200 flex items-center justify-center gap-1.5"
+              >
+                B2B Portal
+                <ArrowRight className="w-4 h-4" />
+              </Link>
             </nav>
           </div>
         </div>
@@ -154,7 +163,7 @@ export function LandingPage() {
               ref={ref}
               className="do-reveal do-d1 text-[34px] sm:text-5xl md:text-6xl lg:text-[72px] xl:text-[80px] font-black leading-[1.05] sm:leading-[1.0] mb-6 tracking-[-0.02em] break-words"
             >
-              <span className="do-hero-line">50 YILDIR</span> <span className="text-white">OTOMOTİV AFTERMARKET'İN</span>
+              <span className="text-white">50 YILDIR OTOMOTİV AFTERMARKET'İN</span>
               <br />
               <span className="text-[#7d9bea]">KESİNTİSİZ GÜCÜ</span>
             </h1>
@@ -242,27 +251,30 @@ export function LandingPage() {
 
             <div
               ref={ref}
-              className="do-reveal do-d1 lg:w-1/2 w-full relative rounded-xl border border-white/15 bg-white/[0.06] backdrop-blur-sm overflow-hidden flex flex-col sm:flex-row divide-y sm:divide-y-0 sm:divide-x divide-white/10"
+              className="do-reveal do-d1 lg:w-1/2 w-full relative rounded-xl border border-white/15 bg-white/[0.06] backdrop-blur-sm overflow-hidden group"
             >
-              {[
-                { Icon: Globe, label: "Groupauto International", tag: "Global Ağ", sub: "40+ Ülke · 3.000+ Üye Firma", desc: "Dünyanın en büyük bağımsız yedek parça ağı: global satın alma gücü, ortak kalite standartları ve uluslararası tedarik kapasitesi." },
-                { Icon: Network, label: "Groupauto Türkiye", tag: "Yerel Ayak", sub: "Delta Oto Bünyesinde", desc: "Türkiye'de Groupauto ağının operasyonel ayağı. Global satın alma avantajını yerel stok derinliği ve lojistik hızıyla birleştiriyoruz." },
-              ].map((item) => (
-                <div key={item.label} className="group relative flex-1 p-8 transition-colors duration-500 hover:bg-white/[0.05]">
-                  <div className="do-card-beam"></div>
-                  <div className="relative z-10 flex flex-col h-full">
-                    <div className="flex items-center justify-between mb-7">
-                      <div className="w-12 h-12 rounded-lg bg-white/10 border border-white/15 flex items-center justify-center group-hover:bg-[#2547B5] group-hover:border-[#2547B5] group-hover:scale-105 transition-all duration-300">
-                        <item.Icon className="w-6 h-6 text-white" />
-                      </div>
-                      <span className="text-[10px] font-black tracking-[0.25em] text-blue-200/50 uppercase">{item.tag}</span>
-                    </div>
-                    <div className="font-bold text-white text-lg leading-tight">{item.label}</div>
-                    <div className="text-[11px] text-[#7d9bea] mt-1.5 uppercase tracking-[0.2em] font-semibold">{item.sub}</div>
-                    <p className="text-sm text-blue-100/65 leading-relaxed font-light mt-4">{item.desc}</p>
+              <div className="do-card-beam"></div>
+              <div className="relative z-10 p-8">
+                <div className="flex items-center justify-between mb-7">
+                  <div className="w-12 h-12 rounded-lg bg-white/10 border border-white/15 flex items-center justify-center group-hover:bg-[#2547B5] group-hover:border-[#2547B5] group-hover:scale-105 transition-all duration-300">
+                    <Globe className="w-6 h-6 text-white" />
                   </div>
+                  <span className="text-[10px] font-black tracking-[0.25em] text-blue-200/50 uppercase">Global Ağ</span>
                 </div>
-              ))}
+                <div className="font-bold text-white text-lg leading-tight">Groupauto International</div>
+                <div className="text-[11px] text-[#7d9bea] mt-1.5 uppercase tracking-[0.2em] font-semibold">40+ Ülke · 3.000+ Üye Firma</div>
+                <p className="text-sm text-blue-100/65 leading-relaxed font-light mt-4">
+                  Dünyanın en büyük bağımsız yedek parça ağı: global satın alma gücü, ortak kalite standartları ve uluslararası tedarik kapasitesi.
+                </p>
+              </div>
+              <div className="relative z-10 border-t border-white/10 bg-black/10 px-8 py-5 flex items-center gap-4">
+                <div className="w-9 h-9 rounded-lg bg-white/10 border border-white/15 flex items-center justify-center shrink-0">
+                  <Network className="w-4 h-4 text-[#7d9bea]" />
+                </div>
+                <p className="text-[13px] text-blue-100/75 leading-snug">
+                  <span className="text-white font-semibold">Delta Oto</span>, bu ağın Türkiye'deki resmi üyesi olarak global satın alma gücünü yerel stok derinliği ve lojistik hızıyla buluşturuyor.
+                </p>
+              </div>
             </div>
           </div>
         </div>
@@ -300,7 +312,15 @@ export function LandingPage() {
               </div>
             </div>
 
-            <div ref={ref} className="do-reveal do-d2 lg:w-[56%] w-full relative">
+            <div
+              ref={ref}
+              className="do-reveal do-d2 lg:w-[56%] w-full relative"
+              style={{ background: "radial-gradient(ellipse 68% 42% at 58% 50%, rgba(27,58,143,0.8) 55%, transparent 92%)" }}
+            >
+              {/* Harita path verisindeki göl/iç su boşlukları (ör. Tuz Gölü) dolgu almıyor;
+                  koyu section arkaplanında düz siyah leke gibi görünüyordu. Arkaplana
+                  idleColor tonunda bir radial gradient koyup boşlukların "su" gibi
+                  okunmasını sağlıyoruz. */}
               <TurkeyMap
                 hoverable
                 showTooltip
@@ -420,77 +440,7 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* FOOTER (dark) */}
-      <footer className="bg-[#0a0c11] pt-16 md:pt-20 pb-10 border-t border-white/5 text-white">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-14 mb-16">
-
-            <div>
-              <img
-                src="/images/delta-oto-logo.png"
-                alt="Delta Oto"
-                className="h-14 do-logo-invert mb-8 opacity-85"
-              />
-              <ul className="space-y-4 text-sm text-gray-500">
-                <li className="flex items-start gap-3">
-                  <MapPin className="w-4 h-4 shrink-0 text-gray-500 mt-0.5" />
-                  <span className="leading-relaxed">Barbaros Cd. Beyit Sk. No:17,<br />Yukarı Dudullu - Ümraniye / İstanbul</span>
-                </li>
-                <li className="flex items-center gap-3">
-                  <Mail className="w-4 h-4 shrink-0 text-gray-500" />
-                  <a href="mailto:info@deltaoto.com" className="hover:text-white transition-colors">info@deltaoto.com</a>
-                </li>
-                <li className="flex items-center gap-3">
-                  <Phone className="w-4 h-4 shrink-0 text-gray-500" />
-                  <span>0216 526 64 64 / 0216 526 33 44</span>
-                </li>
-              </ul>
-            </div>
-
-            <div className="md:pl-6">
-              <h4 className="text-white text-xs font-bold uppercase tracking-[0.2em] mb-7">Hızlı Bağlantılar</h4>
-              <ul className="space-y-3.5">
-                {["Kurumsal", "B2B Portal Girişi", "İletişim", "Gizlilik Politikası"].map(link => (
-                  <li key={link}>
-                    <a href="#" className="text-sm text-gray-500 hover:text-white transition-colors flex items-center gap-2 group">
-                      <span className="w-0 group-hover:w-3 h-[1px] bg-[#1B3A8F] inline-block transition-all duration-200"></span>
-                      {link}
-                    </a>
-                  </li>
-                ))}
-              </ul>
-
-              <div className="mt-10">
-                <h4 className="text-white text-xs font-bold tracking-[0.2em] mb-5">Private Label</h4>
-                <img src="/images/spart-logo.png" alt="SPART Original Replacement" className="h-9 w-auto rounded-md opacity-90 hover:opacity-100 transition-opacity" />
-              </div>
-            </div>
-
-            <div>
-              <h4 className="text-white text-xs font-bold uppercase tracking-[0.2em] mb-7">Sertifikalar & Üyelikler</h4>
-              <div className="flex gap-4 mb-8">
-                {["OSS\nDerneği", "ISO\n9001", "TS\nEN"].map(cert => (
-                  <div key={cert} className="w-20 h-16 border border-white/8 rounded-lg flex items-center justify-center bg-white/3 hover:border-white/15 transition-colors">
-                    <span className="text-[10px] text-gray-400 font-bold text-center whitespace-pre-line leading-tight">{cert}</span>
-                  </div>
-                ))}
-              </div>
-              <p className="text-xs text-gray-500 leading-relaxed max-w-xs">
-                Kalite standartlarımız ve sektörel üyeliklerimizle güvenilir iş ortaklığının güvencesini sunuyoruz.
-              </p>
-            </div>
-
-          </div>
-
-          <div className="pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
-            <span>© 2026 Delta Oto. Tüm hakları saklıdır.</span>
-            <div className="flex items-center gap-1.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-[#1B3A8F] animate-pulse"></div>
-              <span>Delta Oto · Kuruluş 1976</span>
-            </div>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter />
     </div>
   );
 }

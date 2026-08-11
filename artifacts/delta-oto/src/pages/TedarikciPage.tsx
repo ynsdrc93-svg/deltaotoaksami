@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "wouter";
-import { ChevronRight, ArrowRight, CheckCircle2, Globe, Package, Shield, Zap, Handshake, X } from "lucide-react";
+import { ChevronRight, ArrowRight, CheckCircle2, Globe, Package, Shield, Zap, Handshake, X, Cog } from "lucide-react";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
 import { useEscapeKey, useReveal } from "../hooks/use-motion";
@@ -58,7 +58,7 @@ const ADVANTAGES = [
   { Icon: Package, title: "Kapsamlı Ürün Gamı", desc: "250'den fazla markanın 50.000'i aşkın SKU'sundan oluşan portföy; tek tedarikçi ilişkisiyle uçtan uca karşılanır. Çoklu tedarikçi koordinasyonu yükü kalkar." },
   { Icon: Globe,   title: "Groupauto Tedarik Ayrıcalığı", desc: "Groupauto International üyeliği; 40+ ülkedeki 3.000+ üye firma gücünü satın alma kaldıracımıza dönüştürür. Global fiyat avantajı doğrudan portföyümüze yansır." },
   { Icon: Shield,  title: "OEM Standart Kalite Güvencesi", desc: "Yalnızca orijinal ve OEM eşdeğeri ürün kategorilerinde faaliyet gösteriyoruz. Sahte ve düşük kaliteli ürün portföyde kesinlikle yer almaz." },
-  { Icon: Zap,     title: "Dinamik Katalog Yönetimi", desc: "Yeni araç modelleri ve marka genişlemeleri portföye sürekli eklenir. Güncel stok bilgisine B2B portalı üzerinden anlık erişilebilir; bekleme olmadan sipariş." },
+  { Icon: Zap,     title: "Dinamik Katalog Yönetimi", desc: "Yeni araç modelleri ve marka genişlemeleri portföye sürekli eklenir. Güncel stok bilgisine B2B portalı üzerinden anlık erişilir, bekleme olmadan sipariş verilir." },
   { Icon: Handshake, title: "Opar Ege Bölge Bayiliği", desc: "Opar'ın Ege bölgesi operasyonunu devralarak İzmir ve çevresinde bölgesel stok derinliğimizi ve teslimat hızımızı doğrudan güçlendirdik." },
 ];
 
@@ -66,10 +66,19 @@ export function TedarikciPage() {
   const ref = useReveal();
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const active = CATEGORIES.find((c) => c.name === activeCategory) ?? null;
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const lastTriggerRef = useRef<HTMLElement | null>(null);
   useEscapeKey(() => setActiveCategory(null), !!active);
   useEffect(() => {
     document.body.style.overflow = active ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
+  }, [active]);
+  useEffect(() => {
+    if (active) {
+      closeButtonRef.current?.focus();
+    } else {
+      lastTriggerRef.current?.focus();
+    }
   }, [active]);
 
   return (
@@ -121,7 +130,7 @@ export function TedarikciPage() {
           <div className="mb-12">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea]">Global Marka Portföyü</span>
             <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight mt-2">Güvenilir Markaların Tek Çatısı</h2>
-            <p className="text-white/45 text-[14px] max-w-2xl mt-3 leading-relaxed">Dünyanın önde gelen OEM tedarikçilerinin Türkiye distribütörü olarak, bayilerimize global kaliteyi yerel hızla ulaştırıyoruz. Aşağıda öne çıkan birkaç ortağımız; kategoriye göre tam listeyi yukarıdaki kartlardan görebilirsiniz.</p>
+            <p className="text-white/45 text-[14px] max-w-2xl mt-3 leading-relaxed">Dünyanın önde gelen OEM tedarikçilerinin Türkiye distribütörü olarak, bayilerimize global kaliteyi yerel hızla ulaştırıyoruz. Aşağıda öne çıkan birkaç ortağımız yer alıyor; kategoriye göre tam listeyi az sonraki kartlardan görebilirsiniz.</p>
           </div>
 
           <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-4 auto-rows-[84px] sm:auto-rows-[96px]" style={{ gridAutoFlow: "dense" }}>
@@ -140,7 +149,7 @@ export function TedarikciPage() {
             ))}
           </div>
 
-          <p className="text-white/30 text-[13px] mt-10 text-center">Portföydeki tüm markalar OEM veya OEM eşdeğeri sertifikasyon standardındadır. Gösterilen markalar temsili bir seçimdir; tam liste için B2B portalına giriş yapınız.</p>
+          <p className="text-white/50 text-[13px] mt-10 text-center">Portföydeki tüm markalar OEM veya OEM eşdeğeri sertifikasyon standardındadır. Gösterilen markalar temsili bir seçimdir; tam liste için B2B portalına giriş yapınız.</p>
         </div>
       </section>
 
@@ -157,12 +166,16 @@ export function TedarikciPage() {
               <button
                 key={cat.name}
                 type="button"
-                onClick={() => setActiveCategory(cat.name)}
+                onClick={(e) => { lastTriggerRef.current = e.currentTarget; setActiveCategory(cat.name); }}
                 className="do-card bg-white border border-slate-200 rounded-xl overflow-hidden group cursor-pointer text-left w-full"
               >
-                {cat.image && (
+                {cat.image ? (
                   <div className="aspect-[16/9] overflow-hidden bg-slate-100">
                     <img src={cat.image} alt="" className="w-full h-full object-cover" />
+                  </div>
+                ) : (
+                  <div className="aspect-[16/9] overflow-hidden bg-gradient-to-br from-[#1B3A8F] to-[#0e1016] flex items-center justify-center">
+                    <Cog className="w-12 h-12 text-white/25" strokeWidth={1.25} />
                   </div>
                 )}
                 <div className="p-7">
@@ -278,6 +291,7 @@ export function TedarikciPage() {
               <h3 className="text-xl font-black text-slate-900 mt-1 leading-snug">{active?.name}</h3>
             </div>
             <button
+              ref={closeButtonRef}
               type="button"
               onClick={() => setActiveCategory(null)}
               aria-label="Kapat"

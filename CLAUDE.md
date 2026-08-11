@@ -54,13 +54,13 @@ Eskiden LandingPage.tsx'in kendi `<style>` tag'inde tanımlıydı (iç sayfalar 
 .do-card            /* hover: translateY(-6px), shadow, border-top mavi */
 .do-beam            /* sweep animasyon efekti */
 .do-ticker-inner    /* yatay kayan ticker animasyonu */
-.do-mobile-panel    /* mobil nav paneli: grid-template-rows 0fr→1fr açılır, >=1024px'te her zaman display:none (bkz. not) */
+.do-mobile-panel    /* mobil nav paneli: grid-template-rows 0fr→1fr açılır, >=1280px'te her zaman display:none (bkz. not) */
 ```
 Reveal/counter/parallax hook'ları (`useReveal`, `useCounter`, `useParallax`, `useScrolled`, `useScrollProgress`, `useEscapeKey`) `src/hooks/use-motion.ts`'te — aynı şekilde merkezi, her sayfa import edebilir.
 
 **Kritik:** `@media (prefers-reduced-motion: reduce)` tüm animasyonlar disable edilmiş — bu kuralı koruyun. Global blok artık `.do-page *` ile sınırlı değil, `*` — her sayfayı kapsıyor.
 
-**Cascade layer notu:** `index.css`'teki bu kurallar Tailwind'in `@layer`'ının DIŞINDA (katmansız) yazılıyor — CSS Cascade Layers kuralı gereği katmansız kurallar breakpoint/specificity farketmeksizin HER ZAMAN Tailwind'in katmanlı utility'lerini (`lg:hidden` dahil) ezer. Bir öğeye hem özel bir `.do-*` sınıfı hem de görünürlüğü kontrol eden bir Tailwind responsive utility'si (`lg:hidden`, `md:flex` vb.) birlikte uygulanacaksa, görünürlük mantığını Tailwind'e bırakmayın — `.do-mobile-panel`'deki `@media (min-width: 1024px) { display: none; }` gibi kendi media query'nizle kendi CSS'inizde de zorunlu kılın.
+**Cascade layer notu:** `index.css`'teki bu kurallar Tailwind'in `@layer`'ının DIŞINDA (katmansız) yazılıyor — CSS Cascade Layers kuralı gereği katmansız kurallar breakpoint/specificity farketmeksizin HER ZAMAN Tailwind'in katmanlı utility'lerini (`xl:hidden` dahil) ezer. Bir öğeye hem özel bir `.do-*` sınıfı hem de görünürlüğü kontrol eden bir Tailwind responsive utility'si (`xl:hidden`, `md:flex` vb.) birlikte uygulanacaksa, görünürlük mantığını Tailwind'e bırakmayın — `.do-mobile-panel`'deki `@media (min-width: 1280px) { display: none; }` gibi kendi media query'nizle kendi CSS'inizde de zorunlu kılın.
 
 ---
 
@@ -148,9 +148,9 @@ artifacts/delta-oto/
 - **Aktif sayfa:** `border-b-2 border-[#1B3A8F]` ile vurgulanan link
 - **Scroll:** Scroll > 30px'de `bg-white/0.98` + box-shadow
 - **Nav öğeleri:** Hakkımızda · Tedarikçiler · Operasyon ve Lojistik · Kariyer · İletişim
-- **Masaüstü/mobil eşiği:** Nav + SPART + B2B `lg` (1024px) altında gizlenir; `<1024px`'te logo yanında hamburger (`lucide-react` `Menu`/`X`) açılır, aynı 5 link + SPART'ı dikey panelde gösterir (`.do-mobile-panel`, bkz. bölüm 2). Route değişince otomatik kapanır (`useLocation` + `useEffect`), Escape ile de kapanır (`useEscapeKey`).
+- **Masaüstü/mobil eşiği:** Nav + SPART + B2B `xl` (1280px) altında gizlenir; `<1280px`'te logo yanında hamburger (`lucide-react` `Menu`/`X`) açılır, aynı 5 link + SPART + B2B Portal butonunu dikey panelde gösterir (`.do-mobile-panel`, bkz. bölüm 2). Route değişince otomatik kapanır (`useLocation` + `useEffect`), Escape ile de kapanır (`useEscapeKey`). (Eşik başlangıçta `lg`/1024px idi; 1024–1279px arasında gerçek bir header taşma/overlap bug'ı bulunduğu için `xl`/1280px'e çıkarıldı — bkz. bölüm 12 notları.)
 
-**LandingPage'in kendi header'ı da aynı mobil davranışa sahip** (kendi `mobileOpen` state'i + aynı `.do-mobile-panel` sınıfı) — iki header dosyası ayrı ama artık ikisi de `<1024px`'te gezinme sağlıyor.
+**LandingPage'in kendi header'ı da aynı mobil davranışa sahip** (kendi `mobileOpen` state'i + aynı `.do-mobile-panel` sınıfı, aynı scroll-shrink mantığı) — iki header dosyası ayrı ama artık ikisi de `<1280px`'te gezinme sağlıyor.
 
 ### SiteFooter
 - **Arkaplan:** `bg-[#0a0c11]` (footer siyahı)
@@ -303,7 +303,7 @@ Kendi header'ı var (iç sayfaların SiteHeader'ından farklı).
 7. **Kariyer:** Statik pozisyon listesi yok; LinkedIn ve Kariyer.net'e yönlendirme.
 8. **prefers-reduced-motion:** Tüm CSS animasyonları media query ile disable edilmiş — koruyun.
 9. **Görseller:** Unsplash stok fotoğraflar hero arkaplanlarında kullanılıyor. SPART sayfası AI üretimi görseller kullanıyor (`spart-hero.jpg`, `spart-quality.jpg`, `spart-warehouse.jpg`).
-10. **LandingPage kendi header'ını içeriyor:** Refactor gerekiyorsa dikkat — SiteHeader ile ayrı tutulmuş.
+10. **LandingPage kendi header'ını içeriyor:** Refactor gerekiyorsa dikkat — SiteHeader ile ayrı tutulmuş (nav solda, farklı max-width). **Footer için bu geçerli değil** — LandingPage artık `SiteFooter`'ı doğrudan import edip kullanıyor (eskiden kopya bir footer'ı vardı, koddan sapmış ve linkleri kırılmıştı; birleştirildi).
 
 ---
 

@@ -18,7 +18,9 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Asıl font isteği src/index.css'teki @import ile yapılıyor (daha geniş ağırlık seti,
+         300-900). Buradaki preconnect'ler o isteği hızlandırmak için bilinçli olarak kalıyor;
+         ayrıca bir <link rel="stylesheet"> eklemek aynı fontu iki kez indirtiyordu. -->
   </head>
   <body>
     <div id="root"></div>

@@ -31,12 +31,12 @@ const INFRA_STATS: { target?: number; suffix?: string; value?: string; label: st
 ];
 
 const OPS_FEATURES = [
-  { icon: Truck,        title: "Üç Merkezden Ulusal Dağıtım",    desc: "Ümraniye, Gebze ve İzmir'deki operasyon merkezlerimizden Türkiye'nin 81 iline anlaşmalı lojistik partnerleriyle düzenli teslimat." },
+  { icon: Truck,        title: "Üç Merkezden Ulusal Dağıtım",    desc: "Ümraniye, Gebze ve İzmir'deki operasyon merkezlerimizden Türkiye'nin 81 iline anlaşmalı lojistik partnerleriyle düzenli teslimat gerçekleştiriyoruz." },
   { icon: Zap,         title: "Aynı Gün Sevkiyat Garantisi",     desc: "Saat 14:00'a kadar iletilen siparişler, stokta olan ürünler için aynı gün yüklenir. Acil ihtiyaçta servis sürekliliği önceliğimizdir." },
   { icon: Handshake,   title: "Opar Ege Bölge Bayiliği",         desc: "Opar'ın Ege bölgesi operasyonunu devralarak İzmir merkezli bölgesel stok derinliğimizi ve teslimat kapasitemizi genişlettik." },
   { icon: Shield,      title: "WMS Destekli Depo Yönetimi",      desc: "Ambar yönetim sistemi stok doğruluğunu ve sipariş hazırlık sürecini kontrol altında tutar; hata payı sistem düzeyinde sıfıra yakın tutulur." },
   { icon: BarChart3,   title: "Stok Derinliği & Planlama",       desc: "Talep bazlı envanter planlaması ve dönemsel analiz ile kritik ürünlerde yüksek doluluk oranı sürdürülür. Stokta yok cevabı istisnai kalır." },
-  { icon: PackageCheck, title: "Sevkiyat Kalite Kontrolü",       desc: "Her sipariş çıkışı WMS kontrolünden ardından fiziksel doğrulamadan geçer; hasarlı ve eksik gönderim oranı operasyonel sıfır hedefinde tutulur." },
+  { icon: PackageCheck, title: "Sevkiyat Kalite Kontrolü",       desc: "Her sipariş çıkışı önce WMS kontrolünden, ardından fiziksel doğrulamadan geçer; hasarlı ve eksik gönderim oranı operasyonel sıfır hedefinde tutulur." },
   { icon: Network,     title: "İhracat & Bölgesel Erişim",       desc: "Groupauto International kanalları üzerinden Türkiye dışı pazarlara da ürün ihracatı gerçekleştirilmektedir." },
   { icon: Shield,      title: "Tek Tedarikçi Kolaylığı",         desc: "250'den fazla marka tek çatı altında. Çoklu tedarikçi yönetiminin operasyonel yükü ortadan kalkar, müşteri enerjisi satışa odaklanır." },
 ];
@@ -60,7 +60,7 @@ const DELIVERY_CARDS = [
     Icon: Truck,
     title: "Ertesi Gün Teslimat",
     highlight: "İstanbul ve Çevre İller",
-    desc: "Standart siparişlerde İstanbul ve yakın il müşterilerimiz için ertesi iş günü teslimat hedeflenir. Güvenilir ve öngörülebilir bir deneyim.",
+    desc: "Standart siparişlerde İstanbul ve yakın il müşterileriniz için ertesi iş günü teslimat hedeflenir. Güvenilir ve öngörülebilir bir deneyim.",
     featured: false,
   },
   {
@@ -115,7 +115,7 @@ export function OperasyonPage() {
                   {target !== undefined ? <CountUp target={target} suffix={suffix} /> : value}
                 </div>
                 <div className="text-[11px] font-bold text-[#7d9bea] uppercase tracking-[0.15em] mt-2.5">{label}</div>
-                <div className="text-[11px] text-gray-500 mt-1">{sub}</div>
+                <div className="text-[11px] text-white/50 mt-1">{sub}</div>
               </div>
             ))}
           </div>
@@ -130,7 +130,7 @@ export function OperasyonPage() {
             <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-2 tracking-tight">Operasyonel Ağ Yapımız</h2>
             <p className="text-slate-500 mt-3 max-w-2xl text-[15px]">Üç operasyon merkezinden yönetilen lojistik ağımız, bölgeden bölgeye değişen teslimat takvimi taahhütleriyle çalışır.</p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5 max-w-2xl">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
             {INFRA_STATS.map(({ target, suffix, value, label, sub }) => (
               <div key={label} className="text-center p-6 rounded-xl border border-slate-200 hover:border-[#1B3A8F]/30 hover:shadow-md transition-all">
                 <div className="text-[22px] font-black text-[#1B3A8F] leading-tight tabular-nums">

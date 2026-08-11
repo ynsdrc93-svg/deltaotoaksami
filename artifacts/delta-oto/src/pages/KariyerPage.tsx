@@ -32,13 +32,13 @@ const TESTIMONIALS = [
 
 const BENEFITS = [
   { label: "Özel sağlık sigortası",     sub: "Tüm çalışanlar için",               Icon: HeartPulse },
-  { label: "Yemek kartı katkısı",        sub: "Günlük katkı desteği",              Icon: Utensils },
+  { label: "Yemek kartı katkısı",        sub: "Her iş günü için sağlanır",         Icon: Utensils },
   { label: "Sektörel eğitim bütçesi",    sub: "Yıllık gelişim programı",           Icon: GraduationCap },
   { label: "Esnek çalışma saatleri",     sub: "Pozisyona göre uygulanır",          Icon: Clock },
   { label: "Yıllık kariyer görüşmesi",   sub: "Şeffaf performans değerlendirmesi", Icon: CalendarCheck },
-  { label: "Ulaşım desteği",             sub: "Servis veya ulaşım katkısı",        Icon: Bus },
+  { label: "Ulaşım desteği",             sub: "Servis hattı veya yol bedeli",      Icon: Bus },
   { label: "Marka ve ürün eğitimleri",   sub: "Tedarikçi işbirliğiyle",            Icon: BookOpen },
-  { label: "Mentörlük programı",         sub: "Kıdemli çalışan rehberliği",        Icon: Users },
+  { label: "Mentorluk programı",         sub: "Kıdemli çalışan rehberliği",        Icon: Users },
 ];
 
 const JOB_PLATFORMS = [
@@ -54,7 +54,7 @@ const JOB_PLATFORMS = [
     name: "Kariyer.net",
     desc: "Güncel iş ilanlarımızı Kariyer.net üzerinden inceleyebilir, online başvurunuzu kolayca tamamlayabilirsiniz.",
     url: "https://www.kariyer.net",
-    label: "Kariyer.net'te İlanları Görün",
+    label: "Kariyer.net'i Ziyaret Edin",
     color: "#1B3A8F",
     Icon: ExternalLink,
   },

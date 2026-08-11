@@ -40,7 +40,7 @@ const CATEGORIES = [
   {
     icon: <Droplets className="w-6 h-6" />,
     title: "Motor & Filtreler",
-    desc: "Yağ, hava, yakıt ve Polen filtreleri. Motor ömrünü koruyan doğru filtrasyon.",
+    desc: "Yağ, hava, yakıt ve polen filtreleri. Motor ömrünü koruyan doğru filtrasyon.",
     count: "120+",
     unit: "referans",
   },
@@ -86,7 +86,7 @@ const QUALITIES = [
   {
     icon: <History className="w-5 h-5" />,
     title: "50 Yıllık Sektör Birikimi",
-    desc: "Delta Oto'nun beş on yıllık aftermarket deneyimi, SPART'ın ürün seçimi ve kalite standartlarının temelidir. Bilgi, fiyattan önce gelir.",
+    desc: "Delta Oto'nun 50 yıllık aftermarket deneyimi, SPART'ın ürün seçimi ve kalite standartlarının temelidir. Bilgi, fiyattan önce gelir.",
   },
 ];
 
@@ -294,7 +294,7 @@ export function SpartPage() {
                   </div>
                   <div className="text-right">
                     <span className="text-xl font-black text-[#1B3A8F]">{cat.count}</span>
-                    <div className="text-[11px] text-slate-400 font-medium">{cat.unit}</div>
+                    <div className="text-[11px] text-slate-500 font-medium">{cat.unit}</div>
                   </div>
                 </div>
                 <h3 className="font-bold text-slate-900 mb-2">{cat.title}</h3>
@@ -362,7 +362,7 @@ export function SpartPage() {
                   </span>
                 </div>
                 <h3 className="text-[17px] font-black text-slate-900 mb-1">{depot.name}</h3>
-                <p className="text-slate-400 text-[13px] mb-4">{depot.city}</p>
+                <p className="text-slate-500 text-[13px] mb-4">{depot.city}</p>
                 <p className="text-slate-500 text-[13px] leading-relaxed border-t border-slate-100 pt-4">{depot.address}</p>
               </div>
             ))}

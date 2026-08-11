@@ -141,19 +141,19 @@ export function IletisimPage() {
           proje kuralı gereği navy olmalı, bu da yalnızca burada zaten navy olan Lokasyonlar'ı
           en sona almakla (bkz. CLAUDE.md §9.2) en az müdahaleyle sağlanıyor. */}
       <section className="bg-[#f8fafc] py-20">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-5 gap-12 items-start">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-5 gap-12">
 
-          <div className="lg:col-span-2 space-y-4">
+          <div className="lg:col-span-2 flex flex-col space-y-4">
             <div className="mb-6">
               <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">Merkez Adres</span>
               <h2 className="text-2xl font-black text-slate-900 mt-2">Genel İletişim</h2>
             </div>
             {/* Tek, yoğun özet kart — Departman İletişim'deki ikon-kart ızgarasının bir
                 tekrarı olmasın diye satır bölmeli tek kart olarak tasarlandı. */}
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm divide-y divide-slate-100 overflow-hidden">
+            <div className="flex-1 flex flex-col justify-between bg-white rounded-2xl border border-slate-200 shadow-sm divide-y divide-slate-100 overflow-hidden">
               {[
                 { Icon: MapPin, label: "Merkez Ofis",     lines: ["Barbaros Cd. Beyit Sk. No:17,", "Yukarı Dudullu — Ümraniye / İstanbul"] },
-                { Icon: Phone,  label: "Santral",          lines: ["0216 526 64 64 / 0216 526 33 44", "Pazartesi – Cumartesi, 08:30 – 18:00"] },
+                { Icon: Phone,  label: "Santral",          lines: ["0216 526 64 64 / 0216 526 33 44", "Satış: Pzt–Cmt 08:30–18:00 · B2B: Pzt–Cuma 09:00–17:30"] },
                 { Icon: Mail,   label: "Kurumsal E-posta", lines: ["info@deltaoto.com", "b2b@deltaoto.com"] },
                 { Icon: Globe,  label: "Dijital Kanallar", lines: ["www.deltaoto.com.tr", "b2b.deltaoto.com.tr (B2B Portal)"] },
               ].map(({ Icon, label, lines }) => (
@@ -178,56 +178,61 @@ export function IletisimPage() {
               <h2 className="text-2xl font-black text-slate-900 mt-2">Bize Yazın</h2>
               <p className="text-slate-500 mt-2 text-[14px]">Talebiniz en kısa sürede ilgili birime yönlendirilecektir.</p>
             </div>
-            <div className="grid md:grid-cols-2 gap-5">
-              {[
-                { id: "ad",      label: "Ad Soyad",        ph: "Adınız ve soyadınız" },
-                { id: "firma",   label: "Firma Ünvanı",     ph: "Firma adı" },
-                { id: "telefon", label: "Telefon",          ph: "+90 5XX XXX XX XX" },
-                { id: "email",   label: "Kurumsal E-posta", ph: "ornek@firma.com.tr" },
-              ].map(({ id, label, ph }) => (
-                <div key={id}>
-                  <label className="block text-[11.5px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">{label}</label>
-                  <input
-                    type="text"
-                    placeholder={ph}
-                    className="w-full border border-slate-200 rounded-lg px-4 py-3 text-[14px] text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#1B3A8F] focus:ring-1 focus:ring-[#1B3A8F]/20 transition"
-                    value={(form as Record<string, string>)[id]}
-                    onChange={e => setForm(f => ({ ...f, [id]: e.target.value }))}
-                  />
-                </div>
-              ))}
-            </div>
-            <div className="mt-5">
-              <label className="block text-[11.5px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Talep Konusu</label>
-              <select
-                className="w-full border border-slate-200 rounded-lg px-4 py-3 text-[14px] text-slate-700 focus:outline-none focus:border-[#1B3A8F] focus:ring-1 focus:ring-[#1B3A8F]/20 transition bg-white"
-                value={form.konu}
-                onChange={e => setForm(f => ({ ...f, konu: e.target.value }))}
-              >
-                <option value="">Konu seçiniz</option>
-                <option>Sipariş ve Teslimat Süreci</option>
-                <option>Stok ve Ürün Bilgisi</option>
-                <option>B2B Portal Erişimi ve Yetkilendirme</option>
-                <option>İhracat Talebi</option>
-                <option>Kurumsal İletişim</option>
-                <option>İnsan Kaynakları & Kariyer</option>
-                <option>Diğer</option>
-              </select>
-            </div>
-            <div className="mt-5">
-              <label className="block text-[11.5px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Mesajınız</label>
-              <textarea
-                rows={4}
-                placeholder="Talebinizi ve konuyu kısaca açıklayınız..."
-                className="w-full border border-slate-200 rounded-lg px-4 py-3 text-[14px] text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#1B3A8F] focus:ring-1 focus:ring-[#1B3A8F]/20 transition resize-none"
-                value={form.mesaj}
-                onChange={e => setForm(f => ({ ...f, mesaj: e.target.value }))}
-              />
-            </div>
-            <button className="mt-6 w-full bg-[#1B3A8F] hover:bg-[#2547B5] text-white font-semibold py-4 rounded-lg transition-colors flex items-center justify-center gap-2 group shadow-[0_4px_16px_rgba(27,58,143,0.2)]">
-              Talep Gönderin <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-            </button>
-            <p className="text-center text-[12px] text-slate-400 mt-4">Verileriniz yalnızca talebinizi karşılamak amacıyla kullanılır.</p>
+            <form onSubmit={e => e.preventDefault()}>
+              <div className="grid md:grid-cols-2 gap-5">
+                {[
+                  { id: "ad",      label: "Ad Soyad",        ph: "Adınız ve soyadınız", type: "text" },
+                  { id: "firma",   label: "Firma Ünvanı",     ph: "Firma adı", type: "text" },
+                  { id: "telefon", label: "Telefon",          ph: "+90 5XX XXX XX XX", type: "tel" },
+                  { id: "email",   label: "Kurumsal E-posta", ph: "ornek@firma.com.tr", type: "email" },
+                ].map(({ id, label, ph, type }) => (
+                  <div key={id}>
+                    <label htmlFor={id} className="block text-[11.5px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">{label}</label>
+                    <input
+                      id={id}
+                      type={type}
+                      placeholder={ph}
+                      className="w-full border border-slate-200 rounded-lg px-4 py-3 text-[14px] text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#1B3A8F] focus:ring-1 focus:ring-[#1B3A8F]/20 transition"
+                      value={(form as Record<string, string>)[id]}
+                      onChange={e => setForm(f => ({ ...f, [id]: e.target.value }))}
+                    />
+                  </div>
+                ))}
+              </div>
+              <div className="mt-5">
+                <label htmlFor="konu" className="block text-[11.5px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Talep Konusu</label>
+                <select
+                  id="konu"
+                  className="w-full border border-slate-200 rounded-lg px-4 py-3 text-[14px] text-slate-700 focus:outline-none focus:border-[#1B3A8F] focus:ring-1 focus:ring-[#1B3A8F]/20 transition bg-white"
+                  value={form.konu}
+                  onChange={e => setForm(f => ({ ...f, konu: e.target.value }))}
+                >
+                  <option value="">Konu seçiniz</option>
+                  <option>Sipariş ve Teslimat Süreci</option>
+                  <option>Stok ve Ürün Bilgisi</option>
+                  <option>B2B Portal Erişimi ve Yetkilendirme</option>
+                  <option>İhracat Talebi</option>
+                  <option>Kurumsal İletişim</option>
+                  <option>İnsan Kaynakları & Kariyer</option>
+                  <option>Diğer</option>
+                </select>
+              </div>
+              <div className="mt-5">
+                <label htmlFor="mesaj" className="block text-[11.5px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">Mesajınız</label>
+                <textarea
+                  id="mesaj"
+                  rows={4}
+                  placeholder="Talebinizi ve konuyu kısaca açıklayınız..."
+                  className="w-full border border-slate-200 rounded-lg px-4 py-3 text-[14px] text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#1B3A8F] focus:ring-1 focus:ring-[#1B3A8F]/20 transition resize-none"
+                  value={form.mesaj}
+                  onChange={e => setForm(f => ({ ...f, mesaj: e.target.value }))}
+                />
+              </div>
+              <button type="submit" className="mt-6 w-full bg-[#1B3A8F] hover:bg-[#2547B5] text-white font-semibold py-4 rounded-lg transition-colors flex items-center justify-center gap-2 group shadow-[0_4px_16px_rgba(27,58,143,0.2)]">
+                Talep Gönderin <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+              </button>
+              <p className="text-center text-[12px] text-slate-400 mt-4">Verileriniz yalnızca talebinizi karşılamak amacıyla kullanılır.</p>
+            </form>
           </div>
         </div>
       </section>
@@ -253,12 +258,12 @@ export function IletisimPage() {
                     <div>
                       <span className="text-[11px] font-bold uppercase tracking-widest text-[#7d9bea]">{loc.type}</span>
                       <h3 className="text-[16px] font-bold mt-1">{loc.name}</h3>
-                      <p className="text-white/50 text-[12px] mt-0.5">{loc.city}</p>
+                      <p className="text-white/70 text-[12px] mt-0.5">{loc.city}</p>
                     </div>
                     <div className="flex flex-col items-end gap-2 shrink-0 mt-1">
                       {isPrimary && (
                         <span className="text-[9.5px] font-bold uppercase tracking-wider text-[#0e1016] bg-[#7d9bea] rounded-full px-2.5 py-1">
-                          {loc.type}
+                          Santral Hattı
                         </span>
                       )}
                       <MapPin className="w-5 h-5 text-[#7d9bea]" />

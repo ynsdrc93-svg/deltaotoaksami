@@ -91,7 +91,7 @@ function StatCard({ icon: Icon, target, plus, grouped, label, sub }: {
       <div className="w-11 h-11 bg-[#1B3A8F]/[0.07] rounded-xl flex items-center justify-center mb-4 group-hover:bg-[#1B3A8F]/[0.12] transition-colors">
         <Icon className="w-5 h-5 text-[#1B3A8F]" />
       </div>
-      <div className="text-5xl md:text-6xl font-black text-slate-900 leading-tight tabular-nums">
+      <div className="text-4xl sm:text-5xl md:text-6xl font-black text-slate-900 leading-tight tabular-nums">
         {display}{plus ? "+" : ""}
       </div>
       <div className="text-[12px] font-bold text-[#1B3A8F] uppercase tracking-wider mt-2">{label}</div>
@@ -174,12 +174,12 @@ export function HakkimizdaPage() {
                 <div key={m.year} className={`relative flex flex-col md:flex-row md:items-start gap-2 md:gap-10 pl-6 md:pl-0 ${m.pending ? "opacity-60" : ""}`}>
                   <div className={`md:hidden absolute left-0 top-1 w-[11px] h-[11px] rounded-full ${m.pending ? "bg-transparent border-2 border-dashed border-white/40" : "bg-[#7d9bea] border-2 border-[#1B3A8F]"}`} />
                   <div className="md:w-28 md:text-right shrink-0">
-                    <span className={`font-black ${m.pending ? "text-lg text-white/50" : "text-2xl text-white"}`}>{m.year}</span>
+                    <span className={`font-black ${m.pending ? "text-lg text-white/65" : "text-2xl text-white"}`}>{m.year}</span>
                   </div>
                   <div className="relative pt-0 md:pt-1">
                     <div className={`hidden md:block absolute -left-[1.65rem] top-2.5 w-3 h-3 rounded-full ${m.pending ? "bg-transparent border-2 border-dashed border-white/40" : "bg-[#7d9bea] border-2 border-[#1B3A8F] shadow"}`} />
                     {m.pending ? (
-                      <p className="text-white/40 text-[13px] italic leading-relaxed">Bu döneme ait detaylar yakında eklenecek.</p>
+                      <p className="text-white/75 text-[13px] italic leading-relaxed">Bu döneme ait detaylar yakında eklenecek.</p>
                     ) : (
                       <>
                         <h3 className="text-[15px] font-bold mb-1.5">{m.label}</h3>
