@@ -5,9 +5,6 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
-export interface HealthStatus {
-  status: string;
-}
 
 export interface ContactSubmissionInput {
   /** @minLength 2 */
@@ -21,12 +18,3 @@ export interface ContactSubmissionInput {
   /** Honeypot alanı — gerçek kullanıcılar boş bırakır, doldurulmuşsa bot kabul edilir */
   website?: string;
 }
-
-export interface ContactSubmissionResult {
-  id: string;
-}
-
-export interface ApiErrorBody {
-  error: string;
-}
-

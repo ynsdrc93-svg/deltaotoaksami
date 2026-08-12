@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { MapPin, Phone, Mail, Globe, Clock, ChevronRight, Users, Package, MonitorSmartphone } from "lucide-react";
+import { MapPin, Phone, Mail, Globe, Clock, ChevronRight, Users, Package, MonitorSmartphone, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
+import { submitContactForm } from "@workspace/api-client-react";
 
 const DEPT_CONTACTS = [
   {
@@ -62,8 +63,23 @@ const LOCATIONS = [
   },
 ];
 
+const EMPTY_FORM = { ad: "", firma: "", telefon: "", email: "", konu: "", mesaj: "", website: "" };
+
 export function IletisimPage() {
-  const [form, setForm] = useState({ ad: "", firma: "", telefon: "", email: "", konu: "", mesaj: "" });
+  const [form, setForm] = useState(EMPTY_FORM);
+  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setStatus("submitting");
+    try {
+      await submitContactForm(form);
+      setForm(EMPTY_FORM);
+      setStatus("success");
+    } catch {
+      setStatus("error");
+    }
+  }
 
   return (
     <div className="do-site bg-white min-h-screen">
@@ -188,19 +204,35 @@ export function IletisimPage() {
               <h2 className="text-2xl font-black text-slate-900 mt-2">Bize Yazın</h2>
               <p className="text-slate-500 mt-2 text-[14px]">Talebiniz en kısa sürede ilgili birime yönlendirilecektir.</p>
             </div>
-            <form onSubmit={e => e.preventDefault()}>
+            <form onSubmit={handleSubmit}>
+              {/* Honeypot — gerçek kullanıcılar görmez/doldurmaz; ekran okuyucudan da
+                  aria-hidden ile tamamen gizli. Doluysa backend isteği bot kabul eder.
+                  sr-only negatif offset kullanmadığı için sayfa genişliğini etkilemez. */}
+              <div className="sr-only" aria-hidden="true">
+                <label htmlFor="website">Web siteniz</label>
+                <input
+                  id="website"
+                  name="website"
+                  type="text"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={form.website}
+                  onChange={e => setForm(f => ({ ...f, website: e.target.value }))}
+                />
+              </div>
               <div className="grid md:grid-cols-2 gap-5">
                 {[
-                  { id: "ad",      label: "Ad Soyad",        ph: "Adınız ve soyadınız", type: "text" },
-                  { id: "firma",   label: "Firma Ünvanı",     ph: "Firma adı", type: "text" },
-                  { id: "telefon", label: "Telefon",          ph: "+90 5XX XXX XX XX", type: "tel" },
-                  { id: "email",   label: "Kurumsal E-posta", ph: "ornek@firma.com.tr", type: "email" },
-                ].map(({ id, label, ph, type }) => (
+                  { id: "ad",      label: "Ad Soyad",        ph: "Adınız ve soyadınız", type: "text", required: true },
+                  { id: "firma",   label: "Firma Ünvanı",     ph: "Firma adı", type: "text", required: false },
+                  { id: "telefon", label: "Telefon",          ph: "+90 5XX XXX XX XX", type: "tel", required: false },
+                  { id: "email",   label: "Kurumsal E-posta", ph: "ornek@firma.com.tr", type: "email", required: true },
+                ].map(({ id, label, ph, type, required }) => (
                   <div key={id}>
                     <label htmlFor={id} className="block text-[11.5px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">{label}</label>
                     <input
                       id={id}
                       type={type}
+                      required={required}
                       placeholder={ph}
                       className="w-full border border-slate-200 rounded-lg px-4 py-3 text-[14px] text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#1B3A8F] focus:ring-1 focus:ring-[#1B3A8F]/20 transition"
                       value={(form as Record<string, string>)[id]}
@@ -238,8 +270,28 @@ export function IletisimPage() {
                   onChange={e => setForm(f => ({ ...f, mesaj: e.target.value }))}
                 />
               </div>
-              <button type="submit" className="mt-6 w-full bg-[#1B3A8F] hover:bg-[#2547B5] text-white font-semibold py-4 rounded-lg transition-colors flex items-center justify-center gap-2 group shadow-[0_4px_16px_rgba(27,58,143,0.2)]">
-                Talep Gönderin <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+              {status === "success" && (
+                <div className="mt-6 flex items-center gap-2.5 bg-emerald-50 border border-emerald-200 text-emerald-700 text-[13.5px] font-medium rounded-lg px-4 py-3.5">
+                  <CheckCircle2 className="w-4.5 h-4.5 shrink-0" />
+                  Talebiniz alındı, en kısa sürede size dönüş yapacağız.
+                </div>
+              )}
+              {status === "error" && (
+                <div className="mt-6 flex items-center gap-2.5 bg-red-50 border border-red-200 text-red-700 text-[13.5px] font-medium rounded-lg px-4 py-3.5">
+                  <AlertCircle className="w-4.5 h-4.5 shrink-0" />
+                  Talebiniz gönderilemedi. Lütfen tekrar deneyin ya da bizi doğrudan arayın.
+                </div>
+              )}
+              <button
+                type="submit"
+                disabled={status === "submitting"}
+                className="mt-6 w-full bg-[#1B3A8F] hover:bg-[#2547B5] disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-4 rounded-lg transition-colors flex items-center justify-center gap-2 group shadow-[0_4px_16px_rgba(27,58,143,0.2)]"
+              >
+                {status === "submitting" ? (
+                  <>Gönderiliyor... <Loader2 className="w-4 h-4 animate-spin" /></>
+                ) : (
+                  <>Talep Gönderin <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" /></>
+                )}
               </button>
               <p className="text-center text-[12px] text-slate-400 mt-4">Verileriniz yalnızca talebinizi karşılamak amacıyla kullanılır.</p>
             </form>
