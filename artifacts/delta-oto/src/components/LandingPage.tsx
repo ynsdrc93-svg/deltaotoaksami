@@ -95,7 +95,7 @@ export function LandingPage() {
   const tickerItems = ["250+ Marka", "81 İl + İhracat", "Kuruluş 1976", "Groupauto Üyesi", "Opar Ege Bölge Bayiliği", "Ümraniye Merkez", "Binek & Hafif Ticari", "Kesintisiz Lojistik"];
 
   return (
-    <div className="do-page min-h-screen bg-white text-slate-900 overflow-x-hidden">
+    <div className="do-page min-h-screen bg-white text-slate-900 overflow-x-clip">
       {/* SCROLL PROGRESS */}
       <div className="fixed top-0 left-0 right-0 z-[60] h-[3px] bg-transparent pointer-events-none">
         <div className="h-full bg-gradient-to-r from-[#1B3A8F] via-[#2547B5] to-[#7d9bea]" style={{ width: `${progress * 100}%` }}></div>
@@ -510,12 +510,12 @@ export function LandingPage() {
                   <div
                     key={`${b.slug}-${i}`}
                     aria-hidden={i >= strip.length}
-                    className="shrink-0 mx-2.5 w-[170px] bg-white rounded-lg h-16 px-4 flex items-center justify-center shadow-sm"
+                    className="group relative shrink-0 mx-2.5 w-[170px] bg-white rounded-lg h-16 px-4 flex items-center justify-center shadow-sm hover:shadow-lg hover:z-10 transition-shadow duration-300"
                   >
                     <img
                       src={`/images/brands/${b.slug}.png`}
                       alt={b.name}
-                      className="max-h-7 max-w-[110px] w-auto h-auto object-contain grayscale hover:grayscale-0 transition-all duration-300"
+                      className="max-h-7 max-w-[110px] w-auto h-auto object-contain grayscale group-hover:grayscale-0 group-hover:scale-125 transition-all duration-300"
                     />
                   </div>
                 ))}
