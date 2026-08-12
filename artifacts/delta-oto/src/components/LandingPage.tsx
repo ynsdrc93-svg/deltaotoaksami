@@ -46,10 +46,11 @@ const DISTRIBUTION_ROUTES: { from: [number, number]; to: [number, number] }[] = 
 ];
 
 // Her rotaya hafif rastgele bir gecikme/süre ata — hepsi aynı anda değil,
-// organik/dağınık bir ritimde art arda "uçar" gibi görünsün.
+// organik/dağınık bir ritimde art arda "uçar" gibi görünsün. Kısa gecikme +
+// kısa döngü süresi = bölüm göründüğü anda hızla harekete geçen, dinamik bir his.
 const ROUTE_TIMING = DISTRIBUTION_ROUTES.map(() => ({
-  delay: +(Math.random() * 9).toFixed(2),
-  duration: +(9 + Math.random() * 4).toFixed(2),
+  delay: +(Math.random() * 1.8).toFixed(2),
+  duration: +(3 + Math.random() * 1.5).toFixed(2),
 }));
 
 /** İki nokta arasında hafif yukarı kavisli bir uçuş-rotası eğrisi (quadratic bezier). */
