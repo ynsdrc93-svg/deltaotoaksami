@@ -9,6 +9,7 @@ import { ALL_BRANDS } from "@/lib/brands";
 // Kategori popup'larındaki logo isimleri ALL_BRANDS'ten çözülür — ayrı bir
 // isim haritası tutmak eski/silinmiş marka slug'larıyla senkron kaymasına yol açtı.
 const ALL_BRAND_NAMES: Record<string, string> = Object.fromEntries(ALL_BRANDS.map((b) => [b.slug, b.name]));
+const ALL_BRAND_WEBSITES: Record<string, string | undefined> = Object.fromEntries(ALL_BRANDS.map((b) => [b.slug, b.website]));
 
 // brandSlugs: her kategori gerçek endüstri uzmanlığına göre eşleştirilmiş, hepsi
 // ALL_BRANDS içindeki 50 markadan (yalnızca yüksek çözünürlüklü, temiz logo dosyası
@@ -91,13 +92,15 @@ export function TedarikciPage() {
           <p className="text-[17px] text-gray-300 leading-[1.8] max-w-2xl mb-10 font-light">
             Binek ve hafif ticari araç kategorilerinde dünyanın önde gelen OEM üreticileriyle doğrudan çalışıyoruz. 250'den fazla marka ve 50.000'i aşkın SKU; tek tedarikçi ilişkisiyle eksiksiz karşılanır. Groupauto International üyeliğiyle global satın alma gücü, yerel hız ve servis kalitesiyle buluşuyor.
           </p>
-          <Link
-            href="#"
+          <a
+            href="https://b2b.parcabul.com.tr/login.aspx"
+            target="_blank"
+            rel="noopener noreferrer"
             className="inline-flex items-center gap-2.5 bg-[#1B3A8F] hover:bg-[#2547B5] text-white font-semibold px-8 py-4 rounded-md transition-colors shadow-[0_0_32px_rgba(27,58,143,0.3)] group"
           >
             B2B Portal
             <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-          </Link>
+          </a>
         </div>
       </section>
 
@@ -125,19 +128,30 @@ export function TedarikciPage() {
           </div>
 
           {filteredBrands.length > 0 ? (
-            <div className="flex flex-wrap gap-3">
+            // Beyaz kart + gerçek marka renkleri — navy zeminde beyaz silüet denemesi
+            // ("çerçevesiz" versiyon) okunurluk açısından doğru olsa da premium
+            // durmuyordu; rakip sitelerdeki gibi her logo kendi renginde, ferah,
+            // eşit boyutlu kartlarda gösteriliyor. Sizing: yükseklik sabit
+            // (max-h-12/14), genişlik yalnızca max-w-full ile taşmaya karşı
+            // sınırlı — kartın kendisi geniş ve sabit olduğu için (h-32/36,
+            // cömert padding) BorgWarner gibi düz wordmark'lar bile ezilmeden
+            // rahatça sığıyor, göz kartların tekdüze büyüklüğünü asıl referans
+            // alıyor. Hover: sitenin genelindeki .do-card kalıbı (kalkış +
+            // gölge + üstte lacivert çizgi) — kategori kartlarıyla aynı dil.
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
               {filteredBrands.map((b) => {
                 const Tile = b.website ? "a" : "div";
                 return (
                   <Tile
                     key={b.slug}
                     {...(b.website ? { href: b.website, target: "_blank", rel: "noopener noreferrer" } : {})}
-                    className="bg-white rounded-xl flex items-center justify-center px-7 h-24 shadow-sm hover:shadow-xl hover:-translate-y-0.5 transition-all duration-300"
+                    title={b.name}
+                    className="do-card bg-white rounded-2xl flex items-center justify-center h-32 sm:h-36 px-6 py-6 shadow-sm"
                   >
                     <img
                       src={`/images/brands/${b.slug}.png`}
                       alt={b.name}
-                      className="max-h-11 w-auto h-auto object-contain grayscale hover:grayscale-0 transition-all duration-400"
+                      className="max-h-12 sm:max-h-14 w-auto h-auto max-w-full object-contain"
                     />
                   </Tile>
                 );
@@ -307,16 +321,25 @@ export function TedarikciPage() {
             <p className="text-slate-500 text-[14px] leading-relaxed mb-7">{active?.desc}</p>
             <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-400 block mb-4">Öne Çıkan Tedarikçiler</span>
             <div className="flex flex-wrap gap-3">
-              {active?.brandSlugs.map((s) => (
-                <div key={s} className="border border-slate-200 rounded-xl h-20 flex items-center justify-center px-6 bg-white hover:border-[#1B3A8F]/30 hover:shadow-md transition-all">
-                  <img src={`/images/brands/${s}.png`} alt={ALL_BRAND_NAMES[s]} className="max-h-11 w-auto h-auto object-contain" />
-                </div>
-              ))}
+              {active?.brandSlugs.map((s) => {
+                const website = ALL_BRAND_WEBSITES[s];
+                const Tile = website ? "a" : "div";
+                return (
+                  <Tile
+                    key={s}
+                    {...(website ? { href: website, target: "_blank", rel: "noopener noreferrer" } : {})}
+                    title={ALL_BRAND_NAMES[s]}
+                    className="border border-slate-200 rounded-xl h-20 flex items-center justify-center px-6 bg-white hover:border-[#1B3A8F]/30 hover:shadow-md transition-all"
+                  >
+                    <img src={`/images/brands/${s}.png`} alt={ALL_BRAND_NAMES[s]} className="max-h-11 w-auto h-auto object-contain" />
+                  </Tile>
+                );
+              })}
             </div>
             <p className="text-slate-400 text-[12px] leading-relaxed mt-7">Gösterilen markalar bu kategorideki öne çıkan tedarikçilerimizden temsili bir seçimdir; tam liste ve stok durumu için B2B portalına giriş yapınız.</p>
           </div>
           <div className="p-7 border-t border-slate-100">
-            <a href="#" className="w-full bg-[#1B3A8F] hover:bg-[#2547B5] active:scale-[0.98] text-white font-semibold px-6 py-3.5 rounded-md transition-all flex items-center justify-center gap-2 group">
+            <a href="https://b2b.parcabul.com.tr/login.aspx" target="_blank" rel="noopener noreferrer" className="w-full bg-[#1B3A8F] hover:bg-[#2547B5] active:scale-[0.98] text-white font-semibold px-6 py-3.5 rounded-md transition-all flex items-center justify-center gap-2 group">
               B2B Portal'da İncele
               <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
             </a>

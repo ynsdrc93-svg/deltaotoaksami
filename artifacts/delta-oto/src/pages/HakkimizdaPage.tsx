@@ -473,7 +473,7 @@ export function HakkimizdaPage() {
             <p className="text-white/75 text-sm mt-2 max-w-lg">50 yıllık kurumsal birikimimizle tanışın; B2B portalımızdan sipariş verin veya ekibimizle doğrudan iletişime geçin.</p>
           </div>
           <div className="flex gap-4 shrink-0">
-            <a href="#" className="bg-white text-[#1B3A8F] font-bold px-7 py-3.5 rounded-md hover:bg-gray-100 transition-colors text-sm inline-flex items-center gap-2 group">
+            <a href="https://b2b.parcabul.com.tr/login.aspx" target="_blank" rel="noopener noreferrer" className="bg-white text-[#1B3A8F] font-bold px-7 py-3.5 rounded-md hover:bg-gray-100 transition-colors text-sm inline-flex items-center gap-2 group">
               B2B Portal
               <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
             </a>

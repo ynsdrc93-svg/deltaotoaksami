@@ -66,13 +66,15 @@ export function SiteHeader() {
               <img src="/images/spart-logo.png" alt="SPART Original Replacement" className="h-7 w-auto block" />
             </Link>
 
-            <Link
-              href="#"
+            <a
+              href="https://b2b.parcabul.com.tr/login.aspx"
+              target="_blank"
+              rel="noopener noreferrer"
               className="hidden xl:flex bg-[#1B3A8F] hover:bg-[#2547B5] active:scale-[0.98] text-white text-xs sm:text-[13px] font-semibold tracking-[0.01em] px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-md transition-all duration-200 items-center gap-1.5 shadow-sm hover:shadow-md group whitespace-nowrap shrink-0"
             >
               B2B Portal
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-            </Link>
+            </a>
 
             <button
               type="button"
@@ -108,13 +110,15 @@ export function SiteHeader() {
                 SPART
                 <img src="/images/spart-logo.png" alt="" className="h-5 w-auto" />
               </Link>
-              <Link
-                href="#"
+              <a
+                href="https://b2b.parcabul.com.tr/login.aspx"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="mt-3 bg-[#1B3A8F] hover:bg-[#2547B5] active:scale-[0.98] text-white text-[15px] font-semibold px-5 py-3 rounded-md transition-all duration-200 flex items-center justify-center gap-1.5"
               >
                 B2B Portal
                 <ArrowRight className="w-4 h-4" />
-              </Link>
+              </a>
             </nav>
           </div>
         </div>

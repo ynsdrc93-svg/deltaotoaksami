@@ -95,7 +95,7 @@ export function LandingPage() {
   const tickerItems = ["250+ Marka", "81 İl + İhracat", "Kuruluş 1976", "Groupauto Üyesi", "Opar Ege Bölge Bayiliği", "Ümraniye Merkez", "Binek & Hafif Ticari", "Kesintisiz Lojistik"];
 
   return (
-    <div className="do-page min-h-screen bg-white text-slate-900 overflow-x-hidden">
+    <div className="do-page min-h-screen bg-white text-slate-900 overflow-x-clip">
       {/* SCROLL PROGRESS */}
       <div className="fixed top-0 left-0 right-0 z-[60] h-[3px] bg-transparent pointer-events-none">
         <div className="h-full bg-gradient-to-r from-[#1B3A8F] via-[#2547B5] to-[#7d9bea]" style={{ width: `${progress * 100}%` }}></div>
@@ -142,10 +142,10 @@ export function LandingPage() {
               <img src="/images/spart-logo.png" alt="SPART Original Replacement" className="h-7 w-auto block" />
             </Link>
 
-            <Link href="#" className="hidden xl:flex bg-[#1B3A8F] hover:bg-[#2547B5] active:scale-[0.98] text-white text-xs sm:text-[13px] font-semibold tracking-[0.01em] px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-md transition-all duration-200 items-center gap-1.5 shadow-sm hover:shadow-md group whitespace-nowrap shrink-0">
+            <a href="https://b2b.parcabul.com.tr/login.aspx" target="_blank" rel="noopener noreferrer" className="hidden xl:flex bg-[#1B3A8F] hover:bg-[#2547B5] active:scale-[0.98] text-white text-xs sm:text-[13px] font-semibold tracking-[0.01em] px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-md transition-all duration-200 items-center gap-1.5 shadow-sm hover:shadow-md group whitespace-nowrap shrink-0">
               B2B Portal
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-            </Link>
+            </a>
 
             <button
               type="button"
@@ -178,14 +178,16 @@ export function LandingPage() {
                 SPART
                 <img src="/images/spart-logo.png" alt="" className="h-5 w-auto" />
               </Link>
-              <Link
-                href="#"
+              <a
+                href="https://b2b.parcabul.com.tr/login.aspx"
+                target="_blank"
+                rel="noopener noreferrer"
                 onClick={() => setMobileOpen(false)}
                 className="mt-3 bg-[#1B3A8F] hover:bg-[#2547B5] active:scale-[0.98] text-white text-[15px] font-semibold px-5 py-3 rounded-md transition-all duration-200 flex items-center justify-center gap-1.5"
               >
                 B2B Portal
                 <ArrowRight className="w-4 h-4" />
-              </Link>
+              </a>
             </nav>
           </div>
         </div>
@@ -239,9 +241,9 @@ export function LandingPage() {
                   <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </button>
               </Link>
-              <button className="text-gray-200 hover:text-white active:scale-[0.98] text-base font-medium flex items-center gap-2 border border-white/15 hover:border-white/30 px-8 py-4 rounded-md transition-all duration-200">
+              <a href="https://b2b.parcabul.com.tr/login.aspx" target="_blank" rel="noopener noreferrer" className="text-gray-200 hover:text-white active:scale-[0.98] text-base font-medium flex items-center gap-2 border border-white/15 hover:border-white/30 px-8 py-4 rounded-md transition-all duration-200">
                 B2B Portal
-              </button>
+              </a>
             </div>
           </div>
         </div>
@@ -506,19 +508,26 @@ export function LandingPage() {
           {BRAND_STRIPS.map((strip, rowIndex) => (
             <div key={rowIndex} className="overflow-hidden">
               <div className={rowIndex === 1 ? "do-ticker-inner" : "do-ticker-inner-reverse"}>
-                {[...strip, ...strip].map((b, i) => (
-                  <div
-                    key={`${b.slug}-${i}`}
-                    aria-hidden={i >= strip.length}
-                    className="shrink-0 mx-2.5 w-[170px] bg-white rounded-lg h-16 px-4 flex items-center justify-center shadow-sm"
-                  >
-                    <img
-                      src={`/images/brands/${b.slug}.png`}
-                      alt={b.name}
-                      className="max-h-7 max-w-[110px] w-auto h-auto object-contain grayscale hover:grayscale-0 transition-all duration-300"
-                    />
-                  </div>
-                ))}
+                {[...strip, ...strip].map((b, i) => {
+                  const isDuplicate = i >= strip.length;
+                  const Tile = b.website ? "a" : "div";
+                  return (
+                    <Tile
+                      key={`${b.slug}-${i}`}
+                      aria-hidden={isDuplicate}
+                      tabIndex={isDuplicate ? -1 : undefined}
+                      {...(b.website ? { href: b.website, target: "_blank", rel: "noopener noreferrer" } : {})}
+                      title={b.name}
+                      className="group relative shrink-0 mx-2.5 w-[170px] bg-white rounded-lg h-16 px-4 flex items-center justify-center shadow-sm hover:shadow-lg hover:z-10 transition-shadow duration-300"
+                    >
+                      <img
+                        src={`/images/brands/${b.slug}.png`}
+                        alt={b.name}
+                        className="max-h-7 max-w-[110px] w-auto h-auto object-contain grayscale group-hover:grayscale-0 group-hover:scale-125 transition-all duration-300"
+                      />
+                    </Tile>
+                  );
+                })}
               </div>
             </div>
           ))}
@@ -602,10 +611,10 @@ export function LandingPage() {
             </p>
           </div>
           <div ref={ref} className="do-reveal do-d2 flex gap-4 shrink-0">
-            <button className="bg-white text-[#1B3A8F] font-bold px-8 py-4 rounded-md hover:bg-gray-100 active:scale-[0.98] transition-colors text-sm flex items-center gap-2 group">
+            <a href="https://b2b.parcabul.com.tr/login.aspx" target="_blank" rel="noopener noreferrer" className="bg-white text-[#1B3A8F] font-bold px-8 py-4 rounded-md hover:bg-gray-100 active:scale-[0.98] transition-colors text-sm flex items-center gap-2 group">
               B2B Portal
               <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-            </button>
+            </a>
             <Link to="/iletisim">
               <button className="border border-white/30 hover:border-white/60 active:scale-[0.98] text-white font-medium px-8 py-4 rounded-md transition-colors text-sm">
                 İletişim
