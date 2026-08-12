@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { MapPin, Phone, Mail, Globe, Clock, ChevronRight, Users, Package, MonitorSmartphone } from "lucide-react";
+import { MapPin, Phone, Mail, Globe, Clock, ChevronRight, Users, Package, MonitorSmartphone, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
+import { submitContactForm } from "@workspace/api-client-react";
 
 const DEPT_CONTACTS = [
   {
@@ -62,8 +63,23 @@ const LOCATIONS = [
   },
 ];
 
+const EMPTY_FORM = { ad: "", firma: "", telefon: "", email: "", konu: "", mesaj: "", website: "" };
+
 export function IletisimPage() {
-  const [form, setForm] = useState({ ad: "", firma: "", telefon: "", email: "", konu: "", mesaj: "" });
+  const [form, setForm] = useState(EMPTY_FORM);
+  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    setStatus("submitting");
+    try {
+      await submitContactForm(form);
+      setForm(EMPTY_FORM);
+      setStatus("success");
+    } catch {
+      setStatus("error");
+    }
+  }
 
   return (
     <div className="do-site bg-white min-h-screen">
@@ -158,7 +174,7 @@ export function IletisimPage() {
                 { Icon: MapPin, label: "Merkez Ofis",     lines: ["Barbaros Cd. Beyit Sk. No:17,", "Yukarı Dudullu — Ümraniye / İstanbul"] },
                 { Icon: Phone,  label: "Santral",          lines: ["0216 526 64 64 / 0216 526 33 44", "Satış: Pzt–Cmt 08:30–18:00 · B2B: Pzt–Cuma 09:00–17:30"] },
                 { Icon: Mail,   label: "Kurumsal E-posta", lines: ["info@deltaoto.com", "b2b@deltaoto.com"] },
-                { Icon: Globe,  label: "Dijital Kanallar", lines: ["www.deltaoto.com.tr", "b2b.parcabul.com.tr (B2B Portal)"] },
+                { Icon: Globe,  label: "Dijital Kanallar", lines: ["www.deltaoto.com.tr", { text: "b2b.parcabul.com.tr (B2B Portal)", href: "https://b2b.parcabul.com.tr/login.aspx" }] },
               ].map(({ Icon, label, lines }) => (
                 <div key={label} className="flex items-center gap-3.5 px-5 py-4 hover:bg-slate-50 transition-colors">
                   <div className="shrink-0 w-8 h-8 bg-[#1B3A8F]/[0.08] rounded-xl flex items-center justify-center">
@@ -166,9 +182,16 @@ export function IletisimPage() {
                   </div>
                   <div>
                     <div className="text-[10.5px] font-bold uppercase tracking-wider text-slate-500 mb-0.5">{label}</div>
-                    {lines.map((l, i) => (
-                      <div key={i} className={`text-[12.5px] leading-snug ${i === 0 ? "text-slate-900 font-semibold" : "text-slate-500"}`}>{l}</div>
-                    ))}
+                    {lines.map((l, i) => {
+                      const text = typeof l === "string" ? l : l.text;
+                      const href = typeof l === "string" ? undefined : l.href;
+                      const cls = `text-[12.5px] leading-snug ${i === 0 ? "text-slate-900 font-semibold" : "text-slate-500"}`;
+                      return href ? (
+                        <a key={i} href={href} target="_blank" rel="noopener noreferrer" className={`${cls} hover:text-[#1B3A8F] hover:underline transition-colors`}>{text}</a>
+                      ) : (
+                        <div key={i} className={cls}>{text}</div>
+                      );
+                    })}
                   </div>
                 </div>
               ))}
@@ -181,19 +204,37 @@ export function IletisimPage() {
               <h2 className="text-2xl font-black text-slate-900 mt-2">Bize Yazın</h2>
               <p className="text-slate-500 mt-2 text-[14px]">Talebiniz en kısa sürede ilgili birime yönlendirilecektir.</p>
             </div>
-            <form onSubmit={e => e.preventDefault()}>
+            <form onSubmit={handleSubmit}>
+              {/* Honeypot — gerçek kullanıcılar görmez/doldurmaz; ekran okuyucudan da
+                  aria-hidden ile tamamen gizli. Doluysa backend isteği bot kabul eder.
+                  sr-only negatif offset kullanmadığı için sayfa genişliğini etkilemez. */}
+              <div className="sr-only" aria-hidden="true">
+                <label htmlFor="website">Web siteniz</label>
+                <input
+                  id="website"
+                  name="website"
+                  type="text"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  maxLength={200}
+                  value={form.website}
+                  onChange={e => setForm(f => ({ ...f, website: e.target.value }))}
+                />
+              </div>
               <div className="grid md:grid-cols-2 gap-5">
                 {[
-                  { id: "ad",      label: "Ad Soyad",        ph: "Adınız ve soyadınız", type: "text" },
-                  { id: "firma",   label: "Firma Ünvanı",     ph: "Firma adı", type: "text" },
-                  { id: "telefon", label: "Telefon",          ph: "+90 5XX XXX XX XX", type: "tel" },
-                  { id: "email",   label: "Kurumsal E-posta", ph: "ornek@firma.com.tr", type: "email" },
-                ].map(({ id, label, ph, type }) => (
+                  { id: "ad",      label: "Ad Soyad",        ph: "Adınız ve soyadınız", type: "text", required: true, maxLength: 100 },
+                  { id: "firma",   label: "Firma Ünvanı",     ph: "Firma adı", type: "text", required: false, maxLength: 150 },
+                  { id: "telefon", label: "Telefon",          ph: "+90 5XX XXX XX XX", type: "tel", required: false, maxLength: 40 },
+                  { id: "email",   label: "Kurumsal E-posta", ph: "ornek@firma.com.tr", type: "email", required: true, maxLength: 254 },
+                ].map(({ id, label, ph, type, required, maxLength }) => (
                   <div key={id}>
                     <label htmlFor={id} className="block text-[11.5px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">{label}</label>
                     <input
                       id={id}
                       type={type}
+                      required={required}
+                      maxLength={maxLength}
                       placeholder={ph}
                       className="w-full border border-slate-200 rounded-lg px-4 py-3 text-[14px] text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#1B3A8F] focus:ring-1 focus:ring-[#1B3A8F]/20 transition"
                       value={(form as Record<string, string>)[id]}
@@ -225,14 +266,35 @@ export function IletisimPage() {
                 <textarea
                   id="mesaj"
                   rows={4}
+                  maxLength={5000}
                   placeholder="Talebinizi ve konuyu kısaca açıklayınız..."
                   className="w-full border border-slate-200 rounded-lg px-4 py-3 text-[14px] text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#1B3A8F] focus:ring-1 focus:ring-[#1B3A8F]/20 transition resize-none"
                   value={form.mesaj}
                   onChange={e => setForm(f => ({ ...f, mesaj: e.target.value }))}
                 />
               </div>
-              <button type="submit" className="mt-6 w-full bg-[#1B3A8F] hover:bg-[#2547B5] text-white font-semibold py-4 rounded-lg transition-colors flex items-center justify-center gap-2 group shadow-[0_4px_16px_rgba(27,58,143,0.2)]">
-                Talep Gönderin <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+              {status === "success" && (
+                <div className="mt-6 flex items-center gap-2.5 bg-emerald-50 border border-emerald-200 text-emerald-700 text-[13.5px] font-medium rounded-lg px-4 py-3.5">
+                  <CheckCircle2 className="w-4.5 h-4.5 shrink-0" />
+                  Talebiniz alındı, en kısa sürede size dönüş yapacağız.
+                </div>
+              )}
+              {status === "error" && (
+                <div className="mt-6 flex items-center gap-2.5 bg-red-50 border border-red-200 text-red-700 text-[13.5px] font-medium rounded-lg px-4 py-3.5">
+                  <AlertCircle className="w-4.5 h-4.5 shrink-0" />
+                  Talebiniz gönderilemedi. Lütfen tekrar deneyin ya da bizi doğrudan arayın.
+                </div>
+              )}
+              <button
+                type="submit"
+                disabled={status === "submitting"}
+                className="mt-6 w-full bg-[#1B3A8F] hover:bg-[#2547B5] disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-4 rounded-lg transition-colors flex items-center justify-center gap-2 group shadow-[0_4px_16px_rgba(27,58,143,0.2)]"
+              >
+                {status === "submitting" ? (
+                  <>Gönderiliyor... <Loader2 className="w-4 h-4 animate-spin" /></>
+                ) : (
+                  <>Talep Gönderin <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" /></>
+                )}
               </button>
               <p className="text-center text-[12px] text-slate-400 mt-4">Verileriniz yalnızca talebinizi karşılamak amacıyla kullanılır.</p>
             </form>

@@ -10,6 +10,8 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: contact
+    description: Public contact form
 paths:
   /healthz:
     get:
@@ -24,6 +26,37 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /contact:
+    post:
+      operationId: submitContactForm
+      tags: [contact]
+      summary: Submit contact form
+      description: Delta Oto web sitesindeki iletişim formu gönderimini kaydeder
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ContactSubmissionInput"
+      responses:
+        "201":
+          description: Kaydedildi
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ContactSubmissionResult"
+        "400":
+          description: Geçersiz istek
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorBody"
+        "429":
+          description: Çok fazla istek
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ApiErrorBody"
 components:
   schemas:
     HealthStatus:
@@ -33,4 +66,50 @@ components:
           type: string
       required:
         - status
+    ContactSubmissionInput:
+      type: object
+      properties:
+        ad:
+          type: string
+          minLength: 2
+          maxLength: 100
+        firma:
+          type: string
+          maxLength: 150
+        telefon:
+          type: string
+          maxLength: 40
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        konu:
+          type: string
+          maxLength: 150
+        mesaj:
+          type: string
+          minLength: 5
+          maxLength: 5000
+        website:
+          type: string
+          maxLength: 200
+          description: Honeypot alanı — gerçek kullanıcılar boş bırakır, doldurulmuşsa bot kabul edilir
+      required:
+        - ad
+        - email
+        - mesaj
+    ContactSubmissionResult:
+      type: object
+      properties:
+        id:
+          type: string
+      required:
+        - id
+    ApiErrorBody:
+      type: object
+      properties:
+        error:
+          type: string
+      required:
+        - error
 

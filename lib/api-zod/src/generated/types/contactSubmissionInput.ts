@@ -5,9 +5,6 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
-export interface HealthStatus {
-  status: string;
-}
 
 export interface ContactSubmissionInput {
   /**
@@ -34,12 +31,3 @@ export interface ContactSubmissionInput {
      */
   website?: string;
 }
-
-export interface ContactSubmissionResult {
-  id: string;
-}
-
-export interface ApiErrorBody {
-  error: string;
-}
-
