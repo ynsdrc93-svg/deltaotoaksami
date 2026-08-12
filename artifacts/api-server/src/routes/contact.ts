@@ -1,22 +1,14 @@
 import { randomUUID } from "node:crypto";
 import { Router, type IRouter } from "express";
-import rateLimit from "express-rate-limit";
 import { SubmitContactFormBody, type ApiErrorBody } from "@workspace/api-zod";
 import { db, contactSubmissionsTable } from "@workspace/db";
 import { logger } from "../lib/logger";
 import { sendContactNotification } from "../lib/email";
+import { contactRateLimit } from "../lib/rate-limit";
 
 const router: IRouter = Router();
 
-const contactRateLimit = rateLimit({
-  windowMs: 10 * 60 * 1000,
-  limit: 5,
-  standardHeaders: true,
-  legacyHeaders: false,
-  message: { error: "Çok fazla istek gönderildi, lütfen daha sonra tekrar deneyin." } satisfies ApiErrorBody,
-});
-
-router.post("/contact", contactRateLimit, async (req, res) => {
+router.post("/contact", contactRateLimit, async (req, res, next) => {
   const parsed = SubmitContactFormBody.safeParse(req.body);
 
   if (!parsed.success) {
@@ -35,7 +27,13 @@ router.post("/contact", contactRateLimit, async (req, res) => {
     return;
   }
 
-  const [row] = await db.insert(contactSubmissionsTable).values(submission).returning({ id: contactSubmissionsTable.id });
+  let row: { id: string } | undefined;
+  try {
+    [row] = await db.insert(contactSubmissionsTable).values(submission).returning({ id: contactSubmissionsTable.id });
+  } catch (err) {
+    next(err);
+    return;
+  }
 
   if (!row) {
     const body: ApiErrorBody = { error: "Talebiniz kaydedilemedi, lütfen tekrar deneyin." };

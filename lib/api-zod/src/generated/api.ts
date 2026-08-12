@@ -22,19 +22,31 @@ export const HealthCheckResponse = zod.object({
  * @summary Submit contact form
  */
 export const submitContactFormBodyAdMin = 2;
+export const submitContactFormBodyAdMax = 100;
+
+export const submitContactFormBodyFirmaMax = 150;
+
+export const submitContactFormBodyTelefonMax = 40;
+
+export const submitContactFormBodyEmailMax = 254;
+
+export const submitContactFormBodyKonuMax = 150;
 
 export const submitContactFormBodyMesajMin = 5;
+export const submitContactFormBodyMesajMax = 5000;
+
+export const submitContactFormBodyWebsiteMax = 200;
 
 
 
 export const SubmitContactFormBody = zod.object({
-  "ad": zod.string().min(submitContactFormBodyAdMin),
-  "firma": zod.string().optional(),
-  "telefon": zod.string().optional(),
-  "email": zod.string().email(),
-  "konu": zod.string().optional(),
-  "mesaj": zod.string().min(submitContactFormBodyMesajMin),
-  "website": zod.string().optional().describe('Honeypot alanı — gerçek kullanıcılar boş bırakır, doldurulmuşsa bot kabul edilir')
+  "ad": zod.string().min(submitContactFormBodyAdMin).max(submitContactFormBodyAdMax),
+  "firma": zod.string().max(submitContactFormBodyFirmaMax).optional(),
+  "telefon": zod.string().max(submitContactFormBodyTelefonMax).optional(),
+  "email": zod.string().email().max(submitContactFormBodyEmailMax),
+  "konu": zod.string().max(submitContactFormBodyKonuMax).optional(),
+  "mesaj": zod.string().min(submitContactFormBodyMesajMin).max(submitContactFormBodyMesajMax),
+  "website": zod.string().max(submitContactFormBodyWebsiteMax).optional().describe('Honeypot alanı — gerçek kullanıcılar boş bırakır, doldurulmuşsa bot kabul edilir')
 })
 
 

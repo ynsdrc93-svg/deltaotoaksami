@@ -17,3 +17,4 @@
 //   export type Post = typeof postsTable.$inferSelect;
 
 export * from "./contact-submissions";
+export * from "./rate-limit-hits";

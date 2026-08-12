@@ -216,23 +216,25 @@ export function IletisimPage() {
                   type="text"
                   tabIndex={-1}
                   autoComplete="off"
+                  maxLength={200}
                   value={form.website}
                   onChange={e => setForm(f => ({ ...f, website: e.target.value }))}
                 />
               </div>
               <div className="grid md:grid-cols-2 gap-5">
                 {[
-                  { id: "ad",      label: "Ad Soyad",        ph: "Adınız ve soyadınız", type: "text", required: true },
-                  { id: "firma",   label: "Firma Ünvanı",     ph: "Firma adı", type: "text", required: false },
-                  { id: "telefon", label: "Telefon",          ph: "+90 5XX XXX XX XX", type: "tel", required: false },
-                  { id: "email",   label: "Kurumsal E-posta", ph: "ornek@firma.com.tr", type: "email", required: true },
-                ].map(({ id, label, ph, type, required }) => (
+                  { id: "ad",      label: "Ad Soyad",        ph: "Adınız ve soyadınız", type: "text", required: true, maxLength: 100 },
+                  { id: "firma",   label: "Firma Ünvanı",     ph: "Firma adı", type: "text", required: false, maxLength: 150 },
+                  { id: "telefon", label: "Telefon",          ph: "+90 5XX XXX XX XX", type: "tel", required: false, maxLength: 40 },
+                  { id: "email",   label: "Kurumsal E-posta", ph: "ornek@firma.com.tr", type: "email", required: true, maxLength: 254 },
+                ].map(({ id, label, ph, type, required, maxLength }) => (
                   <div key={id}>
                     <label htmlFor={id} className="block text-[11.5px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">{label}</label>
                     <input
                       id={id}
                       type={type}
                       required={required}
+                      maxLength={maxLength}
                       placeholder={ph}
                       className="w-full border border-slate-200 rounded-lg px-4 py-3 text-[14px] text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#1B3A8F] focus:ring-1 focus:ring-[#1B3A8F]/20 transition"
                       value={(form as Record<string, string>)[id]}
@@ -264,6 +266,7 @@ export function IletisimPage() {
                 <textarea
                   id="mesaj"
                   rows={4}
+                  maxLength={5000}
                   placeholder="Talebinizi ve konuyu kısaca açıklayınız..."
                   className="w-full border border-slate-200 rounded-lg px-4 py-3 text-[14px] text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#1B3A8F] focus:ring-1 focus:ring-[#1B3A8F]/20 transition resize-none"
                   value={form.mesaj}

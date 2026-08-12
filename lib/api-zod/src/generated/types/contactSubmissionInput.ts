@@ -7,14 +7,27 @@
  */
 
 export interface ContactSubmissionInput {
-  /** @minLength 2 */
+  /**
+     * @minLength 2
+     * @maxLength 100
+     */
   ad: string;
+  /** @maxLength 150 */
   firma?: string;
+  /** @maxLength 40 */
   telefon?: string;
+  /** @maxLength 254 */
   email: string;
+  /** @maxLength 150 */
   konu?: string;
-  /** @minLength 5 */
+  /**
+     * @minLength 5
+     * @maxLength 5000
+     */
   mesaj: string;
-  /** Honeypot alanı — gerçek kullanıcılar boş bırakır, doldurulmuşsa bot kabul edilir */
+  /**
+     * Honeypot alanı — gerçek kullanıcılar boş bırakır, doldurulmuşsa bot kabul edilir
+     * @maxLength 200
+     */
   website?: string;
 }
