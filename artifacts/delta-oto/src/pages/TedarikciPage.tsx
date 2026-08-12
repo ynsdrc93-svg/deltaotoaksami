@@ -127,20 +127,17 @@ export function TedarikciPage() {
           </div>
 
           {filteredBrands.length > 0 ? (
-            // Kart/çerçeve yok — sadece ince ayırıcı çizgiler ("spec sheet" görünümü).
-            // Sizing: tüm logolar sabit yüksekliğe (max-h-11) sabitlenir, genişlik serbest
-            // bırakılır — "görsel büyüklük" algısı (cap-height) her markada eşit olur,
-            // yalnızca doğal en/boy oranından gelen genişlik farkı korunur (BorgWarner gibi
-            // düz wordmark'lar daha geniş, UFI Filters gibi kare amblemler daha dar render
-            // olur, ama hepsi aynı yükseklikte — göz "aynı boyda" okur).
-            // Logo PNG'lerinin kendi opak beyaz zemini kaldırılıp gerçek saydamlığa
-            // çevrildi (bkz. public/images/brands/) — aksi halde çerçeve kaldırılsa bile
-            // her logo kendi beyaz dikdörtgeniyle yine "kutulu" görünürdü. Bazı markaların
-            // kendi rengi (lacivert/koyu ton) navy zeminde okunmaz olduğundan, tüm logolar
-            // dinlenme halinde brightness-0 invert ile düz beyaz silüete çevrilip hover'da
-            // gerçek renklerine dönüyor — sitenin genelindeki grayscale->renkli deseniyle
-            // aynı etkileşim dili, sadece koyu zemine uyarlanmış hali.
-            <div className="flex flex-wrap border-t border-l border-white/[0.14]">
+            // Beyaz kart + gerçek marka renkleri — navy zeminde beyaz silüet denemesi
+            // ("çerçevesiz" versiyon) okunurluk açısından doğru olsa da premium
+            // durmuyordu; rakip sitelerdeki gibi her logo kendi renginde, ferah,
+            // eşit boyutlu kartlarda gösteriliyor. Sizing: yükseklik sabit
+            // (max-h-12/14), genişlik yalnızca max-w-full ile taşmaya karşı
+            // sınırlı — kartın kendisi geniş ve sabit olduğu için (h-32/36,
+            // cömert padding) BorgWarner gibi düz wordmark'lar bile ezilmeden
+            // rahatça sığıyor, göz kartların tekdüze büyüklüğünü asıl referans
+            // alıyor. Hover: sitenin genelindeki .do-card kalıbı (kalkış +
+            // gölge + üstte lacivert çizgi) — kategori kartlarıyla aynı dil.
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
               {filteredBrands.map((b) => {
                 const Tile = b.website ? "a" : "div";
                 return (
@@ -148,12 +145,12 @@ export function TedarikciPage() {
                     key={b.slug}
                     {...(b.website ? { href: b.website, target: "_blank", rel: "noopener noreferrer" } : {})}
                     title={b.name}
-                    className="group flex items-center justify-center min-w-0 max-w-full px-7 sm:px-9 h-24 md:h-28 border-r border-b border-white/[0.14] hover:bg-white/[0.05] focus-visible:bg-white/[0.08] focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-[#7d9bea]/60 transition-colors duration-300"
+                    className="do-card bg-white rounded-2xl flex items-center justify-center h-32 sm:h-36 px-6 py-6 shadow-sm"
                   >
                     <img
                       src={`/images/brands/${b.slug}.png`}
                       alt={b.name}
-                      className="max-h-11 h-auto w-auto max-w-full object-contain brightness-0 invert opacity-70 group-hover:opacity-100 group-hover:invert-0 group-hover:brightness-100 transition-all duration-300"
+                      className="max-h-12 sm:max-h-14 w-auto h-auto max-w-full object-contain"
                     />
                   </Tile>
                 );
