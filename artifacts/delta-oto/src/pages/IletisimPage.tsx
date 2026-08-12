@@ -158,7 +158,7 @@ export function IletisimPage() {
                 { Icon: MapPin, label: "Merkez Ofis",     lines: ["Barbaros Cd. Beyit Sk. No:17,", "Yukarı Dudullu — Ümraniye / İstanbul"] },
                 { Icon: Phone,  label: "Santral",          lines: ["0216 526 64 64 / 0216 526 33 44", "Satış: Pzt–Cmt 08:30–18:00 · B2B: Pzt–Cuma 09:00–17:30"] },
                 { Icon: Mail,   label: "Kurumsal E-posta", lines: ["info@deltaoto.com", "b2b@deltaoto.com"] },
-                { Icon: Globe,  label: "Dijital Kanallar", lines: ["www.deltaoto.com.tr", "b2b.parcabul.com.tr (B2B Portal)"] },
+                { Icon: Globe,  label: "Dijital Kanallar", lines: ["www.deltaoto.com.tr", { text: "b2b.parcabul.com.tr (B2B Portal)", href: "https://b2b.parcabul.com.tr/login.aspx" }] },
               ].map(({ Icon, label, lines }) => (
                 <div key={label} className="flex items-center gap-3.5 px-5 py-4 hover:bg-slate-50 transition-colors">
                   <div className="shrink-0 w-8 h-8 bg-[#1B3A8F]/[0.08] rounded-xl flex items-center justify-center">
@@ -166,9 +166,16 @@ export function IletisimPage() {
                   </div>
                   <div>
                     <div className="text-[10.5px] font-bold uppercase tracking-wider text-slate-500 mb-0.5">{label}</div>
-                    {lines.map((l, i) => (
-                      <div key={i} className={`text-[12.5px] leading-snug ${i === 0 ? "text-slate-900 font-semibold" : "text-slate-500"}`}>{l}</div>
-                    ))}
+                    {lines.map((l, i) => {
+                      const text = typeof l === "string" ? l : l.text;
+                      const href = typeof l === "string" ? undefined : l.href;
+                      const cls = `text-[12.5px] leading-snug ${i === 0 ? "text-slate-900 font-semibold" : "text-slate-500"}`;
+                      return href ? (
+                        <a key={i} href={href} target="_blank" rel="noopener noreferrer" className={`${cls} hover:text-[#1B3A8F] hover:underline transition-colors`}>{text}</a>
+                      ) : (
+                        <div key={i} className={cls}>{text}</div>
+                      );
+                    })}
                   </div>
                 </div>
               ))}
