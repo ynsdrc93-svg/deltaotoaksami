@@ -7,11 +7,16 @@ import TurkeyMap from "turkey-map-react";
 import { cities as turkeyCities } from "turkey-map-react/lib/data";
 import { ALL_BRANDS } from "../lib/brands";
 
-const BRAND_STRIPS = [
-  ALL_BRANDS.slice(0, 17),
-  ALL_BRANDS.slice(17, 34),
-  ALL_BRANDS.slice(34, 50),
-];
+// Şeritte yalnızca gerçek logosu olan markalar akar (hasLogo:false olanlar,
+// gerçek logo tedarik edilene kadar bu hızlı-kayan alanda göstermeye uygun
+// değil — bkz. brands.ts). 3 satıra, sabit dilim yerine dinamik olarak
+// eşit bölünür; böylece marka sayısı değiştiğinde satırlar otomatik dengelenir.
+const STRIP_BRANDS = ALL_BRANDS.filter((b) => b.hasLogo);
+const STRIP_ROWS = 3;
+const STRIP_CHUNK = Math.ceil(STRIP_BRANDS.length / STRIP_ROWS);
+const BRAND_STRIPS = Array.from({ length: STRIP_ROWS }, (_, i) =>
+  STRIP_BRANDS.slice(i * STRIP_CHUNK, (i + 1) * STRIP_CHUNK),
+).filter((strip) => strip.length > 0);
 
 const OPS_HUB_PLATES = [34, 41, 35]; // İstanbul (Ümraniye), Kocaeli (Gebze), İzmir
 const OPS_HUB_PATHS = turkeyCities.filter((c) => OPS_HUB_PLATES.includes(c.plateNumber));
@@ -501,7 +506,7 @@ export function LandingPage() {
             Tedarikçilerimiz
           </h2>
           <p ref={ref} className="do-reveal do-d2 text-white/60 text-sm max-w-xl leading-relaxed">
-            Dünyanın önde gelen {ALL_BRANDS.length}+ OEM tedarikçisiyle çalışıyoruz; tam listeyi ve kategoriye göre filtrelemeyi Tedarikçiler sayfamızda inceleyebilirsiniz.
+            Dünyanın önde gelen {STRIP_BRANDS.length}+ OEM tedarikçisiyle çalışıyoruz; tam listeyi, Yerli/Global ayrımını ve kategoriye göre filtrelemeyi Tedarikçiler sayfamızda inceleyebilirsiniz.
           </p>
         </div>
 

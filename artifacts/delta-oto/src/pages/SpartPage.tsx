@@ -20,6 +20,9 @@ import {
   Car,
   History,
   MapPin,
+  Truck,
+  Handshake,
+  Users,
 } from "lucide-react";
 
 const CATEGORIES = [
@@ -124,6 +127,39 @@ const DEPOTS = [
     name: "Opar Ege Operasyonu",
     city: "İzmir",
     address: "Kemalpaşa Kızılüzüm Kırovası Kümeevleri No: 12/1, Kemalpaşa / İzmir",
+  },
+];
+
+const DEALER_BENEFITS = [
+  {
+    icon: <Package className="w-5 h-5" />,
+    title: "Kanıtlanmış Ürün Gücü",
+    desc: "800+ referans, 50+ araç markası kapsamında sürekli büyüyen bir katalog — raf karmaşası değil, net bir portföy.",
+  },
+  {
+    icon: <TrendingUp className="w-5 h-5" />,
+    title: "Rekabetçi Kâr Marjı",
+    desc: "Doğrudan üretici-distribütör ilişkisiyle şekillenen fiyatlandırma, servisinizin kârlılığını korur.",
+  },
+  {
+    icon: <Truck className="w-5 h-5" />,
+    title: "Operasyonel Destek",
+    desc: "Ümraniye, Gebze ve İzmir'deki 3 depodan aynı gün/ertesi gün sevkiyat altyapısından doğrudan yararlanın.",
+  },
+  {
+    icon: <ShieldCheck className="w-5 h-5" />,
+    title: "Marka Güvencesi",
+    desc: "2 yıl ürün garantisi ve OEM toleranslarında üretim — müşterinize verdiğiniz sözün arkasında Delta Oto'nun 50 yıllık adı durur.",
+  },
+  {
+    icon: <Handshake className="w-5 h-5" />,
+    title: "Büyüyen Portföy, Büyüyen İş",
+    desc: "Yeni araç modelleriyle sürekli genişleyen katalog — bugünün yatırımı yarının ürün yelpazesinde karşılığını bulur.",
+  },
+  {
+    icon: <Users className="w-5 h-5" />,
+    title: "Teknik & Satış Desteği",
+    desc: "Ürün eğitimi, teknik danışmanlık ve satış sonrası destek hattıyla ekibinizin yanındayız.",
   },
 ];
 
@@ -373,6 +409,39 @@ export function SpartPage() {
             <p className="text-[13.5px] text-slate-700">
               Cumartesi operasyonu dahil — hafta sonunu beklemeyin.
             </p>
+          </div>
+        </div>
+      </section>
+
+      {/* BAYİLİK AVANTAJLARI — light */}
+      <section className="bg-[#f8fafc] py-24 border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="max-w-2xl mb-14">
+            <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">İş Ortaklığı Fırsatı</span>
+            <h2 className="text-3xl md:text-4xl font-black mt-3 mb-6 tracking-tight text-slate-900">
+              Bayilik, Ürünün Ötesinde Bir Ortaklıktır
+            </h2>
+            <p className="text-slate-600 leading-relaxed">
+              SPART'ı servisinize veya mağazanıza taşımak, yalnızca yeni bir ürün hattı eklemek
+              değildir — Delta Oto'nun 50 yıllık tedarik zinciri deneyimini, lojistik altyapısını
+              ve marka güvencesini de yanınıza almaktır. Aşağıdaki başlıklar, bir SPART iş ortağı
+              olarak elde edeceğiniz somut karşılığı özetliyor.
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {DEALER_BENEFITS.map((b) => (
+              <div
+                key={b.title}
+                className="do-card bg-white border border-slate-200 rounded-xl p-7 group"
+              >
+                <div className="w-11 h-11 rounded-xl bg-[#1B3A8F]/[0.08] flex items-center justify-center text-[#1B3A8F] group-hover:bg-[#1B3A8F] group-hover:text-white transition-colors mb-5">
+                  {b.icon}
+                </div>
+                <h3 className="font-bold text-slate-900 mb-2">{b.title}</h3>
+                <p className="text-[13.5px] text-slate-500 leading-relaxed">{b.desc}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
