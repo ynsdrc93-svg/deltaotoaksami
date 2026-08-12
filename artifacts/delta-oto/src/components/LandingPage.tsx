@@ -508,19 +508,26 @@ export function LandingPage() {
           {BRAND_STRIPS.map((strip, rowIndex) => (
             <div key={rowIndex} className="overflow-hidden">
               <div className={rowIndex === 1 ? "do-ticker-inner" : "do-ticker-inner-reverse"}>
-                {[...strip, ...strip].map((b, i) => (
-                  <div
-                    key={`${b.slug}-${i}`}
-                    aria-hidden={i >= strip.length}
-                    className="group relative shrink-0 mx-2.5 w-[170px] bg-white rounded-lg h-16 px-4 flex items-center justify-center shadow-sm hover:shadow-lg hover:z-10 transition-shadow duration-300"
-                  >
-                    <img
-                      src={`/images/brands/${b.slug}.png`}
-                      alt={b.name}
-                      className="max-h-7 max-w-[110px] w-auto h-auto object-contain grayscale group-hover:grayscale-0 group-hover:scale-125 transition-all duration-300"
-                    />
-                  </div>
-                ))}
+                {[...strip, ...strip].map((b, i) => {
+                  const isDuplicate = i >= strip.length;
+                  const Tile = b.website ? "a" : "div";
+                  return (
+                    <Tile
+                      key={`${b.slug}-${i}`}
+                      aria-hidden={isDuplicate}
+                      tabIndex={isDuplicate ? -1 : undefined}
+                      {...(b.website ? { href: b.website, target: "_blank", rel: "noopener noreferrer" } : {})}
+                      title={b.name}
+                      className="group relative shrink-0 mx-2.5 w-[170px] bg-white rounded-lg h-16 px-4 flex items-center justify-center shadow-sm hover:shadow-lg hover:z-10 transition-shadow duration-300"
+                    >
+                      <img
+                        src={`/images/brands/${b.slug}.png`}
+                        alt={b.name}
+                        className="max-h-7 max-w-[110px] w-auto h-auto object-contain grayscale group-hover:grayscale-0 group-hover:scale-125 transition-all duration-300"
+                      />
+                    </Tile>
+                  );
+                })}
               </div>
             </div>
           ))}

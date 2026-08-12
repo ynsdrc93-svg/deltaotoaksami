@@ -9,6 +9,7 @@ import { ALL_BRANDS } from "@/lib/brands";
 // Kategori popup'larındaki logo isimleri ALL_BRANDS'ten çözülür — ayrı bir
 // isim haritası tutmak eski/silinmiş marka slug'larıyla senkron kaymasına yol açtı.
 const ALL_BRAND_NAMES: Record<string, string> = Object.fromEntries(ALL_BRANDS.map((b) => [b.slug, b.name]));
+const ALL_BRAND_WEBSITES: Record<string, string | undefined> = Object.fromEntries(ALL_BRANDS.map((b) => [b.slug, b.website]));
 
 // brandSlugs: her kategori gerçek endüstri uzmanlığına göre eşleştirilmiş, hepsi
 // ALL_BRANDS içindeki 50 markadan (yalnızca yüksek çözünürlüklü, temiz logo dosyası
@@ -320,11 +321,20 @@ export function TedarikciPage() {
             <p className="text-slate-500 text-[14px] leading-relaxed mb-7">{active?.desc}</p>
             <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-400 block mb-4">Öne Çıkan Tedarikçiler</span>
             <div className="flex flex-wrap gap-3">
-              {active?.brandSlugs.map((s) => (
-                <div key={s} className="border border-slate-200 rounded-xl h-20 flex items-center justify-center px-6 bg-white hover:border-[#1B3A8F]/30 hover:shadow-md transition-all">
-                  <img src={`/images/brands/${s}.png`} alt={ALL_BRAND_NAMES[s]} className="max-h-11 w-auto h-auto object-contain" />
-                </div>
-              ))}
+              {active?.brandSlugs.map((s) => {
+                const website = ALL_BRAND_WEBSITES[s];
+                const Tile = website ? "a" : "div";
+                return (
+                  <Tile
+                    key={s}
+                    {...(website ? { href: website, target: "_blank", rel: "noopener noreferrer" } : {})}
+                    title={ALL_BRAND_NAMES[s]}
+                    className="border border-slate-200 rounded-xl h-20 flex items-center justify-center px-6 bg-white hover:border-[#1B3A8F]/30 hover:shadow-md transition-all"
+                  >
+                    <img src={`/images/brands/${s}.png`} alt={ALL_BRAND_NAMES[s]} className="max-h-11 w-auto h-auto object-contain" />
+                  </Tile>
+                );
+              })}
             </div>
             <p className="text-slate-400 text-[12px] leading-relaxed mt-7">Gösterilen markalar bu kategorideki öne çıkan tedarikçilerimizden temsili bir seçimdir; tam liste ve stok durumu için B2B portalına giriş yapınız.</p>
           </div>
