@@ -264,18 +264,14 @@
   .do-mobile-panel { display: none; }
 }
 
-/* Accordion body (Tedarikçiler kategori kapsamı, mobil). Aynı grid-rows
-   0fr→1fr tekniği, ama .do-mobile-panel'in header'a özel >=1280px
-   display:none kuralı olmadan — görünürlük burada zaten Tailwind'in
-   lg:hidden'ıyla sarmalanıyor, çakışan bir breakpoint kuralı yok. */
-.do-accordion-body {
-  overflow: hidden;
-  transition: grid-template-rows 0.3s cubic-bezier(.22,1,.36,1);
-  display: grid;
-  grid-template-rows: 0fr;
+/* Kategori showcase paneli, öne çıkan kategori değiştiğinde hafif fade+rise
+   (Tedarikçiler). Yalnızca giriş animasyonu — prefers-reduced-motion'da
+   aşağıda devre dışı bırakılıyor. */
+@keyframes do-fade-up {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
 }
-.do-accordion-body.do-open { grid-template-rows: 1fr; }
-.do-accordion-body > div { overflow: hidden; }
+.do-fade-up { animation: do-fade-up 0.35s ease; }
 
 /* Keyboard focus, global */
 :where(a, button, [tabindex]):focus-visible {

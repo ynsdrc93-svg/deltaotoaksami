@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { ChevronRight, ArrowRight, CheckCircle2, Globe, Package, Shield, Zap, Handshake, Search } from "lucide-react";
+import React, { useState, useEffect, useRef } from "react";
+import { ChevronRight, ChevronLeft, ArrowRight, CheckCircle2, Globe, Package, Shield, Zap, Handshake, Search } from "lucide-react";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
 import { BrandLogo } from "@/components/shared/BrandLogo";
@@ -40,10 +40,9 @@ function BrandGroup({ label, brands }: { label: string; brands: Brand[] }) {
   );
 }
 
-const CATEGORY_BRAND_LIMIT = 8;
-const CATEGORY_BRAND_LIMIT_MOBILE = 6;
+const CATEGORY_BRAND_LIMIT = 7;
 
-function CategoryBrandRefs({ category, brands, limit }: { category: ProductCategory; brands: Brand[]; limit: number }) {
+function CategoryBrandRefs({ category, brands }: { category: ProductCategory; brands: Brand[] }) {
   // featuredBrandSlugs (varsa) önce gösterilir — brandSlugs'ın yalnızca
   // öncelik sırasıdır, yeni bir marka eklemez. Kalan markalar kendi
   // orijinal (Excel) sırasıyla arkasından gelir.
@@ -52,36 +51,47 @@ function CategoryBrandRefs({ category, brands, limit }: { category: ProductCateg
   const resolved = orderedSlugs
     .map((slug) => brands.find((b) => b.slug === slug))
     .filter((b): b is Brand => Boolean(b));
-  const shown = resolved.slice(0, limit);
+  const shown = resolved.slice(0, CATEGORY_BRAND_LIMIT);
   const rest = resolved.length - shown.length;
   return (
-    <div className="flex flex-wrap gap-2.5">
+    <div className="flex flex-wrap items-center gap-3 bg-slate-50 rounded-xl px-5 py-4 border border-slate-100">
       {shown.map((b) => (
         <BrandLogo key={b.slug} brand={b} size="chip" />
       ))}
-      {rest > 0 && (
-        <div className="flex items-center justify-center h-[44px] px-3.5 rounded-lg border border-dashed border-slate-200 text-slate-400 text-[12px] font-semibold whitespace-nowrap">
-          +{rest} marka daha
-        </div>
-      )}
+      {rest > 0 && <span className="text-slate-400 text-[12px] font-semibold pl-1 whitespace-nowrap">+{rest} marka daha</span>}
     </div>
   );
 }
 
-// Kategori Kapsamı: masaüstünde sol rayda 23 kategori + sağda seçili
-// kategorinin detay paneli (senkron master-detail); dar ekranda aynı veri
-// tek sütun accordion olarak katlanır. Eski "23 büyük boş kart" grid'inin
-// yerine geçer — aynı Excel-kaynaklı veri (PRODUCT_CATEGORIES), yalnızca
-// sunum katmanı değişti.
-function CategoryExplorer({ categories, brands }: { categories: ProductCategory[]; brands: Brand[] }) {
+// Kategori Showcase: yatay "filmstrip" navigasyonu (23 kategori, hızlı geçiş
+// düğümleri) + öne çıkan kategorinin büyük editorial paneli (index numarası,
+// ikon, açıklama, öne çıkan markalar, B2B CTA'sı). Rail+accordion ikilisinin
+// yerine geçen tek, tüm genişliklerde aynı davranan deneyim — aynı
+// Excel-kaynaklı PRODUCT_CATEGORIES verisi, yalnızca sunum katmanı.
+function CategoryShowcase({ categories, brands }: { categories: ProductCategory[]; brands: Brand[] }) {
   const [activeIdx, setActiveIdx] = useState(0);
   const active = categories[activeIdx];
+  const railRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const node = railRef.current?.children[activeIdx] as HTMLElement | undefined;
+    node?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
+  }, [activeIdx]);
 
   return (
-    <>
-      {/* Masaüstü: rail + detay paneli */}
-      <div className="hidden lg:grid lg:grid-cols-[320px_1fr] gap-8">
-        <div className="lg:sticky lg:top-28 lg:self-start lg:max-h-[600px] overflow-y-auto space-y-1 pr-1">
+    <div>
+      {/* Filmstrip navigasyon — öne çıkan kategori büyük/dolu, diğerleri hızlı geçiş düğümü */}
+      <div className="flex items-center gap-2 mb-8">
+        <button
+          type="button"
+          onClick={() => setActiveIdx((i) => Math.max(0, i - 1))}
+          disabled={activeIdx === 0}
+          aria-label="Önceki kategori"
+          className="hidden sm:flex shrink-0 w-9 h-9 rounded-full border border-slate-200 items-center justify-center text-slate-500 hover:border-[#1B3A8F]/40 hover:text-[#1B3A8F] disabled:opacity-30 disabled:pointer-events-none transition-colors"
+        >
+          <ChevronLeft className="w-4 h-4" />
+        </button>
+        <div ref={railRef} className="flex gap-2 overflow-x-auto do-hide-scrollbar scroll-smooth py-1">
           {categories.map((cat, i) => {
             const isActive = i === activeIdx;
             return (
@@ -90,65 +100,63 @@ function CategoryExplorer({ categories, brands }: { categories: ProductCategory[
                 type="button"
                 onClick={() => setActiveIdx(i)}
                 aria-current={isActive}
-                className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-lg text-left border-l-2 transition-colors duration-200 ${
-                  isActive ? "bg-[#1B3A8F]/[0.07] border-[#1B3A8F]" : "border-transparent hover:bg-slate-50 hover:border-slate-200"
+                className={`shrink-0 flex items-center gap-2 rounded-full border transition-all duration-300 whitespace-nowrap ${
+                  isActive
+                    ? "bg-[#1B3A8F] border-[#1B3A8F] text-white px-5 py-3 shadow-md shadow-[#1B3A8F]/20"
+                    : "bg-white border-slate-200 text-slate-500 hover:border-[#1B3A8F]/30 hover:text-[#1B3A8F] px-4 py-2.5"
                 }`}
               >
-                <cat.icon className={`w-[18px] h-[18px] shrink-0 ${isActive ? "text-[#1B3A8F]" : "text-slate-400"}`} strokeWidth={1.75} />
-                <span className={`text-[13.5px] leading-snug ${isActive ? "font-bold text-slate-900" : "font-medium text-slate-600"}`}>
-                  {cat.name}
-                </span>
+                <cat.icon className={isActive ? "w-[17px] h-[17px]" : "w-4 h-4"} strokeWidth={1.75} />
+                <span className={`font-semibold ${isActive ? "text-[13px]" : "text-[12.5px]"}`}>{cat.name}</span>
               </button>
             );
           })}
         </div>
+        <button
+          type="button"
+          onClick={() => setActiveIdx((i) => Math.min(categories.length - 1, i + 1))}
+          disabled={activeIdx === categories.length - 1}
+          aria-label="Sonraki kategori"
+          className="hidden sm:flex shrink-0 w-9 h-9 rounded-full border border-slate-200 items-center justify-center text-slate-500 hover:border-[#1B3A8F]/40 hover:text-[#1B3A8F] disabled:opacity-30 disabled:pointer-events-none transition-colors"
+        >
+          <ChevronRight className="w-4 h-4" />
+        </button>
+      </div>
 
-        <div className="do-card bg-white border border-slate-200 rounded-2xl p-10">
+      {/* Öne çıkan kategori — hero paneli */}
+      <div key={active.name} className="do-fade-up relative bg-white border border-slate-200 rounded-3xl overflow-hidden">
+        <div className="absolute -right-4 -top-8 text-[140px] sm:text-[200px] leading-none font-black text-slate-50 select-none pointer-events-none" aria-hidden="true">
+          {String(activeIdx + 1).padStart(2, "0")}
+        </div>
+        <div className="relative p-8 sm:p-10 lg:p-12">
           <div className="flex items-center gap-4 mb-6">
-            <div className="w-12 h-12 rounded-xl bg-[#1B3A8F] flex items-center justify-center shrink-0">
-              <active.icon className="w-6 h-6 text-white" strokeWidth={1.75} />
+            <div className="w-14 h-14 rounded-2xl bg-[#1B3A8F] flex items-center justify-center shrink-0">
+              <active.icon className="w-7 h-7 text-white" strokeWidth={1.75} />
             </div>
-            <h3 className="text-2xl font-black text-slate-900 tracking-tight">{active.name}</h3>
+            <div>
+              <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#1B3A8F]">
+                Kategori {String(activeIdx + 1).padStart(2, "0")} / {String(categories.length).padStart(2, "0")}
+              </span>
+              <h3 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight leading-tight">{active.name}</h3>
+            </div>
           </div>
-          <p className="text-slate-500 text-[15px] leading-relaxed max-w-xl mb-9">{active.description}</p>
-          <div className="pt-8 border-t border-slate-100">
-            <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-400 block mb-4">Portföyden Örnek Markalar</span>
-            <CategoryBrandRefs category={active} brands={brands} limit={CATEGORY_BRAND_LIMIT} />
-          </div>
+          <p className="text-slate-500 text-[15px] leading-relaxed max-w-xl mb-8">{active.description}</p>
+
+          <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-400 block mb-3.5">Öne Çıkan Markalar</span>
+          <CategoryBrandRefs category={active} brands={brands} />
+
+          <a
+            href="https://b2b.parcabul.com.tr/login.aspx"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 mt-8 text-[13.5px] font-semibold text-[#1B3A8F] hover:text-[#2547B5] transition-colors group"
+          >
+            B2B Portal'da {active.name} stoklarını inceleyin
+            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+          </a>
         </div>
       </div>
-
-      {/* Mobil/tablet: accordion */}
-      <div className="lg:hidden border border-slate-200 rounded-2xl overflow-hidden bg-white divide-y divide-slate-200">
-        {categories.map((cat, i) => {
-          const isOpen = i === activeIdx;
-          return (
-            <div key={cat.name}>
-              <button
-                type="button"
-                onClick={() => setActiveIdx(isOpen ? -1 : i)}
-                aria-expanded={isOpen}
-                className="w-full flex items-center gap-3.5 px-5 py-4 text-left"
-              >
-                <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 transition-colors ${isOpen ? "bg-[#1B3A8F]" : "bg-[#1B3A8F]/[0.08]"}`}>
-                  <cat.icon className={`w-[18px] h-[18px] ${isOpen ? "text-white" : "text-[#1B3A8F]"}`} strokeWidth={1.75} />
-                </div>
-                <span className="flex-1 text-[13.5px] font-bold text-slate-900 leading-snug">{cat.name}</span>
-                <ChevronRight className={`w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0 ${isOpen ? "rotate-90" : ""}`} />
-              </button>
-              <div className={`do-accordion-body ${isOpen ? "do-open" : ""}`}>
-                <div>
-                  <div className="px-5 pb-5">
-                    <p className="text-slate-500 text-[13.5px] leading-relaxed mb-4">{cat.description}</p>
-                    <CategoryBrandRefs category={cat} brands={brands} limit={CATEGORY_BRAND_LIMIT_MOBILE} />
-                  </div>
-                </div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-    </>
+    </div>
   );
 }
 
@@ -249,9 +257,9 @@ export function TedarikciPage() {
           <div className="mb-12">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">Ürün Kategorileri</span>
             <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-2 tracking-tight">Uçtan Uca Kategori Kapsamı</h2>
-            <p className="text-slate-500 mt-3 max-w-2xl text-[15px]">{PRODUCT_CATEGORIES.length} ürün grubunun her birinde birden fazla marka alternatifi sunuyoruz — bir kategori seçin, o kategoride ürün veren markaları görün.</p>
+            <p className="text-slate-500 mt-3 max-w-2xl text-[15px]">{PRODUCT_CATEGORIES.length} ürün grubunu keşfedin — bir kategori seçin, o kategoride öne çıkan markaları görün.</p>
           </div>
-          <CategoryExplorer categories={PRODUCT_CATEGORIES} brands={CLASSIFIED_BRANDS} />
+          <CategoryShowcase categories={PRODUCT_CATEGORIES} brands={CLASSIFIED_BRANDS} />
         </div>
       </section>
 
