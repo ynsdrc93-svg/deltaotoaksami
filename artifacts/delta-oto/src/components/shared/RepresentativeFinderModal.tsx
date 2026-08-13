@@ -55,7 +55,12 @@ function FallbackDetail({ province }: { province: TurkeyProvince }) {
 function RepresentativeDetail({ rep, province }: { rep: Representative; province: TurkeyProvince }) {
   return (
     <div>
-      <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#1B3A8F]">{province.name} · {rep.region}</span>
+      {/* Coğrafi bağlam province verisinden gelir (province.region ·
+          province.name) — rep.region'ın kendisi burada kullanılmaz, çünkü
+          bu ilin ataması tek bir temsilciye özelse (ör. Gümüşhane) ikisi
+          aynı string olup "Gümüşhane · Gümüşhane" gibi anlamsız bir tekrar
+          üretebilir. Temsilcinin kendi atama adı zaten rep.title'da var. */}
+      <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#1B3A8F]">{province.region} · {province.name}</span>
       <h3 className="text-xl font-black text-slate-900 mt-1 leading-snug">{rep.name}</h3>
       {rep.title && <p className="text-slate-500 text-[13px] mt-0.5 mb-5">{rep.title}</p>}
       <div className="space-y-2.5 mt-5">
@@ -77,9 +82,12 @@ function RepresentativeDetail({ rep, province }: { rep: Representative; province
 export function RepresentativeFinderModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [selectedRegion, setSelectedRegion] = useState<TurkeyRegion | "all">("all");
   const [selectedPlate, setSelectedPlate] = useState<number | null>(null);
+  const [labelPositions, setLabelPositions] = useState<Map<number, { x: number; y: number }>>(new Map());
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const regionLayerRef = useRef<SVGGElement>(null);
 
-  const visibleProvinces = selectedRegion === "all" ? TURKEY_PROVINCES : provincesInRegion(selectedRegion);
+  const regionProvinces = selectedRegion === "all" ? [] : provincesInRegion(selectedRegion);
+  const visibleProvinces = selectedRegion === "all" ? TURKEY_PROVINCES : regionProvinces;
   const selectedProvince = selectedPlate != null ? provinceByPlate(selectedPlate) ?? null : null;
   const selectedRep = selectedPlate != null ? representativeForProvince(selectedPlate) : undefined;
 
@@ -88,6 +96,24 @@ export function RepresentativeFinderModal({ open, onClose }: { open: boolean; on
     const region = provinceByPlate(plate)?.region;
     if (region) setSelectedRegion(region);
   }
+
+  // Seçili bölgenin illeri değiştiğinde, haritadaki gerçek konumlarına göre
+  // (path'in bounding-box merkezi) il adı etiketlerinin yerini hesapla.
+  // Yalnızca bir bölge aktifken çalışır — "Tüm Türkiye"de 81 etiket kalabalık
+  // olacağından hesaplanmaz/gösterilmez.
+  useEffect(() => {
+    if (!regionLayerRef.current) {
+      setLabelPositions(new Map());
+      return;
+    }
+    const next = new Map<number, { x: number; y: number }>();
+    regionLayerRef.current.querySelectorAll("path[data-plate]").forEach((el) => {
+      const plate = Number(el.getAttribute("data-plate"));
+      const bbox = (el as SVGGraphicsElement).getBBox();
+      next.set(plate, { x: bbox.x + bbox.width / 2, y: bbox.y + bbox.height / 2 });
+    });
+    setLabelPositions(next);
+  }, [selectedRegion]);
 
   useEscapeKey(onClose, open);
   useEffect(() => {
@@ -129,14 +155,15 @@ export function RepresentativeFinderModal({ open, onClose }: { open: boolean; on
         </div>
 
         <div className="flex-1 overflow-y-auto p-6 lg:p-8">
-          <div className="flex flex-wrap gap-2 mb-7">
+          <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-400 block mb-3">1. Bölge Seçin</span>
+          <div className="flex flex-wrap gap-2 mb-8">
             <button
               type="button"
               onClick={() => setSelectedRegion("all")}
               aria-pressed={selectedRegion === "all"}
-              className={`text-[12.5px] font-semibold px-3.5 py-1.5 rounded-md border transition-colors ${
+              className={`text-[12.5px] font-semibold px-4 py-2 rounded-full border transition-all duration-200 ${
                 selectedRegion === "all"
-                  ? "bg-[#1B3A8F] border-[#1B3A8F] text-white"
+                  ? "bg-[#1B3A8F] border-[#1B3A8F] text-white shadow-md shadow-[#1B3A8F]/20"
                   : "border-slate-200 text-slate-600 hover:border-[#1B3A8F]/40"
               }`}
             >
@@ -148,9 +175,9 @@ export function RepresentativeFinderModal({ open, onClose }: { open: boolean; on
                 type="button"
                 onClick={() => setSelectedRegion(region)}
                 aria-pressed={selectedRegion === region}
-                className={`text-[12.5px] font-semibold px-3.5 py-1.5 rounded-md border transition-colors ${
+                className={`text-[12.5px] font-semibold px-4 py-2 rounded-full border transition-all duration-200 ${
                   selectedRegion === region
-                    ? "bg-[#1B3A8F] border-[#1B3A8F] text-white"
+                    ? "bg-[#1B3A8F] border-[#1B3A8F] text-white shadow-md shadow-[#1B3A8F]/20"
                     : "border-slate-200 text-slate-600 hover:border-[#1B3A8F]/40"
                 }`}
               >
@@ -161,23 +188,70 @@ export function RepresentativeFinderModal({ open, onClose }: { open: boolean; on
 
           <div className="grid lg:grid-cols-[1fr_300px] gap-8 items-start">
             <div>
-              <div className="relative max-w-[280px] sm:max-w-sm mx-auto lg:max-w-none">
-                <TurkeyMap
-                  hoverable
-                  showTooltip
-                  customStyle={{ idleColor: "#e2e8f0", hoverColor: "#1B3A8F" }}
-                  onClick={(city) => selectProvince(city.plateNumber)}
-                />
-                {selectedProvince && (
+              <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-400 block mb-3">2. İl Seçin</span>
+
+              {/* Harita — "feature panel" çerçevesi içinde */}
+              <div className="rounded-2xl border border-slate-100 bg-slate-50/60 p-5">
+                <div className="relative max-w-[280px] sm:max-w-sm mx-auto lg:max-w-none">
+                  <TurkeyMap
+                    hoverable
+                    showTooltip
+                    customStyle={{ idleColor: "#e2e8f0", hoverColor: "#1B3A8F" }}
+                    onClick={(city) => selectProvince(city.plateNumber)}
+                  />
                   <svg viewBox="0 80 1050 585" className="absolute inset-0 w-full h-full pointer-events-none" aria-hidden="true">
-                    <path d={CITY_PATH_BY_PLATE.get(selectedProvince.plate)} fill="#1B3A8F" stroke="#7d9bea" strokeWidth={2} />
+                    {regionProvinces.length > 0 ? (
+                      <>
+                        <g ref={regionLayerRef}>
+                          {regionProvinces.map((p) => (
+                            <path
+                              key={p.plate}
+                              data-plate={p.plate}
+                              d={CITY_PATH_BY_PLATE.get(p.plate)}
+                              fill={p.plate === selectedPlate ? "#1B3A8F" : "#9db3e8"}
+                              stroke="#ffffff"
+                              strokeWidth={1}
+                            />
+                          ))}
+                        </g>
+                        {Array.from(labelPositions.entries()).map(([plate, pos]) => {
+                          const p = provinceByPlate(plate);
+                          if (!p) return null;
+                          const isSel = plate === selectedPlate;
+                          return (
+                            <text
+                              key={plate}
+                              x={pos.x}
+                              y={pos.y}
+                              textAnchor="middle"
+                              dominantBaseline="middle"
+                              fontSize={11}
+                              fontWeight={600}
+                              fill={isSel ? "#ffffff" : "#1B3A8F"}
+                              stroke={isSel ? "none" : "#ffffff"}
+                              strokeWidth={isSel ? 0 : 2.5}
+                              paintOrder="stroke"
+                            >
+                              {p.name}
+                            </text>
+                          );
+                        })}
+                      </>
+                    ) : (
+                      selectedProvince && (
+                        <path d={CITY_PATH_BY_PLATE.get(selectedProvince.plate)} fill="#1B3A8F" stroke="#7d9bea" strokeWidth={2} />
+                      )
+                    )}
                   </svg>
-                )}
+                </div>
+                <p className="text-slate-400 text-[11.5px] text-center mt-3">
+                  {selectedRegion === "all"
+                    ? "Bir bölge seçin veya haritadan doğrudan bir ile tıklayın."
+                    : "İl üzerine gelerek adını görün, tıklayarak seçin."}
+                </p>
               </div>
-              <p className="text-slate-400 text-[12px] text-center mt-3 mb-6">
-                İl üzerine gelerek adını görün, tıklayarak seçin.
-              </p>
-              <div className="flex flex-wrap gap-2">
+
+              <div className="flex flex-wrap gap-2 mt-5">
                 {visibleProvinces.map((p) => {
                   const isSelected = p.plate === selectedPlate;
                   return (
@@ -199,19 +273,22 @@ export function RepresentativeFinderModal({ open, onClose }: { open: boolean; on
               </div>
             </div>
 
-            <div className="do-card bg-white border border-slate-200 rounded-2xl p-7 lg:sticky lg:top-0">
-              {!selectedProvince ? (
-                <div className="text-center py-8">
-                  <MapPin className="w-7 h-7 text-slate-300 mx-auto mb-4" strokeWidth={1.5} />
-                  <p className="text-slate-400 text-[13.5px] leading-relaxed">
-                    Haritadan veya listeden bir il seçerek başlayın.
-                  </p>
-                </div>
-              ) : selectedRep ? (
-                <RepresentativeDetail rep={selectedRep} province={selectedProvince} />
-              ) : (
-                <FallbackDetail province={selectedProvince} />
-              )}
+            <div>
+              <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-400 block mb-3">3. Temsilciniz</span>
+              <div className="do-card bg-white border border-slate-200 rounded-2xl p-7 lg:sticky lg:top-0">
+                {!selectedProvince ? (
+                  <div className="text-center py-8">
+                    <MapPin className="w-7 h-7 text-slate-300 mx-auto mb-4" strokeWidth={1.5} />
+                    <p className="text-slate-400 text-[13.5px] leading-relaxed">
+                      Haritadan veya listeden bir il seçerek başlayın.
+                    </p>
+                  </div>
+                ) : selectedRep ? (
+                  <RepresentativeDetail rep={selectedRep} province={selectedProvince} />
+                ) : (
+                  <FallbackDetail province={selectedProvince} />
+                )}
+              </div>
             </div>
           </div>
         </div>

@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
-import { ChevronRight, ChevronLeft, ArrowRight, CheckCircle2, Globe, Package, Shield, Zap, Handshake, Search } from "lucide-react";
+import React, { useState } from "react";
+import { ChevronRight, ArrowRight, CheckCircle2, Globe, Package, Shield, Zap, Handshake, Search } from "lucide-react";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
 import { BrandLogo } from "@/components/shared/BrandLogo";
@@ -63,67 +63,42 @@ function CategoryBrandRefs({ category, brands }: { category: ProductCategory; br
   );
 }
 
-// Kategori Showcase: yatay "filmstrip" navigasyonu (23 kategori, hızlı geçiş
-// düğümleri) + öne çıkan kategorinin büyük editorial paneli (index numarası,
-// ikon, açıklama, öne çıkan markalar, B2B CTA'sı). Rail+accordion ikilisinin
-// yerine geçen tek, tüm genişliklerde aynı davranan deneyim — aynı
-// Excel-kaynaklı PRODUCT_CATEGORIES verisi, yalnızca sunum katmanı.
+// Kategori Showcase: her zaman görünen bir "overview" ızgarası (23 kategorinin
+// tamamı tek bakışta) + seçili kategorinin altında büyük bir "spotlight"
+// paneli (index numarası, ikon, açıklama, öne çıkan markalar, B2B CTA'sı).
+// Önceki filmstrip'in yerine geçti — filmstrip yalnızca görünürdeki bir alt
+// kümeyi gösteriyordu, bu yüzden "kapsam" hissi eksikti. Aynı Excel-kaynaklı
+// PRODUCT_CATEGORIES verisi, yalnızca sunum katmanı.
 function CategoryShowcase({ categories, brands }: { categories: ProductCategory[]; brands: Brand[] }) {
   const [activeIdx, setActiveIdx] = useState(0);
   const active = categories[activeIdx];
-  const railRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const node = railRef.current?.children[activeIdx] as HTMLElement | undefined;
-    node?.scrollIntoView({ behavior: "smooth", inline: "center", block: "nearest" });
-  }, [activeIdx]);
 
   return (
     <div>
-      {/* Filmstrip navigasyon — öne çıkan kategori büyük/dolu, diğerleri hızlı geçiş düğümü */}
-      <div className="flex items-center gap-2 mb-8">
-        <button
-          type="button"
-          onClick={() => setActiveIdx((i) => Math.max(0, i - 1))}
-          disabled={activeIdx === 0}
-          aria-label="Önceki kategori"
-          className="hidden sm:flex shrink-0 w-9 h-9 rounded-full border border-slate-200 items-center justify-center text-slate-500 hover:border-[#1B3A8F]/40 hover:text-[#1B3A8F] disabled:opacity-30 disabled:pointer-events-none transition-colors"
-        >
-          <ChevronLeft className="w-4 h-4" />
-        </button>
-        <div ref={railRef} className="flex gap-2 overflow-x-auto do-hide-scrollbar scroll-smooth py-1">
-          {categories.map((cat, i) => {
-            const isActive = i === activeIdx;
-            return (
-              <button
-                key={cat.name}
-                type="button"
-                onClick={() => setActiveIdx(i)}
-                aria-current={isActive}
-                className={`shrink-0 flex items-center gap-2 rounded-full border transition-all duration-300 whitespace-nowrap ${
-                  isActive
-                    ? "bg-[#1B3A8F] border-[#1B3A8F] text-white px-5 py-3 shadow-md shadow-[#1B3A8F]/20"
-                    : "bg-white border-slate-200 text-slate-500 hover:border-[#1B3A8F]/30 hover:text-[#1B3A8F] px-4 py-2.5"
-                }`}
-              >
-                <cat.icon className={isActive ? "w-[17px] h-[17px]" : "w-4 h-4"} strokeWidth={1.75} />
-                <span className={`font-semibold ${isActive ? "text-[13px]" : "text-[12.5px]"}`}>{cat.name}</span>
-              </button>
-            );
-          })}
-        </div>
-        <button
-          type="button"
-          onClick={() => setActiveIdx((i) => Math.min(categories.length - 1, i + 1))}
-          disabled={activeIdx === categories.length - 1}
-          aria-label="Sonraki kategori"
-          className="hidden sm:flex shrink-0 w-9 h-9 rounded-full border border-slate-200 items-center justify-center text-slate-500 hover:border-[#1B3A8F]/40 hover:text-[#1B3A8F] disabled:opacity-30 disabled:pointer-events-none transition-colors"
-        >
-          <ChevronRight className="w-4 h-4" />
-        </button>
+      {/* Overview ızgarası — 23 kategorinin tamamı her zaman görünür, kompakt düğümler */}
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2.5 mb-10">
+        {categories.map((cat, i) => {
+          const isActive = i === activeIdx;
+          return (
+            <button
+              key={cat.name}
+              type="button"
+              onClick={() => setActiveIdx(i)}
+              aria-current={isActive}
+              className={`flex items-center gap-2.5 rounded-xl border px-3.5 py-3 text-left transition-colors duration-200 ${
+                isActive
+                  ? "bg-[#1B3A8F] border-[#1B3A8F]"
+                  : "bg-white border-slate-200 hover:border-[#1B3A8F]/30 hover:bg-slate-50"
+              }`}
+            >
+              <cat.icon className={`w-4 h-4 shrink-0 ${isActive ? "text-white" : "text-[#1B3A8F]"}`} strokeWidth={1.75} />
+              <span className={`text-[12px] leading-tight font-semibold ${isActive ? "text-white" : "text-slate-700"}`}>{cat.name}</span>
+            </button>
+          );
+        })}
       </div>
 
-      {/* Öne çıkan kategori — hero paneli */}
+      {/* Seçili kategori — spotlight paneli */}
       <div key={active.name} className="do-fade-up relative bg-white border border-slate-200 rounded-3xl overflow-hidden">
         <div className="absolute -right-4 -top-8 text-[140px] sm:text-[200px] leading-none font-black text-slate-50 select-none pointer-events-none" aria-hidden="true">
           {String(activeIdx + 1).padStart(2, "0")}
