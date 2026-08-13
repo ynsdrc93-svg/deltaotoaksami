@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "wouter";
 import { MapPin, Phone, Mail, Globe, Clock, ChevronRight, Users, Package, MonitorSmartphone, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
@@ -150,6 +151,22 @@ export function IletisimPage() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* TEMSİLCİLERİMİZ YÖNLENDİRME — ince, tek satırlık geçiş bandı */}
+      <section className="bg-white border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 py-5 flex flex-col sm:flex-row items-center justify-between gap-3">
+          <p className="text-[13.5px] text-slate-600">
+            Bölgenizden sorumlu satış temsilcimizi mi arıyorsunuz?
+          </p>
+          <Link
+            href="/temsilcilerimiz"
+            className="inline-flex items-center gap-1.5 text-[13.5px] font-semibold text-[#1B3A8F] hover:text-[#2547B5] transition-colors whitespace-nowrap"
+          >
+            Temsilcilerimiz sayfasına gidin
+            <ChevronRight className="w-4 h-4" />
+          </Link>
         </div>
       </section>
 

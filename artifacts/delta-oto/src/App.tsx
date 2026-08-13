@@ -5,6 +5,7 @@ import { TedarikciPage } from "@/pages/TedarikciPage";
 import { OperasyonPage } from "@/pages/OperasyonPage";
 import { KariyerPage } from "@/pages/KariyerPage";
 import { IletisimPage } from "@/pages/IletisimPage";
+import { TemsilcilerimizPage } from "@/pages/TemsilcilerimizPage";
 import { SpartPage } from "@/pages/SpartPage";
 import NotFound from "@/pages/not-found";
 import { ScrollToTopButton } from "@/components/shared/ScrollToTopButton";
@@ -19,6 +20,7 @@ function App() {
         <Route path="/operasyon" component={OperasyonPage} />
         <Route path="/kariyer" component={KariyerPage} />
         <Route path="/iletisim" component={IletisimPage} />
+        <Route path="/temsilcilerimiz" component={TemsilcilerimizPage} />
         <Route path="/spart" component={SpartPage} />
         <Route component={NotFound} />
       </Switch>
