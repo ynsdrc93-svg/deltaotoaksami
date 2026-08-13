@@ -3,16 +3,18 @@ import { Link } from "wouter";
 import { ChevronRight, ArrowRight, Globe, Zap, Network, Menu, X, Handshake } from "lucide-react";
 import { useReveal, useScrolled, useCounter, useScrollProgress, useParallax, useEscapeKey } from "../hooks/use-motion";
 import { SiteFooter } from "./shared/SiteFooter";
+import { BrandLogo } from "./shared/BrandLogo";
 import TurkeyMap from "turkey-map-react";
 import { cities as turkeyCities } from "turkey-map-react/lib/data";
 import { CLASSIFIED_BRANDS } from "../lib/brands";
 
 // Şerit, Tedarikçiler sayfasıyla AYNI kaynağı (CLASSIFIED_BRANDS — Excel'in
 // 61 markası) kullanır; Excel'de olmayan markalar burada da gösterilmez
-// (bkz. brands.ts UNCLASSIFIED_BRANDS notu). hasLogo:false olan markalar
-// gerçek logo yerine tipografik yer tutucuyla akar — bkz. StripTile. 3
-// satıra, sabit dilim yerine dinamik olarak eşit bölünür; böylece marka
-// sayısı Excel güncellendiğinde satırlar otomatik dengelenir.
+// (bkz. brands.ts UNCLASSIFIED_BRANDS notu). hasVerifiedLogo:false olan
+// markalar gerçek logo yerine tipografik yer tutucuyla akar — bkz.
+// shared/BrandLogo.tsx (size="strip"). 3 satıra, sabit dilim yerine
+// dinamik olarak eşit bölünür; böylece marka sayısı Excel güncellendiğinde
+// satırlar otomatik dengelenir.
 const STRIP_BRANDS = CLASSIFIED_BRANDS;
 const STRIP_ROWS = 3;
 const STRIP_CHUNK = Math.ceil(STRIP_BRANDS.length / STRIP_ROWS);
@@ -518,28 +520,8 @@ export function LandingPage() {
               <div className={rowIndex === 1 ? "do-ticker-inner" : "do-ticker-inner-reverse"}>
                 {[...strip, ...strip].map((b, i) => {
                   const isDuplicate = i >= strip.length;
-                  const Tile = b.website ? "a" : "div";
                   return (
-                    <Tile
-                      key={`${b.slug}-${i}`}
-                      aria-hidden={isDuplicate}
-                      tabIndex={isDuplicate ? -1 : undefined}
-                      {...(b.website ? { href: b.website, target: "_blank", rel: "noopener noreferrer" } : {})}
-                      title={b.name}
-                      className="group relative shrink-0 mx-2.5 w-[170px] bg-white rounded-lg h-16 px-4 flex items-center justify-center shadow-sm hover:shadow-lg hover:z-10 transition-shadow duration-300"
-                    >
-                      {b.hasLogo ? (
-                        <img
-                          src={`/images/brands/${b.slug}.png`}
-                          alt={b.name}
-                          className="max-h-7 max-w-[110px] w-auto h-auto object-contain grayscale group-hover:grayscale-0 group-hover:scale-125 transition-all duration-300"
-                        />
-                      ) : (
-                        <span className="text-[#1B3A8F] font-bold text-[12px] text-center leading-tight px-1 group-hover:scale-110 transition-transform duration-300">
-                          {b.name}
-                        </span>
-                      )}
-                    </Tile>
+                    <BrandLogo key={`${b.slug}-${i}`} brand={b} size="strip" hidden={isDuplicate} />
                   );
                 })}
               </div>

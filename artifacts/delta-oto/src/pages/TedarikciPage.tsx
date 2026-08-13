@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link } from "wouter";
 import { ChevronRight, ArrowRight, CheckCircle2, Globe, Package, Shield, Zap, Handshake, X, Search } from "lucide-react";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
+import { BrandLogo } from "@/components/shared/BrandLogo";
 import { useEscapeKey } from "../hooks/use-motion";
 import { CLASSIFIED_BRANDS, GLOBAL_BRANDS, YERLI_BRANDS, type Brand } from "@/lib/brands";
 import { PRODUCT_CATEGORIES } from "@/lib/categories";
@@ -24,50 +24,6 @@ const ADVANTAGES = [
   { Icon: Handshake, title: "Opar Ege Bölge Bayiliği", desc: "Opar'ın Ege bölgesi operasyonunu devralarak İzmir ve çevresinde bölgesel stok derinliğimizi ve teslimat hızımızı doğrudan güçlendirdik." },
 ];
 
-// Marka duvarındaki tek kart bileşeni: "wall" (büyük, ana duvar) veya "chip"
-// (kategori panelindeki küçük varyant). Spart kendi /spart sayfamıza,
-// diğerleri (varsa) resmi web sitesine bağlanır; website yoksa bağlantısız
-// bir kart olarak gösterilir. hasLogo=false olan markalar (henüz logosu
-// tedarik edilmemiş) için görsel yerine temiz bir tipografik yer tutucu
-// kullanılır — kırık görsel veya düşük kaliteli logodan kaçınmak için.
-function BrandTile({ brand, size = "wall" }: { brand: Brand; size?: "wall" | "chip" }) {
-  const isWall = size === "wall";
-  const content = brand.hasLogo ? (
-    <img
-      src={`/images/brands/${brand.slug}.png`}
-      alt={brand.name}
-      className={isWall ? "max-h-12 sm:max-h-14 w-auto h-auto max-w-full object-contain" : "max-h-11 w-auto h-auto object-contain"}
-    />
-  ) : (
-    <span className={`text-[#1B3A8F] font-black text-center leading-tight tracking-tight px-2 ${isWall ? "text-[15px]" : "text-[12px]"}`}>
-      {brand.name}
-    </span>
-  );
-  const className = isWall
-    ? "do-card bg-white rounded-2xl flex items-center justify-center h-32 sm:h-36 px-6 py-6 shadow-sm"
-    : "border border-slate-200 rounded-xl h-20 flex items-center justify-center px-6 bg-white hover:border-[#1B3A8F]/30 hover:shadow-md transition-all";
-
-  if (brand.slug === "spart") {
-    return (
-      <Link href="/spart" title={brand.name} className={className}>
-        {content}
-      </Link>
-    );
-  }
-  if (brand.website) {
-    return (
-      <a href={brand.website} target="_blank" rel="noopener noreferrer" title={brand.name} className={className}>
-        {content}
-      </a>
-    );
-  }
-  return (
-    <div title={brand.name} className={className}>
-      {content}
-    </div>
-  );
-}
-
 function BrandGroup({ label, accent, brands }: { label: string; accent: string; brands: Brand[] }) {
   if (brands.length === 0) return null;
   return (
@@ -81,7 +37,7 @@ function BrandGroup({ label, accent, brands }: { label: string; accent: string; 
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
         {brands.map((b) => (
-          <BrandTile key={b.slug} brand={b} />
+          <BrandLogo key={b.slug} brand={b} size="wall" />
         ))}
       </div>
     </div>
@@ -335,7 +291,7 @@ export function TedarikciPage() {
             <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-400 block mb-4">Bu Kategoride Ürün Veren Markalar</span>
             <div className="flex flex-wrap gap-3">
               {activeBrands.map((b) => (
-                <BrandTile key={b.slug} brand={b} size="chip" />
+                <BrandLogo key={b.slug} brand={b} size="chip" />
               ))}
             </div>
             <p className="text-slate-400 text-[12px] leading-relaxed mt-7">Gösterilen liste, bu kategoride ürün veren markalarımızı kapsar; güncel stok durumu için B2B portalına giriş yapınız.</p>

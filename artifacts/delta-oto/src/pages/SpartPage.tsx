@@ -74,12 +74,12 @@ const QUALITIES = [
   {
     icon: <Ruler className="w-5 h-5" />,
     title: "OEM Toleranslarında Üretim",
-    desc: "Her parça, orijinal üretici spesifikasyonları esas alınarak üretilir. Boyutsal hassasiyet ve malzeme kalitesi orijinalle eşdeğerdir.",
+    desc: "Her parça, orijinal üretici spesifikasyonları esas alınarak, boyutsal hassasiyet ve malzeme kalitesinde orijinaline eşdeğer olacak şekilde üretilir.",
   },
   {
     icon: <FlaskConical className="w-5 h-5" />,
     title: "Kapsamlı Test Süreçleri",
-    desc: "Ürünler; yorulma, termal döngü, titreşim ve ömür testlerinden geçirilerek sahaya çıkar. Laboratuvar onaysız hiçbir referans raflara girmez.",
+    desc: "Ürünler, sahaya çıkmadan önce çok aşamalı kalite kontrol süreçlerinden geçirilir.",
   },
   {
     icon: <Car className="w-5 h-5" />,
@@ -97,8 +97,8 @@ const ADVANTAGES = [
   { icon: <ShieldCheck className="w-5 h-5" />, text: "2 Yıl Ürün Garantisi" },
   { icon: <TrendingUp className="w-5 h-5" />, text: "Rekabetçi Bayi Fiyatları" },
   { icon: <Package className="w-5 h-5" />, text: "Hazır Stok, Hızlı Sevkiyat" },
-  { icon: <Award className="w-5 h-5" />, text: "Sektör Onaylı Kalite" },
-  { icon: <CheckCircle2 className="w-5 h-5" />, text: "Teknik Destek Hattı" },
+  { icon: <Award className="w-5 h-5" />, text: "Test Edilmiş Ürün Kalitesi" },
+  { icon: <CheckCircle2 className="w-5 h-5" />, text: "Ürün ve Teknik Bilgi Desteği" },
   { icon: <Wrench className="w-5 h-5" />, text: "OEM Eşdeğer Performans" },
 ];
 
@@ -138,8 +138,8 @@ const DEALER_BENEFITS = [
   },
   {
     icon: <TrendingUp className="w-5 h-5" />,
-    title: "Rekabetçi Kâr Marjı",
-    desc: "Doğrudan üretici-distribütör ilişkisiyle şekillenen fiyatlandırma, servisinizin kârlılığını korur.",
+    title: "Rekabetçi Bayi Fiyatlandırması",
+    desc: "Doğrudan üretici-distribütör ilişkisine dayanan bayi fiyatlandırma yapısı, rekabetçi bir maliyet tabanı sunar.",
   },
   {
     icon: <Truck className="w-5 h-5" />,
@@ -149,17 +149,17 @@ const DEALER_BENEFITS = [
   {
     icon: <ShieldCheck className="w-5 h-5" />,
     title: "Marka Güvencesi",
-    desc: "2 yıl ürün garantisi ve OEM toleranslarında üretim — müşterinize verdiğiniz sözün arkasında Delta Oto'nun 50 yıllık adı durur.",
+    desc: "2 yıl ürün garantisi ve OEM toleranslarında üretim; Delta Oto'nun 50 yıllık sektör deneyimiyle şekillenen bir marka güvencesi.",
   },
   {
     icon: <Handshake className="w-5 h-5" />,
-    title: "Büyüyen Portföy, Büyüyen İş",
-    desc: "Yeni araç modelleriyle sürekli genişleyen katalog — bugünün yatırımı yarının ürün yelpazesinde karşılığını bulur.",
+    title: "Sürekli Genişleyen Katalog",
+    desc: "Yeni araç modelleriyle sürekli genişleyen bir ürün katalogu yapısı.",
   },
   {
     icon: <Users className="w-5 h-5" />,
-    title: "Teknik & Satış Desteği",
-    desc: "Ürün eğitimi, teknik danışmanlık ve satış sonrası destek hattıyla ekibinizin yanındayız.",
+    title: "Marka İletişim Desteği",
+    desc: "Ürün bilgisi ve teknik konularda, Delta Oto'nun saha deneyimine dayanan bir iletişim ve destek yaklaşımıyla ekibinizin yanındayız.",
   },
 ];
 
@@ -275,7 +275,7 @@ export function SpartPage() {
               <p className="text-slate-600 leading-relaxed mb-8">
                 "Original Replacement" felsefesi basittir: parça değişimi için orijinal
                 kaliteden taviz vermek zorunda değilsiniz. SPART, araç üreticisinin
-                toleranslarını karşılarken servis karlılığını korur.
+                toleranslarını karşılayacak şekilde geliştirilmiştir.
               </p>
               <div className="grid grid-cols-2 gap-4">
                 {ADVANTAGES.map((a) => (
@@ -455,8 +455,8 @@ export function SpartPage() {
             SPART Bayisi Olmak İster Misiniz?
           </h2>
           <p className="text-white/65 max-w-xl mx-auto mb-10 text-[15px] leading-relaxed">
-            Delta Oto'nun B2B platformu üzerinden SPART ürünlerine erişin;
-            rekabetçi fiyatları, anlık stok görünümünü ve online sipariş kolaylığını keşfedin.
+            Delta Oto'nun B2B platformu üzerinden SPART ürünlerine erişin,
+            fiyat ve sipariş bilgilerini inceleyin.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <a
