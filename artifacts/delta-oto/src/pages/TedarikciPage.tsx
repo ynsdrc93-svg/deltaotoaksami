@@ -55,8 +55,10 @@ function CategoryBrandRefs({ category, brands }: { category: ProductCategory; br
   const rest = resolved.length - shown.length;
   return (
     <div className="flex flex-wrap items-center gap-3 bg-slate-50 rounded-xl px-5 py-4 border border-slate-100">
-      {shown.map((b) => (
-        <BrandLogo key={b.slug} brand={b} size="chip" />
+      {shown.map((b, i) => (
+        <div key={b.slug} className="do-chip-in" style={{ animationDelay: `${i * 35}ms` }}>
+          <BrandLogo brand={b} size="chip" />
+        </div>
       ))}
       {rest > 0 && <span className="text-slate-400 text-[12px] font-semibold pl-1 whitespace-nowrap">+{rest} marka daha</span>}
     </div>
@@ -64,61 +66,90 @@ function CategoryBrandRefs({ category, brands }: { category: ProductCategory; br
 }
 
 // Kategori Showcase: her zaman görünen bir "overview" ızgarası (23 kategorinin
-// tamamı tek bakışta) + seçili kategorinin altında büyük bir "spotlight"
-// paneli (index numarası, ikon, açıklama, öne çıkan markalar, B2B CTA'sı).
-// Önceki filmstrip'in yerine geçti — filmstrip yalnızca görünürdeki bir alt
-// kümeyi gösteriyordu, bu yüzden "kapsam" hissi eksikti. Aynı Excel-kaynaklı
-// PRODUCT_CATEGORIES verisi, yalnızca sunum katmanı.
+// tamamı tek bakışta) + altında seçili kategorinin büyük "spotlight" paneli.
+// Etkileşim modeli: HOVER = canlı önizleme (masaüstü), CLICK/TAP = kilitle.
+// Fare ızgaradan tamamen çıkınca son kilitlenen kategoriye geri dönülür.
+// Hover yalnızca ilgili kutucuğun rengini değiştirmiyor — tüm bölüm tepki
+// veriyor: atmosferik arka plan, komşu kutucuklar hafifçe geri çekiliyor,
+// spotlight paneli ve öne çıkan markalar canlı güncelleniyor. Aynı
+// Excel-kaynaklı PRODUCT_CATEGORIES verisi, yalnızca sunum katmanı.
 function CategoryShowcase({ categories, brands }: { categories: ProductCategory[]; brands: Brand[] }) {
   const [activeIdx, setActiveIdx] = useState(0);
-  const active = categories[activeIdx];
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+  const displayIdx = hoveredIdx ?? activeIdx;
+  const display = categories[displayIdx];
+  const isHovering = hoveredIdx !== null;
 
   return (
-    <div>
+    <div className="relative overflow-hidden" onMouseLeave={() => setHoveredIdx(null)}>
+      <div
+        className={`do-category-atmosphere pointer-events-none absolute -inset-x-10 -inset-y-16 transition-opacity duration-500 ${isHovering ? "opacity-100" : "opacity-0"}`}
+        aria-hidden="true"
+      />
+
       {/* Overview ızgarası — 23 kategorinin tamamı her zaman görünür, kompakt düğümler */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2.5 mb-10">
+      <div className="relative grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-2.5 mb-10">
         {categories.map((cat, i) => {
-          const isActive = i === activeIdx;
+          const isHovered = i === hoveredIdx;
+          const isLocked = i === activeIdx;
+          const receded = isHovering && !isHovered;
           return (
             <button
               key={cat.name}
               type="button"
               onClick={() => setActiveIdx(i)}
-              aria-current={isActive}
-              className={`flex items-center gap-2.5 rounded-xl border px-3.5 py-3 text-left transition-colors duration-200 ${
-                isActive
-                  ? "bg-[#1B3A8F] border-[#1B3A8F]"
-                  : "bg-white border-slate-200 hover:border-[#1B3A8F]/30 hover:bg-slate-50"
-              }`}
+              onMouseEnter={() => setHoveredIdx(i)}
+              onFocus={() => setHoveredIdx(i)}
+              onBlur={() => setHoveredIdx(null)}
+              aria-current={isLocked}
+              className={`do-category-tile relative flex items-center gap-2.5 rounded-xl border px-3.5 py-3 text-left transition-all duration-300 ${
+                isHovered
+                  ? "bg-[#1B3A8F] border-[#1B3A8F] -translate-y-0.5 shadow-lg shadow-[#1B3A8F]/25 z-10"
+                  : isLocked
+                  ? "bg-[#1B3A8F]/[0.07] border-[#1B3A8F]/50"
+                  : "bg-white border-slate-200"
+              } ${receded ? "opacity-45" : "opacity-100"}`}
             >
-              <cat.icon className={`w-4 h-4 shrink-0 ${isActive ? "text-white" : "text-[#1B3A8F]"}`} strokeWidth={1.75} />
-              <span className={`text-[12px] leading-tight font-semibold ${isActive ? "text-white" : "text-slate-700"}`}>{cat.name}</span>
+              <cat.icon
+                className={`w-4 h-4 shrink-0 transition-transform duration-300 ${isHovered ? "scale-125 text-white" : "text-[#1B3A8F]"}`}
+                strokeWidth={1.75}
+              />
+              <span className={`text-[12px] leading-tight font-semibold ${isHovered ? "text-white" : "text-slate-700"}`}>{cat.name}</span>
+              {(isHovered || isLocked) && (
+                <span className={`absolute top-1.5 right-2.5 text-[9px] font-black tabular-nums ${isHovered ? "text-white/70" : "text-[#1B3A8F]/40"}`}>
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+              )}
+              <span
+                className={`absolute left-0 bottom-0 h-[2px] w-full bg-[#7d9bea] origin-left transition-transform duration-300 ${isHovered ? "scale-x-100" : "scale-x-0"}`}
+                aria-hidden="true"
+              />
             </button>
           );
         })}
       </div>
 
-      {/* Seçili kategori — spotlight paneli */}
-      <div key={active.name} className="do-fade-up relative bg-white border border-slate-200 rounded-3xl overflow-hidden">
+      {/* Seçili/önizlenen kategori — spotlight paneli */}
+      <div key={display.name} className="do-fade-up relative bg-white border border-slate-200 rounded-3xl overflow-hidden">
         <div className="absolute -right-4 -top-8 text-[140px] sm:text-[200px] leading-none font-black text-slate-50 select-none pointer-events-none" aria-hidden="true">
-          {String(activeIdx + 1).padStart(2, "0")}
+          {String(displayIdx + 1).padStart(2, "0")}
         </div>
         <div className="relative p-8 sm:p-10 lg:p-12">
           <div className="flex items-center gap-4 mb-6">
             <div className="w-14 h-14 rounded-2xl bg-[#1B3A8F] flex items-center justify-center shrink-0">
-              <active.icon className="w-7 h-7 text-white" strokeWidth={1.75} />
+              <display.icon className="w-7 h-7 text-white" strokeWidth={1.75} />
             </div>
             <div>
               <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#1B3A8F]">
-                Kategori {String(activeIdx + 1).padStart(2, "0")} / {String(categories.length).padStart(2, "0")}
+                Kategori {String(displayIdx + 1).padStart(2, "0")} / {String(categories.length).padStart(2, "0")}
               </span>
-              <h3 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight leading-tight">{active.name}</h3>
+              <h3 className="text-2xl md:text-3xl font-black text-slate-900 tracking-tight leading-tight">{display.name}</h3>
             </div>
           </div>
-          <p className="text-slate-500 text-[15px] leading-relaxed max-w-xl mb-8">{active.description}</p>
+          <p className="text-slate-500 text-[15px] leading-relaxed max-w-xl mb-8">{display.description}</p>
 
           <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-400 block mb-3.5">Öne Çıkan Markalar</span>
-          <CategoryBrandRefs category={active} brands={brands} />
+          <CategoryBrandRefs category={display} brands={brands} />
 
           <a
             href="https://b2b.parcabul.com.tr/login.aspx"
@@ -126,7 +157,7 @@ function CategoryShowcase({ categories, brands }: { categories: ProductCategory[
             rel="noopener noreferrer"
             className="inline-flex items-center gap-2 mt-8 text-[13.5px] font-semibold text-[#1B3A8F] hover:text-[#2547B5] transition-colors group"
           >
-            B2B Portal'da {active.name} stoklarını inceleyin
+            B2B Portal'da {display.name} stoklarını inceleyin
             <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
           </a>
         </div>

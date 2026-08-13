@@ -18,14 +18,39 @@ import {
 } from "@/lib/turkey-regions";
 
 // Bölge temsilcisi bulma deneyiminin TEK yeri — /iletisim ve /temsilcilerimiz
-// aynı modalı açar, mantık burada tekilleşir (DRY). Harita + bölge filtresi +
-// il listesi + detay paneli, önceden /temsilcilerimiz'in ana gövdesiydi;
-// artık kontrollü bir overlay içinde, hem masaüstünde hem mobilde tam ekran
-// sheet olarak davranır.
+// aynı modalı açar, mantık burada tekilleşir (DRY).
 
 const CITY_PATH_BY_PLATE: Map<number, string> = new Map(
   turkeyCities.map((c: { plateNumber: number; path: string }) => [c.plateNumber, c.path]),
 );
+
+// Otomatik bounding-box merkezi çoğu il için iyi çalışıyor, ancak gerçekten
+// küçük/sıkışık birkaç il (Doğu Marmara ve Batı Karadeniz kümeleri) için
+// okunabilirlik adına küçük, elle ayarlanmış nudge'lar — il konumunu/veriyi
+// DEĞİŞTİRMEZ, yalnızca o ilin etiketinin görsel yerleşimini ince ayarlar.
+const PROVINCE_LABEL_OFFSETS: Record<number, { dx: number; dy: number }> = {
+  34: { dx: 4, dy: 10 },    // İstanbul — boğaz nedeniyle bbox merkezi sudaki boşluğa denk gelebilir
+  41: { dx: -10, dy: -8 },  // Kocaeli
+  77: { dx: 12, dy: 10 },   // Yalova — Kocaeli/Bursa arasında çok küçük
+  11: { dx: 8, dy: 10 },    // Bilecik
+  54: { dx: -4, dy: 10 },   // Sakarya
+  81: { dx: 10, dy: -2 },   // Düzce
+  74: { dx: -8, dy: -6 },   // Bartın
+  78: { dx: 8, dy: 10 },    // Karabük
+  67: { dx: -10, dy: 4 },   // Zonguldak
+  69: { dx: 10, dy: 6 },    // Bayburt
+  79: { dx: 0, dy: 10 },    // Kilis
+  73: { dx: 0, dy: -8 },    // Şırnak
+};
+
+// Eşikler, 81 ilin gerçek bounding-box alan dağılımına göre kalibre edildi
+// (min≈500, p25≈3550, medyan≈5000, p75≈8400, max≈27700 birim²) — küçük
+// illerin (ör. Yalova, Kilis, Bayburt) etiketi orantılı olarak küçük kalır,
+// büyük illerin (ör. Konya, Sivas) etiketi daha büyük ve rahat okunur olur.
+function labelFontSize(area: number, isSelected: boolean): number {
+  const base = area > 9000 ? 12 : area > 5000 ? 10 : area > 2200 ? 8.5 : 6.8;
+  return isSelected ? base + 1.5 : base;
+}
 
 function telHref(phone: string): string {
   return `tel:${phone.replace(/\s+/g, "")}`;
@@ -56,10 +81,9 @@ function RepresentativeDetail({ rep, province }: { rep: Representative; province
   return (
     <div>
       {/* Coğrafi bağlam province verisinden gelir (province.region ·
-          province.name) — rep.region'ın kendisi burada kullanılmaz, çünkü
-          bu ilin ataması tek bir temsilciye özelse (ör. Gümüşhane) ikisi
-          aynı string olup "Gümüşhane · Gümüşhane" gibi anlamsız bir tekrar
-          üretebilir. Temsilcinin kendi atama adı zaten rep.title'da var. */}
+          province.name) — rep.region kullanılmaz, çünkü bu ilin ataması tek
+          bir temsilciye özelse (ör. Gümüşhane) ikisi aynı string olup
+          "Gümüşhane · Gümüşhane" gibi anlamsız bir tekrar üretebilir. */}
       <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#1B3A8F]">{province.region} · {province.name}</span>
       <h3 className="text-xl font-black text-slate-900 mt-1 leading-snug">{rep.name}</h3>
       {rep.title && <p className="text-slate-500 text-[13px] mt-0.5 mb-5">{rep.title}</p>}
@@ -82,11 +106,12 @@ function RepresentativeDetail({ rep, province }: { rep: Representative; province
 export function RepresentativeFinderModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [selectedRegion, setSelectedRegion] = useState<TurkeyRegion | "all">("all");
   const [selectedPlate, setSelectedPlate] = useState<number | null>(null);
-  const [labelPositions, setLabelPositions] = useState<Map<number, { x: number; y: number }>>(new Map());
+  const [labelPositions, setLabelPositions] = useState<Map<number, { x: number; y: number; area: number }>>(new Map());
   const closeButtonRef = useRef<HTMLButtonElement>(null);
-  const regionLayerRef = useRef<SVGGElement>(null);
+  const allProvincesLayerRef = useRef<SVGGElement>(null);
 
   const regionProvinces = selectedRegion === "all" ? [] : provincesInRegion(selectedRegion);
+  const activeRegionPlates = new Set(regionProvinces.map((p) => p.plate));
   const visibleProvinces = selectedRegion === "all" ? TURKEY_PROVINCES : regionProvinces;
   const selectedProvince = selectedPlate != null ? provinceByPlate(selectedPlate) ?? null : null;
   const selectedRep = selectedPlate != null ? representativeForProvince(selectedPlate) : undefined;
@@ -97,23 +122,26 @@ export function RepresentativeFinderModal({ open, onClose }: { open: boolean; on
     if (region) setSelectedRegion(region);
   }
 
-  // Seçili bölgenin illeri değiştiğinde, haritadaki gerçek konumlarına göre
-  // (path'in bounding-box merkezi) il adı etiketlerinin yerini hesapla.
-  // Yalnızca bir bölge aktifken çalışır — "Tüm Türkiye"de 81 etiket kalabalık
-  // olacağından hesaplanmaz/gösterilmez.
+  function fillForProvince(plate: number): string {
+    if (plate === selectedPlate) return "#1B3A8F";
+    if (activeRegionPlates.has(plate)) return "#9db3e8";
+    return "transparent";
+  }
+
+  // İl geometrisi hiç değişmediği için etiket konumları yalnızca bir kez,
+  // mount'ta hesaplanır (path'in gerçek bounding-box merkezi). Bölge/il
+  // seçimi yalnızca hangi etiketin vurgulanacağını belirler — konumları
+  // yeniden hesaplamaz.
   useEffect(() => {
-    if (!regionLayerRef.current) {
-      setLabelPositions(new Map());
-      return;
-    }
-    const next = new Map<number, { x: number; y: number }>();
-    regionLayerRef.current.querySelectorAll("path[data-plate]").forEach((el) => {
+    if (!allProvincesLayerRef.current) return;
+    const next = new Map<number, { x: number; y: number; area: number }>();
+    allProvincesLayerRef.current.querySelectorAll("path[data-plate]").forEach((el) => {
       const plate = Number(el.getAttribute("data-plate"));
       const bbox = (el as SVGGraphicsElement).getBBox();
-      next.set(plate, { x: bbox.x + bbox.width / 2, y: bbox.y + bbox.height / 2 });
+      next.set(plate, { x: bbox.x + bbox.width / 2, y: bbox.y + bbox.height / 2, area: bbox.width * bbox.height });
     });
     setLabelPositions(next);
-  }, [selectedRegion]);
+  }, []);
 
   useEscapeKey(onClose, open);
   useEffect(() => {
@@ -131,7 +159,7 @@ export function RepresentativeFinderModal({ open, onClose }: { open: boolean; on
     >
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
       <div
-        className={`absolute inset-0 sm:inset-5 lg:inset-x-0 lg:top-8 lg:bottom-8 lg:mx-auto lg:max-w-5xl bg-white sm:rounded-2xl shadow-2xl flex flex-col transition-all duration-300 ${
+        className={`absolute inset-0 sm:inset-5 lg:inset-x-0 lg:top-6 lg:bottom-6 lg:mx-auto lg:max-w-6xl bg-white sm:rounded-2xl shadow-2xl flex flex-col transition-all duration-300 ${
           open ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"
         }`}
         role="dialog"
@@ -186,68 +214,63 @@ export function RepresentativeFinderModal({ open, onClose }: { open: boolean; on
             ))}
           </div>
 
-          <div className="grid lg:grid-cols-[1fr_300px] gap-8 items-start">
+          <div className="grid lg:grid-cols-[1fr_260px] gap-8 items-start">
             <div>
               <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-400 block mb-3">2. İl Seçin</span>
 
-              {/* Harita — "feature panel" çerçevesi içinde */}
-              <div className="rounded-2xl border border-slate-100 bg-slate-50/60 p-5">
-                <div className="relative max-w-[280px] sm:max-w-sm mx-auto lg:max-w-none">
+              {/* Harita — "feature panel" çerçevesi içinde, tüm 81 il adı her zaman görünür */}
+              <div className="rounded-2xl border border-slate-100 bg-slate-50/60 p-4 sm:p-6">
+                <div className="relative max-w-[420px] sm:max-w-none mx-auto">
                   <TurkeyMap
                     hoverable
-                    showTooltip
-                    customStyle={{ idleColor: "#e2e8f0", hoverColor: "#1B3A8F" }}
+                    customStyle={{ idleColor: "#e2e8f0", hoverColor: "#c7d5f5" }}
                     onClick={(city) => selectProvince(city.plateNumber)}
                   />
                   <svg viewBox="0 80 1050 585" className="absolute inset-0 w-full h-full pointer-events-none" aria-hidden="true">
-                    {regionProvinces.length > 0 ? (
-                      <>
-                        <g ref={regionLayerRef}>
-                          {regionProvinces.map((p) => (
-                            <path
-                              key={p.plate}
-                              data-plate={p.plate}
-                              d={CITY_PATH_BY_PLATE.get(p.plate)}
-                              fill={p.plate === selectedPlate ? "#1B3A8F" : "#9db3e8"}
-                              stroke="#ffffff"
-                              strokeWidth={1}
-                            />
-                          ))}
-                        </g>
-                        {Array.from(labelPositions.entries()).map(([plate, pos]) => {
-                          const p = provinceByPlate(plate);
-                          if (!p) return null;
-                          const isSel = plate === selectedPlate;
-                          return (
-                            <text
-                              key={plate}
-                              x={pos.x}
-                              y={pos.y}
-                              textAnchor="middle"
-                              dominantBaseline="middle"
-                              fontSize={11}
-                              fontWeight={600}
-                              fill={isSel ? "#ffffff" : "#1B3A8F"}
-                              stroke={isSel ? "none" : "#ffffff"}
-                              strokeWidth={isSel ? 0 : 2.5}
-                              paintOrder="stroke"
-                            >
-                              {p.name}
-                            </text>
-                          );
-                        })}
-                      </>
-                    ) : (
-                      selectedProvince && (
-                        <path d={CITY_PATH_BY_PLATE.get(selectedProvince.plate)} fill="#1B3A8F" stroke="#7d9bea" strokeWidth={2} />
-                      )
-                    )}
+                    <g ref={allProvincesLayerRef}>
+                      {TURKEY_PROVINCES.map((p) => (
+                        <path
+                          key={p.plate}
+                          data-plate={p.plate}
+                          d={CITY_PATH_BY_PLATE.get(p.plate)}
+                          fill={fillForProvince(p.plate)}
+                          stroke={p.plate === selectedPlate || activeRegionPlates.has(p.plate) ? "#ffffff" : "none"}
+                          strokeWidth={1}
+                        />
+                      ))}
+                    </g>
+                    {TURKEY_PROVINCES.map((p) => {
+                      const pos = labelPositions.get(p.plate);
+                      if (!pos) return null;
+                      const offset = PROVINCE_LABEL_OFFSETS[p.plate];
+                      const isSelected = p.plate === selectedPlate;
+                      const isQuiet = selectedRegion !== "all" && !activeRegionPlates.has(p.plate) && !isSelected;
+                      return (
+                        <text
+                          key={p.plate}
+                          x={pos.x + (offset?.dx ?? 0)}
+                          y={pos.y + (offset?.dy ?? 0)}
+                          textAnchor="middle"
+                          dominantBaseline="middle"
+                          fontSize={labelFontSize(pos.area, isSelected)}
+                          fontWeight={isSelected ? 700 : isQuiet ? 500 : 700}
+                          fill={isSelected ? "#ffffff" : "#1B3A8F"}
+                          fillOpacity={isQuiet ? 0.55 : 1}
+                          stroke={isSelected ? "none" : "#ffffff"}
+                          strokeOpacity={isQuiet ? 0.7 : 1}
+                          strokeWidth={isSelected ? 0 : 2.3}
+                          paintOrder="stroke"
+                        >
+                          {p.name}
+                        </text>
+                      );
+                    })}
                   </svg>
                 </div>
                 <p className="text-slate-400 text-[11.5px] text-center mt-3">
                   {selectedRegion === "all"
                     ? "Bir bölge seçin veya haritadan doğrudan bir ile tıklayın."
-                    : "İl üzerine gelerek adını görün, tıklayarak seçin."}
+                    : "İl üzerine tıklayarak seçin."}
                 </p>
               </div>
 
