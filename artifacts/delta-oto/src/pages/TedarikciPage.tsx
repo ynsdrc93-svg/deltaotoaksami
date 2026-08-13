@@ -1,11 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
-import { ChevronRight, ArrowRight, CheckCircle2, Globe, Package, Shield, Zap, Handshake, X, Search } from "lucide-react";
+import React, { useState } from "react";
+import { ChevronRight, ArrowRight, CheckCircle2, Globe, Package, Shield, Zap, Handshake, Search } from "lucide-react";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
 import { BrandLogo } from "@/components/shared/BrandLogo";
-import { useEscapeKey } from "../hooks/use-motion";
 import { CLASSIFIED_BRANDS, GLOBAL_BRANDS, YERLI_BRANDS, type Brand } from "@/lib/brands";
-import { PRODUCT_CATEGORIES } from "@/lib/categories";
+import { PRODUCT_CATEGORIES, type ProductCategory } from "@/lib/categories";
 
 const QUALITY = [
   "OEM veya OEM eşdeğeri sertifikasyon zorunluluğu",
@@ -24,15 +23,12 @@ const ADVANTAGES = [
   { Icon: Handshake, title: "Opar Ege Bölge Bayiliği", desc: "Opar'ın Ege bölgesi operasyonunu devralarak İzmir ve çevresinde bölgesel stok derinliğimizi ve teslimat hızımızı doğrudan güçlendirdik." },
 ];
 
-function BrandGroup({ label, accent, brands }: { label: string; accent: string; brands: Brand[] }) {
+function BrandGroup({ label, brands }: { label: string; brands: Brand[] }) {
   if (brands.length === 0) return null;
   return (
     <div>
       <div className="flex items-center gap-4 mb-7">
         <h3 className="text-xl font-black text-white tracking-tight">{label}</h3>
-        <span className={`text-[11px] font-bold bg-white/[0.08] border border-white/15 px-2.5 py-1 rounded-full ${accent}`}>
-          {brands.length} marka
-        </span>
         <div className="flex-1 h-px bg-white/10" />
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
@@ -44,32 +40,119 @@ function BrandGroup({ label, accent, brands }: { label: string; accent: string; 
   );
 }
 
+const CATEGORY_BRAND_LIMIT = 8;
+const CATEGORY_BRAND_LIMIT_MOBILE = 6;
+
+function CategoryBrandRefs({ category, brands, limit }: { category: ProductCategory; brands: Brand[]; limit: number }) {
+  const resolved = category.brandSlugs
+    .map((slug) => brands.find((b) => b.slug === slug))
+    .filter((b): b is Brand => Boolean(b));
+  const shown = resolved.slice(0, limit);
+  const rest = resolved.length - shown.length;
+  return (
+    <div className="flex flex-wrap gap-2.5">
+      {shown.map((b) => (
+        <BrandLogo key={b.slug} brand={b} size="chip" />
+      ))}
+      {rest > 0 && (
+        <div className="flex items-center justify-center h-[44px] px-3.5 rounded-lg border border-dashed border-slate-200 text-slate-400 text-[12px] font-semibold whitespace-nowrap">
+          +{rest} marka daha
+        </div>
+      )}
+    </div>
+  );
+}
+
+// Kategori Kapsamı: masaüstünde sol rayda 23 kategori + sağda seçili
+// kategorinin detay paneli (senkron master-detail); dar ekranda aynı veri
+// tek sütun accordion olarak katlanır. Eski "23 büyük boş kart" grid'inin
+// yerine geçer — aynı Excel-kaynaklı veri (PRODUCT_CATEGORIES), yalnızca
+// sunum katmanı değişti.
+function CategoryExplorer({ categories, brands }: { categories: ProductCategory[]; brands: Brand[] }) {
+  const [activeIdx, setActiveIdx] = useState(0);
+  const active = categories[activeIdx];
+
+  return (
+    <>
+      {/* Masaüstü: rail + detay paneli */}
+      <div className="hidden lg:grid lg:grid-cols-[320px_1fr] gap-8">
+        <div className="lg:sticky lg:top-28 lg:self-start lg:max-h-[600px] overflow-y-auto space-y-1 pr-1">
+          {categories.map((cat, i) => {
+            const isActive = i === activeIdx;
+            return (
+              <button
+                key={cat.name}
+                type="button"
+                onClick={() => setActiveIdx(i)}
+                aria-current={isActive}
+                className={`w-full flex items-center gap-3.5 px-4 py-3 rounded-lg text-left border-l-2 transition-colors duration-200 ${
+                  isActive ? "bg-[#1B3A8F]/[0.07] border-[#1B3A8F]" : "border-transparent hover:bg-slate-50 hover:border-slate-200"
+                }`}
+              >
+                <cat.icon className={`w-[18px] h-[18px] shrink-0 ${isActive ? "text-[#1B3A8F]" : "text-slate-400"}`} strokeWidth={1.75} />
+                <span className={`text-[13.5px] leading-snug ${isActive ? "font-bold text-slate-900" : "font-medium text-slate-600"}`}>
+                  {cat.name}
+                </span>
+              </button>
+            );
+          })}
+        </div>
+
+        <div className="do-card bg-white border border-slate-200 rounded-2xl p-10">
+          <div className="flex items-center gap-4 mb-6">
+            <div className="w-12 h-12 rounded-xl bg-[#1B3A8F] flex items-center justify-center shrink-0">
+              <active.icon className="w-6 h-6 text-white" strokeWidth={1.75} />
+            </div>
+            <h3 className="text-2xl font-black text-slate-900 tracking-tight">{active.name}</h3>
+          </div>
+          <p className="text-slate-500 text-[15px] leading-relaxed max-w-xl mb-9">{active.description}</p>
+          <div className="pt-8 border-t border-slate-100">
+            <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-400 block mb-4">Portföyden Örnek Markalar</span>
+            <CategoryBrandRefs category={active} brands={brands} limit={CATEGORY_BRAND_LIMIT} />
+          </div>
+        </div>
+      </div>
+
+      {/* Mobil/tablet: accordion */}
+      <div className="lg:hidden border border-slate-200 rounded-2xl overflow-hidden bg-white divide-y divide-slate-200">
+        {categories.map((cat, i) => {
+          const isOpen = i === activeIdx;
+          return (
+            <div key={cat.name}>
+              <button
+                type="button"
+                onClick={() => setActiveIdx(isOpen ? -1 : i)}
+                aria-expanded={isOpen}
+                className="w-full flex items-center gap-3.5 px-5 py-4 text-left"
+              >
+                <div className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 transition-colors ${isOpen ? "bg-[#1B3A8F]" : "bg-[#1B3A8F]/[0.08]"}`}>
+                  <cat.icon className={`w-[18px] h-[18px] ${isOpen ? "text-white" : "text-[#1B3A8F]"}`} strokeWidth={1.75} />
+                </div>
+                <span className="flex-1 text-[13.5px] font-bold text-slate-900 leading-snug">{cat.name}</span>
+                <ChevronRight className={`w-4 h-4 text-slate-400 transition-transform duration-200 shrink-0 ${isOpen ? "rotate-90" : ""}`} />
+              </button>
+              <div className={`do-accordion-body ${isOpen ? "do-open" : ""}`}>
+                <div>
+                  <div className="px-5 pb-5">
+                    <p className="text-slate-500 text-[13.5px] leading-relaxed mb-4">{cat.description}</p>
+                    <CategoryBrandRefs category={cat} brands={brands} limit={CATEGORY_BRAND_LIMIT_MOBILE} />
+                  </div>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </>
+  );
+}
+
 export function TedarikciPage() {
   const [brandSearch, setBrandSearch] = useState("");
   const query = brandSearch.trim().toLowerCase();
   const filteredGlobal = GLOBAL_BRANDS.filter((b) => b.name.toLowerCase().includes(query));
   const filteredYerli = YERLI_BRANDS.filter((b) => b.name.toLowerCase().includes(query));
   const noBrandResults = filteredGlobal.length === 0 && filteredYerli.length === 0;
-
-  const [activeCategory, setActiveCategory] = useState<string | null>(null);
-  const active = PRODUCT_CATEGORIES.find((c) => c.name === activeCategory) ?? null;
-  const activeBrands = (active?.brandSlugs ?? [])
-    .map((slug) => CLASSIFIED_BRANDS.find((b) => b.slug === slug))
-    .filter((b): b is Brand => Boolean(b));
-  const closeButtonRef = useRef<HTMLButtonElement>(null);
-  const lastTriggerRef = useRef<HTMLElement | null>(null);
-  useEscapeKey(() => setActiveCategory(null), !!active);
-  useEffect(() => {
-    document.body.style.overflow = active ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
-  }, [active]);
-  useEffect(() => {
-    if (active) {
-      closeButtonRef.current?.focus();
-    } else {
-      lastTriggerRef.current?.focus();
-    }
-  }, [active]);
 
   return (
     <div className="do-site bg-white min-h-screen">
@@ -143,8 +226,8 @@ export function TedarikciPage() {
             <p className="text-white/50 text-[14px] py-16 text-center">"{brandSearch}" ile eşleşen marka bulunamadı.</p>
           ) : (
             <div className="space-y-16">
-              <BrandGroup label="Global Markalar" accent="text-[#7d9bea]" brands={filteredGlobal} />
-              <BrandGroup label="Yerli Markalar" accent="text-[#d4a656]" brands={filteredYerli} />
+              <BrandGroup label="Global Markalar" brands={filteredGlobal} />
+              <BrandGroup label="Yerli Markalar" brands={filteredYerli} />
             </div>
           )}
 
@@ -158,29 +241,12 @@ export function TedarikciPage() {
       {/* KATEGORİLER — light, Excel Ürün Grupları'na göre 23 kategori */}
       <section className="bg-[#f8fafc] py-24 border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="mb-14">
+          <div className="mb-12">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">Ürün Kategorileri</span>
             <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-2 tracking-tight">Uçtan Uca Kategori Kapsamı</h2>
-            <p className="text-slate-500 mt-3 max-w-2xl text-[15px]">{PRODUCT_CATEGORIES.length} ürün grubunun her birinde birden fazla marka alternatifi sunarak müşterilerimize tercih esnekliği ve maliyet optimizasyon imkânı sağlıyoruz.</p>
+            <p className="text-slate-500 mt-3 max-w-2xl text-[15px]">{PRODUCT_CATEGORIES.length} ürün grubunun her birinde birden fazla marka alternatifi sunuyoruz — bir kategori seçin, o kategoride ürün veren markaları görün.</p>
           </div>
-          <div className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-4">
-            {PRODUCT_CATEGORIES.map((cat) => (
-              <button
-                key={cat.name}
-                type="button"
-                onClick={(e) => { lastTriggerRef.current = e.currentTarget; setActiveCategory(cat.name); }}
-                className="do-card bg-white border border-slate-200 rounded-xl p-6 text-left group flex flex-col gap-5"
-              >
-                <div className="w-10 h-10 rounded-lg bg-[#1B3A8F]/[0.08] flex items-center justify-center group-hover:bg-[#1B3A8F] transition-colors shrink-0">
-                  <cat.icon className="w-5 h-5 text-[#1B3A8F] group-hover:text-white transition-colors" strokeWidth={1.75} />
-                </div>
-                <div>
-                  <h3 className="text-[14px] font-bold text-slate-900 leading-snug mb-2">{cat.name}</h3>
-                  <span className="text-[11px] font-semibold text-slate-400">{cat.brandSlugs.length} marka</span>
-                </div>
-              </button>
-            ))}
-          </div>
+          <CategoryExplorer categories={PRODUCT_CATEGORIES} brands={CLASSIFIED_BRANDS} />
         </div>
       </section>
 
@@ -258,52 +324,6 @@ export function TedarikciPage() {
       </section>
 
       <SiteFooter />
-
-      {/* Kategori marka paneli — "N marka" vaadini gerçek logo setiyle karşılayan sağdan panel */}
-      <div
-        className={`fixed inset-0 z-[70] transition-opacity duration-300 ${active ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`}
-        aria-hidden={!active}
-      >
-        <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setActiveCategory(null)} />
-        <div
-          className={`absolute top-0 right-0 h-full w-full sm:w-[440px] bg-white shadow-2xl transition-transform duration-300 ease-out flex flex-col ${active ? "translate-x-0" : "translate-x-full"}`}
-          role="dialog"
-          aria-modal="true"
-          aria-label={active?.name}
-        >
-          <div className="flex items-start justify-between gap-4 p-7 border-b border-slate-100">
-            <div>
-              <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#1B3A8F]">{active?.brandSlugs.length} Marka</span>
-              <h3 className="text-xl font-black text-slate-900 mt-1 leading-snug">{active?.name}</h3>
-            </div>
-            <button
-              ref={closeButtonRef}
-              type="button"
-              onClick={() => setActiveCategory(null)}
-              aria-label="Kapat"
-              className="shrink-0 w-9 h-9 rounded-full flex items-center justify-center text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
-          <div className="flex-1 overflow-y-auto p-7">
-            <p className="text-slate-500 text-[14px] leading-relaxed mb-7">{active?.description}</p>
-            <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-400 block mb-4">Bu Kategoride Ürün Veren Markalar</span>
-            <div className="flex flex-wrap gap-3">
-              {activeBrands.map((b) => (
-                <BrandLogo key={b.slug} brand={b} size="chip" />
-              ))}
-            </div>
-            <p className="text-slate-400 text-[12px] leading-relaxed mt-7">Gösterilen liste, bu kategoride ürün veren markalarımızı kapsar; güncel stok durumu için B2B portalına giriş yapınız.</p>
-          </div>
-          <div className="p-7 border-t border-slate-100">
-            <a href="https://b2b.parcabul.com.tr/login.aspx" target="_blank" rel="noopener noreferrer" className="w-full bg-[#1B3A8F] hover:bg-[#2547B5] active:scale-[0.98] text-white font-semibold px-6 py-3.5 rounded-md transition-all flex items-center justify-center gap-2 group">
-              B2B Portal'da İncele
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-            </a>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

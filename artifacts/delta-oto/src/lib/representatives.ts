@@ -3,16 +3,20 @@
 // proje talimatı: legacy deltaoto.com/temsilcilerimiz bu ortamın ağ
 // politikası nedeniyle erişilemiyor, bu yüzden gerçek/doğrulanmış veri
 // sağlanana kadar dizi kasıtlı olarak boş kalır. Sayfa bileşenleri bu
-// boşluğu "geliştirme hatası" gibi değil, genel iletişim fallback'ine
-// sorunsuzca düşen normal bir durum olarak ele alır (bkz.
-// TemsilcilerimizPage.tsx). Gerçek kayıtlar geldiğinde yalnızca bu diziye
-// eklenir — sayfa/bileşen kodunda değişiklik gerekmez.
+// boşluğu "geliştirme hatası" gibi değil, haritada tıklanan her il için
+// zarif bir genel iletişim fallback'ine sorunsuzca düşen normal bir durum
+// olarak ele alır (bkz. TemsilcilerimizPage.tsx). Gerçek kayıtlar geldiğinde
+// yalnızca bu diziye eklenir — sayfa/harita/bileşen kodunda değişiklik
+// gerekmez.
 export interface Representative {
   id: string;
   name: string;
   title?: string;
   region: string;
-  provinces?: string[];
+  /** turkey-regions.ts'teki TURKEY_PROVINCES ile aynı plaka numarası sistemi
+   * — il adı yazım/aksan hatalarına karşı sağlam, tek doğruluk kaynağıyla
+   * (plaka kodu) birebir eşleşir. */
+  provinces?: number[];
   phone?: string;
   email?: string;
   photo?: string;
@@ -31,6 +35,18 @@ export const ACTIVE_REPRESENTATIVES: Representative[] = [...REPRESENTATIVES]
 export const REPRESENTATIVE_REGIONS: string[] = Array.from(
   new Set(ACTIVE_REPRESENTATIVES.map((r) => r.region)),
 );
+
+const BY_PROVINCE: Map<number, Representative> = new Map();
+for (const rep of ACTIVE_REPRESENTATIVES) {
+  for (const plate of rep.provinces ?? []) {
+    if (!BY_PROVINCE.has(plate)) BY_PROVINCE.set(plate, rep);
+  }
+}
+
+/** Verilen plaka koduna (ile) atanmış temsilciyi döndürür; henüz atama yoksa undefined. */
+export function representativeForProvince(plate: number): Representative | undefined {
+  return BY_PROVINCE.get(plate);
+}
 
 // Doğrulanmış (deltaoto.com kurumsal iletişim sayfasından) genel şirket
 // bilgisi — bireysel bir temsilcinin kişisel iletişim bilgisi DEĞİLDİR,

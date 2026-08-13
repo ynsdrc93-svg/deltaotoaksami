@@ -264,6 +264,19 @@
   .do-mobile-panel { display: none; }
 }
 
+/* Accordion body (Tedarikçiler kategori kapsamı, mobil). Aynı grid-rows
+   0fr→1fr tekniği, ama .do-mobile-panel'in header'a özel >=1280px
+   display:none kuralı olmadan — görünürlük burada zaten Tailwind'in
+   lg:hidden'ıyla sarmalanıyor, çakışan bir breakpoint kuralı yok. */
+.do-accordion-body {
+  overflow: hidden;
+  transition: grid-template-rows 0.3s cubic-bezier(.22,1,.36,1);
+  display: grid;
+  grid-template-rows: 0fr;
+}
+.do-accordion-body.do-open { grid-template-rows: 1fr; }
+.do-accordion-body > div { overflow: hidden; }
+
 /* Keyboard focus, global */
 :where(a, button, [tabindex]):focus-visible {
   outline: 2px solid #2547B5;
@@ -283,7 +296,7 @@
   }
   .do-card, .do-nav-link::after, .do-spart-badge { transition: none; }
   .do-card:hover { transform: none; }
-  .do-mobile-panel { transition: none; }
+  .do-mobile-panel, .do-accordion-body { transition: none; }
   .animate-pulse { animation: none; }
   /* Sonsuz döngü burada 1 iterasyonda anlık bitip görünmez (idle) karede
      kalır — rota okları için bunu ezip sabit/tam görünür bırakıyoruz. */
