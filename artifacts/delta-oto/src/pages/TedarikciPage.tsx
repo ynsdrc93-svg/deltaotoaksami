@@ -44,7 +44,12 @@ const CATEGORY_BRAND_LIMIT = 8;
 const CATEGORY_BRAND_LIMIT_MOBILE = 6;
 
 function CategoryBrandRefs({ category, brands, limit }: { category: ProductCategory; brands: Brand[]; limit: number }) {
-  const resolved = category.brandSlugs
+  // featuredBrandSlugs (varsa) önce gösterilir — brandSlugs'ın yalnızca
+  // öncelik sırasıdır, yeni bir marka eklemez. Kalan markalar kendi
+  // orijinal (Excel) sırasıyla arkasından gelir.
+  const featured = category.featuredBrandSlugs ?? [];
+  const orderedSlugs = [...featured, ...category.brandSlugs.filter((s) => !featured.includes(s))];
+  const resolved = orderedSlugs
     .map((slug) => brands.find((b) => b.slug === slug))
     .filter((b): b is Brand => Boolean(b));
   const shown = resolved.slice(0, limit);
@@ -232,8 +237,8 @@ export function TedarikciPage() {
           )}
 
           <p className="text-white/50 text-[13px] mt-14 text-center">
-            Portföydeki {CLASSIFIED_BRANDS.length} markanın tamamı OEM veya OEM eşdeğeri sertifikasyon standardındadır.
-            {" "}Kategoriye göre tam liste için aşağıdaki kartları, stok durumu için B2B portalını inceleyebilirsiniz.
+            {CLASSIFIED_BRANDS.length} yerli ve global markadan oluşan geniş ürün portföyümüzü kategoriye göre aşağıda inceleyebilir,
+            {" "}güncel stok durumu için B2B portalına göz atabilirsiniz.
           </p>
         </div>
       </section>

@@ -2,12 +2,11 @@
 // kaydı (isim, telefon, e-posta, bölge, il ataması) buraya eklenmez — bkz.
 // proje talimatı: legacy deltaoto.com/temsilcilerimiz bu ortamın ağ
 // politikası nedeniyle erişilemiyor, bu yüzden gerçek/doğrulanmış veri
-// sağlanana kadar dizi kasıtlı olarak boş kalır. Sayfa bileşenleri bu
-// boşluğu "geliştirme hatası" gibi değil, haritada tıklanan her il için
-// zarif bir genel iletişim fallback'ine sorunsuzca düşen normal bir durum
-// olarak ele alır (bkz. TemsilcilerimizPage.tsx). Gerçek kayıtlar geldiğinde
-// yalnızca bu diziye eklenir — sayfa/harita/bileşen kodunda değişiklik
-// gerekmez.
+// sağlanana kadar dizi büyük ölçüde boş kalır. Sayfa bileşenleri bu boşluğu
+// "geliştirme hatası" gibi değil, haritada tıklanan her il için zarif bir
+// genel iletişim fallback'ine sorunsuzca düşen normal bir durum olarak ele
+// alır (bkz. TemsilcilerimizPage.tsx). Gerçek kayıtlar geldiğinde yalnızca
+// bu diziye eklenir — sayfa/harita/bileşen kodunda değişiklik gerekmez.
 export interface Representative {
   id: string;
   name: string;
@@ -24,7 +23,25 @@ export interface Representative {
   active: boolean;
 }
 
-export const REPRESENTATIVES: Representative[] = [];
+export const REPRESENTATIVES: Representative[] = [
+  // Kullanıcı tarafından legacy deltaoto.com/temsilcilerimiz ekran görüntüsünden
+  // doğrulanmış TEK kayıt (2026-08-13). Yalnızca ekran görüntüsünde görünen
+  // alanlar dolduruldu: isim, unvan (il ataması unvanın kendisinden geliyor —
+  // "Gümüşhane Bölge Temsilcisi"), e-posta. Telefon ve fotoğraf doğrulanmadığı
+  // için icat EDİLMEDİ. Unvan yalnızca Gümüşhane'yi belirttiği için il ataması
+  // da yalnızca Gümüşhane (plaka 29) — komşu Karadeniz illerine genişletme
+  // yapılmadı.
+  {
+    id: "huseyin-kaya",
+    name: "Hüseyin Kaya",
+    title: "Gümüşhane Bölge Temsilcisi",
+    region: "Gümüşhane",
+    provinces: [29],
+    email: "huseyinkaya@deltaoto.com",
+    active: true,
+    order: 1,
+  },
+];
 
 export const ACTIVE_REPRESENTATIVES: Representative[] = [...REPRESENTATIVES]
   .filter((r) => r.active)
