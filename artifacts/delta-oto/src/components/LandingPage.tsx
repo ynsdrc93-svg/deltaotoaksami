@@ -508,7 +508,7 @@ export function LandingPage() {
             Tedarikçilerimiz
           </h2>
           <p ref={ref} className="do-reveal do-d2 text-white/60 text-sm max-w-xl leading-relaxed">
-            {STRIP_BRANDS.length} OEM tedarikçisiyle çalışıyoruz; tam listeyi, Yerli/Global ayrımını ve kategoriye göre filtrelemeyi Tedarikçiler sayfamızda inceleyebilirsiniz.
+            {STRIP_BRANDS.length} yerli ve global markayla çalışıyoruz; tam listeyi, Yerli/Global ayrımını ve kategoriye göre filtrelemeyi Tedarikçiler sayfamızda inceleyebilirsiniz.
           </p>
         </div>
 
