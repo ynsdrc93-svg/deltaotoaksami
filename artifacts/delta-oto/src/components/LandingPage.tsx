@@ -5,13 +5,15 @@ import { useReveal, useScrolled, useCounter, useScrollProgress, useParallax, use
 import { SiteFooter } from "./shared/SiteFooter";
 import TurkeyMap from "turkey-map-react";
 import { cities as turkeyCities } from "turkey-map-react/lib/data";
-import { ALL_BRANDS } from "../lib/brands";
+import { CLASSIFIED_BRANDS } from "../lib/brands";
 
-// Şeritte yalnızca gerçek logosu olan markalar akar (hasLogo:false olanlar,
-// gerçek logo tedarik edilene kadar bu hızlı-kayan alanda göstermeye uygun
-// değil — bkz. brands.ts). 3 satıra, sabit dilim yerine dinamik olarak
-// eşit bölünür; böylece marka sayısı değiştiğinde satırlar otomatik dengelenir.
-const STRIP_BRANDS = ALL_BRANDS.filter((b) => b.hasLogo);
+// Şerit, Tedarikçiler sayfasıyla AYNI kaynağı (CLASSIFIED_BRANDS — Excel'in
+// 61 markası) kullanır; Excel'de olmayan markalar burada da gösterilmez
+// (bkz. brands.ts UNCLASSIFIED_BRANDS notu). hasLogo:false olan markalar
+// gerçek logo yerine tipografik yer tutucuyla akar — bkz. StripTile. 3
+// satıra, sabit dilim yerine dinamik olarak eşit bölünür; böylece marka
+// sayısı Excel güncellendiğinde satırlar otomatik dengelenir.
+const STRIP_BRANDS = CLASSIFIED_BRANDS;
 const STRIP_ROWS = 3;
 const STRIP_CHUNK = Math.ceil(STRIP_BRANDS.length / STRIP_ROWS);
 const BRAND_STRIPS = Array.from({ length: STRIP_ROWS }, (_, i) =>
@@ -506,7 +508,7 @@ export function LandingPage() {
             Tedarikçilerimiz
           </h2>
           <p ref={ref} className="do-reveal do-d2 text-white/60 text-sm max-w-xl leading-relaxed">
-            Dünyanın önde gelen {STRIP_BRANDS.length}+ OEM tedarikçisiyle çalışıyoruz; tam listeyi, Yerli/Global ayrımını ve kategoriye göre filtrelemeyi Tedarikçiler sayfamızda inceleyebilirsiniz.
+            {STRIP_BRANDS.length} OEM tedarikçisiyle çalışıyoruz; tam listeyi, Yerli/Global ayrımını ve kategoriye göre filtrelemeyi Tedarikçiler sayfamızda inceleyebilirsiniz.
           </p>
         </div>
 
@@ -526,11 +528,17 @@ export function LandingPage() {
                       title={b.name}
                       className="group relative shrink-0 mx-2.5 w-[170px] bg-white rounded-lg h-16 px-4 flex items-center justify-center shadow-sm hover:shadow-lg hover:z-10 transition-shadow duration-300"
                     >
-                      <img
-                        src={`/images/brands/${b.slug}.png`}
-                        alt={b.name}
-                        className="max-h-7 max-w-[110px] w-auto h-auto object-contain grayscale group-hover:grayscale-0 group-hover:scale-125 transition-all duration-300"
-                      />
+                      {b.hasLogo ? (
+                        <img
+                          src={`/images/brands/${b.slug}.png`}
+                          alt={b.name}
+                          className="max-h-7 max-w-[110px] w-auto h-auto object-contain grayscale group-hover:grayscale-0 group-hover:scale-125 transition-all duration-300"
+                        />
+                      ) : (
+                        <span className="text-[#1B3A8F] font-bold text-[12px] text-center leading-tight px-1 group-hover:scale-110 transition-transform duration-300">
+                          {b.name}
+                        </span>
+                      )}
                     </Tile>
                   );
                 })}

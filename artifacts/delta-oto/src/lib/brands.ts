@@ -83,9 +83,13 @@ export const CLASSIFIED_BRANDS: Brand[] = [
 export const GLOBAL_BRANDS: Brand[] = CLASSIFIED_BRANDS.filter((b) => b.origin === "global");
 export const YERLI_BRANDS: Brand[] = CLASSIFIED_BRANDS.filter((b) => b.origin === "yerli");
 
-// Excel'de sınıflandırılmamış ama önceki çalışmada resmi kaynaklardan doğrulanmış
-// ek markalar. Yerli/Global etiketi taşımazlar (bilinçli tercih — bkz. proje notları)
-// — yalnızca ana sayfanın etiketsiz "geniş portföy" şeridinde kullanılır.
+// DORMANT — Excel kaynağında ("Kopya Delta Markalar -kategoriler.xlsx") yer
+// almayan, önceki çalışmada resmi kaynaklardan doğrulanmış ek markalar.
+// Excel şu an için TEK marka kaynağı kabul edildiğinden (kullanıcı kararı),
+// bu liste hiçbir sayfada gösterilmiyor ve hiçbir marka sayacına dahil
+// edilmiyor — Tedarikçiler sayfası ve ana sayfa şeridi yalnızca
+// CLASSIFIED_BRANDS kullanır. Silinmedi: Excel ileride güncellenip bu
+// markaları kapsarsa, araştırılmış website verisi burada hazır durur.
 export const UNCLASSIFIED_BRANDS: Brand[] = [
   { slug: "ajusa", name: "Ajusa", website: "https://ajusa.online/en/", hasLogo: true },
   { slug: "akzonobel", name: "AkzoNobel", website: "https://www.akzonobel.com/", hasLogo: true },
@@ -114,6 +118,3 @@ export const UNCLASSIFIED_BRANDS: Brand[] = [
   { slug: "trucktec", name: "Trucktec Automotive", website: "https://www.trucktec.com/", hasLogo: true },
   { slug: "zfaftermarket", name: "ZF Aftermarket", website: "https://aftermarket.zf.com/", hasLogo: true },
 ];
-
-// Ana sayfa marka şeridi için: sınıflandırılmış + sınıflandırılmamış markaların tamamı.
-export const ALL_BRANDS: Brand[] = [...CLASSIFIED_BRANDS, ...UNCLASSIFIED_BRANDS];
