@@ -69,13 +69,17 @@ function CategoryBrandRefs({ category, brands }: { category: ProductCategory; br
   const shown = resolved.slice(0, CATEGORY_BRAND_LIMIT);
   const rest = resolved.length - shown.length;
   return (
-    <div className="flex flex-wrap items-center gap-2 bg-slate-50 rounded-lg px-3.5 py-3 border border-slate-100">
+    <div className="flex flex-wrap items-center gap-2.5 bg-slate-50 rounded-xl px-4 py-3.5 border border-slate-100">
       {shown.map((b, i) => (
         <div key={b.slug} className="do-chip-in" style={{ animationDelay: `${i * 35}ms` }}>
           <BrandLogo brand={b} size="compact" />
         </div>
       ))}
-      {rest > 0 && <span className="text-slate-400 text-[11px] font-semibold pl-1 whitespace-nowrap">+{rest} marka daha</span>}
+      {rest > 0 && (
+        <div className="w-24 h-14 rounded-lg border border-dashed border-slate-300 flex items-center justify-center shrink-0">
+          <span className="text-slate-400 text-[11px] font-bold text-center leading-tight">+{rest}<br />marka</span>
+        </div>
+      )}
     </div>
   );
 }
@@ -114,19 +118,19 @@ function CategoryShowcase({ categories, brands }: { categories: ProductCategory[
       />
 
       {/* Kategori Atlası — 8 makro aile, 23 kategori, tamamı her zaman görünür */}
-      <div className="relative grid grid-cols-2 md:grid-cols-4 gap-x-5 gap-y-4 mb-6">
+      <div className="relative grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-6 mb-8">
         {families.map((family) => {
           const isFamilyDim = isHovering && hoveredFamily !== family.label;
           return (
             <div key={family.label} className={`transition-opacity duration-300 ${isFamilyDim ? "opacity-55" : "opacity-100"}`}>
               <div
-                className={`text-[10px] font-bold uppercase tracking-[0.1em] mb-1.5 transition-colors duration-300 truncate ${
+                className={`text-[10px] font-bold uppercase tracking-[0.1em] mb-2 transition-colors duration-300 truncate ${
                   hoveredFamily === family.label ? "text-[#1B3A8F]" : "text-slate-400"
                 }`}
               >
                 {family.label}
               </div>
-              <div className="space-y-0.5">
+              <div className="space-y-1">
                 {family.items.map(({ cat, idx }) => {
                   const isHovered = idx === hoveredIdx;
                   const isLocked = idx === activeIdx;
@@ -139,7 +143,7 @@ function CategoryShowcase({ categories, brands }: { categories: ProductCategory[
                       onFocus={() => setHoveredIdx(idx)}
                       onBlur={() => setHoveredIdx(null)}
                       aria-current={isLocked}
-                      className={`do-category-tile w-full flex items-center gap-2 rounded-md border-l-[3px] pl-2 pr-2 py-1.5 text-left transition-all duration-300 ${
+                      className={`do-category-tile w-full flex items-center gap-2 rounded-md border-l-[3px] pl-2.5 pr-2 py-2 text-left transition-all duration-300 ${
                         isHovered
                           ? "bg-[#1B3A8F] border-l-[#7d9bea]"
                           : isLocked
@@ -148,7 +152,7 @@ function CategoryShowcase({ categories, brands }: { categories: ProductCategory[
                       }`}
                     >
                       <cat.icon className={`w-3.5 h-3.5 shrink-0 ${isHovered ? "text-white" : "text-[#1B3A8F]"}`} strokeWidth={1.75} />
-                      <span className={`text-[12px] leading-tight font-semibold truncate ${isHovered ? "text-white" : "text-slate-700"}`}>{cat.name}</span>
+                      <span className={`text-[12.5px] leading-tight font-semibold truncate ${isHovered ? "text-white" : "text-slate-700"}`}>{cat.name}</span>
                     </button>
                   );
                 })}
@@ -161,29 +165,29 @@ function CategoryShowcase({ categories, brands }: { categories: ProductCategory[
       {/* Seçili/önizlenen kategori — sıkışık, yatay spotlight paneli */}
       <div key={display.name} className="do-fade-up relative bg-white border border-slate-200 rounded-2xl overflow-hidden">
         <div className="grid lg:grid-cols-[280px_1fr] divide-y lg:divide-y-0 lg:divide-x divide-slate-100">
-          <div className="relative overflow-hidden p-5 flex flex-col justify-center">
-            <div className="absolute -right-3 -bottom-4 text-[80px] leading-none font-black text-slate-50 select-none pointer-events-none" aria-hidden="true">
+          <div className="relative overflow-hidden p-6 lg:p-7 flex flex-col justify-center">
+            <div className="absolute -right-3 -bottom-4 text-[100px] leading-none font-black text-slate-50 select-none pointer-events-none" aria-hidden="true">
               {String(displayIdx + 1).padStart(2, "0")}
             </div>
-            <div className="relative flex items-center gap-3 mb-2">
-              <div className="w-10 h-10 rounded-xl bg-[#1B3A8F] flex items-center justify-center shrink-0">
-                <display.icon className="w-5 h-5 text-white" strokeWidth={1.75} />
+            <div className="relative flex items-center gap-3 mb-3">
+              <div className="w-12 h-12 rounded-xl bg-[#1B3A8F] flex items-center justify-center shrink-0">
+                <display.icon className="w-6 h-6 text-white" strokeWidth={1.75} />
               </div>
               <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-[#1B3A8F]">
                 {String(displayIdx + 1).padStart(2, "0")} / {String(categories.length).padStart(2, "0")}
               </span>
             </div>
-            <h3 className="relative text-lg font-black text-slate-900 tracking-tight leading-snug mb-1">{display.name}</h3>
-            <p className="relative text-slate-500 text-[12.5px] leading-relaxed line-clamp-2">{display.description}</p>
+            <h3 className="relative text-xl font-black text-slate-900 tracking-tight leading-snug mb-1.5">{display.name}</h3>
+            <p className="relative text-slate-500 text-[13px] leading-relaxed line-clamp-2">{display.description}</p>
           </div>
-          <div className="p-5 flex flex-col justify-center">
-            <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400 block mb-2.5">Öne Çıkan Markalar</span>
+          <div className="p-6 lg:p-7 flex flex-col justify-center">
+            <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400 block mb-3">Öne Çıkan Markalar</span>
             <CategoryBrandRefs category={display} brands={brands} />
             <a
               href="https://b2b.parcabul.com.tr/login.aspx"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 mt-3 text-[12.5px] font-semibold text-[#1B3A8F] hover:text-[#2547B5] transition-colors group w-fit"
+              className="inline-flex items-center gap-1.5 mt-4 text-[12.5px] font-semibold text-[#1B3A8F] hover:text-[#2547B5] transition-colors group w-fit"
             >
               B2B Portal'da inceleyin
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
@@ -287,11 +291,12 @@ export function TedarikciPage() {
       </section>
 
       {/* KATEGORİLER — light, Excel Ürün Grupları'na göre 23 kategori.
-          Bölüm py-10/lg:py-12 (öncesinde py-24) — kategori atlası + spotlight
-          bir 16:9 masaüstü viewport'a (1440×900 dahil) kaydırmadan sığmalı. */}
-      <section className="bg-[#f8fafc] py-10 lg:py-12 border-b border-slate-200">
+          Bölüm py-12/lg:py-14 — kategori atlası + spotlight bir 16:9 masaüstü
+          viewport'a (1440×900 dahil) kaydırmadan sığmalı; Faz D'de spotlight'a
+          biraz daha nefes alanı verildi (hâlâ tek viewport sınırı içinde). */}
+      <section className="bg-[#f8fafc] py-12 lg:py-14 border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="mb-5">
+          <div className="mb-7">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">Ürün Kategorileri</span>
             <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-1.5 tracking-tight">Uçtan Uca Kategori Kapsamı</h2>
           </div>

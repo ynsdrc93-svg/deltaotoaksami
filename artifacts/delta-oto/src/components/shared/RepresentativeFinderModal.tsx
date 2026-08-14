@@ -180,12 +180,12 @@ export function RepresentativeFinderModal({ open, onClose }: { open: boolean; on
         </div>
 
         <div className="flex-1 overflow-y-auto p-5 lg:p-6">
-          <div className="flex flex-wrap gap-1.5 mb-4">
+          <div className="flex flex-wrap gap-2 mb-3">
             <button
               type="button"
               onClick={() => setSelectedRegion("all")}
               aria-pressed={selectedRegion === "all"}
-              className={`text-[12px] font-semibold px-3.5 py-1.5 rounded-full border transition-all duration-200 ${
+              className={`text-[11.5px] font-semibold px-3 py-1.5 rounded-full border transition-all duration-200 ${
                 selectedRegion === "all"
                   ? "bg-[#1B3A8F] border-[#1B3A8F] text-white shadow-sm shadow-[#1B3A8F]/20"
                   : "border-slate-200 text-slate-600 hover:border-[#1B3A8F]/40"
@@ -199,7 +199,7 @@ export function RepresentativeFinderModal({ open, onClose }: { open: boolean; on
                 type="button"
                 onClick={() => setSelectedRegion(region)}
                 aria-pressed={selectedRegion === region}
-                className={`text-[12px] font-semibold px-3.5 py-1.5 rounded-full border transition-all duration-200 ${
+                className={`text-[11.5px] font-semibold px-3 py-1.5 rounded-full border transition-all duration-200 ${
                   selectedRegion === region
                     ? "bg-[#1B3A8F] border-[#1B3A8F] text-white shadow-sm shadow-[#1B3A8F]/20"
                     : "border-slate-200 text-slate-600 hover:border-[#1B3A8F]/40"
@@ -210,9 +210,9 @@ export function RepresentativeFinderModal({ open, onClose }: { open: boolean; on
             ))}
           </div>
 
-          <div className="grid lg:grid-cols-[2fr_1fr] gap-5">
+          <div className="grid lg:grid-cols-[3fr_1fr] gap-5">
             {/* Harita + il ızgarası — tek "feature panel" çerçevesi, tüm 81 il adı her zaman görünür */}
-            <div className="rounded-2xl border border-slate-100 bg-slate-50/60 p-3 lg:p-4">
+            <div className="rounded-2xl border border-slate-100 bg-slate-50/60 p-4 lg:p-5">
               <div className="relative max-w-[380px] sm:max-w-none mx-auto">
                 <TurkeyMap
                   hoverable
@@ -269,7 +269,7 @@ export function RepresentativeFinderModal({ open, onClose }: { open: boolean; on
                   Haritadan bir il seçin veya yukarıdan bölge seçerek daraltın.
                 </p>
               ) : (
-                <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-1.5 mt-2.5">
+                <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-2 mt-3">
                   {visibleProvinces.map((p) => {
                     const isSelected = p.plate === selectedPlate;
                     return (
@@ -278,7 +278,7 @@ export function RepresentativeFinderModal({ open, onClose }: { open: boolean; on
                         type="button"
                         onClick={() => selectProvince(p.plate)}
                         aria-pressed={isSelected}
-                        className={`text-[11.5px] font-semibold px-2 py-1.5 rounded-md border truncate transition-colors ${
+                        className={`text-[12px] font-semibold px-2 py-2 rounded-md border truncate transition-colors ${
                           isSelected
                             ? "bg-[#1B3A8F] border-[#1B3A8F] text-white"
                             : "bg-white border-slate-200 text-slate-600 hover:border-[#1B3A8F]/40 hover:text-[#1B3A8F]"
@@ -293,8 +293,8 @@ export function RepresentativeFinderModal({ open, onClose }: { open: boolean; on
             </div>
 
             {/* Temsilci/fallback detayı — kolonun kalan boşluğunu dikey ortalayarak kullanır */}
-            <div className="relative do-card bg-white border border-slate-200 rounded-2xl p-6 overflow-hidden flex flex-col justify-center min-h-[220px]">
-              <MapPin className="absolute -right-5 -bottom-5 w-28 h-28 text-slate-50 pointer-events-none" strokeWidth={1} aria-hidden="true" />
+            <div className="relative do-card bg-white border border-slate-200 rounded-2xl p-5 overflow-hidden flex flex-col justify-center min-h-[160px]">
+              <MapPin className="absolute -right-4 -bottom-4 w-20 h-20 text-slate-50 pointer-events-none" strokeWidth={1} aria-hidden="true" />
               <div className="relative">
                 {!selectedProvince ? (
                   <div className="text-center">

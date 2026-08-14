@@ -30,13 +30,17 @@ const SIZES: Record<BrandLogoSize, SizeStyle> = {
     textSize: "text-[15px]",
     textHover: "",
   },
-  /** Tek-ekran spotlight panelleri için — "chip"in yarısı kadar yükseklikte,
-   * marka duvarı/kategori paneli dışında (ör. sıkışık spotlight raflarında)
-   * kullanılır. */
+  /** Spotlight marka rafları için — sabit KART GENİŞLİĞİ + yüksekliği
+   * ("wall" varyantının bir CSS grid'de otomatik eşit-genişlik kazanmasıyla
+   * aynı ilkeyi, flex-wrap bir rafta elle tekrarlar). Yalnızca yükseklik
+   * sabitlenip genişlik logonun kendi en-boy oranına bırakılırsa geniş
+   * wordmark'lar küçük/kare markalardan çok daha büyük görünür — sabit
+   * genişlik + max-height VE max-width ile img, optik ağırlığı eşitler.
+   * "chip"ten daha kompakt, önceki (yalnızca h-11) sürümden daha ferah. */
   compact: {
-    light: "border border-slate-200 rounded-lg h-11 flex items-center justify-center px-3.5 bg-white hover:border-[#1B3A8F]/30 transition-colors",
-    dark: "border border-white/10 rounded-lg h-11 flex items-center justify-center px-3.5 bg-[#0e1016] hover:border-white/25 transition-colors",
-    img: "max-h-6 w-auto h-auto object-contain",
+    light: "border border-slate-200 rounded-lg w-24 h-14 flex items-center justify-center px-2.5 bg-white hover:border-[#1B3A8F]/30 transition-colors shrink-0",
+    dark: "border border-white/10 rounded-lg w-24 h-14 flex items-center justify-center px-2.5 bg-[#0e1016] hover:border-white/25 transition-colors shrink-0",
+    img: "max-h-7 max-w-full w-auto h-auto object-contain",
     textSize: "text-[10px]",
     textHover: "",
   },
