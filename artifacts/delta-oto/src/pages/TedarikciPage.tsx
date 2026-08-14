@@ -365,7 +365,7 @@ export function TedarikciPage() {
               {[
                 { n: "250+",      l: "Aktif Marka",   d: "Sürekli büyüyen portföy" },
                 { n: "50.000+",   l: "Aktif SKU",     d: "Geniş stok derinliği" },
-                { n: "OEM",       l: "Standart",      d: "Tüm ürünlerde zorunlu" },
+                { n: "OEM",       l: "Standart",      d: "OEM veya eşdeğeri zorunlu" },
                 { n: "Groupauto", l: "Üyeliği",       d: "Global satın alma ağı" },
               ].map(({ n, l, d }) => (
                 <div key={l} className="bg-white/[0.08] border border-white/[0.12] rounded-xl p-6 hover:bg-white/[0.14] transition-colors">

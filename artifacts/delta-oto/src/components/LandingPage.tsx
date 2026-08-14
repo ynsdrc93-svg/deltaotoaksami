@@ -96,7 +96,10 @@ const NAV_LINKS = [
 
 export function LandingPage() {
   const ref = useReveal();
-  const scrolled = useScrolled();
+  // Çift eşik (90 gir / 20 çık): header'ın kendi yükseklik geçişi scroll
+  // pozisyonunu hafifçe kaydırabildiği (scroll anchoring) için tek eşik,
+  // sınırda ileri-geri salınıma (jitter) yol açıyordu — bkz. useScrolled.
+  const scrolled = useScrolled(90, 20);
   const progress = useScrollProgress();
   const heroParallax = useParallax<HTMLImageElement>(0.12);
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -504,7 +507,7 @@ export function LandingPage() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 mb-14">
           <p ref={ref} className="do-reveal text-[#7d9bea] text-xs font-bold uppercase tracking-[0.3em] mb-4 flex items-center gap-3">
             <span className="w-8 h-[2px] bg-[#7d9bea] inline-block"></span>
-            Global Marka Portföyü
+            Yerli ve Global Marka Portföyü
           </p>
           <h2 ref={ref} className="do-reveal do-d1 text-4xl md:text-5xl font-black text-white tracking-tight leading-tight mb-4">
             Tedarikçilerimiz

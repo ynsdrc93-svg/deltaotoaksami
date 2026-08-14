@@ -14,14 +14,29 @@ export function useReveal() {
   return (el: Element | null) => { if (el && !refs.current.includes(el)) refs.current.push(el) }
 }
 
-export function useScrolled(threshold = 40) {
+/** `exit` verilmezse `enter`e eşitlenir — tek eşikli eski çağrılar (ör.
+ * useScrolled(600)) davranışını birebir korur. İkisi FARKLI verilirse
+ * hysteresis (çift eşik) davranışına geçer: `enter`i geçince true, ancak
+ * `exit`in DAHA ALTINA inmeden false'a dönmez — arada bir "ölü bölge" kalır.
+ * Yüksekliği değişen (compact-on-scroll) header'lar gibi, geçişin kendisi
+ * scroll pozisyonunu hafifçe kaydırabilen (scroll anchoring) durumlarda tek
+ * eşik, eşiğin iki yönde art arda tetiklenip salınım/jitter yapmasına yol
+ * açar — çift eşikli ölü bölge bunu engeller. */
+export function useScrolled(enter = 40, exit = enter) {
   const [scrolled, setScrolled] = React.useState(false)
   React.useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > threshold)
+    const onScroll = () => {
+      setScrolled((prev) => {
+        const y = window.scrollY
+        if (!prev && y > enter) return true
+        if (prev && y <= exit) return false
+        return prev
+      })
+    }
     onScroll()
     window.addEventListener("scroll", onScroll, { passive: true })
     return () => window.removeEventListener("scroll", onScroll)
-  }, [threshold])
+  }, [enter, exit])
   return scrolled
 }
 
