@@ -102,17 +102,17 @@ export function OperasyonPage() {
         <div className="absolute left-0 top-0 w-[3px] h-full bg-gradient-to-b from-transparent via-[#1B3A8F] to-transparent opacity-60" />
         <div className="do-beam" />
 
-        <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 relative z-10 py-28">
-          <div ref={ref} className="do-reveal flex items-center gap-3 mb-7">
+        <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 relative z-10 py-16 lg:py-28">
+          <div ref={ref} className="do-reveal flex items-center gap-3 mb-5 lg:mb-7">
             <div className="w-8 h-[2px] bg-[#4d74d6]" />
             <span className="text-[#7d9bea] text-xs font-bold uppercase tracking-[0.3em]">Lojistik & Operasyon Altyapısı</span>
           </div>
-          <h1 ref={ref} className="do-reveal do-d1 text-5xl md:text-6xl lg:text-[72px] font-black leading-[1.05] tracking-[-0.02em] mb-6">
+          <h1 ref={ref} className="do-reveal do-d1 text-4xl sm:text-5xl md:text-6xl lg:text-[72px] font-black leading-[1.05] tracking-[-0.02em] mb-4 lg:mb-6">
             <span className="do-hero-line">ÜÇ MERKEZDEN</span><br />
             <span className="text-white">81 İLE</span><br />
             <span className="text-[#7d9bea]">KESİNTİSİZ</span>
           </h1>
-          <p ref={ref} className="do-reveal do-d2 text-[17px] text-gray-300 leading-[1.8] max-w-2xl mb-10 font-light">
+          <p ref={ref} className="do-reveal do-d2 text-[17px] text-gray-300 leading-[1.8] max-w-2xl mb-6 lg:mb-10 font-light">
             Ümraniye, Gebze ve İzmir'deki operasyon merkezlerimizden yönetilen lojistik ağımız; sipariş hazırlıktan son mile kadar her aşamada hız, güvenilirlik ve servis sürekliliği sağlar. Cumartesi dahil, kesintisiz.
           </p>
           <div ref={ref} className="do-reveal do-d3 flex flex-wrap border-t border-b border-white/15 divide-x divide-white/10">

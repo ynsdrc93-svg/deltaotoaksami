@@ -314,17 +314,17 @@ export function HakkimizdaPage() {
         <div className="absolute inset-0 do-grid-bg opacity-40" />
         <div className="absolute left-0 top-0 w-[3px] h-full bg-gradient-to-b from-transparent via-[#1B3A8F] to-transparent opacity-60" />
 
-        <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 relative z-10 py-28">
-          <div className="flex items-center gap-3 mb-7">
+        <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 relative z-10 py-16 lg:py-28">
+          <div className="flex items-center gap-3 mb-5 lg:mb-7">
             <div className="w-8 h-[2px] bg-[#4d74d6]" />
             <span className="text-[#7d9bea] text-xs font-bold uppercase tracking-[0.3em]">Kuruluş 1976 · Delta Oto</span>
           </div>
-          <h1 className="text-5xl md:text-6xl lg:text-[72px] font-black leading-[1.05] tracking-[-0.02em] mb-6">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[72px] font-black leading-[1.05] tracking-[-0.02em] mb-4 lg:mb-6">
             <span className="do-hero-line">YARIM ASRIN</span><br />
             <span className="text-white">KURUMSAL</span><br />
             <span className="text-[#7d9bea]">BİRİKİMİ</span>
           </h1>
-          <p className="text-base text-gray-300 leading-[1.8] max-w-2xl mb-10 font-light">
+          <p className="text-base text-gray-300 leading-[1.8] max-w-2xl mb-6 lg:mb-10 font-light">
             1976'dan bu yana otomotiv yedek parça dağıtım sektöründe faaliyet gösteren Delta Oto; güçlü tedarik altyapısı, geniş marka portföyü ve Groupauto International üyeliğiyle sektörün yapıcı güçlerinden biri olmaya devam etmektedir.
           </p>
           <Link
@@ -429,7 +429,7 @@ export function HakkimizdaPage() {
               <p className="text-gray-300 leading-[1.85] text-base mb-8 max-w-lg">
                 Avrupa merkezli Groupauto International ağının Türkiye üyesi sıfatıyla, 40'tan fazla ülkedeki distribütörler ve küresel üreticilerle doğrudan bağlantı içindeyiz. Bu üyelik; ürün erişimini, tedarik koşullarını ve piyasa bilgisini rakiplerimizin önünde konumlandırır.
               </p>
-              <div className="grid grid-cols-3 gap-6 mb-10">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 sm:gap-6 mb-10">
                 {[["50+", "Global Tedarikçi"], ["Top Tier", "Tedarikçi Erişimi"], ["İhracat", "Kapasitesi"]].map(([n, l]) => (
                   <div key={l} className="bg-white/[0.06] border border-white/[0.1] rounded-xl p-5 text-center">
                     <div className="text-2xl font-black text-white mb-1">{n}</div>
@@ -485,10 +485,13 @@ export function HakkimizdaPage() {
 
             <div ref={reveal} className="do-reveal-right lg:col-span-3 bg-white divide-y divide-slate-200">
               {ESG_ITEMS.map(({ icon: Icon, title, desc }, i) => (
-                <div key={title} className="group relative flex gap-5 sm:gap-6 items-start p-7 lg:p-8 hover:bg-slate-50/80 transition-colors duration-300">
+                <div key={title} className="group relative flex gap-4 sm:gap-6 items-start p-5 sm:p-7 lg:p-8 hover:bg-slate-50/80 transition-colors duration-300">
                   <div className="absolute left-0 top-0 bottom-0 w-0 group-hover:w-1 bg-[#1B3A8F] transition-all duration-300" aria-hidden="true" />
                   <Icon className="w-7 h-7 text-[#1B3A8F] shrink-0 mt-0.5" strokeWidth={1.5} />
-                  <div>
+                  {/* min-w-0: flex item'ların varsayılan min-width:auto'suna karşı
+                      koruma — metin uzun kelime içermese de garanti şekilde
+                      sarmalanır, satır taşma riski kalmaz. */}
+                  <div className="flex-1 min-w-0">
                     <span className="text-[11px] font-mono text-slate-400 tracking-wider">0{i + 1}</span>
                     <h3 className="text-lg font-black text-slate-900 mt-1 mb-2 leading-snug">{title}</h3>
                     <p className="text-slate-500 text-sm leading-relaxed max-w-md">{desc}</p>

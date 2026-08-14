@@ -233,7 +233,6 @@
   100% { transform: translateX(-50%); }
 }
 .do-ticker-inner { animation: do-ticker 22s linear infinite; display: flex; width: max-content; }
-.do-ticker-inner:hover { animation-play-state: paused; }
 
 /* Ters yönlü şerit (ana sayfa Tedarikçilerimiz — soldan sağa kayan satırlar) */
 @keyframes do-ticker-reverse {
@@ -241,7 +240,17 @@
   100% { transform: translateX(0); }
 }
 .do-ticker-inner-reverse { animation: do-ticker-reverse 26s linear infinite; display: flex; width: max-content; }
-.do-ticker-inner-reverse:hover { animation-play-state: paused; }
+
+/* Dur-on-hover SADECE gerçek hover cihazlarında (fare/trackpad) uygulanır.
+   (hover: hover) olmayan dokunmatik cihazlarda bir dokunuş CSS :hover'ı
+   "yapışık" bırakabiliyordu — kullanıcı şeride dokununca animasyon
+   duruyormuş/takılıyormuş gibi hissettiriyordu. Akış mobilde her zaman
+   sürekli/pürüzsüz kalsın diye bu davranış yalnızca hover-capable
+   cihazlara has kılındı. */
+@media (hover: hover) {
+  .do-ticker-inner:hover { animation-play-state: paused; }
+  .do-ticker-inner-reverse:hover { animation-play-state: paused; }
+}
 
 /* Logo filters */
 .do-logo-invert { filter: brightness(0) invert(1); }

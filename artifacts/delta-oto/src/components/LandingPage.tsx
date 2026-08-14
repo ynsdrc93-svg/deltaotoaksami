@@ -206,8 +206,11 @@ export function LandingPage() {
         </div>
       </header>
 
-      {/* HERO (dark) */}
-      <section className="relative min-h-screen flex items-center overflow-hidden bg-[#0e1016] text-white">
+      {/* HERO (dark) — mobilde min-h-screen yerine diğer sayfalardaki
+          kompakt yükseklik (560px); tam ekran yükseklik yalnızca lg+'da
+          korunur, böylece başlık+açıklama+CTA'lar ilk mobil ekranda daha
+          yukarıda ve görünür oturur. */}
+      <section className="relative min-h-[560px] lg:min-h-screen flex items-center overflow-hidden bg-[#0e1016] text-white">
         <div className="absolute inset-0">
           <img
             ref={heroParallax}
@@ -224,16 +227,16 @@ export function LandingPage() {
         <div className="absolute left-0 top-0 w-[3px] h-full bg-gradient-to-b from-transparent via-[#1B3A8F] to-transparent opacity-60"></div>
         <div className="do-beam"></div>
 
-        <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 relative z-10 pt-20 pb-32">
+        <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 relative z-10 pt-14 pb-10 lg:pt-20 lg:pb-32">
           <div className="max-w-4xl">
-            <div ref={ref} className="do-reveal flex items-center gap-3 mb-8">
+            <div ref={ref} className="do-reveal flex items-center gap-3 mb-5 lg:mb-8">
               <div className="w-8 h-[2px] bg-[#4d74d6]"></div>
               <span className="text-[#7d9bea] text-xs font-bold uppercase tracking-[0.3em]">Kuruluş 1976 · Delta Oto</span>
             </div>
 
             <h1
               ref={ref}
-              className="do-reveal do-d1 text-[34px] sm:text-5xl md:text-6xl lg:text-[72px] xl:text-[80px] font-black leading-[1.05] sm:leading-[1.0] mb-6 tracking-[-0.02em] break-words"
+              className="do-reveal do-d1 text-[34px] sm:text-5xl md:text-6xl lg:text-[72px] xl:text-[80px] font-black leading-[1.05] sm:leading-[1.0] mb-4 lg:mb-6 tracking-[-0.02em] break-words"
             >
               <span className="do-hero-line">50 YILDIR OTOMOTİV AFTERMARKET'İN</span>
               <br />
@@ -242,7 +245,7 @@ export function LandingPage() {
 
             <p
               ref={ref}
-              className="do-reveal do-d2 text-[17px] text-gray-300 leading-[1.75] max-w-2xl mb-12 font-light"
+              className="do-reveal do-d2 text-[17px] text-gray-300 leading-[1.75] max-w-2xl mb-7 lg:mb-12 font-light"
             >
               Binek ve hafif ticari araç yedek parça pazarında, bağımsız yenileme sektörünü güçlü lojistik altyapımız ve küresel tedarik ağımızla yönlendiriyoruz.
             </p>
