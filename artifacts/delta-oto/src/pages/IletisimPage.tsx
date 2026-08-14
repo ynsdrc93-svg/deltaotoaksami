@@ -87,14 +87,26 @@ export function IletisimPage() {
     <div className="do-site bg-white min-h-screen">
       <SiteHeader />
 
-      {/* HERO — geçici: gerçek Boğaz/köprü fotoğrafı henüz repoya eklenmedi
-          (bkz. oturum sonu raporu — dış görsel barındırma bu ortamda
-          güvenilir çalışmıyor, gerçek bir yerel dosya kullanıcıdan bekleniyor).
-          O ana kadar kırık/siyah görsel yerine sade koyu degrade + grid
-          dokusu — sitenin geri kalanıyla tutarlı, en azından bozuk görünmüyor. */}
+      {/* HERO — gerçek yerel fotoğraf (935×1400 dikey kaynak; bkz.
+          public/images/iletisim-hero-bosphorus.jpg). Kaynak dikey olduğu için
+          tek asset + breakpoint'e göre farklı object-position kullanılıyor:
+          mobilde container oranı (~390×560) kaynağa çok yakın olduğu için
+          neredeyse tüm kare (balıkçı + köprü + gökyüzü) görünür kalıyor;
+          masaüstünde container çok daha geniş/kısa olduğu için görünen dikey
+          şerit ~%26'ya düşüyor — object-[center_34%] bu şeridi köprünün
+          kırmızı aydınlatılmış kulesi + güverte + kablo örgüsü üzerine
+          ortalar (balıkçı siluetini feda eder, köprünün kendisini net tutar). */}
       <section className="relative min-h-[560px] flex items-center text-white overflow-hidden bg-[#0e1016]">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#14275c]/40 via-[#0e1016] to-[#0e1016]" />
-        <div className="absolute inset-0 do-grid-bg opacity-40" />
+        <div className="absolute inset-0">
+          <img
+            src="/images/iletisim-hero-bosphorus.jpg"
+            alt=""
+            className="w-full h-full object-cover object-[center_45%] sm:object-[center_34%]"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0e1016] via-[#0e1016]/70 to-[#0e1016]/25" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0e1016] via-transparent to-transparent" />
+        </div>
+        <div className="absolute inset-0 do-grid-bg opacity-20" />
         <div className="absolute left-0 top-0 w-[3px] h-full bg-gradient-to-b from-transparent via-[#1B3A8F] to-transparent opacity-60" />
 
         <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 relative z-10 py-16 lg:py-24">
