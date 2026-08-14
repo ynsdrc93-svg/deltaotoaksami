@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "wouter";
 import { ArrowRight, Menu, X } from "lucide-react";
-import { useEscapeKey } from "../../hooks/use-motion";
+import { useEscapeKey, useScrolled } from "../../hooks/use-motion";
 
 const NAV: { label: string; href: string }[] = [
   { label: "Hakkımızda",           href: "/hakkimizda"  },
@@ -12,15 +12,12 @@ const NAV: { label: string; href: string }[] = [
 ];
 
 export function SiteHeader() {
-  const [scrolled, setScrolled] = useState(false);
+  // Çift eşik (90 gir / 20 çık): header'ın kendi yükseklik geçişi scroll
+  // pozisyonunu hafifçe kaydırabildiği (scroll anchoring) için tek eşik,
+  // sınırda ileri-geri salınıma (jitter) yol açıyordu — bkz. useScrolled.
+  const scrolled = useScrolled(90, 20);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [location] = useLocation();
-
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 30);
-    window.addEventListener("scroll", onScroll, { passive: true });
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
 
   useEffect(() => { setMobileOpen(false); }, [location]);
   useEscapeKey(() => setMobileOpen(false), mobileOpen);

@@ -122,12 +122,30 @@ function MilestoneTimeline() {
   const scrollerRef = React.useRef<HTMLDivElement>(null);
   const cardRefs = React.useRef<(HTMLDivElement | null)[]>([]);
   const [active, setActive] = React.useState(0);
+  // İlk/son birkaç kart, rayın dolgusu/genişliği yüzünden hiçbir zaman TAM
+  // ortalanamıyor (scrollIntoView'ın hedeflediği scrollLeft negatif çıkıyor ya
+  // da maxScrollLeft'i aşıyor, tarayıcı 0'a/maxScrollLeft'e klipliyor) — bu da
+  // örn. kart 0 ve 1'in (aynı şekilde son iki kartın) AYNI fiziksel
+  // scrollLeft'e kliplenmesine yol açar. IntersectionObserver salt geometriyle
+  // bu iki index'i hiçbir zaman ayırt edemez ve "sol" hep aynı komşu karta
+  // geri sıçrar/takılır kalırdı. Çözüm: programatik gezinmede (buton/nokta
+  // tıklaması) hedef index doğrudan ve iyimser olarak yazılır; observer
+  // yalnızca elle/organik kaydırma sırasında devrede kalır.
+  const navigatingRef = React.useRef(false);
+  const hasScrolledRef = React.useRef(false);
+  const navigateTimeoutRef = React.useRef<number | undefined>(undefined);
 
   React.useEffect(() => {
     const scroller = scrollerRef.current;
     if (!scroller) return;
+    const onScroll = () => { hasScrolledRef.current = true; };
+    scroller.addEventListener("scroll", onScroll, { passive: true });
     const obs = new IntersectionObserver(
       (entries) => {
+        // Mount anında (henüz hiç kaydırma olmamışken) observer'ın kendi ilk
+        // ölçümüyle veya programatik bir gezinme sürerken `active`'i ezmesini
+        // engeller — bkz. yukarıdaki not.
+        if (navigatingRef.current || !hasScrolledRef.current) return;
         entries.forEach((entry) => {
           if (!entry.isIntersecting) return;
           const idx = Number((entry.target as HTMLElement).dataset.index);
@@ -139,14 +157,31 @@ function MilestoneTimeline() {
       { root: scroller, threshold: 0, rootMargin: "0px -38% 0px -38%" }
     );
     cardRefs.current.forEach((el) => el && obs.observe(el));
-    return () => obs.disconnect();
+    return () => {
+      obs.disconnect();
+      scroller.removeEventListener("scroll", onScroll);
+      window.clearTimeout(navigateTimeoutRef.current);
+    };
   }, []);
 
   const scrollToIndex = (i: number) => {
     const el = cardRefs.current[i];
     if (!el) return;
+    setActive(i);
+    navigatingRef.current = true;
+    window.clearTimeout(navigateTimeoutRef.current);
     const reduceMotion = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     el.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", inline: "center", block: "nearest" });
+    // Smooth scroll (+ CSS snap'in kendi yerleşmesi) tamamlanana kadar
+    // observer'ı devre dışı tut; scrollend desteği varsa onu, yoksa süre
+    // bazlı bir geri dönüşü kullan.
+    const scroller = scrollerRef.current;
+    const clearNavigating = () => { navigatingRef.current = false; };
+    if (scroller && "onscrollend" in scroller) {
+      scroller.addEventListener("scrollend", clearNavigating, { once: true });
+    } else {
+      navigateTimeoutRef.current = window.setTimeout(clearNavigating, reduceMotion ? 50 : 600);
+    }
   };
 
   const step = (dir: 1 | -1) => scrollToIndex(Math.min(Math.max(active + dir, 0), MILESTONES.length - 1));
