@@ -233,7 +233,6 @@
   100% { transform: translateX(-50%); }
 }
 .do-ticker-inner { animation: do-ticker 22s linear infinite; display: flex; width: max-content; }
-.do-ticker-inner:hover { animation-play-state: paused; }
 
 /* Ters yönlü şerit (ana sayfa Tedarikçilerimiz — soldan sağa kayan satırlar) */
 @keyframes do-ticker-reverse {
@@ -241,7 +240,17 @@
   100% { transform: translateX(0); }
 }
 .do-ticker-inner-reverse { animation: do-ticker-reverse 26s linear infinite; display: flex; width: max-content; }
-.do-ticker-inner-reverse:hover { animation-play-state: paused; }
+
+/* Dur-on-hover SADECE gerçek hover cihazlarında (fare/trackpad) uygulanır.
+   (hover: hover) olmayan dokunmatik cihazlarda bir dokunuş CSS :hover'ı
+   "yapışık" bırakabiliyordu — kullanıcı şeride dokununca animasyon
+   duruyormuş/takılıyormuş gibi hissettiriyordu. Akış mobilde her zaman
+   sürekli/pürüzsüz kalsın diye bu davranış yalnızca hover-capable
+   cihazlara has kılındı. */
+@media (hover: hover) {
+  .do-ticker-inner:hover { animation-play-state: paused; }
+  .do-ticker-inner-reverse:hover { animation-play-state: paused; }
+}
 
 /* Logo filters */
 .do-logo-invert { filter: brightness(0) invert(1); }
@@ -291,13 +300,6 @@
 }
 .do-chip-expand { animation: do-chip-expand 0.2s ease-out both; }
 
-/* Kategori overview'un arkasındaki çok hafif navy/cobalt "atmosfer" —
-   herhangi bir kategori hover edildiğinde belirir, section'ın da tepki
-   verdiği hissini yaratır. Saf dekoratif, marka paletinden (navy). */
-.do-category-atmosphere {
-  background: radial-gradient(640px circle at 50% 0%, rgba(27, 58, 143, 0.07), transparent 70%);
-}
-
 /* Keyboard focus, global */
 :where(a, button, [tabindex]):focus-visible {
   outline: 2px solid #2547B5;
@@ -325,7 +327,7 @@
     transform: none !important;
     filter: none !important;
   }
-  .do-category-tile, .do-category-tile *, .do-category-atmosphere { transition: none !important; }
+  .do-category-tile, .do-category-tile * { transition: none !important; }
   /* Sonsuz döngü burada 1 iterasyonda anlık bitip görünmez (idle) karede
      kalır — rota okları için bunu ezip sabit/tam görünür bırakıyoruz. */
   .do-route-line { animation: none !important; stroke-dashoffset: 0 !important; opacity: 1 !important; }

@@ -6,7 +6,7 @@ import { SiteFooter } from "./shared/SiteFooter";
 import { BrandLogo } from "./shared/BrandLogo";
 import TurkeyMap from "turkey-map-react";
 import { cities as turkeyCities } from "turkey-map-react/lib/data";
-import { CLASSIFIED_BRANDS } from "../lib/brands";
+import { CLASSIFIED_BRANDS, type Brand } from "../lib/brands";
 
 // Şerit, Tedarikçiler sayfasıyla AYNI kaynağı (CLASSIFIED_BRANDS — Excel'in
 // 61 markası) kullanır; Excel'de olmayan markalar burada da gösterilmez
@@ -105,6 +105,22 @@ export function LandingPage() {
   const [mobileOpen, setMobileOpen] = useState(false);
   useEscapeKey(() => setMobileOpen(false), mobileOpen);
 
+  // Mobil marka şeridi dokunma davranışı: bir şeride dokunmak YALNIZCA o
+  // şeridi durdurur (diğer şeritler akmaya devam eder), bir markaya
+  // dokunmak "siteden ayrılıyorsunuz" onayı ister — onaylanana/iptal
+  // edilene kadar o şerit duraklı kalır, kullanıcı kazara siteden ayrılmaz.
+  // Masaüstü hover-duraklatma (CSS, do-ticker-inner:hover) bundan tamamen
+  // bağımsız çalışmaya devam eder — ikisi hiç çakışmaz.
+  const [pausedRow, setPausedRow] = useState<number | null>(null);
+  const [confirmBrand, setConfirmBrand] = useState<{ brand: Brand; rowIndex: number } | null>(null);
+  const cancelLeaveRef = useRef<HTMLButtonElement>(null);
+  useEscapeKey(() => setConfirmBrand(null), confirmBrand !== null);
+  useEffect(() => {
+    document.body.style.overflow = confirmBrand ? "hidden" : "";
+    if (confirmBrand) cancelLeaveRef.current?.focus();
+    return () => { document.body.style.overflow = ""; };
+  }, [confirmBrand]);
+
   const tickerItems = ["250+ Marka", "81 İl + İhracat", "Kuruluş 1976", "Groupauto Üyesi", "Opar Ege Bölge Bayiliği", "Ümraniye Merkez", "Binek & Hafif Ticari", "Kesintisiz Lojistik"];
 
   return (
@@ -131,13 +147,15 @@ export function LandingPage() {
         className="sticky top-0 z-50 transition-all duration-300 bg-white/90 backdrop-blur-md border-b border-slate-200"
         style={{ ...(scrolled ? { background: "rgba(255,255,255,0.98)", borderColor: "rgba(15,23,42,0.1)", boxShadow: "0 4px 24px rgba(15,23,42,0.08)" } : {}) }}
       >
-        <div className={`w-full px-6 lg:px-10 xl:px-16 flex items-center justify-between transition-[height] duration-300 ${scrolled ? "h-16 sm:h-[68px]" : "h-24 sm:h-28"}`}>
-          {/* Logo — sabit solda */}
+        <div className={`w-full px-6 lg:px-10 xl:px-16 flex items-center justify-between transition-[height] duration-300 ${scrolled ? "h-[59px] sm:h-[68px]" : "h-[88px] sm:h-28"}`}>
+          {/* Logo — sabit solda. Mobilde (<sm) ~9-10% küçültüldü + 2px yukarı
+              optik düzeltme (logo hafif alçak duruyordu) — sm ve üzeri (masaüstü)
+              boyut/hizalama birebir korunuyor. */}
           <Link href="/" className="flex items-center shrink-0">
             <img
               src="/images/delta-oto-logo.png"
               alt="Delta Oto 50. Yıl"
-              className={`w-auto transition-[height] duration-300 ${scrolled ? "h-10 sm:h-12" : "h-16 sm:h-20"}`}
+              className={`w-auto transition-[height] duration-300 -mt-0.5 sm:mt-0 ${scrolled ? "h-9 sm:h-12" : "h-[58px] sm:h-20"}`}
             />
           </Link>
 
@@ -166,7 +184,7 @@ export function LandingPage() {
               aria-expanded={mobileOpen}
               aria-controls="do-landing-mobile-nav"
               onClick={() => setMobileOpen(o => !o)}
-              className="xl:hidden inline-flex items-center justify-center w-10 h-10 -mr-2 rounded-md text-slate-700 hover:bg-slate-100 transition-colors shrink-0"
+              className="xl:hidden inline-flex items-center justify-center w-11 h-11 -mr-2.5 rounded-md text-slate-700 hover:bg-slate-100 transition-colors shrink-0"
             >
               {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
@@ -206,8 +224,11 @@ export function LandingPage() {
         </div>
       </header>
 
-      {/* HERO (dark) */}
-      <section className="relative min-h-screen flex items-center overflow-hidden bg-[#0e1016] text-white">
+      {/* HERO (dark) — mobilde min-h-screen yerine diğer sayfalardaki
+          kompakt yükseklik (560px); tam ekran yükseklik yalnızca lg+'da
+          korunur, böylece başlık+açıklama+CTA'lar ilk mobil ekranda daha
+          yukarıda ve görünür oturur. */}
+      <section className="relative min-h-[560px] lg:min-h-screen flex items-center overflow-hidden bg-[#0e1016] text-white">
         <div className="absolute inset-0">
           <img
             ref={heroParallax}
@@ -224,16 +245,16 @@ export function LandingPage() {
         <div className="absolute left-0 top-0 w-[3px] h-full bg-gradient-to-b from-transparent via-[#1B3A8F] to-transparent opacity-60"></div>
         <div className="do-beam"></div>
 
-        <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 relative z-10 pt-20 pb-32">
+        <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 relative z-10 pt-14 pb-10 lg:pt-20 lg:pb-32">
           <div className="max-w-4xl">
-            <div ref={ref} className="do-reveal flex items-center gap-3 mb-8">
+            <div ref={ref} className="do-reveal flex items-center gap-3 mb-5 lg:mb-8">
               <div className="w-8 h-[2px] bg-[#4d74d6]"></div>
               <span className="text-[#7d9bea] text-xs font-bold uppercase tracking-[0.3em]">Kuruluş 1976 · Delta Oto</span>
             </div>
 
             <h1
               ref={ref}
-              className="do-reveal do-d1 text-[34px] sm:text-5xl md:text-6xl lg:text-[72px] xl:text-[80px] font-black leading-[1.05] sm:leading-[1.0] mb-6 tracking-[-0.02em] break-words"
+              className="do-reveal do-d1 text-[34px] sm:text-5xl md:text-6xl lg:text-[72px] xl:text-[80px] font-black leading-[1.05] sm:leading-[1.0] mb-4 lg:mb-6 tracking-[-0.02em] break-words"
             >
               <span className="do-hero-line">50 YILDIR OTOMOTİV AFTERMARKET'İN</span>
               <br />
@@ -242,7 +263,7 @@ export function LandingPage() {
 
             <p
               ref={ref}
-              className="do-reveal do-d2 text-[17px] text-gray-300 leading-[1.75] max-w-2xl mb-12 font-light"
+              className="do-reveal do-d2 text-[17px] text-gray-300 leading-[1.75] max-w-2xl mb-7 lg:mb-12 font-light"
             >
               Binek ve hafif ticari araç yedek parça pazarında, bağımsız yenileme sektörünü güçlü lojistik altyapımız ve küresel tedarik ağımızla yönlendiriyoruz.
             </p>
@@ -519,12 +540,27 @@ export function LandingPage() {
 
         <div className="relative z-10 flex flex-col gap-5">
           {BRAND_STRIPS.map((strip, rowIndex) => (
-            <div key={rowIndex} className="overflow-hidden">
-              <div className={rowIndex === 1 ? "do-ticker-inner" : "do-ticker-inner-reverse"}>
+            <div
+              key={rowIndex}
+              className="overflow-hidden"
+              onTouchStart={() => setPausedRow(rowIndex)}
+              onTouchEnd={() => setPausedRow((r) => (r === rowIndex ? null : r))}
+              onTouchCancel={() => setPausedRow((r) => (r === rowIndex ? null : r))}
+            >
+              <div
+                className={rowIndex === 1 ? "do-ticker-inner" : "do-ticker-inner-reverse"}
+                style={{ animationPlayState: pausedRow === rowIndex || confirmBrand?.rowIndex === rowIndex ? "paused" : undefined }}
+              >
                 {[...strip, ...strip].map((b, i) => {
                   const isDuplicate = i >= strip.length;
                   return (
-                    <BrandLogo key={`${b.slug}-${i}`} brand={b} size="strip" hidden={isDuplicate} />
+                    <BrandLogo
+                      key={`${b.slug}-${i}`}
+                      brand={b}
+                      size="strip"
+                      hidden={isDuplicate}
+                      onNavigateAttempt={(brand) => setConfirmBrand({ brand, rowIndex })}
+                    />
                   );
                 })}
               </div>
@@ -622,6 +658,53 @@ export function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* "Siteden ayrılıyorsunuz" onayı — yalnızca dokunmatik cihazda, marka
+          şeridindeki bir logoya dokunulduğunda devreye girer (bkz.
+          BrandLogo onNavigateAttempt). Masaüstü tıklaması bunu hiç görmez. */}
+      <div
+        className={`fixed inset-0 z-[90] flex items-center justify-center p-6 transition-opacity duration-200 ${
+          confirmBrand ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        }`}
+        aria-hidden={!confirmBrand}
+      >
+        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setConfirmBrand(null)} />
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Siteden ayrılıyorsunuz"
+          className={`relative bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 transition-all duration-200 ${
+            confirmBrand ? "translate-y-0 scale-100" : "translate-y-2 scale-95"
+          }`}
+        >
+          <h3 className="text-lg font-black text-slate-900 mb-2">Siteden ayrılıyorsunuz</h3>
+          <p className="text-slate-500 text-[13.5px] leading-relaxed mb-6">
+            {confirmBrand?.brand.name} için Delta Oto sitesinden ayrılıp markanın resmi web sitesine yönlendirileceksiniz.
+          </p>
+          <div className="flex gap-3">
+            <button
+              ref={cancelLeaveRef}
+              type="button"
+              onClick={() => setConfirmBrand(null)}
+              className="flex-1 border border-slate-200 text-slate-600 font-semibold text-[13.5px] px-4 py-3 rounded-md hover:bg-slate-50 transition-colors"
+            >
+              İptal
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                if (confirmBrand?.brand.website) {
+                  window.open(confirmBrand.brand.website, "_blank", "noopener,noreferrer");
+                }
+                setConfirmBrand(null);
+              }}
+              className="flex-1 bg-[#1B3A8F] hover:bg-[#2547B5] text-white font-semibold text-[13.5px] px-4 py-3 rounded-md transition-colors"
+            >
+              Devam Et
+            </button>
+          </div>
+        </div>
+      </div>
 
       <SiteFooter />
     </div>

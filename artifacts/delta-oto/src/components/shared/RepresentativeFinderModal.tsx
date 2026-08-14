@@ -29,8 +29,8 @@ const CITY_PATH_BY_PLATE: Map<number, string> = new Map(
 // okunabilirlik adına küçük, elle ayarlanmış nudge'lar — il konumunu/veriyi
 // DEĞİŞTİRMEZ, yalnızca o ilin etiketinin görsel yerleşimini ince ayarlar.
 const PROVINCE_LABEL_OFFSETS: Record<number, { dx: number; dy: number }> = {
-  34: { dx: 4, dy: 10 },    // İstanbul — boğaz nedeniyle bbox merkezi sudaki boşluğa denk gelebilir
-  41: { dx: -10, dy: -8 },  // Kocaeli
+  34: { dx: 4, dy: 20 },    // İstanbul — boğaz nedeniyle bbox merkezi sudaki boşluğa denk gelebilir; dy Kocaeli çakışmasını gidermek için büyütüldü
+  41: { dx: -10, dy: -24 }, // Kocaeli — İstanbul'a yakın, dy büyütüldü (Sakarya/Yalova'ya hâlâ yeterli mesafede)
   77: { dx: 12, dy: 10 },   // Yalova — Kocaeli/Bursa arasında çok küçük
   11: { dx: 8, dy: 10 },    // Bilecik
   54: { dx: -4, dy: 10 },   // Sakarya
@@ -38,19 +38,43 @@ const PROVINCE_LABEL_OFFSETS: Record<number, { dx: number; dy: number }> = {
   74: { dx: -8, dy: -6 },   // Bartın
   78: { dx: 8, dy: 10 },    // Karabük
   67: { dx: -10, dy: 4 },   // Zonguldak
-  69: { dx: 10, dy: 6 },    // Bayburt
+  69: { dx: 16, dy: 30 },   // Bayburt — Gümüşhane ve Erzurum'la neredeyse aynı yükseklikte (yatay üçlü zincir); güneye kaydırılarak ikisinden de dikey olarak ayrıştırıldı
   79: { dx: 0, dy: 10 },    // Kilis
   73: { dx: 0, dy: -8 },    // Şırnak
+  // Etiketler artık TEK sabit boyutta (bkz. LABEL_FONT_SIZE) — bu satırdan
+  // itibaren eklenen nudge'lar komşu il çiftleri arasındaki gerçek merkez
+  // mesafesinin bu sabit boyutta yeterli olmadığı yerler için, Playwright'la
+  // ölçülen gerçek bounding-box çakışmasına göre eklendi (bkz.
+  // RepresentativeFinderModal QA) — boyut farkı değil, yalnızca konum düzeltmesi.
+  2:  { dx: 8, dy: 14 },    // Adıyaman — Kahramanmaraş'a yakın
+  46: { dx: -8, dy: -12 },  // Kahramanmaraş — Adıyaman'a yakın
+  3:  { dx: 10, dy: 12 },   // Afyonkarahisar — en uzun il adı, Uşak'a yakın
+  64: { dx: -10, dy: -12 }, // Uşak — Afyonkarahisar'a yakın
+  1:  { dx: -6, dy: -6 },   // Adana — Osmaniye'ye yakın
+  35: { dx: 0, dy: 14 },    // İzmir — Manisa'ya yakın
+  45: { dx: 0, dy: -12 },   // Manisa — İzmir'e yakın
+  21: { dx: 0, dy: -12 },   // Diyarbakır — Batman'a yakın
+  72: { dx: 0, dy: 12 },    // Batman — Diyarbakır'a yakın, küçük il
+  80: { dx: 10, dy: 30 },   // Osmaniye — hem Adana hem Gaziantep'e yakın, küçük il; güneye kaydırıldı
+  27: { dx: 6, dy: -8 },    // Gaziantep — Osmaniye'ye yakın
+  // Doğu Karadeniz kümesi (Giresun/Gümüşhane/Trabzon/Bayburt) haritanın en
+  // sıkışık dörtlüsü — dördü de kümenin ortak merkezinden dışa doğru
+  // kaydırıldı (tek bir ili itmek sorunu komşusuna devrediyordu).
+  28: { dx: -8, dy: 0 },    // Giresun
+  29: { dx: -4, dy: 12 },   // Gümüşhane
+  61: { dx: 6, dy: -8 },    // Trabzon
 };
 
-// Eşikler, 81 ilin gerçek bounding-box alan dağılımına göre kalibre edildi
-// (min≈500, p25≈3550, medyan≈5000, p75≈8400, max≈27700 birim²) — küçük
-// illerin (ör. Yalova, Kilis, Bayburt) etiketi orantılı olarak küçük kalır,
-// büyük illerin (ör. Konya, Sivas) etiketi daha büyük ve rahat okunur olur.
-function labelFontSize(area: number, isSelected: boolean): number {
-  const base = area > 9000 ? 12 : area > 5000 ? 10 : area > 2200 ? 8.5 : 6.8;
-  return isSelected ? base + 1.5 : base;
-}
+// Tüm il etiketleri TEK bir sabit font boyutu kullanır — bbox-alanına göre
+// kademeli boyutlandırma ve seçili-il büyütmesi bilerek KALDIRILDI (kullanıcı
+// kararı: büyüklük farkı olmasın, vurgulama yalnızca renk/ağırlıkla yapılsın
+// — bkz. render'daki fill/fontWeight dallanması ve fillForProvince). Referans
+// ölçek: "Çankırı" etiketinin önceki (area>2200 kademesi) boyutu — masaüstünde
+// 8.5, mobilde 8.5×1.8=15.3 — kullanıcının onayladığı okunabilirlik seviyesi.
+// `scale`: harita SVG'si viewBox birimlerinde sabit kalıyor ama mobilde
+// fiziksel render genişliği masaüstünün çok altında — aynı birim font-size
+// mobilde ekranda çok daha küçük piksele düşüyor, ~1.8 bu küçülmeyi telafi eder.
+const LABEL_FONT_SIZE = 8.5;
 
 function telHref(phone: string): string {
   return `tel:${phone.replace(/\s+/g, "")}`;
@@ -106,9 +130,20 @@ function RepresentativeDetail({ rep, province }: { rep: Representative; province
 export function RepresentativeFinderModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [selectedRegion, setSelectedRegion] = useState<TurkeyRegion | "all">("all");
   const [selectedPlate, setSelectedPlate] = useState<number | null>(null);
-  const [labelPositions, setLabelPositions] = useState<Map<number, { x: number; y: number; area: number }>>(new Map());
+  const [labelPositions, setLabelPositions] = useState<Map<number, { x: number; y: number }>>(new Map());
   const closeButtonRef = useRef<HTMLButtonElement>(null);
   const allProvincesLayerRef = useRef<SVGGElement>(null);
+  // Tailwind'in `sm` eşiğiyle (640px) hizalı — bu genişliğin altında harita
+  // fiziksel olarak çok daha küçük render edildiği için il etiketleri
+  // LABEL_FONT_SIZE ile birlikte ölçeklenir (bkz. yukarıdaki not).
+  const [isNarrow, setIsNarrow] = useState(false);
+  useEffect(() => {
+    const mq = window.matchMedia("(max-width: 639px)");
+    const update = () => setIsNarrow(mq.matches);
+    update();
+    mq.addEventListener("change", update);
+    return () => mq.removeEventListener("change", update);
+  }, []);
 
   const regionProvinces = selectedRegion === "all" ? [] : provincesInRegion(selectedRegion);
   const activeRegionPlates = new Set(regionProvinces.map((p) => p.plate));
@@ -134,11 +169,11 @@ export function RepresentativeFinderModal({ open, onClose }: { open: boolean; on
   // yeniden hesaplamaz.
   useEffect(() => {
     if (!allProvincesLayerRef.current) return;
-    const next = new Map<number, { x: number; y: number; area: number }>();
+    const next = new Map<number, { x: number; y: number }>();
     allProvincesLayerRef.current.querySelectorAll("path[data-plate]").forEach((el) => {
       const plate = Number(el.getAttribute("data-plate"));
       const bbox = (el as SVGGraphicsElement).getBBox();
-      next.set(plate, { x: bbox.x + bbox.width / 2, y: bbox.y + bbox.height / 2, area: bbox.width * bbox.height });
+      next.set(plate, { x: bbox.x + bbox.width / 2, y: bbox.y + bbox.height / 2 });
     });
     setLabelPositions(next);
   }, []);
@@ -179,11 +214,11 @@ export function RepresentativeFinderModal({ open, onClose }: { open: boolean; on
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-5 lg:p-6">
+        <div className="flex-1 overflow-y-auto p-2 sm:p-5 lg:p-6">
           <div className="flex flex-wrap gap-2 mb-3">
             <button
               type="button"
-              onClick={() => setSelectedRegion("all")}
+              onClick={() => { setSelectedRegion("all"); setSelectedPlate(null); }}
               aria-pressed={selectedRegion === "all"}
               className={`text-[11.5px] font-semibold px-3 py-1.5 rounded-full border transition-all duration-200 ${
                 selectedRegion === "all"
@@ -210,10 +245,13 @@ export function RepresentativeFinderModal({ open, onClose }: { open: boolean; on
             ))}
           </div>
 
-          <div className="grid lg:grid-cols-[3fr_1fr] gap-5">
-            {/* Harita + il ızgarası — tek "feature panel" çerçevesi, tüm 81 il adı her zaman görünür */}
-            <div className="rounded-2xl border border-slate-100 bg-slate-50/60 p-4 lg:p-5">
-              <div className="relative max-w-[380px] sm:max-w-none mx-auto">
+          <div className="grid lg:grid-cols-[3fr_1fr] gap-4 sm:gap-5">
+            {/* Harita + il ızgarası — tek "feature panel" çerçevesi, tüm 81 il adı her zaman görünür.
+                Mobilde max-width sınırı yok — harita panelin tüm genişliğini
+                kullanır, bu da etiketlerin fiziksel render boyutunu (dolayısıyla
+                okunabilirliğini) doğrudan büyütür. */}
+            <div className="rounded-2xl border border-slate-100 bg-slate-50/60 p-1 sm:p-4 lg:p-5">
+              <div className="relative mx-auto">
                 <TurkeyMap
                   hoverable
                   customStyle={{ idleColor: "#e2e8f0", hoverColor: "#c7d5f5" }}
@@ -238,6 +276,7 @@ export function RepresentativeFinderModal({ open, onClose }: { open: boolean; on
                     const offset = PROVINCE_LABEL_OFFSETS[p.plate];
                     const isSelected = p.plate === selectedPlate;
                     const isQuiet = selectedRegion !== "all" && !activeRegionPlates.has(p.plate) && !isSelected;
+                    const labelScale = isNarrow ? 1.8 : 1;
                     return (
                       <text
                         key={p.plate}
@@ -245,13 +284,13 @@ export function RepresentativeFinderModal({ open, onClose }: { open: boolean; on
                         y={pos.y + (offset?.dy ?? 0)}
                         textAnchor="middle"
                         dominantBaseline="middle"
-                        fontSize={labelFontSize(pos.area, isSelected)}
+                        fontSize={LABEL_FONT_SIZE * labelScale}
                         fontWeight={isSelected ? 700 : isQuiet ? 500 : 700}
                         fill={isSelected ? "#ffffff" : "#1B3A8F"}
                         fillOpacity={isQuiet ? 0.55 : 1}
                         stroke={isSelected ? "none" : "#ffffff"}
                         strokeOpacity={isQuiet ? 0.7 : 1}
-                        strokeWidth={isSelected ? 0 : 2.3}
+                        strokeWidth={isSelected ? 0 : 2.3 * labelScale}
                         paintOrder="stroke"
                       >
                         {p.name}
@@ -293,8 +332,8 @@ export function RepresentativeFinderModal({ open, onClose }: { open: boolean; on
             </div>
 
             {/* Temsilci/fallback detayı — kolonun kalan boşluğunu dikey ortalayarak kullanır */}
-            <div className="relative do-card bg-white border border-slate-200 rounded-2xl p-5 overflow-hidden flex flex-col justify-center min-h-[160px]">
-              <MapPin className="absolute -right-4 -bottom-4 w-20 h-20 text-slate-50 pointer-events-none" strokeWidth={1} aria-hidden="true" />
+            <div className="relative do-card bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 overflow-hidden flex flex-col justify-center min-h-[140px] sm:min-h-[160px]">
+              <MapPin className="absolute -right-3 -bottom-3 w-16 h-16 sm:-right-4 sm:-bottom-4 sm:w-20 sm:h-20 text-slate-50 pointer-events-none" strokeWidth={1} aria-hidden="true" />
               <div className="relative">
                 {!selectedProvince ? (
                   <div className="text-center">

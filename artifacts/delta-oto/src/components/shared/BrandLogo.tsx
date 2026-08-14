@@ -24,9 +24,13 @@ interface SizeStyle {
 
 const SIZES: Record<BrandLogoSize, SizeStyle> = {
   wall: {
-    light: "do-card bg-white rounded-2xl flex items-center justify-center h-32 sm:h-36 px-6 py-6 shadow-sm",
-    dark: "do-card bg-[#0e1016] border border-white/10 rounded-2xl flex items-center justify-center h-32 sm:h-36 px-6 py-6 shadow-sm",
-    img: "max-h-12 sm:max-h-14 w-auto h-auto max-w-full object-contain",
+    // Mobilde (<sm) marka duvarı 4 sütun (bkz. TedarikciPage BrandGroup) —
+    // orijinal h-32/px-6/py-6 kart 4 sütunda logoyu sıkıştırıp taşırdı, bu
+    // yüzden yalnızca <sm tier'ı daraltıldı; sm ve üzeri (3/4/5/6 sütun)
+    // birebir eski değerlerinde kaldı.
+    light: "do-card bg-white rounded-2xl flex items-center justify-center h-16 px-2 py-2 sm:h-32 sm:px-6 sm:py-6 lg:h-36 shadow-sm",
+    dark: "do-card bg-[#0e1016] border border-white/10 rounded-2xl flex items-center justify-center h-16 px-2 py-2 sm:h-32 sm:px-6 sm:py-6 lg:h-36 shadow-sm",
+    img: "max-h-8 sm:max-h-12 lg:max-h-14 w-auto h-auto max-w-full object-contain",
     textSize: "text-[15px]",
     textHover: "",
   },
@@ -64,11 +68,17 @@ export function BrandLogo({
   brand,
   size = "wall",
   hidden,
+  onNavigateAttempt,
 }: {
   brand: Brand;
   size?: BrandLogoSize;
   /** Şerit gibi kopyalanan/gizli duplikasyonlar için — aria-hidden + tabIndex=-1 uygular. */
   hidden?: boolean;
+  /** Verilirse VE cihaz dokunmatikse (hover desteklemiyorsa), brand.website'e
+   * doğrudan gitmek yerine varsayılan navigasyon engellenir ve bu callback
+   * çağrılır — çağıran taraf "siteden ayrılıyorsunuz" onayı gösterebilir.
+   * Masaüstü/fare tıklaması etkilenmez, her zaman doğrudan siteye gider. */
+  onNavigateAttempt?: (brand: Brand, url: string) => void;
 }) {
   const style = SIZES[size];
   const isDark = brand.logoBackground === "dark";
@@ -97,8 +107,25 @@ export function BrandLogo({
     );
   }
   if (brand.website) {
+    const websiteUrl = brand.website;
     return (
-      <a href={brand.website} target="_blank" rel="noopener noreferrer" title={brand.name} className={cardClass} {...a11yProps}>
+      <a
+        href={websiteUrl}
+        target="_blank"
+        rel="noopener noreferrer"
+        title={brand.name}
+        className={cardClass}
+        onClick={(e) => {
+          // "(hover: hover)" = gerçek fare/trackpad. Dokunmatikte bunu
+          // devre dışı bırakıp callback'e devrederiz; masaüstü tıklaması
+          // hiçbir zaman kesilmez, her zaman doğrudan yeni sekmede açılır.
+          if (onNavigateAttempt && !window.matchMedia("(hover: hover)").matches) {
+            e.preventDefault();
+            onNavigateAttempt(brand, websiteUrl);
+          }
+        }}
+        {...a11yProps}
+      >
         {content}
       </a>
     );

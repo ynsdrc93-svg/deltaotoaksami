@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { MapPin, Phone, Mail, Globe, Clock, ChevronRight, Users, Package, MonitorSmartphone, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
+import { MapPin, Phone, Mail, Globe, Clock, ChevronRight, ArrowRight, Users, Package, MonitorSmartphone, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
 import { RepresentativeFinderModal } from "@/components/shared/RepresentativeFinderModal";
@@ -87,33 +87,66 @@ export function IletisimPage() {
     <div className="do-site bg-white min-h-screen">
       <SiteHeader />
 
-      {/* HERO */}
-      <section className="relative min-h-[480px] flex items-center text-white overflow-hidden bg-[#0e1016]">
+      {/* HERO — gerçek yerel fotoğraf (935×1400 dikey kaynak; bkz.
+          public/images/iletisim-hero-bosphorus.jpg). Kaynak dikey olduğu için
+          tek asset + breakpoint'e göre farklı object-position kullanılıyor:
+          mobilde container oranı (~390×560) kaynağa çok yakın olduğu için
+          neredeyse tüm kare (balıkçı + köprü + gökyüzü) görünür kalıyor;
+          masaüstünde container çok daha geniş/kısa olduğu için görünen dikey
+          şerit ~%26'ya düşüyor — object-[center_34%] bu şeridi köprünün
+          kırmızı aydınlatılmış kulesi + güverte + kablo örgüsü üzerine
+          ortalar (balıkçı siluetini feda eder, köprünün kendisini net tutar). */}
+      <section className="relative min-h-[560px] flex items-center text-white overflow-hidden bg-[#0e1016]">
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1527838832700-5059252407fa?w=1920&q=80"
+            src="/images/iletisim-hero-bosphorus.jpg"
             alt=""
-            className="w-full h-full object-cover opacity-20"
-            style={{ objectPosition: "center 60%" }}
+            className="w-full h-full object-cover object-[center_45%] sm:object-[center_34%]"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0e1016] via-[#0e1016]/80 to-[#0e1016]/30" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0e1016] via-[#0e1016]/70 to-[#0e1016]/25" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0e1016] via-transparent to-transparent" />
         </div>
-        <div className="absolute inset-0 do-grid-bg opacity-40" />
+        <div className="absolute inset-0 do-grid-bg opacity-20" />
         <div className="absolute left-0 top-0 w-[3px] h-full bg-gradient-to-b from-transparent via-[#1B3A8F] to-transparent opacity-60" />
 
-        <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 relative z-10 py-24">
-          <div className="flex items-center gap-3 mb-7">
+        <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 relative z-10 py-16 lg:py-24">
+          <div className="flex items-center gap-3 mb-5 lg:mb-7">
             <div className="w-8 h-[2px] bg-[#4d74d6]" />
-            <span className="text-[#7d9bea] text-xs font-bold uppercase tracking-[0.3em]">Kurumsal İletişim · Ümraniye, İstanbul</span>
+            <span className="text-[#7d9bea] text-xs font-bold uppercase tracking-[0.3em]">İletişim Kanallarımız · Ümraniye, İstanbul</span>
           </div>
-          <h1 className="text-5xl md:text-6xl lg:text-[72px] font-black leading-[1.05] tracking-[-0.02em] mb-5">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[72px] font-black leading-[1.05] tracking-[-0.02em] mb-4 lg:mb-5">
             <span className="do-hero-line">BİZE</span><br />
             <span className="text-[#7d9bea]">ULAŞIN</span>
           </h1>
-          <p className="text-[17px] text-gray-300 max-w-xl font-light leading-[1.8]">
+          <p className="text-[17px] text-gray-300 max-w-xl font-light leading-[1.8] mb-6 lg:mb-9">
             Ürün sorguları, B2B portal erişimi veya kurumsal iletişim için size özel kanaldan ulaşın.
           </p>
+          <div className="flex flex-wrap gap-3 sm:gap-4">
+            <button
+              type="button"
+              onClick={() => setRepModalOpen(true)}
+              className="bg-[#1B3A8F] hover:bg-[#2547B5] active:scale-[0.98] text-white font-semibold px-6 sm:px-8 py-3.5 sm:py-4 rounded-md text-[14px] sm:text-base transition-all duration-200 flex items-center gap-2 sm:gap-2.5 shadow-[0_0_32px_rgba(27,58,143,0.3)] hover:shadow-[0_0_48px_rgba(27,58,143,0.45)]"
+            >
+              <MapPin className="w-4 h-4 sm:w-5 sm:h-5" />
+              Bölge Temsilcinizi Bulun
+            </button>
+            <a
+              href="#iletisim-formu"
+              className="text-gray-200 hover:text-white active:scale-[0.98] text-[14px] sm:text-base font-medium flex items-center gap-2 border border-white/15 hover:border-white/30 px-6 sm:px-8 py-3.5 sm:py-4 rounded-md transition-all duration-200"
+            >
+              <Mail className="w-4 h-4" />
+              İletişim Formu
+            </a>
+            <a
+              href="https://b2b.parcabul.com.tr/login.aspx"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group text-gray-200 hover:text-white active:scale-[0.98] text-[14px] sm:text-base font-medium flex items-center gap-2 border border-white/15 hover:border-white/30 px-6 sm:px-8 py-3.5 sm:py-4 rounded-md transition-all duration-200"
+            >
+              B2B Portal
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+            </a>
+          </div>
         </div>
       </section>
 
@@ -192,7 +225,7 @@ export function IletisimPage() {
       {/* FORM + ADRES — light. Lokasyonlar'dan önceye taşındı: footer'dan hemen önceki bölüm
           proje kuralı gereği navy olmalı, bu da yalnızca burada zaten navy olan Lokasyonlar'ı
           en sona almakla (bkz. CLAUDE.md §9.2) en az müdahaleyle sağlanıyor. */}
-      <section className="bg-[#f8fafc] py-20">
+      <section id="iletisim-formu" className="scroll-mt-24 bg-[#f8fafc] py-20">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-5 gap-12 items-start">
 
           <div className="lg:col-span-2">

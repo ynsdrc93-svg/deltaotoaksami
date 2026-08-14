@@ -20,21 +20,34 @@ export function TemsilcilerimizPage() {
     <div className="do-site bg-white min-h-screen">
       <SiteHeader />
 
-      {/* HERO — dark */}
-      <section className="relative min-h-[460px] flex items-center text-white overflow-hidden bg-[#0e1016]">
+      {/* HERO — dark. Diğer 5 iç sayfa heroyla aynı kalıp: img + iki gradyan
+          overlay + grid-bg + sol aksan çizgisi (bkz. Hakkımızda/Tedarikçiler/
+          Operasyon/Kariyer/İletişim) — önceden yalnızca düz koyu zemin vardı,
+          bu da üst nav'ın altında görsel olarak "eksik/yarım" hissettiriyordu. */}
+      <section className="relative min-h-[560px] flex items-center text-white overflow-hidden bg-[#0e1016]">
+        <div className="absolute inset-0">
+          <img
+            src="/images/delta-oto-hero.png"
+            alt=""
+            className="w-full h-full object-cover opacity-25"
+            style={{ objectPosition: "center 40%" }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0e1016] via-[#0e1016]/80 to-[#0e1016]/30" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0e1016] via-transparent to-transparent" />
+        </div>
         <div className="absolute inset-0 do-grid-bg opacity-40" />
         <div className="absolute left-0 top-0 w-[3px] h-full bg-gradient-to-b from-transparent via-[#1B3A8F] to-transparent opacity-60" />
-        <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 relative z-10 py-20 text-center flex flex-col items-center">
-          <div className="flex items-center gap-3 mb-7">
+        <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 relative z-10 py-14 lg:py-20 text-center flex flex-col items-center">
+          <div className="flex items-center gap-3 mb-5 lg:mb-7">
             <div className="w-8 h-[2px] bg-[#4d74d6]" />
             <span className="text-[#7d9bea] text-xs font-bold uppercase tracking-[0.3em]">Satış Ağımız</span>
             <div className="w-8 h-[2px] bg-[#4d74d6]" />
           </div>
-          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black leading-[1.08] tracking-[-0.02em] mb-6 max-w-2xl">
+          <h1 className="text-4xl md:text-5xl lg:text-6xl font-black leading-[1.08] tracking-[-0.02em] mb-4 lg:mb-6 max-w-2xl">
             <span className="do-hero-line">Size En Yakın</span><br />
             <span className="text-white">Delta Oto </span><span className="text-[#7d9bea]">Temsilcisi</span>
           </h1>
-          <p className="text-[17px] text-gray-300 leading-[1.8] max-w-xl font-light mb-10">
+          <p className="text-[17px] text-gray-300 leading-[1.8] max-w-xl font-light mb-6 lg:mb-10">
             Türkiye'nin 81 iline yayılan satış yapılanmamızda, size en uygun iletişim noktasını
             haritadan birkaç saniyede bulun.
           </p>

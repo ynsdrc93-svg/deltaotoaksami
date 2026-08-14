@@ -1,10 +1,11 @@
-import React, { useId, useState } from "react";
-import { ChevronRight, ChevronUp, ArrowRight, CheckCircle2, Globe, Package, Shield, Zap, Handshake, Search } from "lucide-react";
+import React, { useEffect, useId, useState } from "react";
+import { ChevronRight, ChevronUp, ArrowRight, CheckCircle2, Globe, Package, Shield, Zap, Handshake, Search, X } from "lucide-react";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
 import { BrandLogo } from "@/components/shared/BrandLogo";
 import { CLASSIFIED_BRANDS, GLOBAL_BRANDS, YERLI_BRANDS, type Brand } from "@/lib/brands";
 import { PRODUCT_CATEGORIES, type ProductCategory } from "@/lib/categories";
+import { useEscapeKey } from "@/hooks/use-motion";
 
 const QUALITY = [
   "OEM veya OEM eşdeğeri sertifikasyon zorunluluğu",
@@ -31,7 +32,7 @@ function BrandGroup({ label, brands }: { label: string; brands: Brand[] }) {
         <h3 className="text-xl font-black text-white tracking-tight">{label}</h3>
         <div className="flex-1 h-px bg-white/10" />
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
+      <div className="grid grid-cols-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-2.5 sm:gap-4">
         {brands.map((b) => (
           <BrandLogo key={b.slug} brand={b} size="wall" />
         ))}
@@ -134,6 +135,26 @@ function CategoryBrandRefs({ category, brands }: { category: ProductCategory; br
 function CategoryShowcase({ categories, brands }: { categories: ProductCategory[]; brands: Brand[] }) {
   const [activeIdx, setActiveIdx] = useState(0);
   const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+  // Mobilde (<lg) atlas kutucuğuna dokunmak masaüstündeki gibi inline
+  // spotlight'ı AÇMAZ — akıştan kopma hissi yaratıyordu. Onun yerine aynı
+  // içerik (ikon/başlık/açıklama/marka rafı/CTA) alttan açılan bir
+  // bottom-sheet'te gösterilir; masaüstü inline panel ve mantığı
+  // değişmeden kalır, yalnızca CSS ile <lg'de gizlenir.
+  const [mobileSheetOpen, setMobileSheetOpen] = useState(false);
+  // Mobilde dokunma sonrası buton her zaman güvenilir bir "blur" almayabilir
+  // (tarayıcıya göre değişir) — bu da hoveredIdx'i sheet kapandıktan sonra da
+  // takılı bırakıp atlas'ta "yapışkan" hover rengi/aile soluklaşması gibi
+  // düzensiz görünüme yol açabiliyordu. Sheet'i kapatan her yol bu fonksiyonu
+  // kullanır ki kapanışta atlas her zaman temiz "kilitli" durumuna dönsün.
+  function closeMobileSheet() {
+    setMobileSheetOpen(false);
+    setHoveredIdx(null);
+  }
+  useEscapeKey(closeMobileSheet, mobileSheetOpen);
+  useEffect(() => {
+    document.body.style.overflow = mobileSheetOpen ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [mobileSheetOpen]);
   const displayIdx = hoveredIdx ?? activeIdx;
   const display = categories[displayIdx];
   const isHovering = hoveredIdx !== null;
@@ -150,11 +171,6 @@ function CategoryShowcase({ categories, brands }: { categories: ProductCategory[
 
   return (
     <div className="relative overflow-hidden" onMouseLeave={() => setHoveredIdx(null)}>
-      <div
-        className={`do-category-atmosphere pointer-events-none absolute -inset-x-10 -inset-y-16 transition-opacity duration-500 ${isHovering ? "opacity-100" : "opacity-0"}`}
-        aria-hidden="true"
-      />
-
       {/* Kategori Atlası — 8 makro aile, 23 kategori, tamamı her zaman görünür */}
       <div className="relative grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-6 mb-8">
         {families.map((family) => {
@@ -176,7 +192,7 @@ function CategoryShowcase({ categories, brands }: { categories: ProductCategory[
                     <button
                       key={cat.name}
                       type="button"
-                      onClick={() => setActiveIdx(idx)}
+                      onClick={() => { setActiveIdx(idx); setMobileSheetOpen(true); }}
                       onMouseEnter={() => setHoveredIdx(idx)}
                       onFocus={() => setHoveredIdx(idx)}
                       onBlur={() => setHoveredIdx(null)}
@@ -200,8 +216,9 @@ function CategoryShowcase({ categories, brands }: { categories: ProductCategory[
         })}
       </div>
 
-      {/* Seçili/önizlenen kategori — sıkışık, yatay spotlight paneli */}
-      <div key={display.name} className="do-fade-up relative bg-white border border-slate-200 rounded-2xl overflow-hidden">
+      {/* Seçili/önizlenen kategori — sıkışık, yatay spotlight paneli.
+          Yalnızca >=lg'de görünür; <lg'de yerini aşağıdaki bottom-sheet alır. */}
+      <div key={display.name} className="hidden lg:block do-fade-up relative bg-white border border-slate-200 rounded-2xl overflow-hidden">
         <div className="grid lg:grid-cols-[280px_1fr] divide-y lg:divide-y-0 lg:divide-x divide-slate-100">
           <div className="relative overflow-hidden p-6 lg:p-7 flex flex-col justify-center">
             <div className="absolute -right-3 -bottom-4 text-[100px] leading-none font-black text-slate-50 select-none pointer-events-none" aria-hidden="true">
@@ -219,6 +236,65 @@ function CategoryShowcase({ categories, brands }: { categories: ProductCategory[
             <p className="relative text-slate-500 text-[13px] leading-relaxed line-clamp-2">{display.description}</p>
           </div>
           <div className="p-6 lg:p-7 flex flex-col justify-center">
+            <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400 block mb-3">Öne Çıkan Markalar</span>
+            <CategoryBrandRefs category={display} brands={brands} />
+            <a
+              href="https://b2b.parcabul.com.tr/login.aspx"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 mt-4 text-[12.5px] font-semibold text-[#1B3A8F] hover:text-[#2547B5] transition-colors group w-fit"
+            >
+              B2B Portal'da inceleyin
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+            </a>
+          </div>
+        </div>
+      </div>
+
+      {/* MOBİL BOTTOM-SHEET — <lg'de kategoriye dokununca alttan açılır;
+          masaüstü inline panelle aynı içerik (RepresentativeFinderModal'daki
+          modal dilini izler: backdrop blur, rounded-2xl, shadow-2xl). */}
+      <div
+        className={`lg:hidden fixed inset-0 z-[70] transition-opacity duration-300 ${
+          mobileSheetOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        }`}
+        aria-hidden={!mobileSheetOpen}
+      >
+        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={closeMobileSheet} />
+        <div
+          className={`absolute inset-x-0 bottom-0 max-h-[85vh] bg-white rounded-t-2xl shadow-2xl flex flex-col transition-transform duration-300 ${
+            mobileSheetOpen ? "translate-y-0" : "translate-y-full"
+          }`}
+          role="dialog"
+          aria-modal="true"
+          aria-label={display.name}
+        >
+          <div className="flex justify-center pt-3 pb-1 shrink-0" aria-hidden="true">
+            <div className="w-10 h-1 rounded-full bg-slate-200" />
+          </div>
+          <div className="flex items-center justify-between gap-3 px-5 pb-3 border-b border-slate-100 shrink-0">
+            <div className="flex items-center gap-3 min-w-0">
+              <div className="w-10 h-10 rounded-xl bg-[#1B3A8F] flex items-center justify-center shrink-0">
+                <display.icon className="w-5 h-5 text-white" strokeWidth={1.75} />
+              </div>
+              <div className="min-w-0">
+                <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-[#1B3A8F] block">
+                  {String(displayIdx + 1).padStart(2, "0")} / {String(categories.length).padStart(2, "0")}
+                </span>
+                <h3 className="text-[15px] font-black text-slate-900 tracking-tight leading-snug truncate">{display.name}</h3>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={closeMobileSheet}
+              aria-label="Kapat"
+              className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors"
+            >
+              <X className="w-4 h-4" />
+            </button>
+          </div>
+          <div className="overflow-y-auto p-5">
+            <p className="text-slate-500 text-[13px] leading-relaxed mb-4">{display.description}</p>
             <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400 block mb-3">Öne Çıkan Markalar</span>
             <CategoryBrandRefs category={display} brands={brands} />
             <a
@@ -263,17 +339,17 @@ export function TedarikciPage() {
         <div className="absolute inset-0 do-grid-bg opacity-40" />
         <div className="absolute left-0 top-0 w-[3px] h-full bg-gradient-to-b from-transparent via-[#1B3A8F] to-transparent opacity-60" />
 
-        <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 relative z-10 py-28">
-          <div className="flex items-center gap-3 mb-7">
+        <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 relative z-10 py-16 lg:py-28">
+          <div className="flex items-center gap-3 mb-5 lg:mb-7">
             <div className="w-8 h-[2px] bg-[#4d74d6]" />
             <span className="text-[#7d9bea] text-xs font-bold uppercase tracking-[0.3em]">Ürün Portföyü · 250+ Marka</span>
           </div>
-          <h1 className="text-5xl md:text-6xl lg:text-[72px] font-black leading-[1.05] tracking-[-0.02em] mb-6">
+          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[72px] font-black leading-[1.05] tracking-[-0.02em] mb-4 lg:mb-6">
             <span className="do-hero-line">GLOBAL KALİTE,</span><br />
             <span className="text-white">TEK ÇATI,</span><br />
             <span className="text-[#7d9bea]">DERİN STOK</span>
           </h1>
-          <p className="text-[17px] text-gray-300 leading-[1.8] max-w-2xl mb-10 font-light">
+          <p className="text-[17px] text-gray-300 leading-[1.8] max-w-2xl mb-6 lg:mb-10 font-light">
             Binek ve hafif ticari araç kategorilerinde dünyanın önde gelen OEM üreticileriyle doğrudan çalışıyoruz. 250'den fazla marka ve 50.000'i aşkın SKU; tek tedarikçi ilişkisiyle eksiksiz karşılanır. Groupauto International üyeliğiyle global satın alma gücü, yerel hız ve servis kalitesiyle buluşuyor.
           </p>
           <a
