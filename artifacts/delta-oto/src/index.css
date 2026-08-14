@@ -281,6 +281,16 @@
 }
 .do-chip-in { animation: do-chip-in 0.4s ease both; }
 
+/* "+N marka" genişletildiğinde yeni beliren logo kartları için — do-chip-in'in
+   400ms gri-tondan-renge açılışından bilerek farklı: genişletme bir
+   "spotlight" değil, sade bir liste açılımı, bu yüzden kısa (200ms) ve
+   sade bir fade+slide kullanır. */
+@keyframes do-chip-expand {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.do-chip-expand { animation: do-chip-expand 0.2s ease-out both; }
+
 /* Kategori overview'un arkasındaki çok hafif navy/cobalt "atmosfer" —
    herhangi bir kategori hover edildiğinde belirir, section'ın da tepki
    verdiği hissini yaratır. Saf dekoratif, marka paletinden (navy). */
@@ -309,7 +319,7 @@
   .do-card:hover { transform: none; }
   .do-mobile-panel { transition: none; }
   .animate-pulse { animation: none; }
-  .do-fade-up, .do-chip-in {
+  .do-fade-up, .do-chip-in, .do-chip-expand {
     animation: none !important;
     opacity: 1 !important;
     transform: none !important;

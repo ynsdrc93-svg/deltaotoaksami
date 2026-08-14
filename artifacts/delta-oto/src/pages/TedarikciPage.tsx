@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { ChevronRight, ArrowRight, CheckCircle2, Globe, Package, Shield, Zap, Handshake, Search } from "lucide-react";
+import React, { useId, useState } from "react";
+import { ChevronRight, ChevronUp, ArrowRight, CheckCircle2, Globe, Package, Shield, Zap, Handshake, Search } from "lucide-react";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
 import { BrandLogo } from "@/components/shared/BrandLogo";
@@ -58,6 +58,15 @@ const MACRO_FAMILIES: { label: string; categoryNames: string[] }[] = [
 ];
 
 function CategoryBrandRefs({ category, brands }: { category: ProductCategory; brands: Brand[] }) {
+  // Genişletme durumu bilerek burada, yerel state olarak tutuluyor: bu
+  // bileşen CategoryShowcase'te `key={display.name}` taşıyan bir üst
+  // sarmalayıcının içinde render edilir, dolayısıyla kategori değişince
+  // (hover önizleme veya kilitleme fark etmeksizin) React bileşeni komple
+  // yeniden mount eder ve `expanded` otomatik olarak false'a döner — ayrı
+  // bir reset efekti yazmaya gerek kalmaz.
+  const [expanded, setExpanded] = useState(false);
+  const shelfId = useId();
+
   // featuredBrandSlugs (varsa) önce gösterilir — brandSlugs'ın yalnızca
   // öncelik sırasıdır, yeni bir marka eklemez. Kalan markalar kendi
   // orijinal (Excel) sırasıyla arkasından gelir.
@@ -68,17 +77,46 @@ function CategoryBrandRefs({ category, brands }: { category: ProductCategory; br
     .filter((b): b is Brand => Boolean(b));
   const shown = resolved.slice(0, CATEGORY_BRAND_LIMIT);
   const rest = resolved.length - shown.length;
+  const visible = expanded ? resolved : shown;
+
   return (
-    <div className="flex flex-wrap items-center gap-2.5 bg-slate-50 rounded-xl px-4 py-3.5 border border-slate-100">
-      {shown.map((b, i) => (
-        <div key={b.slug} className="do-chip-in" style={{ animationDelay: `${i * 35}ms` }}>
-          <BrandLogo brand={b} size="compact" />
-        </div>
-      ))}
-      {rest > 0 && (
-        <div className="w-24 h-14 rounded-lg border border-dashed border-slate-300 flex items-center justify-center shrink-0">
-          <span className="text-slate-400 text-[11px] font-bold text-center leading-tight">+{rest}<br />marka</span>
-        </div>
+    <div id={shelfId} className="flex flex-wrap items-center gap-2.5 bg-slate-50 rounded-xl px-4 py-3.5 border border-slate-100">
+      {visible.map((b, i) => {
+        const isNewlyRevealed = i >= shown.length;
+        return (
+          <div
+            key={b.slug}
+            className={isNewlyRevealed ? "do-chip-expand" : "do-chip-in"}
+            style={{ animationDelay: isNewlyRevealed ? `${(i - shown.length) * 30}ms` : `${i * 35}ms` }}
+          >
+            <BrandLogo brand={b} size="compact" />
+          </div>
+        );
+      })}
+      {rest > 0 && !expanded && (
+        <button
+          type="button"
+          onClick={() => setExpanded(true)}
+          aria-expanded={false}
+          aria-controls={shelfId}
+          className="group w-24 h-14 rounded-lg border border-dashed border-slate-300 flex items-center justify-center shrink-0 hover:border-[#1B3A8F]/50 hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1B3A8F] transition-colors"
+        >
+          <span className="text-slate-400 group-hover:text-[#1B3A8F] text-[11px] font-bold text-center leading-tight transition-colors">
+            +{rest}<br />marka
+          </span>
+        </button>
+      )}
+      {rest > 0 && expanded && (
+        <button
+          type="button"
+          onClick={() => setExpanded(false)}
+          aria-expanded={true}
+          aria-controls={shelfId}
+          className="inline-flex items-center gap-1 h-14 px-2 rounded-lg shrink-0 text-[11px] font-bold text-[#1B3A8F] hover:text-[#2547B5] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1B3A8F] transition-colors"
+        >
+          <ChevronUp className="w-3.5 h-3.5" strokeWidth={2} />
+          Daha az göster
+        </button>
       )}
     </div>
   );
