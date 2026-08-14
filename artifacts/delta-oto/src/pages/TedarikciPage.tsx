@@ -1,27 +1,10 @@
-import React, { useState, useEffect, useRef } from "react";
-import { Link } from "wouter";
-import { ChevronRight, ArrowRight, CheckCircle2, Globe, Package, Shield, Zap, Handshake, X, Cog, Search } from "lucide-react";
+import React, { useId, useState } from "react";
+import { ChevronRight, ChevronUp, ArrowRight, CheckCircle2, Globe, Package, Shield, Zap, Handshake, Search } from "lucide-react";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
-import { useEscapeKey } from "../hooks/use-motion";
-import { ALL_BRANDS } from "@/lib/brands";
-
-// Kategori popup'larındaki logo isimleri ALL_BRANDS'ten çözülür — ayrı bir
-// isim haritası tutmak eski/silinmiş marka slug'larıyla senkron kaymasına yol açtı.
-const ALL_BRAND_NAMES: Record<string, string> = Object.fromEntries(ALL_BRANDS.map((b) => [b.slug, b.name]));
-const ALL_BRAND_WEBSITES: Record<string, string | undefined> = Object.fromEntries(ALL_BRANDS.map((b) => [b.slug, b.website]));
-
-// brandSlugs: her kategori gerçek endüstri uzmanlığına göre eşleştirilmiş, hepsi
-// ALL_BRANDS içindeki 50 markadan (yalnızca yüksek çözünürlüklü, temiz logo dosyası
-// garantili markalar) — kart üstündeki "+ daha fazla" popup'ta bunları gösterir.
-const CATEGORIES = [
-  { name: "Fren & Güvenlik Sistemleri", count: "45+ Marka", brandSlugs: ["brembo", "tmdfriction", "bosch", "continental", "corteco"], image: "/images/brake-systems.png", desc: "Fren balata/disk sistemleri, ABS ve araç güvenlik elektroniğinde OEM ve OEM eşdeğeri portföy." },
-  { name: "Süspansiyon & Direksiyon",   count: "38+ Marka", brandSlugs: ["monroe", "skf", "trucktec", "hlmando", "kyb"], image: "/images/suspension-steering.png", desc: "Amortisör, rotil, salıncak ve direksiyon sistemi bileşenlerinde geniş marka alternatifi." },
-  { name: "Motor, Ateşleme & Elektrik", count: "52+ Marka", brandSlugs: ["bosch", "denso", "phinia", "vitesco", "segautomotive"], image: "/images/engine-parts.png", desc: "Ateşleme, yakıt enjeksiyonu, turbo ve araç elektroniğinde küresel OEM tedarikçileri." },
-  { name: "Rulman & Transmisyon",        count: "28+ Marka", brandSlugs: ["skf", "schaeffler", "meritor", "gkn", "driv"], image: "/images/heavy-duty.png", desc: "Rulman, debriyaj ve şanzıman gruplarında hassas mühendislik gerektiren kategoriler." },
-  { name: "Filtre & Periyodik Bakım",    count: "30+ Marka", brandSlugs: ["mannhummel", "purflux", "liquimoly", "hengst", "totalenergies"], image: "/images/filters.png", desc: "Yağ, hava, yakıt ve kabin filtrelerinde periyodik bakım döngüsüne uygun geniş kapsam." },
-  { name: "Kaporta & Aydınlatma",        count: "35+ Marka", brandSlugs: ["valeo", "osram", "philips", "forvia"], image: "/images/electrical-lighting.png", desc: "Far, arka lamba ve kaporta/aydınlatma sistemlerinde orijinal görünüm ve performans." },
-];
+import { BrandLogo } from "@/components/shared/BrandLogo";
+import { CLASSIFIED_BRANDS, GLOBAL_BRANDS, YERLI_BRANDS, type Brand } from "@/lib/brands";
+import { PRODUCT_CATEGORIES, type ProductCategory } from "@/lib/categories";
 
 const QUALITY = [
   "OEM veya OEM eşdeğeri sertifikasyon zorunluluğu",
@@ -40,25 +23,226 @@ const ADVANTAGES = [
   { Icon: Handshake, title: "Opar Ege Bölge Bayiliği", desc: "Opar'ın Ege bölgesi operasyonunu devralarak İzmir ve çevresinde bölgesel stok derinliğimizi ve teslimat hızımızı doğrudan güçlendirdik." },
 ];
 
+function BrandGroup({ label, brands }: { label: string; brands: Brand[] }) {
+  if (brands.length === 0) return null;
+  return (
+    <div>
+      <div className="flex items-center gap-4 mb-7">
+        <h3 className="text-xl font-black text-white tracking-tight">{label}</h3>
+        <div className="flex-1 h-px bg-white/10" />
+      </div>
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
+        {brands.map((b) => (
+          <BrandLogo key={b.slug} brand={b} size="wall" />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+const CATEGORY_BRAND_LIMIT = 7;
+
+// Sunum-katmanı-yalnızca makro aile gruplaması — 23 onaylı Excel kategorisini
+// DEĞİŞTİRMEZ (isim/slug/brandSlugs/featuredBrandSlugs sabit kalır), yalnızca
+// atlas'ta görsel olarak nasıl kümelendiklerini belirler. Her isim
+// PRODUCT_CATEGORIES'teki gerçek category.name ile birebir eşleşir.
+const MACRO_FAMILIES: { label: string; categoryNames: string[] }[] = [
+  { label: "Motor & Yakıt Sistemleri", categoryNames: ["Motor", "Yakıt ve Enjeksiyon"] },
+  { label: "Güç Aktarımı", categoryNames: ["Aks-Transmisyon", "Debriyaj-Volan", "Şanzıman"] },
+  { label: "Fren & Şasi", categoryNames: ["Fren Sistemi", "Direksiyon", "Süspansiyon-Taşıyıcı Sistem"] },
+  { label: "Elektrik, Aydınlatma & Görüş", categoryNames: ["Elektrik", "Şarj-Marş", "Aydınlatma", "Araç Görünürlük-Uyarı Grubu"] },
+  { label: "Termal Yönetim", categoryNames: ["Klima-Isıtma", "Soğutma"] },
+  { label: "Filtrasyon & Bakım", categoryNames: ["Filtre", "Motor Yağı", "Sarf ve Bakım Ürünleri"] },
+  { label: "Sızdırmazlık & Motor Çevresi", categoryNames: ["Conta-Keçe-O-Ring", "Kayış-Gergi-Rulman-Kit", "Kauçuk-Hortumlar-Borular"] },
+  { label: "Dış Donanım & Tamamlayıcı Ürünler", categoryNames: ["Kaporta-Karoseri", "Lastik-Jant", "Üniversal Ürünler"] },
+];
+
+function CategoryBrandRefs({ category, brands }: { category: ProductCategory; brands: Brand[] }) {
+  // Genişletme durumu bilerek burada, yerel state olarak tutuluyor: bu
+  // bileşen CategoryShowcase'te `key={display.name}` taşıyan bir üst
+  // sarmalayıcının içinde render edilir, dolayısıyla kategori değişince
+  // (hover önizleme veya kilitleme fark etmeksizin) React bileşeni komple
+  // yeniden mount eder ve `expanded` otomatik olarak false'a döner — ayrı
+  // bir reset efekti yazmaya gerek kalmaz.
+  const [expanded, setExpanded] = useState(false);
+  const shelfId = useId();
+
+  // featuredBrandSlugs (varsa) önce gösterilir — brandSlugs'ın yalnızca
+  // öncelik sırasıdır, yeni bir marka eklemez. Kalan markalar kendi
+  // orijinal (Excel) sırasıyla arkasından gelir.
+  const featured = category.featuredBrandSlugs ?? [];
+  const orderedSlugs = [...featured, ...category.brandSlugs.filter((s) => !featured.includes(s))];
+  const resolved = orderedSlugs
+    .map((slug) => brands.find((b) => b.slug === slug))
+    .filter((b): b is Brand => Boolean(b));
+  const shown = resolved.slice(0, CATEGORY_BRAND_LIMIT);
+  const rest = resolved.length - shown.length;
+  const visible = expanded ? resolved : shown;
+
+  return (
+    <div id={shelfId} className="flex flex-wrap items-center gap-2.5 bg-slate-50 rounded-xl px-4 py-3.5 border border-slate-100">
+      {visible.map((b, i) => {
+        const isNewlyRevealed = i >= shown.length;
+        return (
+          <div
+            key={b.slug}
+            className={isNewlyRevealed ? "do-chip-expand" : "do-chip-in"}
+            style={{ animationDelay: isNewlyRevealed ? `${(i - shown.length) * 30}ms` : `${i * 35}ms` }}
+          >
+            <BrandLogo brand={b} size="compact" />
+          </div>
+        );
+      })}
+      {rest > 0 && !expanded && (
+        <button
+          type="button"
+          onClick={() => setExpanded(true)}
+          aria-expanded={false}
+          aria-controls={shelfId}
+          className="group w-24 h-14 rounded-lg border border-dashed border-slate-300 flex items-center justify-center shrink-0 hover:border-[#1B3A8F]/50 hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1B3A8F] transition-colors"
+        >
+          <span className="text-slate-400 group-hover:text-[#1B3A8F] text-[11px] font-bold text-center leading-tight transition-colors">
+            +{rest}<br />marka
+          </span>
+        </button>
+      )}
+      {rest > 0 && expanded && (
+        <button
+          type="button"
+          onClick={() => setExpanded(false)}
+          aria-expanded={true}
+          aria-controls={shelfId}
+          className="inline-flex items-center gap-1 h-14 px-2 rounded-lg shrink-0 text-[11px] font-bold text-[#1B3A8F] hover:text-[#2547B5] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#1B3A8F] transition-colors"
+        >
+          <ChevronUp className="w-3.5 h-3.5" strokeWidth={2} />
+          Daha az göster
+        </button>
+      )}
+    </div>
+  );
+}
+
+// Kategori Atlası: 23 onaylı kategori, 8 makro aile altında sunum-katmanında
+// kümelenmiş — hepsi her zaman görünür ve doğrudan tıklanabilir (ekstra
+// tıklama/alt sayfa yok). Altında seçili/önizlenen kategorinin sıkışık, yatay
+// "spotlight" paneli. Etkileşim: HOVER = canlı önizleme (masaüstü),
+// CLICK/TAP = kilitle. Fare atlasdan tamamen çıkınca son kilitlenen
+// kategoriye geri dönülür. Hover, kutucuğun kendisini vurgularken hovered
+// kategori dışındaki AİLELER hafifçe geri çekilir — aynı ailenin diğer
+// üyeleri okunaklı kalır. Aynı Excel-kaynaklı PRODUCT_CATEGORIES verisi,
+// yalnızca sunum katmanı.
+function CategoryShowcase({ categories, brands }: { categories: ProductCategory[]; brands: Brand[] }) {
+  const [activeIdx, setActiveIdx] = useState(0);
+  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
+  const displayIdx = hoveredIdx ?? activeIdx;
+  const display = categories[displayIdx];
+  const isHovering = hoveredIdx !== null;
+
+  const indexByName = new Map(categories.map((c, i) => [c.name, i]));
+  const families = MACRO_FAMILIES.map((f) => ({
+    label: f.label,
+    items: f.categoryNames
+      .map((name) => ({ idx: indexByName.get(name) }))
+      .filter((x): x is { idx: number } => x.idx !== undefined)
+      .map(({ idx }) => ({ cat: categories[idx], idx })),
+  }));
+  const hoveredFamily = hoveredIdx != null ? families.find((f) => f.items.some((it) => it.idx === hoveredIdx))?.label ?? null : null;
+
+  return (
+    <div className="relative overflow-hidden" onMouseLeave={() => setHoveredIdx(null)}>
+      <div
+        className={`do-category-atmosphere pointer-events-none absolute -inset-x-10 -inset-y-16 transition-opacity duration-500 ${isHovering ? "opacity-100" : "opacity-0"}`}
+        aria-hidden="true"
+      />
+
+      {/* Kategori Atlası — 8 makro aile, 23 kategori, tamamı her zaman görünür */}
+      <div className="relative grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-6 mb-8">
+        {families.map((family) => {
+          const isFamilyDim = isHovering && hoveredFamily !== family.label;
+          return (
+            <div key={family.label} className={`transition-opacity duration-300 ${isFamilyDim ? "opacity-55" : "opacity-100"}`}>
+              <div
+                className={`text-[10px] font-bold uppercase tracking-[0.1em] mb-2 transition-colors duration-300 truncate ${
+                  hoveredFamily === family.label ? "text-[#1B3A8F]" : "text-slate-400"
+                }`}
+              >
+                {family.label}
+              </div>
+              <div className="space-y-1">
+                {family.items.map(({ cat, idx }) => {
+                  const isHovered = idx === hoveredIdx;
+                  const isLocked = idx === activeIdx;
+                  return (
+                    <button
+                      key={cat.name}
+                      type="button"
+                      onClick={() => setActiveIdx(idx)}
+                      onMouseEnter={() => setHoveredIdx(idx)}
+                      onFocus={() => setHoveredIdx(idx)}
+                      onBlur={() => setHoveredIdx(null)}
+                      aria-current={isLocked}
+                      className={`do-category-tile w-full flex items-center gap-2 rounded-md border-l-[3px] pl-2.5 pr-2 py-2 text-left transition-all duration-300 ${
+                        isHovered
+                          ? "bg-[#1B3A8F] border-l-[#7d9bea]"
+                          : isLocked
+                          ? "bg-[#1B3A8F]/[0.06] border-l-[#1B3A8F]/50"
+                          : "border-l-transparent hover:bg-slate-50"
+                      }`}
+                    >
+                      <cat.icon className={`w-3.5 h-3.5 shrink-0 ${isHovered ? "text-white" : "text-[#1B3A8F]"}`} strokeWidth={1.75} />
+                      <span className={`text-[12.5px] leading-tight font-semibold truncate ${isHovered ? "text-white" : "text-slate-700"}`}>{cat.name}</span>
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* Seçili/önizlenen kategori — sıkışık, yatay spotlight paneli */}
+      <div key={display.name} className="do-fade-up relative bg-white border border-slate-200 rounded-2xl overflow-hidden">
+        <div className="grid lg:grid-cols-[280px_1fr] divide-y lg:divide-y-0 lg:divide-x divide-slate-100">
+          <div className="relative overflow-hidden p-6 lg:p-7 flex flex-col justify-center">
+            <div className="absolute -right-3 -bottom-4 text-[100px] leading-none font-black text-slate-50 select-none pointer-events-none" aria-hidden="true">
+              {String(displayIdx + 1).padStart(2, "0")}
+            </div>
+            <div className="relative flex items-center gap-3 mb-3">
+              <div className="w-12 h-12 rounded-xl bg-[#1B3A8F] flex items-center justify-center shrink-0">
+                <display.icon className="w-6 h-6 text-white" strokeWidth={1.75} />
+              </div>
+              <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-[#1B3A8F]">
+                {String(displayIdx + 1).padStart(2, "0")} / {String(categories.length).padStart(2, "0")}
+              </span>
+            </div>
+            <h3 className="relative text-xl font-black text-slate-900 tracking-tight leading-snug mb-1.5">{display.name}</h3>
+            <p className="relative text-slate-500 text-[13px] leading-relaxed line-clamp-2">{display.description}</p>
+          </div>
+          <div className="p-6 lg:p-7 flex flex-col justify-center">
+            <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400 block mb-3">Öne Çıkan Markalar</span>
+            <CategoryBrandRefs category={display} brands={brands} />
+            <a
+              href="https://b2b.parcabul.com.tr/login.aspx"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-1.5 mt-4 text-[12.5px] font-semibold text-[#1B3A8F] hover:text-[#2547B5] transition-colors group w-fit"
+            >
+              B2B Portal'da inceleyin
+              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function TedarikciPage() {
   const [brandSearch, setBrandSearch] = useState("");
-  const filteredBrands = ALL_BRANDS.filter((b) => b.name.toLowerCase().includes(brandSearch.trim().toLowerCase()));
-  const [activeCategory, setActiveCategory] = useState<string | null>(null);
-  const active = CATEGORIES.find((c) => c.name === activeCategory) ?? null;
-  const closeButtonRef = useRef<HTMLButtonElement>(null);
-  const lastTriggerRef = useRef<HTMLElement | null>(null);
-  useEscapeKey(() => setActiveCategory(null), !!active);
-  useEffect(() => {
-    document.body.style.overflow = active ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
-  }, [active]);
-  useEffect(() => {
-    if (active) {
-      closeButtonRef.current?.focus();
-    } else {
-      lastTriggerRef.current?.focus();
-    }
-  }, [active]);
+  const query = brandSearch.trim().toLowerCase();
+  const filteredGlobal = GLOBAL_BRANDS.filter((b) => b.name.toLowerCase().includes(query));
+  const filteredYerli = YERLI_BRANDS.filter((b) => b.name.toLowerCase().includes(query));
+  const noBrandResults = filteredGlobal.length === 0 && filteredYerli.length === 0;
 
   return (
     <div className="do-site bg-white min-h-screen">
@@ -104,15 +288,16 @@ export function TedarikciPage() {
         </div>
       </section>
 
-      {/* MARKA DUVARI — navy, aranabilir/filtrelenebilir tam marka dizini (50 marka) */}
+      {/* MARKA DUVARI — Global Markalar / Yerli Markalar, Excel kaynağına göre
+          net iki gruba ayrılmış, aranabilir/filtrelenebilir tam marka dizini */}
       <section className="relative bg-[#1B3A8F] py-20 md:py-24 border-b border-white/[0.06] overflow-hidden">
         <div className="absolute inset-0 do-grid-bg opacity-25" />
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-          <div className="mb-10 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+          <div className="mb-14 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
             <div>
-              <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea]">Global Marka Portföyü</span>
-              <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight mt-2">{ALL_BRANDS.length}+ Markanın Tek Çatısı</h2>
-              <p className="text-white/45 text-[14px] max-w-xl mt-3 leading-relaxed">Dünyanın önde gelen OEM tedarikçilerinin Türkiye distribütörü olarak, bayilerimize global kaliteyi yerel hızla ulaştırıyoruz.</p>
+              <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea]">Marka Portföyü</span>
+              <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight mt-2">{CLASSIFIED_BRANDS.length} Markanın Tek Çatısı</h2>
+              <p className="text-white/45 text-[14px] max-w-xl mt-3 leading-relaxed">Global OEM tedarikçilerini ve güçlü yerli üreticileri, tek portföyde bir araya getiriyoruz.</p>
             </div>
             <div className="relative w-full lg:w-72 shrink-0">
               <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/40 pointer-events-none" />
@@ -127,91 +312,33 @@ export function TedarikciPage() {
             </div>
           </div>
 
-          {filteredBrands.length > 0 ? (
-            // Beyaz kart + gerçek marka renkleri — navy zeminde beyaz silüet denemesi
-            // ("çerçevesiz" versiyon) okunurluk açısından doğru olsa da premium
-            // durmuyordu; rakip sitelerdeki gibi her logo kendi renginde, ferah,
-            // eşit boyutlu kartlarda gösteriliyor. Sizing: yükseklik sabit
-            // (max-h-12/14), genişlik yalnızca max-w-full ile taşmaya karşı
-            // sınırlı — kartın kendisi geniş ve sabit olduğu için (h-32/36,
-            // cömert padding) BorgWarner gibi düz wordmark'lar bile ezilmeden
-            // rahatça sığıyor, göz kartların tekdüze büyüklüğünü asıl referans
-            // alıyor. Hover: sitenin genelindeki .do-card kalıbı (kalkış +
-            // gölge + üstte lacivert çizgi) — kategori kartlarıyla aynı dil.
-            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
-              {filteredBrands.map((b) => {
-                const Tile = b.website ? "a" : "div";
-                return (
-                  <Tile
-                    key={b.slug}
-                    {...(b.website ? { href: b.website, target: "_blank", rel: "noopener noreferrer" } : {})}
-                    title={b.name}
-                    className="do-card bg-white rounded-2xl flex items-center justify-center h-32 sm:h-36 px-6 py-6 shadow-sm"
-                  >
-                    <img
-                      src={`/images/brands/${b.slug}.png`}
-                      alt={b.name}
-                      className="max-h-12 sm:max-h-14 w-auto h-auto max-w-full object-contain"
-                    />
-                  </Tile>
-                );
-              })}
-            </div>
-          ) : (
+          {noBrandResults ? (
             <p className="text-white/50 text-[14px] py-16 text-center">"{brandSearch}" ile eşleşen marka bulunamadı.</p>
+          ) : (
+            <div className="space-y-16">
+              <BrandGroup label="Global Markalar" brands={filteredGlobal} />
+              <BrandGroup label="Yerli Markalar" brands={filteredYerli} />
+            </div>
           )}
 
-          <p className="text-white/50 text-[13px] mt-10 text-center">
-            {filteredBrands.length === ALL_BRANDS.length
-              ? `Portföydeki ${ALL_BRANDS.length} markanın tamamı OEM veya OEM eşdeğeri sertifikasyon standardındadır.`
-              : `${filteredBrands.length} / ${ALL_BRANDS.length} marka gösteriliyor.`}
-            {" "}Kategoriye göre tam liste için aşağıdaki kartları, stok durumu için B2B portalını inceleyebilirsiniz.
+          <p className="text-white/50 text-[13px] mt-14 text-center">
+            {CLASSIFIED_BRANDS.length} yerli ve global markadan oluşan geniş ürün portföyümüzü kategoriye göre aşağıda inceleyebilir,
+            {" "}güncel stok durumu için B2B portalına göz atabilirsiniz.
           </p>
         </div>
       </section>
 
-      {/* KATEGORİLER — light */}
-      <section className="bg-[#f8fafc] py-24 border-b border-slate-200">
+      {/* KATEGORİLER — light, Excel Ürün Grupları'na göre 23 kategori.
+          Bölüm py-12/lg:py-14 — kategori atlası + spotlight bir 16:9 masaüstü
+          viewport'a (1440×900 dahil) kaydırmadan sığmalı; Faz D'de spotlight'a
+          biraz daha nefes alanı verildi (hâlâ tek viewport sınırı içinde). */}
+      <section className="bg-[#f8fafc] py-12 lg:py-14 border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="mb-14">
+          <div className="mb-7">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">Ürün Kategorileri</span>
-            <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-2 tracking-tight">Uçtan Uca Kategori Kapsamı</h2>
-            <p className="text-slate-500 mt-3 max-w-2xl text-[15px]">Her kategoride birden fazla marka alternatifi sunarak müşterilerimize tercih esnekliği ve maliyet optimizasyon imkânı sağlıyoruz.</p>
+            <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-1.5 tracking-tight">Uçtan Uca Kategori Kapsamı</h2>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-5">
-            {CATEGORIES.map((cat) => (
-              <button
-                key={cat.name}
-                type="button"
-                onClick={(e) => { lastTriggerRef.current = e.currentTarget; setActiveCategory(cat.name); }}
-                className="do-card bg-white border border-slate-200 rounded-xl overflow-hidden group cursor-pointer text-left w-full"
-              >
-                {cat.image ? (
-                  <div className="aspect-[16/9] overflow-hidden bg-slate-100">
-                    <img src={cat.image} alt="" className="w-full h-full object-cover" />
-                  </div>
-                ) : (
-                  <div className="aspect-[16/9] overflow-hidden bg-gradient-to-br from-[#1B3A8F] to-[#0e1016] flex items-center justify-center">
-                    <Cog className="w-12 h-12 text-white/25" strokeWidth={1.25} />
-                  </div>
-                )}
-                <div className="p-7">
-                  <div className="flex items-start justify-between mb-4">
-                    <h3 className="text-[15px] font-bold text-slate-900 leading-snug">{cat.name}</h3>
-                    <span className="shrink-0 ml-3 text-[11px] font-bold text-[#1B3A8F] bg-[#1B3A8F]/[0.08] border border-[#1B3A8F]/[0.15] px-2.5 py-1 rounded">{cat.count}</span>
-                  </div>
-                  <div className="flex flex-wrap gap-2">
-                    {cat.brandSlugs.slice(0, 4).map(s => (
-                      <span key={s} className="text-[12px] text-slate-500 bg-slate-100 px-2.5 py-1 rounded-md font-medium">{ALL_BRAND_NAMES[s]}</span>
-                    ))}
-                    <span className="text-[12px] text-[#1B3A8F] font-semibold px-2.5 py-1 inline-flex items-center gap-1 group-hover:gap-1.5 transition-all">
-                      + daha fazla <ChevronRight className="w-3 h-3" />
-                    </span>
-                  </div>
-                </div>
-              </button>
-            ))}
-          </div>
+          <CategoryShowcase categories={PRODUCT_CATEGORIES} brands={CLASSIFIED_BRANDS} />
         </div>
       </section>
 
@@ -289,63 +416,6 @@ export function TedarikciPage() {
       </section>
 
       <SiteFooter />
-
-      {/* Kategori marka paneli — "+ daha fazla" vaadini gerçek logo setiyle karşılayan sağdan panel */}
-      <div
-        className={`fixed inset-0 z-[70] transition-opacity duration-300 ${active ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`}
-        aria-hidden={!active}
-      >
-        <div className="absolute inset-0 bg-black/50 backdrop-blur-sm" onClick={() => setActiveCategory(null)} />
-        <div
-          className={`absolute top-0 right-0 h-full w-full sm:w-[440px] bg-white shadow-2xl transition-transform duration-300 ease-out flex flex-col ${active ? "translate-x-0" : "translate-x-full"}`}
-          role="dialog"
-          aria-modal="true"
-          aria-label={active?.name}
-        >
-          <div className="flex items-start justify-between gap-4 p-7 border-b border-slate-100">
-            <div>
-              <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#1B3A8F]">{active?.count}</span>
-              <h3 className="text-xl font-black text-slate-900 mt-1 leading-snug">{active?.name}</h3>
-            </div>
-            <button
-              ref={closeButtonRef}
-              type="button"
-              onClick={() => setActiveCategory(null)}
-              aria-label="Kapat"
-              className="shrink-0 w-9 h-9 rounded-full flex items-center justify-center text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors"
-            >
-              <X className="w-5 h-5" />
-            </button>
-          </div>
-          <div className="flex-1 overflow-y-auto p-7">
-            <p className="text-slate-500 text-[14px] leading-relaxed mb-7">{active?.desc}</p>
-            <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-400 block mb-4">Öne Çıkan Tedarikçiler</span>
-            <div className="flex flex-wrap gap-3">
-              {active?.brandSlugs.map((s) => {
-                const website = ALL_BRAND_WEBSITES[s];
-                const Tile = website ? "a" : "div";
-                return (
-                  <Tile
-                    key={s}
-                    {...(website ? { href: website, target: "_blank", rel: "noopener noreferrer" } : {})}
-                    title={ALL_BRAND_NAMES[s]}
-                    className="border border-slate-200 rounded-xl h-20 flex items-center justify-center px-6 bg-white hover:border-[#1B3A8F]/30 hover:shadow-md transition-all"
-                  >
-                    <img src={`/images/brands/${s}.png`} alt={ALL_BRAND_NAMES[s]} className="max-h-11 w-auto h-auto object-contain" />
-                  </Tile>
-                );
-              })}
-            </div>
-            <p className="text-slate-400 text-[12px] leading-relaxed mt-7">Gösterilen markalar bu kategorideki öne çıkan tedarikçilerimizden temsili bir seçimdir; tam liste ve stok durumu için B2B portalına giriş yapınız.</p>
-          </div>
-          <div className="p-7 border-t border-slate-100">
-            <a href="https://b2b.parcabul.com.tr/login.aspx" target="_blank" rel="noopener noreferrer" className="w-full bg-[#1B3A8F] hover:bg-[#2547B5] active:scale-[0.98] text-white font-semibold px-6 py-3.5 rounded-md transition-all flex items-center justify-center gap-2 group">
-              B2B Portal'da İncele
-              <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
-            </a>
-          </div>
-        </div>
-      </div>
     </div>
   );
 }

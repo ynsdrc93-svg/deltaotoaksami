@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { MapPin, Phone, Mail, Globe, Clock, ChevronRight, Users, Package, MonitorSmartphone, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
+import { RepresentativeFinderModal } from "@/components/shared/RepresentativeFinderModal";
 import { submitContactForm } from "@workspace/api-client-react";
 
 const DEPT_CONTACTS = [
@@ -68,6 +69,7 @@ const EMPTY_FORM = { ad: "", firma: "", telefon: "", email: "", konu: "", mesaj:
 export function IletisimPage() {
   const [form, setForm] = useState(EMPTY_FORM);
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [repModalOpen, setRepModalOpen] = useState(false);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -115,8 +117,42 @@ export function IletisimPage() {
         </div>
       </section>
 
+      {/* NASIL YARDIMCI OLABİLİRİZ — iki net yol: genel iletişim / temsilci bul.
+          Eski ince "Temsilcilerimiz sayfasına gidin" banner'ının yerine geçti —
+          artık ayrı bir sayfaya değil, aynı sayfa içindeki modalı açıyor. */}
+      <section className="bg-white py-16 border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="mb-10 text-center">
+            <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">Nasıl Yardımcı Olabiliriz?</span>
+            <h2 className="text-2xl md:text-3xl font-black text-slate-900 mt-2 tracking-tight">İki Hızlı Yol</h2>
+          </div>
+          <div className="grid sm:grid-cols-2 gap-5 max-w-4xl mx-auto">
+            <a href="#genel-iletisim" className="do-card group bg-white border border-slate-200 rounded-2xl p-8 flex flex-col">
+              <div className="w-12 h-12 rounded-xl bg-[#1B3A8F]/[0.08] flex items-center justify-center mb-5 group-hover:bg-[#1B3A8F] transition-colors">
+                <Users className="w-6 h-6 text-[#1B3A8F] group-hover:text-white transition-colors" />
+              </div>
+              <h3 className="text-lg font-black text-slate-900 mb-2">Genel İletişim</h3>
+              <p className="text-slate-500 text-[13.5px] leading-relaxed mb-5 flex-1">Satış, B2B portal, İK ve ihracat ekiplerimize doğrudan ulaşın.</p>
+              <span className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-[#1B3A8F]">
+                Departmanları görün <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+              </span>
+            </a>
+            <button type="button" onClick={() => setRepModalOpen(true)} className="do-card group bg-[#1B3A8F] rounded-2xl p-8 flex flex-col text-left">
+              <div className="w-12 h-12 rounded-xl bg-white/[0.12] flex items-center justify-center mb-5 group-hover:bg-white transition-colors">
+                <MapPin className="w-6 h-6 text-white group-hover:text-[#1B3A8F] transition-colors" />
+              </div>
+              <h3 className="text-lg font-black text-white mb-2">Bölge Temsilcinizi Bulun</h3>
+              <p className="text-white/60 text-[13.5px] leading-relaxed mb-5 flex-1">81 il, 7 bölge — haritadan ilinizi seçin, size özel temsilciyi görün.</p>
+              <span className="inline-flex items-center gap-1.5 text-[13px] font-semibold text-white">
+                Haritayı Açın <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+              </span>
+            </button>
+          </div>
+        </div>
+      </section>
+
       {/* DEPARTMAN KİŞİ BİLGİLERİ — light */}
-      <section className="bg-[#f8fafc] py-20 border-b border-slate-200">
+      <section id="genel-iletisim" className="scroll-mt-24 bg-[#f8fafc] py-20 border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="mb-12">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">Departman İletişim</span>
@@ -349,6 +385,8 @@ export function IletisimPage() {
       </section>
 
       <SiteFooter />
+
+      <RepresentativeFinderModal open={repModalOpen} onClose={() => setRepModalOpen(false)} />
     </div>
   );
 }

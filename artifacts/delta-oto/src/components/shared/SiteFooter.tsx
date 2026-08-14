@@ -39,6 +39,7 @@ export function SiteFooter() {
                 { label: "Operasyon ve Lojistik", href: "/operasyon"    },
                 { label: "Kariyer",               href: "/kariyer"     },
                 { label: "İletişim",              href: "/iletisim"    },
+                { label: "Temsilcilerimiz",       href: "/temsilcilerimiz" },
               ].map(({ label, href }) => (
                 <li key={href}>
                   <Link href={href} className="text-sm text-gray-500 hover:text-white transition-colors flex items-center gap-2 group">

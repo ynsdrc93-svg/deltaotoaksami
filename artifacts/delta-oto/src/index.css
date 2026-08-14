@@ -264,6 +264,40 @@
   .do-mobile-panel { display: none; }
 }
 
+/* Kategori showcase paneli, öne çıkan kategori değiştiğinde (hover önizleme
+   veya tıklayarak kilitleme) hafif fade+rise+scale (Tedarikçiler). Yalnızca
+   giriş animasyonu — prefers-reduced-motion'da aşağıda devre dışı bırakılıyor. */
+@keyframes do-fade-up {
+  from { opacity: 0; transform: translateY(8px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+.do-fade-up { animation: do-fade-up 0.25s ease; }
+
+/* Spotlight paneldeki öne çıkan marka çipleri: sırayla (staggered), gri
+   tondan gerçek renge "odağa gelen" bir açılışla beliriyor. */
+@keyframes do-chip-in {
+  from { opacity: 0; transform: translateY(4px) scale(0.96); filter: grayscale(1); }
+  to { opacity: 1; transform: translateY(0) scale(1); filter: grayscale(0); }
+}
+.do-chip-in { animation: do-chip-in 0.4s ease both; }
+
+/* "+N marka" genişletildiğinde yeni beliren logo kartları için — do-chip-in'in
+   400ms gri-tondan-renge açılışından bilerek farklı: genişletme bir
+   "spotlight" değil, sade bir liste açılımı, bu yüzden kısa (200ms) ve
+   sade bir fade+slide kullanır. */
+@keyframes do-chip-expand {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.do-chip-expand { animation: do-chip-expand 0.2s ease-out both; }
+
+/* Kategori overview'un arkasındaki çok hafif navy/cobalt "atmosfer" —
+   herhangi bir kategori hover edildiğinde belirir, section'ın da tepki
+   verdiği hissini yaratır. Saf dekoratif, marka paletinden (navy). */
+.do-category-atmosphere {
+  background: radial-gradient(640px circle at 50% 0%, rgba(27, 58, 143, 0.07), transparent 70%);
+}
+
 /* Keyboard focus, global */
 :where(a, button, [tabindex]):focus-visible {
   outline: 2px solid #2547B5;
@@ -285,6 +319,13 @@
   .do-card:hover { transform: none; }
   .do-mobile-panel { transition: none; }
   .animate-pulse { animation: none; }
+  .do-fade-up, .do-chip-in, .do-chip-expand {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+    filter: none !important;
+  }
+  .do-category-tile, .do-category-tile *, .do-category-atmosphere { transition: none !important; }
   /* Sonsuz döngü burada 1 iterasyonda anlık bitip görünmez (idle) karede
      kalır — rota okları için bunu ezip sabit/tam görünür bırakıyoruz. */
   .do-route-line { animation: none !important; stroke-dashoffset: 0 !important; opacity: 1 !important; }

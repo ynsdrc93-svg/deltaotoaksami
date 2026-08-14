@@ -3,15 +3,24 @@ import { Link } from "wouter";
 import { ChevronRight, ArrowRight, Globe, Zap, Network, Menu, X, Handshake } from "lucide-react";
 import { useReveal, useScrolled, useCounter, useScrollProgress, useParallax, useEscapeKey } from "../hooks/use-motion";
 import { SiteFooter } from "./shared/SiteFooter";
+import { BrandLogo } from "./shared/BrandLogo";
 import TurkeyMap from "turkey-map-react";
 import { cities as turkeyCities } from "turkey-map-react/lib/data";
-import { ALL_BRANDS } from "../lib/brands";
+import { CLASSIFIED_BRANDS } from "../lib/brands";
 
-const BRAND_STRIPS = [
-  ALL_BRANDS.slice(0, 17),
-  ALL_BRANDS.slice(17, 34),
-  ALL_BRANDS.slice(34, 50),
-];
+// Şerit, Tedarikçiler sayfasıyla AYNI kaynağı (CLASSIFIED_BRANDS — Excel'in
+// 61 markası) kullanır; Excel'de olmayan markalar burada da gösterilmez
+// (bkz. brands.ts UNCLASSIFIED_BRANDS notu). hasVerifiedLogo:false olan
+// markalar gerçek logo yerine tipografik yer tutucuyla akar — bkz.
+// shared/BrandLogo.tsx (size="strip"). 3 satıra, sabit dilim yerine
+// dinamik olarak eşit bölünür; böylece marka sayısı Excel güncellendiğinde
+// satırlar otomatik dengelenir.
+const STRIP_BRANDS = CLASSIFIED_BRANDS;
+const STRIP_ROWS = 3;
+const STRIP_CHUNK = Math.ceil(STRIP_BRANDS.length / STRIP_ROWS);
+const BRAND_STRIPS = Array.from({ length: STRIP_ROWS }, (_, i) =>
+  STRIP_BRANDS.slice(i * STRIP_CHUNK, (i + 1) * STRIP_CHUNK),
+).filter((strip) => strip.length > 0);
 
 const OPS_HUB_PLATES = [34, 41, 35]; // İstanbul (Ümraniye), Kocaeli (Gebze), İzmir
 const OPS_HUB_PATHS = turkeyCities.filter((c) => OPS_HUB_PLATES.includes(c.plateNumber));
@@ -501,7 +510,7 @@ export function LandingPage() {
             Tedarikçilerimiz
           </h2>
           <p ref={ref} className="do-reveal do-d2 text-white/60 text-sm max-w-xl leading-relaxed">
-            Dünyanın önde gelen {ALL_BRANDS.length}+ OEM tedarikçisiyle çalışıyoruz; tam listeyi ve kategoriye göre filtrelemeyi Tedarikçiler sayfamızda inceleyebilirsiniz.
+            {STRIP_BRANDS.length} yerli ve global markayla çalışıyoruz; tam listeyi, Yerli/Global ayrımını ve kategoriye göre filtrelemeyi Tedarikçiler sayfamızda inceleyebilirsiniz.
           </p>
         </div>
 
@@ -511,22 +520,8 @@ export function LandingPage() {
               <div className={rowIndex === 1 ? "do-ticker-inner" : "do-ticker-inner-reverse"}>
                 {[...strip, ...strip].map((b, i) => {
                   const isDuplicate = i >= strip.length;
-                  const Tile = b.website ? "a" : "div";
                   return (
-                    <Tile
-                      key={`${b.slug}-${i}`}
-                      aria-hidden={isDuplicate}
-                      tabIndex={isDuplicate ? -1 : undefined}
-                      {...(b.website ? { href: b.website, target: "_blank", rel: "noopener noreferrer" } : {})}
-                      title={b.name}
-                      className="group relative shrink-0 mx-2.5 w-[170px] bg-white rounded-lg h-16 px-4 flex items-center justify-center shadow-sm hover:shadow-lg hover:z-10 transition-shadow duration-300"
-                    >
-                      <img
-                        src={`/images/brands/${b.slug}.png`}
-                        alt={b.name}
-                        className="max-h-7 max-w-[110px] w-auto h-auto object-contain grayscale group-hover:grayscale-0 group-hover:scale-125 transition-all duration-300"
-                      />
-                    </Tile>
+                    <BrandLogo key={`${b.slug}-${i}`} brand={b} size="strip" hidden={isDuplicate} />
                   );
                 })}
               </div>

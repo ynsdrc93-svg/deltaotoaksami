@@ -20,6 +20,9 @@ import {
   Car,
   History,
   MapPin,
+  Truck,
+  Handshake,
+  Users,
 } from "lucide-react";
 
 const CATEGORIES = [
@@ -71,12 +74,12 @@ const QUALITIES = [
   {
     icon: <Ruler className="w-5 h-5" />,
     title: "OEM Toleranslarında Üretim",
-    desc: "Her parça, orijinal üretici spesifikasyonları esas alınarak üretilir. Boyutsal hassasiyet ve malzeme kalitesi orijinalle eşdeğerdir.",
+    desc: "Her parça, orijinal üretici spesifikasyonları esas alınarak, boyutsal hassasiyet ve malzeme kalitesinde orijinaline eşdeğer olacak şekilde üretilir.",
   },
   {
     icon: <FlaskConical className="w-5 h-5" />,
     title: "Kapsamlı Test Süreçleri",
-    desc: "Ürünler; yorulma, termal döngü, titreşim ve ömür testlerinden geçirilerek sahaya çıkar. Laboratuvar onaysız hiçbir referans raflara girmez.",
+    desc: "Ürünler, sahaya çıkmadan önce çok aşamalı kalite kontrol süreçlerinden geçirilir.",
   },
   {
     icon: <Car className="w-5 h-5" />,
@@ -94,8 +97,8 @@ const ADVANTAGES = [
   { icon: <ShieldCheck className="w-5 h-5" />, text: "2 Yıl Ürün Garantisi" },
   { icon: <TrendingUp className="w-5 h-5" />, text: "Rekabetçi Bayi Fiyatları" },
   { icon: <Package className="w-5 h-5" />, text: "Hazır Stok, Hızlı Sevkiyat" },
-  { icon: <Award className="w-5 h-5" />, text: "Sektör Onaylı Kalite" },
-  { icon: <CheckCircle2 className="w-5 h-5" />, text: "Teknik Destek Hattı" },
+  { icon: <Award className="w-5 h-5" />, text: "Test Edilmiş Ürün Kalitesi" },
+  { icon: <CheckCircle2 className="w-5 h-5" />, text: "Ürün ve Teknik Bilgi Desteği" },
   { icon: <Wrench className="w-5 h-5" />, text: "OEM Eşdeğer Performans" },
 ];
 
@@ -124,6 +127,39 @@ const DEPOTS = [
     name: "Opar Ege Operasyonu",
     city: "İzmir",
     address: "Kemalpaşa Kızılüzüm Kırovası Kümeevleri No: 12/1, Kemalpaşa / İzmir",
+  },
+];
+
+const DEALER_BENEFITS = [
+  {
+    icon: <Package className="w-5 h-5" />,
+    title: "Kanıtlanmış Ürün Gücü",
+    desc: "800+ referans, 50+ araç markası kapsamında sürekli büyüyen bir katalog — raf karmaşası değil, net bir portföy.",
+  },
+  {
+    icon: <TrendingUp className="w-5 h-5" />,
+    title: "Rekabetçi Bayi Fiyatlandırması",
+    desc: "Doğrudan üretici-distribütör ilişkisine dayanan bayi fiyatlandırma yapısı, rekabetçi bir maliyet tabanı sunar.",
+  },
+  {
+    icon: <Truck className="w-5 h-5" />,
+    title: "Operasyonel Destek",
+    desc: "Ümraniye, Gebze ve İzmir'deki 3 depodan aynı gün/ertesi gün sevkiyat altyapısından doğrudan yararlanın.",
+  },
+  {
+    icon: <ShieldCheck className="w-5 h-5" />,
+    title: "Marka Güvencesi",
+    desc: "2 yıl ürün garantisi ve OEM toleranslarında üretim; Delta Oto'nun 50 yıllık sektör deneyimiyle şekillenen bir marka güvencesi.",
+  },
+  {
+    icon: <Handshake className="w-5 h-5" />,
+    title: "Sürekli Genişleyen Katalog",
+    desc: "Yeni araç modelleriyle sürekli genişleyen bir ürün katalogu yapısı.",
+  },
+  {
+    icon: <Users className="w-5 h-5" />,
+    title: "Marka İletişim Desteği",
+    desc: "Ürün bilgisi ve teknik konularda, Delta Oto'nun saha deneyimine dayanan bir iletişim ve destek yaklaşımıyla ekibinizin yanındayız.",
   },
 ];
 
@@ -239,7 +275,7 @@ export function SpartPage() {
               <p className="text-slate-600 leading-relaxed mb-8">
                 "Original Replacement" felsefesi basittir: parça değişimi için orijinal
                 kaliteden taviz vermek zorunda değilsiniz. SPART, araç üreticisinin
-                toleranslarını karşılarken servis karlılığını korur.
+                toleranslarını karşılayacak şekilde geliştirilmiştir.
               </p>
               <div className="grid grid-cols-2 gap-4">
                 {ADVANTAGES.map((a) => (
@@ -377,6 +413,39 @@ export function SpartPage() {
         </div>
       </section>
 
+      {/* BAYİLİK AVANTAJLARI — light */}
+      <section className="bg-[#f8fafc] py-24 border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="max-w-2xl mb-14">
+            <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">İş Ortaklığı Fırsatı</span>
+            <h2 className="text-3xl md:text-4xl font-black mt-3 mb-6 tracking-tight text-slate-900">
+              Bayilik, Ürünün Ötesinde Bir Ortaklıktır
+            </h2>
+            <p className="text-slate-600 leading-relaxed">
+              SPART'ı servisinize veya mağazanıza taşımak, yalnızca yeni bir ürün hattı eklemek
+              değildir — Delta Oto'nun 50 yıllık tedarik zinciri deneyimini, lojistik altyapısını
+              ve marka güvencesini de yanınıza almaktır. Aşağıdaki başlıklar, bir SPART iş ortağı
+              olarak elde edeceğiniz somut karşılığı özetliyor.
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+            {DEALER_BENEFITS.map((b) => (
+              <div
+                key={b.title}
+                className="do-card bg-white border border-slate-200 rounded-xl p-7 group"
+              >
+                <div className="w-11 h-11 rounded-xl bg-[#1B3A8F]/[0.08] flex items-center justify-center text-[#1B3A8F] group-hover:bg-[#1B3A8F] group-hover:text-white transition-colors mb-5">
+                  {b.icon}
+                </div>
+                <h3 className="font-bold text-slate-900 mb-2">{b.title}</h3>
+                <p className="text-[13.5px] text-slate-500 leading-relaxed">{b.desc}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* CTA — navy */}
       <section className="relative bg-[#1B3A8F] text-white py-24 overflow-hidden">
         <div className="absolute inset-0 do-grid-bg opacity-20" />
@@ -386,8 +455,8 @@ export function SpartPage() {
             SPART Bayisi Olmak İster Misiniz?
           </h2>
           <p className="text-white/65 max-w-xl mx-auto mb-10 text-[15px] leading-relaxed">
-            Delta Oto'nun B2B platformu üzerinden SPART ürünlerine erişin;
-            rekabetçi fiyatları, anlık stok görünümünü ve online sipariş kolaylığını keşfedin.
+            Delta Oto'nun B2B platformu üzerinden SPART ürünlerine erişin,
+            fiyat ve sipariş bilgilerini inceleyin.
           </p>
           <div className="flex flex-wrap justify-center gap-4">
             <a
