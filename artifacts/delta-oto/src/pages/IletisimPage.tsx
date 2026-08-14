@@ -87,18 +87,13 @@ export function IletisimPage() {
     <div className="do-site bg-white min-h-screen">
       <SiteHeader />
 
-      {/* HERO */}
+      {/* HERO — geçici: gerçek Boğaz/köprü fotoğrafı henüz repoya eklenmedi
+          (bkz. oturum sonu raporu — dış görsel barındırma bu ortamda
+          güvenilir çalışmıyor, gerçek bir yerel dosya kullanıcıdan bekleniyor).
+          O ana kadar kırık/siyah görsel yerine sade koyu degrade + grid
+          dokusu — sitenin geri kalanıyla tutarlı, en azından bozuk görünmüyor. */}
       <section className="relative min-h-[560px] flex items-center text-white overflow-hidden bg-[#0e1016]">
-        <div className="absolute inset-0">
-          <img
-            src="https://images.unsplash.com/photo-g4kNo754b7A?w=1920&q=80"
-            alt=""
-            className="w-full h-full object-cover opacity-30"
-            style={{ objectPosition: "center 60%" }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0e1016] via-[#0e1016]/80 to-[#0e1016]/30" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0e1016] via-transparent to-transparent" />
-        </div>
+        <div className="absolute inset-0 bg-gradient-to-br from-[#14275c]/40 via-[#0e1016] to-[#0e1016]" />
         <div className="absolute inset-0 do-grid-bg opacity-40" />
         <div className="absolute left-0 top-0 w-[3px] h-full bg-gradient-to-b from-transparent via-[#1B3A8F] to-transparent opacity-60" />
 

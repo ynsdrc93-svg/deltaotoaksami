@@ -147,13 +147,15 @@ export function LandingPage() {
         className="sticky top-0 z-50 transition-all duration-300 bg-white/90 backdrop-blur-md border-b border-slate-200"
         style={{ ...(scrolled ? { background: "rgba(255,255,255,0.98)", borderColor: "rgba(15,23,42,0.1)", boxShadow: "0 4px 24px rgba(15,23,42,0.08)" } : {}) }}
       >
-        <div className={`w-full px-6 lg:px-10 xl:px-16 flex items-center justify-between transition-[height] duration-300 ${scrolled ? "h-16 sm:h-[68px]" : "h-24 sm:h-28"}`}>
-          {/* Logo — sabit solda */}
+        <div className={`w-full px-6 lg:px-10 xl:px-16 flex items-center justify-between transition-[height] duration-300 ${scrolled ? "h-[59px] sm:h-[68px]" : "h-[88px] sm:h-28"}`}>
+          {/* Logo — sabit solda. Mobilde (<sm) ~9-10% küçültüldü + 2px yukarı
+              optik düzeltme (logo hafif alçak duruyordu) — sm ve üzeri (masaüstü)
+              boyut/hizalama birebir korunuyor. */}
           <Link href="/" className="flex items-center shrink-0">
             <img
               src="/images/delta-oto-logo.png"
               alt="Delta Oto 50. Yıl"
-              className={`w-auto transition-[height] duration-300 ${scrolled ? "h-10 sm:h-12" : "h-16 sm:h-20"}`}
+              className={`w-auto transition-[height] duration-300 -mt-0.5 sm:mt-0 ${scrolled ? "h-9 sm:h-12" : "h-[58px] sm:h-20"}`}
             />
           </Link>
 
@@ -182,7 +184,7 @@ export function LandingPage() {
               aria-expanded={mobileOpen}
               aria-controls="do-landing-mobile-nav"
               onClick={() => setMobileOpen(o => !o)}
-              className="xl:hidden inline-flex items-center justify-center w-10 h-10 -mr-2 rounded-md text-slate-700 hover:bg-slate-100 transition-colors shrink-0"
+              className="xl:hidden inline-flex items-center justify-center w-11 h-11 -mr-2.5 rounded-md text-slate-700 hover:bg-slate-100 transition-colors shrink-0"
             >
               {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
             </button>
