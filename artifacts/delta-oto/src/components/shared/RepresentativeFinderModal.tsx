@@ -29,8 +29,8 @@ const CITY_PATH_BY_PLATE: Map<number, string> = new Map(
 // okunabilirlik adına küçük, elle ayarlanmış nudge'lar — il konumunu/veriyi
 // DEĞİŞTİRMEZ, yalnızca o ilin etiketinin görsel yerleşimini ince ayarlar.
 const PROVINCE_LABEL_OFFSETS: Record<number, { dx: number; dy: number }> = {
-  34: { dx: 4, dy: 10 },    // İstanbul — boğaz nedeniyle bbox merkezi sudaki boşluğa denk gelebilir
-  41: { dx: -10, dy: -8 },  // Kocaeli
+  34: { dx: 4, dy: 20 },    // İstanbul — boğaz nedeniyle bbox merkezi sudaki boşluğa denk gelebilir; dy Kocaeli çakışmasını gidermek için büyütüldü
+  41: { dx: -10, dy: -24 }, // Kocaeli — İstanbul'a yakın, dy büyütüldü (Sakarya/Yalova'ya hâlâ yeterli mesafede)
   77: { dx: 12, dy: 10 },   // Yalova — Kocaeli/Bursa arasında çok küçük
   11: { dx: 8, dy: 10 },    // Bilecik
   54: { dx: -4, dy: 10 },   // Sakarya
@@ -41,6 +41,20 @@ const PROVINCE_LABEL_OFFSETS: Record<number, { dx: number; dy: number }> = {
   69: { dx: 10, dy: 6 },    // Bayburt
   79: { dx: 0, dy: 10 },    // Kilis
   73: { dx: 0, dy: -8 },    // Şırnak
+  // Bu dört il alan-bazlı boyutlandırmada "küçük" sayılmıyor (dolayısıyla
+  // mobil boost tavanına girmiyor), ama komşularına merkez-mesafesi kısa
+  // olduğu için mobilde yine de çakışıyordu — Playwright ile ölçülen gerçek
+  // bounding-box çakışmasına göre eklendi (bkz. RepresentativeFinderModal QA).
+  2:  { dx: 8, dy: 14 },    // Adıyaman — Kahramanmaraş'a yakın
+  46: { dx: -8, dy: -12 },  // Kahramanmaraş — Adıyaman'a yakın
+  3:  { dx: 10, dy: 12 },   // Afyonkarahisar — en uzun il adı + büyük font, Uşak'a yakın
+  64: { dx: -10, dy: -12 }, // Uşak — Afyonkarahisar'a yakın
+  1:  { dx: -6, dy: -6 },   // Adana — Osmaniye'ye yakın
+  80: { dx: 8, dy: 22 },    // Osmaniye — hem Adana hem Gaziantep'e yakın, küçük il; güneye kaydırıldı
+  35: { dx: 0, dy: 14 },    // İzmir — Manisa'ya yakın
+  45: { dx: 0, dy: -12 },   // Manisa — İzmir'e yakın
+  21: { dx: 0, dy: -12 },   // Diyarbakır — Batman'a yakın
+  72: { dx: 0, dy: 12 },    // Batman — Diyarbakır'a yakın, küçük il
 };
 
 // Eşikler, 81 ilin gerçek bounding-box alan dağılımına göre kalibre edildi
@@ -199,7 +213,7 @@ export function RepresentativeFinderModal({ open, onClose }: { open: boolean; on
           <div className="flex flex-wrap gap-2 mb-3">
             <button
               type="button"
-              onClick={() => setSelectedRegion("all")}
+              onClick={() => { setSelectedRegion("all"); setSelectedPlate(null); }}
               aria-pressed={selectedRegion === "all"}
               className={`text-[11.5px] font-semibold px-3 py-1.5 rounded-full border transition-all duration-200 ${
                 selectedRegion === "all"
@@ -231,7 +245,7 @@ export function RepresentativeFinderModal({ open, onClose }: { open: boolean; on
                 Mobilde max-width sınırı yok — harita panelin tüm genişliğini
                 kullanır, bu da etiketlerin fiziksel render boyutunu (dolayısıyla
                 okunabilirliğini) doğrudan büyütür. */}
-            <div className="rounded-2xl border border-slate-100 bg-slate-50/60 p-2.5 sm:p-4 lg:p-5">
+            <div className="rounded-2xl border border-slate-100 bg-slate-50/60 p-1.5 sm:p-4 lg:p-5">
               <div className="relative mx-auto">
                 <TurkeyMap
                   hoverable
@@ -257,7 +271,13 @@ export function RepresentativeFinderModal({ open, onClose }: { open: boolean; on
                     const offset = PROVINCE_LABEL_OFFSETS[p.plate];
                     const isSelected = p.plate === selectedPlate;
                     const isQuiet = selectedRegion !== "all" && !activeRegionPlates.has(p.plate) && !isSelected;
-                    const labelScale = isNarrow ? 1.8 : 1;
+                    const rawScale = isNarrow ? 1.8 : 1;
+                    // Küçük/sıkışık illerde (Doğu Marmara, Batı Karadeniz kümeleri gibi
+                    // komşu bbox'ları dar illerde) tam 1.8x mobil boost etiketleri komşularıyla
+                    // çakıştırıyor — bu illerde boost 1.35x tavanına sabitlenir, büyük/izole
+                    // illerde tam boost korunur. Aynı değer stroke'a da uygulanır ki font/halo
+                    // oranı tüm illerde tutarlı kalsın.
+                    const labelScale = pos.area <= 2200 ? Math.min(rawScale, 1.35) : rawScale;
                     return (
                       <text
                         key={p.plate}

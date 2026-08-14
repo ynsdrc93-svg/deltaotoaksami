@@ -32,7 +32,7 @@ function BrandGroup({ label, brands }: { label: string; brands: Brand[] }) {
         <h3 className="text-xl font-black text-white tracking-tight">{label}</h3>
         <div className="flex-1 h-px bg-white/10" />
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-4">
+      <div className="grid grid-cols-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6 gap-2.5 sm:gap-4">
         {brands.map((b) => (
           <BrandLogo key={b.slug} brand={b} size="wall" />
         ))}
@@ -141,7 +141,16 @@ function CategoryShowcase({ categories, brands }: { categories: ProductCategory[
   // bottom-sheet'te gösterilir; masaüstü inline panel ve mantığı
   // değişmeden kalır, yalnızca CSS ile <lg'de gizlenir.
   const [mobileSheetOpen, setMobileSheetOpen] = useState(false);
-  useEscapeKey(() => setMobileSheetOpen(false), mobileSheetOpen);
+  // Mobilde dokunma sonrası buton her zaman güvenilir bir "blur" almayabilir
+  // (tarayıcıya göre değişir) — bu da hoveredIdx'i sheet kapandıktan sonra da
+  // takılı bırakıp atlas'ta "yapışkan" hover rengi/aile soluklaşması gibi
+  // düzensiz görünüme yol açabiliyordu. Sheet'i kapatan her yol bu fonksiyonu
+  // kullanır ki kapanışta atlas her zaman temiz "kilitli" durumuna dönsün.
+  function closeMobileSheet() {
+    setMobileSheetOpen(false);
+    setHoveredIdx(null);
+  }
+  useEscapeKey(closeMobileSheet, mobileSheetOpen);
   useEffect(() => {
     document.body.style.overflow = mobileSheetOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
@@ -162,11 +171,6 @@ function CategoryShowcase({ categories, brands }: { categories: ProductCategory[
 
   return (
     <div className="relative overflow-hidden" onMouseLeave={() => setHoveredIdx(null)}>
-      <div
-        className={`do-category-atmosphere pointer-events-none absolute -inset-x-10 -inset-y-16 transition-opacity duration-500 ${isHovering ? "opacity-100" : "opacity-0"}`}
-        aria-hidden="true"
-      />
-
       {/* Kategori Atlası — 8 makro aile, 23 kategori, tamamı her zaman görünür */}
       <div className="relative grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-6 mb-8">
         {families.map((family) => {
@@ -256,7 +260,7 @@ function CategoryShowcase({ categories, brands }: { categories: ProductCategory[
         }`}
         aria-hidden={!mobileSheetOpen}
       >
-        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setMobileSheetOpen(false)} />
+        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={closeMobileSheet} />
         <div
           className={`absolute inset-x-0 bottom-0 max-h-[85vh] bg-white rounded-t-2xl shadow-2xl flex flex-col transition-transform duration-300 ${
             mobileSheetOpen ? "translate-y-0" : "translate-y-full"
@@ -282,7 +286,7 @@ function CategoryShowcase({ categories, brands }: { categories: ProductCategory[
             </div>
             <button
               type="button"
-              onClick={() => setMobileSheetOpen(false)}
+              onClick={closeMobileSheet}
               aria-label="Kapat"
               className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors"
             >

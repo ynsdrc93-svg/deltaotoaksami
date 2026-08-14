@@ -6,7 +6,7 @@ import { SiteFooter } from "./shared/SiteFooter";
 import { BrandLogo } from "./shared/BrandLogo";
 import TurkeyMap from "turkey-map-react";
 import { cities as turkeyCities } from "turkey-map-react/lib/data";
-import { CLASSIFIED_BRANDS } from "../lib/brands";
+import { CLASSIFIED_BRANDS, type Brand } from "../lib/brands";
 
 // Şerit, Tedarikçiler sayfasıyla AYNI kaynağı (CLASSIFIED_BRANDS — Excel'in
 // 61 markası) kullanır; Excel'de olmayan markalar burada da gösterilmez
@@ -104,6 +104,22 @@ export function LandingPage() {
   const heroParallax = useParallax<HTMLImageElement>(0.12);
   const [mobileOpen, setMobileOpen] = useState(false);
   useEscapeKey(() => setMobileOpen(false), mobileOpen);
+
+  // Mobil marka şeridi dokunma davranışı: bir şeride dokunmak YALNIZCA o
+  // şeridi durdurur (diğer şeritler akmaya devam eder), bir markaya
+  // dokunmak "siteden ayrılıyorsunuz" onayı ister — onaylanana/iptal
+  // edilene kadar o şerit duraklı kalır, kullanıcı kazara siteden ayrılmaz.
+  // Masaüstü hover-duraklatma (CSS, do-ticker-inner:hover) bundan tamamen
+  // bağımsız çalışmaya devam eder — ikisi hiç çakışmaz.
+  const [pausedRow, setPausedRow] = useState<number | null>(null);
+  const [confirmBrand, setConfirmBrand] = useState<{ brand: Brand; rowIndex: number } | null>(null);
+  const cancelLeaveRef = useRef<HTMLButtonElement>(null);
+  useEscapeKey(() => setConfirmBrand(null), confirmBrand !== null);
+  useEffect(() => {
+    document.body.style.overflow = confirmBrand ? "hidden" : "";
+    if (confirmBrand) cancelLeaveRef.current?.focus();
+    return () => { document.body.style.overflow = ""; };
+  }, [confirmBrand]);
 
   const tickerItems = ["250+ Marka", "81 İl + İhracat", "Kuruluş 1976", "Groupauto Üyesi", "Opar Ege Bölge Bayiliği", "Ümraniye Merkez", "Binek & Hafif Ticari", "Kesintisiz Lojistik"];
 
@@ -522,12 +538,27 @@ export function LandingPage() {
 
         <div className="relative z-10 flex flex-col gap-5">
           {BRAND_STRIPS.map((strip, rowIndex) => (
-            <div key={rowIndex} className="overflow-hidden">
-              <div className={rowIndex === 1 ? "do-ticker-inner" : "do-ticker-inner-reverse"}>
+            <div
+              key={rowIndex}
+              className="overflow-hidden"
+              onTouchStart={() => setPausedRow(rowIndex)}
+              onTouchEnd={() => setPausedRow((r) => (r === rowIndex ? null : r))}
+              onTouchCancel={() => setPausedRow((r) => (r === rowIndex ? null : r))}
+            >
+              <div
+                className={rowIndex === 1 ? "do-ticker-inner" : "do-ticker-inner-reverse"}
+                style={{ animationPlayState: pausedRow === rowIndex || confirmBrand?.rowIndex === rowIndex ? "paused" : undefined }}
+              >
                 {[...strip, ...strip].map((b, i) => {
                   const isDuplicate = i >= strip.length;
                   return (
-                    <BrandLogo key={`${b.slug}-${i}`} brand={b} size="strip" hidden={isDuplicate} />
+                    <BrandLogo
+                      key={`${b.slug}-${i}`}
+                      brand={b}
+                      size="strip"
+                      hidden={isDuplicate}
+                      onNavigateAttempt={(brand) => setConfirmBrand({ brand, rowIndex })}
+                    />
                   );
                 })}
               </div>
@@ -625,6 +656,53 @@ export function LandingPage() {
           </div>
         </div>
       </section>
+
+      {/* "Siteden ayrılıyorsunuz" onayı — yalnızca dokunmatik cihazda, marka
+          şeridindeki bir logoya dokunulduğunda devreye girer (bkz.
+          BrandLogo onNavigateAttempt). Masaüstü tıklaması bunu hiç görmez. */}
+      <div
+        className={`fixed inset-0 z-[90] flex items-center justify-center p-6 transition-opacity duration-200 ${
+          confirmBrand ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+        }`}
+        aria-hidden={!confirmBrand}
+      >
+        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setConfirmBrand(null)} />
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Siteden ayrılıyorsunuz"
+          className={`relative bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 transition-all duration-200 ${
+            confirmBrand ? "translate-y-0 scale-100" : "translate-y-2 scale-95"
+          }`}
+        >
+          <h3 className="text-lg font-black text-slate-900 mb-2">Siteden ayrılıyorsunuz</h3>
+          <p className="text-slate-500 text-[13.5px] leading-relaxed mb-6">
+            {confirmBrand?.brand.name} için Delta Oto sitesinden ayrılıp markanın resmi web sitesine yönlendirileceksiniz.
+          </p>
+          <div className="flex gap-3">
+            <button
+              ref={cancelLeaveRef}
+              type="button"
+              onClick={() => setConfirmBrand(null)}
+              className="flex-1 border border-slate-200 text-slate-600 font-semibold text-[13.5px] px-4 py-3 rounded-md hover:bg-slate-50 transition-colors"
+            >
+              İptal
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                if (confirmBrand?.brand.website) {
+                  window.open(confirmBrand.brand.website, "_blank", "noopener,noreferrer");
+                }
+                setConfirmBrand(null);
+              }}
+              className="flex-1 bg-[#1B3A8F] hover:bg-[#2547B5] text-white font-semibold text-[13.5px] px-4 py-3 rounded-md transition-colors"
+            >
+              Devam Et
+            </button>
+          </div>
+        </div>
+      </div>
 
       <SiteFooter />
     </div>

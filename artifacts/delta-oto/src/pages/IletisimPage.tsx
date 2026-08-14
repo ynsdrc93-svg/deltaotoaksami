@@ -1,9 +1,89 @@
 import React, { useState } from "react";
-import { MapPin, Phone, Mail, Globe, Clock, ChevronRight, Users, Package, MonitorSmartphone, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
+import { MapPin, Phone, Mail, Globe, Clock, ChevronRight, ArrowRight, Users, Package, MonitorSmartphone, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
 import { RepresentativeFinderModal } from "@/components/shared/RepresentativeFinderModal";
 import { submitContactForm } from "@workspace/api-client-react";
+
+// Boğaz köprüsü silüeti — doğrulanamayan/yanlış çıkabilecek bir stok fotoğraf
+// (önceki görsel bir camiyi ön plana çıkarıyordu) yerine, tamamen marka
+// paletiyle (navy/mavi) çizilmiş özgün bir illüstrasyon. Kablo eğrisi ve
+// hanger'lar aynı quadratic bezier formülünden türediği için birebir hizalı
+// kalır — elle uydurulmuş, hizası kayabilecek koordinatlar değil.
+function bezierPoint(t: number, p0: number, p1: number, p2: number): number {
+  const mt = 1 - t;
+  return mt * mt * p0 + 2 * mt * t * p1 + t * t * p2;
+}
+
+function IstanbulBridgeArt() {
+  const towerX = [460, 1000];
+  const towerTopY = 150;
+  const deckY = 460;
+  const anchorX = [70, 1390];
+  const midX = (towerX[0] + towerX[1]) / 2;
+  const sagY = towerTopY + (deckY - towerTopY) * 0.42;
+  const hangerCount = 13;
+  const hangers = Array.from({ length: hangerCount }, (_, i) => {
+    const t = i / (hangerCount - 1);
+    return { x: bezierPoint(t, towerX[0], midX, towerX[1]), y: bezierPoint(t, towerTopY, sagY, towerTopY) };
+  });
+  const mainCablePath = `M ${towerX[0]},${towerTopY} Q ${midX},${sagY} ${towerX[1]},${towerTopY}`;
+  const leftSidePath = `M ${anchorX[0]},${deckY - 6} Q ${(anchorX[0] + towerX[0]) / 2},${towerTopY + 40} ${towerX[0]},${towerTopY}`;
+  const rightSidePath = `M ${towerX[1]},${towerTopY} Q ${(anchorX[1] + towerX[1]) / 2},${towerTopY + 40} ${anchorX[1]},${deckY - 6}`;
+
+  return (
+    <svg viewBox="0 0 1460 800" preserveAspectRatio="xMidYMid slice" className="w-full h-full" aria-hidden="true">
+      <defs>
+        <linearGradient id="do-bosphorus-sky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#14275c" />
+          <stop offset="100%" stopColor="#0e1016" />
+        </linearGradient>
+        <linearGradient id="do-bosphorus-water" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stopColor="#1B3A8F" stopOpacity="0.5" />
+          <stop offset="100%" stopColor="#0e1016" stopOpacity="0.95" />
+        </linearGradient>
+      </defs>
+      <rect x="0" y="0" width="1460" height="800" fill="url(#do-bosphorus-sky)" />
+      {/* uzak yaka silüeti — sade, alçak, tek bir binaya/simgeye indirgenmeyen soyut şehir hattı */}
+      <g fill="#0e1016" opacity="0.5">
+        {[40, 90, 150, 210, 270, 330, 1180, 1240, 1300, 1360, 1410].map((x, i) => (
+          <rect key={x} x={x} y={415 - ((i * 37) % 55)} width="34" height={((i * 37) % 55) + 45} />
+        ))}
+      </g>
+      {/* köprü kuleleri */}
+      {towerX.map((tx) => (
+        <g key={tx} stroke="#7d9bea" strokeWidth="5" strokeLinecap="round" opacity="0.9">
+          <line x1={tx - 22} y1={deckY} x2={tx - 8} y2={towerTopY} />
+          <line x1={tx + 22} y1={deckY} x2={tx + 8} y2={towerTopY} />
+          <line x1={tx - 15} y1={towerTopY + 60} x2={tx + 15} y2={towerTopY + 60} strokeWidth="4" />
+        </g>
+      ))}
+      {/* ana + yan açıklık kabloları */}
+      <path d={mainCablePath} stroke="#7d9bea" strokeWidth="3.5" fill="none" opacity="0.85" />
+      <path d={leftSidePath} stroke="#7d9bea" strokeWidth="3" fill="none" opacity="0.7" />
+      <path d={rightSidePath} stroke="#7d9bea" strokeWidth="3" fill="none" opacity="0.7" />
+      {/* hanger'lar (askı kabloları) */}
+      {hangers.slice(1, -1).map((h) => (
+        <line key={h.x} x1={h.x} y1={h.y} x2={h.x} y2={deckY} stroke="#4d74d6" strokeWidth="1.5" opacity="0.55" />
+      ))}
+      {/* güverte + köprü ışıkları */}
+      <line x1={anchorX[0]} y1={deckY} x2={anchorX[1]} y2={deckY} stroke="#7d9bea" strokeWidth="4" opacity="0.9" />
+      {hangers.map((h) => (
+        <circle key={`l${h.x}`} cx={h.x} cy={deckY} r="3.5" fill="#7d9bea" opacity="0.9" />
+      ))}
+      {/* su + yansımalar */}
+      <rect x="0" y={deckY + 4} width="1460" height={800 - deckY} fill="url(#do-bosphorus-water)" />
+      {hangers.filter((_, i) => i % 2 === 0).map((h) => (
+        <line key={`r${h.x}`} x1={h.x} y1={deckY + 10} x2={h.x} y2={deckY + 70} stroke="#7d9bea" strokeWidth="2" opacity="0.18" />
+      ))}
+      <g stroke="#7d9bea" strokeOpacity="0.12" strokeWidth="1.5">
+        <line x1="120" y1={deckY + 110} x2="420" y2={deckY + 110} />
+        <line x1="560" y1={deckY + 150} x2="900" y2={deckY + 150} />
+        <line x1="1000" y1={deckY + 100} x2="1300" y2={deckY + 100} />
+      </g>
+    </svg>
+  );
+}
 
 const DEPT_CONTACTS = [
   {
@@ -88,14 +168,11 @@ export function IletisimPage() {
       <SiteHeader />
 
       {/* HERO */}
-      <section className="relative min-h-[480px] flex items-center text-white overflow-hidden bg-[#0e1016]">
+      <section className="relative min-h-[560px] flex items-center text-white overflow-hidden bg-[#0e1016]">
         <div className="absolute inset-0">
-          <img
-            src="https://images.unsplash.com/photo-1527838832700-5059252407fa?w=1920&q=80"
-            alt=""
-            className="w-full h-full object-cover opacity-20"
-            style={{ objectPosition: "center 60%" }}
-          />
+          <div className="w-full h-full opacity-45">
+            <IstanbulBridgeArt />
+          </div>
           <div className="absolute inset-0 bg-gradient-to-r from-[#0e1016] via-[#0e1016]/80 to-[#0e1016]/30" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0e1016] via-transparent to-transparent" />
         </div>
@@ -105,15 +182,41 @@ export function IletisimPage() {
         <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 relative z-10 py-16 lg:py-24">
           <div className="flex items-center gap-3 mb-5 lg:mb-7">
             <div className="w-8 h-[2px] bg-[#4d74d6]" />
-            <span className="text-[#7d9bea] text-xs font-bold uppercase tracking-[0.3em]">Kurumsal İletişim · Ümraniye, İstanbul</span>
+            <span className="text-[#7d9bea] text-xs font-bold uppercase tracking-[0.3em]">İletişim Kanallarımız · Ümraniye, İstanbul</span>
           </div>
           <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[72px] font-black leading-[1.05] tracking-[-0.02em] mb-4 lg:mb-5">
             <span className="do-hero-line">BİZE</span><br />
             <span className="text-[#7d9bea]">ULAŞIN</span>
           </h1>
-          <p className="text-[17px] text-gray-300 max-w-xl font-light leading-[1.8]">
+          <p className="text-[17px] text-gray-300 max-w-xl font-light leading-[1.8] mb-6 lg:mb-9">
             Ürün sorguları, B2B portal erişimi veya kurumsal iletişim için size özel kanaldan ulaşın.
           </p>
+          <div className="flex flex-wrap gap-3 sm:gap-4">
+            <button
+              type="button"
+              onClick={() => setRepModalOpen(true)}
+              className="bg-[#1B3A8F] hover:bg-[#2547B5] active:scale-[0.98] text-white font-semibold px-6 sm:px-8 py-3.5 sm:py-4 rounded-md text-[14px] sm:text-base transition-all duration-200 flex items-center gap-2 sm:gap-2.5 shadow-[0_0_32px_rgba(27,58,143,0.3)] hover:shadow-[0_0_48px_rgba(27,58,143,0.45)]"
+            >
+              <MapPin className="w-4 h-4 sm:w-5 sm:h-5" />
+              Bölge Temsilcinizi Bulun
+            </button>
+            <a
+              href="#iletisim-formu"
+              className="text-gray-200 hover:text-white active:scale-[0.98] text-[14px] sm:text-base font-medium flex items-center gap-2 border border-white/15 hover:border-white/30 px-6 sm:px-8 py-3.5 sm:py-4 rounded-md transition-all duration-200"
+            >
+              <Mail className="w-4 h-4" />
+              İletişim Formu
+            </a>
+            <a
+              href="https://b2b.parcabul.com.tr/login.aspx"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group text-gray-200 hover:text-white active:scale-[0.98] text-[14px] sm:text-base font-medium flex items-center gap-2 border border-white/15 hover:border-white/30 px-6 sm:px-8 py-3.5 sm:py-4 rounded-md transition-all duration-200"
+            >
+              B2B Portal
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
+            </a>
+          </div>
         </div>
       </section>
 
@@ -192,7 +295,7 @@ export function IletisimPage() {
       {/* FORM + ADRES — light. Lokasyonlar'dan önceye taşındı: footer'dan hemen önceki bölüm
           proje kuralı gereği navy olmalı, bu da yalnızca burada zaten navy olan Lokasyonlar'ı
           en sona almakla (bkz. CLAUDE.md §9.2) en az müdahaleyle sağlanıyor. */}
-      <section className="bg-[#f8fafc] py-20">
+      <section id="iletisim-formu" className="scroll-mt-24 bg-[#f8fafc] py-20">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-5 gap-12 items-start">
 
           <div className="lg:col-span-2">

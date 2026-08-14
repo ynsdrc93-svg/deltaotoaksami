@@ -20,8 +20,21 @@ export function TemsilcilerimizPage() {
     <div className="do-site bg-white min-h-screen">
       <SiteHeader />
 
-      {/* HERO — dark */}
-      <section className="relative min-h-[460px] flex items-center text-white overflow-hidden bg-[#0e1016]">
+      {/* HERO — dark. Diğer 5 iç sayfa heroyla aynı kalıp: img + iki gradyan
+          overlay + grid-bg + sol aksan çizgisi (bkz. Hakkımızda/Tedarikçiler/
+          Operasyon/Kariyer/İletişim) — önceden yalnızca düz koyu zemin vardı,
+          bu da üst nav'ın altında görsel olarak "eksik/yarım" hissettiriyordu. */}
+      <section className="relative min-h-[560px] flex items-center text-white overflow-hidden bg-[#0e1016]">
+        <div className="absolute inset-0">
+          <img
+            src="/images/delta-oto-hero.png"
+            alt=""
+            className="w-full h-full object-cover opacity-25"
+            style={{ objectPosition: "center 40%" }}
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0e1016] via-[#0e1016]/80 to-[#0e1016]/30" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0e1016] via-transparent to-transparent" />
+        </div>
         <div className="absolute inset-0 do-grid-bg opacity-40" />
         <div className="absolute left-0 top-0 w-[3px] h-full bg-gradient-to-b from-transparent via-[#1B3A8F] to-transparent opacity-60" />
         <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 relative z-10 py-14 lg:py-20 text-center flex flex-col items-center">

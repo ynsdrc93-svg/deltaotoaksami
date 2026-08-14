@@ -300,13 +300,6 @@
 }
 .do-chip-expand { animation: do-chip-expand 0.2s ease-out both; }
 
-/* Kategori overview'un arkasındaki çok hafif navy/cobalt "atmosfer" —
-   herhangi bir kategori hover edildiğinde belirir, section'ın da tepki
-   verdiği hissini yaratır. Saf dekoratif, marka paletinden (navy). */
-.do-category-atmosphere {
-  background: radial-gradient(640px circle at 50% 0%, rgba(27, 58, 143, 0.07), transparent 70%);
-}
-
 /* Keyboard focus, global */
 :where(a, button, [tabindex]):focus-visible {
   outline: 2px solid #2547B5;
@@ -334,7 +327,7 @@
     transform: none !important;
     filter: none !important;
   }
-  .do-category-tile, .do-category-tile *, .do-category-atmosphere { transition: none !important; }
+  .do-category-tile, .do-category-tile * { transition: none !important; }
   /* Sonsuz döngü burada 1 iterasyonda anlık bitip görünmez (idle) karede
      kalır — rota okları için bunu ezip sabit/tam görünür bırakıyoruz. */
   .do-route-line { animation: none !important; stroke-dashoffset: 0 !important; opacity: 1 !important; }
