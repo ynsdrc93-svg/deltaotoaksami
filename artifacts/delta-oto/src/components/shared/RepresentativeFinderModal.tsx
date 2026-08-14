@@ -159,39 +159,35 @@ export function RepresentativeFinderModal({ open, onClose }: { open: boolean; on
     >
       <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
       <div
-        className={`absolute inset-0 sm:inset-5 lg:inset-x-0 lg:top-6 lg:bottom-6 lg:mx-auto lg:max-w-6xl bg-white sm:rounded-2xl shadow-2xl flex flex-col transition-all duration-300 ${
+        className={`absolute inset-0 sm:inset-5 lg:inset-x-0 lg:top-4 lg:bottom-4 lg:mx-auto lg:max-w-6xl bg-white sm:rounded-2xl shadow-2xl flex flex-col transition-all duration-300 ${
           open ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"
         }`}
         role="dialog"
         aria-modal="true"
         aria-label="Bölge Temsilcinizi Bulun"
       >
-        <div className="flex items-start justify-between gap-4 p-6 lg:p-7 border-b border-slate-100 shrink-0">
-          <div>
-            <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#1B3A8F]">Satış Ağımız</span>
-            <h2 className="text-xl lg:text-2xl font-black text-slate-900 mt-1">Bölge Temsilcinizi Bulun</h2>
-          </div>
+        <div className="flex items-center justify-between gap-4 px-5 py-3.5 lg:px-6 lg:py-4 border-b border-slate-100 shrink-0">
+          <h2 className="text-lg lg:text-xl font-black text-slate-900">Bölge Temsilcinizi Bulun</h2>
           <button
             ref={closeButtonRef}
             type="button"
             onClick={onClose}
             aria-label="Kapat"
-            className="shrink-0 w-9 h-9 rounded-full flex items-center justify-center text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors"
+            className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
-        <div className="flex-1 overflow-y-auto p-6 lg:p-8">
-          <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-400 block mb-3">1. Bölge Seçin</span>
-          <div className="flex flex-wrap gap-2 mb-8">
+        <div className="flex-1 overflow-y-auto p-5 lg:p-6">
+          <div className="flex flex-wrap gap-1.5 mb-4">
             <button
               type="button"
               onClick={() => setSelectedRegion("all")}
               aria-pressed={selectedRegion === "all"}
-              className={`text-[12.5px] font-semibold px-4 py-2 rounded-full border transition-all duration-200 ${
+              className={`text-[12px] font-semibold px-3.5 py-1.5 rounded-full border transition-all duration-200 ${
                 selectedRegion === "all"
-                  ? "bg-[#1B3A8F] border-[#1B3A8F] text-white shadow-md shadow-[#1B3A8F]/20"
+                  ? "bg-[#1B3A8F] border-[#1B3A8F] text-white shadow-sm shadow-[#1B3A8F]/20"
                   : "border-slate-200 text-slate-600 hover:border-[#1B3A8F]/40"
               }`}
             >
@@ -203,9 +199,9 @@ export function RepresentativeFinderModal({ open, onClose }: { open: boolean; on
                 type="button"
                 onClick={() => setSelectedRegion(region)}
                 aria-pressed={selectedRegion === region}
-                className={`text-[12.5px] font-semibold px-4 py-2 rounded-full border transition-all duration-200 ${
+                className={`text-[12px] font-semibold px-3.5 py-1.5 rounded-full border transition-all duration-200 ${
                   selectedRegion === region
-                    ? "bg-[#1B3A8F] border-[#1B3A8F] text-white shadow-md shadow-[#1B3A8F]/20"
+                    ? "bg-[#1B3A8F] border-[#1B3A8F] text-white shadow-sm shadow-[#1B3A8F]/20"
                     : "border-slate-200 text-slate-600 hover:border-[#1B3A8F]/40"
                 }`}
               >
@@ -214,93 +210,94 @@ export function RepresentativeFinderModal({ open, onClose }: { open: boolean; on
             ))}
           </div>
 
-          <div className="grid lg:grid-cols-[1fr_260px] gap-8 items-start">
-            <div>
-              <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-400 block mb-3">2. İl Seçin</span>
+          <div className="grid lg:grid-cols-[2fr_1fr] gap-5">
+            {/* Harita + il ızgarası — tek "feature panel" çerçevesi, tüm 81 il adı her zaman görünür */}
+            <div className="rounded-2xl border border-slate-100 bg-slate-50/60 p-3 lg:p-4">
+              <div className="relative max-w-[380px] sm:max-w-none mx-auto">
+                <TurkeyMap
+                  hoverable
+                  customStyle={{ idleColor: "#e2e8f0", hoverColor: "#c7d5f5" }}
+                  onClick={(city) => selectProvince(city.plateNumber)}
+                />
+                <svg viewBox="0 80 1050 585" className="absolute inset-0 w-full h-full pointer-events-none" aria-hidden="true">
+                  <g ref={allProvincesLayerRef}>
+                    {TURKEY_PROVINCES.map((p) => (
+                      <path
+                        key={p.plate}
+                        data-plate={p.plate}
+                        d={CITY_PATH_BY_PLATE.get(p.plate)}
+                        fill={fillForProvince(p.plate)}
+                        stroke={p.plate === selectedPlate || activeRegionPlates.has(p.plate) ? "#ffffff" : "none"}
+                        strokeWidth={1}
+                      />
+                    ))}
+                  </g>
+                  {TURKEY_PROVINCES.map((p) => {
+                    const pos = labelPositions.get(p.plate);
+                    if (!pos) return null;
+                    const offset = PROVINCE_LABEL_OFFSETS[p.plate];
+                    const isSelected = p.plate === selectedPlate;
+                    const isQuiet = selectedRegion !== "all" && !activeRegionPlates.has(p.plate) && !isSelected;
+                    return (
+                      <text
+                        key={p.plate}
+                        x={pos.x + (offset?.dx ?? 0)}
+                        y={pos.y + (offset?.dy ?? 0)}
+                        textAnchor="middle"
+                        dominantBaseline="middle"
+                        fontSize={labelFontSize(pos.area, isSelected)}
+                        fontWeight={isSelected ? 700 : isQuiet ? 500 : 700}
+                        fill={isSelected ? "#ffffff" : "#1B3A8F"}
+                        fillOpacity={isQuiet ? 0.55 : 1}
+                        stroke={isSelected ? "none" : "#ffffff"}
+                        strokeOpacity={isQuiet ? 0.7 : 1}
+                        strokeWidth={isSelected ? 0 : 2.3}
+                        paintOrder="stroke"
+                      >
+                        {p.name}
+                      </text>
+                    );
+                  })}
+                </svg>
+              </div>
 
-              {/* Harita — "feature panel" çerçevesi içinde, tüm 81 il adı her zaman görünür */}
-              <div className="rounded-2xl border border-slate-100 bg-slate-50/60 p-4 sm:p-6">
-                <div className="relative max-w-[420px] sm:max-w-none mx-auto">
-                  <TurkeyMap
-                    hoverable
-                    customStyle={{ idleColor: "#e2e8f0", hoverColor: "#c7d5f5" }}
-                    onClick={(city) => selectProvince(city.plateNumber)}
-                  />
-                  <svg viewBox="0 80 1050 585" className="absolute inset-0 w-full h-full pointer-events-none" aria-hidden="true">
-                    <g ref={allProvincesLayerRef}>
-                      {TURKEY_PROVINCES.map((p) => (
-                        <path
-                          key={p.plate}
-                          data-plate={p.plate}
-                          d={CITY_PATH_BY_PLATE.get(p.plate)}
-                          fill={fillForProvince(p.plate)}
-                          stroke={p.plate === selectedPlate || activeRegionPlates.has(p.plate) ? "#ffffff" : "none"}
-                          strokeWidth={1}
-                        />
-                      ))}
-                    </g>
-                    {TURKEY_PROVINCES.map((p) => {
-                      const pos = labelPositions.get(p.plate);
-                      if (!pos) return null;
-                      const offset = PROVINCE_LABEL_OFFSETS[p.plate];
-                      const isSelected = p.plate === selectedPlate;
-                      const isQuiet = selectedRegion !== "all" && !activeRegionPlates.has(p.plate) && !isSelected;
-                      return (
-                        <text
-                          key={p.plate}
-                          x={pos.x + (offset?.dx ?? 0)}
-                          y={pos.y + (offset?.dy ?? 0)}
-                          textAnchor="middle"
-                          dominantBaseline="middle"
-                          fontSize={labelFontSize(pos.area, isSelected)}
-                          fontWeight={isSelected ? 700 : isQuiet ? 500 : 700}
-                          fill={isSelected ? "#ffffff" : "#1B3A8F"}
-                          fillOpacity={isQuiet ? 0.55 : 1}
-                          stroke={isSelected ? "none" : "#ffffff"}
-                          strokeOpacity={isQuiet ? 0.7 : 1}
-                          strokeWidth={isSelected ? 0 : 2.3}
-                          paintOrder="stroke"
-                        >
-                          {p.name}
-                        </text>
-                      );
-                    })}
-                  </svg>
-                </div>
-                <p className="text-slate-400 text-[11.5px] text-center mt-3">
-                  {selectedRegion === "all"
-                    ? "Bir bölge seçin veya haritadan doğrudan bir ile tıklayın."
-                    : "İl üzerine tıklayarak seçin."}
+              {/* "Tüm Türkiye": kısa tek satır ipucu. Bölge seçili: o bölgenin il
+                  ızgarası — 81 ili listelemeye çalışmak yerine, yalnızca seçili
+                  bölgenin illeri kompakt bir ızgarada gösterilir. */}
+              {selectedRegion === "all" ? (
+                <p className="text-slate-400 text-[11.5px] text-center mt-2.5">
+                  Haritadan bir il seçin veya yukarıdan bölge seçerek daraltın.
                 </p>
-              </div>
-
-              <div className="flex flex-wrap gap-2 mt-5">
-                {visibleProvinces.map((p) => {
-                  const isSelected = p.plate === selectedPlate;
-                  return (
-                    <button
-                      key={p.plate}
-                      type="button"
-                      onClick={() => selectProvince(p.plate)}
-                      aria-pressed={isSelected}
-                      className={`text-[12px] font-semibold px-3 py-1.5 rounded-md border transition-colors ${
-                        isSelected
-                          ? "bg-[#1B3A8F] border-[#1B3A8F] text-white"
-                          : "border-slate-200 text-slate-600 hover:border-[#1B3A8F]/40 hover:text-[#1B3A8F]"
-                      }`}
-                    >
-                      {p.name}
-                    </button>
-                  );
-                })}
-              </div>
+              ) : (
+                <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-1.5 mt-2.5">
+                  {visibleProvinces.map((p) => {
+                    const isSelected = p.plate === selectedPlate;
+                    return (
+                      <button
+                        key={p.plate}
+                        type="button"
+                        onClick={() => selectProvince(p.plate)}
+                        aria-pressed={isSelected}
+                        className={`text-[11.5px] font-semibold px-2 py-1.5 rounded-md border truncate transition-colors ${
+                          isSelected
+                            ? "bg-[#1B3A8F] border-[#1B3A8F] text-white"
+                            : "bg-white border-slate-200 text-slate-600 hover:border-[#1B3A8F]/40 hover:text-[#1B3A8F]"
+                        }`}
+                      >
+                        {p.name}
+                      </button>
+                    );
+                  })}
+                </div>
+              )}
             </div>
 
-            <div>
-              <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-400 block mb-3">3. Temsilciniz</span>
-              <div className="do-card bg-white border border-slate-200 rounded-2xl p-7 lg:sticky lg:top-0">
+            {/* Temsilci/fallback detayı — kolonun kalan boşluğunu dikey ortalayarak kullanır */}
+            <div className="relative do-card bg-white border border-slate-200 rounded-2xl p-6 overflow-hidden flex flex-col justify-center min-h-[220px]">
+              <MapPin className="absolute -right-5 -bottom-5 w-28 h-28 text-slate-50 pointer-events-none" strokeWidth={1} aria-hidden="true" />
+              <div className="relative">
                 {!selectedProvince ? (
-                  <div className="text-center py-8">
+                  <div className="text-center">
                     <MapPin className="w-7 h-7 text-slate-300 mx-auto mb-4" strokeWidth={1.5} />
                     <p className="text-slate-400 text-[13.5px] leading-relaxed">
                       Haritadan veya listeden bir il seçerek başlayın.
@@ -316,12 +313,12 @@ export function RepresentativeFinderModal({ open, onClose }: { open: boolean; on
           </div>
         </div>
 
-        <div className="border-t border-slate-100 px-6 lg:px-8 py-4 shrink-0 flex flex-wrap items-center justify-between gap-3 bg-slate-50/60">
-          <span className="text-[12.5px] text-slate-500">İlinizi bulamadınız mı? Genel hattımızla da iletişime geçebilirsiniz.</span>
-          <div className="flex items-center gap-3">
-            <a href={telHref(GENERAL_CONTACT.phone)} className="text-[12.5px] font-semibold text-[#1B3A8F] hover:text-[#2547B5] transition-colors">{GENERAL_CONTACT.phone}</a>
+        <div className="border-t border-slate-100 px-5 lg:px-6 py-2.5 shrink-0 flex flex-wrap items-center justify-between gap-2 bg-slate-50/60">
+          <span className="text-[11.5px] text-slate-500">İlinizi bulamadınız mı?</span>
+          <div className="flex items-center gap-2.5">
+            <a href={telHref(GENERAL_CONTACT.phone)} className="text-[11.5px] font-semibold text-[#1B3A8F] hover:text-[#2547B5] transition-colors">{GENERAL_CONTACT.phone}</a>
             <span className="text-slate-300">·</span>
-            <a href={`mailto:${GENERAL_CONTACT.email}`} className="text-[12.5px] font-semibold text-[#1B3A8F] hover:text-[#2547B5] transition-colors">{GENERAL_CONTACT.email}</a>
+            <a href={`mailto:${GENERAL_CONTACT.email}`} className="text-[11.5px] font-semibold text-[#1B3A8F] hover:text-[#2547B5] transition-colors">{GENERAL_CONTACT.email}</a>
           </div>
         </div>
       </div>

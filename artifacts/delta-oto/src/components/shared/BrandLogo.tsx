@@ -12,7 +12,7 @@ import type { Brand } from "@/lib/brands";
 // içeren, şeffaf zeminde görünmeyen asset'ler — bkz. brands.ts) koyu bir
 // kart zemininde gösterilir; site genelindeki "dark hero" tonuyla (#0e1016)
 // tutarlıdır.
-type BrandLogoSize = "wall" | "chip" | "strip";
+type BrandLogoSize = "wall" | "chip" | "strip" | "compact";
 
 interface SizeStyle {
   light: string;
@@ -28,6 +28,16 @@ const SIZES: Record<BrandLogoSize, SizeStyle> = {
     dark: "do-card bg-[#0e1016] border border-white/10 rounded-2xl flex items-center justify-center h-32 sm:h-36 px-6 py-6 shadow-sm",
     img: "max-h-12 sm:max-h-14 w-auto h-auto max-w-full object-contain",
     textSize: "text-[15px]",
+    textHover: "",
+  },
+  /** Tek-ekran spotlight panelleri için — "chip"in yarısı kadar yükseklikte,
+   * marka duvarı/kategori paneli dışında (ör. sıkışık spotlight raflarında)
+   * kullanılır. */
+  compact: {
+    light: "border border-slate-200 rounded-lg h-11 flex items-center justify-center px-3.5 bg-white hover:border-[#1B3A8F]/30 transition-colors",
+    dark: "border border-white/10 rounded-lg h-11 flex items-center justify-center px-3.5 bg-[#0e1016] hover:border-white/25 transition-colors",
+    img: "max-h-6 w-auto h-auto object-contain",
+    textSize: "text-[10px]",
     textHover: "",
   },
   chip: {
