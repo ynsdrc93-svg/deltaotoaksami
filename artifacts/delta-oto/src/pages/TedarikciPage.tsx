@@ -60,11 +60,11 @@ const MACRO_FAMILIES: { label: string; categoryNames: string[] }[] = [
 
 function CategoryBrandRefs({ category, brands }: { category: ProductCategory; brands: Brand[] }) {
   // Genişletme durumu bilerek burada, yerel state olarak tutuluyor: bu
-  // bileşen CategoryShowcase'te `key={display.name}` taşıyan bir üst
-  // sarmalayıcının içinde render edilir, dolayısıyla kategori değişince
-  // (hover önizleme veya kilitleme fark etmeksizin) React bileşeni komple
-  // yeniden mount eder ve `expanded` otomatik olarak false'a döner — ayrı
-  // bir reset efekti yazmaya gerek kalmaz.
+  // bileşen CategoryExplorer'da `key={active.name}` taşıyan bir üst
+  // sarmalayıcının içinde render edilir, dolayısıyla seçili kategori
+  // değişince React bileşeni komple yeniden mount eder ve `expanded`
+  // otomatik olarak false'a döner — ayrı bir reset efekti yazmaya gerek
+  // kalmaz.
   const [expanded, setExpanded] = useState(false);
   const shelfId = useId();
 
@@ -81,7 +81,7 @@ function CategoryBrandRefs({ category, brands }: { category: ProductCategory; br
   const visible = expanded ? resolved : shown;
 
   return (
-    <div id={shelfId} className="flex flex-wrap items-center gap-2.5 bg-slate-50 rounded-xl px-4 py-3.5 border border-slate-100">
+    <div id={shelfId} className="flex flex-wrap items-center gap-2.5">
       {visible.map((b, i) => {
         const isNewlyRevealed = i >= shown.length;
         return (
@@ -123,151 +123,211 @@ function CategoryBrandRefs({ category, brands }: { category: ProductCategory; br
   );
 }
 
-// Kategori Atlası: 23 onaylı kategori, 8 makro aile altında sunum-katmanında
-// kümelenmiş — hepsi her zaman görünür ve doğrudan tıklanabilir (ekstra
-// tıklama/alt sayfa yok). Altında seçili/önizlenen kategorinin sıkışık, yatay
-// "spotlight" paneli. Etkileşim: HOVER = canlı önizleme (masaüstü),
-// CLICK/TAP = kilitle. Fare atlasdan tamamen çıkınca son kilitlenen
-// kategoriye geri dönülür. Hover, kutucuğun kendisini vurgularken hovered
-// kategori dışındaki AİLELER hafifçe geri çekilir — aynı ailenin diğer
-// üyeleri okunaklı kalır. Aynı Excel-kaynaklı PRODUCT_CATEGORIES verisi,
-// yalnızca sunum katmanı.
-function CategoryShowcase({ categories, brands }: { categories: ProductCategory[]; brands: Brand[] }) {
+// Kategori Gezgini (Category Explorer) — eski "Kategori Atlası"nın yerini
+// alır. Önceki modelde bir TEK state (hoveredIdx) hem "canlı önizleme" hem
+// "gösterilecek kategori" anlamına geliyordu (displayIdx = hoveredIdx ??
+// activeIdx). Kullanıcı tıklayarak bir kategoriyi kilitledikten sonra fareyi
+// aşağıdaki marka alanına doğru hareket ettirdiğinde, ARADAN geçtiği başka
+// kategori satırlarının onMouseEnter'ı da hoveredIdx'i değiştiriyor, gösterilen
+// içerik istenmeden başka bir kategoriye atlıyordu (bkz. "Fren Sistemi" hata
+// senaryosu). Yeni model bunu bir yama ile değil, mimariyle çözer: hover'a
+// bağlı bir state ARTIK HİÇ YOK. Seçim SADECE tıklamayla değişir (CLICK =
+// commit). Ayrıca masaüstünde navigasyon (sol ray) ve seçili kategori detayı
+// (sağ stage) YAN YANA konumlanır — üst-alt yerine — bu da markalara ulaşmak
+// için başka kategori satırlarının üzerinden geçme zorunluluğunu yapısal
+// olarak ortadan kaldırır. Veri kaynağı değişmedi: aynı Excel-kökenli
+// PRODUCT_CATEGORIES + sunum-katmanı MACRO_FAMILIES.
+function CategoryExplorer({ categories, brands }: { categories: ProductCategory[]; brands: Brand[] }) {
   const [activeIdx, setActiveIdx] = useState(0);
-  const [hoveredIdx, setHoveredIdx] = useState<number | null>(null);
-  // Mobilde (<lg) atlas kutucuğuna dokunmak masaüstündeki gibi inline
-  // spotlight'ı AÇMAZ — akıştan kopma hissi yaratıyordu. Onun yerine aynı
-  // içerik (ikon/başlık/açıklama/marka rafı/CTA) alttan açılan bir
-  // bottom-sheet'te gösterilir; masaüstü inline panel ve mantığı
-  // değişmeden kalır, yalnızca CSS ile <lg'de gizlenir.
+  // Mobilde aile seçimi yalnızca alttaki kategori listesini FİLTRELER —
+  // hangi kategorinin "seçili/kilitli" olduğuyla (activeIdx) ilgisi yoktur.
+  const [mobileFamilyIdx, setMobileFamilyIdx] = useState(0);
+  // <lg'de kategoriye dokunmak masaüstündeki gibi inline stage'i değiştirmenin
+  // yanı sıra alttan açılan bir bottom-sheet gösterir — akıştan kopma
+  // hissi yaratmaması için (masaüstünde stage zaten görünür durumda).
   const [mobileSheetOpen, setMobileSheetOpen] = useState(false);
-  // Mobilde dokunma sonrası buton her zaman güvenilir bir "blur" almayabilir
-  // (tarayıcıya göre değişir) — bu da hoveredIdx'i sheet kapandıktan sonra da
-  // takılı bırakıp atlas'ta "yapışkan" hover rengi/aile soluklaşması gibi
-  // düzensiz görünüme yol açabiliyordu. Sheet'i kapatan her yol bu fonksiyonu
-  // kullanır ki kapanışta atlas her zaman temiz "kilitli" durumuna dönsün.
-  function closeMobileSheet() {
-    setMobileSheetOpen(false);
-    setHoveredIdx(null);
-  }
-  useEscapeKey(closeMobileSheet, mobileSheetOpen);
+  useEscapeKey(() => setMobileSheetOpen(false), mobileSheetOpen);
   useEffect(() => {
     document.body.style.overflow = mobileSheetOpen ? "hidden" : "";
     return () => { document.body.style.overflow = ""; };
   }, [mobileSheetOpen]);
-  const displayIdx = hoveredIdx ?? activeIdx;
-  const display = categories[displayIdx];
-  const isHovering = hoveredIdx !== null;
+
+  const active = categories[activeIdx];
 
   const indexByName = new Map(categories.map((c, i) => [c.name, i]));
   const families = MACRO_FAMILIES.map((f) => ({
     label: f.label,
     items: f.categoryNames
-      .map((name) => ({ idx: indexByName.get(name) }))
-      .filter((x): x is { idx: number } => x.idx !== undefined)
-      .map(({ idx }) => ({ cat: categories[idx], idx })),
+      .map((name) => indexByName.get(name))
+      .filter((idx): idx is number => idx !== undefined)
+      .map((idx) => ({ cat: categories[idx], idx })),
   }));
-  const hoveredFamily = hoveredIdx != null ? families.find((f) => f.items.some((it) => it.idx === hoveredIdx))?.label ?? null : null;
+  const activeFamily = families.find((f) => f.items.some((it) => it.idx === activeIdx)) ?? null;
+  // Sol ray iki alt-sütuna bölünür (4+4 aile) — tek sütunda 23 kategori +
+  // 8 aile başlığı dikey olarak çok uzun olurdu; 2 sütun modülü 1440×900'e
+  // kaydırmadan sığdırır.
+  const half = Math.ceil(families.length / 2);
+  const railColumns = [families.slice(0, half), families.slice(half)];
+  const mobileFamily = families[mobileFamilyIdx];
+
+  function selectCategory(idx: number) {
+    setActiveIdx(idx);
+    setMobileSheetOpen(true);
+  }
 
   return (
-    <div className="relative overflow-hidden" onMouseLeave={() => setHoveredIdx(null)}>
-      {/* Kategori Atlası — 8 makro aile, 23 kategori, tamamı her zaman görünür */}
-      <div className="relative grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-6 mb-8">
-        {families.map((family) => {
-          const isFamilyDim = isHovering && hoveredFamily !== family.label;
-          return (
-            <div key={family.label} className={`transition-opacity duration-300 ${isFamilyDim ? "opacity-55" : "opacity-100"}`}>
-              <div
-                className={`text-[10px] font-bold uppercase tracking-[0.1em] mb-2 transition-colors duration-300 truncate ${
-                  hoveredFamily === family.label ? "text-[#1B3A8F]" : "text-slate-400"
-                }`}
-              >
-                {family.label}
-              </div>
-              <div className="space-y-1">
-                {family.items.map(({ cat, idx }) => {
-                  const isHovered = idx === hoveredIdx;
-                  const isLocked = idx === activeIdx;
-                  return (
-                    <button
-                      key={cat.name}
-                      type="button"
-                      onClick={() => { setActiveIdx(idx); setMobileSheetOpen(true); }}
-                      onMouseEnter={() => setHoveredIdx(idx)}
-                      onFocus={() => setHoveredIdx(idx)}
-                      onBlur={() => setHoveredIdx(null)}
-                      aria-current={isLocked}
-                      className={`do-category-tile w-full flex items-center gap-2 rounded-md border-l-[3px] pl-2.5 pr-2 py-2 text-left transition-all duration-300 ${
-                        isHovered
-                          ? "bg-[#1B3A8F] border-l-[#7d9bea]"
-                          : isLocked
-                          ? "bg-[#1B3A8F]/[0.06] border-l-[#1B3A8F]/50"
-                          : "border-l-transparent hover:bg-slate-50"
-                      }`}
-                    >
-                      <cat.icon className={`w-3.5 h-3.5 shrink-0 ${isHovered ? "text-white" : "text-[#1B3A8F]"}`} strokeWidth={1.75} />
-                      <span className={`text-[12.5px] leading-tight font-semibold truncate ${isHovered ? "text-white" : "text-slate-700"}`}>{cat.name}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          );
-        })}
+    <div>
+      <div className="flex items-baseline gap-2.5 mb-7 lg:mb-9">
+        <span className="text-[13px] font-bold text-slate-700">{categories.length} kategori</span>
+        <span className="w-1 h-1 rounded-full bg-slate-300" aria-hidden="true" />
+        <span className="text-[13px] font-bold text-slate-700">{MACRO_FAMILIES.length} ürün ailesi</span>
       </div>
 
-      {/* Seçili/önizlenen kategori — sıkışık, yatay spotlight paneli.
-          Yalnızca >=lg'de görünür; <lg'de yerini aşağıdaki bottom-sheet alır. */}
-      <div key={display.name} className="hidden lg:block do-fade-up relative bg-white border border-slate-200 rounded-2xl overflow-hidden">
-        <div className="grid lg:grid-cols-[280px_1fr] divide-y lg:divide-y-0 lg:divide-x divide-slate-100">
-          <div className="relative overflow-hidden p-6 lg:p-7 flex flex-col justify-center">
-            <div className="absolute -right-3 -bottom-4 text-[100px] leading-none font-black text-slate-50 select-none pointer-events-none" aria-hidden="true">
-              {String(displayIdx + 1).padStart(2, "0")}
+      {/* MASAÜSTÜ — sol: aile + kategori rayı (yalnızca tıklama commit eder,
+          hover sadece düz CSS :hover ile satırın kendi rengini değiştirir,
+          hiçbir React state'ine dokunmaz). Sağ: seçili kategorinin stage'i,
+          marka şeridi ve CTA aynı editoryal kompozisyonda. */}
+      <div className="hidden lg:grid grid-cols-[380px_1fr] gap-12">
+        <div className="grid grid-cols-2 gap-x-6 gap-y-8 content-start">
+          {railColumns.map((col, ci) => (
+            <div key={ci} className="space-y-8">
+              {col.map((family) => {
+                const isActiveFamily = family.label === activeFamily?.label;
+                return (
+                  <div key={family.label}>
+                    <div
+                      className={`text-[10.5px] font-bold uppercase tracking-[0.1em] mb-2.5 transition-colors duration-200 truncate ${
+                        isActiveFamily ? "text-[#1B3A8F]" : "text-slate-400"
+                      }`}
+                    >
+                      {family.label}
+                    </div>
+                    <div className="space-y-0.5">
+                      {family.items.map(({ cat, idx }) => {
+                        const isActive = idx === activeIdx;
+                        return (
+                          <button
+                            key={cat.name}
+                            type="button"
+                            onClick={() => setActiveIdx(idx)}
+                            aria-current={isActive}
+                            className={`w-full flex items-center gap-2 rounded-md border-l-[3px] pl-2.5 pr-2 py-1.5 text-left transition-colors duration-200 ${
+                              isActive
+                                ? "bg-[#1B3A8F]/[0.07] border-l-[#1B3A8F]"
+                                : "border-l-transparent hover:bg-slate-50"
+                            }`}
+                          >
+                            <cat.icon className={`w-3.5 h-3.5 shrink-0 ${isActive ? "text-[#1B3A8F]" : "text-slate-400"}`} strokeWidth={1.75} />
+                            <span className={`text-[13px] leading-tight truncate ${isActive ? "text-[#1B3A8F] font-bold" : "text-slate-600 font-medium"}`}>
+                              {cat.name}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                );
+              })}
             </div>
-            <div className="relative flex items-center gap-3 mb-3">
-              <div className="w-12 h-12 rounded-xl bg-[#1B3A8F] flex items-center justify-center shrink-0">
-                <display.icon className="w-6 h-6 text-white" strokeWidth={1.75} />
-              </div>
-              <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-[#1B3A8F]">
-                {String(displayIdx + 1).padStart(2, "0")} / {String(categories.length).padStart(2, "0")}
+          ))}
+        </div>
+
+        <div key={active.name} className="do-fade-up min-w-0">
+          <div className="flex items-center gap-4 mb-4">
+            <div className="w-14 h-14 rounded-2xl bg-[#1B3A8F] flex items-center justify-center shrink-0">
+              <active.icon className="w-7 h-7 text-white" strokeWidth={1.75} />
+            </div>
+            <div className="min-w-0">
+              <span className="text-[10.5px] font-bold uppercase tracking-[0.15em] text-[#1B3A8F] block truncate">
+                {String(activeIdx + 1).padStart(2, "0")} / {String(categories.length).padStart(2, "0")} · {activeFamily?.label}
               </span>
+              <h3 className="text-2xl font-black text-slate-900 tracking-tight leading-tight">{active.name}</h3>
             </div>
-            <h3 className="relative text-xl font-black text-slate-900 tracking-tight leading-snug mb-1.5">{display.name}</h3>
-            <p className="relative text-slate-500 text-[13px] leading-relaxed line-clamp-2">{display.description}</p>
           </div>
-          <div className="p-6 lg:p-7 flex flex-col justify-center">
-            <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400 block mb-3">Öne Çıkan Markalar</span>
-            <CategoryBrandRefs category={display} brands={brands} />
-            <a
-              href="https://b2b.parcabul.com.tr/login.aspx"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 mt-4 text-[12.5px] font-semibold text-[#1B3A8F] hover:text-[#2547B5] transition-colors group w-fit"
-            >
-              B2B Portal'da inceleyin
-              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-            </a>
+          <p className="text-slate-500 text-[15px] leading-relaxed max-w-xl mb-7">{active.description}</p>
+
+          <div className="border-t border-slate-200 pt-6">
+            <div className="flex items-baseline justify-between mb-3.5">
+              <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-400">İlgili Markalar</span>
+              <span className="text-[11px] font-bold text-slate-400">{active.brandSlugs.length} marka</span>
+            </div>
+            <CategoryBrandRefs category={active} brands={brands} />
           </div>
+
+          <a
+            href="https://b2b.parcabul.com.tr/login.aspx"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-1.5 mt-6 text-[13px] font-semibold text-[#1B3A8F] hover:text-[#2547B5] transition-colors group"
+          >
+            Bu kategorideki ürünleri B2B Portal'da inceleyin
+            <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
+          </a>
         </div>
       </div>
 
-      {/* MOBİL BOTTOM-SHEET — <lg'de kategoriye dokununca alttan açılır;
-          masaüstü inline panelle aynı içerik (RepresentativeFinderModal'daki
-          modal dilini izler: backdrop blur, rounded-2xl, shadow-2xl). */}
+      {/* MOBİL — kendi modeli: aile filtresi (yatay kaydırma, sadece listeyi
+          daraltır) + filtrelenmiş kategori listesi (tıklama = seç + sheet aç).
+          Masaüstü rayının küçültülmüş hali DEĞİL — 23 kategoriyi tek dikey
+          liste yerine önce aile ile daraltmak dokunmatik gezinmeyi kısaltır. */}
+      <div className="lg:hidden">
+        <div className="flex gap-2 overflow-x-auto do-hide-scrollbar -mx-6 px-6 pb-1 mb-5" role="tablist" aria-label="Ürün ailesi seçin">
+          {families.map((family, fi) => {
+            const isActive = fi === mobileFamilyIdx;
+            return (
+              <button
+                key={family.label}
+                type="button"
+                role="tab"
+                onClick={() => setMobileFamilyIdx(fi)}
+                aria-selected={isActive}
+                className={`shrink-0 text-[12.5px] font-semibold px-3.5 py-2 rounded-full border transition-colors duration-200 whitespace-nowrap ${
+                  isActive ? "bg-[#1B3A8F] border-[#1B3A8F] text-white" : "border-slate-200 text-slate-600"
+                }`}
+              >
+                {family.label}
+              </button>
+            );
+          })}
+        </div>
+        <div className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-400 mb-3">
+          {mobileFamily.label} · {mobileFamily.items.length} kategori
+        </div>
+        <div className="space-y-1.5">
+          {mobileFamily.items.map(({ cat, idx }) => (
+            <button
+              key={cat.name}
+              type="button"
+              onClick={() => selectCategory(idx)}
+              className="w-full flex items-center gap-3 rounded-xl border border-slate-200 pl-3.5 pr-3 py-3 text-left active:bg-slate-50 transition-colors"
+            >
+              <div className="w-9 h-9 rounded-lg bg-[#1B3A8F]/[0.08] flex items-center justify-center shrink-0">
+                <cat.icon className="w-4 h-4 text-[#1B3A8F]" strokeWidth={1.75} />
+              </div>
+              <span className="flex-1 min-w-0 text-[13.5px] font-semibold text-slate-800 truncate">{cat.name}</span>
+              <ChevronRight className="w-4 h-4 text-slate-300 shrink-0" aria-hidden="true" />
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* MOBİL BOTTOM-SHEET — kategoriye dokununca alttan açılır
+          (RepresentativeFinderModal'daki modal dilini izler: backdrop blur,
+          rounded-2xl, shadow-2xl). */}
       <div
         className={`lg:hidden fixed inset-0 z-[70] transition-opacity duration-300 ${
           mobileSheetOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
         }`}
         aria-hidden={!mobileSheetOpen}
       >
-        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={closeMobileSheet} />
+        <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={() => setMobileSheetOpen(false)} />
         <div
           className={`absolute inset-x-0 bottom-0 max-h-[85vh] bg-white rounded-t-2xl shadow-2xl flex flex-col transition-transform duration-300 ${
             mobileSheetOpen ? "translate-y-0" : "translate-y-full"
           }`}
           role="dialog"
           aria-modal="true"
-          aria-label={display.name}
+          aria-label={active.name}
         >
           <div className="flex justify-center pt-3 pb-1 shrink-0" aria-hidden="true">
             <div className="w-10 h-1 rounded-full bg-slate-200" />
@@ -275,18 +335,18 @@ function CategoryShowcase({ categories, brands }: { categories: ProductCategory[
           <div className="flex items-center justify-between gap-3 px-5 pb-3 border-b border-slate-100 shrink-0">
             <div className="flex items-center gap-3 min-w-0">
               <div className="w-10 h-10 rounded-xl bg-[#1B3A8F] flex items-center justify-center shrink-0">
-                <display.icon className="w-5 h-5 text-white" strokeWidth={1.75} />
+                <active.icon className="w-5 h-5 text-white" strokeWidth={1.75} />
               </div>
               <div className="min-w-0">
-                <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-[#1B3A8F] block">
-                  {String(displayIdx + 1).padStart(2, "0")} / {String(categories.length).padStart(2, "0")}
+                <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-[#1B3A8F] block truncate">
+                  {String(activeIdx + 1).padStart(2, "0")} / {String(categories.length).padStart(2, "0")} · {activeFamily?.label}
                 </span>
-                <h3 className="text-[15px] font-black text-slate-900 tracking-tight leading-snug truncate">{display.name}</h3>
+                <h3 className="text-[15px] font-black text-slate-900 tracking-tight leading-snug truncate">{active.name}</h3>
               </div>
             </div>
             <button
               type="button"
-              onClick={closeMobileSheet}
+              onClick={() => setMobileSheetOpen(false)}
               aria-label="Kapat"
               className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors"
             >
@@ -294,16 +354,19 @@ function CategoryShowcase({ categories, brands }: { categories: ProductCategory[
             </button>
           </div>
           <div className="overflow-y-auto p-5">
-            <p className="text-slate-500 text-[13px] leading-relaxed mb-4">{display.description}</p>
-            <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400 block mb-3">Öne Çıkan Markalar</span>
-            <CategoryBrandRefs category={display} brands={brands} />
+            <p className="text-slate-500 text-[13px] leading-relaxed mb-4">{active.description}</p>
+            <div className="flex items-baseline justify-between mb-3">
+              <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-slate-400">İlgili Markalar</span>
+              <span className="text-[10px] font-bold text-slate-400">{active.brandSlugs.length} marka</span>
+            </div>
+            <CategoryBrandRefs category={active} brands={brands} />
             <a
               href="https://b2b.parcabul.com.tr/login.aspx"
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 mt-4 text-[12.5px] font-semibold text-[#1B3A8F] hover:text-[#2547B5] transition-colors group w-fit"
             >
-              B2B Portal'da inceleyin
+              Bu kategorideki ürünleri B2B Portal'da inceleyin
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
             </a>
           </div>
@@ -414,7 +477,7 @@ export function TedarikciPage() {
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">Ürün Kategorileri</span>
             <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-1.5 tracking-tight">Uçtan Uca Kategori Kapsamı</h2>
           </div>
-          <CategoryShowcase categories={PRODUCT_CATEGORIES} brands={CLASSIFIED_BRANDS} />
+          <CategoryExplorer categories={PRODUCT_CATEGORIES} brands={CLASSIFIED_BRANDS} />
         </div>
       </section>
 

@@ -104,7 +104,27 @@ export function IletisimPage() {
             dikey şerit ~%26 idi; 650px'e çıkarınca ~%30'a yükseliyor
             (~%15 daha fazla kaynak alanı) — köprü kulesi/güverte/kablo
             örgüsü hâlâ net, sadece etrafında biraz daha bağlam (gökyüzü/
-            güverte) görünüyor. */}
+            güverte) görünüyor.
+
+          GÖRÜNTÜ KALİTESİ NOTU (Faz 2 incelemesi): "hafif pikselli/yumuşak"
+          görünümün kök nedeni araştırıldı — kaynak 935×1400px, bu hero
+          masaüstünde ~1440px+ genişliğe object-cover ile geriliyor (≈1.54x
+          upscale, retina ekranlarda fiilen ~3x). Bu saf bir çözünürlük
+          yetersizliği; CSS/object-position tarafında telafi edilebilecek bir
+          render hatası DEĞİL. Gerçek, daha yüksek çözünürlüklü bir Boğaz
+          Köprüsü fotoğrafı için: (1) genel web araması, (2) bu fotoğrafın
+          kaynağı olan fotoğrafçının GitHub portföyündeki TÜM diğer
+          Istanbul-2023 görselleri (dahil ham "DSC_*" dosyalar) tek tek
+          kontrol edildi — o depodaki hiçbir dosya 1400px uzun kenarı
+          aşmıyor ve hiçbiri bu kadar iyi bir köprü kompozisyonu sunmuyor.
+          Wikimedia Commons'ta 2048×1161'lik daha büyük bir sürüm MEVCUT
+          ama bu sandbox'ın ağ politikası wikimedia.org'u (ve Unsplash/
+          Pexels'i) tamamen engelliyor — daha önce bu oturumda doğrulandı.
+          Sahte keskinleştirme filtresi/upscale eklenmedi (istenmiyor).
+          Sonuç: gerçek, ulaşılabilir daha iyi bir alternatif yok — aynı
+          asset ve crop bilinçli olarak KORUNDU. Kurumsal lisanslı/daha
+          yüksek çözünürlüklü bir çekim sağlanırsa asset swap teknik olarak
+          basit (tek dosya + aynı object-position mantığı). */}
       <section className="relative min-h-[590px] sm:min-h-[650px] flex items-center text-white overflow-hidden bg-[#0e1016]">
         <div className="absolute inset-0">
           <img

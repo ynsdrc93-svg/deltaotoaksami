@@ -333,7 +333,6 @@
     transform: none !important;
     filter: none !important;
   }
-  .do-category-tile, .do-category-tile * { transition: none !important; }
   /* Sonsuz döngü burada 1 iterasyonda anlık bitip görünmez (idle) karede
      kalır — rota okları için bunu ezip sabit/tam görünür bırakıyoruz. */
   .do-route-line { animation: none !important; stroke-dashoffset: 0 !important; opacity: 1 !important; }
