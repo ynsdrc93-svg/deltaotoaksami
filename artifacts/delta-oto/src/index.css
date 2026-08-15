@@ -239,7 +239,13 @@
   0% { transform: translateX(-50%); }
   100% { transform: translateX(0); }
 }
-.do-ticker-inner-reverse { animation: do-ticker-reverse 26s linear infinite; display: flex; width: max-content; }
+
+/* Marka/tedarikçi şeridi (ana sayfa Tedarikçilerimiz, 3 satır) — üstteki
+   fact-ticker'dan (.do-ticker-inner, 22s) kasıtlı olarak AYRI sınıflar:
+   ~%15-18 daha yavaş, "hâlâ canlı ama daha az huzursuz" hissi için — üst
+   şeridin hızını (farklı bir amaç: kısa fact listesi) etkilemeden. */
+.do-brand-ticker { animation: do-ticker 26s linear infinite; display: flex; width: max-content; }
+.do-brand-ticker-reverse { animation: do-ticker-reverse 30s linear infinite; display: flex; width: max-content; }
 
 /* Dur-on-hover SADECE gerçek hover cihazlarında (fare/trackpad) uygulanır.
    (hover: hover) olmayan dokunmatik cihazlarda bir dokunuş CSS :hover'ı
@@ -249,7 +255,7 @@
    cihazlara has kılındı. */
 @media (hover: hover) {
   .do-ticker-inner:hover { animation-play-state: paused; }
-  .do-ticker-inner-reverse:hover { animation-play-state: paused; }
+  .do-brand-ticker:hover, .do-brand-ticker-reverse:hover { animation-play-state: paused; }
 }
 
 /* Logo filters */

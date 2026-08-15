@@ -130,7 +130,7 @@ const DEPOTS = [
   },
 ];
 
-const DEALER_BENEFITS = [
+const PARTNERSHIP_BENEFITS = [
   {
     icon: <Package className="w-5 h-5" />,
     title: "Kanıtlanmış Ürün Gücü",
@@ -235,7 +235,7 @@ export function SpartPage() {
               href="/iletisim"
               className="inline-flex items-center gap-2 border border-white/20 hover:border-white/50 text-white font-semibold px-8 py-4 rounded-md transition-colors"
             >
-              Bayilik İçin Bize Ulaşın
+              SPART İçin Bize Ulaşın
             </Link>
           </div>
         </div>
@@ -413,13 +413,13 @@ export function SpartPage() {
         </div>
       </section>
 
-      {/* BAYİLİK AVANTAJLARI — light */}
+      {/* İŞ ORTAKLIĞI AVANTAJLARI — light */}
       <section className="bg-[#f8fafc] py-24 border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="max-w-2xl mb-14">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">İş Ortaklığı Fırsatı</span>
             <h2 className="text-3xl md:text-4xl font-black mt-3 mb-6 tracking-tight text-slate-900">
-              Bayilik, Ürünün Ötesinde Bir Ortaklıktır
+              SPART, Ürünün Ötesinde Bir Ortaklıktır
             </h2>
             <p className="text-slate-600 leading-relaxed">
               SPART'ı servisinize veya mağazanıza taşımak, yalnızca yeni bir ürün hattı eklemek
@@ -430,7 +430,7 @@ export function SpartPage() {
           </div>
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
-            {DEALER_BENEFITS.map((b) => (
+            {PARTNERSHIP_BENEFITS.map((b) => (
               <div
                 key={b.title}
                 className="do-card bg-white border border-slate-200 rounded-xl p-7 group"
@@ -452,7 +452,7 @@ export function SpartPage() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 text-center">
           <span className="inline-block text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea] mb-6">SPART Original Replacement</span>
           <h2 className="text-3xl md:text-4xl font-black tracking-tight mb-4">
-            SPART Bayisi Olmak İster Misiniz?
+            SPART ile Çalışmak İster Misiniz?
           </h2>
           <p className="text-white/65 max-w-xl mx-auto mb-10 text-[15px] leading-relaxed">
             Delta Oto'nun B2B platformu üzerinden SPART ürünlerine erişin,

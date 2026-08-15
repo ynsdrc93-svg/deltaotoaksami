@@ -397,16 +397,30 @@ export function HakkimizdaPage() {
             <h2 className="text-3xl md:text-4xl font-black mt-2 tracking-tight">İş Birimlerimiz</h2>
             <p className="text-white/75 mt-3 max-w-xl text-[15px]">Delta Oto, birbirini tamamlayan iş kollarıyla otomotiv satış sonrası sektöründe kapsamlı bir tedarik gücü sunmaktadır.</p>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
-            {BUSINESS_UNITS.map(({ icon: Icon, title, desc, tags }) => (
-              <div key={title} className="group bg-white/[0.08] border border-white/[0.12] rounded-xl p-7 hover:bg-white/[0.14] transition-colors flex flex-col">
-                <div className="w-11 h-11 bg-white/10 border border-white/15 rounded-xl flex items-center justify-center mb-5 group-hover:bg-white/[0.18] transition-colors">
-                  <Icon className="w-5 h-5 text-[#7d9bea]" />
+          {/* Kart ızgarası yerine numaralı editoryal satır listesi — bu sayfada
+              iki bölüm üstteki VALUES paneli ve Operasyon'un OPS_GROUPS listesi
+              aynı deseni (büyük soluk index numarası + ikon + metin, kart değil)
+              kullanıyor; İş Birimlerimiz aynı ızgara+kart tekrarını kırıyor. */}
+          <div className="divide-y divide-white/10 border-t border-b border-white/10">
+            {BUSINESS_UNITS.map(({ icon: Icon, title, desc, tags }, i) => (
+              <div
+                key={title}
+                className="group/row flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8 py-7 hover:bg-white/[0.03] transition-colors duration-300 rounded-lg -mx-4 px-4"
+              >
+                <div className="flex items-center gap-5 shrink-0 sm:w-72">
+                  <span className="text-4xl sm:text-5xl font-black text-white/[0.12] group-hover/row:text-[#7d9bea]/40 tabular-nums leading-none transition-colors duration-300 shrink-0">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <div className="w-11 h-11 bg-white/10 border border-white/15 rounded-xl flex items-center justify-center shrink-0 group-hover/row:bg-[#7d9bea]/15 group-hover/row:border-[#7d9bea]/30 transition-colors duration-300">
+                    <Icon className="w-5 h-5 text-[#7d9bea]" />
+                  </div>
+                  <h3 className="text-[15px] font-bold leading-snug">{title}</h3>
                 </div>
-                <h3 className="text-[15px] font-bold mb-3 leading-snug">{title}</h3>
-                <p className="text-white/75 text-sm leading-relaxed flex-1">{desc}</p>
-                <div className="flex flex-wrap gap-1.5 mt-5">
-                  {tags.map(t => <span key={t} className="text-[11px] bg-white/10 border border-white/15 text-white/70 px-2.5 py-1 rounded-full">{t}</span>)}
+                <div className="min-w-0 flex-1">
+                  <p className="text-white/75 text-sm leading-relaxed">{desc}</p>
+                  <div className="flex flex-wrap gap-1.5 mt-3.5">
+                    {tags.map(t => <span key={t} className="text-[11px] bg-white/10 border border-white/15 text-white/70 px-2.5 py-1 rounded-full">{t}</span>)}
+                  </div>
                 </div>
               </div>
             ))}
@@ -415,11 +429,13 @@ export function HakkimizdaPage() {
       </section>
 
       {/* GROUPAUTO — dark */}
+      {/* Not: eskiden burada çok düşük opaklıkta (opacity-10, üstüne de
+          %80 siyah katman) jenerik bir depo görseli (delta-oto-ops.png)
+          vardı — pratikte görünmez denecek kadar silikti. delta-oto-depot.jpg'i
+          burada da (dördüncü kez) kullanmak tekrar hissini güçlendireceğinden,
+          görsel katman tamamen kaldırıldı; grid doku zaten yeterli zemin
+          dokusu sağlıyor. */}
       <section className="relative bg-[#0e1016] text-white py-24 overflow-hidden">
-        <div className="absolute inset-0">
-          <img src="/images/delta-oto-ops.png" alt="" className="w-full h-full object-cover opacity-10" />
-          <div className="absolute inset-0 bg-[#0e1016]/80" />
-        </div>
         <div className="absolute inset-0 do-grid-bg opacity-30" />
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
           <div className="grid lg:grid-cols-2 gap-14 items-start">

@@ -20,22 +20,17 @@ export function TemsilcilerimizPage() {
     <div className="do-site bg-white min-h-screen">
       <SiteHeader />
 
-      {/* HERO — dark. Diğer 5 iç sayfa heroyla aynı kalıp: img + iki gradyan
-          overlay + grid-bg + sol aksan çizgisi (bkz. Hakkımızda/Tedarikçiler/
-          Operasyon/Kariyer/İletişim) — önceden yalnızca düz koyu zemin vardı,
-          bu da üst nav'ın altında görsel olarak "eksik/yarım" hissettiriyordu. */}
+      {/* HERO — dark, fotoğrafsız (bilinçli tercih). Bu sayfa artık aynı
+          Türkiye haritası deneyimini açan ikincil bir giriş noktası (bkz.
+          İletişim); ana depo fotoğrafını (delta-oto-depot.jpg) üçüncü kez
+          kırpıp burada da kullanmak "aynı fotoğrafın her yerde tekrarı"
+          hissini güçlendirirdi. Diğer sayfalardan görsel olarak kasıtlı
+          şekilde ayrışması — grid doku + marka lacivertinden ince bir üst-sol
+          ton + aksan çizgisi — yeterli "eksik/yarım hissi" düzeltmesini
+          fotoğraf tekrarına gerek kalmadan sağlıyor. */}
       <section className="relative min-h-[560px] flex items-center text-white overflow-hidden bg-[#0e1016]">
-        <div className="absolute inset-0">
-          <img
-            src="/images/delta-oto-hero.png"
-            alt=""
-            className="w-full h-full object-cover opacity-25"
-            style={{ objectPosition: "center 40%" }}
-          />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0e1016] via-[#0e1016]/80 to-[#0e1016]/30" />
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0e1016] via-transparent to-transparent" />
-        </div>
         <div className="absolute inset-0 do-grid-bg opacity-40" />
+        <div className="absolute inset-0 bg-gradient-to-br from-[#1B3A8F]/20 via-transparent to-transparent" />
         <div className="absolute left-0 top-0 w-[3px] h-full bg-gradient-to-b from-transparent via-[#1B3A8F] to-transparent opacity-60" />
         <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 relative z-10 py-14 lg:py-20 text-center flex flex-col items-center">
           <div className="flex items-center gap-3 mb-5 lg:mb-7">

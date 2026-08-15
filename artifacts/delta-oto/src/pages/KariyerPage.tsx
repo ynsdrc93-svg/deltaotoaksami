@@ -18,10 +18,10 @@ import { SiteFooter } from "@/components/shared/SiteFooter";
 import { useReveal } from "../hooks/use-motion";
 
 const CULTURE = [
-  { title: "Performans Odaklılık", desc: "Sonuçlar ve taahhüt bütünlüğü temel değerlendirme kriterleridir. Hedefler netleştirilir, takip edilir ve gerçekleştirilir." },
-  { title: "Kolektif Başarı", desc: "Bireysel yetkinlik, takım dinamikleriyle pekiştirilir. Bilgi paylaşımı ve iş birliği kurumsal kültürün temel bileşenidir." },
-  { title: "Sürekli Yetkinlik Gelişimi", desc: "Sektör bilgisini güncel tutmak için eğitim programları, mentorluk ve konferans katılım desteği sunulmaktadır." },
-  { title: "Kurumsal Dürüstlük", desc: "Müşterilere, tedarikçilere ve birbirimize karşı şeffaf, tutarlı ve dürüst ilişki standartları istisnasız korunur." },
+  { title: "Sözünü Tutmak", desc: "Bir teslim tarihine, bir siparişe ya da bir müşteriye verilen söz belirleyicidir. Hedefler net konur, sonucun arkasında durulur." },
+  { title: "Birlikte Çalışmak", desc: "Tek başına iyi olmak yetmez; bilgiyi paylaşan, birbirinin işini kolaylaştıran bir ekip yapısı önceliklidir." },
+  { title: "İşin Başında Öğrenmek", desc: "Sektör bilgisi büyük ölçüde sahada, zamanla edinilir; bu süreç eğitim desteği ve kıdemli çalışan tecrübesiyle güçlenir." },
+  { title: "Dürüst İlişkiler", desc: "Müşteriyle, tedarikçiyle ve ekip arkadaşlarıyla ilişkide gerçekçi konuşmak, söz vermeden önce iki kez düşünmek esastır." },
 ];
 
 const TESTIMONIALS = [

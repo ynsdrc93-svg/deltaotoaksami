@@ -109,7 +109,7 @@ export function LandingPage() {
   // şeridi durdurur (diğer şeritler akmaya devam eder), bir markaya
   // dokunmak "siteden ayrılıyorsunuz" onayı ister — onaylanana/iptal
   // edilene kadar o şerit duraklı kalır, kullanıcı kazara siteden ayrılmaz.
-  // Masaüstü hover-duraklatma (CSS, do-ticker-inner:hover) bundan tamamen
+  // Masaüstü hover-duraklatma (CSS, do-brand-ticker:hover) bundan tamamen
   // bağımsız çalışmaya devam eder — ikisi hiç çakışmaz.
   const [pausedRow, setPausedRow] = useState<number | null>(null);
   const [confirmBrand, setConfirmBrand] = useState<{ brand: Brand; rowIndex: number } | null>(null);
@@ -227,17 +227,27 @@ export function LandingPage() {
       {/* HERO (dark) — mobilde min-h-screen yerine diğer sayfalardaki
           kompakt yükseklik (560px); tam ekran yükseklik yalnızca lg+'da
           korunur, böylece başlık+açıklama+CTA'lar ilk mobil ekranda daha
-          yukarıda ve görünür oturur. */}
+          yukarıda ve görünür oturur.
+          Görsel: jenerik/anonim depo fotoğrafı yerine gerçek Delta Oto
+          tesisi (delta-oto-depot.jpg — binada "delta50" yazısı ve Groupauto
+          rozeti görünür durumda). Operasyon sayfası AYNI kaynağı ama FARKLI
+          bir crop ile kullanıyor (bkz. OperasyonPage yorumu): bu container
+          lg+'da tam ekran yüksekliğinde (Operasyon'un sabit 560px'inden
+          farklı) olduğundan, object-cover matematiği zaten doğal olarak
+          farklı bir dilim gösteriyor — mobilde dar-dikey crop tabelayı
+          çerçeveler, masaüstünde geniş-kısa crop neredeyse tüm kaynağı
+          gösterir. Opaklık/gradyan da tabelanın okunur kalması için bu
+          sayfaya özgü hafifçe açıldı (bkz. Operasyon'daki kendi değerleri —
+          ikisi de aynı değil). */}
       <section className="relative min-h-[560px] lg:min-h-screen flex items-center overflow-hidden bg-[#0e1016] text-white">
         <div className="absolute inset-0">
           <img
             ref={heroParallax}
-            src="/images/delta-oto-hero.png"
+            src="/images/delta-oto-depot.jpg"
             alt=""
-            className="w-full h-full object-cover opacity-30 will-change-transform"
-            style={{ objectPosition: "center 40%" }}
+            className="w-full h-full object-cover object-[34%_50%] lg:object-[40%_28%] opacity-65 will-change-transform"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0e1016] via-[#0e1016]/80 to-[#0e1016]/30"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0e1016]/92 via-[#0e1016]/55 to-[#0e1016]/15"></div>
           <div className="absolute inset-0 bg-gradient-to-t from-[#0e1016] via-transparent to-transparent"></div>
         </div>
         <div className="do-hero-stripe"></div>
@@ -314,7 +324,7 @@ export function LandingPage() {
             </div>
           </div>
 
-          <p className="mt-12 text-slate-800 text-base sm:text-xl md:text-2xl font-bold tracking-tight sm:whitespace-nowrap">1976'dan bu yana otomotiv yedek parça dağıtımında kesintisiz güç.</p>
+          <p className="mt-12 text-slate-800 text-base sm:text-xl md:text-2xl font-bold tracking-tight sm:whitespace-nowrap">1976'dan bu yana otomotiv yedek parça dağıtımında istikrarlı bir güç.</p>
         </div>
       </section>
 
@@ -368,7 +378,7 @@ export function LandingPage() {
                   <div className="font-bold text-white text-lg leading-tight">Groupauto International</div>
                   <div className="text-[11px] text-[#7d9bea] mt-1.5 uppercase tracking-[0.2em] font-semibold">40+ Ülke · 3.000+ Üye Firma</div>
                   <p className="text-sm text-blue-100/65 leading-relaxed font-light mt-4">
-                    Dünyanın en büyük bağımsız yedek parça ağı: global satın alma gücü, ortak kalite standartları ve uluslararası tedarik kapasitesi.
+                    Bağımsız yedek parça sektörünün önde gelen küresel ağlarından biri: üye firmalarına global satın alma gücü, ortak kalite standartları ve uluslararası tedarik kapasitesi sunar.
                   </p>
                   <ul className="mt-5 space-y-2.5">
                     {[
@@ -422,7 +432,7 @@ export function LandingPage() {
               </p>
               <h2 ref={ref} className="do-reveal do-d1 text-4xl md:text-5xl font-black text-white mb-8 leading-[1.1] tracking-tight">
                 Üç Merkezden,<br />
-                <span className="text-[#7d9bea]">81 İle Kesintisiz.</span>
+                <span className="text-[#7d9bea]">81 İle Tam Kapsama.</span>
               </h2>
               <p ref={ref} className="do-reveal do-d2 text-[16px] text-gray-300 leading-[1.85] font-light">
                 Ümraniye, Gebze ve İzmir'deki operasyon merkezlerimizden Türkiye'nin tamamına ve küresel pazarlara uzanan dağıtım ağıyla; binek ve hafif ticari araç gruplarında 250'den fazla markanın tedariğini hız ve güvenilirlik standartlarında gerçekleştiriyoruz.
@@ -548,7 +558,7 @@ export function LandingPage() {
               onTouchCancel={() => setPausedRow((r) => (r === rowIndex ? null : r))}
             >
               <div
-                className={rowIndex === 1 ? "do-ticker-inner" : "do-ticker-inner-reverse"}
+                className={rowIndex === 1 ? "do-brand-ticker" : "do-brand-ticker-reverse"}
                 style={{ animationPlayState: pausedRow === rowIndex || confirmBrand?.rowIndex === rowIndex ? "paused" : undefined }}
               >
                 {[...strip, ...strip].map((b, i) => {

@@ -89,14 +89,23 @@ export function IletisimPage() {
 
       {/* HERO — gerçek yerel fotoğraf (935×1400 dikey kaynak; bkz.
           public/images/iletisim-hero-bosphorus.jpg). Kaynak dikey olduğu için
-          tek asset + breakpoint'e göre farklı object-position kullanılıyor:
-          mobilde container oranı (~390×560) kaynağa çok yakın olduğu için
-          neredeyse tüm kare (balıkçı + köprü + gökyüzü) görünür kalıyor;
-          masaüstünde container çok daha geniş/kısa olduğu için görünen dikey
-          şerit ~%26'ya düşüyor — object-[center_34%] bu şeridi köprünün
-          kırmızı aydınlatılmış kulesi + güverte + kablo örgüsü üzerine
-          ortalar (balıkçı siluetini feda eder, köprünün kendisini net tutar). */}
-      <section className="relative min-h-[560px] flex items-center text-white overflow-hidden bg-[#0e1016]">
+          tek asset + breakpoint'e göre farklı object-position kullanılıyor.
+          "Daha fazla fotoğraf görünsün" isteği CSS scale() ile SAHTE bir
+          zoom-out olarak değil, hero'nun kendi yüksekliğini artırarak
+          çözüldü — object-cover matematiğinde (bkz. object-cover crop
+          hesapları) sabit genişlikte bir full-bleed hero'da yükseklik
+          artışı, kaynağın DAHA FAZLA dikey aralığını görünür kılar, boş
+          kenar/letterbox riski olmadan:
+          - mobilde (~390px genişlik) container zaten kaynağa çok yakındı
+            (~%96 yükseklik görünüyordu) — 560→590px ile pratikte tam kare
+            (~%100 yükseklik, ~%97 genişlik) görünür oldu; buradan alınacak
+            görünür-alan kazancı zaten sınırlıydı.
+          - masaüstünde (1440px genişlik) önceki 560px yükseklikte görünen
+            dikey şerit ~%26 idi; 650px'e çıkarınca ~%30'a yükseliyor
+            (~%15 daha fazla kaynak alanı) — köprü kulesi/güverte/kablo
+            örgüsü hâlâ net, sadece etrafında biraz daha bağlam (gökyüzü/
+            güverte) görünüyor. */}
+      <section className="relative min-h-[590px] sm:min-h-[650px] flex items-center text-white overflow-hidden bg-[#0e1016]">
         <div className="absolute inset-0">
           <img
             src="/images/iletisim-hero-bosphorus.jpg"

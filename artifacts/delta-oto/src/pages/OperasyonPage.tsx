@@ -86,16 +86,26 @@ export function OperasyonPage() {
     <div className="do-site bg-white min-h-screen">
       <SiteHeader />
 
-      {/* HERO */}
+      {/* HERO — gerçek Delta Oto tesis fotoğrafı (delta-oto-depot.jpg,
+          binada "delta50" yazısı + Groupauto rozeti görünür). Ana sayfa
+          AYNI kaynağı kullanıyor ama bu container'ın sabit 560px yüksekliği
+          (ana sayfanın lg+'da tam-ekran yüksekliğinden farklı) object-cover
+          matematiğini tersine çeviriyor: burada TAM GENİŞLİK gösterilip
+          dikey eksende kırpılıyor (ana sayfada tam TERSİ) — iki hero doğal
+          olarak farklı bir dilim gösteriyor, aynı fotoğrafın kopyası gibi
+          hissettirmiyor. object-position Y ~%42 tabelayı (kaynakta y:~%15-55)
+          çerçeve içinde tutacak şekilde seçildi; önceki opacity-20 + %80
+          opak gradyan tabelayı pratikte görünmez kılıyordu — ikisi de
+          tabela okunur kalsın diye açıldı (ham ayna/mirror kullanılmadı:
+          kaynaktaki "delta50" yazısı ayna alınırsa ters ve yanlış görünürdü). */}
       <section className="relative min-h-[560px] flex items-center text-white overflow-hidden bg-[#0e1016]">
         <div className="absolute inset-0">
           <img
             src="/images/delta-oto-depot.jpg"
             alt=""
-            className="w-full h-full object-cover opacity-20"
-            style={{ objectPosition: "center 42%" }}
+            className="w-full h-full object-cover object-[38%_50%] lg:object-[46%_38%] opacity-62"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0e1016] via-[#0e1016]/80 to-[#0e1016]/30" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0e1016]/90 via-[#0e1016]/50 to-[#0e1016]/12" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0e1016] via-transparent to-transparent" />
         </div>
         <div className="absolute inset-0 do-grid-bg opacity-40" />
