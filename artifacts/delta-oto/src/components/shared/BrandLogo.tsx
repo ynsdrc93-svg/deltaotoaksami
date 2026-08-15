@@ -12,7 +12,7 @@ import type { Brand } from "@/lib/brands";
 // içeren, şeffaf zeminde görünmeyen asset'ler — bkz. brands.ts) koyu bir
 // kart zemininde gösterilir; site genelindeki "dark hero" tonuyla (#0e1016)
 // tutarlıdır.
-type BrandLogoSize = "wall" | "chip" | "strip" | "compact";
+type BrandLogoSize = "wall" | "chip" | "strip" | "compact" | "dock";
 
 interface SizeStyle {
   light: string;
@@ -53,6 +53,20 @@ const SIZES: Record<BrandLogoSize, SizeStyle> = {
     dark: "border border-white/10 rounded-xl h-20 flex items-center justify-center px-6 bg-[#0e1016] hover:border-white/25 hover:shadow-md transition-all",
     img: "max-h-11 w-auto h-auto object-contain",
     textSize: "text-[12px]",
+    textHover: "",
+  },
+  /** Aktif Ürün Doku'daki (Tedarikçiler kategori matrisi) marka slotları
+   * için — kasıtlı olarak ÇERÇEVESİZ ve kartsız: tek tek kutulanmış bir
+   * "logo rafı" değil, dokuya doğrudan entegre yatay bir şerit hissi
+   * hedefler. Açık logolar hiçbir kutuya sahip değildir (yalnızca boşluk
+   * ayırır); "dark" logolar (şeffaf zeminde görünmeyen beyaz/açık çizimler)
+   * yalnızca gerekli minimum koyu arka planı korur — bu bir istisna, kural
+   * değil (bkz. brands.ts logoBackground alanı). */
+  dock: {
+    light: "flex items-center justify-center h-9 px-2 shrink-0",
+    dark: "flex items-center justify-center h-9 px-2.5 rounded-md bg-[#0e1016] shrink-0",
+    img: "max-h-5 max-w-[76px] w-auto h-auto object-contain",
+    textSize: "text-[10.5px]",
     textHover: "",
   },
   strip: {
