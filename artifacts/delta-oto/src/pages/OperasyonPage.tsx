@@ -120,10 +120,10 @@ export function OperasyonPage() {
           <h1 ref={ref} className="do-reveal do-d1 text-4xl sm:text-5xl md:text-6xl lg:text-[72px] font-black leading-[1.05] tracking-[-0.02em] mb-3 lg:mb-6">
             <span className="do-hero-line">ÜÇ MERKEZDEN</span><br />
             <span className="text-white">81 İLE</span><br />
-            <span className="text-[#7d9bea]">KESİNTİSİZ AĞ</span>
+            <span className="text-[#7d9bea]">YAYGIN DAĞITIM</span>
           </h1>
           <p ref={ref} className="do-reveal do-d2 text-[17px] text-gray-300 leading-[1.6] sm:leading-[1.8] max-w-2xl mb-4 lg:mb-10 font-light">
-            Lojistik ağımız; Ümraniye, Gebze ve İzmir'deki operasyon merkezlerimizden 81 ile hızlı, güvenilir ve sürdürülebilir hizmet sunar.
+            Lojistik ağımız; Ümraniye, Gebze ve İzmir'deki operasyon merkezlerimizden 81 ile hızlı, güvenilir ve planlı dağıtım sunar.
           </p>
           {/* 2x2 (mobil) / 1x4 (sm+) grid — eşit sütun genişliği garantili; eski
               flex-wrap + min-w yaklaşımı içerik-bağımlı genişlik ürettiği için

@@ -121,7 +121,7 @@ export function LandingPage() {
     return () => { document.body.style.overflow = ""; };
   }, [confirmBrand]);
 
-  const tickerItems = ["250+ Marka", "81 İl + İhracat", "Kuruluş 1976", "Groupauto Üyesi", "Opar Ege Bölge Bayiliği", "Ümraniye Merkez", "Binek & Hafif Ticari", "Kesintisiz Lojistik"];
+  const tickerItems = ["250+ Marka", "81 İl + İhracat", "Kuruluş 1976", "Groupauto Üyesi", "Opar Ege Bölge Bayiliği", "Ümraniye Merkez", "Binek & Hafif Ticari", "3 Operasyon Merkezi"];
 
   return (
     <div className="do-page min-h-screen bg-white text-slate-900 overflow-x-clip">
