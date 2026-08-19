@@ -306,6 +306,20 @@
 }
 .do-chip-expand { animation: do-chip-expand 0.2s ease-out both; }
 
+/* Tedarikçiler kategori gezgini — aile endeksi ve alt kategori satırlarında
+   "spotlight" hissi: bir satır hover edilirken KOMŞU satırlar (hover'daki ve
+   kalıcı olarak seçili olan hariç) hafifçe geri çekilir (opacity düşer).
+   Saf CSS :hover + :not(:hover) — hiçbir React state'ine dokunmaz, bu yüzden
+   hover'ın committed seçimi (activeIdx) etkilemesi mimari olarak mümkün
+   değil; yalnızca fare listenin İÇİNDEYKEN geçerlidir, ayrılınca tüm
+   satırlar anında tam opaklığa döner. */
+.do-index-list:hover .do-index-row:not(:hover):not(.do-index-row-active) {
+  opacity: 0.55;
+}
+.do-index-row {
+  transition: opacity 150ms ease-out;
+}
+
 /* Keyboard focus, global */
 :where(a, button, [tabindex]):focus-visible {
   outline: 2px solid #2547B5;
@@ -324,6 +338,8 @@
     transition: none !important;
   }
   .do-card, .do-nav-link::after, .do-spart-badge { transition: none; }
+  .do-index-row { transition: none; }
+  .do-index-list:hover .do-index-row:not(:hover):not(.do-index-row-active) { opacity: 1; }
   .do-card:hover { transform: none; }
   .do-mobile-panel { transition: none; }
   .animate-pulse { animation: none; }

@@ -185,7 +185,7 @@ function CategoryExplorer({ categories, brands }: { categories: ProductCategory[
           yalnızca düz CSS :hover ile kendi rengini değiştirir; seçim
           SADECE tıklamayla commit edilir. */}
       <div className="hidden lg:grid grid-cols-[280px_1fr] gap-10">
-        <div className="divide-y divide-slate-200 border-t border-slate-200 self-start">
+        <div className="do-index-list divide-y divide-slate-200 border-t border-slate-200 self-start">
           {families.map((family, fi) => {
             const isActive = fi === activeFamilyIdx;
             return (
@@ -194,36 +194,25 @@ function CategoryExplorer({ categories, brands }: { categories: ProductCategory[
                 type="button"
                 onClick={() => selectFamily(fi)}
                 aria-current={isActive}
-                className={`group relative w-full flex items-start gap-3.5 py-4 px-3.5 text-left overflow-hidden transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] ${
-                  isActive ? "bg-[#1B3A8F] focus-visible:outline-white" : "focus-visible:outline-[#1B3A8F]"
+                className={`do-index-row group w-full flex items-start gap-3.5 py-4 px-3.5 text-left border-l-2 transition-colors duration-150 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] ${
+                  isActive
+                    ? "do-index-row-active bg-[#1B3A8F] border-l-[#1B3A8F] focus-visible:outline-white"
+                    : "border-l-transparent hover:border-l-[#1B3A8F]/40 hover:bg-[#1B3A8F]/[0.04] focus-visible:outline-[#1B3A8F]"
                 }`}
               >
-                {/* Hover-yalnızca navy dolgu: seçili DEĞİLSE, fareyle üzerine
-                    gelince soldan sağa açılan bir dolgu (scale-x, saf CSS
-                    :hover — hiçbir state'e dokunmaz). Fare ayrılınca geri
-                    kapanır; seçili aile için bu katman hiç render edilmez,
-                    onun navy'si kalıcı ve statiktir. */}
-                {!isActive && (
-                  <span
-                    className="absolute inset-0 bg-[#1B3A8F] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-200 ease-out"
-                    aria-hidden="true"
-                  />
-                )}
-                <span className={`relative z-10 text-xl font-black tabular-nums w-7 shrink-0 pt-px transition-colors duration-200 ${
-                  isActive ? "text-white" : "text-slate-300 group-hover:text-white"
+                <span className={`text-xl font-black tabular-nums w-7 shrink-0 pt-px transition-colors duration-150 ${
+                  isActive ? "text-white" : "text-slate-300 group-hover:text-[#1B3A8F]"
                 }`}>
                   {String(fi + 1).padStart(2, "0")}
                 </span>
-                <span className={`relative z-10 flex-1 text-[13px] leading-snug pt-1 transition-colors duration-200 ${
-                  isActive ? "text-white font-bold" : "text-slate-600 font-semibold group-hover:text-white"
+                <span className={`flex-1 leading-snug transition-colors duration-150 ${
+                  isActive ? "text-[14px] pt-[3px] text-white font-bold" : "text-[13px] pt-1 text-slate-600 font-semibold group-hover:text-[#1B3A8F]"
                 }`}>
                   {family.label}
                 </span>
                 <ChevronRight
-                  className={`relative z-10 w-4 h-4 shrink-0 mt-1 transition-all duration-200 ${
-                    isActive
-                      ? "text-white opacity-100 translate-x-0"
-                      : "text-white opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0"
+                  className={`w-4 h-4 shrink-0 mt-1 transition-opacity duration-150 ${
+                    isActive ? "text-white opacity-100" : "text-[#1B3A8F]/70 opacity-0 group-hover:opacity-100"
                   }`}
                   aria-hidden="true"
                 />
@@ -238,7 +227,7 @@ function CategoryExplorer({ categories, brands }: { categories: ProductCategory[
               <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-[#1B3A8F]">{activeFamily?.label}</span>
               <span className="text-[11px] font-bold text-slate-400">{activeFamily?.items.length} kategori</span>
             </div>
-            <div className="grid grid-cols-2 gap-x-8 gap-y-1">
+            <div className="do-index-list grid grid-cols-2 gap-x-8 gap-y-1">
               {activeFamily?.items.map(({ cat, idx }) => {
                 const isActive = idx === activeIdx;
                 return (
@@ -247,27 +236,35 @@ function CategoryExplorer({ categories, brands }: { categories: ProductCategory[
                     type="button"
                     onClick={() => setActiveIdx(idx)}
                     aria-current={isActive}
-                    className={`group flex items-center gap-2.5 -ml-[2px] pl-2.5 pr-2 py-2 text-left border-l-2 transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#1B3A8F] ${
-                      isActive ? "border-l-[#1B3A8F] bg-[#1B3A8F]/[0.08]" : "border-l-transparent hover:bg-[#1B3A8F]/[0.05]"
+                    className={`do-index-row group flex items-center gap-2.5 -ml-[2px] pl-2.5 pr-2 py-2 text-left border-l-2 transition-colors duration-150 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#1B3A8F] ${
+                      isActive ? "do-index-row-active border-l-[#1B3A8F] bg-[#1B3A8F]/[0.08]" : "border-l-transparent hover:bg-[#1B3A8F]/[0.05]"
                     }`}
                   >
                     <cat.icon
-                      className={`w-4 h-4 shrink-0 transition-transform duration-150 ${
-                        isActive ? "text-[#1B3A8F]" : "text-slate-400 group-hover:text-[#1B3A8F] group-hover:translate-x-0.5"
+                      className={`w-4 h-4 shrink-0 transition-colors duration-150 ${
+                        isActive ? "text-[#1B3A8F]" : "text-slate-400 group-hover:text-[#1B3A8F]"
                       }`}
                       strokeWidth={1.75}
                     />
                     <span
-                      className={`flex-1 text-[14px] leading-tight transition-transform duration-150 ${
-                        isActive ? "text-[#1B3A8F] font-bold" : "text-slate-700 font-medium group-hover:text-[#1B3A8F] group-hover:translate-x-0.5"
+                      className={`flex-1 text-[14px] leading-tight transition-colors duration-150 ${
+                        isActive ? "text-[#1B3A8F] font-bold" : "text-slate-700 font-medium group-hover:text-[#1B3A8F]"
                       }`}
                     >
                       {cat.name}
                     </span>
-                    <ChevronRight
-                      className={`w-3.5 h-3.5 shrink-0 text-[#1B3A8F] transition-opacity duration-150 ${isActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`}
-                      aria-hidden="true"
-                    />
+                    {/* Seçili satırda "açık/expanded" hissi veren aşağı ok;
+                        yalnızca hover'da beliren sağ ok bir "git/seç"
+                        affordance'ıdır — ikisi farklı anlamlar taşır, bu
+                        yüzden aynı ikon değil. */}
+                    {isActive ? (
+                      <ChevronDown className="w-3.5 h-3.5 shrink-0 text-[#1B3A8F]" aria-hidden="true" />
+                    ) : (
+                      <ChevronRight
+                        className="w-3.5 h-3.5 shrink-0 text-[#1B3A8F]/60 opacity-0 group-hover:opacity-100 transition-opacity duration-150"
+                        aria-hidden="true"
+                      />
+                    )}
                   </button>
                 );
               })}
