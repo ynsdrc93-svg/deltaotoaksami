@@ -102,6 +102,13 @@ function CategoryBrandRefs({ category, brands }: { category: ProductCategory; br
 // SADECE seçili ailenin kategorileri + onun altında (aynı sütunda, "kopuk
 // kutu" hissi vermeden) AKTİF ÜRÜN DOKU. Veri kaynağı değişmedi: aynı
 // Excel-kökenli PRODUCT_CATEGORIES + sunum-katmanı MACRO_FAMILIES.
+//
+// Mikro-etkileşim turu: aktif aile satırı artık KALICI dolgun navy zemin +
+// beyaz tipografi (aktif olmayan satırlarda hiçbir arka plan yok — yalnızca
+// hover'da soldan sağa açılan bir navy dolgu pseudo-katmanı belirir, saf CSS
+// :hover, hiçbir state'e dokunmaz; fare ayrılınca geri kapanır). Varsayılan
+// yükleme durumu artık her zaman family 01 / category 01 — bkz. aşağıdaki
+// orderedCategories notu.
 function CategoryExplorer({ categories, brands }: { categories: ProductCategory[]; brands: Brand[] }) {
   const [activeIdx, setActiveIdx] = useState(0);
   // Mobilde aile seçimi yalnızca alttaki kategori listesini FİLTRELER —
@@ -122,15 +129,29 @@ function CategoryExplorer({ categories, brands }: { categories: ProductCategory[
     return () => { document.body.style.overflow = ""; };
   }, [mobileSheetOpen, mobileFamilySheetOpen]);
 
-  const active = categories[activeIdx];
+  // GÖRÜNTÜLENEN sıra: 01-08 aile hiyerarşisiyle TUTARLI, tek bir "display
+  // order". categories.ts'teki PRODUCT_CATEGORIES'in kendi (Excel) satır
+  // sırasına DOKUNULMADI — brandSlugs/icon/description/ilişkiler birebir
+  // aynı; yalnızca bu bileşen, MACRO_FAMILIES sırasına göre düzleştirilmiş
+  // bir sunum listesi (orderedCategories) türetiyor ve activeIdx artık BU
+  // listenin içindeki pozisyonu tutuyor. Böylece "Motor İç Aksamı" (family
+  // 01'in ilk kategorisi) 01/23 olarak görünür — önceden Excel'deki ham
+  // satır konumu olan 15/23'ü gösteriyordu, kafa karıştırıcıydı.
+  const categoryByName = new Map(categories.map((c) => [c.name, c]));
+  const orderedCategories = MACRO_FAMILIES.flatMap((f) =>
+    f.categoryNames
+      .map((name) => categoryByName.get(name))
+      .filter((c): c is ProductCategory => c !== undefined),
+  );
+  const orderedIndexByName = new Map(orderedCategories.map((c, i) => [c.name, i]));
+  const active = orderedCategories[activeIdx];
 
-  const indexByName = new Map(categories.map((c, i) => [c.name, i]));
   const families = MACRO_FAMILIES.map((f) => ({
     label: f.label,
     items: f.categoryNames
-      .map((name) => indexByName.get(name))
+      .map((name) => orderedIndexByName.get(name))
       .filter((idx): idx is number => idx !== undefined)
-      .map((idx) => ({ cat: categories[idx], idx })),
+      .map((idx) => ({ cat: orderedCategories[idx], idx })),
   }));
   const activeFamilyIdx = families.findIndex((f) => f.items.some((it) => it.idx === activeIdx));
   const activeFamily = families[activeFamilyIdx] ?? null;
@@ -173,16 +194,39 @@ function CategoryExplorer({ categories, brands }: { categories: ProductCategory[
                 type="button"
                 onClick={() => selectFamily(fi)}
                 aria-current={isActive}
-                className={`w-full flex items-start gap-3.5 py-4 pl-3.5 -ml-3.5 pr-2 text-left border-l-2 transition-colors duration-200 ${
-                  isActive ? "border-l-[#1B3A8F] bg-[#1B3A8F]/[0.06]" : "border-l-transparent hover:bg-slate-50"
+                className={`group relative w-full flex items-start gap-3.5 py-4 px-3.5 text-left overflow-hidden transition-colors duration-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] ${
+                  isActive ? "bg-[#1B3A8F] focus-visible:outline-white" : "focus-visible:outline-[#1B3A8F]"
                 }`}
               >
-                <span className={`text-xl font-black tabular-nums w-7 shrink-0 pt-px transition-colors duration-200 ${isActive ? "text-[#1B3A8F]" : "text-slate-300"}`}>
+                {/* Hover-yalnızca navy dolgu: seçili DEĞİLSE, fareyle üzerine
+                    gelince soldan sağa açılan bir dolgu (scale-x, saf CSS
+                    :hover — hiçbir state'e dokunmaz). Fare ayrılınca geri
+                    kapanır; seçili aile için bu katman hiç render edilmez,
+                    onun navy'si kalıcı ve statiktir. */}
+                {!isActive && (
+                  <span
+                    className="absolute inset-0 bg-[#1B3A8F] origin-left scale-x-0 group-hover:scale-x-100 transition-transform duration-200 ease-out"
+                    aria-hidden="true"
+                  />
+                )}
+                <span className={`relative z-10 text-xl font-black tabular-nums w-7 shrink-0 pt-px transition-colors duration-200 ${
+                  isActive ? "text-white" : "text-slate-300 group-hover:text-white"
+                }`}>
                   {String(fi + 1).padStart(2, "0")}
                 </span>
-                <span className={`text-[13px] leading-snug pt-1 transition-colors duration-200 ${isActive ? "text-slate-900 font-bold" : "text-slate-600 font-semibold"}`}>
+                <span className={`relative z-10 flex-1 text-[13px] leading-snug pt-1 transition-colors duration-200 ${
+                  isActive ? "text-white font-bold" : "text-slate-600 font-semibold group-hover:text-white"
+                }`}>
                   {family.label}
                 </span>
+                <ChevronRight
+                  className={`relative z-10 w-4 h-4 shrink-0 mt-1 transition-all duration-200 ${
+                    isActive
+                      ? "text-white opacity-100 translate-x-0"
+                      : "text-white opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0"
+                  }`}
+                  aria-hidden="true"
+                />
               </button>
             );
           })}
@@ -203,14 +247,27 @@ function CategoryExplorer({ categories, brands }: { categories: ProductCategory[
                     type="button"
                     onClick={() => setActiveIdx(idx)}
                     aria-current={isActive}
-                    className={`flex items-center gap-2.5 -ml-[2px] pl-2.5 pr-2 py-2 text-left border-l-2 transition-colors duration-150 ${
-                      isActive ? "border-l-[#1B3A8F] bg-[#1B3A8F]/[0.08]" : "border-l-transparent hover:bg-slate-50"
+                    className={`group flex items-center gap-2.5 -ml-[2px] pl-2.5 pr-2 py-2 text-left border-l-2 transition-colors duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] focus-visible:outline-[#1B3A8F] ${
+                      isActive ? "border-l-[#1B3A8F] bg-[#1B3A8F]/[0.08]" : "border-l-transparent hover:bg-[#1B3A8F]/[0.05]"
                     }`}
                   >
-                    <cat.icon className={`w-4 h-4 shrink-0 ${isActive ? "text-[#1B3A8F]" : "text-slate-400"}`} strokeWidth={1.75} />
-                    <span className={`text-[14px] leading-tight ${isActive ? "text-[#1B3A8F] font-bold" : "text-slate-700 font-medium"}`}>
+                    <cat.icon
+                      className={`w-4 h-4 shrink-0 transition-transform duration-150 ${
+                        isActive ? "text-[#1B3A8F]" : "text-slate-400 group-hover:text-[#1B3A8F] group-hover:translate-x-0.5"
+                      }`}
+                      strokeWidth={1.75}
+                    />
+                    <span
+                      className={`flex-1 text-[14px] leading-tight transition-transform duration-150 ${
+                        isActive ? "text-[#1B3A8F] font-bold" : "text-slate-700 font-medium group-hover:text-[#1B3A8F] group-hover:translate-x-0.5"
+                      }`}
+                    >
                       {cat.name}
                     </span>
+                    <ChevronRight
+                      className={`w-3.5 h-3.5 shrink-0 text-[#1B3A8F] transition-opacity duration-150 ${isActive ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`}
+                      aria-hidden="true"
+                    />
                   </button>
                 );
               })}
@@ -230,7 +287,7 @@ function CategoryExplorer({ categories, brands }: { categories: ProductCategory[
                   <active.icon className="w-5 h-5 text-white" strokeWidth={1.75} />
                 </div>
                 <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-[#1B3A8F] block mb-1">
-                  {String(activeIdx + 1).padStart(2, "0")}/{String(categories.length).padStart(2, "0")}
+                  {String(activeIdx + 1).padStart(2, "0")}/{String(orderedCategories.length).padStart(2, "0")}
                 </span>
                 <h3 className="text-base font-black text-slate-900 tracking-tight leading-tight mb-1.5">{active.name}</h3>
                 <p className="text-slate-500 text-[12.5px] leading-relaxed">{active.description}</p>
@@ -408,7 +465,7 @@ function CategoryExplorer({ categories, brands }: { categories: ProductCategory[
               </div>
               <div className="min-w-0">
                 <span className="text-[10px] font-bold uppercase tracking-[0.15em] text-[#1B3A8F] block truncate">
-                  {String(activeIdx + 1).padStart(2, "0")} / {String(categories.length).padStart(2, "0")} · {activeFamily?.label}
+                  {String(activeIdx + 1).padStart(2, "0")} / {String(orderedCategories.length).padStart(2, "0")} · {activeFamily?.label}
                 </span>
                 <h3 className="text-[15px] font-black text-slate-900 tracking-tight leading-snug truncate">{active.name}</h3>
               </div>
