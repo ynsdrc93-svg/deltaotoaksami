@@ -1,3 +1,4 @@
+import { useEffect, useRef } from "react";
 import TurkeyMap from "turkey-map-react";
 import { cities as turkeyCities } from "turkey-map-react/lib/data";
 
@@ -67,7 +68,26 @@ function routeArcPath([x1, y1]: [number, number], [x2, y2]: [number, number]) {
   return `M ${x1},${y1} Q ${mx.toFixed(1)},${my.toFixed(1)} ${x2},${y2}`;
 }
 
-export function LogisticsMap({ revealRef }: { revealRef: (el: Element | null) => void }) {
+export function LogisticsMap() {
+  // Bu bileşen lazy-load edildiği için paylaşılan useReveal()'ın
+  // IntersectionObserver'ı LandingPage mount olduğunda (bu SVG henüz DOM'da
+  // yokken) BİR KEZ kurulup çalışıyor — sonradan mount olan bu elementi asla
+  // gözlemlemiyor, bu yüzden .do-in hiç eklenmiyordu ve rotalar sonsuza kadar
+  // opacity:0 kalıyordu (bkz. Pass 02 regresyon bulgusu). Çözüm: bu SVG için
+  // kendi bağımsız/yerel gözlemcisini kur — paylaşılan useReveal semantiğiyle
+  // birebir aynı eşik (threshold 0.12), aynı tek-seferlik do-in davranışı.
+  const routeLayerRef = useRef<SVGSVGElement | null>(null);
+  useEffect(() => {
+    const el = routeLayerRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { el.classList.add("do-in"); obs.unobserve(el); } },
+      { threshold: 0.12 },
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
   return (
     <>
       {/* Not: haritanın path verisinde birkaç ilde küçük iç-su (göl) boşlukları var
@@ -93,7 +113,7 @@ export function LogisticsMap({ revealRef }: { revealRef: (el: Element | null) =>
           kendini çizen rota okları — "sadece batıda 3 nokta" algısını
           "buradan tüm ülkeye" hikayesine dönüştürür. */}
       <svg
-        ref={revealRef}
+        ref={routeLayerRef}
         viewBox="0 80 1050 585"
         className="do-route-layer absolute inset-0 w-full h-full pointer-events-none"
         aria-hidden="true"

@@ -451,7 +451,7 @@ export function LandingPage() {
             >
               {mapReady && (
                 <Suspense fallback={null}>
-                  <LogisticsMap revealRef={ref} />
+                  <LogisticsMap />
                 </Suspense>
               )}
             </div>
