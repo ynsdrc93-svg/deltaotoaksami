@@ -115,6 +115,25 @@ export function LandingPage() {
   const [confirmBrand, setConfirmBrand] = useState<{ brand: Brand; rowIndex: number } | null>(null);
   const cancelLeaveRef = useRef<HTMLButtonElement>(null);
   useEscapeKey(() => setConfirmBrand(null), confirmBrand !== null);
+
+  // Tedarikçi şeridi (~60 marka logosu) ilk yüklemede hero/font/JS ile
+  // bant genişliği için yarışmasın diye görüntü isteği, kullanıcı bölüme
+  // yaklaşana kadar ertelenir. rootMargin geniş tutuldu (1200px) — kullanıcı
+  // gerçekten şeride ulaştığında logolar zaten hazır olsun. Satır
+  // sarmalayıcılarında sabit h-16 (bkz. JSX) sayesinde bağlama öncesi/sonrası
+  // yükseklik birebir aynı kalır — CLS sıfırda kalır, iskelet/spinner yok.
+  const [tickerReady, setTickerReady] = useState(false);
+  const tickerRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const el = tickerRef.current;
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setTickerReady(true); obs.disconnect(); } },
+      { rootMargin: "1200px 0px" },
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
   useEffect(() => {
     document.body.style.overflow = confirmBrand ? "hidden" : "";
     if (confirmBrand) cancelLeaveRef.current?.focus();
@@ -153,7 +172,7 @@ export function LandingPage() {
               boyut/hizalama birebir korunuyor. */}
           <Link href="/" className="flex items-center shrink-0">
             <img
-              src="/images/delta-oto-logo.png"
+              src="/images/delta-oto-logo.webp"
               alt="Delta Oto 50. Yıl"
               className={`w-auto transition-[height] duration-300 -mt-0.5 sm:mt-0 ${scrolled ? "h-9 sm:h-12" : "h-[58px] sm:h-20"}`}
             />
@@ -243,8 +262,9 @@ export function LandingPage() {
         <div className="absolute inset-0">
           <img
             ref={heroParallax}
-            src="/images/delta-oto-depot.jpg"
+            src="/images/delta-oto-depot.webp"
             alt=""
+            fetchPriority="high"
             className="w-full h-full object-cover object-[34%_50%] lg:object-[40%_28%] opacity-65 will-change-transform"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-[#0e1016]/92 via-[#0e1016]/55 to-[#0e1016]/15"></div>
@@ -548,32 +568,34 @@ export function LandingPage() {
           </p>
         </div>
 
-        <div className="relative z-10 flex flex-col gap-5">
+        <div ref={tickerRef} className="relative z-10 flex flex-col gap-5">
           {BRAND_STRIPS.map((strip, rowIndex) => (
             <div
               key={rowIndex}
-              className="overflow-hidden"
+              className="overflow-hidden h-16"
               onTouchStart={() => setPausedRow(rowIndex)}
               onTouchEnd={() => setPausedRow((r) => (r === rowIndex ? null : r))}
               onTouchCancel={() => setPausedRow((r) => (r === rowIndex ? null : r))}
             >
-              <div
-                className={rowIndex === 1 ? "do-brand-ticker" : "do-brand-ticker-reverse"}
-                style={{ animationPlayState: pausedRow === rowIndex || confirmBrand?.rowIndex === rowIndex ? "paused" : undefined }}
-              >
-                {[...strip, ...strip].map((b, i) => {
-                  const isDuplicate = i >= strip.length;
-                  return (
-                    <BrandLogo
-                      key={`${b.slug}-${i}`}
-                      brand={b}
-                      size="strip"
-                      hidden={isDuplicate}
-                      onNavigateAttempt={(brand) => setConfirmBrand({ brand, rowIndex })}
-                    />
-                  );
-                })}
-              </div>
+              {tickerReady && (
+                <div
+                  className={rowIndex === 1 ? "do-brand-ticker" : "do-brand-ticker-reverse"}
+                  style={{ animationPlayState: pausedRow === rowIndex || confirmBrand?.rowIndex === rowIndex ? "paused" : undefined }}
+                >
+                  {[...strip, ...strip].map((b, i) => {
+                    const isDuplicate = i >= strip.length;
+                    return (
+                      <BrandLogo
+                        key={`${b.slug}-${i}`}
+                        brand={b}
+                        size="strip"
+                        hidden={isDuplicate}
+                        onNavigateAttempt={(brand) => setConfirmBrand({ brand, rowIndex })}
+                      />
+                    );
+                  })}
+                </div>
+              )}
             </div>
           ))}
         </div>

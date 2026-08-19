@@ -18,9 +18,21 @@
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Asıl font isteği src/index.css'teki @import ile yapılıyor (daha geniş ağırlık seti,
-         300-900). Buradaki preconnect'ler o isteği hızlandırmak için bilinçli olarak kalıyor;
-         ayrıca bir <link rel="stylesheet"> eklemek aynı fontu iki kez indirtiyordu. -->
+    <!-- Font isteği artık burada, <head>'den doğrudan yapılıyor (önceden
+         src/index.css'teki @import ile yapılıyordu — bu, tarayıcının fontu
+         CSS indirilip parse edilene kadar keşfedememesine, dolayısıyla seri/
+         gecikmeli bir zincire yol açıyordu). ÖNEMLİ: aynı fontu iki kez
+         indirtmemek için src/index.css'teki @import KALDIRILDI — font isteği
+         artık TEK kaynaktan (burada) yapılıyor. Ağırlık seti (300-900) ve
+         display=swap birebir korundu. -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap">
+    <!-- Hero LCP görseli: gerçek Lighthouse trace'i bu görselin SPA'da (SSR
+         yok) ilk HTML'de keşfedilemediğini (requestDiscoverable=false) ve
+         ~13s'lik bir resourceLoadDelay yaşadığını doğruladı — preload, JS
+         bundle'ı beklemeden isteği tarayıcının preload scanner'ına açar. href,
+         LandingPage.tsx'teki hero <img> src'iyle birebir aynı kalmalı (aksi
+         halde çift indirme olur). -->
+    <link rel="preload" as="image" fetchpriority="high" href="/images/delta-oto-depot.webp">
   </head>
   <body>
     <div id="root"></div>

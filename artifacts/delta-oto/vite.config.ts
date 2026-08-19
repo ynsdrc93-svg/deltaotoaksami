@@ -26,12 +26,39 @@ if (!basePath) {
   );
 }
 
+// Performans denetimi bulgusu: `pnpm run serve` (vite preview) production'da
+// hiçbir Cache-Control header'ı ayarlamıyor (Lighthouse: "Cache TTL: None").
+// Bu, yalnızca hash'li build çıktısı (/assets/index-XXXXXXXX.js|css — içerik
+// değişince dosya adı da değişir, bu yüzden sonsuza kadar cache'lenmesi
+// güvenlidir) için path-spesifik, katkı-only bir immutable cache ekler.
+// index.html (SPA fallback) ve hash'siz /images/* buradan HİÇ etkilenmiyor —
+// header eklenmiyor, mevcut davranış birebir korunuyor: bir versiyonlama
+// stratejisi olmadan bunlara uzun/immutable cache vermek riskli olurdu
+// (bkz. CLAUDE.md performans notları). Deployment production'da vite
+// preview'dan FARKLI bir katman üzerinden serviyorsa bu middleware hiç
+// devreye girmez — topolojiyi değiştirmez, yalnızca zaten var olan preview
+// sunucusuna güvenli bir ek yapar.
+function immutableAssetCachePlugin() {
+  return {
+    name: "delta-oto-immutable-asset-cache",
+    configurePreviewServer(server: { middlewares: { use: (fn: (req: any, res: any, next: () => void) => void) => void } }) {
+      server.middlewares.use((req, res, next) => {
+        if (req.url?.includes("/assets/")) {
+          res.setHeader("Cache-Control", "public, max-age=31536000, immutable");
+        }
+        next();
+      });
+    },
+  };
+}
+
 export default defineConfig({
   base: basePath,
   plugins: [
     react(),
     tailwindcss(),
     runtimeErrorOverlay(),
+    immutableAssetCachePlugin(),
     ...(process.env.NODE_ENV !== "production" &&
     process.env.REPL_ID !== undefined
       ? [

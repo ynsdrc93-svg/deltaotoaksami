@@ -34,7 +34,7 @@ export function SiteHeader() {
               optik düzeltme (logo hafif alçak duruyordu) — sm ve üzeri (masaüstü)
               boyut/hizalama birebir korunuyor. */}
           <Link href="/" className="flex items-center shrink-0">
-            <img src="/images/delta-oto-logo.png" alt="Delta Oto 50. Yıl" className={`w-auto transition-[height] duration-300 -mt-0.5 sm:mt-0 ${scrolled ? "h-9 sm:h-12" : "h-[58px] sm:h-20"}`} />
+            <img src="/images/delta-oto-logo.webp" alt="Delta Oto 50. Yıl" className={`w-auto transition-[height] duration-300 -mt-0.5 sm:mt-0 ${scrolled ? "h-9 sm:h-12" : "h-[58px] sm:h-20"}`} />
           </Link>
 
           {/* Sağ grup: nav + SPART + B2B */}

@@ -10,7 +10,7 @@ export function SiteFooter() {
 
           <div>
             <img
-              src="/images/delta-oto-logo.png"
+              src="/images/delta-oto-logo.webp"
               alt="Delta Oto"
               className="h-14 do-logo-invert mb-8 opacity-85"
             />
