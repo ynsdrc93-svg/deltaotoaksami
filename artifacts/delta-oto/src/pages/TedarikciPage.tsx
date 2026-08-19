@@ -185,7 +185,22 @@ function CategoryExplorer({ categories, brands }: { categories: ProductCategory[
           yalnızca düz CSS :hover ile kendi rengini değiştirir; seçim
           SADECE tıklamayla commit edilir. */}
       <div className="hidden lg:grid grid-cols-[280px_1fr] gap-10">
-        <div className="do-index-list divide-y divide-slate-200 border-t border-slate-200 self-start">
+        <div className="do-index-list border-t border-slate-200 self-start">
+          {/* Satırlar arasında bilerek `-mt-px` (1px) örtüşme var — bu görsel
+              boşluk yaratmaz, tam tersi bir "hover flicker" hatasını önler:
+              satırlar bir zamanlar `divide-y` ile TAM 0px boşlukla bitişikti,
+              ama değişken satır yüksekliği (aile etiketleri 1 veya 2 satıra
+              sarabiliyor, aktif satırın yazısı 14px) sınırı bazı yerlerde
+              alt-piksel kesirli bir konuma denk getiriyordu. Gerçek bir fare/
+              trackpad hiçbir zaman tam olarak durağan değildir (sürekli
+              alt-piksel titreşimi vardır) — sıfır tolerans olan bir sınırda bu
+              titreşim, hangi satırın :hover'a sahip olduğunu saniyede onlarca
+              kez değiştirebiliyordu. 1px'lik kasıtlı örtüşme (sonraki satır,
+              DOM sırasına göre öncekinin ÜZERİNE boyanır) bu belirsizliği
+              ortadan kaldırır: sınır artık kayan-noktalı bir karşılaştırmayla
+              değil, sabit boyama sırasıyla çözülür — gerçek cihaz titreşimi
+              artık asla iki satır arasında gidip gelmeye yetmez. Zamanlayıcı/
+              debounce/React state YOK — saf DOM geometrisi. */}
           {families.map((family, fi) => {
             const isActive = fi === activeFamilyIdx;
             return (
@@ -194,7 +209,9 @@ function CategoryExplorer({ categories, brands }: { categories: ProductCategory[
                 type="button"
                 onClick={() => selectFamily(fi)}
                 aria-current={isActive}
-                className={`do-index-row group w-full flex items-start gap-3.5 py-4 px-3.5 text-left border-l-2 transition-colors duration-150 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] ${
+                className={`do-index-row group relative w-full flex items-start gap-3.5 py-4 px-3.5 text-left border-l-2 transition-colors duration-150 ease-out focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-[-2px] ${
+                  fi > 0 ? "border-t border-slate-200 -mt-px" : ""
+                } ${
                   isActive
                     ? "do-index-row-active bg-[#1B3A8F] border-l-[#1B3A8F] focus-visible:outline-white"
                     : "border-l-transparent hover:border-l-[#1B3A8F]/40 hover:bg-[#1B3A8F]/[0.04] focus-visible:outline-[#1B3A8F]"
@@ -211,7 +228,7 @@ function CategoryExplorer({ categories, brands }: { categories: ProductCategory[
                   {family.label}
                 </span>
                 <ChevronRight
-                  className={`w-4 h-4 shrink-0 mt-1 transition-opacity duration-150 ${
+                  className={`w-4 h-4 shrink-0 mt-1 transition-opacity duration-150 pointer-events-none ${
                     isActive ? "text-white opacity-100" : "text-[#1B3A8F]/70 opacity-0 group-hover:opacity-100"
                   }`}
                   aria-hidden="true"
