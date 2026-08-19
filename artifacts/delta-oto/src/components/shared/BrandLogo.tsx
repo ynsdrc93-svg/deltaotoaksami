@@ -2,7 +2,7 @@ import { Link } from "wouter";
 import type { Brand } from "@/lib/brands";
 
 // Tek reusable marka-logosu bileşeni — Tedarikçiler sayfasının marka duvarı
-// ("wall"), kategori panelindeki marka çipleri ("chip") ve ana sayfa
+// ("wall"), kategori gezgininin marka alanı ("gallery") ve ana sayfa
 // tedarikçi şeridi ("strip") aynı bileşeni, aynı brand datasını kullanır.
 // Gerçek en-boy oranı her zaman korunur (object-fit: contain, sabit
 // yükseklik + auto genişlik) — hiçbir logo deforme edilmez. hasVerifiedLogo
@@ -12,7 +12,7 @@ import type { Brand } from "@/lib/brands";
 // içeren, şeffaf zeminde görünmeyen asset'ler — bkz. brands.ts) koyu bir
 // kart zemininde gösterilir; site genelindeki "dark hero" tonuyla (#0e1016)
 // tutarlıdır.
-type BrandLogoSize = "wall" | "chip" | "strip" | "compact" | "dock";
+type BrandLogoSize = "wall" | "strip" | "gallery";
 
 interface SizeStyle {
   light: string;
@@ -34,39 +34,20 @@ const SIZES: Record<BrandLogoSize, SizeStyle> = {
     textSize: "text-[15px]",
     textHover: "",
   },
-  /** Spotlight marka rafları için — sabit KART GENİŞLİĞİ + yüksekliği
-   * ("wall" varyantının bir CSS grid'de otomatik eşit-genişlik kazanmasıyla
-   * aynı ilkeyi, flex-wrap bir rafta elle tekrarlar). Yalnızca yükseklik
-   * sabitlenip genişlik logonun kendi en-boy oranına bırakılırsa geniş
-   * wordmark'lar küçük/kare markalardan çok daha büyük görünür — sabit
-   * genişlik + max-height VE max-width ile img, optik ağırlığı eşitler.
-   * "chip"ten daha kompakt, önceki (yalnızca h-11) sürümden daha ferah. */
-  compact: {
-    light: "border border-slate-200 rounded-lg w-24 h-14 flex items-center justify-center px-2.5 bg-white hover:border-[#1B3A8F]/30 transition-colors shrink-0",
-    dark: "border border-white/10 rounded-lg w-24 h-14 flex items-center justify-center px-2.5 bg-[#0e1016] hover:border-white/25 transition-colors shrink-0",
-    img: "max-h-7 max-w-full w-auto h-auto object-contain",
-    textSize: "text-[10px]",
-    textHover: "",
-  },
-  chip: {
-    light: "border border-slate-200 rounded-xl h-20 flex items-center justify-center px-6 bg-white hover:border-[#1B3A8F]/30 hover:shadow-md transition-all",
-    dark: "border border-white/10 rounded-xl h-20 flex items-center justify-center px-6 bg-[#0e1016] hover:border-white/25 hover:shadow-md transition-all",
-    img: "max-h-11 w-auto h-auto object-contain",
-    textSize: "text-[12px]",
-    textHover: "",
-  },
-  /** Aktif Ürün Doku'daki (Tedarikçiler kategori matrisi) marka slotları
-   * için — kasıtlı olarak ÇERÇEVESİZ ve kartsız: tek tek kutulanmış bir
-   * "logo rafı" değil, dokuya doğrudan entegre yatay bir şerit hissi
-   * hedefler. Açık logolar hiçbir kutuya sahip değildir (yalnızca boşluk
-   * ayırır); "dark" logolar (şeffaf zeminde görünmeyen beyaz/açık çizimler)
-   * yalnızca gerekli minimum koyu arka planı korur — bu bir istisna, kural
-   * değil (bkz. brands.ts logoBackground alanı). */
-  dock: {
-    light: "flex items-center justify-center h-9 px-2 shrink-0",
-    dark: "flex items-center justify-center h-9 px-2.5 rounded-md bg-[#0e1016] shrink-0",
-    img: "max-h-5 max-w-[76px] w-auto h-auto object-contain",
-    textSize: "text-[10.5px]",
+  /** Tedarikçiler kategori gezgininin Aktif Ürün Doku'sundaki marka alanı
+   * için — bu ekranda marka alanı modülün ANA odağıdır (kompakt kategori
+   * bilgisi + küçük B2B aksiyonunun yanında dominant bir grid). Her logo
+   * AYNI kutu boyutunu (sabit yükseklik, CSS grid'de eşit sütun genişliği)
+   * paylaşır — böylece küçük/kare bir logo ile geniş bir wordmark yan yana
+   * eşit görsel ağırlıkta durur ("biri kayboluyor biri bağırıyor" hissi
+   * olmadan). Marka duvarındaki ("wall") kart diliyle aynı aile (beyaz
+   * kart, ince kenarlık) ama daha kompakt — burada tek kategoride 20'ye
+   * yakın logo aynı anda görünebiliyor. */
+  gallery: {
+    light: "border border-slate-200 rounded-lg bg-white flex items-center justify-center h-16 px-3 hover:border-[#1B3A8F]/30 transition-colors",
+    dark: "border border-white/10 rounded-lg bg-[#0e1016] flex items-center justify-center h-16 px-3 hover:border-white/25 transition-colors",
+    img: "max-h-8 max-w-full w-auto h-auto object-contain",
+    textSize: "text-[11px]",
     textHover: "",
   },
   strip: {
