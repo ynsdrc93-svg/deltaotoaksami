@@ -595,8 +595,11 @@ export function LandingPage() {
                   </div>
                   <span className="text-[10px] font-black tracking-[0.25em] text-blue-200/50 uppercase text-right">{data.eyebrow}</span>
                 </div>
-                <div className="relative z-10 font-bold text-white text-xl leading-tight">{data.title}</div>
-                <p className="relative z-10 text-sm text-blue-100/70 leading-relaxed font-light mt-4">
+                {/* Logo altında marka adı tekrarı kaldırıldı — logo kendisi
+                    kimliği zaten taşıyor (görev talimatı). Açıklama, logo
+                    satırının mb-7 boşluğunun hemen ardından doğal olarak
+                    başlıyor; ayrı bir üst boşluk eklenmedi. */}
+                <p className="relative z-10 text-sm text-blue-100/70 leading-relaxed font-light">
                   {data.body}
                 </p>
                 {/* GROUPAUTO: resmi rakamlardan kompakt bir veri satırı.

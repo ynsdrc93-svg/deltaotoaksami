@@ -67,7 +67,7 @@ export function SiteFooter() {
               alt="Delta Oto"
               width={1152}
               height={240}
-              className="h-11 w-auto do-logo-invert mb-8 opacity-85"
+              className="h-[59px] w-auto do-logo-invert mb-8 opacity-85"
             />
             <ul className="space-y-4 text-sm text-gray-500">
               <li className="flex items-start gap-3">
@@ -97,7 +97,7 @@ export function SiteFooter() {
                 </li>
               ))}
             </ul>
-            <div className="mt-6">
+            <div className="mt-4">
               <Link href={routeFor("spart", lang)}>
                 <img src="/images/spart-logo.png" alt="SPART Original Replacement" className="h-9 w-auto rounded-md opacity-90 hover:opacity-100 transition-opacity" />
               </Link>
