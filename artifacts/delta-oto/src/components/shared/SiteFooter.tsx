@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "wouter";
-import { MapPin, Mail, Phone, BadgeCheck } from "lucide-react";
+import { MapPin, Mail, Phone, BadgeCheck, Linkedin } from "lucide-react";
 import { useLang, routeFor, type Lang, type RouteKey } from "@/lib/i18n";
 
 // "Private Label" başlığı kaldırıldı (kullanıcı kararı, Content/UX Pass 01) —
@@ -8,6 +8,18 @@ import { useLang, routeFor, type Lang, type RouteKey } from "@/lib/i18n";
 // GROUPAUTO Türkiye'ye ait resmi, temiz bir rozet/ikon asset'i repo'da
 // bulunamadı (yalnızca etkinlik fotoğrafları mevcuttu) — bu yüzden
 // eklenmedi; bkz. görev raporu "eksik asset" notu.
+// "SPART" başlığı da kaldırıldı (Desktop Feedback Round) — logo tek başına,
+// başlıksız duruyor; hedef/link (routeFor("spart")) DEĞİŞMEDİ.
+//
+// SOSYAL MEDYA: yalnızca kod tabanında ZATEN var olan, doğrulanmış resmi
+// bağlantı eklendi — LinkedIn (KariyerPage.tsx'te "LinkedIn'de Pozisyonları
+// İnceleyin" CTA'sı için önceden onaylanmış https://www.linkedin.com/company/delta-oto).
+// Instagram ve YouTube için repo içinde HİÇBİR resmi URL bulunamadı — bu
+// ikisi icat edilmedi, href="#" kullanılmadı, hiç render edilmiyor. Gerçek
+// hesap URL'leri sağlandığında buraya aynı desenle eklenebilir.
+const SOCIAL_LINKS: { label: string; href: string; Icon: typeof Linkedin }[] = [
+  { label: "LinkedIn", href: "https://www.linkedin.com/company/delta-oto", Icon: Linkedin },
+];
 const QUICK_LINKS: { key: RouteKey; label: Record<Lang, string> }[] = [
   { key: "about", label: { tr: "Hakkımızda", en: "About Us" } },
   { key: "partners", label: { tr: "İş Ortaklarımız", en: "Partners" } },
@@ -25,7 +37,6 @@ const CERTS: { label: Record<Lang, string> }[] = [
 
 const T = {
   quickLinks: { tr: "Hızlı Bağlantılar", en: "Quick Links" },
-  spartHeading: { tr: "SPART", en: "SPART" },
   certsHeading: { tr: "Sertifikalar & Üyelikler", en: "Certifications & Memberships" },
   certsBody: {
     tr: "Kalite standartlarımız ve sektörel üyeliklerimizle güvenilir iş ortaklığının güvencesini sunuyoruz.",
@@ -80,7 +91,6 @@ export function SiteFooter() {
               ))}
             </ul>
             <div className="mt-10">
-              <h4 className="text-white text-xs font-bold tracking-[0.2em] mb-5">{T.spartHeading[lang]}</h4>
               <Link href={routeFor("spart", lang)}>
                 <img src="/images/spart-logo.png" alt="SPART Original Replacement" className="h-9 w-auto rounded-md opacity-90 hover:opacity-100 transition-opacity" />
               </Link>
@@ -106,9 +116,27 @@ export function SiteFooter() {
 
         <div className="pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
           <span>{T.rights[lang]}</span>
-          <div className="flex items-center gap-1.5">
-            <div className="w-1.5 h-1.5 rounded-full bg-[#1B3A8F] animate-pulse" />
-            <span>{T.established[lang]}</span>
+          <div className="flex items-center gap-5">
+            {SOCIAL_LINKS.length > 0 && (
+              <div className="flex items-center gap-3">
+                {SOCIAL_LINKS.map(({ label, href, Icon }) => (
+                  <a
+                    key={label}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={label}
+                    className="text-gray-500 hover:text-white transition-colors"
+                  >
+                    <Icon className="w-4 h-4" strokeWidth={1.75} />
+                  </a>
+                ))}
+              </div>
+            )}
+            <div className="flex items-center gap-1.5">
+              <div className="w-1.5 h-1.5 rounded-full bg-[#1B3A8F] animate-pulse" />
+              <span>{T.established[lang]}</span>
+            </div>
           </div>
         </div>
       </div>

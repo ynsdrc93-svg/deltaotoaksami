@@ -269,6 +269,19 @@
   animation-iteration-count: infinite;
 }
 
+/* turkey-map-react satır-içi (inline) `cursor: pointer` stilini kendi
+   path'lerine HER ZAMAN basar — hoverable={false} olsa bile (yalnızca
+   tıklama/hover DAVRANIŞINI kapatır, cursor stilini değil). Satır-içi
+   stiller normal CSS kurallarından daha yüksek özgüllüğe sahiptir, bu
+   yüzden yalnızca !important onu geçebilir. Bu kural SADECE ana sayfa
+   lojistik haritasını (.do-map-decorative, bkz. LogisticsMap.tsx) kapsar —
+   RepresentativeFinderModal'daki gerçekten tıklanabilir il seçim haritası
+   bu sınıfı taşımaz ve etkilenmez. */
+.do-map-decorative svg,
+.do-map-decorative path {
+  cursor: default !important;
+}
+
 /* Hide native scrollbar on custom horizontal scroll-snap rails (HakkimizdaPage
    zaman çizelgesi) — the rail ships its own prev/next buttons + dot rail as the
    visible scroll affordance, so the native bar is just noise. Not an animation,

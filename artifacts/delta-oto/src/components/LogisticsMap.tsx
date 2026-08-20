@@ -23,6 +23,14 @@ const OPS_HUB_POINTS: [number, number][] = [
 // Dağıtım rotaları: 3 merkezden ülke geneline uzanan ok çizgileri.
 // Uçlar turkey-map-react'in path verisinden hesaplanan yaklaşık il merkezleri
 // (bounding-box centroid), haritayla aynı viewBox ("0 80 1050 585") üzerinde.
+// Antalya İSTİSNASI: Antalya kıyı şeridi girintili (Antalya Körfezi bbox'ın
+// içine doğru kesiyor) — düz bbox-merkezi bu ilde denize düşüyordu (headless
+// tarayıcıda gerçek path üzerinde isPointInFill() ile doğrulandı: eski nokta
+// [277.6, 519.5] karada DEĞİL). Yerine, aynı path verisi üzerinde ızgara
+// tabanlı bir "erişilemezlik kutbu" (pole of inaccessibility) hesabıyla
+// bulunan, kara parçasının en derin/merkezi noktası kullanılıyor — sınırdan
+// ~26 birim içeride, karada olduğu doğrulanmış. Diğer tüm uçlar (İzmir ->
+// Muğla dahil) aynı yöntemle ayrıca doğrulandı ve değiştirilmedi.
 const DISTRIBUTION_ROUTES: { from: [number, number]; to: [number, number] }[] = [
   { from: [193.6, 211.0], to: [555.7, 218.6] }, // Ümraniye -> Samsun (Karadeniz)
   { from: [193.6, 211.0], to: [750.7, 246.5] }, // Ümraniye -> Trabzon (Doğu Karadeniz)
@@ -40,7 +48,7 @@ const DISTRIBUTION_ROUTES: { from: [number, number]; to: [number, number] }[] = 
   { from: [241.0, 236.5], to: [295.8, 323.5] }, // Gebze -> Eskişehir (İç Anadolu batı)
   { from: [241.0, 236.5], to: [437.4, 207.8] }, // Gebze -> Kastamonu (Batı Karadeniz)
   { from: [241.0, 236.5], to: [387.5, 437.6] }, // Gebze -> Konya (İç Anadolu güney)
-  { from: [96.7, 376.5],  to: [277.6, 519.5] }, // İzmir -> Antalya (Akdeniz)
+  { from: [96.7, 376.5],  to: [243.5, 503.1] }, // İzmir -> Antalya (Akdeniz) — bkz. aşağıdaki not
   { from: [96.7, 376.5],  to: [149.2, 495.1] }, // İzmir -> Muğla (Ege güney)
 ];
 
@@ -97,11 +105,23 @@ export function LogisticsMap() {
           hover/tooltip/tıklama kaldırıldı, kullanıcı illeri seçemez. Silüet,
           3 operasyon merkezi vurgusu ve animasyonlu dağıtım rotaları AYNEN
           korunuyor. */}
-      <TurkeyMap
-        hoverable={false}
-        showTooltip={false}
-        customStyle={{ idleColor: "#1B3A8F", hoverColor: "#1B3A8F" }}
-      />
+      {/* .do-map-decorative: turkey-map-react HER zaman kendi path'lerine
+          satır-içi `cursor: pointer` stili basıyor — bu, hoverable={false}
+          olsa bile değişmiyor (kütüphanenin kendi kaynağında doğrulandı;
+          yalnızca onMouseOver/tıklama DAVRANIŞI hoverable'a bağlı, cursor
+          stili değil). Satır-içi stil normal CSS'ten daha yüksek özgüllüğe
+          sahip olduğu için yalnızca !important onu geçebilir — bkz.
+          index.css'teki `.do-map-decorative path` kuralı. Bu sınıf SADECE bu
+          dekoratif haritayı kapsar; RepresentativeFinderModal'daki GERÇEKTEN
+          tıklanabilir harita (il seçimi orada kasıtlı olarak etkileşimli)
+          etkilenmez. */}
+      <div className="do-map-decorative">
+        <TurkeyMap
+          hoverable={false}
+          showTooltip={false}
+          customStyle={{ idleColor: "#1B3A8F", hoverColor: "#1B3A8F" }}
+        />
+      </div>
       {/* turkey-map-react has no per-city color prop; overlay the 3 hub
           provinces' own path data (same viewBox) with the accent fill. */}
       <svg

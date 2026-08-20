@@ -341,9 +341,9 @@ export function LandingPage() {
             />
           </Link>
 
-          {/* Sağ grup: nav + dil + SPART + B2B */}
-          <div className="flex items-center gap-4 xl:gap-6 shrink-0">
-            <nav className="hidden xl:flex items-center gap-5 xl:gap-7 text-[13.5px] font-medium tracking-tight text-slate-600">
+          {/* Sağ grup: nav + dil + SPART/B2B kompakt blok */}
+          <div className="flex items-center gap-3 xl:gap-5 shrink-0">
+            <nav className="hidden xl:flex items-center gap-4 xl:gap-6 text-[13.5px] font-medium tracking-tight text-slate-600">
               {NAV_LINKS.map(({ key, label }) => (
                 <Link key={key} href={routeFor(key, lang)} className="do-nav-link whitespace-nowrap hover:text-[#1B3A8F] transition-colors duration-200">{label[lang]}</Link>
               ))}
@@ -355,16 +355,19 @@ export function LandingPage() {
               <LanguageSwitcher />
             </div>
 
-            <span className="hidden xl:block w-px h-6 bg-slate-200 shrink-0"></span>
-
-            <Link href={routeFor("spart", lang)} className="hidden xl:flex items-center rounded-md overflow-hidden ring-1 ring-slate-200 hover:ring-[#1B3A8F]/40 transition-all duration-200 shrink-0">
-              <img src="/images/spart-logo.png" alt="SPART Original Replacement" className="h-7 w-auto block" />
-            </Link>
-
-            <a href="https://b2b.parcabul.com.tr/login.aspx" target="_blank" rel="noopener noreferrer" className="hidden xl:flex bg-[#1B3A8F] hover:bg-[#2547B5] active:scale-[0.98] text-white text-xs sm:text-[13px] font-semibold tracking-[0.01em] px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-md transition-all duration-200 items-center gap-1.5 shadow-sm hover:shadow-md group whitespace-nowrap shrink-0">
-              {t.hero.ctaB2B}
-              <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
-            </a>
+            {/* Kompakt SPART/B2B Portal bloğu — bkz. SiteHeader.tsx'teki aynı
+                deseni (Desktop Feedback Round §6): üst/alt istiflenmiş,
+                tek dış çerçeve, ince ayraç. */}
+            <div className="hidden xl:flex flex-col rounded-md border border-slate-200 overflow-hidden shrink-0 w-[108px]">
+              <Link href={routeFor("spart", lang)} className="flex items-center justify-center h-7 hover:bg-slate-50 transition-colors">
+                <img src="/images/spart-logo.png" alt="SPART Original Replacement" className="h-4 w-auto block" />
+              </Link>
+              <div className="h-px bg-slate-200" />
+              <a href="https://b2b.parcabul.com.tr/login.aspx" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-1 h-7 bg-[#1B3A8F] hover:bg-[#2547B5] text-white text-[10px] font-bold tracking-[0.03em] transition-colors group">
+                {t.hero.ctaB2B.toUpperCase()}
+                <ArrowRight className="w-2.5 h-2.5 group-hover:translate-x-0.5 transition-transform" />
+              </a>
+            </div>
 
             <button
               type="button"
