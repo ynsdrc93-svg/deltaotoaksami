@@ -144,11 +144,7 @@ function RepresentativeDetail({ rep, province }: { rep: Representative; province
   );
 }
 
-// `lang` opsiyonel + "tr" varsayılan: IletisimPage.tsx bu modalı henüz
-// useLang() ile çağırmıyor (ayrı bir çeviri görevi kapsamında) — o görev
-// tamamlanana kadar mevcut çağrı yeri kırılmasın diye varsayılan sağlanıyor;
-// tamamlandığında oradaki çağrı da `lang={lang}` geçecek (bkz. TemsilcilerimizPage.tsx).
-export function RepresentativeFinderModal({ open, onClose, lang = "tr" }: { open: boolean; onClose: () => void; lang?: Lang }) {
+export function RepresentativeFinderModal({ open, onClose, lang }: { open: boolean; onClose: () => void; lang: Lang }) {
   const [selectedRegion, setSelectedRegion] = useState<TurkeyRegion | "all">("all");
   const [selectedPlate, setSelectedPlate] = useState<number | null>(null);
   const [labelPositions, setLabelPositions] = useState<Map<number, { x: number; y: number }>>(new Map());
