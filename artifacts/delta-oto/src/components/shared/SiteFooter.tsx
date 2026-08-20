@@ -58,12 +58,16 @@ export function SiteFooter() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-14 mb-16">
 
           <div>
+            {/* Klasik (50. yıl kampanya etiketi eklenmeden önceki) Delta Oto
+                logosu — header'daki yeni Delta 50 logosundan bilinçli olarak
+                farklı, footer'a özel bir asset (origin/main / 700c053'ten
+                alındı). Header'daki kampanya logosu DEĞİŞMEDİ. */}
             <img
-              src="/images/delta-oto-logo.webp"
+              src="/images/delta-oto-logo-classic.webp"
               alt="Delta Oto"
-              width={963}
+              width={1152}
               height={240}
-              className="h-14 w-auto do-logo-invert mb-8 opacity-85"
+              className="h-11 w-auto do-logo-invert mb-8 opacity-85"
             />
             <ul className="space-y-4 text-sm text-gray-500">
               <li className="flex items-start gap-3">

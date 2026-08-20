@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "wouter";
-import { ChevronDown } from "lucide-react";
 import { useEscapeKey } from "@/hooks/use-motion";
 import { otherLanguageHref, type Lang } from "@/lib/i18n";
 
@@ -74,11 +73,13 @@ function MobileSegmented() {
   );
 }
 
-/** Masaüstü header için: yalnızca AKTİF dili gösteren kompakt bir tetikleyici
- * ("[TR ▾]" gibi) — iki dilin aynı anda görünmesi (eski segment kontrol)
- * kaldırıldı (Desktop Feedback Round §5). Tıklamak, diğer dili içeren dar
- * bir açılır panel gösterir; seçmek doğrudan otherLanguageHref() ile
- * rota-farkındalıklı geçişi korur. Dışarı tıklama ve Escape kapatır. */
+/** Masaüstü header için: yalnızca AKTİF dilin bayrağı, metinsiz (ne "TR" ne
+ * "EN" yazısı, chevron da yok — sadece bayrak ikonu bir kare buton içinde).
+ * Tıklamak, diğer dilin bayrağını (yine metinsiz) içeren dar bir açılır
+ * panel gösterir; seçmek doğrudan otherLanguageHref() ile rota-farkındalıklı
+ * geçişi korur. Erişilebilirlik metni (aria-label/title) her iki düğmede de
+ * korunuyor — yalnızca GÖRSEL etiket kaldırıldı. Dışarı tıklama ve Escape
+ * kapatır. */
 function DesktopDropdown() {
   const [location] = useLocation();
   const [open, setOpen] = useState(false);
@@ -110,19 +111,18 @@ function DesktopDropdown() {
         onClick={() => setOpen((o) => !o)}
         aria-haspopup="listbox"
         aria-expanded={open}
+        title={active.ariaLabel}
         aria-label={`${active.ariaLabel === "Türkçe" ? "Dil" : "Language"}: ${active.ariaLabel}`}
-        className={`flex items-center gap-1.5 h-7 pl-2 pr-1.5 rounded-md border transition-colors duration-150 font-semibold text-[11.5px] ${
-          open ? "border-[#1B3A8F]/40 bg-[#1B3A8F]/[0.06] text-[#1B3A8F]" : "border-slate-200 text-slate-600 hover:border-[#1B3A8F]/30 hover:text-[#1B3A8F]"
+        className={`flex items-center gap-1 h-7 w-7 justify-center rounded-md border transition-colors duration-150 ${
+          open ? "border-[#1B3A8F]/40 bg-[#1B3A8F]/[0.06]" : "border-slate-200 hover:border-[#1B3A8F]/30"
         }`}
       >
-        <active.Flag className="w-3.5 h-3.5 shrink-0" />
-        {active.label}
-        <ChevronDown className={`w-3 h-3 shrink-0 transition-transform duration-150 ${open ? "rotate-180" : ""}`} />
+        <active.Flag className="w-4 h-4 shrink-0" />
       </button>
 
       <div
         role="listbox"
-        className={`absolute right-0 top-full mt-1.5 min-w-[92px] rounded-md border border-slate-200 bg-white shadow-lg shadow-slate-900/[0.08] py-1 transition-all duration-150 origin-top-right z-50 ${
+        className={`absolute right-0 top-full mt-1.5 rounded-md border border-slate-200 bg-white shadow-lg shadow-slate-900/[0.08] p-1 transition-all duration-150 origin-top-right z-50 ${
           open ? "opacity-100 scale-100 pointer-events-auto" : "opacity-0 scale-95 pointer-events-none"
         }`}
         aria-hidden={!open}
@@ -131,11 +131,12 @@ function DesktopDropdown() {
           href={otherHref}
           role="option"
           aria-selected="false"
+          title={other.ariaLabel}
+          aria-label={other.ariaLabel}
           onClick={() => setOpen(false)}
-          className="flex items-center gap-2 px-3 py-1.5 text-[12px] font-semibold text-slate-600 hover:bg-slate-50 hover:text-[#1B3A8F] transition-colors"
+          className="flex items-center justify-center w-7 h-7 rounded text-slate-600 hover:bg-slate-50 transition-colors"
         >
-          <other.Flag className="w-3.5 h-3.5 shrink-0" />
-          {other.label}
+          <other.Flag className="w-4 h-4 shrink-0" />
         </Link>
       </div>
     </div>

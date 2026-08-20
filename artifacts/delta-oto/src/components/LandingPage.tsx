@@ -85,14 +85,19 @@ const content = {
       groupauto: {
         eyebrow: "Global Ağ",
         title: "GROUPAUTO International",
-        fact: "40+ Ülke · 71 Referans Tedarikçi",
-        body: "GROUPAUTO International üyeliğimiz; sektörel bilgi paylaşımı, güçlü iş bağlantıları ve uluslararası aftermarket perspektifiyle Delta Oto'nun iş ortaklıklarını destekler.",
+        body: "GROUPAUTO International üyeliğimiz; Delta Oto'yu dünyanın önde gelen bağımsız otomotiv aftermarket ağlarından biriyle buluşturuyor. Bu yapı; güçlü iş bağlantıları, sektörel bilgi paylaşımı ve tedarikçi ilişkileri açısından önemli bir uluslararası bağlantı sağlıyor.",
+        stats: [
+          { value: "29", label: "Üye" },
+          { value: "71", label: "Referans Tedarikçi" },
+          { value: "1.958", label: "Distribütör" },
+          { value: "118", label: "Ülke" },
+        ],
       },
       opar: {
         eyebrow: "Bölgesel Ortaklık",
         title: "Opar",
-        fact: "Ege Bölgesi",
-        body: "Ege Bölge Bayiliğimiz; Opar'ın marka gücünü Delta Oto'nun bölgesel stok, saha ve dağıtım kabiliyetiyle buluşturur.",
+        body: "Opar Ege Bölge Bayiliğimiz; markanın ürün gücünü Delta Oto'nun bölgesel stok, satış ve dağıtım kabiliyetiyle buluşturuyor. İzmir merkezli saha yapılanmamızla Ege Bölgesi'nde hızlı ürün erişimi, düzenli sevkiyat ve güçlü bayi desteği sağlıyoruz.",
+        identifier: "Ege Bölge Bayiliği",
       },
     },
     logistics: {
@@ -172,14 +177,19 @@ const content = {
       groupauto: {
         eyebrow: "Global Network",
         title: "GROUPAUTO International",
-        fact: "40+ Countries · 71 Referenced Suppliers",
-        body: "Our GROUPAUTO International membership strengthens Delta Oto's partnerships through industry knowledge sharing, established business connections and an international aftermarket perspective.",
+        body: "Our GROUPAUTO International membership connects Delta Oto with one of the world's leading independent automotive aftermarket networks — a meaningful international link built on strong business relationships, shared industry knowledge and supplier partnerships.",
+        stats: [
+          { value: "29", label: "Members" },
+          { value: "71", label: "Referenced Suppliers" },
+          { value: "1,958", label: "Distributors" },
+          { value: "118", label: "Countries" },
+        ],
       },
       opar: {
         eyebrow: "Regional Partnership",
         title: "Opar",
-        fact: "Aegean Region",
-        body: "Our Aegean Regional Dealership combines Opar's brand strength with Delta Oto's regional inventory, field presence and distribution capabilities.",
+        body: "Our Opar Aegean Regional Dealership pairs the brand's product strength with Delta Oto's regional inventory, sales and distribution capabilities. Through our İzmir-based field organization, we deliver fast product access, regular shipments and strong dealer support across the Aegean Region.",
+        identifier: "Aegean Regional Dealership",
       },
     },
     logistics: {
@@ -566,26 +576,48 @@ export function LandingPage() {
 
           <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
             {[
-              { data: t.partnership.groupauto, logoSrc: "/images/groupauto-international-logo.webp", logoAlt: "GROUPAUTO International", logoW: 900, logoH: 181, chipBg: "bg-[#0e1016]", refClass: "do-reveal do-d1" },
-              { data: t.partnership.opar, logoSrc: "/images/opar-logo.svg", logoAlt: "Opar", logoW: 849, logoH: 341, chipBg: "bg-white", refClass: "do-reveal do-d2" },
-            ].map(({ data, logoSrc, logoAlt, logoW, logoH, chipBg, refClass }) => (
+              { data: t.partnership.groupauto, logoSrc: "/images/groupauto-international-logo.webp", logoAlt: "GROUPAUTO International", logoW: 900, logoH: 181, refClass: "do-reveal do-d1" },
+              { data: t.partnership.opar, logoSrc: "/images/opar-logo-white.svg", logoAlt: "Opar", logoW: 849, logoH: 341, refClass: "do-reveal do-d2" },
+            ].map(({ data, logoSrc, logoAlt, logoW, logoH, refClass }) => (
               <div
                 key={data.title}
                 ref={ref}
                 className={`${refClass} relative rounded-xl border border-white/15 bg-white/[0.06] backdrop-blur-sm overflow-hidden group p-8 flex flex-col`}
               >
                 <div className="do-card-beam"></div>
+                {/* Logo çerçevesiz: her iki logo da (GROUPAUTO zaten beyaz-negatif,
+                    Opar artık beyaz-negatif SVG olarak) doğrudan panelin lacivert
+                    zemininde duruyor — kutu/chip/border yok. Ortak h-11 yükseklik
+                    bandı yalnızca hizalama için, görsel bir çerçeve değil. */}
                 <div className="relative z-10 flex items-center justify-between gap-4 mb-7">
-                  <div className={`h-14 px-5 rounded-lg flex items-center shrink-0 ${chipBg}`}>
-                    <img src={logoSrc} alt={logoAlt} width={logoW} height={logoH} className="max-h-9 w-auto object-contain" />
+                  <div className="h-11 flex items-center shrink-0">
+                    <img src={logoSrc} alt={logoAlt} width={logoW} height={logoH} className="h-full w-auto object-contain" />
                   </div>
                   <span className="text-[10px] font-black tracking-[0.25em] text-blue-200/50 uppercase text-right">{data.eyebrow}</span>
                 </div>
                 <div className="relative z-10 font-bold text-white text-xl leading-tight">{data.title}</div>
-                <div className="relative z-10 text-[11px] text-[#7d9bea] mt-1.5 uppercase tracking-[0.2em] font-semibold">{data.fact}</div>
                 <p className="relative z-10 text-sm text-blue-100/70 leading-relaxed font-light mt-4">
                   {data.body}
                 </p>
+                {/* GROUPAUTO: resmi rakamlardan kompakt bir veri satırı.
+                    Opar: aynı görsel alanda, uydurma KPI olmadan metinsel kimlik
+                    ("Ege Bölge Bayiliği") — görsel simetri, aynı bilgi mimarisini
+                    gerektirmiyor (görev talimatı). */}
+                {"stats" in data && (
+                  <div className="relative z-10 grid grid-cols-4 gap-3 mt-6 pt-6 border-t border-white/10">
+                    {data.stats.map((s) => (
+                      <div key={s.label}>
+                        <div className="text-xl md:text-2xl font-black text-white tabular-nums leading-none">{s.value}</div>
+                        <div className="text-[9px] text-blue-200/55 uppercase tracking-[0.1em] mt-1.5 leading-tight">{s.label}</div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+                {"identifier" in data && (
+                  <div className="relative z-10 mt-6 pt-6 border-t border-white/10">
+                    <div className="text-xs font-black text-white uppercase tracking-[0.2em]">{data.identifier}</div>
+                  </div>
+                )}
               </div>
             ))}
           </div>
