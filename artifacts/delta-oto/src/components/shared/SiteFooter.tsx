@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "wouter";
-import { MapPin, Mail, Phone, BadgeCheck, Linkedin } from "lucide-react";
+import { MapPin, Mail, Phone, BadgeCheck, Linkedin, Instagram } from "lucide-react";
 import { useLang, routeFor, type Lang, type RouteKey } from "@/lib/i18n";
 
 // "Private Label" başlığı kaldırıldı (kullanıcı kararı, Content/UX Pass 01) —
@@ -11,14 +11,17 @@ import { useLang, routeFor, type Lang, type RouteKey } from "@/lib/i18n";
 // "SPART" başlığı da kaldırıldı (Desktop Feedback Round) — logo tek başına,
 // başlıksız duruyor; hedef/link (routeFor("spart")) DEĞİŞMEDİ.
 //
-// SOSYAL MEDYA: yalnızca kod tabanında ZATEN var olan, doğrulanmış resmi
-// bağlantı eklendi — LinkedIn (KariyerPage.tsx'te "LinkedIn'de Pozisyonları
-// İnceleyin" CTA'sı için önceden onaylanmış https://www.linkedin.com/company/delta-oto).
-// Instagram ve YouTube için repo içinde HİÇBİR resmi URL bulunamadı — bu
-// ikisi icat edilmedi, href="#" kullanılmadı, hiç render edilmiyor. Gerçek
-// hesap URL'leri sağlandığında buraya aynı desenle eklenebilir.
+// SOSYAL MEDYA: doğrulanmış resmi hesap URL'leri kullanıcı tarafından
+// sağlandı (LinkedIn şirket sayfası + Instagram). Aynı LinkedIn URL'i
+// KariyerPage.tsx'teki "LinkedIn'de Pozisyonları İnceleyin" CTA'sında da
+// güncellendi — iki yerde farklı/eski bir bağlantı kalmasın diye.
+// Konum: Footer Revizyonu talebiyle bottom legal bar'dan (kopuk/sonradan-
+// eklenmiş görünüyordu) Sertifikalar kolonunun altına taşındı — aynı
+// kolonun doğal akışında, ince bir ayraçla ayrılmış sessiz bir alt-blok;
+// sertifika kutularıyla boyut/vurgu olarak yarışmıyor.
 const SOCIAL_LINKS: { label: string; href: string; Icon: typeof Linkedin }[] = [
-  { label: "LinkedIn", href: "https://www.linkedin.com/company/delta-oto", Icon: Linkedin },
+  { label: "LinkedIn", href: "https://www.linkedin.com/company/delta-oto-aksam%C4%B1-san-ve-tic-a-%C5%9F/?viewAsMember=true", Icon: Linkedin },
+  { label: "Instagram", href: "https://www.instagram.com/delta_oto/", Icon: Instagram },
 ];
 const QUICK_LINKS: { key: RouteKey; label: Record<Lang, string> }[] = [
   { key: "about", label: { tr: "Hakkımızda", en: "About Us" } },
@@ -90,7 +93,7 @@ export function SiteFooter() {
                 </li>
               ))}
             </ul>
-            <div className="mt-10">
+            <div className="mt-6">
               <Link href={routeFor("spart", lang)}>
                 <img src="/images/spart-logo.png" alt="SPART Original Replacement" className="h-9 w-auto rounded-md opacity-90 hover:opacity-100 transition-opacity" />
               </Link>
@@ -110,15 +113,8 @@ export function SiteFooter() {
             <p className="text-xs text-gray-500 leading-relaxed max-w-xs">
               {T.certsBody[lang]}
             </p>
-          </div>
-
-        </div>
-
-        <div className="pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
-          <span>{T.rights[lang]}</span>
-          <div className="flex items-center gap-5">
             {SOCIAL_LINKS.length > 0 && (
-              <div className="flex items-center gap-3">
+              <div className="flex items-center gap-2 mt-7 pt-6 border-t border-white/5">
                 {SOCIAL_LINKS.map(({ label, href, Icon }) => (
                   <a
                     key={label}
@@ -126,17 +122,22 @@ export function SiteFooter() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={label}
-                    className="text-gray-500 hover:text-white transition-colors"
+                    className="w-8 h-8 rounded-full flex items-center justify-center text-gray-500 hover:text-white hover:bg-white/5 transition-all duration-200"
                   >
                     <Icon className="w-4 h-4" strokeWidth={1.75} />
                   </a>
                 ))}
               </div>
             )}
-            <div className="flex items-center gap-1.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-[#1B3A8F] animate-pulse" />
-              <span>{T.established[lang]}</span>
-            </div>
+          </div>
+
+        </div>
+
+        <div className="pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
+          <span>{T.rights[lang]}</span>
+          <div className="flex items-center gap-1.5">
+            <div className="w-1.5 h-1.5 rounded-full bg-[#1B3A8F] animate-pulse" />
+            <span>{T.established[lang]}</span>
           </div>
         </div>
       </div>

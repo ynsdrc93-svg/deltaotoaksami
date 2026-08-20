@@ -23,7 +23,7 @@ import { useLang, type Lang } from "@/lib/i18n";
 // İki dil dalı arasında ikon bileşenlerini tekrar etmemek için ayrı tutulur;
 // sıralama content.*.benefits.groups / content.*.platforms.items ile birebir eşleşir.
 const JOB_PLATFORMS = [
-  { name: "LinkedIn", url: "https://www.linkedin.com/company/delta-oto", Icon: Linkedin },
+  { name: "LinkedIn", url: "https://www.linkedin.com/company/delta-oto-aksam%C4%B1-san-ve-tic-a-%C5%9F/?viewAsMember=true", Icon: Linkedin },
   { name: "Kariyer.net", url: "https://www.kariyer.net", Icon: ExternalLink },
 ];
 
