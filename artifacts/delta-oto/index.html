@@ -16,16 +16,9 @@
     <meta name="twitter:description" content="1976'dan bu yana güçlü ürün portföyü ve lojistik altyapısıyla otomotiv yedek parça sektöründe güvenilir tedarik." />
     <meta name="twitter:image" content="/images/delta-oto-depot.jpg" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <!-- Font isteği artık burada, <head>'den doğrudan yapılıyor (önceden
-         src/index.css'teki @import ile yapılıyordu — bu, tarayıcının fontu
-         CSS indirilip parse edilene kadar keşfedememesine, dolayısıyla seri/
-         gecikmeli bir zincire yol açıyordu). ÖNEMLİ: aynı fontu iki kez
-         indirtmemek için src/index.css'teki @import KALDIRILDI — font isteği
-         artık TEK kaynaktan (burada) yapılıyor. Ağırlık seti (300-900) ve
-         display=swap birebir korundu. -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap">
+    <!-- Font artık self-hosted (bkz. src/index.css @font-face bloğu,
+         /fonts/inter-*.woff2) — fonts.googleapis.com/fonts.gstatic.com'a
+         hiç istek gitmiyor, bu yüzden preconnect de gereksiz. -->
     <!-- Hero LCP görseli: gerçek Lighthouse trace'i bu görselin SPA'da (SSR
          yok) ilk HTML'de keşfedilemediğini (requestDiscoverable=false) ve
          ~13s'lik bir resourceLoadDelay yaşadığını doğruladı — preload, JS
