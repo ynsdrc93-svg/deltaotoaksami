@@ -61,13 +61,18 @@ export function SiteFooter() {
             {/* Klasik (50. yıl kampanya etiketi eklenmeden önceki) Delta Oto
                 logosu — header'daki yeni Delta 50 logosundan bilinçli olarak
                 farklı, footer'a özel bir asset (origin/main / 700c053'ten
-                alındı). Header'daki kampanya logosu DEĞİŞMEDİ. */}
+                alındı). Header'daki kampanya logosu DEĞİŞMEDİ. Boyut duyarlı:
+                masaüstünde (md+, footer'ın kendi 3 kolonlu grid eşiğiyle
+                aynı) 70px — birincil kurumsal marka olarak güçlü bir
+                varlık. Mobilde aynı yükseklik genişlik/en-boy oranı
+                nedeniyle (1152:240 ≈ 4.8:1) 390px'lik görünümü neredeyse
+                uçtan uca kaplayıp orantısız dururdu — 59px'te kalıyor. */}
             <img
               src="/images/delta-oto-logo-classic.webp"
               alt="Delta Oto"
               width={1152}
               height={240}
-              className="h-[59px] w-auto do-logo-invert mb-8 opacity-85"
+              className="h-[59px] md:h-[70px] w-auto do-logo-invert mb-8 opacity-85"
             />
             <ul className="space-y-4 text-sm text-gray-500">
               <li className="flex items-start gap-3">

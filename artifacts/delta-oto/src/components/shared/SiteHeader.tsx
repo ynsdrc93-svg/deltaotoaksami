@@ -81,24 +81,23 @@ export function SiteHeader() {
               <LanguageSwitcher />
             </div>
 
-            {/* Kompakt SPART/B2B Portal bloğu — eskiden yan yana iki geniş öğe
-                (logo kutusu + dolgun buton), artık paylaşılan tek bir dış
-                çerçevede üst/alt istiflenmiş, ince bir ayraçla ayrılmış iki
-                satır (Desktop Feedback Round §6). Her ikisi de bağımsız
-                tıklanabilir kalıyor; yatay alan kazanımı burada. */}
-            <div className="hidden xl:flex flex-col rounded-md border border-slate-200 overflow-hidden shrink-0 w-[108px]">
-              <Link
-                href={routeFor("spart", lang)}
-                className="flex items-center justify-center h-7 hover:bg-slate-50 transition-colors"
-              >
-                <img src="/images/spart-logo.png" alt={SPART_ALT[lang]} className="h-4 w-auto block" />
+            {/* SPART/B2B ikili grup — artık paylaşılan bir dış çerçeve/widget
+                İÇİNDE değil (Visual Polish Round §2): SPART logosu beyaz
+                header zemininde serbest duruyor (kutu/border yok, yalnızca
+                hover'da opaklık), altında küçük, bağımsız navy bir B2B
+                butonu var. İkisi arasında yalnızca ince bir boşluk (gap-1.5)
+                — bir "çerçeve" değil, tek bir grup gibi OKUNMALARINI
+                sağlıyor. Yatay alan kazanımı (LandingPage.tsx'teki aynı
+                blokla piksel piksel eşleşmeli) korunuyor. */}
+            <div className="hidden xl:flex flex-col items-center gap-1.5 shrink-0 w-[104px]">
+              <Link href={routeFor("spart", lang)} className="opacity-80 hover:opacity-100 transition-opacity">
+                <img src="/images/spart-logo.png" alt={SPART_ALT[lang]} className="h-5 w-auto block" />
               </Link>
-              <div className="h-px bg-slate-200" />
               <a
                 href="https://b2b.parcabul.com.tr/login.aspx"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-1 h-7 bg-[#1B3A8F] hover:bg-[#2547B5] text-white text-[10px] font-bold tracking-[0.03em] transition-colors group"
+                className="flex items-center justify-center gap-1 w-full h-[26px] rounded-md bg-[#1B3A8F] hover:bg-[#2547B5] text-white text-[10px] font-bold tracking-[0.03em] transition-colors group"
               >
                 {B2B_LABEL[lang].toUpperCase()}
                 <ArrowRight className="w-2.5 h-2.5 group-hover:translate-x-0.5 transition-transform" />

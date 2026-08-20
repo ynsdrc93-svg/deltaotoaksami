@@ -365,15 +365,15 @@ export function LandingPage() {
               <LanguageSwitcher />
             </div>
 
-            {/* Kompakt SPART/B2B Portal bloğu — bkz. SiteHeader.tsx'teki aynı
-                deseni (Desktop Feedback Round §6): üst/alt istiflenmiş,
-                tek dış çerçeve, ince ayraç. */}
-            <div className="hidden xl:flex flex-col rounded-md border border-slate-200 overflow-hidden shrink-0 w-[108px]">
-              <Link href={routeFor("spart", lang)} className="flex items-center justify-center h-7 hover:bg-slate-50 transition-colors">
-                <img src="/images/spart-logo.png" alt="SPART Original Replacement" className="h-4 w-auto block" />
+            {/* SPART/B2B ikili grup — bkz. SiteHeader.tsx'teki birebir aynı
+                desen (Visual Polish Round §2): paylaşılan çerçeve kaldırıldı,
+                SPART serbest duruyor, altında küçük bağımsız navy B2B
+                butonu var. */}
+            <div className="hidden xl:flex flex-col items-center gap-1.5 shrink-0 w-[104px]">
+              <Link href={routeFor("spart", lang)} className="opacity-80 hover:opacity-100 transition-opacity">
+                <img src="/images/spart-logo.png" alt="SPART Original Replacement" className="h-5 w-auto block" />
               </Link>
-              <div className="h-px bg-slate-200" />
-              <a href="https://b2b.parcabul.com.tr/login.aspx" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-1 h-7 bg-[#1B3A8F] hover:bg-[#2547B5] text-white text-[10px] font-bold tracking-[0.03em] transition-colors group">
+              <a href="https://b2b.parcabul.com.tr/login.aspx" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-1 w-full h-[26px] rounded-md bg-[#1B3A8F] hover:bg-[#2547B5] text-white text-[10px] font-bold tracking-[0.03em] transition-colors group">
                 {t.hero.ctaB2B.toUpperCase()}
                 <ArrowRight className="w-2.5 h-2.5 group-hover:translate-x-0.5 transition-transform" />
               </a>
@@ -609,7 +609,7 @@ export function LandingPage() {
                 {"stats" in data && (
                   <div className="relative z-10 grid grid-cols-4 gap-3 mt-6 pt-6 border-t border-white/10">
                     {data.stats.map((s) => (
-                      <div key={s.label}>
+                      <div key={s.label} className="text-center">
                         <div className="text-xl md:text-2xl font-black text-white tabular-nums leading-none">{s.value}</div>
                         <div className="text-[9px] text-blue-200/55 uppercase tracking-[0.1em] mt-1.5 leading-tight">{s.label}</div>
                       </div>
