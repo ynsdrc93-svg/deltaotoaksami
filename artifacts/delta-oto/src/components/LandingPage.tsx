@@ -1,6 +1,6 @@
 import React, { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { Link } from "wouter";
-import { ChevronRight, ArrowRight, Handshake, Globe, Menu, X } from "lucide-react";
+import { ChevronRight, ArrowRight, Menu, X } from "lucide-react";
 import { useReveal, useScrolled, useCounter, useScrollProgress, useParallax, useEscapeKey } from "../hooks/use-motion";
 import { useDocumentMeta } from "../hooks/use-document-meta";
 import { SiteFooter } from "./shared/SiteFooter";
@@ -423,30 +423,34 @@ export function LandingPage() {
           kompakt yükseklik (560px); tam ekran yükseklik yalnızca lg+'da
           korunur, böylece başlık+açıklama+CTA'lar ilk mobil ekranda daha
           yukarıda ve görünür oturur.
-          Görsel: jenerik/anonim depo fotoğrafı yerine gerçek Delta Oto
-          tesisi (delta-oto-depot.jpg — binada "delta50" yazısı ve Groupauto
-          rozeti görünür durumda). Operasyon sayfası AYNI kaynağı ama FARKLI
-          bir crop ile kullanıyor (bkz. OperasyonPage yorumu): bu container
-          lg+'da tam ekran yüksekliğinde (Operasyon'un sabit 560px'inden
-          farklı) olduğundan, object-cover matematiği zaten doğal olarak
-          farklı bir dilim gösteriyor — mobilde dar-dikey crop tabelayı
-          çerçeveler, masaüstünde geniş-kısa crop neredeyse tüm kaynağı
-          gösterir. Opaklık/gradyan da tabelanın okunur kalması için bu
-          sayfaya özgü hafifçe açıldı (bkz. Operasyon'daki kendi değerleri —
-          ikisi de aynı değil). Hero başlığı/kırpma/parallax bu revizyon
-          kapsamında BİLİNÇLİ OLARAK değiştirilmedi — yalnızca EN çevirisi
-          eklendi (bkz. görev talimatı: "preserve hero layout/copy/crop"). */}
+          Görsel (Desktop Feedback Round, hero değişimi): yeni "delta50"
+          tesis/kamyon filosu fotoğrafı (Codex üretimi) — kompozisyonun
+          KENDİSİ zaten solda koyu/loş, sağda aydınlık bir gradyan taşıyor,
+          bu yüzden eski görselin ağır opaklık indirimi (65%) ve koyu
+          gradyan katmanı burada abartılı kalırdı ("no excessive additional
+          overlays if the image already provides enough contrast" — görev
+          talimatı). Opaklık ~90%'a çıkarıldı, gradyan katmanı ince/yönlü bir
+          "metin okunabilirlik güvencesi"ne indirildi — fotoğrafın kendi
+          atmosferi korunuyor. object-position: bina tabelası (~üst-orta/sağ)
+          VE kamyon filosu (~alt-sağ) her iki kırpımda da kadraj içinde
+          kalacak şekilde ayarlandı (mobilde dar-dikey kırpım konuyu sağa
+          kaydırır — solda zaten boş/koyu alan var; masaüstünde geniş-kısa
+          kırpım kaynağın neredeyse tamamını gösterir). Hero başlığı/metin/
+          parallax mekaniği DEĞİŞMEDİ — yalnızca görsel kaynağı ve onun
+          opaklık/gradyan ayarı bu görsele özgü güncellendi. */}
       <section className="relative min-h-[560px] lg:min-h-screen flex items-center overflow-hidden bg-[#0e1016] text-white">
         <div className="absolute inset-0">
           <img
             ref={heroParallax}
-            src="/images/delta-oto-depot.webp"
+            src="/images/delta-oto-hero-facility.webp"
             alt=""
+            width={1920}
+            height={1081}
             fetchPriority="high"
-            className="w-full h-full object-cover object-[34%_50%] lg:object-[40%_28%] opacity-65 will-change-transform"
+            className="w-full h-full object-cover object-[88%_50%] lg:object-[50%_38%] opacity-90 will-change-transform"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0e1016]/92 via-[#0e1016]/55 to-[#0e1016]/15"></div>
-          <div className="absolute inset-0 bg-gradient-to-t from-[#0e1016] via-transparent to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0e1016]/78 via-[#0e1016]/28 to-transparent"></div>
+          <div className="absolute inset-0 bg-gradient-to-t from-[#0e1016]/70 via-transparent to-transparent"></div>
         </div>
         <div className="do-hero-stripe"></div>
         <div className="absolute inset-0 do-grid-bg opacity-60"></div>
@@ -528,12 +532,19 @@ export function LandingPage() {
 
       {/* STRATEGIC PARTNERSHIP (navy) — Content/UX Pass 01: eski "bir dev +
           bir küçük kart" hiyerarşisi kaldırıldı. GROUPAUTO International ve
-          Opar artık BİREBİR eşit boyutta iki editoryal panel — aynı ikon
-          rozeti boyutu, aynı tip ölçeği, aynı boşluk/dolgu, aynı kart
-          çerçevesi. Ne resmi bir GROUPAUTO ne de Opar logo asset'i repo'da
-          mevcut (araştırıldı, bulunamadı) — bu yüzden iki panel de AYNI
-          ikon-rozet dilini kullanıyor; bu, asimetrik bir "biri var biri yok"
-          logo sorunu yaşamadan eşitliği doğal olarak garanti ediyor. */}
+          Opar BİREBİR eşit boyutta iki editoryal panel — aynı kart çerçevesi,
+          aynı tip ölçeği, aynı boşluk/dolgu.
+          Desktop Feedback Round: resmi logolar eklendi (kullanıcı sağladı).
+          GROUPAUTO'nun asset'i BEYAZ/saydam (yalnızca koyu zeminde görünür) —
+          Opar'ınki ise koyu lacivert/şeffaf (yalnızca açık zeminde görünür,
+          bu panelin kendi navy gradyanına karşı neredeyse görünmez kalır,
+          headless tarayıcıda doğrulandı). Bu yüzden iki logo da AYNI boyut/
+          konum/dolgu ile (yükseklik sınırı ortak, sanatı yeniden çizmeden
+          object-contain) ama KENDİ rengine uygun zeminli birer "chip" içinde
+          gösteriliyor — chip'in kendisi normalize edilen şey, logo sanatı
+          DEĞİL (bkz. görev talimatı). Opar .ai kaynağından pdftocairo ile
+          çıkarılmış temiz vektör SVG (yalnızca 3 path, rasterize değil),
+          içerik sınırlarına headless tarayıcıda getBBox() ile trim edildi. */}
       <section className="py-20 md:py-28 relative overflow-hidden text-white" style={{ background: "linear-gradient(135deg, #1B3A8F 0%, #14275c 100%)" }}>
         <div className="absolute inset-0 do-grid-bg opacity-40"></div>
         <div className="absolute right-0 top-0 w-1/2 h-full bg-gradient-to-l from-white/5 to-transparent pointer-events-none"></div>
@@ -555,20 +566,20 @@ export function LandingPage() {
 
           <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
             {[
-              { data: t.partnership.groupauto, Icon: Globe, refClass: "do-reveal do-d1" },
-              { data: t.partnership.opar, Icon: Handshake, refClass: "do-reveal do-d2" },
-            ].map(({ data, Icon, refClass }) => (
+              { data: t.partnership.groupauto, logoSrc: "/images/groupauto-international-logo.webp", logoAlt: "GROUPAUTO International", logoW: 900, logoH: 181, chipBg: "bg-[#0e1016]", refClass: "do-reveal do-d1" },
+              { data: t.partnership.opar, logoSrc: "/images/opar-logo.svg", logoAlt: "Opar", logoW: 849, logoH: 341, chipBg: "bg-white", refClass: "do-reveal do-d2" },
+            ].map(({ data, logoSrc, logoAlt, logoW, logoH, chipBg, refClass }) => (
               <div
                 key={data.title}
                 ref={ref}
                 className={`${refClass} relative rounded-xl border border-white/15 bg-white/[0.06] backdrop-blur-sm overflow-hidden group p-8 flex flex-col`}
               >
                 <div className="do-card-beam"></div>
-                <div className="relative z-10 flex items-center justify-between mb-7">
-                  <div className="w-12 h-12 rounded-lg bg-white/10 border border-white/15 flex items-center justify-center group-hover:bg-[#2547B5] group-hover:border-[#2547B5] group-hover:scale-105 transition-all duration-300">
-                    <Icon className="w-6 h-6 text-white" />
+                <div className="relative z-10 flex items-center justify-between gap-4 mb-7">
+                  <div className={`h-14 px-5 rounded-lg flex items-center shrink-0 ${chipBg}`}>
+                    <img src={logoSrc} alt={logoAlt} width={logoW} height={logoH} className="max-h-9 w-auto object-contain" />
                   </div>
-                  <span className="text-[10px] font-black tracking-[0.25em] text-blue-200/50 uppercase">{data.eyebrow}</span>
+                  <span className="text-[10px] font-black tracking-[0.25em] text-blue-200/50 uppercase text-right">{data.eyebrow}</span>
                 </div>
                 <div className="relative z-10 font-bold text-white text-xl leading-tight">{data.title}</div>
                 <div className="relative z-10 text-[11px] text-[#7d9bea] mt-1.5 uppercase tracking-[0.2em] font-semibold">{data.fact}</div>
