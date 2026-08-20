@@ -44,7 +44,7 @@ const FACT_ICONS = [Award, Globe, Users, TrendingUp];
 const FACT_META: { target: number; plus: boolean; grouped: boolean }[] = [
   { target: 1976, plus: false, grouped: false },
   { target: 40,   plus: true,  grouped: false },
-  { target: 3000, plus: true,  grouped: true },
+  { target: 29,   plus: false, grouped: false }, // Düzeltme: resmi Groupauto International üye sayısı (29 Members) — bkz. aşağıdaki not
   { target: 100,  plus: true,  grouped: false }, // İçerik/UX Revizyon Notu: sitewide marka iddiası 250+ → 100+ değişti (bkz. content.*.facts.items[3])
 ];
 
@@ -72,14 +72,18 @@ const ESG_ICONS = [Route, Recycle, Laptop];
 //    dağıtım kapasitesine sahip olduğu iddiasıydı — şirket politikası bunu
 //    yasaklıyor (Delta yalnızca Türkiye çapında dağıtım yapar; yalnızca
 //    Groupauto International özel adı/ağı uluslararası olarak nitelenebilir).
-//    Yerine, hemen üstündeki paragrafta zaten geçen "40+ ülke" ile
-//    tekrara düşmeyen, doğrulanmış bir başka Groupauto-ağı istatistiği
-//    ("3.000+ Üye Firma") konuldu.
 // 2) Sitewide marka sayısı iddiası "250+" → "100+" olarak değişti (bkz.
 //    FACT_META[3], BUSINESS_UNITS[0], MILESTONES[7]).
-// 3) 2015 dönüm noktasındaki "ihracat operasyonu faaliyete geçti" ifadesi
-//    kaldırıldı — Delta'nın kendisinin ihracat yaptığı iddiasıydı; şirket
-//    Türkiye çapında bir distribütör olarak konumlandırılır, ihracatçı değil.
+// 3) 2015 dönüm noktasındaki bir cümle kaldırıldı — Delta'nın kendisinin
+//    ihracat yaptığı iddiasıydı; şirket Türkiye çapında bir distribütör
+//    olarak konumlandırılır.
+// 4) Düzeltme turu: yukarıdaki (1) maddesinin İLK düzeltmesinde yerine
+//    konan "3.000+ Üye Firma" rakamı da desteksizdi (uydurma/doğrulanmamış
+//    bir sayıydı, gerçek bir kaynağa dayanmıyordu). FACT_META[2] ve
+//    groupauto.stats artık YALNIZCA GROUPAUTO International'ın kendi resmi
+//    kamuya açık rakamlarından (29 Members / 71 Referenced Suppliers /
+//    1.958 Distributors) alınan üç değeri kullanıyor — hiçbiri yukarı
+//    yuvarlanmadı veya yeniden yorumlanmadı.
 const content = {
   tr: {
     meta: {
@@ -149,7 +153,7 @@ const content = {
       eyebrow: "Uluslararası Ağ",
       heading: "Groupauto International Üyesi",
       body: "Avrupa merkezli Groupauto International ağının Türkiye üyesi sıfatıyla, 40'tan fazla ülkedeki distribütörler ve küresel üreticilerle doğrudan bağlantı içindeyiz. Bu üyelik; ürün erişimini, tedarik koşullarını ve piyasa bilgisini rakiplerimizin önünde konumlandırır.",
-      stats: [["50+", "Global Tedarikçi"], ["Top Tier", "Tedarikçi Erişimi"], ["3.000+", "Üye Firma"]] as [string, string][],
+      stats: [["29", "Üye Ağ"], ["71", "Referans Tedarikçi"], ["1.958", "Distribütör"]] as [string, string][],
       exploreLink: "Marka Portföyümüzü İnceleyin",
       benefitsHeading: "Üyeliğin Faydaları",
       benefits: [
@@ -247,7 +251,7 @@ const content = {
       eyebrow: "International Network",
       heading: "GROUPAUTO International Member",
       body: "As the Turkey member of the Europe-based GROUPAUTO International network, we are directly connected with distributors and global manufacturers in more than 40 countries. This membership puts our product access, supply terms and market intelligence ahead of our competitors.",
-      stats: [["50+", "Global Suppliers"], ["Top Tier", "Supplier Access"], ["3,000+", "Member Companies"]] as [string, string][],
+      stats: [["29", "Members"], ["71", "Referenced Suppliers"], ["1,958", "Distributors"]] as [string, string][],
       exploreLink: "Explore Our Brand Portfolio",
       benefitsHeading: "Benefits of Membership",
       benefits: [

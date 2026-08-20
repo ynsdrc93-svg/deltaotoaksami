@@ -30,7 +30,7 @@ const content = {
   tr: {
     meta: {
       title: "Bize Ulaşın — Satış, B2B ve Kurumsal İletişim | Delta Oto",
-      description: "Delta Oto ile iletişime geçin: satış ve sipariş, B2B portal desteği, insan kaynakları ve ihracat/kurumsal iletişim için doğrudan hat, e-posta, iletişim formu ve üç operasyon merkezimizin adresleri.",
+      description: "Delta Oto ile iletişime geçin: satış ve sipariş, B2B portal desteği, insan kaynakları ve kurumsal iletişim için doğrudan hat, e-posta, iletişim formu ve üç operasyon merkezimizin adresleri.",
     },
     hero: {
       eyebrow: "İletişim Kanallarımız · Ümraniye, İstanbul",
@@ -45,7 +45,7 @@ const content = {
       heading: "İki Hızlı Yol",
       general: {
         title: "Genel İletişim",
-        desc: "Satış, B2B portal, İK ve ihracat ekiplerimize doğrudan ulaşın.",
+        desc: "Satış, B2B portal, İK ve kurumsal iletişim ekiplerimize doğrudan ulaşın.",
         link: "Departmanları görün",
       },
       findRep: {
@@ -81,12 +81,9 @@ const content = {
           email: "ik@deltaoto.com",
         },
         {
-          // Not: gerçek ORGANİZASYONEL departman kategorisi — kaldırılmadı/
-          // yeniden adlandırılmadı. Yalnızca EN etiketi "Export" olarak
-          // çevrildi (bkz. görev talimatı §C.2); TR etiket AYNEN korundu.
-          dept: "İhracat & Genel Kurumsal",
+          dept: "Genel Kurumsal",
           lines: [] as string[],
-          info: "Yurt dışı iş birlikleri ve kurumsal iletişim",
+          info: "Kurumsal iletişim ve genel talepler",
           hours: "Pazartesi – Cuma, 08:30 – 17:30",
           email: "info@deltaoto.com",
         },
@@ -119,7 +116,7 @@ const content = {
         "Sipariş ve Teslimat Süreci",
         "Stok ve Ürün Bilgisi",
         "B2B Portal Erişimi ve Yetkilendirme",
-        "İhracat Talebi",
+        "Genel Kurumsal Talep",
         "Kurumsal İletişim",
         "İnsan Kaynakları & Kariyer",
         "Diğer",
@@ -165,7 +162,7 @@ const content = {
   en: {
     meta: {
       title: "Contact Us — Sales, B2B and Corporate Contacts | Delta Oto",
-      description: "Get in touch with Delta Oto: direct lines and email for sales and orders, B2B portal support, human resources and export/corporate affairs, plus a contact form and the addresses of our three operations centers.",
+      description: "Get in touch with Delta Oto: direct lines and email for sales and orders, B2B portal support, human resources and corporate affairs, plus a contact form and the addresses of our three operations centers.",
     },
     hero: {
       eyebrow: "Contact Channels · Ümraniye, İstanbul",
@@ -180,7 +177,7 @@ const content = {
       heading: "Two Quick Paths",
       general: {
         title: "General Contact",
-        desc: "Reach our sales, B2B portal, HR and export teams directly.",
+        desc: "Reach our sales, B2B portal, HR and corporate communications teams directly.",
         link: "View departments",
       },
       findRep: {
@@ -216,9 +213,9 @@ const content = {
           email: "ik@deltaoto.com",
         },
         {
-          dept: "Export & Corporate Affairs",
+          dept: "Corporate Affairs",
           lines: [] as string[],
-          info: "International partnerships and corporate communications",
+          info: "Corporate communications and general inquiries",
           hours: "Monday – Friday, 08:30 – 17:30",
           email: "info@deltaoto.com",
         },
@@ -251,7 +248,7 @@ const content = {
         "Order & Delivery Process",
         "Stock & Product Information",
         "B2B Portal Access & Authorization",
-        "Export Request",
+        "General Corporate Inquiry",
         "Corporate Communications",
         "Human Resources & Careers",
         "Other",

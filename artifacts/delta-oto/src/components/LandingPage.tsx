@@ -85,7 +85,7 @@ const content = {
       groupauto: {
         eyebrow: "Global Ağ",
         title: "GROUPAUTO International",
-        fact: "40+ Ülke · 3.000+ Üye Firma",
+        fact: "40+ Ülke · 71 Referans Tedarikçi",
         body: "GROUPAUTO International üyeliğimiz; sektörel bilgi paylaşımı, güçlü iş bağlantıları ve uluslararası aftermarket perspektifiyle Delta Oto'nun iş ortaklıklarını destekler.",
       },
       opar: {
@@ -172,7 +172,7 @@ const content = {
       groupauto: {
         eyebrow: "Global Network",
         title: "GROUPAUTO International",
-        fact: "40+ Countries · 3,000+ Member Companies",
+        fact: "40+ Countries · 71 Referenced Suppliers",
         body: "Our GROUPAUTO International membership strengthens Delta Oto's partnerships through industry knowledge sharing, established business connections and an international aftermarket perspective.",
       },
       opar: {
