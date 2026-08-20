@@ -1,8 +1,9 @@
-import { lazy, Suspense } from "react";
+import { lazy, Suspense, useEffect } from "react";
 import { Switch, Route } from "wouter";
 import { LandingPage } from "@/components/LandingPage";
 import { ScrollToTopButton } from "@/components/shared/ScrollToTopButton";
 import { ScrollToTop } from "@/components/shared/ScrollToTop";
+import { useLang } from "@/lib/i18n";
 
 // Ana sayfa dışındaki tüm rotalar lazy-load edilir — ilk yüklemede yalnızca
 // LandingPage'in kodu indirilir, ziyaret edilmeyen sayfaların kodu asla
@@ -27,19 +28,34 @@ function RouteFallback() {
 }
 
 function App() {
+  // <html lang> her zaman gerçek görüntülenen dille eşleşsin — URL'den
+  // türetilen useLang() ile senkron, ayrı bir Provider gerekmiyor.
+  const lang = useLang();
+  useEffect(() => {
+    document.documentElement.lang = lang;
+  }, [lang]);
+
   return (
     <>
       <ScrollToTop />
       <Suspense fallback={<RouteFallback />}>
         <Switch>
           <Route path="/" component={LandingPage} />
+          <Route path="/en" component={LandingPage} />
           <Route path="/hakkimizda" component={HakkimizdaPage} />
+          <Route path="/en/about" component={HakkimizdaPage} />
           <Route path="/tedarikciler" component={TedarikciPage} />
+          <Route path="/en/partners" component={TedarikciPage} />
           <Route path="/operasyon" component={OperasyonPage} />
+          <Route path="/en/operations" component={OperasyonPage} />
           <Route path="/kariyer" component={KariyerPage} />
+          <Route path="/en/careers" component={KariyerPage} />
           <Route path="/iletisim" component={IletisimPage} />
+          <Route path="/en/contact" component={IletisimPage} />
           <Route path="/temsilcilerimiz" component={TemsilcilerimizPage} />
+          <Route path="/en/representatives" component={TemsilcilerimizPage} />
           <Route path="/spart" component={SpartPage} />
+          <Route path="/en/spart" component={SpartPage} />
           <Route component={NotFound} />
         </Switch>
       </Suspense>

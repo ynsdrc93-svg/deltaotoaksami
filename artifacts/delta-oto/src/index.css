@@ -335,7 +335,7 @@
   from { opacity: 0; transform: translateY(8px) scale(0.98); }
   to { opacity: 1; transform: translateY(0) scale(1); }
 }
-.do-fade-up { animation: do-fade-up 0.25s ease; }
+.do-fade-up { animation: do-fade-up 0.2s ease; }
 
 /* Spotlight paneldeki öne çıkan marka çipleri: sırayla (staggered), gri
    tondan gerçek renge "odağa gelen" bir açılışla beliriyor. */

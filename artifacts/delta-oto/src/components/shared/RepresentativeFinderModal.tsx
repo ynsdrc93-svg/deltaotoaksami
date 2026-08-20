@@ -16,9 +16,27 @@ import {
   type TurkeyRegion,
   type TurkeyProvince,
 } from "@/lib/turkey-regions";
+import type { Lang } from "@/lib/i18n";
 
 // Bölge temsilcisi bulma deneyiminin TEK yeri — /iletisim ve /temsilcilerimiz
-// aynı modalı açar, mantık burada tekilleşir (DRY).
+// aynı modalı açar, mantık burada tekilleşir (DRY). `lang` prop olarak
+// alınır (kendi useLang() çağırmaz) — çağıran sayfa zaten bu değeri
+// hesaplıyor, tek kaynaktan aşağı akar. Bölge/il adları (TURKEY_REGIONS,
+// province.name) coğrafi özel adlardır — marka adları gibi çevrilmez, her
+// iki dilde de Türkçe haliyle kalır.
+const UI = {
+  dialogLabel: { tr: "Bölge Temsilcinizi Bulun", en: "Find Your Representative" },
+  title: { tr: "Bölge Temsilcinizi Bulun", en: "Find Your Representative" },
+  close: { tr: "Kapat", en: "Close" },
+  allTurkey: { tr: "Tüm Türkiye", en: "All of Türkiye" },
+  hintAll: { tr: "Haritadan bir il seçin veya yukarıdan bölge seçerek daraltın.", en: "Select a province on the map, or narrow down by region above." },
+  hintEmpty: { tr: "Haritadan veya listeden bir il seçerek başlayın.", en: "Start by selecting a province on the map or from the list." },
+  notFoundPrompt: { tr: "İlinizi bulamadınız mı?", en: "Can't find your province?" },
+  fallbackBody: {
+    tr: "Bu il için güncel bir temsilci ataması henüz yayınlanmadı. Ekibimize genel satış hattımız üzerinden doğrudan ulaşabilirsiniz.",
+    en: "No representative has been assigned for this province yet. You can reach our team directly through our general sales line.",
+  },
+} satisfies Record<string, Record<Lang, string>>;
 
 const CITY_PATH_BY_PLATE: Map<number, string> = new Map(
   turkeyCities.map((c: { plateNumber: number; path: string }) => [c.plateNumber, c.path]),
@@ -80,14 +98,13 @@ function telHref(phone: string): string {
   return `tel:${phone.replace(/\s+/g, "")}`;
 }
 
-function FallbackDetail({ province }: { province: TurkeyProvince }) {
+function FallbackDetail({ province, lang }: { province: TurkeyProvince; lang: Lang }) {
   return (
     <div>
       <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#1B3A8F]">{province.region}</span>
       <h3 className="text-xl font-black text-slate-900 mt-1 mb-4">{province.name}</h3>
       <p className="text-slate-500 text-[13.5px] leading-relaxed mb-6">
-        Bu il için güncel bir temsilci ataması henüz yayınlanmadı. Ekibimize genel satış hattımız
-        üzerinden doğrudan ulaşabilirsiniz.
+        {UI.fallbackBody[lang]}
       </p>
       <div className="space-y-2.5">
         <a href={telHref(GENERAL_CONTACT.phone)} className="flex items-center gap-2.5 text-[13.5px] font-semibold text-slate-700 hover:text-[#1B3A8F] transition-colors">
@@ -127,7 +144,11 @@ function RepresentativeDetail({ rep, province }: { rep: Representative; province
   );
 }
 
-export function RepresentativeFinderModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+// `lang` opsiyonel + "tr" varsayılan: IletisimPage.tsx bu modalı henüz
+// useLang() ile çağırmıyor (ayrı bir çeviri görevi kapsamında) — o görev
+// tamamlanana kadar mevcut çağrı yeri kırılmasın diye varsayılan sağlanıyor;
+// tamamlandığında oradaki çağrı da `lang={lang}` geçecek (bkz. TemsilcilerimizPage.tsx).
+export function RepresentativeFinderModal({ open, onClose, lang = "tr" }: { open: boolean; onClose: () => void; lang?: Lang }) {
   const [selectedRegion, setSelectedRegion] = useState<TurkeyRegion | "all">("all");
   const [selectedPlate, setSelectedPlate] = useState<number | null>(null);
   const [labelPositions, setLabelPositions] = useState<Map<number, { x: number; y: number }>>(new Map());
@@ -199,15 +220,15 @@ export function RepresentativeFinderModal({ open, onClose }: { open: boolean; on
         }`}
         role="dialog"
         aria-modal="true"
-        aria-label="Bölge Temsilcinizi Bulun"
+        aria-label={UI.dialogLabel[lang]}
       >
         <div className="flex items-center justify-between gap-4 px-5 py-3.5 lg:px-6 lg:py-4 border-b border-slate-100 shrink-0">
-          <h2 className="text-lg lg:text-xl font-black text-slate-900">Bölge Temsilcinizi Bulun</h2>
+          <h2 className="text-lg lg:text-xl font-black text-slate-900">{UI.title[lang]}</h2>
           <button
             ref={closeButtonRef}
             type="button"
             onClick={onClose}
-            aria-label="Kapat"
+            aria-label={UI.close[lang]}
             className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors"
           >
             <X className="w-4 h-4" />
@@ -226,7 +247,7 @@ export function RepresentativeFinderModal({ open, onClose }: { open: boolean; on
                   : "border-slate-200 text-slate-600 hover:border-[#1B3A8F]/40"
               }`}
             >
-              Tüm Türkiye
+              {UI.allTurkey[lang]}
             </button>
             {TURKEY_REGIONS.map((region) => (
               <button
@@ -305,7 +326,7 @@ export function RepresentativeFinderModal({ open, onClose }: { open: boolean; on
                   bölgenin illeri kompakt bir ızgarada gösterilir. */}
               {selectedRegion === "all" ? (
                 <p className="text-slate-400 text-[11.5px] text-center mt-2.5">
-                  Haritadan bir il seçin veya yukarıdan bölge seçerek daraltın.
+                  {UI.hintAll[lang]}
                 </p>
               ) : (
                 <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-2 mt-3">
@@ -339,13 +360,13 @@ export function RepresentativeFinderModal({ open, onClose }: { open: boolean; on
                   <div className="text-center">
                     <MapPin className="w-7 h-7 text-slate-300 mx-auto mb-4" strokeWidth={1.5} />
                     <p className="text-slate-400 text-[13.5px] leading-relaxed">
-                      Haritadan veya listeden bir il seçerek başlayın.
+                      {UI.hintEmpty[lang]}
                     </p>
                   </div>
                 ) : selectedRep ? (
                   <RepresentativeDetail rep={selectedRep} province={selectedProvince} />
                 ) : (
-                  <FallbackDetail province={selectedProvince} />
+                  <FallbackDetail province={selectedProvince} lang={lang} />
                 )}
               </div>
             </div>
@@ -353,7 +374,7 @@ export function RepresentativeFinderModal({ open, onClose }: { open: boolean; on
         </div>
 
         <div className="border-t border-slate-100 px-5 lg:px-6 py-2.5 shrink-0 flex flex-wrap items-center justify-between gap-2 bg-slate-50/60">
-          <span className="text-[11.5px] text-slate-500">İlinizi bulamadınız mı?</span>
+          <span className="text-[11.5px] text-slate-500">{UI.notFoundPrompt[lang]}</span>
           <div className="flex items-center gap-2.5">
             <a href={telHref(GENERAL_CONTACT.phone)} className="text-[11.5px] font-semibold text-[#1B3A8F] hover:text-[#2547B5] transition-colors">{GENERAL_CONTACT.phone}</a>
             <span className="text-slate-300">·</span>

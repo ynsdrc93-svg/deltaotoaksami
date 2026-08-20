@@ -92,11 +92,15 @@ export function LogisticsMap() {
     <>
       {/* Not: haritanın path verisinde birkaç ilde küçük iç-su (göl) boşlukları var
           (ör. Tuz Gölü) — arkaplana glow/gradient eklemek silüetin dışına taşıp
-          bozuk görünüyordu, bu yüzden haritayı olduğu gibi (temiz) bırakıyoruz. */}
+          bozuk görünüyordu, bu yüzden haritayı olduğu gibi (temiz) bırakıyoruz.
+          Harita artık salt görsel/dekoratif (Content/UX Pass 01) — il bazlı
+          hover/tooltip/tıklama kaldırıldı, kullanıcı illeri seçemez. Silüet,
+          3 operasyon merkezi vurgusu ve animasyonlu dağıtım rotaları AYNEN
+          korunuyor. */}
       <TurkeyMap
-        hoverable
-        showTooltip
-        customStyle={{ idleColor: "#1B3A8F", hoverColor: "#4d74d6" }}
+        hoverable={false}
+        showTooltip={false}
+        customStyle={{ idleColor: "#1B3A8F", hoverColor: "#1B3A8F" }}
       />
       {/* turkey-map-react has no per-city color prop; overlay the 3 hub
           provinces' own path data (same viewBox) with the accent fill. */}

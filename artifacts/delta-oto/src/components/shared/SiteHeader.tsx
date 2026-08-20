@@ -2,14 +2,25 @@ import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "wouter";
 import { ArrowRight, Menu, X } from "lucide-react";
 import { useEscapeKey, useScrolled } from "../../hooks/use-motion";
+import { useLang, routeFor, type Lang } from "@/lib/i18n";
+import { LanguageSwitcher } from "./LanguageSwitcher";
 
-const NAV: { label: string; href: string }[] = [
-  { label: "Hakkımızda",           href: "/hakkimizda"  },
-  { label: "Tedarikçiler",          href: "/tedarikciler" },
-  { label: "Operasyon ve Lojistik", href: "/operasyon"   },
-  { label: "Kariyer",               href: "/kariyer"     },
-  { label: "İletişim",              href: "/iletisim"    },
+// Nav etiketleri: "Tedarikçiler" görünür kullanıcı terminolojisi olarak
+// "İş Ortaklarımız" (nav'da kısaca "Partners"/"İş Ortaklarımız") oldu — route
+// (/tedarikciler) bilinçli olarak DEĞİŞMEDİ, mevcut linkler kırılmasın diye
+// (bkz. lib/i18n.ts routeFor). İç veri adı hâlâ "partners" (RouteKey).
+const NAV: { key: "about" | "partners" | "operations" | "careers" | "contact"; label: Record<Lang, string> }[] = [
+  { key: "about", label: { tr: "Hakkımızda", en: "About Us" } },
+  { key: "partners", label: { tr: "İş Ortaklarımız", en: "Partners" } },
+  { key: "operations", label: { tr: "Operasyon ve Lojistik", en: "Operations & Logistics" } },
+  { key: "careers", label: { tr: "Kariyer", en: "Careers" } },
+  { key: "contact", label: { tr: "İletişim", en: "Contact" } },
 ];
+
+const SPART_ALT: Record<Lang, string> = { tr: "SPART Original Replacement", en: "SPART Original Replacement" };
+const B2B_LABEL: Record<Lang, string> = { tr: "B2B Portal", en: "B2B Portal" };
+const MENU_OPEN_LABEL: Record<Lang, string> = { tr: "Menüyü aç", en: "Open menu" };
+const MENU_CLOSE_LABEL: Record<Lang, string> = { tr: "Menüyü kapat", en: "Close menu" };
 
 export function SiteHeader() {
   // Çift eşik (90 gir / 20 çık): header'ın kendi yükseklik geçişi scroll
@@ -18,6 +29,7 @@ export function SiteHeader() {
   const scrolled = useScrolled(90, 20);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [location] = useLocation();
+  const lang = useLang();
 
   useEffect(() => { setMobileOpen(false); }, [location]);
   useEscapeKey(() => setMobileOpen(false), mobileOpen);
@@ -33,24 +45,31 @@ export function SiteHeader() {
           {/* Logo — sabit solda. Mobilde (<sm) ~9-10% küçültüldü + 2px yukarı
               optik düzeltme (logo hafif alçak duruyordu) — sm ve üzeri (masaüstü)
               boyut/hizalama birebir korunuyor. */}
-          <Link href="/" className="flex items-center shrink-0">
-            <img src="/images/delta-oto-logo.webp" alt="Delta Oto 50. Yıl" className={`w-auto transition-[height] duration-300 -mt-0.5 sm:mt-0 ${scrolled ? "h-9 sm:h-12" : "h-[58px] sm:h-20"}`} />
+          <Link href={routeFor("home", lang)} className="flex items-center shrink-0">
+            <img
+              src="/images/delta-oto-logo.webp"
+              alt="Delta Oto 50. Yıl"
+              width={963}
+              height={240}
+              className={`w-auto transition-[height] duration-300 -mt-0.5 sm:mt-0 ${scrolled ? "h-9 sm:h-12" : "h-[58px] sm:h-20"}`}
+            />
           </Link>
 
-          {/* Sağ grup: nav + SPART + B2B */}
-          <div className="flex items-center gap-5 xl:gap-7 shrink-0">
+          {/* Sağ grup: nav + dil + SPART + B2B */}
+          <div className="flex items-center gap-4 xl:gap-6 shrink-0">
             <nav className="hidden xl:flex items-center gap-5 xl:gap-7 text-[13.5px] font-medium tracking-tight text-slate-600">
-              {NAV.map(({ label, href }) => {
+              {NAV.map(({ key, label }) => {
+                const href = routeFor(key, lang);
                 const isActive = location === href;
                 return (
                   <Link
-                    key={href}
+                    key={key}
                     href={href}
                     className={`do-nav-link whitespace-nowrap transition-colors duration-200 ${
                       isActive ? "text-[#1B3A8F] font-semibold do-active" : "hover:text-[#1B3A8F]"
                     }`}
                   >
-                    {label}
+                    {label[lang]}
                   </Link>
                 );
               })}
@@ -58,11 +77,17 @@ export function SiteHeader() {
 
             <span className="hidden xl:block w-px h-6 bg-slate-200 shrink-0" />
 
+            <div className="hidden xl:block">
+              <LanguageSwitcher />
+            </div>
+
+            <span className="hidden xl:block w-px h-6 bg-slate-200 shrink-0" />
+
             <Link
-              href="/spart"
+              href={routeFor("spart", lang)}
               className="hidden xl:flex items-center rounded-md overflow-hidden ring-1 ring-slate-200 hover:ring-[#1B3A8F]/40 transition-all duration-200 shrink-0"
             >
-              <img src="/images/spart-logo.png" alt="SPART Original Replacement" className="h-7 w-auto block" />
+              <img src="/images/spart-logo.png" alt={SPART_ALT[lang]} className="h-7 w-auto block" />
             </Link>
 
             <a
@@ -71,13 +96,13 @@ export function SiteHeader() {
               rel="noopener noreferrer"
               className="hidden xl:flex bg-[#1B3A8F] hover:bg-[#2547B5] active:scale-[0.98] text-white text-xs sm:text-[13px] font-semibold tracking-[0.01em] px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-md transition-all duration-200 items-center gap-1.5 shadow-sm hover:shadow-md group whitespace-nowrap shrink-0"
             >
-              B2B Portal
+              {B2B_LABEL[lang]}
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
             </a>
 
             <button
               type="button"
-              aria-label={mobileOpen ? "Menüyü kapat" : "Menüyü aç"}
+              aria-label={mobileOpen ? MENU_CLOSE_LABEL[lang] : MENU_OPEN_LABEL[lang]}
               aria-expanded={mobileOpen}
               aria-controls="do-site-mobile-nav"
               onClick={() => setMobileOpen(o => !o)}
@@ -93,29 +118,34 @@ export function SiteHeader() {
         <div id="do-site-mobile-nav" className={`do-mobile-panel xl:hidden border-slate-200 ${mobileOpen ? "do-open border-t" : ""}`}>
           <div>
             <nav className="w-full px-6 py-3 flex flex-col">
-              {NAV.map(({ label, href }) => {
+              {NAV.map(({ key, label }) => {
+                const href = routeFor(key, lang);
                 const isActive = location === href;
                 return (
                   <Link
-                    key={href}
+                    key={key}
                     href={href}
                     className={`py-3 text-[15px] font-medium border-b border-slate-100 last:border-b-0 ${isActive ? "text-[#1B3A8F] font-semibold" : "text-slate-700 hover:text-[#1B3A8F]"}`}
                   >
-                    {label}
+                    {label[lang]}
                   </Link>
                 );
               })}
-              <Link href="/spart" className="py-3 text-[15px] font-medium text-slate-700 hover:text-[#1B3A8F] flex items-center gap-2">
+              <Link href={routeFor("spart", lang)} className="py-3 text-[15px] font-medium text-slate-700 hover:text-[#1B3A8F] flex items-center gap-2">
                 SPART
                 <img src="/images/spart-logo.png" alt="" className="h-5 w-auto" />
               </Link>
+              <div className="py-3 flex items-center justify-between border-t border-slate-100 mt-1 pt-4">
+                <span className="text-[13px] font-medium text-slate-500">{lang === "tr" ? "Dil" : "Language"}</span>
+                <LanguageSwitcher variant="mobile" />
+              </div>
               <a
                 href="https://b2b.parcabul.com.tr/login.aspx"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-3 bg-[#1B3A8F] hover:bg-[#2547B5] active:scale-[0.98] text-white text-[15px] font-semibold px-5 py-3 rounded-md transition-all duration-200 flex items-center justify-center gap-1.5"
               >
-                B2B Portal
+                {B2B_LABEL[lang]}
                 <ArrowRight className="w-4 h-4" />
               </a>
             </nav>

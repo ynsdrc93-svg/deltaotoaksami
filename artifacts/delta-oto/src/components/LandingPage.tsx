@@ -1,10 +1,13 @@
 import React, { lazy, Suspense, useEffect, useRef, useState } from "react";
 import { Link } from "wouter";
-import { ChevronRight, ArrowRight, Globe, Zap, Network, Menu, X, Handshake } from "lucide-react";
+import { ChevronRight, ArrowRight, Handshake, Globe, Menu, X } from "lucide-react";
 import { useReveal, useScrolled, useCounter, useScrollProgress, useParallax, useEscapeKey } from "../hooks/use-motion";
+import { useDocumentMeta } from "../hooks/use-document-meta";
 import { SiteFooter } from "./shared/SiteFooter";
 import { BrandLogo } from "./shared/BrandLogo";
+import { LanguageSwitcher } from "./shared/LanguageSwitcher";
 import { CLASSIFIED_BRANDS, type Brand } from "../lib/brands";
+import { useLang, routeFor, type Lang, type RouteKey } from "../lib/i18n";
 
 // turkey-map-react, LandingPage'in JS entry chunk'ının en büyük tek
 // katkısıydı (bkz. LogisticsMap.tsx üst notu) — bu yüzden ayrı bir dosyaya
@@ -18,7 +21,11 @@ const LogisticsMap = lazy(() => import("./LogisticsMap").then((m) => ({ default:
 // markalar gerçek logo yerine tipografik yer tutucuyla akar — bkz.
 // shared/BrandLogo.tsx (size="strip"). 3 satıra, sabit dilim yerine
 // dinamik olarak eşit bölünür; böylece marka sayısı Excel güncellendiğinde
-// satırlar otomatik dengelenir.
+// satırlar otomatik dengelenir. NOT: "100+ marka" (görünür genel iddia,
+// bkz. content.partners.body) ile buradaki 61 GERÇEK sınıflandırılmış logo
+// sayısı FARKLI kasıtlı şeyler — biri kamuya açık portföy iddiası, diğeri
+// şerit/duvarda gösterilen doğrulanmış logo veri kümesi (bkz. Content/UX
+// Pass 01 görev tanımı §5).
 const STRIP_BRANDS = CLASSIFIED_BRANDS;
 const STRIP_ROWS = 3;
 const STRIP_CHUNK = Math.ceil(STRIP_BRANDS.length / STRIP_ROWS);
@@ -38,15 +45,198 @@ function CountUp({ target, suffix = "", duration = 1600, className = "" }: { tar
   return <span ref={ref} className={className}>{started ? count : 0}{suffix}</span>;
 }
 
-const NAV_LINKS = [
-  { label: "Hakkımızda",           href: "/hakkimizda"  },
-  { label: "Tedarikçiler",          href: "/tedarikciler" },
-  { label: "Operasyon ve Lojistik", href: "/operasyon"   },
-  { label: "Kariyer",               href: "/kariyer"     },
-  { label: "İletişim",              href: "/iletisim"    },
+const NAV_LINKS: { key: RouteKey; label: Record<Lang, string> }[] = [
+  { key: "about", label: { tr: "Hakkımızda", en: "About Us" } },
+  { key: "partners", label: { tr: "İş Ortaklarımız", en: "Partners" } },
+  { key: "operations", label: { tr: "Operasyon ve Lojistik", en: "Operations & Logistics" } },
+  { key: "careers", label: { tr: "Kariyer", en: "Careers" } },
+  { key: "contact", label: { tr: "İletişim", en: "Contact" } },
 ];
 
+// Tüm sayfa metni — TR kök/varsayılan dil, EN /en altında. Sayfa bileşenleri
+// tekrarlanmıyor (bkz. görev talimatı §2); bunun yerine tek JSX ağacı bu
+// objeden dile göre okuyor (const t = content[lang]).
+const content = {
+  tr: {
+    meta: {
+      title: "Delta Oto — Otomotiv Yedek Parça Distribütörü | Kuruluş 1976",
+      description: "Delta Oto, 1976'dan bu yana 100+ marka ile Türkiye genelinde binek ve hafif ticari araç yedek parça dağıtımı, geniş ürün portföyü ve güçlü lojistik altyapısı sunar. Groupauto üyesi, 81 il dağıtım ağı.",
+    },
+    tickerItems: ["100+ Marka", "81 İl Dağıtım", "Kuruluş 1976", "GROUPAUTO Üyesi", "Opar Ege Bölge Bayiliği", "Ümraniye Merkez", "Binek & Hafif Ticari", "3 Operasyon Merkezi"],
+    hero: {
+      eyebrow: "Kuruluş 1976 · Delta Oto",
+      titleLine1: "50 YILDIR OTOMOTİV AFTERMARKET'İN",
+      titleLine2: "KESİNTİSİZ GÜCÜ",
+      body: "Binek ve hafif ticari araç yedek parça pazarında, bağımsız yenileme sektörünü güçlü lojistik altyapımız ve küresel tedarik ağımızla yönlendiriyoruz.",
+      ctaContact: "Bize Ulaşın",
+      ctaB2B: "B2B Portal",
+    },
+    metrics: {
+      eyebrow: "Rakamlarla Güç",
+      brands: "Marka",
+      provinces: "İl",
+      founded: "Kuruluş",
+      body: "1976'dan bu yana otomotiv yedek parça dağıtımında istikrarlı bir güç.",
+    },
+    partnership: {
+      eyebrow: "Stratejik İş Birlikleri",
+      headline: "Güçlü Bağlantılar. Yerel Uzmanlık.",
+      intro: "Delta Oto; GROUPAUTO International üyeliği ve Opar Ege Bölge Bayiliği ile güçlü iş birliklerini, stok ve dağıtım kabiliyetiyle Türkiye pazarında somut değere dönüştürür.",
+      groupauto: {
+        eyebrow: "Global Ağ",
+        title: "GROUPAUTO International",
+        fact: "40+ Ülke · 3.000+ Üye Firma",
+        body: "GROUPAUTO International üyeliğimiz; sektörel bilgi paylaşımı, güçlü iş bağlantıları ve uluslararası aftermarket perspektifiyle Delta Oto'nun iş ortaklıklarını destekler.",
+      },
+      opar: {
+        eyebrow: "Bölgesel Ortaklık",
+        title: "Opar",
+        fact: "Ege Bölgesi",
+        body: "Ege Bölge Bayiliğimiz; Opar'ın marka gücünü Delta Oto'nun bölgesel stok, saha ve dağıtım kabiliyetiyle buluşturur.",
+      },
+    },
+    logistics: {
+      eyebrow: "Lojistik Altyapı",
+      titleLine1: "Üç Operasyon Merkezi.",
+      titleLine2: "Türkiye Genelinde Güçlü Dağıtım.",
+      body: "Gebze, İzmir ve Ümraniye'deki operasyon merkezlerimizden Türkiye genelinde planlı, hızlı ve güvenilir dağıtım sağlıyoruz. 100'den fazla markayı güçlü stok yapımız ve düzenli sevkiyat operasyonumuzla müşterilerimize ulaştırıyoruz.",
+      hubs: [{ label: "Gebze", plate: 41 }, { label: "İzmir", plate: 35 }, { label: "Ümraniye", plate: 34 }],
+      cards: [
+        { title: "Her İş Günü Sevkiyat", desc: "Hafta içi her gün düzenli yükleme. Cumartesi sevkiyat kapasitesiyle hizmet sürekliliği korunur." },
+        { title: "Aynı Gün Sevk", desc: "14:00'a kadar iletilen siparişler, stokta olan ürünler için aynı gün yola çıkar." },
+        { title: "Derin Stok", desc: "50.000'i aşkın aktif SKU ile talep edilen ürünün büyük bölümü hazır stoktan karşılanır." },
+        { title: "Türkiye Geneli Dağıtım", desc: "Gebze, İzmir ve Ümraniye operasyon merkezlerinden Türkiye genelinde planlı sevkiyat." },
+      ],
+    },
+    partners: {
+      eyebrow: "Yerli ve Global Marka Portföyü",
+      title: "İş Ortaklarımız",
+      body: "Global ve yerli üreticilerden oluşan 100+ markalık portföyümüz, güçlü stok yapımız ve yaygın dağıtım operasyonumuzla Türkiye genelinde müşterilerimizle buluşuyor.",
+      cta: "Tüm iş ortaklarımızı inceleyin",
+    },
+    agenda: {
+      eyebrow: "Gündem & Vizyon",
+      titleA: "Sahadaki",
+      titleB: "Gelişmeler",
+      body: "Sektördeki gelişmeleri ve Delta Oto'nun sahaya yansıyan adımlarını buradan takip edebilirsiniz.",
+      card1: {
+        tag1: "Mayıs 2026", tag2: "Yeni Operasyon",
+        title: "Opar Ege Bölge Bayiliği Operasyonu Başladı",
+        body: "Mayıs 2026 itibarıyla Opar Ege Bölge Bayiliği operasyonunu devralarak Ege bölgesindeki tedarik ağımızı doğrudan genişlettik. Bu adımla birlikte bölgeye yönelik ürün çeşitliliğimiz ve teslimat kapasitemiz önemli ölçüde güçlendi.",
+      },
+      card2: {
+        tag1: "2025 · Dubai", tag2: "Uluslararası Zirve",
+        title: "GROUPAUTO International Dubai O2O Tedarikçi Günleri 2025",
+        body: "Dubai'de düzenlenen GROUPAUTO International O2O Tedarikçi Günleri'nde Türkiye'yi ve Delta Oto'yu temsil ettik. 35'ten fazla global üreticiyle gerçekleştirilen görüşmelerde tedarik portföyümüzü ve piyasa trendlerini ele aldık.",
+      },
+    },
+    cta: {
+      title: "Yedek Parça Siparişleriniz için B2B Portalımız",
+      body: "Portalımız üzerinden yedek parça siparişi verebilir, stok ve fiyat bilgilerine ulaşabilirsiniz.",
+      contact: "İletişim",
+    },
+    leaveModal: {
+      title: "Siteden ayrılıyorsunuz",
+      body: (name: string) => `${name} için Delta Oto sitesinden ayrılıp markanın resmi web sitesine yönlendirileceksiniz.`,
+      cancel: "İptal",
+      continue: "Devam Et",
+    },
+    menuOpen: "Menüyü aç",
+    menuClose: "Menüyü kapat",
+  },
+  en: {
+    meta: {
+      title: "Delta Oto — Automotive Aftermarket Parts Distributor | Est. 1976",
+      description: "Since 1976, Delta Oto has supplied 100+ brands of passenger and light commercial vehicle aftermarket parts across Türkiye, backed by a broad product portfolio and strong logistics infrastructure. GROUPAUTO member, distribution to 81 provinces.",
+    },
+    tickerItems: ["100+ Brands", "81 Provinces", "Est. 1976", "GROUPAUTO Member", "Opar Aegean Dealership", "Ümraniye HQ", "Passenger & Light Commercial", "3 Operations Centers"],
+    hero: {
+      eyebrow: "Established 1976 · Delta Oto",
+      titleLine1: "50 YEARS OF AUTOMOTIVE AFTERMARKET'S",
+      titleLine2: "UNINTERRUPTED STRENGTH",
+      body: "In the passenger and light commercial vehicle spare parts market, we guide the independent aftermarket with our strong logistics infrastructure and global supply network.",
+      ctaContact: "Contact Us",
+      ctaB2B: "B2B Portal",
+    },
+    metrics: {
+      eyebrow: "Power in Numbers",
+      brands: "Brands",
+      provinces: "Provinces",
+      founded: "Established",
+      body: "A steady force in automotive spare parts distribution since 1976.",
+    },
+    partnership: {
+      eyebrow: "Strategic Partnerships",
+      headline: "Strong Connections. Local Expertise.",
+      intro: "Through its GROUPAUTO International membership and Opar Aegean Regional Dealership, Delta Oto combines strong partnerships with deep inventory and nationwide distribution capabilities.",
+      groupauto: {
+        eyebrow: "Global Network",
+        title: "GROUPAUTO International",
+        fact: "40+ Countries · 3,000+ Member Companies",
+        body: "Our GROUPAUTO International membership strengthens Delta Oto's partnerships through industry knowledge sharing, established business connections and an international aftermarket perspective.",
+      },
+      opar: {
+        eyebrow: "Regional Partnership",
+        title: "Opar",
+        fact: "Aegean Region",
+        body: "Our Aegean Regional Dealership combines Opar's brand strength with Delta Oto's regional inventory, field presence and distribution capabilities.",
+      },
+    },
+    logistics: {
+      eyebrow: "Logistics Infrastructure",
+      titleLine1: "Three Operations Centers.",
+      titleLine2: "Strong Distribution Across Türkiye.",
+      body: "From our operations centers in Gebze, İzmir and Ümraniye, we provide planned, fast and reliable distribution across Türkiye. Our strong inventory structure and regular delivery operations support a portfolio of more than 100 brands.",
+      hubs: [{ label: "Gebze", plate: 41 }, { label: "İzmir", plate: 35 }, { label: "Ümraniye", plate: 34 }],
+      cards: [
+        { title: "Shipping Every Business Day", desc: "Regular loading every weekday, with Saturday shipping capacity for uninterrupted service." },
+        { title: "Same-Day Dispatch", desc: "Orders placed before 14:00 ship the same day for items in stock." },
+        { title: "Deep Inventory", desc: "With more than 50,000 active SKUs, most orders are fulfilled directly from stock." },
+        { title: "Nationwide Distribution", desc: "Planned distribution across Türkiye from our Gebze, İzmir and Ümraniye operations centers." },
+      ],
+    },
+    partners: {
+      eyebrow: "Local and Global Brand Portfolio",
+      title: "Our Partners",
+      body: "Our portfolio of more than 100 global and local brands is supported by strong inventory and nationwide distribution capabilities.",
+      cta: "View all our partners",
+    },
+    agenda: {
+      eyebrow: "News & Vision",
+      titleA: "Recent",
+      titleB: "Developments",
+      body: "Follow industry developments and how they translate into action at Delta Oto.",
+      card1: {
+        tag1: "May 2026", tag2: "New Operation",
+        title: "Opar Aegean Regional Dealership Operations Begin",
+        body: "As of May 2026, we took over the Opar Aegean Regional Dealership operation, directly expanding our supply network in the Aegean region. This step significantly strengthened our product range and delivery capacity for the region.",
+      },
+      card2: {
+        tag1: "2025 · Dubai", tag2: "International Summit",
+        title: "GROUPAUTO International Dubai O2O Supplier Days 2025",
+        body: "We represented Türkiye and Delta Oto at the GROUPAUTO International O2O Supplier Days held in Dubai. In meetings with more than 35 global manufacturers, we discussed our supply portfolio and market trends.",
+      },
+    },
+    cta: {
+      title: "Your B2B Portal for Spare Parts Orders",
+      body: "Place spare parts orders and access stock and pricing information through our portal.",
+      contact: "Contact",
+    },
+    leaveModal: {
+      title: "You're leaving this site",
+      body: (name: string) => `You'll be redirected from the Delta Oto site to ${name}'s official website.`,
+      cancel: "Cancel",
+      continue: "Continue",
+    },
+    menuOpen: "Open menu",
+    menuClose: "Close menu",
+  },
+} satisfies Record<Lang, any>;
+
 export function LandingPage() {
+  const lang = useLang();
+  const t = content[lang];
+  useDocumentMeta(t.meta.title, t.meta.description);
   const ref = useReveal();
   // Çift eşik (90 gir / 20 çık): header'ın kendi yükseklik geçişi scroll
   // pozisyonunu hafifçe kaydırabildiği (scroll anchoring) için tek eşik,
@@ -113,8 +303,6 @@ export function LandingPage() {
     return () => { document.body.style.overflow = ""; };
   }, [confirmBrand]);
 
-  const tickerItems = ["250+ Marka", "81 İl + İhracat", "Kuruluş 1976", "Groupauto Üyesi", "Opar Ege Bölge Bayiliği", "Ümraniye Merkez", "Binek & Hafif Ticari", "3 Operasyon Merkezi"];
-
   return (
     <div className="do-page min-h-screen bg-white text-slate-900 overflow-x-clip">
       {/* SCROLL PROGRESS */}
@@ -125,8 +313,8 @@ export function LandingPage() {
       {/* TICKER BAR */}
       <div className="bg-[#1B3A8F] py-2 overflow-hidden">
         <div className="do-ticker-inner">
-          {[...tickerItems, ...tickerItems].map((item, i) => (
-            <span key={i} aria-hidden={i >= tickerItems.length} className="px-8 text-xs font-bold uppercase tracking-[0.2em] text-white/90 flex items-center gap-8">
+          {[...t.tickerItems, ...t.tickerItems].map((item, i) => (
+            <span key={i} aria-hidden={i >= t.tickerItems.length} className="px-8 text-xs font-bold uppercase tracking-[0.2em] text-white/90 flex items-center gap-8">
               {item}
               <span className="w-1 h-1 rounded-full bg-white/40 inline-block"></span>
             </span>
@@ -143,36 +331,44 @@ export function LandingPage() {
           {/* Logo — sabit solda. Mobilde (<sm) ~9-10% küçültüldü + 2px yukarı
               optik düzeltme (logo hafif alçak duruyordu) — sm ve üzeri (masaüstü)
               boyut/hizalama birebir korunuyor. */}
-          <Link href="/" className="flex items-center shrink-0">
+          <Link href={routeFor("home", lang)} className="flex items-center shrink-0">
             <img
               src="/images/delta-oto-logo.webp"
               alt="Delta Oto 50. Yıl"
+              width={963}
+              height={240}
               className={`w-auto transition-[height] duration-300 -mt-0.5 sm:mt-0 ${scrolled ? "h-9 sm:h-12" : "h-[58px] sm:h-20"}`}
             />
           </Link>
 
-          {/* Sağ grup: nav + SPART + B2B */}
-          <div className="flex items-center gap-5 xl:gap-7 shrink-0">
+          {/* Sağ grup: nav + dil + SPART + B2B */}
+          <div className="flex items-center gap-4 xl:gap-6 shrink-0">
             <nav className="hidden xl:flex items-center gap-5 xl:gap-7 text-[13.5px] font-medium tracking-tight text-slate-600">
-              {NAV_LINKS.map(({ label, href }) => (
-                <Link key={href} href={href} className="do-nav-link whitespace-nowrap hover:text-[#1B3A8F] transition-colors duration-200">{label}</Link>
+              {NAV_LINKS.map(({ key, label }) => (
+                <Link key={key} href={routeFor(key, lang)} className="do-nav-link whitespace-nowrap hover:text-[#1B3A8F] transition-colors duration-200">{label[lang]}</Link>
               ))}
             </nav>
 
             <span className="hidden xl:block w-px h-6 bg-slate-200 shrink-0"></span>
 
-            <Link href="/spart" className="hidden xl:flex items-center rounded-md overflow-hidden ring-1 ring-slate-200 hover:ring-[#1B3A8F]/40 transition-all duration-200 shrink-0">
+            <div className="hidden xl:block">
+              <LanguageSwitcher />
+            </div>
+
+            <span className="hidden xl:block w-px h-6 bg-slate-200 shrink-0"></span>
+
+            <Link href={routeFor("spart", lang)} className="hidden xl:flex items-center rounded-md overflow-hidden ring-1 ring-slate-200 hover:ring-[#1B3A8F]/40 transition-all duration-200 shrink-0">
               <img src="/images/spart-logo.png" alt="SPART Original Replacement" className="h-7 w-auto block" />
             </Link>
 
             <a href="https://b2b.parcabul.com.tr/login.aspx" target="_blank" rel="noopener noreferrer" className="hidden xl:flex bg-[#1B3A8F] hover:bg-[#2547B5] active:scale-[0.98] text-white text-xs sm:text-[13px] font-semibold tracking-[0.01em] px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-md transition-all duration-200 items-center gap-1.5 shadow-sm hover:shadow-md group whitespace-nowrap shrink-0">
-              B2B Portal
+              {t.hero.ctaB2B}
               <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-0.5 transition-transform" />
             </a>
 
             <button
               type="button"
-              aria-label={mobileOpen ? "Menüyü kapat" : "Menüyü aç"}
+              aria-label={mobileOpen ? t.menuClose : t.menuOpen}
               aria-expanded={mobileOpen}
               aria-controls="do-landing-mobile-nav"
               onClick={() => setMobileOpen(o => !o)}
@@ -187,20 +383,24 @@ export function LandingPage() {
         <div id="do-landing-mobile-nav" className={`do-mobile-panel xl:hidden border-slate-200 ${mobileOpen ? "do-open border-t" : ""}`}>
           <div>
             <nav className="w-full px-6 py-3 flex flex-col">
-              {NAV_LINKS.map(({ label, href }) => (
+              {NAV_LINKS.map(({ key, label }) => (
                 <Link
-                  key={href}
-                  href={href}
+                  key={key}
+                  href={routeFor(key, lang)}
                   onClick={() => setMobileOpen(false)}
                   className="py-3 text-[15px] font-medium text-slate-700 hover:text-[#1B3A8F] border-b border-slate-100 last:border-b-0"
                 >
-                  {label}
+                  {label[lang]}
                 </Link>
               ))}
-              <Link href="/spart" onClick={() => setMobileOpen(false)} className="py-3 text-[15px] font-medium text-slate-700 hover:text-[#1B3A8F] flex items-center gap-2">
+              <Link href={routeFor("spart", lang)} onClick={() => setMobileOpen(false)} className="py-3 text-[15px] font-medium text-slate-700 hover:text-[#1B3A8F] flex items-center gap-2">
                 SPART
                 <img src="/images/spart-logo.png" alt="" className="h-5 w-auto" />
               </Link>
+              <div className="py-3 flex items-center justify-between border-t border-slate-100 mt-1 pt-4">
+                <span className="text-[13px] font-medium text-slate-500">{lang === "tr" ? "Dil" : "Language"}</span>
+                <LanguageSwitcher variant="mobile" />
+              </div>
               <a
                 href="https://b2b.parcabul.com.tr/login.aspx"
                 target="_blank"
@@ -208,7 +408,7 @@ export function LandingPage() {
                 onClick={() => setMobileOpen(false)}
                 className="mt-3 bg-[#1B3A8F] hover:bg-[#2547B5] active:scale-[0.98] text-white text-[15px] font-semibold px-5 py-3 rounded-md transition-all duration-200 flex items-center justify-center gap-1.5"
               >
-                B2B Portal
+                {t.hero.ctaB2B}
                 <ArrowRight className="w-4 h-4" />
               </a>
             </nav>
@@ -230,7 +430,9 @@ export function LandingPage() {
           çerçeveler, masaüstünde geniş-kısa crop neredeyse tüm kaynağı
           gösterir. Opaklık/gradyan da tabelanın okunur kalması için bu
           sayfaya özgü hafifçe açıldı (bkz. Operasyon'daki kendi değerleri —
-          ikisi de aynı değil). */}
+          ikisi de aynı değil). Hero başlığı/kırpma/parallax bu revizyon
+          kapsamında BİLİNÇLİ OLARAK değiştirilmedi — yalnızca EN çevirisi
+          eklendi (bkz. görev talimatı: "preserve hero layout/copy/crop"). */}
       <section className="relative min-h-[560px] lg:min-h-screen flex items-center overflow-hidden bg-[#0e1016] text-white">
         <div className="absolute inset-0">
           <img
@@ -252,34 +454,34 @@ export function LandingPage() {
           <div className="max-w-4xl">
             <div ref={ref} className="do-reveal flex items-center gap-3 mb-5 lg:mb-8">
               <div className="w-8 h-[2px] bg-[#4d74d6]"></div>
-              <span className="text-[#7d9bea] text-xs font-bold uppercase tracking-[0.3em]">Kuruluş 1976 · Delta Oto</span>
+              <span className="text-[#7d9bea] text-xs font-bold uppercase tracking-[0.3em]">{t.hero.eyebrow}</span>
             </div>
 
             <h1
               ref={ref}
               className="do-reveal do-d1 text-[34px] sm:text-5xl md:text-6xl lg:text-[72px] xl:text-[80px] font-black leading-[1.05] sm:leading-[1.0] mb-4 lg:mb-6 tracking-[-0.02em] break-words"
             >
-              <span className="do-hero-line">50 YILDIR OTOMOTİV AFTERMARKET'İN</span>
+              <span className="do-hero-line">{t.hero.titleLine1}</span>
               <br />
-              <span className="text-[#7d9bea]">KESİNTİSİZ GÜCÜ</span>
+              <span className="text-[#7d9bea]">{t.hero.titleLine2}</span>
             </h1>
 
             <p
               ref={ref}
               className="do-reveal do-d2 text-[17px] text-gray-300 leading-[1.75] max-w-2xl mb-7 lg:mb-12 font-light"
             >
-              Binek ve hafif ticari araç yedek parça pazarında, bağımsız yenileme sektörünü güçlü lojistik altyapımız ve küresel tedarik ağımızla yönlendiriyoruz.
+              {t.hero.body}
             </p>
 
             <div ref={ref} className="do-reveal do-d3 flex flex-wrap gap-4 items-center">
-              <Link to="/iletisim">
+              <Link to={routeFor("contact", lang)}>
                 <button className="bg-[#1B3A8F] hover:bg-[#2547B5] active:scale-[0.98] text-white font-semibold px-8 py-4 rounded-md text-base transition-all duration-200 flex items-center gap-2.5 group shadow-[0_0_32px_rgba(27,58,143,0.3)] hover:shadow-[0_0_48px_rgba(27,58,143,0.45)]">
-                  Bize Ulaşın
+                  {t.hero.ctaContact}
                   <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </button>
               </Link>
               <a href="https://b2b.parcabul.com.tr/login.aspx" target="_blank" rel="noopener noreferrer" className="text-gray-200 hover:text-white active:scale-[0.98] text-base font-medium flex items-center gap-2 border border-white/15 hover:border-white/30 px-8 py-4 rounded-md transition-all duration-200">
-                B2B Portal
+                {t.hero.ctaB2B}
               </a>
             </div>
           </div>
@@ -296,118 +498,82 @@ export function LandingPage() {
         <div className="absolute left-0 top-0 w-full h-[2px] bg-gradient-to-r from-transparent via-[#1B3A8F]/40 to-transparent"></div>
 
         <div ref={ref} className="do-reveal max-w-5xl mx-auto px-6 lg:px-8 relative z-10 text-center">
-          <span className="text-xs font-bold uppercase tracking-[0.3em] text-[#1B3A8F]/60">Rakamlarla Güç</span>
+          <span className="text-xs font-bold uppercase tracking-[0.3em] text-[#1B3A8F]/60">{t.metrics.eyebrow}</span>
 
           <div className="mt-12 flex flex-col sm:flex-row items-center justify-center gap-10 sm:gap-0">
             <div className="px-4 sm:px-12">
               <div className="do-metric-num text-7xl md:text-8xl font-black text-slate-900 tabular-nums leading-none">
-                <CountUp target={250} suffix="+" />
+                <CountUp target={100} suffix="+" />
               </div>
-              <div className="mt-3 text-[13px] font-bold uppercase tracking-[0.2em] text-slate-500">Marka</div>
+              <div className="mt-3 text-[13px] font-bold uppercase tracking-[0.2em] text-slate-500">{t.metrics.brands}</div>
             </div>
             <div className="px-4 sm:px-12">
               <div className="do-metric-num text-7xl md:text-8xl font-black text-[#1B3A8F] tabular-nums leading-none">
                 <CountUp target={81} />
               </div>
-              <div className="mt-3 text-[13px] font-bold uppercase tracking-[0.2em] text-slate-500">İl</div>
+              <div className="mt-3 text-[13px] font-bold uppercase tracking-[0.2em] text-slate-500">{t.metrics.provinces}</div>
             </div>
             <div className="px-4 sm:px-12">
               <div className="do-metric-num text-7xl md:text-8xl font-black text-slate-900 tabular-nums leading-none">1976</div>
-              <div className="mt-3 text-[13px] font-bold uppercase tracking-[0.2em] text-slate-500">Kuruluş</div>
+              <div className="mt-3 text-[13px] font-bold uppercase tracking-[0.2em] text-slate-500">{t.metrics.founded}</div>
             </div>
           </div>
 
-          <p className="mt-12 text-slate-800 text-base sm:text-xl md:text-2xl font-bold tracking-tight sm:whitespace-nowrap">1976'dan bu yana otomotiv yedek parça dağıtımında istikrarlı bir güç.</p>
+          <p className="mt-12 text-slate-800 text-base sm:text-xl md:text-2xl font-bold tracking-tight sm:whitespace-nowrap">{t.metrics.body}</p>
         </div>
       </section>
 
-      {/* STRATEGIC PARTNERSHIP (navy) */}
+      {/* STRATEGIC PARTNERSHIP (navy) — Content/UX Pass 01: eski "bir dev +
+          bir küçük kart" hiyerarşisi kaldırıldı. GROUPAUTO International ve
+          Opar artık BİREBİR eşit boyutta iki editoryal panel — aynı ikon
+          rozeti boyutu, aynı tip ölçeği, aynı boşluk/dolgu, aynı kart
+          çerçevesi. Ne resmi bir GROUPAUTO ne de Opar logo asset'i repo'da
+          mevcut (araştırıldı, bulunamadı) — bu yüzden iki panel de AYNI
+          ikon-rozet dilini kullanıyor; bu, asimetrik bir "biri var biri yok"
+          logo sorunu yaşamadan eşitliği doğal olarak garanti ediyor. */}
       <section className="py-20 md:py-28 relative overflow-hidden text-white" style={{ background: "linear-gradient(135deg, #1B3A8F 0%, #14275c 100%)" }}>
         <div className="absolute inset-0 do-grid-bg opacity-40"></div>
         <div className="absolute right-0 top-0 w-1/2 h-full bg-gradient-to-l from-white/5 to-transparent pointer-events-none"></div>
         <div className="do-beam do-beam-delay"></div>
 
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-          <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
-            <div className="lg:w-1/2">
-              <p ref={ref} className="do-reveal text-blue-200 text-xs font-bold uppercase tracking-[0.3em] mb-5 flex items-center gap-3">
-                <span className="w-8 h-[2px] bg-blue-300 inline-block"></span>
-                Stratejik Ortaklık
-              </p>
-              <h2 ref={ref} className="do-reveal do-d1 do-accent-line-light text-4xl md:text-5xl font-black text-white mb-7 tracking-tight leading-[1.1]">
-                Uluslararası Güç,<br/>Yerel Hakimiyet.
-              </h2>
-              <p ref={ref} className="do-reveal do-d2 text-[17px] text-blue-100/80 leading-[1.8] font-light">
-                Groupauto International'ın Türkiye üyesiyiz. Bu üyelik; 40'tan fazla ülkedeki 3.000'i aşkın üye firma gücünü doğrudan satın alma kaldıracımıza dönüştürür. Merkezi müzakere edilen tedarik koşulları, ortak kalite standartları ve üye ağı çapında paylaşılan know-how; Türkiye pazarının hızını küresel ağın gücüyle birleştiriyor.
-              </p>
+          <div className="max-w-2xl mb-12 md:mb-16">
+            <p ref={ref} className="do-reveal text-blue-200 text-xs font-bold uppercase tracking-[0.3em] mb-5 flex items-center gap-3">
+              <span className="w-8 h-[2px] bg-blue-300 inline-block"></span>
+              {t.partnership.eyebrow}
+            </p>
+            <h2 ref={ref} className="do-reveal do-d1 do-accent-line-light text-4xl md:text-5xl font-black text-white mb-6 tracking-tight leading-[1.1]">
+              {t.partnership.headline}
+            </h2>
+            <p ref={ref} className="do-reveal do-d2 text-[17px] text-blue-100/80 leading-[1.8] font-light">
+              {t.partnership.intro}
+            </p>
+          </div>
 
-              <div ref={ref} className="do-reveal do-d3 mt-12 flex gap-12">
-                {[
-                  { target: 50, suffix: "+", label: "Global Tedarikçi" },
-                  { target: 40, suffix: "+", label: "Ülke Ağı" },
-                ].map(({ target, suffix, label }) => (
-                  <div key={label}>
-                    <div className="flex items-baseline">
-                      <CountUp target={target} className="text-4xl md:text-5xl font-black text-white tabular-nums tracking-tight" />
-                      <span className="text-3xl font-black text-[#7d9bea]">{suffix}</span>
-                    </div>
-                    <div className="w-9 h-[2px] bg-[#4d74d6] mt-3 mb-3"></div>
-                    <div className="text-[11px] text-blue-200/70 uppercase tracking-[0.18em]">{label}</div>
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div ref={ref} className="do-reveal do-d1 lg:w-1/2 w-full flex flex-col gap-5">
-              <div className="relative rounded-xl border border-white/15 bg-white/[0.06] backdrop-blur-sm overflow-hidden group">
+          <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
+            {[
+              { data: t.partnership.groupauto, Icon: Globe, refClass: "do-reveal do-d1" },
+              { data: t.partnership.opar, Icon: Handshake, refClass: "do-reveal do-d2" },
+            ].map(({ data, Icon, refClass }) => (
+              <div
+                key={data.title}
+                ref={ref}
+                className={`${refClass} relative rounded-xl border border-white/15 bg-white/[0.06] backdrop-blur-sm overflow-hidden group p-8 flex flex-col`}
+              >
                 <div className="do-card-beam"></div>
-                <div className="relative z-10 p-8">
-                  <div className="flex items-center justify-between mb-7">
-                    <div className="w-12 h-12 rounded-lg bg-white/10 border border-white/15 flex items-center justify-center group-hover:bg-[#2547B5] group-hover:border-[#2547B5] group-hover:scale-105 transition-all duration-300">
-                      <Globe className="w-6 h-6 text-white" />
-                    </div>
-                    <span className="text-[10px] font-black tracking-[0.25em] text-blue-200/50 uppercase">Global Ağ</span>
+                <div className="relative z-10 flex items-center justify-between mb-7">
+                  <div className="w-12 h-12 rounded-lg bg-white/10 border border-white/15 flex items-center justify-center group-hover:bg-[#2547B5] group-hover:border-[#2547B5] group-hover:scale-105 transition-all duration-300">
+                    <Icon className="w-6 h-6 text-white" />
                   </div>
-                  <div className="font-bold text-white text-lg leading-tight">Groupauto International</div>
-                  <div className="text-[11px] text-[#7d9bea] mt-1.5 uppercase tracking-[0.2em] font-semibold">40+ Ülke · 3.000+ Üye Firma</div>
-                  <p className="text-sm text-blue-100/65 leading-relaxed font-light mt-4">
-                    Bağımsız yedek parça sektörünün önde gelen küresel ağlarından biri: üye firmalarına global satın alma gücü, ortak kalite standartları ve uluslararası tedarik kapasitesi sunar.
-                  </p>
-                  <ul className="mt-5 space-y-2.5">
-                    {[
-                      "Merkezi müzakere edilen satın alma koşulları",
-                      "OEM eşdeğeri ortak kalite standartları",
-                      "Üye ağı çapında teknik eğitim ve know-how paylaşımı",
-                    ].map((item) => (
-                      <li key={item} className="flex items-start gap-2.5 text-[13px] text-blue-100/75">
-                        <span className="w-1 h-1 rounded-full bg-[#7d9bea] mt-2 shrink-0" />
-                        {item}
-                      </li>
-                    ))}
-                  </ul>
+                  <span className="text-[10px] font-black tracking-[0.25em] text-blue-200/50 uppercase">{data.eyebrow}</span>
                 </div>
-                <div className="relative z-10 border-t border-white/10 bg-black/10 px-8 py-5 flex items-center gap-4">
-                  <div className="w-9 h-9 rounded-lg bg-white/10 border border-white/15 flex items-center justify-center shrink-0">
-                    <Network className="w-4 h-4 text-[#7d9bea]" />
-                  </div>
-                  <p className="text-[13px] text-blue-100/75 leading-snug">
-                    <span className="text-white font-semibold">Delta Oto</span>, bu ağın Türkiye'deki resmi üyesi olarak global satın alma gücünü yerel stok derinliği ve lojistik hızıyla buluşturuyor.
-                  </p>
-                </div>
+                <div className="relative z-10 font-bold text-white text-xl leading-tight">{data.title}</div>
+                <div className="relative z-10 text-[11px] text-[#7d9bea] mt-1.5 uppercase tracking-[0.2em] font-semibold">{data.fact}</div>
+                <p className="relative z-10 text-sm text-blue-100/70 leading-relaxed font-light mt-4">
+                  {data.body}
+                </p>
               </div>
-
-              <div className="relative rounded-xl border border-white/15 bg-white/[0.06] backdrop-blur-sm overflow-hidden group p-6 flex items-center gap-5">
-                <div className="do-card-beam"></div>
-                <div className="relative z-10 w-11 h-11 rounded-lg bg-white/10 border border-white/15 flex items-center justify-center shrink-0 group-hover:bg-[#2547B5] group-hover:border-[#2547B5] transition-all duration-300">
-                  <Handshake className="w-5 h-5 text-white" />
-                </div>
-                <div className="relative z-10">
-                  <span className="text-[10px] font-black tracking-[0.25em] text-blue-200/50 uppercase">Bölgesel Ortaklık</span>
-                  <div className="font-bold text-white text-[15px] leading-tight mt-1">Opar Ege Bölge Bayiliği</div>
-                  <p className="text-[13px] text-blue-100/65 leading-snug mt-1.5">İzmir ve çevresinde devraldığımız bölgesel operasyonla stok derinliğimizi ve teslimat hızımızı güçlendirdik.</p>
-                </div>
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
@@ -421,21 +587,17 @@ export function LandingPage() {
             <div className="lg:w-[44%] shrink-0">
               <p ref={ref} className="do-reveal text-[#7d9bea] text-xs font-bold uppercase tracking-[0.3em] mb-5 flex items-center gap-3">
                 <span className="w-8 h-[2px] bg-[#4d74d6] inline-block"></span>
-                Lojistik Altyapı
+                {t.logistics.eyebrow}
               </p>
               <h2 ref={ref} className="do-reveal do-d1 text-4xl md:text-5xl font-black text-white mb-8 leading-[1.1] tracking-tight">
-                Üç Merkezden,<br />
-                <span className="text-[#7d9bea]">81 İle Tam Kapsama.</span>
+                {t.logistics.titleLine1}<br />
+                <span className="text-[#7d9bea]">{t.logistics.titleLine2}</span>
               </h2>
               <p ref={ref} className="do-reveal do-d2 text-[16px] text-gray-300 leading-[1.85] font-light">
-                Ümraniye, Gebze ve İzmir'deki operasyon merkezlerimizden Türkiye'nin tamamına ve küresel pazarlara uzanan dağıtım ağıyla; binek ve hafif ticari araç gruplarında 250'den fazla markanın tedariğini hız ve güvenilirlik standartlarında gerçekleştiriyoruz.
+                {t.logistics.body}
               </p>
               <div ref={ref} className="do-reveal do-d3 flex flex-wrap gap-x-6 gap-y-2 mt-8">
-                {[
-                  { label: "Ümraniye", plate: 34 },
-                  { label: "Gebze", plate: 41 },
-                  { label: "İzmir", plate: 35 },
-                ].map((h) => (
+                {t.logistics.hubs.map((h) => (
                   <div key={h.plate} className="flex items-center gap-2 text-[13px] text-gray-300">
                     <span className="w-2 h-2 rounded-full bg-[#7d9bea] inline-block"></span>
                     {h.label}
@@ -458,12 +620,7 @@ export function LandingPage() {
           </div>
 
           <div ref={ref} className="do-reveal do-d3 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
-            {[
-              { title: "Her İş Günü Sevkiyat", desc: "Hafta içi her gün düzenli yükleme. Cumartesi sevkiyat kapasitesiyle hizmet sürekliliği korunur." },
-              { title: "Aynı Gün Sevk", desc: "14:00'a kadar iletilen siparişler, stokta olan ürünler için aynı gün yola çıkar." },
-              { title: "Derin Stok", desc: "50.000'i aşkın aktif SKU ile talep edilen ürünün büyük bölümü hazır stoktan karşılanır." },
-              { title: "İhracat Kapasitesi", desc: "Groupauto International kanallarıyla Türkiye dışı pazarlara da ürün ihracatı gerçekleştirilir." },
-            ].map((card, i) => (
+            {t.logistics.cards.map((card, i) => (
               <div key={card.title} ref={ref} className={`do-reveal ${i > 0 ? `do-d${i}` : ""} group relative border border-white/10 rounded-xl p-6 hover:border-white/30 hover:bg-white/[0.06] transition-all duration-300 cursor-default`}>
                 <div className="w-1.5 h-1.5 rounded-full bg-[#4d74d6] mb-4"></div>
                 <h3 className="text-[14px] font-bold text-white mb-2 leading-snug">{card.title}</h3>
@@ -474,19 +631,22 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* TEDARİKÇİLERİMİZ (navy) — 3 şerit, dönüşümlü yönlerde kayan marka logoları */}
+      {/* İŞ ORTAKLARIMIZ (navy) — 3 şerit, dönüşümlü yönlerde kayan marka logoları.
+          Eskiden "Tedarikçilerimiz" — görünür terminoloji güncellendi (bkz.
+          görev talimatı §4, §11). Logolar artık orijinal marka renklerinde
+          (grayscale kaldırıldı, bkz. shared/BrandLogo.tsx). */}
       <section className="bg-[#1B3A8F] py-20 md:py-24 overflow-hidden relative">
         <div className="absolute inset-0 do-grid-bg opacity-20"></div>
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 mb-14">
           <p ref={ref} className="do-reveal text-[#7d9bea] text-xs font-bold uppercase tracking-[0.3em] mb-4 flex items-center gap-3">
             <span className="w-8 h-[2px] bg-[#7d9bea] inline-block"></span>
-            Yerli ve Global Marka Portföyü
+            {t.partners.eyebrow}
           </p>
           <h2 ref={ref} className="do-reveal do-d1 text-4xl md:text-5xl font-black text-white tracking-tight leading-tight mb-4">
-            Tedarikçilerimiz
+            {t.partners.title}
           </h2>
           <p ref={ref} className="do-reveal do-d2 text-white/60 text-sm max-w-xl leading-relaxed">
-            {STRIP_BRANDS.length} yerli ve global markayla çalışıyoruz; tam listeyi, Yerli/Global ayrımını ve kategoriye göre filtrelemeyi Tedarikçiler sayfamızda inceleyebilirsiniz.
+            {t.partners.body}
           </p>
         </div>
 
@@ -523,8 +683,8 @@ export function LandingPage() {
         </div>
 
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 mt-12 text-center">
-          <Link href="/tedarikciler" className="inline-flex items-center gap-2 text-white font-semibold text-sm hover:text-[#7d9bea] transition-colors group">
-            Tüm tedarikçilerimizi inceleyin
+          <Link href={routeFor("partners", lang)} className="inline-flex items-center gap-2 text-white font-semibold text-sm hover:text-[#7d9bea] transition-colors group">
+            {t.partners.cta}
             <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
@@ -536,13 +696,13 @@ export function LandingPage() {
           <div className="mb-14">
             <p ref={ref} className="do-reveal text-[#1B3A8F] text-xs font-bold uppercase tracking-[0.3em] mb-4 flex items-center gap-3">
               <span className="w-8 h-[2px] bg-[#1B3A8F] inline-block"></span>
-              Gündem & Vizyon
+              {t.agenda.eyebrow}
             </p>
             <h2 ref={ref} className="do-reveal do-d1 text-4xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight mb-4">
-              Sahadaki <span className="text-[#1B3A8F]">Gelişmeler</span>
+              {t.agenda.titleA} <span className="text-[#1B3A8F]">{t.agenda.titleB}</span>
             </h2>
             <p ref={ref} className="do-reveal do-d2 text-slate-600 text-sm max-w-xl leading-relaxed">
-              Sektördeki gelişmeleri ve Delta Oto'nun sahaya yansıyan adımlarını buradan takip edebilirsiniz.
+              {t.agenda.body}
             </p>
           </div>
 
@@ -553,15 +713,14 @@ export function LandingPage() {
             >
               <div className="absolute top-0 right-0 w-32 h-32 bg-[#1B3A8F]/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-500"></div>
               <div className="flex items-center gap-2 mb-6">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-[#1B3A8F] bg-[#1B3A8F]/10 border border-[#1B3A8F]/20 px-2.5 py-1 rounded">Mayıs 2026</span>
-                <Zap className="w-3.5 h-3.5 text-slate-500" />
-                <span className="text-[10px] text-slate-600 uppercase tracking-wider">Yeni Operasyon</span>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-[#1B3A8F] bg-[#1B3A8F]/10 border border-[#1B3A8F]/20 px-2.5 py-1 rounded">{t.agenda.card1.tag1}</span>
+                <span className="text-[10px] text-slate-600 uppercase tracking-wider">{t.agenda.card1.tag2}</span>
               </div>
               <h3 className="text-xl font-bold text-slate-900 mb-5 leading-snug">
-                Opar Ege Bölge Bayiliği Operasyonu Başladı
+                {t.agenda.card1.title}
               </h3>
               <p className="text-[15px] text-slate-600 leading-[1.8] font-light">
-                Mayıs 2026 itibarıyla Opar Ege Bölge Bayiliği operasyonunu devralarak Ege bölgesindeki tedarik ağımızı doğrudan genişlettik. Bu adımla birlikte bölgeye yönelik ürün çeşitliliğimiz ve teslimat kapasitemiz önemli ölçüde güçlendi.
+                {t.agenda.card1.body}
               </p>
             </div>
 
@@ -571,15 +730,14 @@ export function LandingPage() {
             >
               <div className="absolute top-0 right-0 w-32 h-32 bg-[#1B3A8F]/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-500"></div>
               <div className="flex items-center gap-2 mb-6">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-[#1B3A8F] bg-[#1B3A8F]/10 border border-[#1B3A8F]/20 px-2.5 py-1 rounded">2025 · Dubai</span>
-                <Globe className="w-3.5 h-3.5 text-slate-500" />
-                <span className="text-[10px] text-slate-600 uppercase tracking-wider">Uluslararası Zirve</span>
+                <span className="text-[10px] font-bold uppercase tracking-widest text-[#1B3A8F] bg-[#1B3A8F]/10 border border-[#1B3A8F]/20 px-2.5 py-1 rounded">{t.agenda.card2.tag1}</span>
+                <span className="text-[10px] text-slate-600 uppercase tracking-wider">{t.agenda.card2.tag2}</span>
               </div>
               <h3 className="text-xl font-bold text-slate-900 mb-5 leading-snug">
-                Groupauto International Dubai O2O Tedarikçi Günleri 2025
+                {t.agenda.card2.title}
               </h3>
               <p className="text-[15px] text-slate-600 leading-[1.8] font-light">
-                Dubai'de düzenlenen Groupauto International O2O Tedarikçi Günleri'nde Türkiye'yi ve Delta Oto'yu temsil ettik. 35'ten fazla global üreticiyle gerçekleştirilen görüşmelerde tedarik portföyümüzü ve piyasa trendlerini ele aldık.
+                {t.agenda.card2.body}
               </p>
             </div>
           </div>
@@ -593,20 +751,20 @@ export function LandingPage() {
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 flex flex-col md:flex-row items-center justify-between gap-8">
           <div>
             <h2 ref={ref} className="do-reveal text-3xl md:text-4xl font-black text-white tracking-tight">
-              Yedek Parça Siparişleriniz için B2B Portalımız
+              {t.cta.title}
             </h2>
             <p ref={ref} className="do-reveal do-d1 text-white/75 text-base mt-3">
-              Portalımız üzerinden yedek parça siparişi verebilir, stok ve fiyat bilgilerine ulaşabilirsiniz.
+              {t.cta.body}
             </p>
           </div>
           <div ref={ref} className="do-reveal do-d2 flex gap-4 shrink-0">
             <a href="https://b2b.parcabul.com.tr/login.aspx" target="_blank" rel="noopener noreferrer" className="bg-white text-[#1B3A8F] font-bold px-8 py-4 rounded-md hover:bg-gray-100 active:scale-[0.98] transition-colors text-sm flex items-center gap-2 group">
-              B2B Portal
+              {t.hero.ctaB2B}
               <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
             </a>
-            <Link to="/iletisim">
+            <Link to={routeFor("contact", lang)}>
               <button className="border border-white/30 hover:border-white/60 active:scale-[0.98] text-white font-medium px-8 py-4 rounded-md transition-colors text-sm">
-                İletişim
+                {t.cta.contact}
               </button>
             </Link>
           </div>
@@ -626,14 +784,14 @@ export function LandingPage() {
         <div
           role="dialog"
           aria-modal="true"
-          aria-label="Siteden ayrılıyorsunuz"
+          aria-label={t.leaveModal.title}
           className={`relative bg-white rounded-2xl shadow-2xl max-w-sm w-full p-6 transition-all duration-200 ${
             confirmBrand ? "translate-y-0 scale-100" : "translate-y-2 scale-95"
           }`}
         >
-          <h3 className="text-lg font-black text-slate-900 mb-2">Siteden ayrılıyorsunuz</h3>
+          <h3 className="text-lg font-black text-slate-900 mb-2">{t.leaveModal.title}</h3>
           <p className="text-slate-500 text-[13.5px] leading-relaxed mb-6">
-            {confirmBrand?.brand.name} için Delta Oto sitesinden ayrılıp markanın resmi web sitesine yönlendirileceksiniz.
+            {confirmBrand ? t.leaveModal.body(confirmBrand.brand.name) : ""}
           </p>
           <div className="flex gap-3">
             <button
@@ -642,7 +800,7 @@ export function LandingPage() {
               onClick={() => setConfirmBrand(null)}
               className="flex-1 border border-slate-200 text-slate-600 font-semibold text-[13.5px] px-4 py-3 rounded-md hover:bg-slate-50 transition-colors"
             >
-              İptal
+              {t.leaveModal.cancel}
             </button>
             <button
               type="button"
@@ -654,7 +812,7 @@ export function LandingPage() {
               }}
               className="flex-1 bg-[#1B3A8F] hover:bg-[#2547B5] text-white font-semibold text-[13.5px] px-4 py-3 rounded-md transition-colors"
             >
-              Devam Et
+              {t.leaveModal.continue}
             </button>
           </div>
         </div>

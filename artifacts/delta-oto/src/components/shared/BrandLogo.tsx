@@ -53,7 +53,7 @@ const SIZES: Record<BrandLogoSize, SizeStyle> = {
   strip: {
     light: "group relative shrink-0 mx-2.5 w-[170px] bg-white rounded-lg h-16 px-4 flex items-center justify-center shadow-sm hover:shadow-lg hover:z-10 transition-shadow duration-300",
     dark: "group relative shrink-0 mx-2.5 w-[170px] bg-[#0e1016] border border-white/10 rounded-lg h-16 px-4 flex items-center justify-center shadow-sm hover:shadow-lg hover:z-10 transition-shadow duration-300",
-    img: "max-h-7 max-w-[110px] w-auto h-auto object-contain grayscale group-hover:grayscale-0 group-hover:scale-125 transition-all duration-300",
+    img: "max-h-7 max-w-[110px] w-auto h-auto object-contain group-hover:scale-125 transition-transform duration-300",
     textSize: "text-[11px]",
     textHover: "group-hover:scale-110 transition-transform duration-300",
   },
