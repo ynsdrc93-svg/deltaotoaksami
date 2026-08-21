@@ -4,7 +4,7 @@ import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
 import { BrandLogo } from "@/components/shared/BrandLogo";
 import { CLASSIFIED_BRANDS, GLOBAL_BRANDS, YERLI_BRANDS, type Brand } from "@/lib/brands";
-import { PRODUCT_CATEGORIES, type ProductCategory } from "@/lib/categories";
+import { PRODUCT_CATEGORIES, MACRO_FAMILIES, type ProductCategory } from "@/lib/categories";
 import { useEscapeKey, useReveal } from "@/hooks/use-motion";
 import { useDocumentMeta } from "@/hooks/use-document-meta";
 import { useLang, type Lang } from "@/lib/i18n";
@@ -32,7 +32,7 @@ const content = {
       noResults: (q: string) => `"${q}" ile eşleşen marka bulunamadı.`,
       globalLabel: "Global Markalar",
       domesticLabel: "Yerli Markalar",
-      footerNote: (n: number) => `${n} yerli ve global markadan oluşan geniş ürün portföyümüzü kategoriye göre aşağıda inceleyebilir, güncel stok durumu için B2B portalına göz atabilirsiniz.`,
+      footerNote: (n: number) => `100'den fazla markadan oluşan portföyümüzden öne çıkan ${n} tanesini kategoriye göre aşağıda inceleyebilir, güncel stok durumu ve tam liste için B2B portalına göz atabilirsiniz.`,
     },
     categories: {
       eyebrow: "Ürün Kategorileri",
@@ -76,7 +76,7 @@ const content = {
       body: "Tek tedarikçi kolaylığı, global satın alma gücü ve OEM kalite güvencesi — hepsi tek çatı altında.",
       items: [
         { title: "Kapsamlı Ürün Gamı", desc: "100'den fazla markanın 50.000'i aşkın SKU'sundan oluşan portföy; tek tedarikçi ilişkisiyle uçtan uca karşılanır. Çoklu tedarikçi koordinasyonu yükü kalkar." },
-        { title: "Groupauto Tedarik Ayrıcalığı", desc: "GROUPAUTO Türkiye üyeliği; 118 ülkedeki 71 referans tedarikçi gücünü satın alma kaldıracımıza dönüştürür. Global fiyat avantajı doğrudan portföyümüze yansır." },
+        { title: "GROUPAUTO Tedarik Ayrıcalığı", desc: "GROUPAUTO Türkiye üyeliği; 118 ülkedeki 71 referans tedarikçi gücünü satın alma kaldıracımıza dönüştürür. Global fiyat avantajı doğrudan portföyümüze yansır." },
         { title: "OEM Standart Kalite Güvencesi", desc: "Yalnızca orijinal ve OEM eşdeğeri ürün kategorilerinde faaliyet gösteriyoruz. Sahte ve düşük kaliteli ürün portföyde kesinlikle yer almaz." },
         { title: "Dinamik Katalog Yönetimi", desc: "Yeni araç modelleri ve marka genişlemeleri portföye sürekli eklenir. Güncel stok bilgisine B2B portalı üzerinden anlık erişilir, bekleme olmadan sipariş verilir." },
         { title: "Opar Ege Bölge Bayiliği", desc: "Opar'ın Ege bölgesi operasyonunu devralarak İzmir ve çevresinde bölgesel stok derinliğimizi ve teslimat hızımızı doğrudan güçlendirdik." },
@@ -108,7 +108,7 @@ const content = {
       noResults: (q: string) => `No brands match "${q}".`,
       globalLabel: "Global Brands",
       domesticLabel: "Domestic Brands",
-      footerNote: (n: number) => `Browse our extensive portfolio of ${n} domestic and global brands by category below, and check the B2B portal for current stock availability.`,
+      footerNote: (n: number) => `Explore ${n} highlighted brands from our portfolio of 100+ by category below, and check the B2B portal for current stock and the full list.`,
     },
     categories: {
       eyebrow: "Product Categories",
@@ -190,23 +190,6 @@ function BrandGroup({ label, brands }: { label: string; brands: Brand[] }) {
     </div>
   );
 }
-
-// Sunum-katmanı-yalnızca makro aile gruplaması — 23 onaylı Excel kategorisini
-// DEĞİŞTİRMEZ (slug/brandSlugs/featuredBrandSlugs sabit kalır), yalnızca
-// atlas'ta görsel olarak nasıl kümelendiklerini belirler. categoryNames,
-// PRODUCT_CATEGORIES'teki GÖRÜNTÜLENEN category.name (TR) ile birebir eşleşir
-// — dil-bağımsız arama anahtarıdır, İngilizce sayfalarda da TR adıyla lookup
-// yapılır (nameEn yalnızca GÖRÜNTÜLEME için kullanılır).
-const MACRO_FAMILIES: { label: Record<Lang, string>; categoryNames: string[] }[] = [
-  { label: { tr: "Motor & Yakıt Sistemleri", en: "Engine & Fuel Systems" }, categoryNames: ["Motor İç Aksamı", "Yakıt ve Enjeksiyon"] },
-  { label: { tr: "Güç Aktarımı", en: "Powertrain" }, categoryNames: ["Aks-Transmisyon", "Debriyaj-Volan", "Şanzıman"] },
-  { label: { tr: "Fren & Şasi", en: "Brakes & Chassis" }, categoryNames: ["Fren Sistemi", "Direksiyon", "Süspansiyon ve Taşıyıcı Sistem"] },
-  { label: { tr: "Elektrik, Aydınlatma & Görüş", en: "Electrical, Lighting & Visibility" }, categoryNames: ["Elektrik Donanımı", "Şarj-Marş", "Aydınlatma", "Sinyalizasyon ve Görünürlük"] },
-  { label: { tr: "Klima ve Soğutma Sistemleri", en: "Climate & Cooling Systems" }, categoryNames: ["Klima-Isıtma", "Soğutma"] },
-  { label: { tr: "Filtrasyon & Bakım", en: "Filtration & Maintenance" }, categoryNames: ["Filtre", "Motor Yağı", "Sarf ve Bakım Ürünleri"] },
-  { label: { tr: "Sızdırmazlık, Kayış ve Hortum Sistemleri", en: "Sealing, Belt & Hose Systems" }, categoryNames: ["Conta-Keçe-O-Ring", "Kayış-Gergi-Rulman-Kit", "Kauçuk-Hortumlar-Borular"] },
-  { label: { tr: "Kaporta, Lastik ve Tamamlayıcı Ürünler", en: "Body, Tires & Complementary Products" }, categoryNames: ["Kaporta-Karoseri", "Lastik-Jant", "Üniversal Ürünler"] },
-];
 
 function CategoryBrandRefs({ category, brands }: { category: ProductCategory; brands: Brand[] }) {
   // Marka alanı bu modülün ana odağıdır: TÜM markalar alfabetik sırada

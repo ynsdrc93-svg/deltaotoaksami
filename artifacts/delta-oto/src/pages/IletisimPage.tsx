@@ -144,14 +144,14 @@ const content = {
           type: "Kocaeli",
         },
         {
-          name: "Opar Ege Bölge Operasyonu",
+          name: "Opar Ege Bölge Bayiliği",
           city: "Kemalpaşa, İzmir",
           address: "Kemalpaşa Kızılüzüm Kırovası Kümeevleri No: 12/1, Kemalpaşa / İzmir",
           phone: null as string | null,
           type: "Ege Bölge",
         },
         {
-          name: "Merkez Ofis & Depo",
+          name: "Ümraniye Merkez Depo",
           city: "Ümraniye, İstanbul",
           address: "Barbaros Cd. Beyit Sk. No:17, Yukarı Dudullu — Ümraniye / İstanbul",
           phone: "0216 526 64 64 / 0216 526 33 44" as string | null,
@@ -276,14 +276,14 @@ const content = {
           type: "Kocaeli",
         },
         {
-          name: "Opar Aegean Regional Operation",
+          name: "Opar Aegean Regional Dealership",
           city: "Kemalpaşa, İzmir",
           address: "Kemalpaşa Kızılüzüm Kırovası Kümeevleri No: 12/1, Kemalpaşa / İzmir",
           phone: null as string | null,
           type: "Aegean Region",
         },
         {
-          name: "Head Office & Warehouse",
+          name: "Ümraniye Main Warehouse",
           city: "Ümraniye, İstanbul",
           address: "Barbaros Cd. Beyit Sk. No:17, Yukarı Dudullu — Ümraniye / İstanbul",
           phone: "0216 526 64 64 / 0216 526 33 44" as string | null,

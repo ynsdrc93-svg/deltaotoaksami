@@ -81,7 +81,7 @@ const content = {
       ],
     },
     categories: {
-      eyebrow: "Ürün Portföyü",
+      eyebrow: "SPART Ürün Kategorileri",
       heading: "Geniş Kapsam, Tek Marka",
       body: "Binek ve hafif ticari araçların kritik sistemlerini kapsayan SPART katalogu, servisinizin ihtiyaç duyduğu her referansı tek çatı altında sunar.",
       items: [
@@ -116,7 +116,7 @@ const content = {
         },
         {
           label: "Ege Bölge",
-          name: "Opar Ege Operasyonu",
+          name: "Opar Ege Bölge Bayiliği",
           city: "İzmir",
           address: "Kemalpaşa Kızılüzüm Kırovası Kümeevleri No: 12/1, Kemalpaşa / İzmir",
         },
@@ -188,7 +188,7 @@ const content = {
       ],
     },
     categories: {
-      eyebrow: "Product Portfolio",
+      eyebrow: "SPART Product Categories",
       heading: "Broad Coverage, One Brand",
       body: "Covering the critical systems of passenger and light commercial vehicles, the SPART catalog brings every reference your workshop needs under one roof.",
       items: [
@@ -223,7 +223,7 @@ const content = {
         },
         {
           label: "Aegean Region",
-          name: "Opar Aegean Operation",
+          name: "Opar Aegean Regional Dealership",
           city: "İzmir",
           address: "Kemalpaşa Kızılüzüm Kırovası Kümeevleri No: 12/1, Kemalpaşa / İzmir",
         },

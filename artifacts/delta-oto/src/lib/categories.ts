@@ -2,6 +2,7 @@ import type { LucideIcon } from "lucide-react";
 import {
   Cog, Eye, Lightbulb, CircleDot, RotateCw, Navigation, Zap, Filter, Disc, Car, Waves, RefreshCw, Thermometer, CircleDashed, Wrench, Droplet, Settings2, PackageCheck, BatteryCharging, Snowflake, MoveVertical, Boxes, Fuel,
 } from "lucide-react";
+import type { Lang } from "@/lib/i18n";
 
 // Excel kaynağı "Kopya Delta Markalar -kategoriler.xlsx" (Sheet: Ürün Grupları,
 // 30.159 satırlık ürün-marka verisinden agrege edilmiştir) — Tedarikçiler sayfasının
@@ -53,4 +54,26 @@ export const PRODUCT_CATEGORIES: ProductCategory[] = [
   { name: "Süspansiyon ve Taşıyıcı Sistem", nameEn: "Suspension & Chassis Support", icon: MoveVertical, description: "Amortisör, salıncak ve taşıyıcı sistem parçalarında sürüş konforu.", descriptionEn: "Driving comfort through shock absorbers, control arms and chassis support components.", brandSlugs: ["blueprint", "corteco", "delphi", "fag", "febi", "ina", "lemforder", "monroe", "rapro", "sachs", "skf", "spart", "swag", "teknorot", "trw", "ucel", "valeo"], featuredBrandSlugs: ["monroe", "sachs", "lemforder", "trw", "teknorot", "spart"] },
   { name: "Üniversal Ürünler", nameEn: "Universal Products", icon: Boxes, description: "Araç bağımsız, geniş uygulama alanına sahip evrensel ürün grubu.", descriptionEn: "A vehicle-independent product group with broad application coverage.", brandSlugs: ["bosch", "cargo", "delphi", "elring", "osram", "skf", "spart"], featuredBrandSlugs: ["bosch", "skf", "osram", "spart", "delphi"] },
   { name: "Yakıt ve Enjeksiyon", nameEn: "Fuel & Injection", icon: Fuel, description: "Yakıt pompası ve enjeksiyon sisteminde hassas performans parçaları.", descriptionEn: "Precision performance parts for fuel pumps and injection systems.", brandSlugs: ["behr", "borgwarner", "bosch", "delphi", "denso", "era", "febi", "hella", "kale", "mahle", "ngk", "spart", "valeo", "vdo"], featuredBrandSlugs: ["bosch", "delphi", "denso", "vdo", "spart"] },
+];
+
+// Sunum-katmanı-yalnızca makro aile gruplaması — 23 onaylı Excel kategorisini
+// DEĞİŞTİRMEZ (slug/brandSlugs/featuredBrandSlugs sabit kalır), yalnızca
+// atlas'ta görsel olarak nasıl kümelendiklerini belirler. categoryNames,
+// yukarıdaki PRODUCT_CATEGORIES'teki GÖRÜNTÜLENEN category.name (TR) ile
+// birebir eşleşir — dil-bağımsız arama anahtarıdır, İngilizce sayfalarda da
+// TR adıyla lookup yapılır (nameEn yalnızca GÖRÜNTÜLEME için kullanılır).
+// Sitewide Tutarlılık Turu: eskiden TedarikciPage.tsx içinde yerel/export
+// edilmemiş bir sabitti — categories.ts'in kendi üst-yorumundaki "TEK
+// doğruluk kaynağı" iddiasını tam karşılasın diye (23 kategori + bunların
+// 8 makro aileye grupması artık aynı dosyada) buraya taşındı. Davranış/görsel
+// çıktı DEĞİŞMEDİ, yalnızca verinin yaşadığı yer değişti.
+export const MACRO_FAMILIES: { label: Record<Lang, string>; categoryNames: string[] }[] = [
+  { label: { tr: "Motor & Yakıt Sistemleri", en: "Engine & Fuel Systems" }, categoryNames: ["Motor İç Aksamı", "Yakıt ve Enjeksiyon"] },
+  { label: { tr: "Güç Aktarımı", en: "Powertrain" }, categoryNames: ["Aks-Transmisyon", "Debriyaj-Volan", "Şanzıman"] },
+  { label: { tr: "Fren & Şasi", en: "Brakes & Chassis" }, categoryNames: ["Fren Sistemi", "Direksiyon", "Süspansiyon ve Taşıyıcı Sistem"] },
+  { label: { tr: "Elektrik, Aydınlatma & Görüş", en: "Electrical, Lighting & Visibility" }, categoryNames: ["Elektrik Donanımı", "Şarj-Marş", "Aydınlatma", "Sinyalizasyon ve Görünürlük"] },
+  { label: { tr: "Klima ve Soğutma Sistemleri", en: "Climate & Cooling Systems" }, categoryNames: ["Klima-Isıtma", "Soğutma"] },
+  { label: { tr: "Filtrasyon & Bakım", en: "Filtration & Maintenance" }, categoryNames: ["Filtre", "Motor Yağı", "Sarf ve Bakım Ürünleri"] },
+  { label: { tr: "Sızdırmazlık, Kayış ve Hortum Sistemleri", en: "Sealing, Belt & Hose Systems" }, categoryNames: ["Conta-Keçe-O-Ring", "Kayış-Gergi-Rulman-Kit", "Kauçuk-Hortumlar-Borular"] },
+  { label: { tr: "Kaporta, Lastik ve Tamamlayıcı Ürünler", en: "Body, Tires & Complementary Products" }, categoryNames: ["Kaporta-Karoseri", "Lastik-Jant", "Üniversal Ürünler"] },
 ];

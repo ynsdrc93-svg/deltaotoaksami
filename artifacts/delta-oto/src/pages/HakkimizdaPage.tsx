@@ -144,7 +144,7 @@ const content = {
       body: "Delta Oto, birbirini tamamlayan iş kollarıyla otomotiv satış sonrası sektöründe kapsamlı bir tedarik gücü sunmaktadır.",
       items: [
         { title: "Aftermarket Dağıtım", desc: "Binek ve hafif ticari araç kategorilerinde 100'den fazla küresel ve yerel marka distribütörlüğü. Türkiye'nin tamamına B2B kanalı üzerinden tedarik.", tags: ["100+ Marka", "50.000+ SKU", "B2B Portal"] },
-        { title: "SPART Private Label", desc: "Delta Oto'nun özel dağıtım markası SPART; OEM eşdeğeri kaliteyi rekabetçi fiyat yapısıyla sunar. Fren, süspansiyon, motor ve kaporta kategorilerinde aktif portföy.", tags: ["OEM Eşdeğeri", "Rekabetçi Fiyat", "Geniş SKU Gamı"] },
+        { title: "SPART Private Label", desc: "Delta Oto'nun özel dağıtım markası SPART; OEM eşdeğeri kaliteyi rekabetçi fiyat yapısıyla sunar. Fren, süspansiyon, motor ve elektrik kategorilerinde aktif portföy.", tags: ["OEM Eşdeğeri", "Rekabetçi Fiyat", "Geniş SKU Gamı"] },
         { title: "Ağır Vasıta Grubu", desc: "Kamyon, otobüs ve iş makinesi kategorilerinde seçilmiş marka ve ürün gamıyla ağır vasıta segmentine özel tedarik hizmeti.", tags: ["Kamyon", "Otobüs", "İş Makinesi"] },
         { title: "B2B Dijital Kanal", desc: "7/24 erişilebilen B2B portalı üzerinden anlık stok sorgulama, fiyat listeleri ve sipariş yönetimi. Müşteri operasyonlarına entegre dijital tedarik deneyimi.", tags: ["7/24 Erişim", "Anlık Stok", "Dijital Sipariş"] },
       ],
@@ -242,7 +242,7 @@ const content = {
       body: "With complementary lines of business, Delta Oto offers comprehensive supply capability in the automotive aftersales industry.",
       items: [
         { title: "Aftermarket Distribution", desc: "Distribution of more than 100 global and domestic brands across passenger and light commercial vehicle categories, supplying all of Turkey through the B2B channel.", tags: ["100+ Brands", "50,000+ SKUs", "B2B Portal"] },
-        { title: "SPART Private Label", desc: "SPART, Delta Oto's private-label distribution brand, delivers OEM-equivalent quality at a competitive price structure, with an active portfolio in brake, suspension, engine and body categories.", tags: ["OEM Equivalent", "Competitive Pricing", "Wide SKU Range"] },
+        { title: "SPART Private Label", desc: "SPART, Delta Oto's private-label distribution brand, delivers OEM-equivalent quality at a competitive price structure, with an active portfolio in brake, suspension, engine and electrical categories.", tags: ["OEM Equivalent", "Competitive Pricing", "Wide SKU Range"] },
         { title: "Heavy-Duty Vehicle Group", desc: "Dedicated supply service for the heavy-duty vehicle segment, with a select range of brands and products in the truck, bus and heavy-equipment categories.", tags: ["Trucks", "Buses", "Heavy Equipment"] },
         { title: "B2B Digital Channel", desc: "Real-time stock lookup, price lists and order management through a B2B portal accessible around the clock — a digital supply experience integrated into customer operations.", tags: ["24/7 Access", "Real-Time Stock", "Digital Ordering"] },
       ],
