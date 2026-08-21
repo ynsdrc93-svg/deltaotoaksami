@@ -32,7 +32,6 @@ const content = {
       noResults: (q: string) => `"${q}" ile eşleşen marka bulunamadı.`,
       globalLabel: "Global Markalar",
       domesticLabel: "Yerli Markalar",
-      footerNote: (n: number) => `100'den fazla markadan oluşan portföyümüzden öne çıkan ${n} tanesini kategoriye göre aşağıda inceleyebilir, güncel stok durumu ve tam liste için B2B portalına göz atabilirsiniz.`,
     },
     categories: {
       eyebrow: "Ürün Kategorileri",
@@ -108,7 +107,6 @@ const content = {
       noResults: (q: string) => `No brands match "${q}".`,
       globalLabel: "Global Brands",
       domesticLabel: "Domestic Brands",
-      footerNote: (n: number) => `Explore ${n} highlighted brands from our portfolio of 100+ by category below, and check the B2B portal for current stock and the full list.`,
     },
     categories: {
       eyebrow: "Product Categories",
@@ -711,10 +709,6 @@ export function TedarikciPage() {
               <BrandGroup label={t.brandWall.domesticLabel} brands={filteredYerli} />
             </div>
           )}
-
-          <p className="text-white/50 text-[13px] mt-8 lg:mt-14 text-center">
-            {t.brandWall.footerNote(CLASSIFIED_BRANDS.length)}
-          </p>
         </div>
       </section>
 
