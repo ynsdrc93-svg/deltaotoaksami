@@ -43,7 +43,7 @@ const FACT_ICONS = [Award, Globe, Users, TrendingUp];
 // aynı, önceden kurulmuş davranıştır; bu görevin kapsamı dışında değiştirilmedi.
 const FACT_META: { target: number; plus: boolean; grouped: boolean }[] = [
   { target: 1976, plus: false, grouped: false },
-  { target: 40,   plus: true,  grouped: false },
+  { target: 118,  plus: false, grouped: false }, // Düzeltme: eskiden 40+ idi — sayfanın kendi groupauto.stats'ıyla (118 Ülke) tutarsızdı, gerçek resmi rakamla eşitlendi
   { target: 29,   plus: false, grouped: false }, // Düzeltme: resmi Groupauto International üye sayısı (29 Members) — bkz. aşağıdaki not
   { target: 100,  plus: true,  grouped: false }, // İçerik/UX Revizyon Notu: sitewide marka iddiası 250+ → 100+ değişti (bkz. content.*.facts.items[3])
 ];
@@ -88,7 +88,7 @@ const content = {
   tr: {
     meta: {
       title: "Hakkımızda — 50 Yıllık Kurumsal Birikim | Delta Oto",
-      description: "Delta Oto'nun 1976'dan bugüne kurumsal tarihçesi, değer çerçevesi, iş birimleri ve Groupauto International üyeliği; 40+ ülkede küresel tedarik gücü.",
+      description: "Delta Oto'nun 1976'dan bugüne kurumsal tarihçesi, değer çerçevesi, iş birimleri ve Groupauto International üyeliği; 118 ülkede küresel tedarik gücü.",
     },
     hero: {
       eyebrow: "Kuruluş 1976 · Delta Oto",
@@ -152,7 +152,7 @@ const content = {
     groupauto: {
       eyebrow: "Uluslararası Ağ",
       heading: "Groupauto International Üyesi",
-      body: "Avrupa merkezli Groupauto International ağının Türkiye üyesi sıfatıyla, 40'tan fazla ülkedeki distribütörler ve küresel üreticilerle doğrudan bağlantı içindeyiz. Bu üyelik; ürün erişimini, tedarik koşullarını ve piyasa bilgisini rakiplerimizin önünde konumlandırır.",
+      body: "Avrupa merkezli Groupauto International ağının Türkiye üyesi sıfatıyla, 118 ülkedeki distribütörler ve küresel üreticilerle doğrudan bağlantı içindeyiz. Bu üyelik; ürün erişimini, tedarik koşullarını ve piyasa bilgisini rakiplerimizin önünde konumlandırır.",
       stats: [["29", "Üye Ağ"], ["71", "Referans Tedarikçi"], ["1.958", "Distribütör"]] as [string, string][],
       exploreLink: "Marka Portföyümüzü İnceleyin",
       benefitsHeading: "Üyeliğin Faydaları",
@@ -186,7 +186,7 @@ const content = {
   en: {
     meta: {
       title: "About Us — 50 Years of Institutional Heritage | Delta Oto",
-      description: "Delta Oto's corporate history, value framework, business units and GROUPAUTO International membership since 1976 — global supply strength across 40+ countries.",
+      description: "Delta Oto's corporate history, value framework, business units and GROUPAUTO International membership since 1976 — global supply strength across 118 countries.",
     },
     hero: {
       eyebrow: "Founded 1976 · Delta Oto",
@@ -250,7 +250,7 @@ const content = {
     groupauto: {
       eyebrow: "International Network",
       heading: "GROUPAUTO International Member",
-      body: "As the Turkey member of the Europe-based GROUPAUTO International network, we are directly connected with distributors and global manufacturers in more than 40 countries. This membership puts our product access, supply terms and market intelligence ahead of our competitors.",
+      body: "As the Turkey member of the Europe-based GROUPAUTO International network, we are directly connected with distributors and global manufacturers across 118 countries. This membership puts our product access, supply terms and market intelligence ahead of our competitors.",
       stats: [["29", "Members"], ["71", "Referenced Suppliers"], ["1,958", "Distributors"]] as [string, string][],
       exploreLink: "Explore Our Brand Portfolio",
       benefitsHeading: "Benefits of Membership",

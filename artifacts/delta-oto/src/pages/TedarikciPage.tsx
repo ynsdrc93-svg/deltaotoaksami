@@ -76,7 +76,7 @@ const content = {
       body: "Tek tedarikçi kolaylığı, global satın alma gücü ve OEM kalite güvencesi — hepsi tek çatı altında.",
       items: [
         { title: "Kapsamlı Ürün Gamı", desc: "100'den fazla markanın 50.000'i aşkın SKU'sundan oluşan portföy; tek tedarikçi ilişkisiyle uçtan uca karşılanır. Çoklu tedarikçi koordinasyonu yükü kalkar." },
-        { title: "Groupauto Tedarik Ayrıcalığı", desc: "Groupauto International üyeliği; 40+ ülkedeki 71 referans tedarikçi gücünü satın alma kaldıracımıza dönüştürür. Global fiyat avantajı doğrudan portföyümüze yansır." },
+        { title: "Groupauto Tedarik Ayrıcalığı", desc: "Groupauto International üyeliği; 118 ülkedeki 71 referans tedarikçi gücünü satın alma kaldıracımıza dönüştürür. Global fiyat avantajı doğrudan portföyümüze yansır." },
         { title: "OEM Standart Kalite Güvencesi", desc: "Yalnızca orijinal ve OEM eşdeğeri ürün kategorilerinde faaliyet gösteriyoruz. Sahte ve düşük kaliteli ürün portföyde kesinlikle yer almaz." },
         { title: "Dinamik Katalog Yönetimi", desc: "Yeni araç modelleri ve marka genişlemeleri portföye sürekli eklenir. Güncel stok bilgisine B2B portalı üzerinden anlık erişilir, bekleme olmadan sipariş verilir." },
         { title: "Opar Ege Bölge Bayiliği", desc: "Opar'ın Ege bölgesi operasyonunu devralarak İzmir ve çevresinde bölgesel stok derinliğimizi ve teslimat hızımızı doğrudan güçlendirdik." },
@@ -152,7 +152,7 @@ const content = {
       body: "Single-supplier convenience, global purchasing power and OEM quality assurance — all under one roof.",
       items: [
         { title: "Comprehensive Product Range", desc: "A portfolio of more than 100 brands and over 50,000 SKUs, covered end-to-end through a single supplier relationship — removing the burden of coordinating multiple suppliers." },
-        { title: "GROUPAUTO Purchasing Advantage", desc: "Our GROUPAUTO International membership turns the strength of 71 referenced suppliers across 40+ countries into purchasing leverage, translating directly into portfolio-wide price advantages." },
+        { title: "GROUPAUTO Purchasing Advantage", desc: "Our GROUPAUTO International membership turns the strength of 71 referenced suppliers across 118 countries into purchasing leverage, translating directly into portfolio-wide price advantages." },
         { title: "OEM-Standard Quality Assurance", desc: "We operate exclusively in original and OEM-equivalent product categories. Counterfeit and substandard products have no place in our portfolio." },
         { title: "Dynamic Catalog Management", desc: "New vehicle models and brand expansions are added to the portfolio continuously. Current stock information is available instantly through the B2B portal, so orders can be placed without delay." },
         { title: "Aegean Regional Dealership with Opar", desc: "By taking over Opar's Aegean region operation, we directly strengthened our regional stock depth and delivery speed in and around İzmir." },

@@ -81,22 +81,17 @@ const content = {
     partnership: {
       eyebrow: "Stratejik İş Birlikleri",
       headline: "Güçlü Bağlantılar. Yerel Uzmanlık.",
-      intro: "Delta Oto; GROUPAUTO International üyeliği ve Opar Ege Bölge Bayiliği ile güçlü iş birliklerini, stok ve dağıtım kabiliyetiyle Türkiye pazarında somut değere dönüştürür.",
+      intro: "Delta Oto; GROUPAUTO Türkiye yapılanması ve Opar Ege Bölge Bayiliği ile güçlü iş birliklerini, stok ve dağıtım kabiliyetiyle Türkiye pazarında somut değere dönüştürür.",
       groupauto: {
         eyebrow: "Global Ağ",
-        title: "GROUPAUTO International",
-        body: "GROUPAUTO International üyeliğimiz; Delta Oto'yu dünyanın önde gelen bağımsız otomotiv aftermarket ağlarından biriyle buluşturuyor. Bu yapı; güçlü iş bağlantıları, sektörel bilgi paylaşımı ve tedarikçi ilişkileri açısından önemli bir uluslararası bağlantı sağlıyor.",
-        stats: [
-          { value: "29", label: "Üye" },
-          { value: "71", label: "Referans Tedarikçi" },
-          { value: "1.958", label: "Distribütör" },
-          { value: "118", label: "Ülke" },
-        ],
+        title: "GROUPAUTO Türkiye",
+        body: "Delta Oto, GROUPAUTO Türkiye yapılanması içerisinde güçlü iş ortaklıkları ve yaygın tedarik ağıyla konumlanır. Bu yapı; satış sonrası pazar dinamiklerine hızlı uyum, güçlü marka erişimi ve sektörel iş birliği açısından önemli bir avantaj sağlar.",
+        identifier: "GROUPAUTO Türkiye Üyeliği",
       },
       opar: {
         eyebrow: "Bölgesel Ortaklık",
         title: "Opar",
-        body: "Opar Ege Bölge Bayiliğimiz; markanın ürün gücünü Delta Oto'nun bölgesel stok, satış ve dağıtım kabiliyetiyle buluşturuyor. İzmir merkezli saha yapılanmamızla Ege Bölgesi'nde hızlı ürün erişimi, düzenli sevkiyat ve güçlü bayi desteği sağlıyoruz.",
+        body: "Delta Oto'nun Opar Ege Bölge Bayiliği; bölgesel stok gücü, düzenli sevkiyat yapısı ve yaygın saha organizasyonu ile desteklenir. İzmir merkezli operasyon yapımız sayesinde Ege Bölgesi'nde süreklilik, erişilebilirlik ve güçlü bayi desteği sağlanır.",
         identifier: "Ege Bölge Bayiliği",
       },
     },
@@ -108,7 +103,7 @@ const content = {
       hubs: [{ label: "Gebze", plate: 41 }, { label: "İzmir", plate: 35 }, { label: "Ümraniye", plate: 34 }],
       cards: [
         { title: "Her İş Günü Sevkiyat", desc: "Hafta içi her gün düzenli yükleme. Cumartesi sevkiyat kapasitesiyle hizmet sürekliliği korunur." },
-        { title: "Aynı Gün Sevk", desc: "14:00'a kadar iletilen siparişler, stokta olan ürünler için aynı gün yola çıkar." },
+        { title: "Aynı Gün Sevk", desc: "18:00'e kadar iletilen siparişler, stokta olan ürünler için aynı gün yola çıkar." },
         { title: "Derin Stok", desc: "50.000'i aşkın aktif SKU ile talep edilen ürünün büyük bölümü hazır stoktan karşılanır." },
         { title: "Türkiye Geneli Dağıtım", desc: "Gebze, İzmir ve Ümraniye operasyon merkezlerinden Türkiye genelinde planlı sevkiyat." },
       ],
@@ -173,22 +168,17 @@ const content = {
     partnership: {
       eyebrow: "Strategic Partnerships",
       headline: "Strong Connections. Local Expertise.",
-      intro: "Through its GROUPAUTO International membership and Opar Aegean Regional Dealership, Delta Oto combines strong partnerships with deep inventory and nationwide distribution capabilities.",
+      intro: "Through its position within the GROUPAUTO Türkiye structure and Opar Aegean Regional Dealership, Delta Oto combines strong partnerships with deep inventory and nationwide distribution capabilities.",
       groupauto: {
         eyebrow: "Global Network",
-        title: "GROUPAUTO International",
-        body: "Our GROUPAUTO International membership connects Delta Oto with one of the world's leading independent automotive aftermarket networks — a meaningful international link built on strong business relationships, shared industry knowledge and supplier partnerships.",
-        stats: [
-          { value: "29", label: "Members" },
-          { value: "71", label: "Referenced Suppliers" },
-          { value: "1,958", label: "Distributors" },
-          { value: "118", label: "Countries" },
-        ],
+        title: "GROUPAUTO Türkiye",
+        body: "Delta Oto is positioned within the GROUPAUTO Türkiye structure through strong business partnerships and a wide-reaching supply network. This gives us a real edge — fast adaptation to aftermarket dynamics, strong brand access and close industry collaboration.",
+        identifier: "GROUPAUTO Türkiye Membership",
       },
       opar: {
         eyebrow: "Regional Partnership",
         title: "Opar",
-        body: "Our Opar Aegean Regional Dealership pairs the brand's product strength with Delta Oto's regional inventory, sales and distribution capabilities. Through our İzmir-based field organization, we deliver fast product access, regular shipments and strong dealer support across the Aegean Region.",
+        body: "Delta Oto's Opar Aegean Regional Dealership is backed by strong regional inventory, a consistent dispatch structure and wide-reaching field organization. Our İzmir-based operations deliver continuity, accessibility and strong dealer support across the Aegean Region.",
         identifier: "Aegean Regional Dealership",
       },
     },
@@ -200,7 +190,7 @@ const content = {
       hubs: [{ label: "Gebze", plate: 41 }, { label: "İzmir", plate: 35 }, { label: "Ümraniye", plate: 34 }],
       cards: [
         { title: "Shipping Every Business Day", desc: "Regular loading every weekday, with Saturday shipping capacity for uninterrupted service." },
-        { title: "Same-Day Dispatch", desc: "Orders placed before 14:00 ship the same day for items in stock." },
+        { title: "Same-Day Dispatch", desc: "Orders placed before 18:00 ship the same day for items in stock." },
         { title: "Deep Inventory", desc: "With more than 50,000 active SKUs, most orders are fulfilled directly from stock." },
         { title: "Nationwide Distribution", desc: "Planned distribution across Türkiye from our Gebze, İzmir and Ümraniye operations centers." },
       ],
@@ -540,21 +530,17 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* STRATEGIC PARTNERSHIP (navy) — Content/UX Pass 01: eski "bir dev +
-          bir küçük kart" hiyerarşisi kaldırıldı. GROUPAUTO International ve
-          Opar BİREBİR eşit boyutta iki editoryal panel — aynı kart çerçevesi,
-          aynı tip ölçeği, aynı boşluk/dolgu.
-          Desktop Feedback Round: resmi logolar eklendi (kullanıcı sağladı).
-          GROUPAUTO'nun asset'i BEYAZ/saydam (yalnızca koyu zeminde görünür) —
-          Opar'ınki ise koyu lacivert/şeffaf (yalnızca açık zeminde görünür,
-          bu panelin kendi navy gradyanına karşı neredeyse görünmez kalır,
-          headless tarayıcıda doğrulandı). Bu yüzden iki logo da AYNI boyut/
-          konum/dolgu ile (yükseklik sınırı ortak, sanatı yeniden çizmeden
-          object-contain) ama KENDİ rengine uygun zeminli birer "chip" içinde
-          gösteriliyor — chip'in kendisi normalize edilen şey, logo sanatı
-          DEĞİL (bkz. görev talimatı). Opar .ai kaynağından pdftocairo ile
-          çıkarılmış temiz vektör SVG (yalnızca 3 path, rasterize değil),
-          içerik sınırlarına headless tarayıcıda getBBox() ile trim edildi. */}
+      {/* STRATEGIC PARTNERSHIP (navy) — GROUPAUTO Türkiye ve Opar BİREBİR eşit
+          boyutta iki editoryal panel: aynı kart çerçevesi, aynı tip ölçeği,
+          aynı boşluk/dolgu, aynı bilgi mimarisi (logo → açıklama → metinsel
+          kimlik satırı, uydurma rakam yok). Her iki logo da artık beyaz-
+          negatif ve doğrudan panelin lacivert zemininde duruyor — kutu/chip/
+          border yok (bkz. ortak h-11 hizalama bandı, görsel çerçeve değil).
+          Opar .ai kaynağından pdftocairo ile çıkarılmış temiz vektör SVG'nin
+          (yalnızca 3 path, rasterize değil) path fill'leri beyaza boyandı.
+          GROUPAUTO Türkiye logosu bu turda talep edildi ama uploads'ta
+          bulunamadı — mevcut (International) logo geçici olarak korunuyor,
+          bkz. .map() dizisinin hemen üstündeki not. */}
       <section className="py-20 md:py-28 relative overflow-hidden text-white" style={{ background: "linear-gradient(135deg, #1B3A8F 0%, #14275c 100%)" }}>
         <div className="absolute inset-0 do-grid-bg opacity-40"></div>
         <div className="absolute right-0 top-0 w-1/2 h-full bg-gradient-to-l from-white/5 to-transparent pointer-events-none"></div>
@@ -575,6 +561,14 @@ export function LandingPage() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
+            {/* NOT: GROUPAUTO Türkiye logosu bu görev turunda talep edildi
+                ancak yüklenen dosyalar arasında bulunamadı (uploads dizini
+                kontrol edildi, tek adayı marka-parça logoları paketiydi,
+                GROUPAUTO'yla ilgisizdi) — bkz. görev raporu. Metin içeriği
+                (başlık/açıklama/kimlik) GROUPAUTO Türkiye'ye güncellendi,
+                ancak logo görseli ve alt metni gerçek asset gelene kadar
+                mevcut (International) sürümde bırakıldı — alt metni hâlâ
+                ekranda görünen görsele sadık kalmalı. */}
             {[
               { data: t.partnership.groupauto, logoSrc: "/images/groupauto-international-logo.webp", logoAlt: "GROUPAUTO International", logoW: 900, logoH: 181, refClass: "do-reveal do-d1" },
               { data: t.partnership.opar, logoSrc: "/images/opar-logo-white.svg", logoAlt: "Opar", logoW: 849, logoH: 341, refClass: "do-reveal do-d2" },
@@ -602,25 +596,14 @@ export function LandingPage() {
                 <p className="relative z-10 text-sm text-blue-100/70 leading-relaxed font-light">
                   {data.body}
                 </p>
-                {/* GROUPAUTO: resmi rakamlardan kompakt bir veri satırı.
-                    Opar: aynı görsel alanda, uydurma KPI olmadan metinsel kimlik
-                    ("Ege Bölge Bayiliği") — görsel simetri, aynı bilgi mimarisini
-                    gerektirmiyor (görev talimatı). */}
-                {"stats" in data && (
-                  <div className="relative z-10 grid grid-cols-4 gap-3 mt-6 pt-6 border-t border-white/10">
-                    {data.stats.map((s) => (
-                      <div key={s.label} className="text-center">
-                        <div className="text-xl md:text-2xl font-black text-white tabular-nums leading-none">{s.value}</div>
-                        <div className="text-[9px] text-blue-200/55 uppercase tracking-[0.1em] mt-1.5 leading-tight">{s.label}</div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-                {"identifier" in data && (
-                  <div className="relative z-10 mt-6 pt-6 border-t border-white/10">
-                    <div className="text-xs font-black text-white uppercase tracking-[0.2em]">{data.identifier}</div>
-                  </div>
-                )}
+                {/* GROUPAUTO Türkiye ve Opar artık aynı biçimde: doğrulanmamış
+                    uluslararası rakamlar yerine sessiz, metinsel bir kimlik
+                    satırı — iki panel arasında birebir aynı bilgi mimarisi,
+                    tam görsel simetri (görev talimatı: "equal content
+                    hierarchy"). */}
+                <div className="relative z-10 mt-6 pt-6 border-t border-white/10">
+                  <div className="text-xs font-black text-white uppercase tracking-[0.2em]">{data.identifier}</div>
+                </div>
               </div>
             ))}
           </div>

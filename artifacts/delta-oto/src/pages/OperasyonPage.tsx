@@ -48,7 +48,7 @@ const content = {
       stats: [
         { target: 3, label: "Operasyon Merkezi", sub: "Gebze · İzmir · Ümraniye" },
         { target: 50000, suffix: "+", label: "SKU", sub: "Sürekli stok derinliği" },
-        { value: "14:00", label: "Son Sipariş Saati", sub: "Aynı gün sevkiyat" },
+        { value: "18:00", label: "Son Sipariş Saati", sub: "Aynı gün sevkiyat" },
         { target: 81, label: "İl", sub: "Ulusal dağıtım kapsamı" },
       ],
     },
@@ -70,8 +70,8 @@ const content = {
       cards: [
         {
           title: "Aynı Gün Sevkiyat",
-          highlight: "14:00 Son Sipariş Saati",
-          desc: "Stokta olan ürünler için 14:00'a kadar iletilen siparişler, sipariş saatine bakılmaksızın aynı gün kargoya verilir. Acil ihtiyaçlarınızda net ve güvenilir bir taahhüt.",
+          highlight: "18:00 Son Sipariş Saati",
+          desc: "Stokta olan ürünler için 18:00'e kadar iletilen siparişler, sipariş saatine bakılmaksızın aynı gün kargoya verilir. Acil ihtiyaçlarınızda net ve güvenilir bir taahhüt.",
           featured: true,
         },
         {
@@ -89,43 +89,39 @@ const content = {
       ],
     },
     depots: {
-      eyebrow: "Dağıtım Ağı",
-      heading: "Lojistik Merkezlerimiz",
-      body: "Yanınızda ve yakınınızdayız. Üç operasyon merkezi üzerinden Türkiye'nin tamamına kesintisiz hizmet sunuyoruz.",
-      mainBadge: "Ana Depo",
-      operationWord: "Operasyon",
+      eyebrow: "Operasyon Altyapısı",
+      heading: "Türkiye Geneline Güçlü Dağıtım Yapısı",
+      body: "Ümraniye, Gebze ve İzmir operasyon merkezlerimiz üzerinden Türkiye geneline düzenli, planlı ve sürdürülebilir bir dağıtım yapısı sunuyoruz. Her operasyon noktası bulunduğu bölgenin ihtiyaçlarına göre konumlanırken; merkez yapı, sevkiyat sürekliliği ve stok erişilebilirliği açısından birbirini tamamlar.",
+      centralTag: "Merkez Koordinasyon",
       items: [
         {
-          label: "Kocaeli",
-          name: "Gebze Deposu",
+          title: "Gebze Operasyon Noktası",
           city: "Kocaeli",
           address: "Barış, 1804. Sk. No:4, 41400 Gebze / Kocaeli",
-          coverage: "Doğu Marmara, Kocaeli, Sakarya ve İç Anadolu'ya erişim güzergahında stratejik stok noktası",
-          highlights: ["Bölgesel Stok Noktası", "Doğu Marmara Öncelikli Teslimat", "Aynı Gün Sevk Kapasitesi"],
-          featured: false,
+          body: "Kocaeli ve çevresindeki sanayi hattına yakın konumlanan Gebze operasyon noktamız, Doğu Marmara eksenindeki dağıtım sürekliliğini destekler. Bölgesel stok erişimi ve planlı sevkiyat yapısıyla günlük operasyon akışında önemli rol üstlenir.",
+          central: false,
+          facts: [] as string[],
         },
         {
-          label: "Ege Bölge",
-          name: "Opar Ege Operasyonu",
+          title: "İzmir Operasyon Noktası",
           city: "İzmir",
           address: "Kemalpaşa Kızılüzüm Kırovası Kümeevleri No: 12/1, Kemalpaşa / İzmir",
-          coverage: "İzmir, Manisa, Aydın, Muğla ve çevre iller bölgesel tedarik ve dağıtım üssü",
-          highlights: ["Bölgesel Stok Derinliği", "Ege İlleri Öncelikli Teslimat", "Groupauto Bölge Temsilciliği"],
-          featured: false,
+          body: "İzmir merkezli operasyon yapımız, Ege Bölgesi'ndeki teslimat akışını destekleyen bölgesel bir dağıtım odağıdır. Düzenli sevkiyat planlaması ve saha erişimi sayesinde bölge genelinde süreklilik sağlar.",
+          central: false,
+          facts: [] as string[],
         },
         {
-          label: "Merkez",
-          name: "Ümraniye Merkez Depo",
+          title: "Ümraniye Merkez Depo",
           city: "İstanbul",
           address: "Barbaros Cd. Beyit Sk. No:17, Yukarı Dudullu — Ümraniye / İstanbul",
-          coverage: "İstanbul, Marmara, Trakya ve Türkiye geneli ulusal sevkiyat merkezi",
-          highlights: ["Aynı Gün Sevkiyat (14:00 son sipariş saati)", "Ertesi Gün İstanbul İçi", "Cumartesi Sevkiyat Kapasitesi", "Tüm 81 İle Ulusal Dağıtım"],
-          featured: true,
+          body: "Ümraniye merkez depomuz, operasyon yapısının ana koordinasyon noktasıdır. İstanbul, Marmara, Trakya ve Türkiye geneline yönelik dağıtım planlaması bu merkez üzerinden yönetilir.",
+          central: true,
+          facts: ["Aynı gün sevkiyat", "İstanbul içi planlı teslimat", "Türkiye geneline düzenli dağıtım"],
         },
       ],
       banner: {
-        heading: "Tüm Türkiye'ye Kesintisiz Erişim — Haftanın 6 Günü",
-        body: "Üç operasyon merkezimiz ve anlaşmalı lojistik partnerlerimiz aracılığıyla 81 ile düzenli teslimat.",
+        heading: "Türkiye genelinde süreklilik odaklı dağıtım yapısı",
+        body: "Üç operasyon merkezimiz ve planlı lojistik organizasyonumuz sayesinde Türkiye genelinde düzenli teslimat akışı sağlıyoruz.",
         statValue: "81",
         statLabel: "İl Kapsamı",
       },
@@ -137,12 +133,12 @@ const content = {
       groupLabels: ["Dağıtım & Kapsama", "Sistem, Kalite & Güvence"],
       features: [
         { title: "Üç Merkezden Ulusal Dağıtım", desc: "Gebze, İzmir ve Ümraniye'deki operasyon merkezlerimizden Türkiye'nin 81 iline anlaşmalı lojistik partnerleriyle düzenli teslimat gerçekleştiriyoruz." },
-        { title: "Aynı Gün Sevkiyat Garantisi", desc: "Saat 14:00'a kadar iletilen siparişler, stokta olan ürünler için aynı gün yüklenir. Acil ihtiyaçta servis sürekliliği önceliğimizdir." },
+        { title: "Aynı Gün Sevkiyat Garantisi", desc: "Saat 18:00'e kadar iletilen siparişler, stokta olan ürünler için aynı gün yüklenir. Acil ihtiyaçta servis sürekliliği önceliğimizdir." },
         { title: "Opar Ege Bölge Bayiliği", desc: "Opar'ın Ege bölgesi operasyonunu devralarak İzmir merkezli bölgesel stok derinliğimizi ve teslimat kapasitemizi genişlettik." },
         { title: "WMS Destekli Depo Yönetimi", desc: "Ambar yönetim sistemi stok doğruluğunu ve sipariş hazırlık sürecini kontrol altında tutar; hata payı sistem düzeyinde sıfıra yakın tutulur." },
         { title: "Stok Derinliği & Planlama", desc: "Talep bazlı envanter planlaması ve dönemsel analiz ile kritik ürünlerde yüksek doluluk oranı sürdürülür. Stokta yok cevabı istisnai kalır." },
         { title: "Sevkiyat Kalite Kontrolü", desc: "Her sipariş çıkışı önce WMS kontrolünden, ardından fiziksel doğrulamadan geçer; hasarlı ve eksik gönderim oranı operasyonel sıfır hedefinde tutulur." },
-        { title: "Groupauto International Ağı", desc: "Groupauto International üyeliğimiz; global ölçekte bir tedarik ve bilgi paylaşım ağının parçası olmamızı sağlar, bu güç yurt içi operasyonel kapasitemize yansır." },
+        { title: "GROUPAUTO Türkiye Ağı", desc: "GROUPAUTO Türkiye yapılanması içerisindeki konumumuz; güçlü tedarik bağlantıları ve sektörel iş birliğini doğrudan yurt içi operasyonel kapasitemize taşır." },
         { title: "Tek Tedarikçi Kolaylığı", desc: "100'den fazla marka tek çatı altında. Çoklu tedarikçi yönetiminin operasyonel yükü ortadan kalkar, müşteri enerjisi satışa odaklanır." },
       ],
     },
@@ -176,7 +172,7 @@ const content = {
       stats: [
         { target: 3, label: "Operations Centers", sub: "Gebze · İzmir · Ümraniye" },
         { target: 50000, suffix: "+", label: "SKU", sub: "Continuous stock depth" },
-        { value: "14:00", label: "Order Cutoff Time", sub: "Same-day dispatch" },
+        { value: "18:00", label: "Order Cutoff Time", sub: "Same-day dispatch" },
         { target: 81, label: "Provinces", sub: "Nationwide distribution coverage" },
       ],
     },
@@ -198,8 +194,8 @@ const content = {
       cards: [
         {
           title: "Same-Day Dispatch",
-          highlight: "14:00 Order Cutoff",
-          desc: "For in-stock items, orders placed by 14:00 ship the same day, regardless of exactly when they came in. A clear, reliable commitment when you need it most.",
+          highlight: "18:00 Order Cutoff",
+          desc: "For in-stock items, orders placed by 18:00 ship the same day, regardless of exactly when they came in. A clear, reliable commitment when you need it most.",
           featured: true,
         },
         {
@@ -217,45 +213,41 @@ const content = {
       ],
     },
     depots: {
-      eyebrow: "Distribution Network",
-      heading: "Our Logistics Centers",
-      body: "We're by your side, close to where you are. We provide uninterrupted service across all of Türkiye through three operations centers.",
-      mainBadge: "Main Depot",
-      operationWord: "Operation",
+      eyebrow: "Operations Infrastructure",
+      heading: "A Strong Distribution Structure Across Türkiye",
+      body: "From our operations centers in Ümraniye, Gebze and İzmir, we run a consistent, planned and sustainable distribution structure across Türkiye. Each site is positioned around its own region's needs, while the central hub complements them on shipping continuity and stock availability.",
+      centralTag: "Central Coordination",
       items: [
         {
-          label: "Kocaeli",
-          name: "Gebze Warehouse",
+          title: "Gebze Operations Site",
           city: "Kocaeli",
           address: "Barış, 1804. Sk. No:4, 41400 Gebze / Kocaeli",
-          coverage: "A strategic stock point on the route to Eastern Marmara, Kocaeli, Sakarya and Central Anatolia.",
-          highlights: ["Regional Stock Point", "Priority Delivery to Eastern Marmara", "Same-Day Dispatch Capacity"],
-          featured: false,
+          body: "Positioned close to the industrial corridor around Kocaeli, our Gebze site supports distribution continuity across the eastern Marmara region. Regional stock access and planned dispatch keep it central to daily operations.",
+          central: false,
+          facts: [] as string[],
         },
         {
-          label: "Aegean Region",
-          name: "Opar Aegean Operation",
+          title: "İzmir Operations Site",
           city: "İzmir",
           address: "Kemalpaşa Kızılüzüm Kırovası Kümeevleri No: 12/1, Kemalpaşa / İzmir",
-          coverage: "A regional supply and distribution base for İzmir, Manisa, Aydın, Muğla and the surrounding provinces.",
-          highlights: ["Regional Stock Depth", "Priority Delivery to Aegean Provinces", "GROUPAUTO Regional Representation"],
-          featured: false,
+          body: "Our İzmir-based operation is a regional distribution hub supporting delivery flow across the Aegean Region. Regular dispatch planning and field access keep service consistent throughout the region.",
+          central: false,
+          facts: [] as string[],
         },
         {
-          label: "Central",
-          name: "Ümraniye Central Warehouse",
+          title: "Ümraniye Central Warehouse",
           city: "İstanbul",
           address: "Barbaros Cd. Beyit Sk. No:17, Yukarı Dudullu — Ümraniye / İstanbul",
-          coverage: "A national dispatch center for İstanbul, Marmara, Thrace and the whole of Türkiye.",
-          highlights: ["Same-Day Dispatch (14:00 order cutoff)", "Next-Day Within İstanbul", "Saturday Dispatch Capacity", "Nationwide Distribution to All 81 Provinces"],
-          featured: true,
+          body: "Our Ümraniye central warehouse is the main coordination point of our operations structure. Distribution planning for İstanbul, Marmara, Thrace and the rest of Türkiye is managed from this hub.",
+          central: true,
+          facts: ["Same-day dispatch", "Planned delivery within İstanbul", "Regular nationwide distribution"],
         },
       ],
       banner: {
-        heading: "Uninterrupted Access Across Türkiye — 6 Days a Week",
-        body: "Regular delivery to all 81 provinces through our three operations centers and contracted logistics partners.",
+        heading: "A continuity-focused distribution structure across Türkiye",
+        body: "Through our three operations centers and planned logistics organization, we maintain a steady flow of deliveries across Türkiye.",
         statValue: "81",
-        statLabel: "Province Coverage",
+        statLabel: "Provinces Covered",
       },
     },
     capabilities: {
@@ -265,12 +257,12 @@ const content = {
       groupLabels: ["Distribution & Coverage", "Systems, Quality & Assurance"],
       features: [
         { title: "Nationwide Distribution from Three Centers", desc: "From our operations centers in Gebze, İzmir and Ümraniye, we deliver regularly to all 81 provinces of Türkiye through contracted logistics partners." },
-        { title: "Same-Day Dispatch Guarantee", desc: "Orders placed before 14:00 are loaded the same day for items in stock. Service continuity is our priority for urgent needs." },
+        { title: "Same-Day Dispatch Guarantee", desc: "Orders placed before 18:00 are loaded the same day for items in stock. Service continuity is our priority for urgent needs." },
         { title: "Opar Aegean Regional Dealership", desc: "By taking over Opar's Aegean region operation, we expanded our regional stock depth and delivery capacity from our İzmir base." },
         { title: "WMS-Supported Warehouse Management", desc: "Our warehouse management system keeps stock accuracy and order preparation under control, holding the error margin close to zero at the system level." },
         { title: "Stock Depth & Planning", desc: "Demand-based inventory planning and periodic analysis maintain a high fill rate on critical products, keeping out-of-stock responses the exception." },
         { title: "Dispatch Quality Control", desc: "Every outgoing order passes a WMS check followed by physical verification; damaged and incomplete shipments are held to an operational zero target." },
-        { title: "GROUPAUTO International Network", desc: "Our GROUPAUTO International membership makes us part of a global supply and knowledge-sharing network — strength that translates directly into our domestic operational capacity." },
+        { title: "GROUPAUTO Türkiye Network", desc: "Our position within the GROUPAUTO Türkiye structure brings strong supply connections and industry collaboration directly into our domestic operational capacity." },
         { title: "Single-Supplier Convenience", desc: "More than 100 brands under one roof. The operational burden of managing multiple suppliers disappears, freeing customer energy to focus on sales." },
       ],
     },
@@ -443,64 +435,54 @@ export function OperasyonPage() {
         </div>
       </section>
 
-      {/* LOJİSTİK MERKEZLERİMİZ — white */}
-      <section className="bg-white py-24">
+      {/* LOJİSTİK MERKEZLERİMİZ — white. Visual Redesign Round: eski üç/dört
+          "genel AI kartı" şablonu (renkli ikon kutusu, "Ana Depo" rozeti,
+          madde işaretli liste) tamamen kaldırıldı. Yerine: tipografi ağırlıklı,
+          ince bir üst çizgiyle bağlanan üç kolon (Gebze → İzmir → Ümraniye
+          sırası, sitedeki diğer lokasyon listeleriyle aynı). Ümraniye, kart
+          büyütülmeden yalnızca küçük bir "Merkez Koordinasyon" etiketiyle
+          ayırt ediliyor. Alt kapsama şeridi de tek bir büyük KPI kutusu
+          yerine, metinle aynı satırda baseline hizalı sessiz bir rakama
+          indirgendi. */}
+      <section className="bg-white py-24 md:py-28">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="mb-14">
+          <div className="max-w-2xl mb-16 md:mb-20">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">{t.depots.eyebrow}</span>
             <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-2 tracking-tight">{t.depots.heading}</h2>
-            <p className="text-slate-500 mt-3 max-w-xl text-[15px]">{t.depots.body}</p>
+            <p className="text-slate-500 mt-4 text-[15px] leading-relaxed">{t.depots.body}</p>
           </div>
-          {/* Sıralama: Gebze, İzmir, Ümraniye — Content/UX Pass 01'de sitedeki tüm
-              lokasyon listeleri için sabitlenen sıra (bkz. LandingPage). "featured"
-              (Ana Depo rozeti + lg:col-span-2) Ümraniye'de kalır — bu sıralamadan
-              bağımsız, gerçek bir durum (Ümraniye merkez/ana depo). */}
-          <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-6 mb-10">
-            {t.depots.items.map(({ label, name, city, address, coverage, highlights, featured }: { label: string; name: string; city: string; address: string; coverage: string; highlights: string[]; featured: boolean }) => (
-              <div
-                key={name}
-                className={`rounded-xl p-7 transition-all ${
-                  featured
-                    ? "lg:col-span-2 border border-[#1B3A8F]/30 bg-[#1B3A8F]/[0.03] shadow-[0_20px_50px_rgba(27,58,143,0.12)] hover:border-[#1B3A8F]/50 hover:shadow-xl"
-                    : "border border-slate-200 hover:border-[#1B3A8F]/30 hover:shadow-lg"
-                }`}
-              >
-                <div className="flex items-start justify-between mb-5">
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <span className="text-[10px] font-bold uppercase tracking-widest text-[#1B3A8F]">{label} {t.depots.operationWord}</span>
-                      {featured && (
-                        <span className="text-[9px] font-black uppercase tracking-widest text-white bg-[#1B3A8F] px-2 py-0.5 rounded-full">{t.depots.mainBadge}</span>
-                      )}
-                    </div>
-                    <h3 className={`font-black text-slate-900 mt-1 ${featured ? "text-[19px]" : "text-[17px]"}`}>{name}</h3>
-                    <p className="text-slate-400 text-[13px] mt-0.5">{city}</p>
-                  </div>
-                  <div className={`rounded-xl border flex items-center justify-center shrink-0 ${featured ? "w-11 h-11 bg-[#1B3A8F] border-[#1B3A8F]" : "w-10 h-10 bg-[#1B3A8F]/[0.08] border-[#1B3A8F]/[0.12]"}`}>
-                    <MapPin className={`w-5 h-5 ${featured ? "text-white" : "text-[#1B3A8F]"}`} />
-                  </div>
+
+          <div className="relative grid md:grid-cols-3 gap-x-10 lg:gap-x-16 gap-y-14">
+            <div className="hidden md:block absolute top-[7px] left-0 right-0 h-px bg-slate-200" aria-hidden="true" />
+            {t.depots.items.map(({ title, city, address, body, central, facts }: { title: string; city: string; address: string; body: string; central: boolean; facts: string[] }) => (
+              <div key={title} className="relative">
+                <div className="flex items-center gap-2 mb-5">
+                  <MapPin className="w-3.5 h-3.5 text-[#1B3A8F]/50 shrink-0 relative z-10 bg-white" />
+                  <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-400">{city}</span>
+                  {central && (
+                    <span className="text-[10px] font-black uppercase tracking-[0.15em] text-[#1B3A8F]">· {t.depots.centralTag}</span>
+                  )}
                 </div>
-                <p className="text-slate-500 text-[13px] mb-4 leading-relaxed">{address}</p>
-                <p className="text-slate-500 text-[13px] leading-relaxed mb-5 border-t border-slate-100 pt-4">{coverage}</p>
-                <div className="space-y-2">
-                  {highlights.map((h: string) => (
-                    <div key={h} className="flex items-center gap-2.5">
-                      <div className="w-1.5 h-1.5 rounded-full bg-[#1B3A8F] shrink-0" />
-                      <span className="text-[13px] text-slate-700">{h}</span>
-                    </div>
-                  ))}
+                <h3 className="font-black text-slate-900 text-xl tracking-tight">{title}</h3>
+                <p className="text-slate-600 text-[14px] leading-relaxed mt-4">{body}</p>
+                <div className="mt-5 pt-4 border-t border-slate-100">
+                  <p className="text-slate-400 text-[12.5px] leading-relaxed">{address}</p>
+                  {facts.length > 0 && (
+                    <p className="text-[12.5px] text-[#1B3A8F] font-semibold mt-2.5">{facts.join(" · ")}</p>
+                  )}
                 </div>
               </div>
             ))}
           </div>
-          <div className="bg-[#1B3A8F]/[0.05] border border-[#1B3A8F]/[0.12] rounded-xl px-8 py-6 flex flex-col sm:flex-row items-center gap-6 justify-between">
-            <div>
-              <div className="text-[15px] font-bold text-slate-900">{t.depots.banner.heading}</div>
-              <p className="text-slate-500 text-[13.5px] mt-1">{t.depots.banner.body}</p>
+
+          <div className="mt-16 md:mt-20 pt-10 border-t border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+            <div className="max-w-xl">
+              <div className="text-lg font-bold text-slate-900">{t.depots.banner.heading}</div>
+              <p className="text-slate-500 text-[14px] mt-1.5 leading-relaxed">{t.depots.banner.body}</p>
             </div>
-            <div className="shrink-0 text-center">
-              <div className="text-4xl font-black text-[#1B3A8F]">{t.depots.banner.statValue}</div>
-              <div className="text-[11px] text-[#1B3A8F] font-bold uppercase tracking-wide mt-1">{t.depots.banner.statLabel}</div>
+            <div className="flex items-baseline gap-2 shrink-0">
+              <span className="text-3xl font-black text-[#1B3A8F] tabular-nums">{t.depots.banner.statValue}</span>
+              <span className="text-[11px] text-slate-500 uppercase tracking-wide font-bold">{t.depots.banner.statLabel}</span>
             </div>
           </div>
         </div>
