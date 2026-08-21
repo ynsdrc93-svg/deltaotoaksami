@@ -5,9 +5,11 @@ import { useLang, routeFor, type Lang, type RouteKey } from "@/lib/i18n";
 
 // "Private Label" başlığı kaldırıldı (kullanıcı kararı, Content/UX Pass 01) —
 // SPART kendi marka/ürün hedefi olarak kalıyor, yalnızca üst başlık gitti.
-// GROUPAUTO Türkiye'ye ait resmi, temiz bir rozet/ikon asset'i repo'da
-// bulunamadı (yalnızca etkinlik fotoğrafları mevcuttu) — bu yüzden
-// eklenmedi; bkz. görev raporu "eksik asset" notu.
+// GROUPAUTO Türkiye üyelik rozeti: "Groupauto Logo Types-01.png" kaynağından
+// (kullanıcı sağladı) — trim edilip webp'e dönüştürüldü, sanat değiştirilmedi.
+// Kendi ışık/koyu yarımlarıyla zaten görsel bir çerçeve taşıdığı için ek bir
+// kutu/border eklenmedi; Sertifikalar sütununun sosyal medya bloğuyla aynı
+// ayraçlı alt-bölümde, ondan hemen önce duruyor.
 // "SPART" başlığı da kaldırıldı (Desktop Feedback Round) — logo tek başına,
 // başlıksız duruyor; hedef/link (routeFor("spart")) DEĞİŞMEDİ.
 //
@@ -47,6 +49,7 @@ const T = {
   },
   rights: { tr: "© 2026 Delta Oto. Tüm hakları saklıdır.", en: "© 2026 Delta Oto. All rights reserved." },
   established: { tr: "Delta Oto · Kuruluş 1976", en: "Delta Oto · Established 1976" },
+  groupautoMember: { tr: "GROUPAUTO Türkiye Üyesi", en: "GROUPAUTO Türkiye Member" },
 } satisfies Record<string, Record<Lang, string>>;
 
 export function SiteFooter() {
@@ -122,22 +125,34 @@ export function SiteFooter() {
             <p className="text-xs text-gray-500 leading-relaxed max-w-xs">
               {T.certsBody[lang]}
             </p>
-            {SOCIAL_LINKS.length > 0 && (
-              <div className="flex items-center gap-2 mt-7 pt-6 border-t border-white/5">
-                {SOCIAL_LINKS.map(({ label, href, Icon }) => (
-                  <a
-                    key={label}
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={label}
-                    className="w-8 h-8 rounded-full flex items-center justify-center text-gray-500 hover:text-white hover:bg-white/5 transition-all duration-200"
-                  >
-                    <Icon className="w-4 h-4" strokeWidth={1.75} />
-                  </a>
-                ))}
+            <div className="mt-7 pt-6 border-t border-white/5">
+              <div className="flex items-center gap-3 mb-5">
+                <img
+                  src="/images/groupauto-turkiye-badge.webp"
+                  alt="GROUPAUTO Türkiye"
+                  width={400}
+                  height={199}
+                  className="h-8 w-auto shrink-0 rounded-[3px]"
+                />
+                <span className="text-[12.5px] text-gray-300 font-semibold leading-tight">{T.groupautoMember[lang]}</span>
               </div>
-            )}
+              {SOCIAL_LINKS.length > 0 && (
+                <div className="flex items-center gap-2">
+                  {SOCIAL_LINKS.map(({ label, href, Icon }) => (
+                    <a
+                      key={label}
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={label}
+                      className="w-8 h-8 rounded-full flex items-center justify-center text-gray-500 hover:text-white hover:bg-white/5 transition-all duration-200"
+                    >
+                      <Icon className="w-4 h-4" strokeWidth={1.75} />
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
           </div>
 
         </div>

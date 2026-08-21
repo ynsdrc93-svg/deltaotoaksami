@@ -562,19 +562,14 @@ export function LandingPage() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
-            {/* NOT: GROUPAUTO Türkiye logosu artık ikinci kez talep edildi
-                ancak yüklenen dosyalar arasında yine bulunamadı (uploads
-                dizini iki ayrı turda kontrol edildi — tek adaylar marka-parça
-                logoları paketi ve GROUPAUTO ile ilgisiz eski bir etkinlik
-                fotoğrafları arşiviydi) — bkz. görev raporu. Sayfadaki TÜM
-                metin içeriği GROUPAUTO Türkiye'ye güncellendi; alt metni de
-                (kullanıcının "sıfır görünür International" talimatı gereği)
-                Türkiye'ye çevrildi, ancak logo GÖRSELİ hâlâ eski
-                (International) — kutunun kendi baskılı sanatını değiştirmek
-                gerçek asset olmadan mümkün değil, doğru dosya sağlandığında
-                yalnızca aşağıdaki logoSrc'nin değişmesi yeterli. */}
+            {/* GROUPAUTO Türkiye logosu: gatr.png kaynağından (kullanıcı
+                sağladı) — trim edilip küçük bir kenar boşluğuyla webp'e
+                dönüştürüldü, sanat yeniden çizilmedi/bozulmadı. Zaten beyaz-
+                negatif olarak geldiği için doğrudan panelin lacivert
+                zemininde duruyor, Opar'ın beyaz SVG'siyle birebir aynı
+                muamele (kutu/chip/border yok, ortak h-11 hizalama bandı). */}
             {[
-              { data: t.partnership.groupauto, logoSrc: "/images/groupauto-international-logo.webp", logoAlt: "GROUPAUTO Türkiye", logoW: 900, logoH: 181, refClass: "do-reveal do-d1" },
+              { data: t.partnership.groupauto, logoSrc: "/images/groupauto-turkiye-logo.webp", logoAlt: "GROUPAUTO Türkiye", logoW: 900, logoH: 183, refClass: "do-reveal do-d1" },
               { data: t.partnership.opar, logoSrc: "/images/opar-logo-white.svg", logoAlt: "Opar", logoW: 849, logoH: 341, refClass: "do-reveal do-d2" },
             ].map(({ data, logoSrc, logoAlt, logoW, logoH, refClass }) => (
               <div
