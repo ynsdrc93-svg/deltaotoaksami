@@ -459,7 +459,7 @@ export function IletisimPage() {
             {t.departments.list.map(({ dept, lines, info, hours, email }, i) => {
               const Icon = DEPT_ICONS[i];
               return (
-                <div key={dept} className="bg-white border border-slate-200 rounded-xl p-6 hover:border-[#1B3A8F]/30 hover:shadow-md transition-all flex flex-col">
+                <div key={dept} ref={reveal} className={`do-reveal do-d${(i % 4) + 1} bg-white border border-slate-200 rounded-xl p-6 hover:border-[#1B3A8F]/30 hover:shadow-md transition-all flex flex-col`}>
                   <div className="w-10 h-10 bg-[#1B3A8F]/[0.08] rounded-xl flex items-center justify-center mb-4">
                     <Icon className="w-5 h-5 text-[#1B3A8F]" />
                   </div>
@@ -642,12 +642,13 @@ export function IletisimPage() {
             <p className="text-white/55 mt-3 text-[15px]">{t.locations.body}</p>
           </div>
           <div className="grid md:grid-cols-3 gap-5">
-            {t.locations.list.map((loc) => {
+            {t.locations.list.map((loc, i) => {
               const isPrimary = Boolean(loc.phone);
               return (
                 <div
                   key={loc.name}
-                  className={`do-card bg-white/[0.08] border rounded-xl p-7 ${isPrimary ? "border-[#7d9bea]/40" : "border-white/[0.12]"}`}
+                  ref={reveal}
+                  className={`do-reveal do-d${i + 1} do-card bg-white/[0.08] border rounded-xl p-7 ${isPrimary ? "border-[#7d9bea]/40" : "border-white/[0.12]"}`}
                 >
                   <div className="flex items-start justify-between mb-4">
                     <div>

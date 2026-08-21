@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation } from "wouter";
+import { ChevronDown } from "lucide-react";
 import { useEscapeKey } from "@/hooks/use-motion";
 import { otherLanguageHref, type Lang } from "@/lib/i18n";
 
@@ -109,8 +110,13 @@ function DesktopDropdown() {
           içindeki dairesel bayraktı (Visual Polish Round §1): border
           tamamen kaldırıldı, bayrak artık SPART'ın header'daki muamelesiyle
           aynı mantıkla ("kutu değil, kendisi") sadece hover'da hafif bir
-          zemin kazanıyor. Ok/chevron yok — bayrak tek başına yeterince
-          okunaklı ve tıklanabilir hissettiriyor. */}
+          zemin kazanıyor. Header Rebalance Round: bayrak artık tek başına
+          yeterince "tıklanabilir" okunmuyordu (kullanıcı geri bildirimi) —
+          minik, soluk bir chevron eklendi (yalnızca dropdown hissi vermek
+          için, ok bayraktan daha küçük/pasif kalıyor ki sade duruş
+          bozulmasın). Çerçeve/border YİNE eklenmedi — kullanıcı "çerçeve
+          çok basit görünüyorsa kullanma" dedi, dolayısıyla sade zemin
+          değişimi (hover/açık) tek görsel gösterge olarak kalıyor. */}
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
@@ -118,11 +124,12 @@ function DesktopDropdown() {
         aria-expanded={open}
         title={active.ariaLabel}
         aria-label={`${active.ariaLabel === "Türkçe" ? "Dil" : "Language"}: ${active.ariaLabel}`}
-        className={`flex items-center justify-center p-1.5 rounded-[3px] transition-colors duration-150 ${
+        className={`flex items-center gap-1 justify-center py-1.5 pl-1.5 pr-1 rounded-[3px] transition-colors duration-150 ${
           open ? "bg-[#1B3A8F]/[0.07]" : "hover:bg-slate-100/80"
         }`}
       >
         <active.Flag className="w-[22px] h-[15px] shrink-0" />
+        <ChevronDown className={`w-3 h-3 text-slate-400 shrink-0 transition-transform duration-150 ${open ? "rotate-180" : ""}`} />
       </button>
 
       <div

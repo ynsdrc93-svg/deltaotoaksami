@@ -65,16 +65,20 @@ export function SiteFooter() {
                 farklı, footer'a özel bir asset (origin/main / 700c053'ten
                 alındı). Header'daki kampanya logosu DEĞİŞMEDİ. Boyut duyarlı:
                 masaüstünde (md+, footer'ın kendi 3 kolonlu grid eşiğiyle
-                aynı) 70px — birincil kurumsal marka olarak güçlü bir
-                varlık. Mobilde aynı yükseklik genişlik/en-boy oranı
-                nedeniyle (1152:240 ≈ 4.8:1) 390px'lik görünümü neredeyse
-                uçtan uca kaplayıp orantısız dururdu — 59px'te kalıyor. */}
+                aynı) — birincil kurumsal marka olarak güçlü bir varlık.
+                Header/Footer Design Pass: 70px → 76px, kompozisyonda daha
+                güçlü dursun diye ölçülü bir artış (kullanıcı talebi) —
+                opaklık da 85%→90%'a çıkarıldı, çok koyu zeminde biraz daha
+                net okunsun diye. Mobilde aynı yükseklik genişlik/en-boy
+                oranı nedeniyle (1152:240 ≈ 4.8:1) 390px'lik görünümü
+                neredeyse uçtan uca kaplayıp orantısız dururdu — 64px'te
+                (eskiden 59px) daha ölçülü bir artışla kalıyor. */}
             <img
               src="/images/delta-oto-logo-classic.webp"
               alt="Delta Oto"
               width={1152}
               height={240}
-              className="h-[59px] md:h-[70px] w-auto do-logo-invert mb-8 opacity-85"
+              className="h-[64px] md:h-[76px] w-auto do-logo-invert mb-8 opacity-90"
             />
             <ul className="space-y-4 text-sm text-gray-500">
               <li className="flex items-start gap-3">
@@ -121,8 +125,14 @@ export function SiteFooter() {
                 </div>
               ))}
             </div>
+            {/* Footer Revizyonu (bu tur): ikonlar w-8→w-9, w-4→w-[18px] —
+                sertifika kutularının (w-20 h-16) hemen altında artık daha
+                "kasıtlı" bir ağırlıkla duruyor, önceki boyut biraz fazla
+                ürkek/silik kalıyordu. Konum/sıra DEĞİŞMEDİ — hiyerarşi hâlâ
+                kullanıcının istediği gibi: sertifikalar → sosyal → ayraç →
+                GroupAuto Türkiye üyeliği (en sonda). */}
             {SOCIAL_LINKS.length > 0 && (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2.5">
                 {SOCIAL_LINKS.map(({ label, href, Icon }) => (
                   <a
                     key={label}
@@ -130,20 +140,23 @@ export function SiteFooter() {
                     target="_blank"
                     rel="noopener noreferrer"
                     aria-label={label}
-                    className="w-8 h-8 rounded-full flex items-center justify-center text-gray-500 hover:text-white hover:bg-white/5 transition-all duration-200"
+                    className="w-9 h-9 rounded-full flex items-center justify-center text-gray-500 hover:text-white hover:bg-white/5 transition-all duration-200"
                   >
-                    <Icon className="w-4 h-4" strokeWidth={1.75} />
+                    <Icon className="w-[18px] h-[18px]" strokeWidth={1.75} />
                   </a>
                 ))}
               </div>
             )}
+            {/* GroupAuto Türkiye rozeti (bu tur): h-10 → h-12 — kullanıcı
+                talebiyle biraz daha büyütüldü, hâlâ ana Delta logosunun
+                (64-76px) belirgin şekilde altında, baskın değil. */}
             <div className="mt-6 pt-6 border-t border-white/5 flex items-center gap-3">
               <img
                 src="/images/groupauto-turkiye-badge.webp"
                 alt="GROUPAUTO Türkiye"
                 width={400}
                 height={199}
-                className="h-10 w-auto shrink-0 rounded-[3px]"
+                className="h-12 w-auto shrink-0 rounded-[3px]"
               />
               <span className="text-[12.5px] text-gray-300 font-semibold leading-tight">{T.groupautoMember[lang]}</span>
             </div>

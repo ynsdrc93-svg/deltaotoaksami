@@ -61,9 +61,12 @@ export function SiteHeader() {
             />
           </Link>
 
-          {/* Sağ grup: nav + dil + B2B Portal butonu */}
-          <div className="flex items-center gap-3 xl:gap-5 shrink-0">
-            <nav className="hidden xl:flex items-center gap-4 xl:gap-6 text-[13.5px] font-medium tracking-tight text-slate-600">
+          {/* Sağ grup: nav + dil + B2B Portal butonu — Header Rebalance
+              Round: eski gap-3/gap-4 sıkışık duruyordu (kullanıcı geri
+              bildirimi), gap-4/gap-5'e çıkarıldı — daha kurumsal, daha az
+              "yığılmış" bir sağ küme. */}
+          <div className="flex items-center gap-4 xl:gap-6 shrink-0">
+            <nav className="hidden xl:flex items-center gap-5 xl:gap-7 text-[13.5px] font-medium tracking-tight text-slate-600">
               {NAV.map(({ key, label }) => {
                 const href = routeFor(key, lang);
                 const isActive = location === href;
@@ -101,7 +104,7 @@ export function SiteHeader() {
               href="https://b2b.parcabul.com.tr/login.aspx"
               target="_blank"
               rel="noopener noreferrer"
-              className="hidden xl:flex items-center justify-center gap-1.5 px-4 h-9 rounded-[4px] bg-[#1B3A8F] hover:bg-[#2547B5] text-white text-[11px] font-bold tracking-[0.03em] transition-colors group whitespace-nowrap shrink-0"
+              className="hidden xl:flex items-center justify-center gap-1.5 px-5 h-9 rounded-[4px] bg-[#1B3A8F] hover:bg-[#2547B5] text-white text-[11px] font-bold tracking-[0.03em] transition-colors group whitespace-nowrap shrink-0"
             >
               {B2B_LABEL[lang].toUpperCase()}
               <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />

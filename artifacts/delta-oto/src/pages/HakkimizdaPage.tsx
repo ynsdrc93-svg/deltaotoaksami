@@ -564,13 +564,15 @@ export function HakkimizdaPage() {
       {/* KURUMSAL RAKAMLAR — light */}
       <section className="bg-white py-20 border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="mb-12">
+          <div ref={reveal} className="do-reveal mb-12">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">{t.facts.eyebrow}</span>
             <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-2 tracking-tight">{t.facts.heading}</h2>
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
-            {FACT_STATS.map((stat) => (
-              <StatCard key={stat.target} {...stat} />
+            {FACT_STATS.map((stat, i) => (
+              <div key={stat.target} ref={reveal} className={`do-reveal ${STAGGER_CLASSES[i] ?? ""}`}>
+                <StatCard {...stat} />
+              </div>
             ))}
           </div>
         </div>
@@ -743,11 +745,11 @@ export function HakkimizdaPage() {
       {/* KAPANIŞ CTA — navy (footer öncesi son bölüm daima #1B3A8F olmalı; ESG'nin rengi değişmedi, araya yeni bant eklendi) */}
       <section className="bg-[#1B3A8F] py-16 text-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
-          <div>
+          <div ref={reveal} className="do-reveal-left">
             <h2 className="text-3xl md:text-4xl font-black tracking-tight">{t.cta.heading}</h2>
             <p className="text-white/75 text-sm mt-2 max-w-lg">{t.cta.body}</p>
           </div>
-          <div className="flex gap-4 shrink-0">
+          <div ref={reveal} className="do-reveal-right flex gap-4 shrink-0">
             <a href="https://b2b.parcabul.com.tr/login.aspx" target="_blank" rel="noopener noreferrer" className="bg-white text-[#1B3A8F] font-bold px-7 py-3.5 rounded-md hover:bg-gray-100 transition-colors text-sm inline-flex items-center gap-2 group">
               {t.cta.b2b}
               <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />

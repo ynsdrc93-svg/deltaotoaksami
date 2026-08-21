@@ -343,9 +343,11 @@ export function LandingPage() {
             />
           </Link>
 
-          {/* Sağ grup: nav + dil + B2B Portal butonu */}
-          <div className="flex items-center gap-3 xl:gap-5 shrink-0">
-            <nav className="hidden xl:flex items-center gap-4 xl:gap-6 text-[13.5px] font-medium tracking-tight text-slate-600">
+          {/* Sağ grup: nav + dil + B2B Portal butonu — Header Rebalance Round:
+              bkz. SiteHeader.tsx'teki birebir aynı gerekçe, gap-3/gap-4 →
+              gap-4/gap-5. */}
+          <div className="flex items-center gap-4 xl:gap-6 shrink-0">
+            <nav className="hidden xl:flex items-center gap-5 xl:gap-7 text-[13.5px] font-medium tracking-tight text-slate-600">
               {NAV_LINKS.map(({ key, label }) => (
                 <Link key={key} href={routeFor(key, lang)} className="do-nav-link whitespace-nowrap hover:text-[#1B3A8F] transition-colors duration-200">{label[lang]}</Link>
               ))}
@@ -362,7 +364,7 @@ export function LandingPage() {
                 kaldırıldı, B2B artık tek başına duran kompakt bir buton
                 (px-4 h-9, text-[11px]) — eski dikey SPART/B2B stack'i
                 gitti. */}
-            <a href="https://b2b.parcabul.com.tr/login.aspx" target="_blank" rel="noopener noreferrer" className="hidden xl:flex items-center justify-center gap-1.5 px-4 h-9 rounded-[4px] bg-[#1B3A8F] hover:bg-[#2547B5] text-white text-[11px] font-bold tracking-[0.03em] transition-colors group whitespace-nowrap shrink-0">
+            <a href="https://b2b.parcabul.com.tr/login.aspx" target="_blank" rel="noopener noreferrer" className="hidden xl:flex items-center justify-center gap-1.5 px-5 h-9 rounded-[4px] bg-[#1B3A8F] hover:bg-[#2547B5] text-white text-[11px] font-bold tracking-[0.03em] transition-colors group whitespace-nowrap shrink-0">
               {t.hero.ctaB2B.toUpperCase()}
               <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
             </a>
@@ -532,9 +534,9 @@ export function LandingPage() {
           border yok (bkz. ortak h-11 hizalama bandı, görsel çerçeve değil).
           Opar .ai kaynağından pdftocairo ile çıkarılmış temiz vektör SVG'nin
           (yalnızca 3 path, rasterize değil) path fill'leri beyaza boyandı.
-          GROUPAUTO Türkiye logosu bu turda talep edildi ama uploads'ta
-          bulunamadı — mevcut (International) logo geçici olarak korunuyor,
-          bkz. .map() dizisinin hemen üstündeki not. */}
+          GROUPAUTO Türkiye logosu (gatr.png kaynağından, trim + webp) daha
+          sonraki bir turda sağlandı ve eski International wordmark'ın
+          yerine geçti — bkz. .map() dizisindeki logoSrc. */}
       <section className="py-20 md:py-28 relative overflow-hidden text-white" style={{ background: "linear-gradient(135deg, #1B3A8F 0%, #14275c 100%)" }}>
         <div className="absolute inset-0 do-grid-bg opacity-40"></div>
         <div className="absolute right-0 top-0 w-1/2 h-full bg-gradient-to-l from-white/5 to-transparent pointer-events-none"></div>
@@ -562,8 +564,8 @@ export function LandingPage() {
                 zemininde duruyor, Opar'ın beyaz SVG'siyle birebir aynı
                 muamele (kutu/chip/border yok, ortak h-11 hizalama bandı). */}
             {[
-              { data: t.partnership.groupauto, logoSrc: "/images/groupauto-turkiye-logo.webp", logoAlt: "GROUPAUTO Türkiye", logoW: 900, logoH: 183, refClass: "do-reveal do-d1" },
-              { data: t.partnership.opar, logoSrc: "/images/opar-logo-white.svg", logoAlt: "Opar", logoW: 849, logoH: 341, refClass: "do-reveal do-d2" },
+              { data: t.partnership.groupauto, logoSrc: "/images/groupauto-turkiye-logo.webp", logoAlt: "GROUPAUTO Türkiye", logoW: 900, logoH: 183, refClass: "do-reveal-left" },
+              { data: t.partnership.opar, logoSrc: "/images/opar-logo-white.svg", logoAlt: "Opar", logoW: 849, logoH: 341, refClass: "do-reveal-right" },
             ].map(({ data, logoSrc, logoAlt, logoW, logoH, refClass }) => (
               <div
                 key={data.title}
@@ -632,7 +634,7 @@ export function LandingPage() {
 
             <div
               ref={(el) => { ref(el); mapSectionRef.current = el; }}
-              className="do-reveal do-d2 lg:w-[56%] w-full relative"
+              className="do-reveal-right lg:w-[56%] w-full relative"
               style={{ aspectRatio: "1050 / 585" }}
             >
               {mapReady && (
@@ -733,7 +735,7 @@ export function LandingPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div
               ref={ref}
-              className="do-reveal do-card bg-[#f4f6f9] border border-slate-200 rounded-xl p-10 group relative overflow-hidden"
+              className="do-reveal-left do-card bg-[#f4f6f9] border border-slate-200 rounded-xl p-10 group relative overflow-hidden"
             >
               <div className="absolute top-0 right-0 w-32 h-32 bg-[#1B3A8F]/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-500"></div>
               <div className="flex items-center gap-2 mb-6">
@@ -750,7 +752,7 @@ export function LandingPage() {
 
             <div
               ref={ref}
-              className="do-reveal do-d2 do-card bg-[#f4f6f9] border border-slate-200 rounded-xl p-10 group relative overflow-hidden"
+              className="do-reveal-right do-card bg-[#f4f6f9] border border-slate-200 rounded-xl p-10 group relative overflow-hidden"
             >
               <div className="absolute top-0 right-0 w-32 h-32 bg-[#1B3A8F]/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-500"></div>
               <div className="flex items-center gap-2 mb-6">

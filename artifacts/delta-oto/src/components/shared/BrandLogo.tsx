@@ -39,7 +39,10 @@ const SIZES: Record<BrandLogoSize, SizeStyle> = {
     light: "do-card bg-white rounded-2xl flex items-center justify-center h-16 px-2 py-2 sm:h-32 sm:px-4 sm:py-6 lg:h-36 shadow-sm",
     dark: "do-card bg-[#0e1016] border border-white/10 rounded-2xl flex items-center justify-center h-16 px-2 py-2 sm:h-32 sm:px-4 sm:py-6 lg:h-36 shadow-sm",
     img: "max-h-8 sm:max-h-12 lg:max-h-16 w-auto h-auto max-w-full object-contain",
-    textSize: "text-[15px]",
+    // Optical Balance Round: doğrulanmış görseli olmayan tek marka (Taifun)
+    // bu tipografik yer tutucuyu kullanıyor — komşu logo görsellerinin
+    // yanında "ezik" durmasın diye 15px→17px, tracking-tight→normal.
+    textSize: "text-[17px] tracking-normal",
     textHover: "",
   },
   /** Tedarikçiler kategori gezgininin Aktif Ürün Doku'sundaki marka alanı
@@ -55,14 +58,14 @@ const SIZES: Record<BrandLogoSize, SizeStyle> = {
     light: "border border-slate-200 rounded-lg bg-white flex items-center justify-center h-16 px-3 hover:border-[#1B3A8F]/30 transition-colors",
     dark: "border border-white/10 rounded-lg bg-[#0e1016] flex items-center justify-center h-16 px-3 hover:border-white/25 transition-colors",
     img: "max-h-8 max-w-full w-auto h-auto object-contain",
-    textSize: "text-[11px]",
+    textSize: "text-[11px] tracking-tight",
     textHover: "",
   },
   strip: {
     light: "group relative shrink-0 mx-2.5 w-[170px] bg-white rounded-lg h-16 px-4 flex items-center justify-center shadow-sm hover:shadow-lg hover:z-10 transition-shadow duration-300",
     dark: "group relative shrink-0 mx-2.5 w-[170px] bg-[#0e1016] border border-white/10 rounded-lg h-16 px-4 flex items-center justify-center shadow-sm hover:shadow-lg hover:z-10 transition-shadow duration-300",
     img: "max-h-7 max-w-[110px] w-auto h-auto object-contain group-hover:scale-125 transition-transform duration-300",
-    textSize: "text-[11px]",
+    textSize: "text-[11px] tracking-tight",
     textHover: "group-hover:scale-110 transition-transform duration-300",
   },
 };
@@ -106,7 +109,7 @@ export function BrandLogo({
       style={scaleStyle}
     />
   ) : (
-    <span className={`${textColor} font-black text-center leading-tight tracking-tight px-2 ${style.textSize} ${style.textHover}`}>
+    <span className={`${textColor} font-black text-center leading-tight px-2 ${style.textSize} ${style.textHover}`}>
       {brand.name}
     </span>
   );

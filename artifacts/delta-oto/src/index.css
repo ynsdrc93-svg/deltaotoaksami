@@ -100,6 +100,17 @@
 }
 .do-reveal-right.do-in { opacity: 1; transform: none; }
 
+/* Tek seferlik "çizilme" hissi — sol kenardan sağa doğru büyüyen ince
+   bağlantı çizgisi (Operasyon: hub & spoke ağ kompozisyonu). do-route-line'ın
+   (SVG stroke-dashoffset) aksine düz bir <div> için scaleX kullanır — ayrı
+   bir path/dasharray hesabı gerektirmez, aynı do-in tetikleyicisiyle çalışır. */
+.do-line-grow {
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 0.9s cubic-bezier(.22,1,.36,1);
+}
+.do-line-grow.do-in { transform: scaleX(1); }
+
 /* Cards */
 .do-card {
   transition: transform 0.3s cubic-bezier(.22,1,.36,1), box-shadow 0.3s ease;
@@ -394,7 +405,7 @@
   .do-beam, .do-beam-delay { animation: none; opacity: 0; }
   .do-ticker-inner, .do-ticker-inner-reverse { animation: none; }
   .do-card-beam { display: none; }
-  .do-reveal, .do-reveal-left, .do-reveal-right {
+  .do-reveal, .do-reveal-left, .do-reveal-right, .do-line-grow {
     opacity: 1 !important;
     transform: none !important;
     transition: none !important;

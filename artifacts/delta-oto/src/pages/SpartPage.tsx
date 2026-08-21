@@ -420,7 +420,8 @@ export function SpartPage() {
               return (
                 <div
                   key={cat.title}
-                  className="bg-white border border-slate-200 rounded-xl p-6 hover:border-[#1B3A8F]/30 hover:shadow-md transition-all group"
+                  ref={reveal}
+                  className={`do-reveal do-d${(i % 4) + 1} bg-white border border-slate-200 rounded-xl p-6 hover:border-[#1B3A8F]/30 hover:shadow-md transition-all group`}
                 >
                   <div className="flex items-start justify-between mb-4">
                     <div className="w-12 h-12 bg-[#1B3A8F]/[0.08] rounded-xl flex items-center justify-center text-[#1B3A8F] group-hover:bg-[#1B3A8F] group-hover:text-white transition-colors">
@@ -458,7 +459,8 @@ export function SpartPage() {
               return (
                 <div
                   key={q.title}
-                  className="bg-white/[0.07] border border-white/[0.12] rounded-xl p-7 hover:bg-white/[0.11] transition-colors"
+                  ref={reveal}
+                  className={`do-reveal ${i % 2 === 1 ? "do-d1" : ""} bg-white/[0.07] border border-white/[0.12] rounded-xl p-7 hover:bg-white/[0.11] transition-colors`}
                 >
                   <div className="w-11 h-11 rounded-xl bg-white/10 border border-white/15 flex items-center justify-center mb-5">
                     <Icon className="w-5 h-5" />
@@ -531,7 +533,8 @@ export function SpartPage() {
               return (
                 <div
                   key={b.title}
-                  className="do-card bg-white border border-slate-200 rounded-xl p-7 group"
+                  ref={reveal}
+                  className={`do-reveal do-d${(i % 4) + 1} do-card bg-white border border-slate-200 rounded-xl p-7 group`}
                 >
                   <div className="w-11 h-11 rounded-xl bg-[#1B3A8F]/[0.08] flex items-center justify-center text-[#1B3A8F] group-hover:bg-[#1B3A8F] group-hover:text-white transition-colors mb-5">
                     <Icon className="w-5 h-5" />
