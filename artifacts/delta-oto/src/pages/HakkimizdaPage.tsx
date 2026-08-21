@@ -88,12 +88,12 @@ const content = {
   tr: {
     meta: {
       title: "Hakkımızda — 50 Yıllık Kurumsal Birikim | Delta Oto",
-      description: "Delta Oto'nun 1976'dan bugüne kurumsal tarihçesi, değer çerçevesi, iş birimleri ve Groupauto International üyeliği; 118 ülkede küresel tedarik gücü.",
+      description: "Delta Oto'nun 1976'dan bugüne kurumsal tarihçesi, değer çerçevesi, iş birimleri ve GROUPAUTO Türkiye üyeliği; 118 ülkede küresel tedarik gücü.",
     },
     hero: {
       eyebrow: "Kuruluş 1976 · Delta Oto",
       title: ["YARIM ASRIN", "KURUMSAL", "BİRİKİMİ"],
-      body: "1976'dan bu yana otomotiv yedek parça dağıtım sektöründe faaliyet gösteren Delta Oto; güçlü tedarik altyapısı, geniş marka portföyü ve Groupauto International üyeliğiyle sektörün yapıcı güçlerinden biri olmaya devam etmektedir.",
+      body: "1976'dan bu yana otomotiv yedek parça dağıtım sektöründe faaliyet gösteren Delta Oto; güçlü tedarik altyapısı, geniş marka portföyü ve GROUPAUTO Türkiye üyeliğiyle sektörün yapıcı güçlerinden biri olmaya devam etmektedir.",
       cta: "Operasyon Altyapımızı İnceleyin",
     },
     facts: {
@@ -101,7 +101,7 @@ const content = {
       heading: "Kurumsal Ölçek ve Erişim",
       items: [
         { label: "Kuruluş Yılı", sub: "50 yıl sektör deneyimi" },
-        { label: "Ülke Ağı", sub: "Groupauto International" },
+        { label: "Ülke Ağı", sub: "GROUPAUTO Türkiye" },
         { label: "Groupauto Üyesi", sub: "Küresel distribütör ağı" },
         { label: "Aktif Marka", sub: "Sürekli güncellenen portföy" },
       ],
@@ -120,7 +120,7 @@ const content = {
         { label: "Kuruluş", desc: "Ümraniye'de temelleri atılan şirket, otomotiv aftermarket sektörünün kurucu distribütörleri arasında yerini aldı." },
         { label: "Portföy Genişlemesi", desc: "Tedarik ağının derinleşmesiyle birlikte İstanbul bölgesinde lider distribütör konumuna ulaşıldı; ürün kategorileri sistematik biçimde genişletildi." },
         { label: "", desc: "" },
-        { label: "Groupauto International Üyeliği", desc: "Avrupa merkezli bağımsız aftermarket ağına tam üye olunarak küresel tedarik kanallarına, üretici anlaşmalarına ve piyasa bilgisine erişim sağlandı." },
+        { label: "GROUPAUTO Üyeliği", desc: "Avrupa merkezli bağımsız aftermarket ağına tam üye olunarak küresel tedarik kanallarına, üretici anlaşmalarına ve piyasa bilgisine erişim sağlandı." },
         { label: "", desc: "" },
         { label: "Ulusal Lojistik Ağı", desc: "Türkiye'nin 81 iline kesintisiz teslimat kapasitesi kuruldu. Opar Ege bölge operasyonuyla dağıtım coğrafyası İzmir ve Ege'ye yayıldı." },
         { label: "", desc: "" },
@@ -150,9 +150,9 @@ const content = {
       ],
     },
     groupauto: {
-      eyebrow: "Uluslararası Ağ",
-      heading: "Groupauto International Üyesi",
-      body: "Avrupa merkezli Groupauto International ağının Türkiye üyesi sıfatıyla, 118 ülkedeki distribütörler ve küresel üreticilerle doğrudan bağlantı içindeyiz. Bu üyelik; ürün erişimini, tedarik koşullarını ve piyasa bilgisini rakiplerimizin önünde konumlandırır.",
+      eyebrow: "Küresel Ağ",
+      heading: "GROUPAUTO Türkiye Üyeliği",
+      body: "Avrupa merkezli GROUPAUTO ağının Türkiye üyesi sıfatıyla, 118 ülkedeki distribütörler ve küresel üreticilerle doğrudan bağlantı içindeyiz. Bu üyelik; ürün erişimini, tedarik koşullarını ve piyasa bilgisini rakiplerimizin önünde konumlandırır.",
       stats: [["29", "Üye Ağ"], ["71", "Referans Tedarikçi"], ["1.958", "Distribütör"]] as [string, string][],
       exploreLink: "Marka Portföyümüzü İnceleyin",
       benefitsHeading: "Üyeliğin Faydaları",
@@ -186,12 +186,12 @@ const content = {
   en: {
     meta: {
       title: "About Us — 50 Years of Institutional Heritage | Delta Oto",
-      description: "Delta Oto's corporate history, value framework, business units and GROUPAUTO International membership since 1976 — global supply strength across 118 countries.",
+      description: "Delta Oto's corporate history, value framework, business units and GROUPAUTO Türkiye membership since 1976 — global supply strength across 118 countries.",
     },
     hero: {
       eyebrow: "Founded 1976 · Delta Oto",
       title: ["HALF A CENTURY OF", "INSTITUTIONAL", "HERITAGE"],
-      body: "Delta Oto has operated in the automotive spare parts distribution industry since 1976. With a strong supply infrastructure, a broad brand portfolio and its GROUPAUTO International membership, it continues to be one of the industry's constructive forces.",
+      body: "Delta Oto has operated in the automotive spare parts distribution industry since 1976. With a strong supply infrastructure, a broad brand portfolio and its GROUPAUTO Türkiye membership, it continues to be one of the industry's constructive forces.",
       cta: "Explore Our Operations Infrastructure",
     },
     facts: {
@@ -199,7 +199,7 @@ const content = {
       heading: "Corporate Scale and Reach",
       items: [
         { label: "Founding Year", sub: "50 years of industry experience" },
-        { label: "Country Network", sub: "GROUPAUTO International" },
+        { label: "Country Network", sub: "GROUPAUTO Türkiye" },
         { label: "GROUPAUTO Members", sub: "Global distributor network" },
         { label: "Active Brands", sub: "Continuously updated portfolio" },
       ],
@@ -218,7 +218,7 @@ const content = {
         { label: "Founding", desc: "Founded in Ümraniye, the company took its place among the founding distributors of the automotive aftermarket industry." },
         { label: "Portfolio Expansion", desc: "As the supply network deepened, the company reached a leading distributor position in the İstanbul region; product categories were systematically expanded." },
         { label: "", desc: "" },
-        { label: "GROUPAUTO International Membership", desc: "Full membership in the Europe-based independent aftermarket network provided access to global supply channels, manufacturer agreements and market intelligence." },
+        { label: "GROUPAUTO Membership", desc: "Full membership in the Europe-based independent aftermarket network provided access to global supply channels, manufacturer agreements and market intelligence." },
         { label: "", desc: "" },
         { label: "National Logistics Network", desc: "Uninterrupted delivery capacity to all 81 provinces of Turkey was established. With the Opar Aegean regional operation, distribution coverage expanded to İzmir and the Aegean region." },
         { label: "", desc: "" },
@@ -248,9 +248,9 @@ const content = {
       ],
     },
     groupauto: {
-      eyebrow: "International Network",
-      heading: "GROUPAUTO International Member",
-      body: "As the Turkey member of the Europe-based GROUPAUTO International network, we are directly connected with distributors and global manufacturers across 118 countries. This membership puts our product access, supply terms and market intelligence ahead of our competitors.",
+      eyebrow: "Global Network",
+      heading: "GROUPAUTO Türkiye Membership",
+      body: "As the Turkey member of the Europe-based GROUPAUTO network, we are directly connected with distributors and global manufacturers across 118 countries. This membership puts our product access, supply terms and market intelligence ahead of our competitors.",
       stats: [["29", "Members"], ["71", "Referenced Suppliers"], ["1,958", "Distributors"]] as [string, string][],
       exploreLink: "Explore Our Brand Portfolio",
       benefitsHeading: "Benefits of Membership",

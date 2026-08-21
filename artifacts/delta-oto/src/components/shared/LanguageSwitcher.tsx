@@ -3,37 +3,36 @@ import { Link, useLocation } from "wouter";
 import { useEscapeKey } from "@/hooks/use-motion";
 import { otherLanguageHref, type Lang } from "@/lib/i18n";
 
-// Basit/temiz, satır-içi SVG bayraklar (emoji yok, CDN yok) — 16x16
-// viewBox, küçük boyutta (segment kontrolde ~14px) net kalması için
-// abartılı detaydan kaçınıldı.
+// Basit/temiz, satır-içi SVG bayraklar (emoji yok, CDN yok) — 20x14 viewBox,
+// gerçek bayrak en-boy oranına yakın DİKDÖRTGEN kart (Visual Polish Round:
+// eskiden dairesel rozet biçimindeydi, "ucuz/basit" hissi ve gereksiz bir
+// yuvarlaklık taşıyordu — hafif yuvarlatılmış köşeli (rx=1.5) düz bir
+// dikdörtgen daha sade/premium duruyor, gerçek bayrak formuna da daha sadık).
 function TrFlag({ className }: { className?: string }) {
   return (
-    <svg viewBox="0 0 16 16" className={className} aria-hidden="true">
-      <circle cx="8" cy="8" r="8" fill="#E30A17" />
-      <circle cx="6.6" cy="8" r="4.3" fill="#fff" />
-      <circle cx="7.6" cy="8" r="3.5" fill="#E30A17" />
-      <path
-        fill="#fff"
-        d="M10.3 8l1.62-.53-1.0 1.38.01-1.7.99 1.38z"
-      />
+    <svg viewBox="0 0 20 14" className={className} aria-hidden="true">
+      <rect width="20" height="14" rx="1.5" fill="#E30A17" />
+      <circle cx="8.1" cy="7" r="3.7" fill="#fff" />
+      <circle cx="9.1" cy="7" r="2.95" fill="#E30A17" />
+      <path fill="#fff" d="M12.75 7l2.1-.7-1.32 1.8.03-2.2 1.29 1.8z" />
     </svg>
   );
 }
 
 function GbFlag({ className }: { className?: string }) {
   return (
-    <svg viewBox="0 0 16 16" className={className} aria-hidden="true">
+    <svg viewBox="0 0 20 14" className={className} aria-hidden="true">
       <defs>
-        <clipPath id="gb-circle-clip">
-          <circle cx="8" cy="8" r="8" />
+        <clipPath id="gb-rect-clip">
+          <rect width="20" height="14" rx="1.5" />
         </clipPath>
       </defs>
-      <g clipPath="url(#gb-circle-clip)">
-        <rect width="16" height="16" fill="#00247D" />
-        <path d="M0 0L16 16M16 0L0 16" stroke="#fff" strokeWidth="3.2" />
-        <path d="M0 0L16 16M16 0L0 16" stroke="#CF142B" strokeWidth="1.2" />
-        <path d="M8 0V16M0 8H16" stroke="#fff" strokeWidth="5.4" />
-        <path d="M8 0V16M0 8H16" stroke="#CF142B" strokeWidth="2.2" />
+      <g clipPath="url(#gb-rect-clip)">
+        <rect width="20" height="14" fill="#00247D" />
+        <path d="M0 0L20 14M20 0L0 14" stroke="#fff" strokeWidth="2.8" />
+        <path d="M0 0L20 14M20 0L0 14" stroke="#CF142B" strokeWidth="1" />
+        <path d="M10 0V14M0 7H20" stroke="#fff" strokeWidth="4.6" />
+        <path d="M10 0V14M0 7H20" stroke="#CF142B" strokeWidth="1.8" />
       </g>
     </svg>
   );
@@ -64,7 +63,7 @@ function MobileSegmented() {
               active ? "bg-[#1B3A8F]/10 text-[#1B3A8F]" : "text-slate-500 hover:text-[#1B3A8F] hover:bg-slate-50"
             }`}
           >
-            <Flag className="w-4 h-4 shrink-0" />
+            <Flag className="w-[18px] h-3 shrink-0 rounded-[1.5px]" />
             {label}
           </Link>
         );
@@ -106,6 +105,12 @@ function DesktopDropdown() {
 
   return (
     <div ref={rootRef} className="relative shrink-0">
+      {/* Çerçevesiz, dikdörtgen bayrak — eskiden kare+border'lı bir buton
+          içindeki dairesel bayraktı (Visual Polish Round §1): border
+          tamamen kaldırıldı, bayrak artık SPART'ın header'daki muamelesiyle
+          aynı mantıkla ("kutu değil, kendisi") sadece hover'da hafif bir
+          zemin kazanıyor. Ok/chevron yok — bayrak tek başına yeterince
+          okunaklı ve tıklanabilir hissettiriyor. */}
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
@@ -113,16 +118,16 @@ function DesktopDropdown() {
         aria-expanded={open}
         title={active.ariaLabel}
         aria-label={`${active.ariaLabel === "Türkçe" ? "Dil" : "Language"}: ${active.ariaLabel}`}
-        className={`flex items-center gap-1 h-7 w-7 justify-center rounded-md border transition-colors duration-150 ${
-          open ? "border-[#1B3A8F]/40 bg-[#1B3A8F]/[0.06]" : "border-slate-200 hover:border-[#1B3A8F]/30"
+        className={`flex items-center justify-center p-1.5 rounded-[3px] transition-colors duration-150 ${
+          open ? "bg-[#1B3A8F]/[0.07]" : "hover:bg-slate-100/80"
         }`}
       >
-        <active.Flag className="w-4 h-4 shrink-0" />
+        <active.Flag className="w-[22px] h-[15px] shrink-0" />
       </button>
 
       <div
         role="listbox"
-        className={`absolute right-0 top-full mt-1.5 rounded-md border border-slate-200 bg-white shadow-lg shadow-slate-900/[0.08] p-1 transition-all duration-150 origin-top-right z-50 ${
+        className={`absolute right-0 top-full mt-1.5 rounded-md border border-slate-200 bg-white shadow-lg shadow-slate-900/[0.08] p-1.5 transition-all duration-150 origin-top-right z-50 ${
           open ? "opacity-100 scale-100 pointer-events-auto" : "opacity-0 scale-95 pointer-events-none"
         }`}
         aria-hidden={!open}
@@ -134,9 +139,9 @@ function DesktopDropdown() {
           title={other.ariaLabel}
           aria-label={other.ariaLabel}
           onClick={() => setOpen(false)}
-          className="flex items-center justify-center w-7 h-7 rounded text-slate-600 hover:bg-slate-50 transition-colors"
+          className="flex items-center justify-center p-1.5 rounded-[3px] hover:bg-slate-100/80 transition-colors"
         >
-          <other.Flag className="w-4 h-4 shrink-0" />
+          <other.Flag className="w-[22px] h-[15px] shrink-0" />
         </Link>
       </div>
     </div>

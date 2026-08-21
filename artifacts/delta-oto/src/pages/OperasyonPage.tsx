@@ -305,24 +305,27 @@ export function OperasyonPage() {
     <div className="do-site bg-white min-h-screen">
       <SiteHeader />
 
-      {/* HERO — gerçek Delta Oto tesis fotoğrafı (delta-oto-depot.jpg,
-          binada "delta50" yazısı + Groupauto rozeti görünür). Ana sayfa
-          AYNI kaynağı kullanıyor ama bu container'ın sabit 560px yüksekliği
-          (ana sayfanın lg+'da tam-ekran yüksekliğinden farklı) object-cover
-          matematiğini tersine çeviriyor: burada TAM GENİŞLİK gösterilip
-          dikey eksende kırpılıyor (ana sayfada tam TERSİ) — iki hero doğal
-          olarak farklı bir dilim gösteriyor, aynı fotoğrafın kopyası gibi
-          hissettirmiyor. object-position Y ~%42 tabelayı (kaynakta y:~%15-55)
-          çerçeve içinde tutacak şekilde seçildi; önceki opacity-20 + %80
-          opak gradyan tabelayı pratikte görünmez kılıyordu — ikisi de
-          tabela okunur kalsın diye açıldı (ham ayna/mirror kullanılmadı:
-          kaynaktaki "delta50" yazısı ayna alınırsa ters ve yanlış görünürdü). */}
+      {/* HERO — ana sayfayla AYNI gerçek Delta Oto tesis fotoğrafı
+          (delta-oto-hero-facility.webp — "delta50" tabelası + 5 kamyonluk
+          filo), eski ayrı depot.jpg kaynağı yerine (Lojistik Sayfası Revizyon
+          Turu). Bu container SABİT min-h-[560px] yükseklikte — ana sayfanın
+          lg+'da tam-ekran yüksekliğinden farklı, bu yüzden object-cover
+          matematiği burada TERS işliyor: konteyner oranı (genişlik/560px)
+          görselin kendi oranından (1920/1081) daha geniş olduğu için TAM
+          GENİŞLİK gösterilip fazlalık DİKEY eksende kırpılıyor. object-
+          position-y, tabela (kaynakta y≈%12-27) VE kamyon filosunun (kaynakta
+          y≈%51-74) ikisini de 560px'lik pencereye sığdıracak şekilde seçildi
+          — bu iki bölge birlikte kaynağın neredeyse tamamını (y≈%9-56)
+          kaplıyor, dar bir sabit-yükseklik konteynerde ikisini birden tutmak
+          çok az boşluk bırakıyor (bkz. görev raporu, görsel doğrulama). */}
       <section className="relative min-h-[560px] flex items-center text-white overflow-hidden bg-[#0e1016]">
         <div className="absolute inset-0">
           <img
-            src="/images/delta-oto-depot.jpg"
+            src="/images/delta-oto-hero-facility.webp"
             alt=""
-            className="w-full h-full object-cover object-[38%_50%] lg:object-[46%_38%] opacity-62"
+            width={1920}
+            height={1081}
+            className="w-full h-full object-cover object-[50%_28%] opacity-70"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-[#0e1016]/90 via-[#0e1016]/50 to-[#0e1016]/12" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0e1016] via-transparent to-transparent" />

@@ -125,9 +125,9 @@ const content = {
         body: "Mayıs 2026 itibarıyla Opar Ege Bölge Bayiliği operasyonunu devralarak Ege bölgesindeki tedarik ağımızı doğrudan genişlettik. Bu adımla birlikte bölgeye yönelik ürün çeşitliliğimiz ve teslimat kapasitemiz önemli ölçüde güçlendi.",
       },
       card2: {
-        tag1: "2025 · Dubai", tag2: "Uluslararası Zirve",
-        title: "GROUPAUTO International Dubai O2O Tedarikçi Günleri 2025",
-        body: "Dubai'de düzenlenen GROUPAUTO International O2O Tedarikçi Günleri'nde Türkiye'yi ve Delta Oto'yu temsil ettik. 35'ten fazla global üreticiyle gerçekleştirilen görüşmelerde tedarik portföyümüzü ve piyasa trendlerini ele aldık.",
+        tag1: "2025 · Dubai", tag2: "Küresel Zirve",
+        title: "Dubai O2O Tedarikçi Günleri 2025",
+        body: "Dubai'de düzenlenen O2O Tedarikçi Günleri'nde Türkiye'yi ve Delta Oto'yu temsil ettik. 35'ten fazla global üreticiyle gerçekleştirilen görüşmelerde tedarik portföyümüzü ve piyasa trendlerini ele aldık.",
       },
     },
     cta: {
@@ -212,9 +212,9 @@ const content = {
         body: "As of May 2026, we took over the Opar Aegean Regional Dealership operation, directly expanding our supply network in the Aegean region. This step significantly strengthened our product range and delivery capacity for the region.",
       },
       card2: {
-        tag1: "2025 · Dubai", tag2: "International Summit",
-        title: "GROUPAUTO International Dubai O2O Supplier Days 2025",
-        body: "We represented Türkiye and Delta Oto at the GROUPAUTO International O2O Supplier Days held in Dubai. In meetings with more than 35 global manufacturers, we discussed our supply portfolio and market trends.",
+        tag1: "2025 · Dubai", tag2: "Global Summit",
+        title: "Dubai O2O Supplier Days 2025",
+        body: "We represented Türkiye and Delta Oto at the O2O Supplier Days held in Dubai. In meetings with more than 35 global manufacturers, we discussed our supply portfolio and market trends.",
       },
     },
     cta: {
@@ -356,14 +356,15 @@ export function LandingPage() {
             </div>
 
             {/* SPART/B2B ikili grup — bkz. SiteHeader.tsx'teki birebir aynı
-                desen (Visual Polish Round §2): paylaşılan çerçeve kaldırıldı,
-                SPART serbest duruyor, altında küçük bağımsız navy B2B
-                butonu var. */}
-            <div className="hidden xl:flex flex-col items-center gap-1.5 shrink-0 w-[104px]">
+                desen (Header Revizyon Turu §1): ikisi de artık kendi
+                içeriğine göre boyutlanıyor (SPART h-6, B2B auto-width
+                px-3) — eskiden B2B'nin w-full ile zorla 104px'e gerilmesi
+                küçük logoya karşı dengesiz duruyordu. */}
+            <div className="hidden xl:flex flex-col items-center gap-1.5 shrink-0">
               <Link href={routeFor("spart", lang)} className="opacity-80 hover:opacity-100 transition-opacity">
-                <img src="/images/spart-logo.png" alt="SPART Original Replacement" className="h-5 w-auto block" />
+                <img src="/images/spart-logo.png" alt="SPART Original Replacement" className="h-6 w-auto block" />
               </Link>
-              <a href="https://b2b.parcabul.com.tr/login.aspx" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-1 w-full h-[26px] rounded-md bg-[#1B3A8F] hover:bg-[#2547B5] text-white text-[10px] font-bold tracking-[0.03em] transition-colors group">
+              <a href="https://b2b.parcabul.com.tr/login.aspx" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-1 px-3 h-[26px] rounded-[3px] bg-[#1B3A8F] hover:bg-[#2547B5] text-white text-[10px] font-bold tracking-[0.03em] transition-colors group whitespace-nowrap">
                 {t.hero.ctaB2B.toUpperCase()}
                 <ArrowRight className="w-2.5 h-2.5 group-hover:translate-x-0.5 transition-transform" />
               </a>
@@ -561,16 +562,19 @@ export function LandingPage() {
           </div>
 
           <div className="grid md:grid-cols-2 gap-6 lg:gap-8">
-            {/* NOT: GROUPAUTO Türkiye logosu bu görev turunda talep edildi
-                ancak yüklenen dosyalar arasında bulunamadı (uploads dizini
-                kontrol edildi, tek adayı marka-parça logoları paketiydi,
-                GROUPAUTO'yla ilgisizdi) — bkz. görev raporu. Metin içeriği
-                (başlık/açıklama/kimlik) GROUPAUTO Türkiye'ye güncellendi,
-                ancak logo görseli ve alt metni gerçek asset gelene kadar
-                mevcut (International) sürümde bırakıldı — alt metni hâlâ
-                ekranda görünen görsele sadık kalmalı. */}
+            {/* NOT: GROUPAUTO Türkiye logosu artık ikinci kez talep edildi
+                ancak yüklenen dosyalar arasında yine bulunamadı (uploads
+                dizini iki ayrı turda kontrol edildi — tek adaylar marka-parça
+                logoları paketi ve GROUPAUTO ile ilgisiz eski bir etkinlik
+                fotoğrafları arşiviydi) — bkz. görev raporu. Sayfadaki TÜM
+                metin içeriği GROUPAUTO Türkiye'ye güncellendi; alt metni de
+                (kullanıcının "sıfır görünür International" talimatı gereği)
+                Türkiye'ye çevrildi, ancak logo GÖRSELİ hâlâ eski
+                (International) — kutunun kendi baskılı sanatını değiştirmek
+                gerçek asset olmadan mümkün değil, doğru dosya sağlandığında
+                yalnızca aşağıdaki logoSrc'nin değişmesi yeterli. */}
             {[
-              { data: t.partnership.groupauto, logoSrc: "/images/groupauto-international-logo.webp", logoAlt: "GROUPAUTO International", logoW: 900, logoH: 181, refClass: "do-reveal do-d1" },
+              { data: t.partnership.groupauto, logoSrc: "/images/groupauto-international-logo.webp", logoAlt: "GROUPAUTO Türkiye", logoW: 900, logoH: 181, refClass: "do-reveal do-d1" },
               { data: t.partnership.opar, logoSrc: "/images/opar-logo-white.svg", logoAlt: "Opar", logoW: 849, logoH: 341, refClass: "do-reveal do-d2" },
             ].map(({ data, logoSrc, logoAlt, logoW, logoH, refClass }) => (
               <div

@@ -81,23 +81,24 @@ export function SiteHeader() {
               <LanguageSwitcher />
             </div>
 
-            {/* SPART/B2B ikili grup — artık paylaşılan bir dış çerçeve/widget
-                İÇİNDE değil (Visual Polish Round §2): SPART logosu beyaz
-                header zemininde serbest duruyor (kutu/border yok, yalnızca
-                hover'da opaklık), altında küçük, bağımsız navy bir B2B
-                butonu var. İkisi arasında yalnızca ince bir boşluk (gap-1.5)
-                — bir "çerçeve" değil, tek bir grup gibi OKUNMALARINI
-                sağlıyor. Yatay alan kazanımı (LandingPage.tsx'teki aynı
-                blokla piksel piksel eşleşmeli) korunuyor. */}
-            <div className="hidden xl:flex flex-col items-center gap-1.5 shrink-0 w-[104px]">
+            {/* SPART/B2B ikili grup — çerçevesiz (Visual Polish Round §2),
+                artık ikisi de KENDİ içeriğine göre boyutlanıyor (Header
+                Revizyon Turu §1): eskiden SPART bir logonun doğal genişliği
+                (~59px) kadardı ama B2B butonu w-full ile 104px'e zorla
+                geriliyordu — "küçük logo + kocaman blok" dengesizliği
+                yaratıyordu. Şimdi SPART biraz büyütüldü (h-6), B2B da kendi
+                metin+dolgu genişliğine (auto, px-3) döndürüldü — ikisi de
+                aynı boyut ailesinde, aynı "utility zone" hissi veriyor ama
+                B2B tek başına baskın bir blok gibi durmuyor. */}
+            <div className="hidden xl:flex flex-col items-center gap-1.5 shrink-0">
               <Link href={routeFor("spart", lang)} className="opacity-80 hover:opacity-100 transition-opacity">
-                <img src="/images/spart-logo.png" alt={SPART_ALT[lang]} className="h-5 w-auto block" />
+                <img src="/images/spart-logo.png" alt={SPART_ALT[lang]} className="h-6 w-auto block" />
               </Link>
               <a
                 href="https://b2b.parcabul.com.tr/login.aspx"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="flex items-center justify-center gap-1 w-full h-[26px] rounded-md bg-[#1B3A8F] hover:bg-[#2547B5] text-white text-[10px] font-bold tracking-[0.03em] transition-colors group"
+                className="flex items-center justify-center gap-1 px-3 h-[26px] rounded-[3px] bg-[#1B3A8F] hover:bg-[#2547B5] text-white text-[10px] font-bold tracking-[0.03em] transition-colors group whitespace-nowrap"
               >
                 {B2B_LABEL[lang].toUpperCase()}
                 <ArrowRight className="w-2.5 h-2.5 group-hover:translate-x-0.5 transition-transform" />

@@ -20,7 +20,7 @@ const content = {
     hero: {
       eyebrow: "Ürün Portföyü · 100+ Marka",
       title: ["GLOBAL KALİTE,", "TEK ÇATI,", "DERİN STOK"],
-      body: "Binek ve hafif ticari araç kategorilerinde dünyanın önde gelen OEM üreticileriyle doğrudan çalışıyoruz. 100'den fazla marka ve 50.000'i aşkın SKU; tek tedarikçi ilişkisiyle eksiksiz karşılanır. Groupauto International üyeliğiyle global satın alma gücü, yerel hız ve servis kalitesiyle buluşuyor.",
+      body: "Binek ve hafif ticari araç kategorilerinde dünyanın önde gelen OEM üreticileriyle doğrudan çalışıyoruz. 100'den fazla marka ve 50.000'i aşkın SKU; tek tedarikçi ilişkisiyle eksiksiz karşılanır. GROUPAUTO Türkiye üyeliğiyle global satın alma gücü, yerel hız ve servis kalitesiyle buluşuyor.",
       cta: "B2B Portal",
     },
     brandWall: {
@@ -54,13 +54,13 @@ const content = {
     quality: {
       eyebrow: "Kalite Güvencesi",
       heading: "Tedarikçi Kalite Kriterleri",
-      body: "Portföyümüze alınan her marka, titiz bir ön değerlendirme ve süregelen denetim sürecine tabidir. Groupauto International global satın alma standartları bu sürecin omurgasını oluşturur. Sahte ve düşük kaliteli ürüne karşı sıfır tolerans politikamız; müşterilerimizin saha güvenilirliğini korumanın temel güvencesidir.",
+      body: "Portföyümüze alınan her marka, titiz bir ön değerlendirme ve süregelen denetim sürecine tabidir. GROUPAUTO'nun global satın alma standartları bu sürecin omurgasını oluşturur. Sahte ve düşük kaliteli ürüne karşı sıfır tolerans politikamız; müşterilerimizin saha güvenilirliğini korumanın temel güvencesidir.",
       items: [
         "OEM veya OEM eşdeğeri sertifikasyon zorunluluğu",
         "Kayıt dışı ve taklit ürün sıfır toleranstır",
         "Üretici belgelendirmesi ve lot takip zorunluluğu",
         "Periyodik ürün denetimleri ve saha geri bildirim sistemi",
-        "Groupauto International global satın alma standartları",
+        "GROUPAUTO'nun global satın alma standartları",
         "Stok tutarlılığı ve teslimat performansı SLA takibi",
       ],
       stats: [
@@ -76,7 +76,7 @@ const content = {
       body: "Tek tedarikçi kolaylığı, global satın alma gücü ve OEM kalite güvencesi — hepsi tek çatı altında.",
       items: [
         { title: "Kapsamlı Ürün Gamı", desc: "100'den fazla markanın 50.000'i aşkın SKU'sundan oluşan portföy; tek tedarikçi ilişkisiyle uçtan uca karşılanır. Çoklu tedarikçi koordinasyonu yükü kalkar." },
-        { title: "Groupauto Tedarik Ayrıcalığı", desc: "Groupauto International üyeliği; 118 ülkedeki 71 referans tedarikçi gücünü satın alma kaldıracımıza dönüştürür. Global fiyat avantajı doğrudan portföyümüze yansır." },
+        { title: "Groupauto Tedarik Ayrıcalığı", desc: "GROUPAUTO Türkiye üyeliği; 118 ülkedeki 71 referans tedarikçi gücünü satın alma kaldıracımıza dönüştürür. Global fiyat avantajı doğrudan portföyümüze yansır." },
         { title: "OEM Standart Kalite Güvencesi", desc: "Yalnızca orijinal ve OEM eşdeğeri ürün kategorilerinde faaliyet gösteriyoruz. Sahte ve düşük kaliteli ürün portföyde kesinlikle yer almaz." },
         { title: "Dinamik Katalog Yönetimi", desc: "Yeni araç modelleri ve marka genişlemeleri portföye sürekli eklenir. Güncel stok bilgisine B2B portalı üzerinden anlık erişilir, bekleme olmadan sipariş verilir." },
         { title: "Opar Ege Bölge Bayiliği", desc: "Opar'ın Ege bölgesi operasyonunu devralarak İzmir ve çevresinde bölgesel stok derinliğimizi ve teslimat hızımızı doğrudan güçlendirdik." },
@@ -96,7 +96,7 @@ const content = {
     hero: {
       eyebrow: "Product Portfolio · 100+ Brands",
       title: ["GLOBAL QUALITY,", "ONE ROOF,", "DEEP STOCK"],
-      body: "We work directly with the world's leading OEM manufacturers across passenger and light commercial vehicle categories. More than 100 brands and over 50,000 SKUs are covered end-to-end through a single supplier relationship. Our GROUPAUTO International membership brings global purchasing power together with local speed and service quality.",
+      body: "We work directly with the world's leading OEM manufacturers across passenger and light commercial vehicle categories. More than 100 brands and over 50,000 SKUs are covered end-to-end through a single supplier relationship. Our GROUPAUTO Türkiye membership brings global purchasing power together with local speed and service quality.",
       cta: "B2B Portal",
     },
     brandWall: {
@@ -130,13 +130,13 @@ const content = {
     quality: {
       eyebrow: "Quality Assurance",
       heading: "Supplier Quality Criteria",
-      body: "Every brand admitted to our portfolio undergoes rigorous pre-qualification and ongoing audit. GROUPAUTO International's global purchasing standards form the backbone of this process. Our zero-tolerance policy on counterfeit and substandard products is the core guarantee behind our customers' field reliability.",
+      body: "Every brand admitted to our portfolio undergoes rigorous pre-qualification and ongoing audit. GROUPAUTO's global purchasing standards form the backbone of this process. Our zero-tolerance policy on counterfeit and substandard products is the core guarantee behind our customers' field reliability.",
       items: [
         "Mandatory OEM or OEM-equivalent certification",
         "Zero tolerance for unregistered and counterfeit products",
         "Mandatory manufacturer certification and lot traceability",
         "Periodic product audits and field feedback system",
-        "GROUPAUTO International global purchasing standards",
+        "GROUPAUTO's global purchasing standards",
         "Stock consistency and delivery performance SLA tracking",
       ],
       stats: [
@@ -152,7 +152,7 @@ const content = {
       body: "Single-supplier convenience, global purchasing power and OEM quality assurance — all under one roof.",
       items: [
         { title: "Comprehensive Product Range", desc: "A portfolio of more than 100 brands and over 50,000 SKUs, covered end-to-end through a single supplier relationship — removing the burden of coordinating multiple suppliers." },
-        { title: "GROUPAUTO Purchasing Advantage", desc: "Our GROUPAUTO International membership turns the strength of 71 referenced suppliers across 118 countries into purchasing leverage, translating directly into portfolio-wide price advantages." },
+        { title: "GROUPAUTO Purchasing Advantage", desc: "Our GROUPAUTO Türkiye membership turns the strength of 71 referenced suppliers across 118 countries into purchasing leverage, translating directly into portfolio-wide price advantages." },
         { title: "OEM-Standard Quality Assurance", desc: "We operate exclusively in original and OEM-equivalent product categories. Counterfeit and substandard products have no place in our portfolio." },
         { title: "Dynamic Catalog Management", desc: "New vehicle models and brand expansions are added to the portfolio continuously. Current stock information is available instantly through the B2B portal, so orders can be placed without delay." },
         { title: "Aegean Regional Dealership with Opar", desc: "By taking over Opar's Aegean region operation, we directly strengthened our regional stock depth and delivery speed in and around İzmir." },
@@ -174,10 +174,14 @@ function BrandGroup({ label, brands }: { label: string; brands: Brand[] }) {
         <h3 className="text-xl font-black text-white tracking-tight">{label}</h3>
         <div className="flex-1 h-px bg-white/10" />
       </div>
-      {/* Content/UX Pass 01 (§14): masaüstünde satır başına logo yoğunluğu
-          bir kademe artırıldı (lg 4→5, xl 5→6, 2xl 6→7) — kart boyutu/oranı,
-          mobil (4) ve sm (3) yoğunluğu DEĞİŞMEDİ. */}
-      <div className="grid grid-cols-4 sm:grid-cols-3 lg:grid-cols-5 xl:grid-cols-6 2xl:grid-cols-7 gap-2.5 sm:gap-4">
+      {/* Content/UX Pass 01 (§14, sonra Revizyon Turu): masaüstünde satır
+          başına logo yoğunluğu kademeli artırılmıştı (lg 5→xl 6→2xl 7);
+          bu turda gerçek "masaüstü" eşiği olan xl (1280px, header/nav'ın
+          da kullandığı proje-geneli desktop kırılımı) ve üzerinde düz 8
+          sütuna çıkarıldı. lg (1024-1279px, tablet-ish ara bölge) 6'da
+          kaldı — 8 sütun orada kart boyutunu aşırı sıkıştırırdı. Mobil
+          (4) ve sm (3) yoğunluğu DEĞİŞMEDİ. */}
+      <div className="grid grid-cols-4 sm:grid-cols-3 lg:grid-cols-6 xl:grid-cols-8 2xl:grid-cols-8 gap-2.5 sm:gap-4">
         {brands.map((b) => (
           <BrandLogo key={b.slug} brand={b} size="wall" />
         ))}
