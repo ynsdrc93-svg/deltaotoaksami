@@ -28,9 +28,17 @@ const SIZES: Record<BrandLogoSize, SizeStyle> = {
     // orijinal h-32/px-6/py-6 kart 4 sütunda logoyu sıkıştırıp taşırdı, bu
     // yüzden yalnızca <sm tier'ı daraltıldı; sm ve üzeri (3/4/5/6 sütun)
     // birebir eski değerlerinde kaldı.
-    light: "do-card bg-white rounded-2xl flex items-center justify-center h-16 px-2 py-2 sm:h-32 sm:px-6 sm:py-6 lg:h-36 shadow-sm",
-    dark: "do-card bg-[#0e1016] border border-white/10 rounded-2xl flex items-center justify-center h-16 px-2 py-2 sm:h-32 sm:px-6 sm:py-6 lg:h-36 shadow-sm",
-    img: "max-h-8 sm:max-h-12 lg:max-h-14 w-auto h-auto max-w-full object-contain",
+    //
+    // Supplier Logo Source Correction Round: 8 sütunlu ızgarada (xl+) her
+    // kart yalnızca ~138px genişliğinde — eski sm:px-6 (24px×2) dolgusuyla
+    // gerçek logo alanı ~90px'e düşüyordu. Ölçüm: BorgWarner (11.9:1 en-boy
+    // oranı) bu alanda yalnızca 8px yükseklikte render ediyordu (Bosch 20px,
+    // Contitech 12px). Dolgu sm:px-6→sm:px-4'e indirildi (~106px alan) ve
+    // dikey tavan lg:max-h-14→lg:max-h-16'ya çıkarıldı (kompakt/kare
+    // logoların da biraz daha nefes alması için) — bkz. img altındaki not.
+    light: "do-card bg-white rounded-2xl flex items-center justify-center h-16 px-2 py-2 sm:h-32 sm:px-4 sm:py-6 lg:h-36 shadow-sm",
+    dark: "do-card bg-[#0e1016] border border-white/10 rounded-2xl flex items-center justify-center h-16 px-2 py-2 sm:h-32 sm:px-4 sm:py-6 lg:h-36 shadow-sm",
+    img: "max-h-8 sm:max-h-12 lg:max-h-16 w-auto h-auto max-w-full object-contain",
     textSize: "text-[15px]",
     textHover: "",
   },
@@ -79,11 +87,23 @@ export function BrandLogo({
   const isDark = brand.logoBackground === "dark";
   const textColor = isDark ? "text-white" : "text-[#1B3A8F]";
 
+  // logoScale: object-contain zaten her logoyu kendi kutusuna sığdırıyor
+  // (deforme etmeden) ama çok geniş/düz oranlı wordmark'lar (ör. BorgWarner
+  // ~11.9:1) bu kutuda birkaç piksele kadar küçülebiliyor — kare/kompakt
+  // markalarla yan yana geldiğinde "kayboluyor" hissi yaratıyor. transform:
+  // scale() halihazırda object-contain ile sığdırılmış render'ı, kutunun
+  // KENDİ merkezinden orantılı büyütüp/küçültüyor — en-boy oranı bozulmuyor,
+  // yalnızca dolgu (padding) boşluğuna taşıyor. Bu yüzden ölçek her zaman
+  // ~1.15 ile sınırlı (bkz. brands.ts) — dolgu boşluğunu aşıp komşu karta
+  // taşmaması için.
+  const scaleStyle = brand.logoScale && brand.logoScale !== 1 ? { transform: `scale(${brand.logoScale})` } : undefined;
+
   const content = brand.hasVerifiedLogo ? (
     <img
       src={`/images/brands/${brand.slug}.${brand.logoFormat ?? "png"}`}
       alt={brand.name}
       className={style.img}
+      style={scaleStyle}
     />
   ) : (
     <span className={`${textColor} font-black text-center leading-tight tracking-tight px-2 ${style.textSize} ${style.textHover}`}>

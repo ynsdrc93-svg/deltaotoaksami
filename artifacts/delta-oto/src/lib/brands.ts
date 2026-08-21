@@ -19,6 +19,16 @@ export interface Brand {
   /** "dark" ise logo yalnızca beyaz/açık renkli çizim içerir (şeffaf zeminde
    * görünmez) — koyu kart zemininde gösterilmesi gerekir. Belirtilmezse "light". */
   logoBackground?: "light" | "dark";
+  /** Kısıtlı optik normalizasyon override'ı — bkz. BrandLogo.tsx. object-contain
+   * her logoyu kutusuna deforme etmeden sığdırır, ama çok geniş/düz en-boy
+   * oranlı wordmark'lar (ör. BorgWarner ~11.9:1) bu kutuda birkaç piksele
+   * kadar küçülüp kare/kompakt markaların yanında "kayboluyor" hissi
+   * yaratabiliyor. Belirtilirse img'e transform: scale() olarak uygulanır
+   * (en-boy oranı KORUNUR, yalnızca kutunun kendi dolgu boşluğu içinde
+   * büyür/küçülür). Aralık kasıtlı olarak dar tutulmalı: ~0.80–1.15.
+   * Çoğu marka bu alanı hiç belirtmemeli (varsayılan 1) — yalnızca gerçek
+   * görsel QA'da bariz dengesizlik görülen markalarda kullanılır. */
+  logoScale?: number;
 }
 
 // Excel'e göre Yerli/Global sınıflandırılmış 61 marka — Tedarikçiler sayfasındaki
@@ -31,29 +41,32 @@ export interface Brand {
 // bırakılabilir (BrandLogo.tsx varsayılanı "png"); script tekrar
 // çalıştırılınca webp'ye geçirilebilir.
 //
-// Header/Supplier Assets Round: "Delta-Tedarikci-Logolari.pdf" (kullanıcı
-// sağladı, 55 sayfa/marka, Adobe Illustrator kaynağı) artık bu 61 markanın
-// 55'i için logo ARTWORK'ünün tek doğruluk kaynağı — sayfa→marka eşlemesi
-// birebir doğrulandı, hiçbiri tahmin edilmedi. Her sayfa yüksek çözünürlükte
-// (400dpi, şeffaflık korunarak) render edildi, alpha kanalına göre içerik
-// sınırlarına kırpıldı (~%3 kenar boşluğu eklendi), 560px genişliğe (mevcut
-// asset kuralıyla aynı) yeniden boyutlandırıldı — sanat yeniden çizilmedi,
-// renklendirilmedi, deforme edilmedi. PDF'te OLMAYAN 6 sınıflandırılmış
-// marka (LuK, Mahle, Mann-Filter, Monroe, Optima, Taifun) mevcut doğrulanmış
-// asset'leriyle DEĞİŞMEDEN kalıyor. PDF'teki yeni artwork'ün önceki
-// asset'ten farklı olarak zaten açık zeminde tam okunaklı çıktığı 5 marka
-// (Frendi, IOTO, King Piston, Silbak, Supsan) için logoBackground:"dark"
-// bayrağı kaldırıldı — yeni asset koyu kart gerektirmiyor.
+// Supplier Logo Source Correction Round: "Delta-Tedarikci-Logolari.pdf" (55
+// sayfa, Header/Supplier Assets Round'da kullanıldı) kullanıcı tarafından
+// REVİZE EDİLDİ ve "Rev-Delta-Tedarikci-Logolari.pdf" (59 sayfa, Adobe
+// Illustrator kaynağı) ile DEĞİŞTİRİLDİ — eski 55 sayfalık PDF artık kaynak
+// olarak KULLANILMIYOR. Revize dosya, eski sürümde eksik olan 4 markayı
+// (LuK, Mahle, Mann-Filter, Monroe — sayfa 34-37) ekliyor; sayfa→marka
+// eşlemesi 59/59 birebir doğrulandı, hiçbiri tahmin edilmedi. Her sayfa aynı
+// pipeline'dan geçti: 400dpi render (şeffaflık korunarak) → alpha kanalına
+// göre içerik sınırlarına kırpma (~%3 kenar boşluğu) → 560px genişliğe
+// (mevcut asset kuralıyla aynı) yeniden boyutlandırma — sanat yeniden
+// çizilmedi, renklendirilmedi, deforme edilmedi. Revize PDF'te de OLMAYAN
+// yalnızca 2 sınıflandırılmış marka (Optima, Taifun) mevcut doğrulanmış
+// asset'leriyle DEĞİŞMEDEN kalıyor. Frendi/IOTO/King Piston/Silbak/Supsan
+// için logoBackground:"dark" bayrağının kaldırılması (önceki turdan) hâlâ
+// geçerli — revize PDF'teki bu markaların artwork'ü de açık zeminde tam
+// okunaklı.
 export const CLASSIFIED_BRANDS: Brand[] = [
   { slug: "behr", name: "Behr", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "beru", name: "Beru", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "blueprint", name: "Blue Print", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
-  { slug: "borgwarner", name: "BorgWarner", website: "https://www.borgwarner.com/aftermarket", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
+  { slug: "borgwarner", name: "BorgWarner", website: "https://www.borgwarner.com/aftermarket", origin: "global", hasVerifiedLogo: true, logoFormat: "webp", logoScale: 1.15 },
   { slug: "bosch", name: "Bosch", website: "https://www.boschaftermarket.com/", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "brembo", name: "Brembo", website: "https://www.brembo.com/en", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "cargo", name: "HC-Cargo", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "champion", name: "Champion", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
-  { slug: "contitech", name: "ContiTech", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
+  { slug: "contitech", name: "ContiTech", origin: "global", hasVerifiedLogo: true, logoFormat: "webp", logoScale: 1.15 },
   { slug: "corteco", name: "Corteco", website: "https://www.corteco.com/", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "dayco", name: "Dayco", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "delphi", name: "Delphi", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
@@ -63,12 +76,12 @@ export const CLASSIFIED_BRANDS: Brand[] = [
   { slug: "era", name: "ERA Benelux", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "fag", name: "FAG", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "febi", name: "febi bilstein", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
-  { slug: "ferodo", name: "Ferodo", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
+  { slug: "ferodo", name: "Ferodo", origin: "global", hasVerifiedLogo: true, logoFormat: "webp", logoScale: 1.1 },
   { slug: "filtron", name: "Filtron", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "frendi", name: "Frendi", origin: "yerli", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "gates", name: "Gates", website: "https://www.gates.com/", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "gkn", name: "GKN", website: "https://www.gknautomotive.com/en/aftermarket/", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
-  { slug: "hlmando", name: "HL Mando", website: "https://hlmandoaftermarket.com/", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
+  { slug: "hlmando", name: "HL Mando", website: "https://hlmandoaftermarket.com/", origin: "global", hasVerifiedLogo: true, logoFormat: "webp", logoScale: 1.15 },
   { slug: "hattat", name: "Hattat", origin: "yerli", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "hella", name: "Hella", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "henkel", name: "Henkel", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
@@ -76,12 +89,12 @@ export const CLASSIFIED_BRANDS: Brand[] = [
   { slug: "ioto", name: "IOTO", origin: "yerli", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "kale", name: "Kale", origin: "yerli", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "kingpiston", name: "King Piston", origin: "yerli", hasVerifiedLogo: true, logoFormat: "webp" },
-  { slug: "lemforder", name: "Lemförder", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
+  { slug: "lemforder", name: "Lemförder", origin: "global", hasVerifiedLogo: true, logoFormat: "webp", logoScale: 1.1 },
   { slug: "liquimoly", name: "Liqui Moly", website: "https://www.liqui-moly.com/", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "luk", name: "LuK", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
-  { slug: "mahle", name: "Mahle", website: "https://www.mahle-aftermarket.com/eu/en/", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
+  { slug: "mahle", name: "Mahle", website: "https://www.mahle-aftermarket.com/eu/en/", origin: "global", hasVerifiedLogo: true, logoFormat: "webp", logoScale: 1.1 },
   { slug: "mannfilter", name: "Mann-Filter", website: "https://www.mann-filter.com/", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
-  { slug: "monroe", name: "Monroe", website: "https://www.monroe.com/", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
+  { slug: "monroe", name: "Monroe", website: "https://www.monroe.com/", origin: "global", hasVerifiedLogo: true, logoFormat: "webp", logoScale: 1.1 },
   { slug: "ngk", name: "NGK", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "nrf", name: "NRF", website: "https://www.nrf.eu/", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "optima", name: "Optima", origin: "yerli", hasVerifiedLogo: true, logoFormat: "svg" },
