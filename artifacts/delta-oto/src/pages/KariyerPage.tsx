@@ -314,7 +314,7 @@ export function KariyerPage() {
                   target="_blank"
                   rel="noopener noreferrer"
                   ref={reveal}
-                  className={`do-reveal do-d${(i % 4) + 1} group border border-slate-200 rounded-2xl p-8 hover:border-[#1B3A8F]/40 hover:shadow-xl transition-all block`}
+                  className={`${i === 0 ? "do-reveal-left" : "do-reveal-right"} group border border-slate-200 rounded-2xl p-8 hover:border-[#1B3A8F]/40 hover:shadow-xl transition-all block`}
                 >
                   <div className="flex items-start justify-between mb-6">
                     <div className="w-14 h-14 bg-[#1B3A8F]/[0.08] rounded-xl flex items-center justify-center group-hover:bg-[#1B3A8F] transition-colors">
@@ -365,7 +365,7 @@ export function KariyerPage() {
                 <div
                   key={group.title}
                   ref={reveal}
-                  className={`do-reveal do-d${gi + 1} relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.045] p-7 md:p-8 transition-colors duration-300 hover:border-white/20`}
+                  className={`${gi === 0 ? "do-reveal-left" : "do-reveal-right"} relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.045] p-7 md:p-8 transition-colors duration-300 hover:border-white/20`}
                 >
                   <span
                     aria-hidden="true"

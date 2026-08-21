@@ -25,9 +25,26 @@ export interface Brand {
    * kadar küçülüp kare/kompakt markaların yanında "kayboluyor" hissi
    * yaratabiliyor. Belirtilirse img'e transform: scale() olarak uygulanır
    * (en-boy oranı KORUNUR, yalnızca kutunun kendi dolgu boşluğu içinde
-   * büyür/küçülür). Aralık kasıtlı olarak dar tutulmalı: ~0.80–1.15.
-   * Çoğu marka bu alanı hiç belirtmemeli (varsayılan 1) — yalnızca gerçek
-   * görsel QA'da bariz dengesizlik görülen markalarda kullanılır. */
+   * büyür/küçülür).
+   *
+   * Optical Balance Round #2 bulgusu: kare/dikey (~aspect 0.9–1.15) logolar
+   * "wall" kutusunda (lg:max-h-16=64px tavan) HER ZAMAN yükseklik-sınırlı
+   * render olur — bu yüzden algılanan küçüklük doğrusal yükseklik değil,
+   * render ALANIDIR (width×height, karesel olarak ölçeklenir). Önceki turun
+   * ~1.08–1.15 aralığı (yalnızca ~%17–%32 alan artışı) bu yüzden yetersiz
+   * kaldı — geniş wordmark'larla (ör. Sachs/Henkel/Champion, hiç scale
+   * almadan ~6.000–6.500px² render alanı) aradaki fark hâlâ 3-4 kat
+   * kapanmıyordu (bkz. Aug 2026 QA ölçümü). Gerçek kart geometrisi canlı
+   * ölçüldü (1440px, xl 8-sütun): kart 138×144px, dolgu 24px dikey/16px
+   * yatay → güvenli iç alan 106×96px. Bu ölçüme göre kare/dikey logolarda
+   * 1.3 (→ ~84px render yüksekliği, dolgu kenarına ~6px pay) güvenle
+   * doğrulanmış üst sınır — hem masaüstü (8 sütun) hem mobil (4 sütun, en
+   * dar kart) geometrisinde taşma olmadan test edildi. Aralık artık: geniş
+   * wordmark'lar için ~1.10–1.15 (mevcut render'ı biraz güçlendirmek için),
+   * kare/dikey kompakt markalar için ölçülmüş üst sınır ~1.3. Her yeni
+   * değer, tahmine değil GERÇEK render ölçümüne dayanmalı (getBoundingClientRect
+   * + kart padding'i) — yalnızca göz kararıyla artırılmamalı. Çoğu marka bu
+   * alanı hiç belirtmemeli (varsayılan 1). */
   logoScale?: number;
 }
 
@@ -72,20 +89,20 @@ export const CLASSIFIED_BRANDS: Brand[] = [
   { slug: "delphi", name: "Delphi", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "denso", name: "Denso", website: "https://www.denso-am.eu/", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "dolz", name: "Dolz", website: "https://www.idolz.com/en/", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
-  { slug: "elring", name: "Elring", website: "https://www.elring.us/", origin: "global", hasVerifiedLogo: true, logoFormat: "webp", logoScale: 1.15 },
+  { slug: "elring", name: "Elring", website: "https://www.elring.us/", origin: "global", hasVerifiedLogo: true, logoFormat: "webp", logoScale: 1.3 },
   { slug: "era", name: "ERA Benelux", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "fag", name: "FAG", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "febi", name: "febi bilstein", origin: "global", hasVerifiedLogo: true, logoFormat: "webp", logoScale: 1.1 },
   { slug: "ferodo", name: "Ferodo", origin: "global", hasVerifiedLogo: true, logoFormat: "webp", logoScale: 1.1 },
   { slug: "filtron", name: "Filtron", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
-  { slug: "frendi", name: "Frendi", origin: "yerli", hasVerifiedLogo: true, logoFormat: "webp" },
+  { slug: "frendi", name: "Frendi", origin: "yerli", hasVerifiedLogo: true, logoFormat: "webp", logoScale: 1.3 },
   { slug: "gates", name: "Gates", website: "https://www.gates.com/", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "gkn", name: "GKN", website: "https://www.gknautomotive.com/en/aftermarket/", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "hlmando", name: "HL Mando", website: "https://hlmandoaftermarket.com/", origin: "global", hasVerifiedLogo: true, logoFormat: "webp", logoScale: 1.15 },
   { slug: "hattat", name: "Hattat", origin: "yerli", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "hella", name: "Hella", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "henkel", name: "Henkel", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
-  { slug: "ina", name: "INA", origin: "global", hasVerifiedLogo: true, logoFormat: "webp", logoScale: 1.15 },
+  { slug: "ina", name: "INA", origin: "global", hasVerifiedLogo: true, logoFormat: "webp", logoScale: 1.3 },
   { slug: "ioto", name: "IOTO", origin: "yerli", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "kale", name: "Kale", origin: "yerli", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "kingpiston", name: "King Piston", origin: "yerli", hasVerifiedLogo: true, logoFormat: "webp" },
@@ -95,9 +112,9 @@ export const CLASSIFIED_BRANDS: Brand[] = [
   { slug: "mahle", name: "Mahle", website: "https://www.mahle-aftermarket.com/eu/en/", origin: "global", hasVerifiedLogo: true, logoFormat: "webp", logoScale: 1.1 },
   { slug: "mannfilter", name: "Mann-Filter", website: "https://www.mann-filter.com/", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "monroe", name: "Monroe", website: "https://www.monroe.com/", origin: "global", hasVerifiedLogo: true, logoFormat: "webp", logoScale: 1.1 },
-  { slug: "ngk", name: "NGK", origin: "global", hasVerifiedLogo: true, logoFormat: "webp", logoScale: 1.08 },
+  { slug: "ngk", name: "NGK", origin: "global", hasVerifiedLogo: true, logoFormat: "webp", logoScale: 1.3 },
   { slug: "nrf", name: "NRF", website: "https://www.nrf.eu/", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
-  { slug: "optima", name: "Optima", origin: "yerli", hasVerifiedLogo: true, logoFormat: "svg", logoScale: 1.1 },
+  { slug: "optima", name: "Optima", origin: "yerli", hasVerifiedLogo: true, logoFormat: "svg", logoScale: 1.3 },
   { slug: "osram", name: "Osram", website: "https://www.osram.com/am/", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "purflux", name: "Purflux Group", website: "https://purfluxgroup.com/", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "rapro", name: "Rapro", origin: "yerli", hasVerifiedLogo: true, logoFormat: "webp" },
@@ -118,7 +135,7 @@ export const CLASSIFIED_BRANDS: Brand[] = [
   { slug: "vitesco", name: "Vitesco Technologies", website: "https://www.vitesco-technologies.com/", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "wolflubricants", name: "Wolf Lubricants", website: "https://www.wolflubes.com/", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "opar", name: "Opar", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
-  { slug: "marelli", name: "Marelli", website: "https://www.magnetimarelli-parts-and-services.com/", origin: "global", hasVerifiedLogo: true, logoFormat: "webp", logoScale: 1.1 },
+  { slug: "marelli", name: "Marelli", website: "https://www.magnetimarelli-parts-and-services.com/", origin: "global", hasVerifiedLogo: true, logoFormat: "webp", logoScale: 1.3 },
 ];
 
 export const GLOBAL_BRANDS: Brand[] = CLASSIFIED_BRANDS.filter((b) => b.origin === "global");

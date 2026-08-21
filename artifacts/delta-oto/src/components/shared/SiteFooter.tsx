@@ -72,12 +72,26 @@ export function SiteFooter() {
                 net okunsun diye. Mobilde aynı yükseklik genişlik/en-boy
                 oranı nedeniyle (1152:240 ≈ 4.8:1) 390px'lik görünümü
                 neredeyse uçtan uca kaplayıp orantısız dururdu — 64px'te
-                (eskiden 59px) daha ölçülü bir artışla kalıyor. */}
+                (eskiden 59px) daha ölçülü bir artışla kalıyor.
+
+                Hero/Footer Hizalama Turu bulgusu: kaynak dosyanın kendi
+                içinde (canvas 1152×240) sağ/sol %10.68, üst/alt %6.25
+                simetrik BOŞ (şeffaf) kenar boşluğu vardı — bu yüzden DOM
+                kutusu aşağıdaki adres ikonuyla piksel piksel aynı x'te
+                başlasa bile (doğrulandı), logonun GÖRÜNÜR çizimi ~39px
+                sağda kalıyordu (canlı ekran görüntüsü + piksel tarama ile
+                ölçüldü). Kalıcı çözüm: kaynak dosya kendisi, görünür
+                çizginin gerçek sınırına (yalnızca 6px görsel pay
+                bırakılarak, köşeli/çapraz kenarların anti-aliasing'i
+                kırpılmasın diye) yeniden kırpıldı (1152×240 → 918×222) —
+                CSS negatif margin gibi kırılgan bir "telafi" yerine kaynağı
+                düzeltmek tercih edildi. Bu asset yalnızca burada kullanılıyor
+                (grep ile doğrulandı), başka hiçbir sayfa/bileşen etkilenmedi. */}
             <img
               src="/images/delta-oto-logo-classic.webp"
               alt="Delta Oto"
-              width={1152}
-              height={240}
+              width={918}
+              height={222}
               className="h-[64px] md:h-[76px] w-auto do-logo-invert mb-8 opacity-90"
             />
             <ul className="space-y-4 text-sm text-gray-500">

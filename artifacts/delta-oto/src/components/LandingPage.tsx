@@ -460,11 +460,19 @@ export function LandingPage() {
               <span className="text-[#7d9bea] text-xs font-bold uppercase tracking-[0.3em]">{t.hero.eyebrow}</span>
             </div>
 
+            {/* Hero Görsel Turu: titleLine1 artık do-hero-line (beyaz→%55
+                saydam gradyan) DEĞİL, düz beyaz. Mobil kırılımda (dar
+                genişlik, object-[88%_50%] kırpımı) uzun ifade 3 satıra
+                sarınca box-decoration-break:clone HER satıra kendi gradyan
+                kuyruğunu uyguluyor — "OTOMOTİV" ve "AFTERMARKET'İN" kelime
+                sonları, görselin açık gri bina duvarıyla çakışıp neredeyse
+                okunamaz hale geliyordu (canlı mobil QA'da tespit edildi,
+                bkz. Operasyon hero'sundaki birebir aynı kök neden). */}
             <h1
               ref={ref}
               className="do-reveal do-d1 text-[34px] sm:text-5xl md:text-6xl lg:text-[72px] xl:text-[80px] font-black leading-[1.05] sm:leading-[1.0] mb-4 lg:mb-6 tracking-[-0.02em] break-words"
             >
-              <span className="do-hero-line">{t.hero.titleLine1}</span>
+              <span className="text-white">{t.hero.titleLine1}</span>
               <br />
               <span className="text-[#7d9bea]">{t.hero.titleLine2}</span>
             </h1>
