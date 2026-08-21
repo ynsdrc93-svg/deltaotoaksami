@@ -5,11 +5,6 @@ import { useLang, routeFor, type Lang, type RouteKey } from "@/lib/i18n";
 
 // "Private Label" başlığı kaldırıldı (kullanıcı kararı, Content/UX Pass 01) —
 // SPART kendi marka/ürün hedefi olarak kalıyor, yalnızca üst başlık gitti.
-// GROUPAUTO Türkiye üyelik rozeti: "Groupauto Logo Types-01.png" kaynağından
-// (kullanıcı sağladı) — trim edilip webp'e dönüştürüldü, sanat değiştirilmedi.
-// Kendi ışık/koyu yarımlarıyla zaten görsel bir çerçeve taşıdığı için ek bir
-// kutu/border eklenmedi; Sertifikalar sütununun sosyal medya bloğuyla aynı
-// ayraçlı alt-bölümde, ondan hemen önce duruyor.
 // "SPART" başlığı da kaldırıldı (Desktop Feedback Round) — logo tek başına,
 // başlıksız duruyor; hedef/link (routeFor("spart")) DEĞİŞMEDİ.
 //
@@ -18,9 +13,17 @@ import { useLang, routeFor, type Lang, type RouteKey } from "@/lib/i18n";
 // KariyerPage.tsx'teki "LinkedIn'de Pozisyonları İnceleyin" CTA'sında da
 // güncellendi — iki yerde farklı/eski bir bağlantı kalmasın diye.
 // Konum: Footer Revizyonu talebiyle bottom legal bar'dan (kopuk/sonradan-
-// eklenmiş görünüyordu) Sertifikalar kolonunun altına taşındı — aynı
-// kolonun doğal akışında, ince bir ayraçla ayrılmış sessiz bir alt-blok;
-// sertifika kutularıyla boyut/vurgu olarak yarışmıyor.
+// eklenmiş görünüyordu) Sertifikalar kolonunun altına taşındı.
+//
+// GROUPAUTO Türkiye üyelik rozeti: "Groupauto Logo Types-01.png" kaynağından
+// (kullanıcı sağladı) — trim edilip webp'e dönüştürüldü, sanat değiştirilmedi.
+// Header/Supplier Assets Round: sertifika/üyelik alt-bölümünün hiyerarşisi
+// yeniden kuruldu — artık SOSYAL İKONLAR önce, tek bir ayraç, sonra GROUPAUTO
+// Türkiye üyeliği EN SONDA (kullanıcı talimatı: üyelik mesajı bu alt-
+// bölümün son öğesi olmalı). Rozet ölçülü şekilde büyütüldü (h-8 → h-10) —
+// hâlâ ana Delta logosunun (59-70px) çok altında, baskın değil. Jenerik
+// "Kalite standartlarımız..." açıklama metni tamamen kaldırıldı — sertifika
+// kutuları kendi başına duruyor, gereksiz dolgu cümleye ihtiyaç yok.
 const SOCIAL_LINKS: { label: string; href: string; Icon: typeof Linkedin }[] = [
   { label: "LinkedIn", href: "https://www.linkedin.com/company/delta-oto-aksam%C4%B1-san-ve-tic-a-%C5%9F/?viewAsMember=true", Icon: Linkedin },
   { label: "Instagram", href: "https://www.instagram.com/delta_oto/", Icon: Instagram },
@@ -43,10 +46,6 @@ const CERTS: { label: Record<Lang, string> }[] = [
 const T = {
   quickLinks: { tr: "Hızlı Bağlantılar", en: "Quick Links" },
   certsHeading: { tr: "Sertifikalar & Üyelikler", en: "Certifications & Memberships" },
-  certsBody: {
-    tr: "Kalite standartlarımız ve sektörel üyeliklerimizle güvenilir iş ortaklığının güvencesini sunuyoruz.",
-    en: "Our quality standards and industry memberships back every partnership we build.",
-  },
   rights: { tr: "© 2026 Delta Oto. Tüm hakları saklıdır.", en: "© 2026 Delta Oto. All rights reserved." },
   established: { tr: "Delta Oto · Kuruluş 1976", en: "Delta Oto · Established 1976" },
   groupautoMember: { tr: "GROUPAUTO Türkiye Üyesi", en: "GROUPAUTO Türkiye Member" },
@@ -122,36 +121,31 @@ export function SiteFooter() {
                 </div>
               ))}
             </div>
-            <p className="text-xs text-gray-500 leading-relaxed max-w-xs">
-              {T.certsBody[lang]}
-            </p>
-            <div className="mt-7 pt-6 border-t border-white/5">
-              <div className="flex items-center gap-3 mb-5">
-                <img
-                  src="/images/groupauto-turkiye-badge.webp"
-                  alt="GROUPAUTO Türkiye"
-                  width={400}
-                  height={199}
-                  className="h-8 w-auto shrink-0 rounded-[3px]"
-                />
-                <span className="text-[12.5px] text-gray-300 font-semibold leading-tight">{T.groupautoMember[lang]}</span>
+            {SOCIAL_LINKS.length > 0 && (
+              <div className="flex items-center gap-2">
+                {SOCIAL_LINKS.map(({ label, href, Icon }) => (
+                  <a
+                    key={label}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={label}
+                    className="w-8 h-8 rounded-full flex items-center justify-center text-gray-500 hover:text-white hover:bg-white/5 transition-all duration-200"
+                  >
+                    <Icon className="w-4 h-4" strokeWidth={1.75} />
+                  </a>
+                ))}
               </div>
-              {SOCIAL_LINKS.length > 0 && (
-                <div className="flex items-center gap-2">
-                  {SOCIAL_LINKS.map(({ label, href, Icon }) => (
-                    <a
-                      key={label}
-                      href={href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={label}
-                      className="w-8 h-8 rounded-full flex items-center justify-center text-gray-500 hover:text-white hover:bg-white/5 transition-all duration-200"
-                    >
-                      <Icon className="w-4 h-4" strokeWidth={1.75} />
-                    </a>
-                  ))}
-                </div>
-              )}
+            )}
+            <div className="mt-6 pt-6 border-t border-white/5 flex items-center gap-3">
+              <img
+                src="/images/groupauto-turkiye-badge.webp"
+                alt="GROUPAUTO Türkiye"
+                width={400}
+                height={199}
+                className="h-10 w-auto shrink-0 rounded-[3px]"
+              />
+              <span className="text-[12.5px] text-gray-300 font-semibold leading-tight">{T.groupautoMember[lang]}</span>
             </div>
           </div>
 

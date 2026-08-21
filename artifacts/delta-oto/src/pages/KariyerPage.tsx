@@ -220,22 +220,23 @@ export function KariyerPage() {
         <div className="absolute left-0 top-0 w-[3px] h-full bg-gradient-to-b from-transparent via-[#1B3A8F] to-transparent opacity-60" />
 
         <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 relative z-10 py-16 lg:py-28">
-          <div className="flex items-center gap-3 mb-5 lg:mb-7">
+          <div ref={reveal} className="do-reveal flex items-center gap-3 mb-5 lg:mb-7">
             <div className="w-8 h-[2px] bg-[#4d74d6]" />
             <span className="text-[#7d9bea] text-xs font-bold uppercase tracking-[0.3em]">{t.hero.eyebrow}</span>
           </div>
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[72px] font-black leading-[1.05] tracking-[-0.02em] mb-4 lg:mb-6">
+          <h1 ref={reveal} className="do-reveal do-d1 text-4xl sm:text-5xl md:text-6xl lg:text-[72px] font-black leading-[1.05] tracking-[-0.02em] mb-4 lg:mb-6">
             <span className="do-hero-line">{t.hero.title[0]}</span><br />
             <span className="text-white">{t.hero.title[1]}</span><br />
             <span className="text-[#7d9bea]">{t.hero.title[2]}</span>
           </h1>
-          <p className="text-[17px] text-gray-300 leading-[1.8] max-w-2xl mb-6 lg:mb-10 font-light">
+          <p ref={reveal} className="do-reveal do-d2 text-[17px] text-gray-300 leading-[1.8] max-w-2xl mb-6 lg:mb-10 font-light">
             {t.hero.body}
           </p>
           <button
+            ref={reveal}
             type="button"
             onClick={scrollToPlatforms}
-            className="inline-flex items-center gap-2.5 bg-[#1B3A8F] hover:bg-[#2547B5] text-white font-semibold px-8 py-4 rounded-md transition-colors shadow-[0_0_32px_rgba(27,58,143,0.3)] group"
+            className="do-reveal do-d3 inline-flex items-center gap-2.5 bg-[#1B3A8F] hover:bg-[#2547B5] text-white font-semibold px-8 py-4 rounded-md transition-colors shadow-[0_0_32px_rgba(27,58,143,0.3)] group"
           >
             {t.hero.cta}
             <ChevronDown className="w-5 h-5 group-hover:translate-y-0.5 transition-transform" />

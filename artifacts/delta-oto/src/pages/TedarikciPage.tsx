@@ -5,7 +5,7 @@ import { SiteFooter } from "@/components/shared/SiteFooter";
 import { BrandLogo } from "@/components/shared/BrandLogo";
 import { CLASSIFIED_BRANDS, GLOBAL_BRANDS, YERLI_BRANDS, type Brand } from "@/lib/brands";
 import { PRODUCT_CATEGORIES, type ProductCategory } from "@/lib/categories";
-import { useEscapeKey } from "@/hooks/use-motion";
+import { useEscapeKey, useReveal } from "@/hooks/use-motion";
 import { useDocumentMeta } from "@/hooks/use-document-meta";
 import { useLang, type Lang } from "@/lib/i18n";
 
@@ -167,9 +167,10 @@ const content = {
 } satisfies Record<Lang, any>;
 
 function BrandGroup({ label, brands }: { label: string; brands: Brand[] }) {
+  const reveal = useReveal();
   if (brands.length === 0) return null;
   return (
-    <div>
+    <div ref={reveal} className="do-reveal">
       <div className="flex items-center gap-4 mb-7">
         <h3 className="text-xl font-black text-white tracking-tight">{label}</h3>
         <div className="flex-1 h-px bg-white/10" />
@@ -309,8 +310,10 @@ function CategoryExplorer({ categories, brands, lang, t }: { categories: Product
     setMobileFamilyIdx((i) => (i + 1) % families.length);
   }
 
+  const reveal = useReveal();
+
   return (
-    <div>
+    <div ref={reveal} className="do-reveal">
       {/* MASAÜSTÜ — üç sütun TEK bir çerçeve içinde, soldan sağa:
           1) Ürün Ailesi (~23%, 8 aile her zaman görünür) 2) Alt Kategori
           (~27%, seçili ailenin kategorileri, dikey liste) 3) Markalar
@@ -645,6 +648,7 @@ export function TedarikciPage() {
   const filteredGlobal = GLOBAL_BRANDS.filter((b) => b.name.toLowerCase().includes(query));
   const filteredYerli = YERLI_BRANDS.filter((b) => b.name.toLowerCase().includes(query));
   const noBrandResults = filteredGlobal.length === 0 && filteredYerli.length === 0;
+  const reveal = useReveal();
 
   return (
     <div className="do-site bg-white min-h-screen">
@@ -667,23 +671,24 @@ export function TedarikciPage() {
         <div className="absolute left-0 top-0 w-[3px] h-full bg-gradient-to-b from-transparent via-[#1B3A8F] to-transparent opacity-60" />
 
         <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 relative z-10 py-10 lg:py-28">
-          <div className="flex items-center gap-3 mb-5 lg:mb-7">
+          <div ref={reveal} className="do-reveal flex items-center gap-3 mb-5 lg:mb-7">
             <div className="w-8 h-[2px] bg-[#4d74d6]" />
             <span className="text-[#7d9bea] text-xs font-bold uppercase tracking-[0.3em]">{t.hero.eyebrow}</span>
           </div>
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[72px] font-black leading-[1.05] tracking-[-0.02em] mb-4 lg:mb-6">
+          <h1 ref={reveal} className="do-reveal do-d1 text-4xl sm:text-5xl md:text-6xl lg:text-[72px] font-black leading-[1.05] tracking-[-0.02em] mb-4 lg:mb-6">
             <span className="do-hero-line">{t.hero.title[0]}</span><br />
             <span className="text-white">{t.hero.title[1]}</span><br />
             <span className="text-[#7d9bea]">{t.hero.title[2]}</span>
           </h1>
-          <p className="text-[17px] text-gray-300 leading-[1.8] max-w-2xl mb-6 lg:mb-10 font-light">
+          <p ref={reveal} className="do-reveal do-d2 text-[17px] text-gray-300 leading-[1.8] max-w-2xl mb-6 lg:mb-10 font-light">
             {t.hero.body}
           </p>
           <a
+            ref={reveal}
             href="https://b2b.parcabul.com.tr/login.aspx"
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-2.5 bg-[#1B3A8F] hover:bg-[#2547B5] text-white font-semibold px-8 py-4 rounded-md transition-colors shadow-[0_0_32px_rgba(27,58,143,0.3)] group"
+            className="do-reveal do-d3 inline-flex items-center gap-2.5 bg-[#1B3A8F] hover:bg-[#2547B5] text-white font-semibold px-8 py-4 rounded-md transition-colors shadow-[0_0_32px_rgba(27,58,143,0.3)] group"
           >
             {t.hero.cta}
             <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
@@ -696,7 +701,7 @@ export function TedarikciPage() {
       <section className="relative bg-[#1B3A8F] py-10 md:py-24 border-b border-white/[0.06] overflow-hidden">
         <div className="absolute inset-0 do-grid-bg opacity-25" />
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-          <div className="mb-8 lg:mb-14 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
+          <div ref={reveal} className="do-reveal mb-8 lg:mb-14 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
             <div>
               <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea]">{t.brandWall.eyebrow}</span>
               <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight mt-2">{t.brandWall.heading(CLASSIFIED_BRANDS.length)}</h2>
@@ -733,7 +738,7 @@ export function TedarikciPage() {
       {/* KATEGORİLER — light, Excel Ürün Grupları'na göre 23 kategori. */}
       <section className="bg-[#f8fafc] py-10 lg:py-12 border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 mb-6 lg:mb-7">
+          <div ref={reveal} className="do-reveal flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 mb-6 lg:mb-7">
             <div>
               <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">{t.categories.eyebrow}</span>
               <h2 className="text-2xl md:text-3xl font-black text-slate-900 mt-1 tracking-tight">{t.categories.heading}</h2>
@@ -749,10 +754,10 @@ export function TedarikciPage() {
       </section>
 
       {/* TEDARİKÇİ KALİTE KRİTERLERİ — navy */}
-      <section className="bg-[#1B3A8F] py-24 text-white">
+      <section className="bg-[#1B3A8F] py-24 text-white overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div>
+            <div ref={reveal} className="do-reveal-left">
               <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea] block mb-4">{t.quality.eyebrow}</span>
               <h2 className="text-3xl md:text-4xl font-black tracking-tight mb-6">{t.quality.heading}</h2>
               <p className="text-white/65 leading-[1.85] text-[15.5px] mb-8">
@@ -767,7 +772,7 @@ export function TedarikciPage() {
                 ))}
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-4">
+            <div ref={reveal} className="do-reveal-right grid grid-cols-2 gap-4">
               {t.quality.stats.map(({ n, l, d }) => (
                 <div key={l} className="bg-white/[0.08] border border-white/[0.12] rounded-xl p-6 hover:bg-white/[0.14] transition-colors">
                   <div className="text-2xl font-black text-white mb-1">{n}</div>
@@ -783,7 +788,7 @@ export function TedarikciPage() {
       {/* AVANTAJLAR — white */}
       <section className="bg-white py-20">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="mb-12">
+          <div ref={reveal} className="do-reveal mb-12">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">{t.advantages.eyebrow}</span>
             <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-2 tracking-tight">{t.advantages.heading}</h2>
             <p className="text-slate-500 mt-3 text-[15px] max-w-2xl">{t.advantages.body}</p>
@@ -792,7 +797,7 @@ export function TedarikciPage() {
             {t.advantages.items.map(({ title, desc }, i) => {
               const Icon = ADVANTAGE_ICONS[i];
               return (
-                <div key={title} className="do-card flex gap-6 border border-slate-200 rounded-xl p-8 group">
+                <div key={title} ref={reveal} className={`do-reveal ${i % 2 === 1 ? "do-d1" : ""} do-card flex gap-6 border border-slate-200 rounded-xl p-8 group`}>
                   <div className="shrink-0 w-12 h-12 bg-[#1B3A8F]/[0.08] rounded-xl flex items-center justify-center group-hover:bg-[#1B3A8F] transition-colors">
                     <Icon className="w-5 h-5 text-[#1B3A8F] group-hover:text-white transition-colors" />
                   </div>
@@ -810,7 +815,7 @@ export function TedarikciPage() {
       {/* CTA — navy */}
       <section className="relative bg-[#1B3A8F] text-white py-20 overflow-hidden">
         <div className="absolute inset-0 do-grid-bg opacity-20" />
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 text-center">
+        <div ref={reveal} className="do-reveal max-w-7xl mx-auto px-6 lg:px-8 relative z-10 text-center">
           <h2 className="text-3xl md:text-4xl font-black tracking-tight mb-4">{t.cta.heading}</h2>
           <p className="text-gray-300 mb-8 max-w-xl mx-auto text-[16px] font-light">{t.cta.body}</p>
           <a

@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "wouter";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
-import { useCounter } from "../hooks/use-motion";
+import { useCounter, useReveal } from "../hooks/use-motion";
 import { useDocumentMeta } from "@/hooks/use-document-meta";
 import { useLang, routeFor, type Lang } from "@/lib/i18n";
 import {
@@ -287,6 +287,7 @@ export function SpartPage() {
   const lang = useLang();
   const t = content[lang];
   useDocumentMeta(t.meta.title, t.meta.description);
+  const reveal = useReveal();
 
   return (
     <div className="do-site bg-white min-h-screen flex flex-col">
@@ -305,23 +306,23 @@ export function SpartPage() {
         <div className="absolute inset-0 do-grid-bg opacity-20" />
 
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 py-24">
-          <div className="flex items-center gap-3 mb-6">
+          <div ref={reveal} className="do-reveal flex items-center gap-3 mb-6">
             <div className="w-8 h-[2px] bg-[#4d74d6]" />
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea]">
               {t.hero.eyebrow}
             </span>
           </div>
 
-          <h1 className="text-4xl sm:text-5xl md:text-6xl font-black leading-[1.05] tracking-tight mb-6 max-w-2xl">
+          <h1 ref={reveal} className="do-reveal do-d1 text-4xl sm:text-5xl md:text-6xl font-black leading-[1.05] tracking-tight mb-6 max-w-2xl">
             <span className="do-hero-line">{t.hero.titleLine1}</span>
             <br />
             <span className="text-[#7d9bea]">{t.hero.titleLine2}</span>
           </h1>
-          <p className="text-slate-300 text-base sm:text-lg max-w-xl leading-relaxed mb-10">
+          <p ref={reveal} className="do-reveal do-d2 text-slate-300 text-base sm:text-lg max-w-xl leading-relaxed mb-10">
             {t.hero.body}
           </p>
 
-          <div className="flex flex-wrap gap-4">
+          <div ref={reveal} className="do-reveal do-d3 flex flex-wrap gap-4">
             <a
               href="#kategoriler"
               className="inline-flex items-center gap-2 bg-[#1B3A8F] hover:bg-[#2547B5] text-white font-semibold px-8 py-4 rounded-md transition-colors shadow-[0_0_32px_rgba(27,58,143,0.3)] group"
@@ -356,10 +357,10 @@ export function SpartPage() {
       </section>
 
       {/* HAKKINDA */}
-      <section className="bg-white py-24 border-b border-slate-100">
+      <section className="bg-white py-24 border-b border-slate-100 overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div>
+            <div ref={reveal} className="do-reveal-left">
               <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">{t.story.eyebrow}</span>
               <h2 className="text-3xl md:text-4xl font-black mt-3 mb-6 tracking-tight text-slate-900">
                 {t.story.headingLine1}<br />{t.story.headingLine2}
@@ -383,7 +384,7 @@ export function SpartPage() {
               </div>
             </div>
 
-            <div className="relative">
+            <div ref={reveal} className="do-reveal-right relative">
               <div className="aspect-[4/3] rounded-2xl overflow-hidden bg-slate-100">
                 <img
                   src="/images/spart-quality.jpg"
@@ -403,7 +404,7 @@ export function SpartPage() {
       {/* KATEGORİLER */}
       <section id="kategoriler" className="bg-[#f8fafc] py-24 border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="mb-14">
+          <div ref={reveal} className="do-reveal mb-14">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">{t.categories.eyebrow}</span>
             <h2 className="text-3xl md:text-4xl font-black mt-3 tracking-tight text-slate-900">
               {t.categories.heading}
@@ -442,7 +443,7 @@ export function SpartPage() {
       {/* KALİTE STANDARTLARı */}
       <section className="bg-[#1B3A8F] py-24 text-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="mb-14">
+          <div ref={reveal} className="do-reveal mb-14">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea]">
               {t.quality.eyebrow}
             </span>
@@ -474,7 +475,7 @@ export function SpartPage() {
       {/* DAĞITIM ALTYAPISI */}
       <section className="bg-white py-24 border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="mb-14 max-w-2xl">
+          <div ref={reveal} className="do-reveal mb-14 max-w-2xl">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">{t.distribution.eyebrow}</span>
             <h2 className="text-3xl md:text-4xl font-black mt-3 mb-6 tracking-tight text-slate-900">
               {t.distribution.heading}
@@ -485,8 +486,8 @@ export function SpartPage() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-6 mb-10">
-            {t.distribution.depots.map((depot) => (
-              <div key={depot.name} className="do-card bg-white border border-slate-200 rounded-xl p-7">
+            {t.distribution.depots.map((depot, i) => (
+              <div key={depot.name} ref={reveal} className={`do-reveal ${i === 1 ? "do-d1" : i === 2 ? "do-d2" : ""} do-card bg-white border border-slate-200 rounded-xl p-7`}>
                 <div className="flex items-start justify-between mb-5">
                   <div className="w-10 h-10 rounded-xl bg-[#1B3A8F]/[0.08] border border-[#1B3A8F]/[0.12] flex items-center justify-center shrink-0">
                     <MapPin className="w-5 h-5 text-[#1B3A8F]" />
@@ -514,7 +515,7 @@ export function SpartPage() {
       {/* İŞ ORTAKLIĞI AVANTAJLARI — light */}
       <section className="bg-[#f8fafc] py-24 border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="max-w-2xl mb-14">
+          <div ref={reveal} className="do-reveal max-w-2xl mb-14">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">{t.partnership.eyebrow}</span>
             <h2 className="text-3xl md:text-4xl font-black mt-3 mb-6 tracking-tight text-slate-900">
               {t.partnership.heading}
@@ -547,7 +548,7 @@ export function SpartPage() {
       {/* CTA — navy */}
       <section className="relative bg-[#1B3A8F] text-white py-24 overflow-hidden">
         <div className="absolute inset-0 do-grid-bg opacity-20" />
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 text-center">
+        <div ref={reveal} className="do-reveal max-w-7xl mx-auto px-6 lg:px-8 relative z-10 text-center">
           <span className="inline-block text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea] mb-6">{t.cta.eyebrow}</span>
           <h2 className="text-3xl md:text-4xl font-black tracking-tight mb-4">
             {t.cta.heading}

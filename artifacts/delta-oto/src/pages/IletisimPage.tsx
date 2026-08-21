@@ -5,6 +5,7 @@ import { SiteFooter } from "@/components/shared/SiteFooter";
 import { RepresentativeFinderModal } from "@/components/shared/RepresentativeFinderModal";
 import { submitContactForm } from "@workspace/api-client-react";
 import { useDocumentMeta } from "@/hooks/use-document-meta";
+import { useReveal } from "@/hooks/use-motion";
 import { useLang, type Lang } from "@/lib/i18n";
 
 // Departman kartlarının ikonları veriye değil DİZİN'e (index) bağlı — metin
@@ -302,6 +303,7 @@ export function IletisimPage() {
   const [form, setForm] = useState(EMPTY_FORM);
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [repModalOpen, setRepModalOpen] = useState(false);
+  const reveal = useReveal();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -371,18 +373,18 @@ export function IletisimPage() {
         <div className="absolute left-0 top-0 w-[3px] h-full bg-gradient-to-b from-transparent via-[#1B3A8F] to-transparent opacity-60" />
 
         <div className="w-full max-w-7xl mx-auto px-6 lg:px-8 relative z-10 py-16 lg:py-24">
-          <div className="flex items-center gap-3 mb-5 lg:mb-7">
+          <div ref={reveal} className="do-reveal flex items-center gap-3 mb-5 lg:mb-7">
             <div className="w-8 h-[2px] bg-[#4d74d6]" />
             <span className="text-[#7d9bea] text-xs font-bold uppercase tracking-[0.3em]">{t.hero.eyebrow}</span>
           </div>
-          <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-[72px] font-black leading-[1.05] tracking-[-0.02em] mb-4 lg:mb-5">
+          <h1 ref={reveal} className="do-reveal do-d1 text-4xl sm:text-5xl md:text-6xl lg:text-[72px] font-black leading-[1.05] tracking-[-0.02em] mb-4 lg:mb-5">
             <span className="do-hero-line">{t.hero.title[0]}</span><br />
             <span className="text-[#7d9bea]">{t.hero.title[1]}</span>
           </h1>
-          <p className="text-[17px] text-gray-300 max-w-xl font-light leading-[1.8] mb-6 lg:mb-9">
+          <p ref={reveal} className="do-reveal do-d2 text-[17px] text-gray-300 max-w-xl font-light leading-[1.8] mb-6 lg:mb-9">
             {t.hero.body}
           </p>
-          <div className="flex flex-wrap gap-3 sm:gap-4">
+          <div ref={reveal} className="do-reveal do-d3 flex flex-wrap gap-3 sm:gap-4">
             <button
               type="button"
               onClick={() => setRepModalOpen(true)}
@@ -414,14 +416,14 @@ export function IletisimPage() {
       {/* NASIL YARDIMCI OLABİLİRİZ — iki net yol: genel iletişim / temsilci bul.
           Eski ince "Temsilcilerimiz sayfasına gidin" banner'ının yerine geçti —
           artık ayrı bir sayfaya değil, aynı sayfa içindeki modalı açıyor. */}
-      <section className="bg-white py-16 border-b border-slate-200">
+      <section className="bg-white py-16 border-b border-slate-200 overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="mb-10 text-center">
+          <div ref={reveal} className="do-reveal mb-10 text-center">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">{t.quickPaths.eyebrow}</span>
             <h2 className="text-2xl md:text-3xl font-black text-slate-900 mt-2 tracking-tight">{t.quickPaths.heading}</h2>
           </div>
           <div className="grid sm:grid-cols-2 gap-5 max-w-4xl mx-auto">
-            <a href="#genel-iletisim" className="do-card group bg-white border border-slate-200 rounded-2xl p-8 flex flex-col">
+            <a ref={reveal} href="#genel-iletisim" className="do-reveal-left do-card group bg-white border border-slate-200 rounded-2xl p-8 flex flex-col">
               <div className="w-12 h-12 rounded-xl bg-[#1B3A8F]/[0.08] flex items-center justify-center mb-5 group-hover:bg-[#1B3A8F] transition-colors">
                 <Users className="w-6 h-6 text-[#1B3A8F] group-hover:text-white transition-colors" />
               </div>
@@ -431,7 +433,7 @@ export function IletisimPage() {
                 {t.quickPaths.general.link} <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
               </span>
             </a>
-            <button type="button" onClick={() => setRepModalOpen(true)} className="do-card group bg-[#1B3A8F] rounded-2xl p-8 flex flex-col text-left">
+            <button ref={reveal} type="button" onClick={() => setRepModalOpen(true)} className="do-reveal-right do-card group bg-[#1B3A8F] rounded-2xl p-8 flex flex-col text-left">
               <div className="w-12 h-12 rounded-xl bg-white/[0.12] flex items-center justify-center mb-5 group-hover:bg-white transition-colors">
                 <MapPin className="w-6 h-6 text-white group-hover:text-[#1B3A8F] transition-colors" />
               </div>
@@ -448,7 +450,7 @@ export function IletisimPage() {
       {/* DEPARTMAN KİŞİ BİLGİLERİ — light */}
       <section id="genel-iletisim" className="scroll-mt-24 bg-[#f8fafc] py-20 border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="mb-12">
+          <div ref={reveal} className="do-reveal mb-12">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">{t.departments.eyebrow}</span>
             <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-2 tracking-tight">{t.departments.heading}</h2>
             <p className="text-slate-500 mt-3 text-[15px]">{t.departments.body}</p>
@@ -489,10 +491,10 @@ export function IletisimPage() {
       {/* FORM + ADRES — light. Lokasyonlar'dan önceye taşındı: footer'dan hemen önceki bölüm
           proje kuralı gereği navy olmalı, bu da yalnızca burada zaten navy olan Lokasyonlar'ı
           en sona almakla (bkz. CLAUDE.md §9.2) en az müdahaleyle sağlanıyor. */}
-      <section id="iletisim-formu" className="scroll-mt-24 bg-[#f8fafc] py-20">
+      <section id="iletisim-formu" className="scroll-mt-24 bg-[#f8fafc] py-20 overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 grid lg:grid-cols-5 gap-12 items-start">
 
-          <div className="lg:col-span-2">
+          <div ref={reveal} className="do-reveal-left lg:col-span-2">
             <div className="mb-6">
               <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">{t.addressCard.eyebrow}</span>
               <h2 className="text-2xl font-black text-slate-900 mt-2">{t.addressCard.heading}</h2>
@@ -529,7 +531,7 @@ export function IletisimPage() {
             </div>
           </div>
 
-          <div className="lg:col-span-3 bg-white rounded-2xl border border-slate-200 shadow-sm p-10">
+          <div ref={reveal} className="do-reveal-right lg:col-span-3 bg-white rounded-2xl border border-slate-200 shadow-sm p-10">
             <div className="mb-8">
               <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">{t.form.eyebrow}</span>
               <h2 className="text-2xl font-black text-slate-900 mt-2">{t.form.heading}</h2>
@@ -634,7 +636,7 @@ export function IletisimPage() {
           sırası: Gebze, İzmir, Ümraniye (bkz. dosya başındaki not). */}
       <section className="bg-[#1B3A8F] py-20 text-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="mb-10">
+          <div ref={reveal} className="do-reveal mb-10">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea] block mb-3">{t.locations.eyebrow}</span>
             <h2 className="text-3xl font-black tracking-tight">{t.locations.heading}</h2>
             <p className="text-white/55 mt-3 text-[15px]">{t.locations.body}</p>

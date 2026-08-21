@@ -30,10 +30,24 @@ export interface Brand {
 // format webp'ye çevrildi. Yeni bir marka eklenirse logoFormat belirtilmeden
 // bırakılabilir (BrandLogo.tsx varsayılanı "png"); script tekrar
 // çalıştırılınca webp'ye geçirilebilir.
+//
+// Header/Supplier Assets Round: "Delta-Tedarikci-Logolari.pdf" (kullanıcı
+// sağladı, 55 sayfa/marka, Adobe Illustrator kaynağı) artık bu 61 markanın
+// 55'i için logo ARTWORK'ünün tek doğruluk kaynağı — sayfa→marka eşlemesi
+// birebir doğrulandı, hiçbiri tahmin edilmedi. Her sayfa yüksek çözünürlükte
+// (400dpi, şeffaflık korunarak) render edildi, alpha kanalına göre içerik
+// sınırlarına kırpıldı (~%3 kenar boşluğu eklendi), 560px genişliğe (mevcut
+// asset kuralıyla aynı) yeniden boyutlandırıldı — sanat yeniden çizilmedi,
+// renklendirilmedi, deforme edilmedi. PDF'te OLMAYAN 6 sınıflandırılmış
+// marka (LuK, Mahle, Mann-Filter, Monroe, Optima, Taifun) mevcut doğrulanmış
+// asset'leriyle DEĞİŞMEDEN kalıyor. PDF'teki yeni artwork'ün önceki
+// asset'ten farklı olarak zaten açık zeminde tam okunaklı çıktığı 5 marka
+// (Frendi, IOTO, King Piston, Silbak, Supsan) için logoBackground:"dark"
+// bayrağı kaldırıldı — yeni asset koyu kart gerektirmiyor.
 export const CLASSIFIED_BRANDS: Brand[] = [
-  { slug: "behr", name: "Behr", origin: "global", hasVerifiedLogo: true, logoFormat: "svg" },
-  { slug: "beru", name: "Beru", origin: "global", hasVerifiedLogo: true, logoFormat: "svg" },
-  { slug: "blueprint", name: "Blue Print", origin: "global", hasVerifiedLogo: true, logoFormat: "svg" },
+  { slug: "behr", name: "Behr", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
+  { slug: "beru", name: "Beru", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
+  { slug: "blueprint", name: "Blue Print", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "borgwarner", name: "BorgWarner", website: "https://www.borgwarner.com/aftermarket", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "bosch", name: "Bosch", website: "https://www.boschaftermarket.com/", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "brembo", name: "Brembo", website: "https://www.brembo.com/en", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
@@ -49,19 +63,19 @@ export const CLASSIFIED_BRANDS: Brand[] = [
   { slug: "era", name: "ERA Benelux", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "fag", name: "FAG", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "febi", name: "febi bilstein", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
-  { slug: "ferodo", name: "Ferodo", origin: "global", hasVerifiedLogo: true, logoFormat: "svg" },
+  { slug: "ferodo", name: "Ferodo", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "filtron", name: "Filtron", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
-  { slug: "frendi", name: "Frendi", origin: "yerli", hasVerifiedLogo: true, logoFormat: "webp", logoBackground: "dark" },
+  { slug: "frendi", name: "Frendi", origin: "yerli", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "gates", name: "Gates", website: "https://www.gates.com/", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "gkn", name: "GKN", website: "https://www.gknautomotive.com/en/aftermarket/", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "hlmando", name: "HL Mando", website: "https://hlmandoaftermarket.com/", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "hattat", name: "Hattat", origin: "yerli", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "hella", name: "Hella", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
-  { slug: "henkel", name: "Henkel", origin: "global", hasVerifiedLogo: true, logoFormat: "svg" },
+  { slug: "henkel", name: "Henkel", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "ina", name: "INA", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
-  { slug: "ioto", name: "IOTO", origin: "yerli", hasVerifiedLogo: true, logoFormat: "webp", logoBackground: "dark" },
+  { slug: "ioto", name: "IOTO", origin: "yerli", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "kale", name: "Kale", origin: "yerli", hasVerifiedLogo: true, logoFormat: "webp" },
-  { slug: "kingpiston", name: "King Piston", origin: "yerli", hasVerifiedLogo: true, logoFormat: "webp", logoBackground: "dark" },
+  { slug: "kingpiston", name: "King Piston", origin: "yerli", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "lemforder", name: "Lemförder", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "liquimoly", name: "Liqui Moly", website: "https://www.liqui-moly.com/", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "luk", name: "LuK", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
@@ -76,10 +90,10 @@ export const CLASSIFIED_BRANDS: Brand[] = [
   { slug: "rapro", name: "Rapro", origin: "yerli", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "sachs", name: "Sachs", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "segautomotive", name: "SEG Automotive", website: "https://www.seg-automotive.com/", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
-  { slug: "silbak", name: "Silbak", origin: "yerli", hasVerifiedLogo: true, logoFormat: "svg", logoBackground: "dark" },
+  { slug: "silbak", name: "Silbak", origin: "yerli", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "skf", name: "SKF", website: "https://vehicleaftermarket.skf.com/", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "spart", name: "Spart", origin: "yerli", hasVerifiedLogo: true, logoFormat: "webp" },
-  { slug: "supsan", name: "Supsan", origin: "yerli", hasVerifiedLogo: true, logoFormat: "svg", logoBackground: "dark" },
+  { slug: "supsan", name: "Supsan", origin: "yerli", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "swag", name: "SWAG", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "taifun", name: "Taifun", origin: "yerli", hasVerifiedLogo: false },
   { slug: "teknorot", name: "Teknorot", origin: "yerli", hasVerifiedLogo: true, logoFormat: "webp" },

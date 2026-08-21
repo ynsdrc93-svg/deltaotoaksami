@@ -330,18 +330,20 @@ export function LandingPage() {
         <div className={`w-full px-6 lg:px-10 xl:px-16 flex items-center justify-between transition-[height] duration-300 ${scrolled ? "h-[59px] sm:h-[68px]" : "h-[88px] sm:h-28"}`}>
           {/* Logo — sabit solda. Mobilde (<sm) ~9-10% küçültüldü + 2px yukarı
               optik düzeltme (logo hafif alçak duruyordu) — sm ve üzeri (masaüstü)
-              boyut/hizalama birebir korunuyor. */}
+              boyut/hizalama birebir korunuyor. Header/Supplier Assets Round:
+              SiteHeader.tsx ile birebir aynı yeni logo asset'ine (883x240)
+              güncellendi — bkz. o dosyadaki gerekçe yorumu. */}
           <Link href={routeFor("home", lang)} className="flex items-center shrink-0">
             <img
-              src="/images/delta-oto-logo.webp"
+              src="/images/delta-oto-header-logo.webp"
               alt="Delta Oto 50. Yıl"
-              width={963}
+              width={883}
               height={240}
               className={`w-auto transition-[height] duration-300 -mt-0.5 sm:mt-0 ${scrolled ? "h-9 sm:h-12" : "h-[58px] sm:h-20"}`}
             />
           </Link>
 
-          {/* Sağ grup: nav + dil + SPART/B2B kompakt blok */}
+          {/* Sağ grup: nav + dil + B2B Portal butonu */}
           <div className="flex items-center gap-3 xl:gap-5 shrink-0">
             <nav className="hidden xl:flex items-center gap-4 xl:gap-6 text-[13.5px] font-medium tracking-tight text-slate-600">
               {NAV_LINKS.map(({ key, label }) => (
@@ -355,20 +357,15 @@ export function LandingPage() {
               <LanguageSwitcher />
             </div>
 
-            {/* SPART/B2B ikili grup — bkz. SiteHeader.tsx'teki birebir aynı
-                desen (Header Revizyon Turu §1): ikisi de artık kendi
-                içeriğine göre boyutlanıyor (SPART h-6, B2B auto-width
-                px-3) — eskiden B2B'nin w-full ile zorla 104px'e gerilmesi
-                küçük logoya karşı dengesiz duruyordu. */}
-            <div className="hidden xl:flex flex-col items-center gap-1.5 shrink-0">
-              <Link href={routeFor("spart", lang)} className="opacity-80 hover:opacity-100 transition-opacity">
-                <img src="/images/spart-logo.png" alt="SPART Original Replacement" className="h-6 w-auto block" />
-              </Link>
-              <a href="https://b2b.parcabul.com.tr/login.aspx" target="_blank" rel="noopener noreferrer" className="flex items-center justify-center gap-1 px-3 h-[26px] rounded-[3px] bg-[#1B3A8F] hover:bg-[#2547B5] text-white text-[10px] font-bold tracking-[0.03em] transition-colors group whitespace-nowrap">
-                {t.hero.ctaB2B.toUpperCase()}
-                <ArrowRight className="w-2.5 h-2.5 group-hover:translate-x-0.5 transition-transform" />
-              </a>
-            </div>
+            {/* B2B Portal — bkz. SiteHeader.tsx'teki birebir aynı desen
+                (Header/Supplier Assets Round): SPART header'dan tamamen
+                kaldırıldı, B2B artık tek başına duran kompakt bir buton
+                (px-4 h-9, text-[11px]) — eski dikey SPART/B2B stack'i
+                gitti. */}
+            <a href="https://b2b.parcabul.com.tr/login.aspx" target="_blank" rel="noopener noreferrer" className="hidden xl:flex items-center justify-center gap-1.5 px-4 h-9 rounded-[4px] bg-[#1B3A8F] hover:bg-[#2547B5] text-white text-[11px] font-bold tracking-[0.03em] transition-colors group whitespace-nowrap shrink-0">
+              {t.hero.ctaB2B.toUpperCase()}
+              <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+            </a>
 
             <button
               type="button"
@@ -397,10 +394,6 @@ export function LandingPage() {
                   {label[lang]}
                 </Link>
               ))}
-              <Link href={routeFor("spart", lang)} onClick={() => setMobileOpen(false)} className="py-3 text-[15px] font-medium text-slate-700 hover:text-[#1B3A8F] flex items-center gap-2">
-                SPART
-                <img src="/images/spart-logo.png" alt="" className="h-5 w-auto" />
-              </Link>
               <div className="py-3 flex items-center justify-between border-t border-slate-100 mt-1 pt-4">
                 <span className="text-[13px] font-medium text-slate-500">{lang === "tr" ? "Dil" : "Language"}</span>
                 <LanguageSwitcher variant="mobile" />

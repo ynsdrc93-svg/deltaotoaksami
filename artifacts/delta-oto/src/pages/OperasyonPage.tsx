@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Truck, Shield, Zap, Network, PackageCheck, MapPin, BarChart3, ChevronRight, Calendar, ArrowRight, Handshake } from "lucide-react";
+import { Truck, Shield, Zap, Network, PackageCheck, BarChart3, ChevronRight, Calendar, ArrowRight, Handshake } from "lucide-react";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
 import { useReveal, useCounter } from "../hooks/use-motion";
@@ -91,40 +91,39 @@ const content = {
     depots: {
       eyebrow: "Operasyon Altyapısı",
       heading: "Türkiye Geneline Güçlü Dağıtım Yapısı",
-      body: "Ümraniye, Gebze ve İzmir operasyon merkezlerimiz üzerinden Türkiye geneline düzenli, planlı ve sürdürülebilir bir dağıtım yapısı sunuyoruz. Her operasyon noktası bulunduğu bölgenin ihtiyaçlarına göre konumlanırken; merkez yapı, sevkiyat sürekliliği ve stok erişilebilirliği açısından birbirini tamamlar.",
+      body: "Ümraniye, Gebze ve İzmir operasyon noktalarımız, birbirini tamamlayan üç bölgesel odak üzerinden Türkiye geneline düzenli bir dağıtım hattı kurar.",
       centralTag: "Merkez Koordinasyon",
+      statTrio: [
+        { value: "18:00", label: "Aynı Gün Sevk İçin Son Sipariş" },
+        { value: "81", label: "İl Kapsamı" },
+        { value: "03", label: "Operasyon Noktası" },
+      ],
       items: [
         {
           title: "Gebze Operasyon Noktası",
           city: "Kocaeli",
+          plate: "41",
           address: "Barış, 1804. Sk. No:4, 41400 Gebze / Kocaeli",
-          body: "Kocaeli ve çevresindeki sanayi hattına yakın konumlanan Gebze operasyon noktamız, Doğu Marmara eksenindeki dağıtım sürekliliğini destekler. Bölgesel stok erişimi ve planlı sevkiyat yapısıyla günlük operasyon akışında önemli rol üstlenir.",
+          body: "Doğu Marmara sanayi hattına yakın konumuyla bölgesel stok ve sevkiyat akışını destekler. Kocaeli, Sakarya ve çevre illere hızlı erişim sağlar.",
           central: false,
-          facts: [] as string[],
         },
         {
           title: "İzmir Operasyon Noktası",
           city: "İzmir",
+          plate: "35",
           address: "Kemalpaşa Kızılüzüm Kırovası Kümeevleri No: 12/1, Kemalpaşa / İzmir",
-          body: "İzmir merkezli operasyon yapımız, Ege Bölgesi'ndeki teslimat akışını destekleyen bölgesel bir dağıtım odağıdır. Düzenli sevkiyat planlaması ve saha erişimi sayesinde bölge genelinde süreklilik sağlar.",
+          body: "Ege Bölgesi'nin stok ve dağıtım odağıdır. İzmir merkezli saha yapısı, bölgedeki düzenli sevkiyat ve bayi erişimini destekler.",
           central: false,
-          facts: [] as string[],
         },
         {
           title: "Ümraniye Merkez Depo",
           city: "İstanbul",
+          plate: "34",
           address: "Barbaros Cd. Beyit Sk. No:17, Yukarı Dudullu — Ümraniye / İstanbul",
-          body: "Ümraniye merkez depomuz, operasyon yapısının ana koordinasyon noktasıdır. İstanbul, Marmara, Trakya ve Türkiye geneline yönelik dağıtım planlaması bu merkez üzerinden yönetilir.",
+          body: "Delta Oto'nun ana koordinasyon ve merkez depo noktasıdır. İstanbul'dan Türkiye geneline uzanan dağıtım planlaması bu merkez üzerinden yönetilir.",
           central: true,
-          facts: ["Aynı gün sevkiyat", "İstanbul içi planlı teslimat", "Türkiye geneline düzenli dağıtım"],
         },
       ],
-      banner: {
-        heading: "Türkiye genelinde süreklilik odaklı dağıtım yapısı",
-        body: "Üç operasyon merkezimiz ve planlı lojistik organizasyonumuz sayesinde Türkiye genelinde düzenli teslimat akışı sağlıyoruz.",
-        statValue: "81",
-        statLabel: "İl Kapsamı",
-      },
     },
     capabilities: {
       eyebrow: "Lojistik Altyapı",
@@ -215,40 +214,39 @@ const content = {
     depots: {
       eyebrow: "Operations Infrastructure",
       heading: "A Strong Distribution Structure Across Türkiye",
-      body: "From our operations centers in Ümraniye, Gebze and İzmir, we run a consistent, planned and sustainable distribution structure across Türkiye. Each site is positioned around its own region's needs, while the central hub complements them on shipping continuity and stock availability.",
+      body: "Our Ümraniye, Gebze and İzmir operations sites form three complementary regional hubs, together running a consistent distribution line across Türkiye.",
       centralTag: "Central Coordination",
+      statTrio: [
+        { value: "18:00", label: "Same-Day Dispatch Cutoff" },
+        { value: "81", label: "Provinces Covered" },
+        { value: "03", label: "Operations Sites" },
+      ],
       items: [
         {
           title: "Gebze Operations Site",
           city: "Kocaeli",
+          plate: "41",
           address: "Barış, 1804. Sk. No:4, 41400 Gebze / Kocaeli",
-          body: "Positioned close to the industrial corridor around Kocaeli, our Gebze site supports distribution continuity across the eastern Marmara region. Regional stock access and planned dispatch keep it central to daily operations.",
+          body: "Close to the industrial corridor of eastern Marmara, it supports regional stock and dispatch flow. It provides fast access to Kocaeli, Sakarya and nearby provinces.",
           central: false,
-          facts: [] as string[],
         },
         {
           title: "İzmir Operations Site",
           city: "İzmir",
+          plate: "35",
           address: "Kemalpaşa Kızılüzüm Kırovası Kümeevleri No: 12/1, Kemalpaşa / İzmir",
-          body: "Our İzmir-based operation is a regional distribution hub supporting delivery flow across the Aegean Region. Regular dispatch planning and field access keep service consistent throughout the region.",
+          body: "The stock and distribution hub for the Aegean Region. Our İzmir-based field structure supports regular dispatch and dealer access across the region.",
           central: false,
-          facts: [] as string[],
         },
         {
           title: "Ümraniye Central Warehouse",
           city: "İstanbul",
+          plate: "34",
           address: "Barbaros Cd. Beyit Sk. No:17, Yukarı Dudullu — Ümraniye / İstanbul",
-          body: "Our Ümraniye central warehouse is the main coordination point of our operations structure. Distribution planning for İstanbul, Marmara, Thrace and the rest of Türkiye is managed from this hub.",
+          body: "Delta Oto's main coordination and central warehouse site. Distribution planning from İstanbul to all of Türkiye is managed from this hub.",
           central: true,
-          facts: ["Same-day dispatch", "Planned delivery within İstanbul", "Regular nationwide distribution"],
         },
       ],
-      banner: {
-        heading: "A continuity-focused distribution structure across Türkiye",
-        body: "Through our three operations centers and planned logistics organization, we maintain a steady flow of deliveries across Türkiye.",
-        statValue: "81",
-        statLabel: "Provinces Covered",
-      },
     },
     capabilities: {
       eyebrow: "Logistics Infrastructure",
@@ -438,55 +436,66 @@ export function OperasyonPage() {
         </div>
       </section>
 
-      {/* LOJİSTİK MERKEZLERİMİZ — white. Visual Redesign Round: eski üç/dört
-          "genel AI kartı" şablonu (renkli ikon kutusu, "Ana Depo" rozeti,
-          madde işaretli liste) tamamen kaldırıldı. Yerine: tipografi ağırlıklı,
-          ince bir üst çizgiyle bağlanan üç kolon (Gebze → İzmir → Ümraniye
-          sırası, sitedeki diğer lokasyon listeleriyle aynı). Ümraniye, kart
-          büyütülmeden yalnızca küçük bir "Merkez Koordinasyon" etiketiyle
-          ayırt ediliyor. Alt kapsama şeridi de tek bir büyük KPI kutusu
-          yerine, metinle aynı satırda baseline hizalı sessiz bir rakama
-          indirgendi. */}
+      {/* LOJİSTİK MERKEZLERİMİZ — white. Header/Supplier Assets Round: bir
+          önceki tur ("Visual Redesign Round") üç düz metin kolonunu hâlâ
+          "METİN / METİN / METİN" gibi okutuyordu — kullanıcı geri bildirimi
+          net: "too text-heavy". Editoryal yön korunuyor (tipografi ağırlıklı,
+          kart/kutu yok) ama görsel anlatım güçlendirildi: (1) 18:00 / 81 / 03
+          artık ayrı bir KPI kutusu değil, girişin hemen altında sessiz bir
+          rakam üçlüsü; (2) her lokasyon artık dev, soluk bir "01/02/03" indeks
+          numarasıyla açılıyor (dergi bölüm numaralandırması), yanında plaka
+          kodu (41/35/34 — turkey-regions.ts'teki gerçek il plaka verisiyle
+          aynı dil), gövde metni 2 cümleye indirildi; (3) üstteki ince çizgi,
+          artık her lokasyonun başında dolu (Ümraniye/merkez) veya içi boş
+          (Gebze/İzmir) küçük bir "rota noktası" noktasıyla kesişiyor — saf
+          metin kolonları yerine hafif bir "harita/rota" hissi. Ümraniye hâlâ
+          kart büyütülmeden yalnızca "Merkez Koordinasyon" etiketi ve dolu
+          noktayla ayırt ediliyor. Motion: OPERASYONEL GÜÇLER bölümündeki
+          onaylanmış alternating-left/right dilinin AYNISI — burada üç yatay
+          kolon olduğu için tek tek dönüşümlü değil, kademeli (do-d1/d2/d3)
+          standart reveal kullanıldı; sola/sağa giriş, sayfa geneli motion
+          sisteminde başka yerlerde uygulanıyor. */}
       <section className="bg-white py-24 md:py-28">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="max-w-2xl mb-16 md:mb-20">
+          <div ref={ref} className="do-reveal max-w-2xl mb-12 md:mb-14">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">{t.depots.eyebrow}</span>
             <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-2 tracking-tight">{t.depots.heading}</h2>
             <p className="text-slate-500 mt-4 text-[15px] leading-relaxed">{t.depots.body}</p>
           </div>
 
-          <div className="relative grid md:grid-cols-3 gap-x-10 lg:gap-x-16 gap-y-14">
-            <div className="hidden md:block absolute top-[7px] left-0 right-0 h-px bg-slate-200" aria-hidden="true" />
-            {t.depots.items.map(({ title, city, address, body, central, facts }: { title: string; city: string; address: string; body: string; central: boolean; facts: string[] }) => (
-              <div key={title} className="relative">
-                <div className="flex items-center gap-2 mb-5">
-                  <MapPin className="w-3.5 h-3.5 text-[#1B3A8F]/50 shrink-0 relative z-10 bg-white" />
-                  <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-400">{city}</span>
-                  {central && (
-                    <span className="text-[10px] font-black uppercase tracking-[0.15em] text-[#1B3A8F]">· {t.depots.centralTag}</span>
-                  )}
-                </div>
-                <h3 className="font-black text-slate-900 text-xl tracking-tight">{title}</h3>
-                <p className="text-slate-600 text-[14px] leading-relaxed mt-4">{body}</p>
-                <div className="mt-5 pt-4 border-t border-slate-100">
-                  <p className="text-slate-400 text-[12.5px] leading-relaxed">{address}</p>
-                  {facts.length > 0 && (
-                    <p className="text-[12.5px] text-[#1B3A8F] font-semibold mt-2.5">{facts.join(" · ")}</p>
-                  )}
-                </div>
+          <div ref={ref} className="do-reveal do-d2 flex flex-wrap items-baseline gap-x-10 gap-y-5 pb-12 md:pb-14 mb-14 md:mb-16 border-b border-slate-200">
+            {t.depots.statTrio.map(({ value, label }: { value: string; label: string }) => (
+              <div key={label} className="flex items-baseline gap-2.5">
+                <span className="text-4xl md:text-5xl font-black text-[#1B3A8F] tabular-nums tracking-tight leading-none">{value}</span>
+                <span className="text-[11px] text-slate-500 uppercase tracking-wide font-bold max-w-[120px] leading-tight">{label}</span>
               </div>
             ))}
           </div>
 
-          <div className="mt-16 md:mt-20 pt-10 border-t border-slate-200 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
-            <div className="max-w-xl">
-              <div className="text-lg font-bold text-slate-900">{t.depots.banner.heading}</div>
-              <p className="text-slate-500 text-[14px] mt-1.5 leading-relaxed">{t.depots.banner.body}</p>
-            </div>
-            <div className="flex items-baseline gap-2 shrink-0">
-              <span className="text-3xl font-black text-[#1B3A8F] tabular-nums">{t.depots.banner.statValue}</span>
-              <span className="text-[11px] text-slate-500 uppercase tracking-wide font-bold">{t.depots.banner.statLabel}</span>
-            </div>
+          <div className="relative grid md:grid-cols-3 gap-x-10 lg:gap-x-16 gap-y-14">
+            <div className="hidden md:block absolute top-[5px] left-0 right-0 h-px bg-slate-200" aria-hidden="true" />
+            {t.depots.items.map(({ title, city, plate, address, body, central }: { title: string; city: string; plate: string; address: string; body: string; central: boolean }, i: number) => (
+              <div key={title} ref={ref} className={`relative do-reveal ${i === 0 ? "do-d1" : i === 1 ? "do-d2" : "do-d3"}`}>
+                <div
+                  className={`relative z-10 w-[10px] h-[10px] rounded-full mb-6 ${central ? "bg-[#1B3A8F]" : "bg-white border-2 border-[#1B3A8F]/35"}`}
+                  aria-hidden="true"
+                />
+                <div className="flex items-baseline gap-3">
+                  <span className="text-5xl md:text-6xl font-black text-slate-100 tabular-nums leading-none select-none">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className="text-[11px] font-bold uppercase tracking-[0.15em] text-slate-400 tabular-nums">{plate} · {city}</span>
+                </div>
+                <div className="flex items-center gap-2 mt-3">
+                  <h3 className="font-black text-slate-900 text-xl tracking-tight">{title}</h3>
+                  {central && (
+                    <span className="text-[10px] font-black uppercase tracking-[0.15em] text-[#1B3A8F]">· {t.depots.centralTag}</span>
+                  )}
+                </div>
+                <p className="text-slate-600 text-[14px] leading-relaxed mt-3">{body}</p>
+                <p className="text-slate-400 text-[12.5px] leading-relaxed mt-4 pt-4 border-t border-slate-100">{address}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>

@@ -17,7 +17,6 @@ const NAV: { key: "about" | "partners" | "operations" | "careers" | "contact"; l
   { key: "contact", label: { tr: "İletişim", en: "Contact" } },
 ];
 
-const SPART_ALT: Record<Lang, string> = { tr: "SPART Original Replacement", en: "SPART Original Replacement" };
 const B2B_LABEL: Record<Lang, string> = { tr: "B2B Portal", en: "B2B Portal" };
 const MENU_OPEN_LABEL: Record<Lang, string> = { tr: "Menüyü aç", en: "Open menu" };
 const MENU_CLOSE_LABEL: Record<Lang, string> = { tr: "Menüyü kapat", en: "Close menu" };
@@ -44,18 +43,25 @@ export function SiteHeader() {
 
           {/* Logo — sabit solda. Mobilde (<sm) ~9-10% küçültüldü + 2px yukarı
               optik düzeltme (logo hafif alçak duruyordu) — sm ve üzeri (masaüstü)
-              boyut/hizalama birebir korunuyor. */}
+              boyut/hizalama birebir korunuyor. Header/Supplier Assets Round:
+              logo "Delta-50Yil-Header-Logo.png" kaynağına güncellendi (trim +
+              küçük kenar boşluğu + webp, sanat değiştirilmedi) — eski
+              delta-oto-logo.webp artık hiçbir yerde referans edilmiyor ama
+              silinmedi. Yeni asset'in kırpılmış en-boy oranı (883:240 ≈
+              3.68:1) eskisinden (963:240 ≈ 4.01:1) biraz daha dar olduğu için
+              aynı yükseklik sınıflarında biraz daha az yatay yer kaplıyor —
+              header taşması riski azaldı, ek bir boyut düzeltmesi gerekmedi. */}
           <Link href={routeFor("home", lang)} className="flex items-center shrink-0">
             <img
-              src="/images/delta-oto-logo.webp"
+              src="/images/delta-oto-header-logo.webp"
               alt="Delta Oto 50. Yıl"
-              width={963}
+              width={883}
               height={240}
               className={`w-auto transition-[height] duration-300 -mt-0.5 sm:mt-0 ${scrolled ? "h-9 sm:h-12" : "h-[58px] sm:h-20"}`}
             />
           </Link>
 
-          {/* Sağ grup: nav + dil + SPART/B2B kompakt blok */}
+          {/* Sağ grup: nav + dil + B2B Portal butonu */}
           <div className="flex items-center gap-3 xl:gap-5 shrink-0">
             <nav className="hidden xl:flex items-center gap-4 xl:gap-6 text-[13.5px] font-medium tracking-tight text-slate-600">
               {NAV.map(({ key, label }) => {
@@ -81,29 +87,25 @@ export function SiteHeader() {
               <LanguageSwitcher />
             </div>
 
-            {/* SPART/B2B ikili grup — çerçevesiz (Visual Polish Round §2),
-                artık ikisi de KENDİ içeriğine göre boyutlanıyor (Header
-                Revizyon Turu §1): eskiden SPART bir logonun doğal genişliği
-                (~59px) kadardı ama B2B butonu w-full ile 104px'e zorla
-                geriliyordu — "küçük logo + kocaman blok" dengesizliği
-                yaratıyordu. Şimdi SPART biraz büyütüldü (h-6), B2B da kendi
-                metin+dolgu genişliğine (auto, px-3) döndürüldü — ikisi de
-                aynı boyut ailesinde, aynı "utility zone" hissi veriyor ama
-                B2B tek başına baskın bir blok gibi durmuyor. */}
-            <div className="hidden xl:flex flex-col items-center gap-1.5 shrink-0">
-              <Link href={routeFor("spart", lang)} className="opacity-80 hover:opacity-100 transition-opacity">
-                <img src="/images/spart-logo.png" alt={SPART_ALT[lang]} className="h-6 w-auto block" />
-              </Link>
-              <a
-                href="https://b2b.parcabul.com.tr/login.aspx"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center gap-1 px-3 h-[26px] rounded-[3px] bg-[#1B3A8F] hover:bg-[#2547B5] text-white text-[10px] font-bold tracking-[0.03em] transition-colors group whitespace-nowrap"
-              >
-                {B2B_LABEL[lang].toUpperCase()}
-                <ArrowRight className="w-2.5 h-2.5 group-hover:translate-x-0.5 transition-transform" />
-              </a>
-            </div>
+            {/* B2B Portal — Header/Supplier Assets Round: SPART tamamen
+                header'dan kaldırıldı (kullanıcı kararı; SPART footer'da
+                kalmaya devam ediyor). B2B artık paylaşılan bir çerçeve/stack
+                içinde değil, kendi başına duran kompakt bir buton — SPART
+                gittiği için boşta kalan dikey stack alanı da kaldırıldı,
+                buton nav satırıyla aynı hizada tek satır olarak duruyor.
+                Biraz büyütüldü (px-4 h-9, text-[11px]) çünkü artık yalnız
+                başına daha "kasıtlı" görünmesi gerekiyordu — SPART'ın
+                küçük ikinci öğesi olmadan eski 26px yükseklik fazla
+                mütevazı/kayıp kalıyordu. */}
+            <a
+              href="https://b2b.parcabul.com.tr/login.aspx"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hidden xl:flex items-center justify-center gap-1.5 px-4 h-9 rounded-[4px] bg-[#1B3A8F] hover:bg-[#2547B5] text-white text-[11px] font-bold tracking-[0.03em] transition-colors group whitespace-nowrap shrink-0"
+            >
+              {B2B_LABEL[lang].toUpperCase()}
+              <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+            </a>
 
             <button
               type="button"
@@ -136,10 +138,6 @@ export function SiteHeader() {
                   </Link>
                 );
               })}
-              <Link href={routeFor("spart", lang)} className="py-3 text-[15px] font-medium text-slate-700 hover:text-[#1B3A8F] flex items-center gap-2">
-                SPART
-                <img src="/images/spart-logo.png" alt="" className="h-5 w-auto" />
-              </Link>
               <div className="py-3 flex items-center justify-between border-t border-slate-100 mt-1 pt-4">
                 <span className="text-[13px] font-medium text-slate-500">{lang === "tr" ? "Dil" : "Language"}</span>
                 <LanguageSwitcher variant="mobile" />

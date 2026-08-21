@@ -617,7 +617,7 @@ export function HakkimizdaPage() {
       {/* İŞ BİRİMLERİ — navy */}
       <section className="bg-[#1B3A8F] py-24 text-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="mb-14">
+          <div ref={reveal} className="do-reveal mb-14">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea]">{t.businessUnits.eyebrow}</span>
             <h2 className="text-3xl md:text-4xl font-black mt-2 tracking-tight">{t.businessUnits.heading}</h2>
             <p className="text-white/75 mt-3 max-w-xl text-[15px]">{t.businessUnits.body}</p>
@@ -630,7 +630,8 @@ export function HakkimizdaPage() {
             {BUSINESS_UNITS.map(({ icon: Icon, title, desc, tags }, i) => (
               <div
                 key={title}
-                className="group/row flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8 py-7 hover:bg-white/[0.03] transition-colors duration-300 rounded-lg -mx-4 px-4"
+                ref={reveal}
+                className={`do-reveal ${STAGGER_CLASSES[i] ?? ""} group/row flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8 py-7 hover:bg-white/[0.03] transition-colors duration-300 rounded-lg -mx-4 px-4`}
               >
                 <div className="flex items-center gap-5 shrink-0 sm:w-72">
                   <span className="text-4xl sm:text-5xl font-black text-white/[0.12] group-hover/row:text-[#7d9bea]/40 tabular-nums leading-none transition-colors duration-300 shrink-0">
@@ -664,7 +665,7 @@ export function HakkimizdaPage() {
         <div className="absolute inset-0 do-grid-bg opacity-30" />
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
           <div className="grid lg:grid-cols-2 gap-14 items-start">
-            <div>
+            <div ref={reveal} className="do-reveal-left">
               <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea] block mb-4">{t.groupauto.eyebrow}</span>
               <h2 className="text-3xl md:text-4xl font-black tracking-tight mb-6">{t.groupauto.heading}</h2>
               <p className="text-gray-300 leading-[1.85] text-base mb-8 max-w-lg">
@@ -682,7 +683,7 @@ export function HakkimizdaPage() {
                 {t.groupauto.exploreLink} <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
-            <div className="space-y-4">
+            <div ref={reveal} className="do-reveal-right space-y-4">
               <h3 className="text-[15px] font-bold text-white/80 uppercase tracking-widest mb-6">{t.groupauto.benefitsHeading}</h3>
               {t.groupauto.benefits.map(item => (
                 <div key={item.t} className="bg-white/[0.06] border border-white/[0.1] rounded-xl p-5 hover:bg-white/[0.1] transition-colors">
