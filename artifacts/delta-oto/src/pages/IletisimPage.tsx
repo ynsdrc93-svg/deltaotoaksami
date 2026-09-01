@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "wouter";
 import { MapPin, Phone, Mail, Globe, Clock, ChevronRight, ArrowRight, Users, Package, MonitorSmartphone, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
@@ -6,7 +7,7 @@ import { RepresentativeFinderModal } from "@/components/shared/RepresentativeFin
 import { submitContactForm } from "@workspace/api-client-react";
 import { useDocumentMeta } from "@/hooks/use-document-meta";
 import { useReveal } from "@/hooks/use-motion";
-import { useLang, type Lang } from "@/lib/i18n";
+import { useLang, routeFor, type Lang } from "@/lib/i18n";
 
 // Departman kartlarının ikonları veriye değil DİZİN'e (index) bağlı — metin
 // içeriği content.tr/content.en'de, ikon eşlemesi burada sabit (bkz.
@@ -129,6 +130,7 @@ const content = {
       submitting: "Gönderiliyor...",
       submit: "Talep Gönderin",
       privacy: "Verileriniz yalnızca talebinizi karşılamak amacıyla kullanılır.",
+      privacyLinkLabel: "KVKK Aydınlatma Metni'ni inceleyin",
     },
     locations: {
       eyebrow: "Operasyon Merkezlerimiz",
@@ -261,6 +263,7 @@ const content = {
       submitting: "Sending...",
       submit: "Send Request",
       privacy: "Your information is used only to process your request.",
+      privacyLinkLabel: "Read our KVKK Notice",
     },
     locations: {
       eyebrow: "Our Operations Centers",
@@ -625,7 +628,12 @@ export function IletisimPage() {
                   <>{t.form.submit} <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" /></>
                 )}
               </button>
-              <p className="text-center text-[12px] text-slate-400 mt-4">{t.form.privacy}</p>
+              <p className="text-center text-[12px] text-slate-400 mt-4">
+                {t.form.privacy}{" "}
+                <Link href={routeFor("kvkk", lang)} className="text-[#1B3A8F] font-medium hover:underline">
+                  {t.form.privacyLinkLabel}
+                </Link>
+              </p>
             </form>
           </div>
         </div>

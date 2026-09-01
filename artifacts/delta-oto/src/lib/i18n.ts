@@ -21,7 +21,10 @@ export type RouteKey =
   | "representatives"
   | "careers"
   | "contact"
-  | "spart";
+  | "spart"
+  | "privacy"
+  | "cookies"
+  | "kvkk";
 
 // TEK doğruluk kaynağı: mantıksal sayfa anahtarı -> her dildeki gerçek yol.
 // Mevcut TR yolları BİREBİR korunur (link kırılması yok) — yeni EN yolları
@@ -35,6 +38,9 @@ const ROUTES: Record<RouteKey, Record<Lang, string>> = {
   careers: { tr: "/kariyer", en: "/en/careers" },
   contact: { tr: "/iletisim", en: "/en/contact" },
   spart: { tr: "/spart", en: "/en/spart" },
+  privacy: { tr: "/gizlilik-politikasi", en: "/en/privacy-policy" },
+  cookies: { tr: "/cerez-politikasi", en: "/en/cookie-policy" },
+  kvkk: { tr: "/kvkk-aydinlatma-metni", en: "/en/kvkk-notice" },
 };
 
 export function routeFor(key: RouteKey, lang: Lang): string {

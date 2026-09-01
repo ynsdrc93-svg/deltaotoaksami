@@ -7,10 +7,21 @@ import { useEffect } from "react";
 // kütüphanesi (react-helmet vb.) yerine — "no heavy runtime dependency"
 // kısıtına uyarak — doğrudan document.title ve mevcut meta[name=description]
 // etiketini güncelleyen minimal bir hook. Sayfa değişince otomatik çalışır.
-export function useDocumentMeta(title: string, description: string) {
+//
+// robots (opsiyonel): yalnızca henüz hukuki incelemesi tamamlanmamış taslak
+// sayfalar (KVKK/Gizlilik/Çerez) için "noindex, follow" geçilir — arama
+// motorlarının incelenmemiş bir taslağı indekslemesini engeller. Sayfadan
+// ayrılınca index.html'deki varsayılana ("index, follow") geri döner.
+export function useDocumentMeta(title: string, description: string, robots?: string) {
   useEffect(() => {
     document.title = title;
-    const el = document.querySelector('meta[name="description"]');
-    if (el) el.setAttribute("content", description);
-  }, [title, description]);
+    const descEl = document.querySelector('meta[name="description"]');
+    if (descEl) descEl.setAttribute("content", description);
+
+    if (!robots) return;
+    const robotsEl = document.querySelector('meta[name="robots"]');
+    const previous = robotsEl?.getAttribute("content") ?? "index, follow";
+    robotsEl?.setAttribute("content", robots);
+    return () => { robotsEl?.setAttribute("content", previous); };
+  }, [title, description, robots]);
 }

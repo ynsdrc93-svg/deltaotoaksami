@@ -17,6 +17,9 @@ const KariyerPage = lazy(() => import("@/pages/KariyerPage").then((m) => ({ defa
 const IletisimPage = lazy(() => import("@/pages/IletisimPage").then((m) => ({ default: m.IletisimPage })));
 const TemsilcilerimizPage = lazy(() => import("@/pages/TemsilcilerimizPage").then((m) => ({ default: m.TemsilcilerimizPage })));
 const SpartPage = lazy(() => import("@/pages/SpartPage").then((m) => ({ default: m.SpartPage })));
+const GizlilikPolitikasiPage = lazy(() => import("@/pages/GizlilikPolitikasiPage").then((m) => ({ default: m.GizlilikPolitikasiPage })));
+const CerezPolitikasiPage = lazy(() => import("@/pages/CerezPolitikasiPage").then((m) => ({ default: m.CerezPolitikasiPage })));
+const KvkkAydinlatmaMetniPage = lazy(() => import("@/pages/KvkkAydinlatmaMetniPage").then((m) => ({ default: m.KvkkAydinlatmaMetniPage })));
 const NotFound = lazy(() => import("@/pages/not-found"));
 
 // Tüm iç sayfalar koyu (#0e1016) bir hero ile açılıyor — Suspense fallback'i
@@ -56,6 +59,12 @@ function App() {
           <Route path="/en/representatives" component={TemsilcilerimizPage} />
           <Route path="/spart" component={SpartPage} />
           <Route path="/en/spart" component={SpartPage} />
+          <Route path="/gizlilik-politikasi" component={GizlilikPolitikasiPage} />
+          <Route path="/en/privacy-policy" component={GizlilikPolitikasiPage} />
+          <Route path="/cerez-politikasi" component={CerezPolitikasiPage} />
+          <Route path="/en/cookie-policy" component={CerezPolitikasiPage} />
+          <Route path="/kvkk-aydinlatma-metni" component={KvkkAydinlatmaMetniPage} />
+          <Route path="/en/kvkk-notice" component={KvkkAydinlatmaMetniPage} />
           <Route component={NotFound} />
         </Switch>
       </Suspense>

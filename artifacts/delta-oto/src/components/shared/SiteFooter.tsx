@@ -37,6 +37,18 @@ const QUICK_LINKS: { key: RouteKey; label: Record<Lang, string> }[] = [
   { key: "representatives", label: { tr: "Temsilcilerimiz", en: "Representatives" } },
 ];
 
+// Yasal Belgeler satırı: telif/established rozet satırının HEMEN üzerine,
+// aynı üst-ayraçlı bloğun içine ikinci bir satır olarak eklendi — mevcut
+// satırın kendi içeriği/sırası DEĞİŞMEDİ (bkz. yukarıdaki hiyerarşi notu),
+// yalnızca üstüne yeni bir satır kondu. Üç sayfa da henüz taslak (bkz.
+// LegalPageLayout'taki uyarı) — bu yüzden burada da ayrı bir vurgu/rozet
+// eklenmedi, diğer QUICK_LINKS ile aynı sade stil kullanıldı.
+const LEGAL_LINKS: { key: RouteKey; label: Record<Lang, string> }[] = [
+  { key: "privacy", label: { tr: "Gizlilik Politikası", en: "Privacy Policy" } },
+  { key: "cookies", label: { tr: "Çerez Politikası", en: "Cookie Policy" } },
+  { key: "kvkk", label: { tr: "KVKK Aydınlatma Metni", en: "KVKK Notice" } },
+];
+
 const CERTS: { label: Record<Lang, string> }[] = [
   { label: { tr: "OSS\nDerneği", en: "OSS\nAssociation" } },
   { label: { tr: "ISO\n9001", en: "ISO\n9001" } },
@@ -178,11 +190,20 @@ export function SiteFooter() {
 
         </div>
 
-        <div className="pt-8 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
-          <span>{T.rights[lang]}</span>
-          <div className="flex items-center gap-1.5">
-            <div className="w-1.5 h-1.5 rounded-full bg-[#1B3A8F] animate-pulse" />
-            <span>{T.established[lang]}</span>
+        <div className="pt-8 border-t border-white/5 flex flex-col gap-5">
+          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-5 gap-y-2">
+            {LEGAL_LINKS.map(({ key, label }) => (
+              <Link key={key} href={routeFor(key, lang)} className="text-xs text-gray-500 hover:text-white transition-colors">
+                {label[lang]}
+              </Link>
+            ))}
+          </div>
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
+            <span>{T.rights[lang]}</span>
+            <div className="flex items-center gap-1.5">
+              <div className="w-1.5 h-1.5 rounded-full bg-[#1B3A8F] animate-pulse" />
+              <span>{T.established[lang]}</span>
+            </div>
           </div>
         </div>
       </div>
