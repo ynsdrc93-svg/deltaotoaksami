@@ -135,20 +135,6 @@ const content = {
         { title: "Sürdürülebilir Büyüme", desc: "Müşteri portföyünün rekabet gücünü artırmak ve uzun vadeli iş ortaklıkları kurmak, Delta Oto'nun büyüme stratejisinin merkezindedir. Kısa vadeli kâr yerine ilişki kalitesi önceliklidir." },
       ],
     },
-    // Sanat Yönetimi Turu (§11): eskiden 4 eşit kart (her biri kendi ikonu +
-    // etiket bulutuyla) — "100+ Marka/50.000+ SKU/B2B Portal" gibi etiketler
-    // sayfanın kendi Kurumsal Rakamlar/GROUPAUTO bölümlerinde zaten söyleniyordu,
-    // gerçek yeni bilgi yalnızca Ağır Vasıta Grubu'ydu. Dört kartlık AI-şablon
-    // hissi tamamen kaldırıldı; tek bir kesin cümle + üç iş kolunun sade bir
-    // adlandırma satırına indirildi (kutu/etiket/ikon yok). B2B artık ayrı bir
-    // "iş birimi" gibi listelenmiyor — üç iş kolunun ORTAK erişim kanalı olarak
-    // kapanış cümlesine taşındı (kategori karışıklığı da düzeltilmiş oldu).
-    businessUnits: {
-      eyebrow: "Yapımız",
-      heading: "Üç İş Kolu, Tek Altyapı",
-      body: "Binek ve hafif ticari araç yedek parça dağıtımı, SPART özel markası ve ağır vasıta segmentine özel tedarik — üçü de aynı B2B altyapısı üzerinden yönetilir.",
-      lines: ["Aftermarket Dağıtım", "SPART Private Label", "Ağır Vasıta Grubu"],
-    },
     gundem: {
       eyebrow: "Gündem",
       heading: "Sahadaki Gelişmeler",
@@ -240,12 +226,6 @@ const content = {
         { title: "Operational Excellence", desc: "Performance standards are carefully maintained at every link in the process from order to delivery. WMS-supported processes safeguard stock accuracy and our commitment to speed." },
         { title: "Sustainable Growth", desc: "Strengthening the competitiveness of our customer portfolio and building long-term business partnerships are at the center of Delta Oto's growth strategy. Relationship quality takes priority over short-term profit." },
       ],
-    },
-    businessUnits: {
-      eyebrow: "Our Structure",
-      heading: "Three Business Lines, One Infrastructure",
-      body: "Passenger and light commercial vehicle parts distribution, the SPART private label, and dedicated supply for the heavy-duty vehicle segment — all managed through the same B2B infrastructure.",
-      lines: ["Aftermarket Distribution", "SPART Private Label", "Heavy-Duty Vehicle Group"],
     },
     gundem: {
       eyebrow: "Agenda",
@@ -680,28 +660,14 @@ export function HakkimizdaPage() {
         </div>
       </section>
 
-      {/* YAPIMIZ — navy. Eskiden "İş Birimlerimiz": 4 eşit kart, her biri
-          kendi ikonu ve etiket bulutuyla — kullanıcı geri bildirimiyle
-          "AI-şablon" olarak işaretlendi. Test: "Bu bölüm, başka yerde
-          söylenmemiş gerçek bilgi mi taşıyor?" Yalnızca Ağır Vasıta Grubu
-          taşıyordu (100+ Marka/50.000+ SKU/B2B zaten Kurumsal Rakamlar ve
-          GROUPAUTO bölümlerinde var). Sonuç: kart/etiket/ikon tamamen
-          kaldırıldı — tek bir kesin cümle + üç iş kolunun sade, ince
-          ayraçlı bir adlandırma satırı. */}
-      <section className="bg-[#1B3A8F] py-20 text-white">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div ref={reveal} className="do-reveal max-w-2xl">
-            <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea]">{t.businessUnits.eyebrow}</span>
-            <h2 className="text-3xl md:text-4xl font-black mt-2 tracking-tight leading-tight">{t.businessUnits.heading}</h2>
-            <p className="text-white/70 mt-4 text-[15px] leading-relaxed">{t.businessUnits.body}</p>
-          </div>
-          <div ref={reveal} className="do-reveal do-d2 mt-10 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-0 sm:divide-x sm:divide-white/15">
-            {t.businessUnits.lines.map((line) => (
-              <span key={line} className="text-[15px] font-bold tracking-tight sm:px-6 sm:first:pl-0">{line}</span>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Görsel/UX Düzeltme Turu (§1): eski "YAPIMIZ / Üç İş Kolu, Tek
+          Altyapı" bölümü (İş Birimlerimiz'in bir önceki turda kart-gridden
+          tek-cümle+adlandırma-satırına indirgenmiş hali) kullanıcı
+          tarafından tamamen reddedildi — yeniden tasarlanmadı, sadece
+          silindi. Yerine başka bir "Ne Yapıyoruz" bölümü KONMADI; sayfa
+          Değerler'den doğrudan GROUPAUTO'ya akıyor (aşağıdaki dark bölüm
+          zaten kendi üst boşluğunu taşıyor, ayrı bir dolgu bloğuna gerek
+          yok). */}
 
       {/* GROUPAUTO — dark */}
       {/* Not: eskiden burada çok düşük opaklıkta (opacity-10, üstüne de

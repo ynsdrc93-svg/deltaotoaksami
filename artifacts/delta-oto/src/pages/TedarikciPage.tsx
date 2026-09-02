@@ -758,10 +758,22 @@ export function TedarikciPage() {
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">{t.advantages.eyebrow}</span>
             <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-2 tracking-tight">{t.advantages.heading}</h2>
           </div>
-          <div ref={reveal} className="do-reveal do-d1 grid grid-cols-2 lg:grid-cols-4 gap-y-10 gap-x-6 lg:divide-x lg:divide-slate-200">
+          {/* Görsel/UX Düzeltme Turu (§2): "Tek Muhatap" (tek maddesi 2
+              kelimeli, diğer üçü tek kelime) 1024-1440px aralığında eski
+              lg:px-8 dolgusunun dar sütununda satır kırıyordu. Kesin çözüm —
+              tek maddeye özel bir küçültme DEĞİL, dördü için eşit uygulanan
+              üç değişiklik: whitespace-nowrap (asla kırılmaz garantisi),
+              boşluğu sütun iç dolgusundan (padding, metin genişliğini
+              yiyor) grid gap'ine taşımak (gap sütunlar ARASINDA kalır,
+              metin genişliğini yemez), ve kademeli tip ölçeği (dar 1024-
+              1279 aralığında bir basamak küçük, geniş 1280+'ta yeniden
+              büyüyor). divide-x çizgisi artık ince bir sol dolgu (pl-4)
+              ile metinden ayrılıyor. 1440/1280/390'da doğrulandı (bkz.
+              görev raporu). */}
+          <div ref={reveal} className="do-reveal do-d1 grid grid-cols-2 lg:grid-cols-4 gap-y-10 gap-x-6 lg:gap-x-10 lg:divide-x lg:divide-slate-200">
             {t.advantages.items.map(({ title, desc }) => (
-              <div key={title} className="lg:px-8 lg:first:pl-0">
-                <div className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight mb-3">{title}</div>
+              <div key={title} className="lg:pl-4 lg:first:pl-0">
+                <div className="text-xl sm:text-2xl xl:text-3xl font-black text-slate-900 tracking-tight mb-3 whitespace-nowrap">{title}</div>
                 <p className="text-slate-500 text-[14px] leading-relaxed">{desc}</p>
               </div>
             ))}

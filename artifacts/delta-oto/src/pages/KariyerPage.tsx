@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
-import { useReveal } from "../hooks/use-motion";
+import { useReveal, useSectionProgress, usePrefersReducedMotion } from "../hooks/use-motion";
 import { useDocumentMeta } from "@/hooks/use-document-meta";
 import { useLang, type Lang } from "@/lib/i18n";
 
@@ -167,6 +167,101 @@ const content = {
   },
 } satisfies Record<Lang, any>;
 
+/**
+ * Kültür bölümü — Görsel/UX Düzeltme Turu (§11-17): önceki ince-ayraçlı
+ * düz metin listesi kullanıcı tarafından reddedildi ("sıkıcı, düz metin,
+ * ucuz, okul projesi gibi"). İçerik (7 ilke) AYNI kaldı — istenen sadece
+ * sunumun sıfırdan yeniden tasarlanmasıydı.
+ *
+ * Yeni konsept: "kinetik manifesto". Yedi ilke normal dikey akışta,
+ * her biri kendi büyük gölge numarasıyla (oversized editorial tipografi) —
+ * ama statik değil: useSectionProgress('transit') bu bloğun kendi TAM
+ * scroll geçişini 0→1 izler (bölüm kasıtlı olarak viewport'tan uzun, 16:9
+ * kısıtı YOK — bkz. hook'un 'transit' modu notu), buradan sürekli bir
+ * "hangi ilke şu an odakta" değeri türetilir (continuousActive). Her madde,
+ * bu odaktan UZAKLIĞINA göre opaklık/ölçek/renk kazanır — ekranı kaydırdıkça
+ * vurgu listede aşağı doğru DALGA gibi ilerler ("bir baskın ilke + değişen
+ * destekleyiciler", kullanıcının önerdiği yönlerden biri). Solda ince bir
+ * ilerleme rayı (nokta dizisi) aynı odağı yansıtır — HakkimizdaPage'deki
+ * zaman çizgisi nokta-navigasyonuyla aynı görsel dil, yeni icat edilmiş bir
+ * desen değil.
+ *
+ * Reduced-motion / statik gereksinim (§15-16): usePrefersReducedMotion
+ * true ise TÜM maddeler focus=1'e sabitlenir — yedi ilke de tam opaklık/
+ * ölçek/renkte, eksiksiz okunur durur (hook'un kendi progress=1 kilidini
+ * kullanmıyoruz, çünkü o durumda continuousActive son maddeye sabitlenip
+ * SADECE o madde odaklı kalırdı — burada davranış kasıtlı olarak override
+ * ediliyor, "tüm ilkeler görünür, hiçbiri gizli değil" gereksinimini
+ * karşılamak için). İlk kare (hiç scroll olmadan, §16): progress=0 →
+ * continuousActive=0 → ilk ilke tam odakta, geri kalanı sakin — sayfa
+ * hiç kaydırılmadan bile "tasarlanmış bir kültür deneyimi" izlenimi verir.
+ */
+function CultureManifesto({ items }: { items: { title: string; desc: string }[] }) {
+  const [sectionRef, progress] = useSectionProgress<HTMLDivElement>("transit");
+  const reducedMotion = usePrefersReducedMotion();
+  const continuousActive = progress * (items.length - 1);
+
+  return (
+    <div ref={sectionRef} className="relative">
+      {/* İlerleme rayı — yalnızca masaüstü; HakkimizdaPage zaman çizgisi
+          nokta-navigasyonuyla aynı görsel dil (küçük/büyük nokta geçişi). */}
+      <div className="hidden lg:block absolute left-0 top-2 bottom-2 w-1.5" aria-hidden="true">
+        <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-px bg-slate-200" />
+        <div className="relative h-full flex flex-col justify-between py-1">
+          {items.map((_, i) => {
+            const focus = reducedMotion ? 1 : Math.max(0, 1 - Math.abs(i - continuousActive) / 1.6);
+            return (
+              <div
+                key={i}
+                className={`w-1.5 rounded-full transition-all duration-300 ${focus > 0.6 ? "h-9 bg-[#1B3A8F]" : "h-2.5 bg-slate-300"}`}
+              />
+            );
+          })}
+        </div>
+      </div>
+
+      <div className="lg:pl-16 space-y-14 sm:space-y-16 md:space-y-20">
+        {items.map((item, i) => {
+          const focus = reducedMotion ? 1 : Math.max(0, 1 - Math.abs(i - continuousActive) / 1.6);
+          const isFocused = focus > 0.6;
+          return (
+            <div
+              key={item.title}
+              style={{ opacity: 0.4 + focus * 0.6, transform: `scale(${0.95 + focus * 0.05})` }}
+              className="origin-left transition-[opacity,transform] duration-150 ease-out"
+            >
+              <div className="flex items-start gap-5 sm:gap-8 md:gap-10">
+                <span
+                  aria-hidden="true"
+                  className="shrink-0 select-none font-black leading-none tabular-nums text-slate-100 text-[56px] sm:text-[80px] md:text-[112px]"
+                >
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <div className="pt-1 sm:pt-3 md:pt-6 min-w-0">
+                  <h3
+                    className={`font-black tracking-tight leading-[1.05] text-2xl sm:text-3xl md:text-5xl transition-colors duration-150 ${
+                      isFocused ? "text-slate-900" : "text-slate-300"
+                    }`}
+                  >
+                    {item.title}
+                  </h3>
+                  <p
+                    className={`mt-3 md:mt-4 max-w-xl leading-relaxed text-[14px] sm:text-[15px] transition-colors duration-150 ${
+                      isFocused ? "text-slate-600" : "text-slate-400"
+                    }`}
+                  >
+                    {item.desc}
+                  </p>
+                </div>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
 export function KariyerPage() {
   const lang = useLang();
   const t = content[lang];
@@ -224,26 +319,16 @@ export function KariyerPage() {
         </div>
       </section>
 
-      {/* KÜLTÜR — light */}
-      <section className="bg-white py-24">
+      {/* KÜLTÜR — light. Sunum tamamen yeniden tasarlandı (bkz. CultureManifesto
+          bileşen yorumu) — 7 ilkenin İÇERİĞİ değişmedi. */}
+      <section className="bg-white py-24 md:py-28 overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div ref={reveal} className="do-reveal mb-14">
+          <div ref={reveal} className="do-reveal mb-16 md:mb-20">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">{t.culture.eyebrow}</span>
             <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-2 tracking-tight">{t.culture.heading}</h2>
             <p className="text-slate-500 mt-3 text-[15px] max-w-2xl">{t.culture.desc}</p>
           </div>
-          <div className="max-w-4xl border-t border-slate-200">
-            {t.culture.items.map((item, i) => (
-              <div
-                key={item.title}
-                ref={reveal}
-                className={`do-reveal do-d${(i % 4) + 1} grid sm:grid-cols-[13rem_1fr] gap-x-10 gap-y-2 py-7 sm:py-8 border-b border-slate-200`}
-              >
-                <h3 className="text-lg font-black text-slate-900 tracking-tight leading-snug">{item.title}</h3>
-                <p className="text-slate-500 text-[14px] sm:text-[15px] leading-relaxed max-w-lg">{item.desc}</p>
-              </div>
-            ))}
-          </div>
+          <CultureManifesto items={t.culture.items} />
         </div>
       </section>
 

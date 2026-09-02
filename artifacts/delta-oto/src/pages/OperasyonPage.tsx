@@ -71,49 +71,30 @@ const content = {
         },
       ],
     },
-    // Sanat Yönetimi Turu (§18-22): Operasyon Altyapısı'nın soyut nokta/
-    // düğüm SVG diyagramı TAMAMEN kaldırıldı — kullanıcı bunu anlamsız
-    // buluyordu ve bu, konseptin ÜÇÜNCÜ varyasyonıydı (hub&spoke → network
-    // diyagramı → ???). Bu turda sıfırdan, farklı bir MEDYUM: saf tipografi
-    // + düzen, SVG yok. "Zincirleme Sorumluluk" konsepti — Gebze ve İzmir'in
-    // BESLEDİĞİ, Ümraniye'nin KARAR VERDİĞİ, 81 ile ÇIKTI verdiği gerçek bir
-    // AKIŞ hikâyesi (bkz. JSX'teki OperationsChain bileşeni). Ayrıca fact-
-    // ownership denetimi (§20-22): eski statTrio (18:00/81/03) kaldırıldı —
-    // 18:00'in birincil yeri Teslimat Hız Güvencesi bölümü, 81'in birincil
-    // yeri artık bu bölümün kendi kapanış satırı, "03" ise zaten üç
-    // lokasyonu isimleriyle listelemenin kendisiyle gereksiz hale geliyordu.
+    // Görsel/UX Düzeltme Turu (§3-4): önceki dikey "Zincirleme Sorumluluk"
+    // düzeni (Gebze satırı → İzmir satırı → büyük Ümraniye paneli → 81 İl
+    // kapanışı, hepsi alt alta) 1440×810'da TEK SAHNE olarak sığmıyordu —
+    // kullanıcı geri bildirimi net: "16:9 porsiyona sığmıyor". Konsept
+    // (bölgesel besleme → merkezi karar → ulusal çıktı) KORUNDU, sunum
+    // sıfırdan YATAY bir bileşime dönüştürüldü: üç blok artık ALT ALTA değil
+    // YAN YANA (bkz. JSX) — dikey yığın yerine genişlik kullanan, tek bakışta
+    // okunan bir kompozisyon. Kopya de buna göre sıkılaştırıldı: adres
+    // satırları kaldırıldı (bu bilginin birincil yeri zaten İletişim
+    // sayfası — burada tekrar etmek "az kopya, az kutu" ilkesine aykırıydı),
+    // roleTag'ler tek/iki kelimeye indirildi, body cümleleri tek kısa
+    // ifadeye indirildi. Masaüstünde yatay, mobilde (16:9 zorunluluğu
+    // masaüstüne özgü) doğal biçimde dikey yığılır.
     depots: {
       eyebrow: "Operasyon Altyapısı",
       heading: "İki Bölge, Tek Karar Noktası",
-      body: "Gebze ve İzmir'den beslenen operasyon, Ümraniye'deki tek karar noktasından Türkiye'nin 81 iline yayılır.",
+      body: "Gebze ve İzmir'i besleyen operasyon, kararını Ümraniye'de alır.",
       reachValue: "81",
       reachLabel: "İl",
-      reachBody: "Türkiye'nin tamamına düzenli, planlı dağıtım.",
+      reachBody: "Türkiye'nin tamamına planlı dağıtım.",
       items: [
-        {
-          title: "Gebze",
-          plate: "41",
-          roleTag: "Doğu Marmara Sevkiyat Noktası",
-          address: "Barış, 1804. Sk. No:4, 41400 Gebze / Kocaeli",
-          body: "Doğu Marmara'nın sanayi omurgasına konumlanır; Kocaeli ve Sakarya'ya hızlı erişim sağlar.",
-          central: false,
-        },
-        {
-          title: "İzmir",
-          plate: "35",
-          roleTag: "Ege Bölgesi Dağıtım Merkezi",
-          address: "Kemalpaşa Kızılüzüm Kırovası Kümeevleri No: 12/1, Kemalpaşa / İzmir",
-          body: "Opar Ege Bölge Bayiliği ile birlikte Ege'nin dağıtım omurgasıdır; bölge geneline düzenli sevkiyat ve bayi erişimi taşır.",
-          central: false,
-        },
-        {
-          title: "Ümraniye",
-          plate: "34",
-          roleTag: "Merkez Koordinasyon",
-          address: "Barbaros Cd. Beyit Sk. No:17, Yukarı Dudullu — Ümraniye / İstanbul",
-          body: "Delta Oto'nun komuta noktası. Stok planlamasından sevkiyat onayına, 81 ile uzanan dağıtımın tamamı burada yönetilir.",
-          central: true,
-        },
+        { title: "Gebze", plate: "41", tag: "Doğu Marmara", body: "Kocaeli ve Sakarya'ya hızlı erişim.", central: false },
+        { title: "İzmir", plate: "35", tag: "Ege Bölgesi · Opar", body: "Ege'nin dağıtım omurgası.", central: false },
+        { title: "Ümraniye", plate: "34", tag: "Merkez Koordinasyon", body: "Stok planlamasından sevkiyata, tüm karar burada alınır.", central: true },
       ],
     },
     // Hard-edit (§21-22): 8 madde → 3. Kalan 5 madde bu sayfada BAŞKA YERDE
@@ -194,35 +175,14 @@ const content = {
     depots: {
       eyebrow: "Operations Infrastructure",
       heading: "Two Regions, One Decision Point",
-      body: "Fed by Gebze and İzmir, the operation reaches all 81 provinces of Türkiye from the single decision point in Ümraniye.",
+      body: "Fed by Gebze and İzmir, the decision is made in Ümraniye.",
       reachValue: "81",
       reachLabel: "Provinces",
-      reachBody: "Regular, planned distribution across all of Türkiye.",
+      reachBody: "Regular, planned distribution across Türkiye.",
       items: [
-        {
-          title: "Gebze",
-          plate: "41",
-          roleTag: "Eastern Marmara Dispatch Point",
-          address: "Barış, 1804. Sk. No:4, 41400 Gebze / Kocaeli",
-          body: "Positioned on eastern Marmara's industrial backbone; fast access to Kocaeli and Sakarya.",
-          central: false,
-        },
-        {
-          title: "İzmir",
-          plate: "35",
-          roleTag: "Aegean Region Distribution Hub",
-          address: "Kemalpaşa Kızılüzüm Kırovası Kümeevleri No: 12/1, Kemalpaşa / İzmir",
-          body: "Together with the Opar Aegean Regional Dealership, the Aegean's distribution backbone — carrying regular dispatch and dealer access across the region.",
-          central: false,
-        },
-        {
-          title: "Ümraniye",
-          plate: "34",
-          roleTag: "Central Coordination",
-          address: "Barbaros Cd. Beyit Sk. No:17, Yukarı Dudullu — Ümraniye / İstanbul",
-          body: "Delta Oto's command point. From stock planning to dispatch approval, distribution across all 81 provinces is directed from here.",
-          central: true,
-        },
+        { title: "Gebze", plate: "41", tag: "Eastern Marmara", body: "Fast access to Kocaeli and Sakarya.", central: false },
+        { title: "İzmir", plate: "35", tag: "Aegean Region · Opar", body: "The Aegean's distribution backbone.", central: false },
+        { title: "Ümraniye", plate: "34", tag: "Central Coordination", body: "From stock planning to dispatch, every decision is made here.", central: true },
       ],
     },
     capabilities: {
@@ -262,12 +222,17 @@ export function OperasyonPage() {
 
   const capabilityItems = t.capabilities.items.map((f: { title: string; desc: string }, i: number) => ({ ...f, icon: CAPABILITY_ICONS[i] }));
 
-  // Dört adımlık süreç artık scroll'a bağlı gerçek bir ilerleme (§23-24):
-  // processProgress bu bölümün kendi viewport geçişini 0→1 izler, her adım
-  // sırayla "geçildi" durumuna döner. prefers-reduced-motion'da hook 1
-  // döndürür (bkz. useSectionProgress) — dört adım da baştan tam/okunur
-  // durumda gelir, animasyona bağlı bilgi kaybı olmaz.
-  const [processRef, processProgress] = useSectionProgress<HTMLDivElement>();
+  // Dört adımlık süreç scroll'a bağlı gerçek bir ilerleme izler. Görsel/UX
+  // Düzeltme Turu (§6-9): 'settle' modu (useSectionProgress'in artık
+  // parametreli hale gelen hook'u, bkz. use-motion.ts) burada KRİTİK — eski
+  // tek-formül davranışı (şimdi 'transit') progress'i bölümün TÜM viewport
+  // geçişine (giriş→tam çıkış) yayıyordu; bu satır boyu kısa bir blok için
+  // bu, progress'in ancak kullanıcı bölümü zaten geçtikten SONRA 1'e
+  // ulaşması demekti — adım 3/4 kullanıcı modülü etkin biçimde terk
+  // ETTİKTEN sonra yanıyordu (bildirilen hata). 'settle', bölüm hâlâ
+  // rahatça tam görünürken 1'e ulaşacak şekilde hedefliyor. explicit mode
+  // parametresi (default zaten 'settle') niyeti belgelemek için yazılı.
+  const [processRef, processProgress] = useSectionProgress<HTMLDivElement>("settle");
   const activeStep = Math.min(3, Math.floor(processProgress * 4));
 
   return (
@@ -428,74 +393,129 @@ export function OperasyonPage() {
         </div>
       </section>
 
-      {/* OPERASYON ALTYAPISI — white. Sanat Yönetimi Turu (§18-19): eski
-          soyut nokta/düğüm SVG ağ diyagramı (bu modülün ÜÇÜNCÜ konsept
-          denemesiydi: hub&spoke kart ızgarası → network diyagramı → bu)
-          kullanıcı tarafından anlamsız bulunduğu için TAMAMEN kaldırıldı —
-          dördüncü bir "dots + lines" varyasyonu denenmedi. Sıfırdan, farklı
-          bir MEDYUM: SVG yok, saf tipografi + düzen. "Zincirleme
-          Sorumluluk" — gerçek bir operasyonel akış: Gebze ve İzmir
-          (bölgesel, küçük görsel ağırlık) BESLER → Ümraniye (büyük, vurgulu
-          panel) KARAR VERİR → 81 il (büyük kapanış rakamı) ÇIKTI alır.
-          İnce dikey bağlayıcılar (.do-flow-line, index.css) SVG değil, tek
-          bir <div> — scroll'da BÜYÜYEREK "bağlantı kuruluyor" hissi verir;
-          bu, dekoratif bir çizim değil, sıranın/nedenselliğin kendisi. */}
-      <section className="bg-white py-24 md:py-28 overflow-hidden">
+      {/* OPERASYON ALTYAPISI — white. Görsel/UX Düzeltme Turu (§3-4): önceki
+          tur bu bölümü soyut node/edge SVG diyagramından kurtarıp saf
+          tipografiye taşımıştı ("Zincirleme Sorumluluk": Gebze/İzmir besler
+          → Ümraniye karar verir → 81 il çıktı alır) — konsept doğruydu, ama
+          dikey yığın (satır→satır→büyük panel→kapanış, alt alta) 1440×810'da
+          TEK SAHNE olarak sığmıyordu (kullanıcı: "16:9 porsiyona sığmıyor").
+          Bu turda konsept AYNI kaldı, MEDYUM yatay bir bileşime döndü: aynı
+          üç blok artık masaüstünde YAN YANA (bölgesel sütun → Ümraniye paneli
+          → 81 İl kapanışı), aralarında .do-flow-line-h (yatay büyüyen
+          bağlayıcı, index.css) ile bağlı. Mobilde (16:9 zorunluluğu yalnızca
+          masaüstüne özgü) aynı üç blok doğal biçimde dikey yığılır — dikey
+          .do-flow-line kardeşi burada devrede kalıyor. */}
+      <section className="bg-white py-16 md:py-20 lg:py-16 overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div ref={ref} className="do-reveal max-w-2xl mb-16 md:mb-20">
+          <div ref={ref} className="do-reveal max-w-2xl mb-8 md:mb-10 lg:mb-12">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">{t.depots.eyebrow}</span>
             <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-2 tracking-tight">{t.depots.heading}</h2>
-            <p className="text-slate-500 mt-4 text-[15px] leading-relaxed">{t.depots.body}</p>
+            <p className="text-slate-500 mt-3 text-[15px] leading-relaxed">{t.depots.body}</p>
           </div>
 
-          <div className="max-w-2xl">
-            {t.depots.items.filter((it: { central: boolean }) => !it.central).map((loc: { title: string; plate: string; roleTag: string; address: string; body: string }, i: number) => (
+          {/* MASAÜSTÜ — yatay tek sahne: bölgesel sütun (Gebze/İzmir, alt
+              alta, küçük görsel ağırlık) → bağlayıcı → Ümraniye (dolgun navy
+              panel, en büyük ağırlık) → bağlayıcı → 81 İl (büyük kapanış
+              rakamı). Üç blok arasındaki KONTRAST (küçük/büyük/büyük-rakam)
+              bölgesel-merkezi ayrımını, ayrı bir "MERKEZ" etiketinden daha
+              güçlü anlatıyor. */}
+          <div className="hidden lg:flex items-stretch">
+            <div className="flex-1 flex flex-col justify-center gap-5 pr-8 min-w-0">
+              {t.depots.items.filter((it: { central: boolean }) => !it.central).map((loc: { title: string; plate: string; tag: string; body: string }, i: number) => (
+                <React.Fragment key={loc.title}>
+                  {i > 0 && <div ref={ref} className="do-flow-line-h h-px bg-slate-200 w-full" aria-hidden="true" />}
+                  <div ref={ref} className={`do-reveal ${i === 0 ? "" : "do-d1"} flex items-start gap-4`}>
+                    <span className="shrink-0 w-9 h-9 rounded-lg border-2 border-slate-300 flex items-center justify-center text-[12px] font-black text-slate-400 tabular-nums">
+                      {loc.plate}
+                    </span>
+                    <div className="min-w-0 pt-0.5">
+                      <div className="flex flex-wrap items-baseline gap-x-2.5">
+                        <h3 className="text-base font-black text-slate-900">{loc.title}</h3>
+                        <span className="text-[10px] font-black uppercase tracking-[0.1em] text-[#1B3A8F]/70">{loc.tag}</span>
+                      </div>
+                      <p className="text-slate-500 text-[12.5px] leading-snug mt-1">{loc.body}</p>
+                    </div>
+                  </div>
+                </React.Fragment>
+              ))}
+            </div>
+
+            <div className="flex items-center px-5 shrink-0" aria-hidden="true">
+              <div ref={ref} className="do-flow-line-h w-10 h-px bg-slate-300" />
+            </div>
+
+            {t.depots.items.filter((it: { central: boolean }) => it.central).map((hub: { title: string; plate: string; tag: string; body: string }) => (
+              <div key={hub.title} className="flex-[1.3] min-w-0">
+                <div ref={ref} className="do-reveal do-d2 h-full bg-[#1B3A8F] text-white rounded-2xl p-7 flex flex-col justify-center">
+                  <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-2.5">
+                    <span className="text-[12px] font-black text-[#7d9bea] tabular-nums">{hub.plate}</span>
+                    <h3 className="text-2xl font-black tracking-tight">{hub.title}</h3>
+                  </div>
+                  <span className="text-[10.5px] font-black uppercase tracking-[0.15em] text-[#7d9bea] mb-2.5 block">{hub.tag}</span>
+                  <p className="text-white/75 text-[13.5px] leading-relaxed max-w-xs">{hub.body}</p>
+                </div>
+              </div>
+            ))}
+
+            <div className="flex items-center px-5 shrink-0" aria-hidden="true">
+              <div ref={ref} className="do-flow-line-h w-10 h-px bg-slate-300" />
+            </div>
+
+            <div ref={ref} className="do-reveal do-d3 flex-1 flex flex-col justify-center pl-2 min-w-0">
+              <span className="text-6xl font-black text-[#1B3A8F] tabular-nums leading-none">{t.depots.reachValue}</span>
+              <div className="text-sm font-black text-slate-900 uppercase tracking-tight mt-2">{t.depots.reachLabel}</div>
+              <p className="text-slate-500 text-[12.5px] mt-1 max-w-[13rem] leading-snug">{t.depots.reachBody}</p>
+            </div>
+          </div>
+
+          {/* MOBİL/TABLET — aynı üç blok doğal biçimde dikey yığılır (16:9
+              tek-sahne zorunluluğu yalnızca masaüstüne özgü). */}
+          <div className="lg:hidden max-w-lg">
+            {t.depots.items.filter((it: { central: boolean }) => !it.central).map((loc: { title: string; plate: string; tag: string; body: string }, i: number) => (
               <React.Fragment key={loc.title}>
-                <div ref={ref} className={`do-reveal ${i === 0 ? "" : "do-d1"} flex items-start gap-5 md:gap-7`}>
-                  <span className="shrink-0 w-11 h-11 rounded-lg border-2 border-slate-300 flex items-center justify-center text-[13px] font-black text-slate-400 tabular-nums">
+                <div ref={ref} className={`do-reveal ${i === 0 ? "" : "do-d1"} flex items-start gap-4`}>
+                  <span className="shrink-0 w-10 h-10 rounded-lg border-2 border-slate-300 flex items-center justify-center text-[12px] font-black text-slate-400 tabular-nums">
                     {loc.plate}
                   </span>
-                  <div className="min-w-0 pt-1">
-                    <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                      <h3 className="text-lg font-black text-slate-900">{loc.title}</h3>
-                      <span className="text-[10.5px] font-black uppercase tracking-[0.12em] text-[#1B3A8F]/70">{loc.roleTag}</span>
+                  <div className="min-w-0 pt-0.5">
+                    <div className="flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
+                      <h3 className="text-base font-black text-slate-900">{loc.title}</h3>
+                      <span className="text-[10px] font-black uppercase tracking-[0.1em] text-[#1B3A8F]/70">{loc.tag}</span>
                     </div>
-                    <p className="text-slate-500 text-[14px] leading-relaxed mt-1.5 max-w-md">{loc.body}</p>
-                    <p className="text-slate-400 text-[11.5px] mt-2">{loc.address}</p>
+                    <p className="text-slate-500 text-[13px] leading-snug mt-1">{loc.body}</p>
                   </div>
                 </div>
-                <div className="pl-5 py-3" aria-hidden="true">
-                  <div ref={ref} className="do-flow-line w-px h-6 bg-slate-200" />
+                <div className="pl-5 py-2.5" aria-hidden="true">
+                  <div ref={ref} className="do-flow-line w-px h-5 bg-slate-200" />
                 </div>
               </React.Fragment>
             ))}
 
-            <div className="pl-5 -mt-3 mb-3" aria-hidden="true">
+            <div className="pl-5 -mt-2.5 mb-2.5" aria-hidden="true">
               <ChevronDown className="w-4 h-4 text-slate-300" />
             </div>
 
-            {t.depots.items.filter((it: { central: boolean }) => it.central).map((hub: { title: string; plate: string; roleTag: string; address: string; body: string }) => (
-              <div key={hub.title} ref={ref} className="do-reveal do-d2 bg-[#1B3A8F] text-white rounded-2xl p-8 md:p-10">
-                <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1.5 mb-3">
-                  <span className="text-[13px] font-black text-[#7d9bea] tabular-nums">{hub.plate}</span>
-                  <h3 className="text-2xl md:text-3xl font-black tracking-tight">{hub.title}</h3>
-                  <span className="text-[11px] font-black uppercase tracking-[0.15em] text-[#7d9bea]">{hub.roleTag}</span>
+            {t.depots.items.filter((it: { central: boolean }) => it.central).map((hub: { title: string; plate: string; tag: string; body: string }) => (
+              <div key={hub.title} ref={ref} className="do-reveal do-d2 bg-[#1B3A8F] text-white rounded-2xl p-6">
+                <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-2">
+                  <span className="text-[12px] font-black text-[#7d9bea] tabular-nums">{hub.plate}</span>
+                  <h3 className="text-xl font-black tracking-tight">{hub.title}</h3>
+                  <span className="text-[10.5px] font-black uppercase tracking-[0.12em] text-[#7d9bea]">{hub.tag}</span>
                 </div>
-                <p className="text-white/75 text-[15px] leading-relaxed max-w-lg">{hub.body}</p>
-                <p className="text-white/45 text-[12px] mt-4">{hub.address}</p>
+                <p className="text-white/75 text-[13.5px] leading-relaxed">{hub.body}</p>
               </div>
             ))}
 
-            <div className="flex flex-col items-start pl-9 mt-3 mb-2" aria-hidden="true">
-              <div ref={ref} className="do-flow-line w-px h-8 bg-slate-200" />
+            <div className="flex flex-col items-start pl-9 mt-2.5 mb-2" aria-hidden="true">
+              <div ref={ref} className="do-flow-line w-px h-6 bg-slate-200" />
               <ChevronDown className="w-4 h-4 text-slate-300 -mt-0.5" />
             </div>
 
-            <div ref={ref} className="do-reveal do-d3 flex items-baseline gap-5 pt-3">
-              <span className="text-6xl md:text-7xl font-black text-[#1B3A8F] tabular-nums leading-none">{t.depots.reachValue}</span>
+            <div ref={ref} className="do-reveal do-d3 flex items-baseline gap-4 pt-2">
+              <span className="text-5xl font-black text-[#1B3A8F] tabular-nums leading-none">{t.depots.reachValue}</span>
               <div>
-                <div className="text-base font-black text-slate-900 uppercase tracking-tight">{t.depots.reachLabel}</div>
-                <p className="text-slate-500 text-[14px] mt-1">{t.depots.reachBody}</p>
+                <div className="text-sm font-black text-slate-900 uppercase tracking-tight">{t.depots.reachLabel}</div>
+                <p className="text-slate-500 text-[13px] mt-1">{t.depots.reachBody}</p>
               </div>
             </div>
           </div>
@@ -527,16 +547,21 @@ export function OperasyonPage() {
         </div>
       </section>
 
-      {/* SİPARİŞ SÜRECİ — navy. Motion artık dekoratif değil, tasarımın
-          kendisi (§23-24): processProgress bu bloğun kendi scroll geçişini
-          izler (useSectionProgress), üstteki ince çubuk gerçek zamanlı
-          dolar ve her adım sırayla "geçildi" durumuna döner (renk/opaklık —
-          boyut/metin DEĞİŞMEZ, sıra animasyon olmadan da tam okunur kalır).
-          prefers-reduced-motion'da hook progress'i 1'e kilitler → dört adım
-          da baştan tam/aktif görünür (bkz. useSectionProgress yorumu) —
-          sitenin genel reduced-motion geçiş-süresi-sıfırlama kuralı
-          (index.css) buradaki transition-colors'ı da otomatik kapsar, ek
-          bir CSS istisnasına gerek kalmadı. */}
+      {/* SİPARİŞ SÜRECİ — navy. Motion dekoratif değil, tasarımın kendisi:
+          processProgress bu bloğun kendi scroll geçişini izler ('settle'
+          modu, bkz. yukarıdaki hook yorumu ve use-motion.ts — Görsel/UX
+          Düzeltme Turu §6-9, adım 4'ün kullanıcı modülü terk ETMEDEN
+          tamamlanmasını garanti eden düzeltme), üstteki ince çubuk gerçek
+          zamanlı dolar. Üç durum (§8, "gerçek bir yolculuk hissi"): quiet
+          (henüz sırası gelmedi) → passed (geçildi, okunur/açık kalır, asla
+          solmaz) → current (şu an "buradayız", ayrıca büyütülmüş nokta +
+          numara — hareket eden bir imleç hissi). Boyut/metin İÇERİĞİ
+          DEĞİŞMEZ, sıra animasyon olmadan da tam okunur kalır.
+          prefers-reduced-motion'da hook progress'i 1'e kilitler → activeStep
+          3'e sabitlenir, dört adım da "passed" (current değil) durumunda
+          baştan tam/okunur görünür — sitenin genel reduced-motion geçiş-
+          süresi-sıfırlama kuralı (index.css) transition-colors/transform'u
+          otomatik kapsar. */}
       <section className="relative bg-[#1B3A8F] text-white py-24 overflow-hidden">
         <div className="absolute inset-0 do-grid-bg opacity-25" />
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
@@ -553,12 +578,24 @@ export function OperasyonPage() {
             <div className="grid md:grid-cols-4 gap-6">
               {t.process.steps.map((s: { num: string; title: string; desc: string }, i: number) => {
                 const isActive = i <= activeStep;
+                const isCurrent = i === activeStep;
                 return (
                   <div key={s.num} className="relative">
-                    <div className={`w-2 h-2 rounded-full mb-5 transition-colors duration-300 ${isActive ? "bg-[#7d9bea]" : "bg-white/15"}`} aria-hidden="true" />
-                    <div className={`text-7xl font-black mb-4 leading-none select-none transition-colors duration-300 ${isActive ? "text-white/25" : "text-white/[0.07]"}`}>{s.num}</div>
-                    <h3 className={`text-[15px] font-bold mb-2 leading-snug transition-colors duration-300 ${isActive ? "text-white" : "text-white/50"}`}>{s.title}</h3>
-                    <p className={`text-[13.5px] leading-relaxed transition-colors duration-300 ${isActive ? "text-white/70" : "text-white/35"}`}>{s.desc}</p>
+                    <div
+                      className={`rounded-full mb-5 transition-all duration-300 ${
+                        isCurrent ? "w-3 h-3 bg-[#7d9bea] shadow-[0_0_0_4px_rgba(125,155,234,0.25)]" : isActive ? "w-2 h-2 bg-[#7d9bea]/70" : "w-2 h-2 bg-white/15"
+                      }`}
+                      aria-hidden="true"
+                    />
+                    <div
+                      className={`font-black mb-4 leading-none select-none origin-left transition-all duration-300 ${
+                        isCurrent ? "text-7xl text-white/40 scale-105" : isActive ? "text-7xl text-white/20" : "text-7xl text-white/[0.07]"
+                      }`}
+                    >
+                      {s.num}
+                    </div>
+                    <h3 className={`text-[15px] font-bold mb-2 leading-snug transition-colors duration-300 ${isCurrent ? "text-white" : isActive ? "text-white/85" : "text-white/50"}`}>{s.title}</h3>
+                    <p className={`text-[13.5px] leading-relaxed transition-colors duration-300 ${isCurrent ? "text-white/80" : isActive ? "text-white/60" : "text-white/35"}`}>{s.desc}</p>
                     {i < 3 && (
                       <div className="hidden md:block absolute top-8 -right-3">
                         <ChevronRight className={`w-5 h-5 transition-colors duration-300 ${isActive ? "text-[#7d9bea]" : "text-white/15"}`} />

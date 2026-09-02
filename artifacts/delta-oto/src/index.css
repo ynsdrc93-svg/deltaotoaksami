@@ -100,21 +100,28 @@
 }
 .do-reveal-right.do-in { opacity: 1; transform: none; }
 
-/* Operasyon Altyapısı "zincirleme sorumluluk" düzeni (Sanat Yönetimi Turu,
-   §18-19) — eskiki soyut node/edge SVG ağ diyagramının YERİNE geçti; o
-   görsel dil ("dots + lines + circles") kullanıcı tarafından anlamsız
-   bulunduğu için tamamen kaldırıldı. Yeni düzen saf tipografi + düzen: iki
-   bölgesel satır (Gebze/İzmir) → bağlantı çizgisi → büyütülmüş Ümraniye
-   satırı → bağlantı çizgisi → "81 İl" kapanış satırı. Bağlayıcı çizgiler
-   SVG değil, tek bir <div> (dikey ince çubuk) — do-reveal'daki aynı do-in
-   tetikleyicisiyle (useReveal) büyür (scaleY), "bağlantı kuruluyor" hissini
-   dekoratif değil, anlamlı bir geçiş olarak taşır. */
+/* Operasyon Altyapısı "zincirleme sorumluluk" düzeni — soyut node/edge SVG
+   ağ diyagramının YERİNE geçti; o görsel dil ("dots + lines + circles")
+   kullanıcı tarafından anlamsız bulunduğu için tamamen kaldırıldı. Bağlayıcı
+   çizgiler SVG değil, tek bir <div> — do-reveal'daki aynı do-in
+   tetikleyicisiyle (useReveal) büyür, "bağlantı kuruluyor" hissini dekoratif
+   değil, anlamlı bir geçiş olarak taşır. .do-flow-line dikey (mobil, alt alta
+   yığılan düzen); .do-flow-line-h yatay kardeşi — Görsel/UX Düzeltme Turu
+   (§3-4) sonrası masaüstü kompozisyonu dikeyden yataya döndüğünde eklendi
+   (16:9 tek-sahne gereksinimi: bölgesel/merkezi/ulusal bloklar artık alt
+   alta değil yan yana, bağlayıcılar da buna göre yatay büyüyor). */
 .do-flow-line {
   transform: scaleY(0);
   transform-origin: top;
   transition: transform 0.5s cubic-bezier(.22,1,.36,1);
 }
 .do-flow-line.do-in { transform: scaleY(1); }
+.do-flow-line-h {
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.5s cubic-bezier(.22,1,.36,1);
+}
+.do-flow-line-h.do-in { transform: scaleX(1); }
 
 /* Cards */
 .do-card {
@@ -476,6 +483,7 @@
   .do-route-line { animation: none !important; stroke-dashoffset: 0 !important; opacity: 1 !important; }
   .do-route-dest { animation: none !important; opacity: 1 !important; transform: none !important; }
   .do-flow-line { transition: none !important; transform: scaleY(1) !important; }
+  .do-flow-line-h { transition: none !important; transform: scaleX(1) !important; }
   *, *::before, *::after {
     transition-duration: 0.001ms !important;
     animation-duration: 0.001ms !important;

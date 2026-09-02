@@ -106,16 +106,39 @@ export function useParallax<T extends HTMLElement>(speed = 0.12) {
 }
 
 /** Scroll-linked progress (0→1) for how far a section has moved through the
- * viewport — used for the Operasyon "Siparişten Teslimata" step sequence, so
- * the process visibly advances as the user scrolls through it rather than
- * just fading in once (görev talimatı §24: "the user should FEEL the
- * process advancing"). Same rAF-throttled window-scroll pattern as
- * useScrollProgress/useParallax above — no new library, no per-frame
- * IntersectionObserver churn. Under prefers-reduced-motion, progress locks
- * to 1 (final/complete state) immediately, matching how useCounter/
- * useParallax already degrade — the sequence must read as fully resolved
- * without motion, never as "stuck mid-way". */
-export function useSectionProgress<T extends HTMLElement>() {
+ * viewport. Same rAF-throttled window-scroll pattern as useScrollProgress/
+ * useParallax above — no new library, no per-frame IntersectionObserver
+ * churn. Under prefers-reduced-motion, progress locks to 1 (final/complete
+ * state) immediately, matching how useCounter/useParallax already degrade —
+ * a sequence built on this must read as fully resolved without motion,
+ * never as "stuck mid-way".
+ *
+ * Two modes, because "how far through" means different things for a short
+ * single-screen module vs. a long scroll-driven list:
+ *
+ * - 'settle' (default): for a section comfortably shorter than the
+ *   viewport (e.g. Operasyon's 4-step row). Progress reaches 1 once the
+ *   section has scrolled to a position where it's still fully, comfortably
+ *   visible — not merely once its bottom has passed the viewport top. Bug
+ *   this fixes: the original single formula (now 'transit', below) mapped
+ *   progress across the section's ENTIRE top-to-bottom transit through the
+ *   viewport, so for a section much shorter than the viewport, progress
+ *   only reached 1 once the section had already scrolled mostly or fully
+ *   past — steps 3/4 lit up only after the user had effectively left the
+ *   module. 'settle' instead targets the earliest point at which the
+ *   section is safely, fully on-screen (never demanding more scroll than
+ *   that), with a small safety margin and a guaranteed minimum scroll
+ *   distance so the change never reads as an instant jump.
+ * - 'transit': the original full top-to-bottom sweep — 0 when the
+ *   section's top just enters the viewport bottom, 1 when its bottom exits
+ *   the viewport top. For a section intentionally taller than the viewport
+ *   and meant to be scrolled THROUGH as a sequence (e.g. Kariyer's culture
+ *   list, where each scroll position should map to a different "active"
+ *   entry across the section's full length) — 'settle' would degenerate
+ *   here, since a section far taller than the viewport can never be
+ *   "fully visible at once".
+ */
+export function useSectionProgress<T extends HTMLElement>(mode: "settle" | "transit" = "settle") {
   const ref = React.useRef<T | null>(null)
   const [progress, setProgress] = React.useState(0)
   React.useEffect(() => {
@@ -129,12 +152,18 @@ export function useSectionProgress<T extends HTMLElement>() {
       if (el) {
         const rect = el.getBoundingClientRect()
         const vh = window.innerHeight
-        // 0 when the section's top just enters the viewport bottom, 1 when
-        // its bottom exits the viewport top — i.e. progress tracks the
-        // section's own transit, not the whole page's.
-        const total = rect.height + vh
-        const passed = vh - rect.top
-        setProgress(Math.min(Math.max(passed / total, 0), 1))
+        const start = vh
+        let end: number
+        if (mode === "transit") {
+          end = -rect.height
+        } else {
+          const topSafeMargin = 0.12 * vh   // stay clear of a sticky header near the top of the viewport
+          const bottomSafeMargin = 24        // small breathing room above the viewport's bottom edge
+          const minTravel = 80               // guarantee some real scroll distance maps to 0→1, never an instant jump
+          const rawEnd = Math.max(topSafeMargin, vh - bottomSafeMargin - rect.height)
+          end = Math.min(rawEnd, start - minTravel)
+        }
+        setProgress(Math.min(Math.max((start - rect.top) / (start - end), 0), 1))
       }
       raf = 0
     }
@@ -143,8 +172,22 @@ export function useSectionProgress<T extends HTMLElement>() {
     window.addEventListener("scroll", onScroll, { passive: true })
     window.addEventListener("resize", onScroll)
     return () => { window.removeEventListener("scroll", onScroll); window.removeEventListener("resize", onScroll); cancelAnimationFrame(raf) }
-  }, [])
+  }, [mode])
   return [ref, progress] as const
+}
+
+/** One-time (mount-only) prefers-reduced-motion read, matching the inline
+ * checks already used by useCounter/useParallax/useSectionProgress — a
+ * shared helper for components that need to branch their own render (not
+ * just a hook's internal animation) on the same preference, e.g. Kariyer's
+ * culture module swapping its scroll-driven emphasis for a static, fully
+ * legible layout. */
+export function usePrefersReducedMotion() {
+  const [reduced, setReduced] = React.useState(false)
+  React.useEffect(() => {
+    setReduced(window.matchMedia("(prefers-reduced-motion: reduce)").matches)
+  }, [])
+  return reduced
 }
 
 /** Escape-to-close for dismissible panels (mobile nav, etc). */
