@@ -320,15 +320,33 @@ export function LandingPage() {
               optik düzeltme (logo hafif alçak duruyordu) — sm ve üzeri (masaüstü)
               boyut/hizalama birebir korunuyor. Header/Supplier Assets Round:
               SiteHeader.tsx ile birebir aynı yeni logo asset'ine (883x240)
-              güncellendi — bkz. o dosyadaki gerekçe yorumu. */}
-          <Link href={routeFor("home", lang)} className="flex items-center shrink-0">
-            <img
-              src="/images/delta-oto-header-logo.webp"
-              alt="Delta Oto 50. Yıl"
-              width={883}
-              height={240}
-              className={`w-auto transition-[height] duration-300 -mt-0.5 sm:mt-0 ${scrolled ? "h-9 sm:h-12" : "h-[58px] sm:h-20"}`}
-            />
+              güncellendi — bkz. o dosyadaki gerekçe yorumu. Görsel/UX
+              Düzeltme Turu §1: scrolled durumda motto'suz delta-oto-logo-
+              classic.webp'e crossfade — bkz. SiteHeader.tsx'teki birebir
+              aynı gerekçe/genişlik hesabı yorumu. */}
+          <Link href={routeFor("home", lang)} className="flex items-center shrink-0" aria-label="Delta Oto 50. Yıl">
+            <span
+              className={`relative inline-block shrink-0 transition-[height,width] duration-300 -mt-0.5 sm:mt-0 ${
+                scrolled ? "h-9 sm:h-12 w-[133px] sm:w-[177px]" : "h-[58px] sm:h-20 w-[213px] sm:w-[294px]"
+              }`}
+            >
+              <img
+                src="/images/delta-oto-header-logo.webp"
+                alt=""
+                aria-hidden="true"
+                width={883}
+                height={240}
+                className={`absolute inset-0 h-full w-full object-contain object-left transition-opacity duration-300 ${scrolled ? "opacity-0" : "opacity-100"}`}
+              />
+              <img
+                src="/images/delta-oto-logo-classic.webp"
+                alt=""
+                aria-hidden="true"
+                width={918}
+                height={222}
+                className={`absolute inset-0 h-full w-full object-contain object-left transition-opacity duration-300 ${scrolled ? "opacity-100" : "opacity-0"}`}
+              />
+            </span>
           </Link>
 
           {/* Sağ grup: nav + dil + B2B Portal butonu — Header Rebalance Round:

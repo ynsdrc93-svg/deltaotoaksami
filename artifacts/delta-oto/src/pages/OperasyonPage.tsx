@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Truck, Shield, Zap, PackageCheck, BarChart3, ChevronRight, ChevronDown, Calendar, ArrowRight } from "lucide-react";
+import { Truck, Zap, ChevronRight, ChevronDown, Calendar, ArrowRight } from "lucide-react";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
 import { useReveal, useCounter, useSectionProgress } from "../hooks/use-motion";
@@ -18,12 +18,6 @@ function CountUp({ target, suffix = "", duration = 1600, className = "" }: { tar
   }, []);
   return <span ref={spanRef} className={className}>{(started ? count : 0).toLocaleString("tr-TR")}{suffix}</span>;
 }
-
-// Operasyonel Yetkinlikler ikonları — sıra content.tr/en.capabilities.items ile
-// birebir eşleşir. Hard-edit sonrası (§21-22) yalnızca 3 madde kaldı, hepsi
-// gerçekten operasyonel: WMS, Stok Derinliği & Planlama, Sevkiyat Kalite
-// Kontrolü.
-const CAPABILITY_ICONS = [PackageCheck, BarChart3, Shield];
 
 // Teslimat kartı ikonları — sıra content.tr/en.delivery.cards ile birebir eşleşir.
 const DELIVERY_ICONS = [Zap, Truck, Calendar];
@@ -84,17 +78,26 @@ const content = {
     // roleTag'ler tek/iki kelimeye indirildi, body cümleleri tek kısa
     // ifadeye indirildi. Masaüstünde yatay, mobilde (16:9 zorunluluğu
     // masaüstüne özgü) doğal biçimde dikey yığılır.
+    // Görsel/UX Düzeltme Turu §3 (canlı incelemede bulunan): "İki Bölge, Tek
+    // Karar Noktası" operasyonu coğrafi olarak sınırlıymış gibi gösteriyordu
+    // ve Ümraniye'yi TEK fiziksel merkezmiş gibi yanlış çerçeveliyordu.
+    // Gerçek hikaye: Türkiye geneli dağıtım/operasyon, Ümraniye'den MERKEZİ
+    // KOORDİNASYON — Gebze ve İzmir birer operasyon noktası, "bölge" değil.
+    // Başlık ve Ümraniye paneli metni bu yönde yeniden yazıldı; "tek karar
+    // noktası" / "tüm karar burada alınır" gibi mutlaklık ifade eden
+    // kelimeler kaldırıldı. Diğer her şey (Gebze/İzmir/Ümraniye/81 İl,
+    // yatay 16:9 kompozisyon) KORUNDU.
     depots: {
       eyebrow: "Operasyon Altyapısı",
-      heading: "İki Bölge, Tek Karar Noktası",
-      body: "Gebze ve İzmir'i besleyen operasyon, kararını Ümraniye'de alır.",
+      heading: "Türkiye Geneli, Tek Merkezden Koordinasyon",
+      body: "Gebze ve İzmir operasyon noktalarımızı, Ümraniye'deki merkezden koordine ediyoruz.",
       reachValue: "81",
       reachLabel: "İl",
       reachBody: "Türkiye'nin tamamına planlı dağıtım.",
       items: [
         { title: "Gebze", plate: "41", tag: "Doğu Marmara", body: "Kocaeli ve Sakarya'ya hızlı erişim.", central: false },
         { title: "İzmir", plate: "35", tag: "Ege Bölgesi · Opar", body: "Ege'nin dağıtım omurgası.", central: false },
-        { title: "Ümraniye", plate: "34", tag: "Merkez Koordinasyon", body: "Stok planlamasından sevkiyata, tüm karar burada alınır.", central: true },
+        { title: "Ümraniye", plate: "34", tag: "Merkez Koordinasyon", body: "Stok ve sevkiyat koordinasyonu, Ümraniye merkezden yönetilir.", central: true },
       ],
     },
     // Hard-edit (§21-22): 8 madde → 3. Kalan 5 madde bu sayfada BAŞKA YERDE
@@ -107,9 +110,9 @@ const content = {
       eyebrow: "Lojistik Altyapı",
       heading: "Sistem ve Kalite",
       items: [
-        { title: "WMS Destekli Depo Yönetimi", desc: "Ambar yönetim sistemi stok doğruluğunu ve sipariş hazırlık sürecini kontrol altında tutar; hata payı sistem düzeyinde sıfıra yakın tutulur." },
-        { title: "Stok Derinliği & Planlama", desc: "Talep bazlı envanter planlaması ve dönemsel analiz ile kritik ürünlerde yüksek doluluk oranı sürdürülür. Stokta yok cevabı istisnai kalır." },
-        { title: "Sevkiyat Kalite Kontrolü", desc: "Her sipariş çıkışı önce WMS kontrolünden, ardından fiziksel doğrulamadan geçer; hasarlı ve eksik gönderim oranı operasyonel sıfır hedefinde tutulur." },
+        { title: "WMS Destekli Depo Yönetimi", desc: "Stok doğruluğu ve sipariş hazırlığı sistem kontrolünde; hata payı sıfıra yakın." },
+        { title: "Stok Derinliği & Planlama", desc: "Talep bazlı planlama, kritik ürünlerde yüksek doluluk sağlar; stokta yok yanıtı istisnadır." },
+        { title: "Sevkiyat Kalite Kontrolü", desc: "Her sevkiyat WMS ve fiziksel kontrolden geçer; hasarlı/eksik gönderim oranı hedefte sıfır." },
       ],
     },
     process: {
@@ -174,24 +177,24 @@ const content = {
     },
     depots: {
       eyebrow: "Operations Infrastructure",
-      heading: "Two Regions, One Decision Point",
-      body: "Fed by Gebze and İzmir, the decision is made in Ümraniye.",
+      heading: "Nationwide Operations, Centrally Coordinated",
+      body: "We coordinate our operation points in Gebze and İzmir from our center in Ümraniye.",
       reachValue: "81",
       reachLabel: "Provinces",
       reachBody: "Regular, planned distribution across Türkiye.",
       items: [
         { title: "Gebze", plate: "41", tag: "Eastern Marmara", body: "Fast access to Kocaeli and Sakarya.", central: false },
         { title: "İzmir", plate: "35", tag: "Aegean Region · Opar", body: "The Aegean's distribution backbone.", central: false },
-        { title: "Ümraniye", plate: "34", tag: "Central Coordination", body: "From stock planning to dispatch, every decision is made here.", central: true },
+        { title: "Ümraniye", plate: "34", tag: "Central Coordination", body: "Stock and dispatch coordination is managed from the Ümraniye center.", central: true },
       ],
     },
     capabilities: {
       eyebrow: "Logistics Infrastructure",
       heading: "Systems and Quality",
       items: [
-        { title: "WMS-Supported Warehouse Management", desc: "Our warehouse management system keeps stock accuracy and order preparation under control, holding the error margin close to zero at the system level." },
-        { title: "Stock Depth & Planning", desc: "Demand-based inventory planning and periodic analysis maintain a high fill rate on critical products, keeping out-of-stock responses the exception." },
-        { title: "Dispatch Quality Control", desc: "Every outgoing order passes a WMS check followed by physical verification; damaged and incomplete shipments are held to an operational zero target." },
+        { title: "WMS-Supported Warehouse Management", desc: "Stock accuracy and order prep run under system control — error margin near zero." },
+        { title: "Stock Depth & Planning", desc: "Demand-based planning keeps critical products in stock; out-of-stock stays the exception." },
+        { title: "Dispatch Quality Control", desc: "Every shipment passes a WMS and physical check — damaged or incomplete stays near zero." },
       ],
     },
     process: {
@@ -219,8 +222,6 @@ export function OperasyonPage() {
   const lang = useLang();
   const t = content[lang];
   useDocumentMeta(t.meta.title, t.meta.description);
-
-  const capabilityItems = t.capabilities.items.map((f: { title: string; desc: string }, i: number) => ({ ...f, icon: CAPABILITY_ICONS[i] }));
 
   // Dört adımlık süreç scroll'a bağlı gerçek bir ilerleme izler. Görsel/UX
   // Düzeltme Turu (§6-9): 'settle' modu (useSectionProgress'in artık
@@ -522,24 +523,41 @@ export function OperasyonPage() {
         </div>
       </section>
 
-      {/* SİSTEM VE KALİTE — dark. Hard-edit (§21-22): eskiden 8 madde, iki
-          tematik grup altında. Beşi kaldırıldı — üç merkezden dağıtım/18:00/
-          Opar zaten yukarıdaki Operasyon Altyapısı ve Teslimat bölümlerinde
-          söylendi; GROUPAUTO ağı ve tek-tedarikçi kolaylığı bu sayfanın değil
-          İş Ortaklarımız'ın konusuydu. Kalan 3 madde gerçekten operasyonel ve
-          BAŞKA YERDE yok — grup/2-sütun ayrımına gerek kalmadı, düz 3 sütun. */}
-      <section className="relative bg-[#0e1016] py-24 text-white overflow-hidden">
+      {/* SİSTEM VE KALİTE — dark. Hard-edit (§21-22, önceki tur): eskiden 8
+          madde, iki tematik grup altında. Beşi kaldırıldı — üç merkezden
+          dağıtım/18:00/Opar zaten yukarıdaki Operasyon Altyapısı ve Teslimat
+          bölümlerinde söylendi; GROUPAUTO ağı ve tek-tedarikçi kolaylığı bu
+          sayfanın değil İş Ortaklarımız'ın konusuydu. Kalan 3 madde gerçekten
+          operasyonel ve BAŞKA YERDE yok.
+
+          Görsel/UX Düzeltme Turu §4 (canlı incelemede bulunan): eski gevşek
+          3-sütun grid (büyük gap-x/y-10 boşluk + küçük ikon + küçük metin,
+          py-24 dolgu) kullanıcının ekran görüntüsünde "başlık + devasa boş
+          koyu alan" olarak okunuyordu — üç madde ORADAYDI ama kompozisyon
+          onları GÖRÜNÜR biçimde ÇERÇEVELEMİYORDU, boşluk içerikten fazla
+          ağırlık taşıyordu. Çözüm: (1) dolgu sıkılaştırıldı (py-24→py-16/20),
+          (2) üç madde artık border-t/divide-x/border-b ile TEK bir çerçeveli
+          şerit — sınırlar kompozisyona "bunlar üç GERÇEK, sınırlı unsur"
+          diyen bir kapsayıcılık veriyor (site genelinde zaten kullanılan
+          numaralı-liste/divide-x dili, yeni icat edilmiş değil — bkz.
+          TedarikciPage "Neden Delta Oto" ve bu sayfanın kendi Operasyon
+          Altyapısı plaka numaraları), (3) ikonlar yerine 01/02/03 numaralı
+          endeks (aynı sebep: mevcut site dili), (4) üç ayrı gecikmeli
+          do-reveal yerine TEK bir kapsayıcı reveal — üç maddenin farklı
+          anlarda yarı-saydam görünüp "bitmemiş" hissi verme riskini
+          (canlı incelemede olası bir etken) ortadan kaldırıyor. */}
+      <section className="relative bg-[#0e1016] py-16 md:py-20 text-white overflow-hidden">
         <div className="absolute inset-0 do-grid-bg opacity-40" />
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-          <div ref={ref} className="do-reveal mb-14">
+          <div ref={ref} className="do-reveal mb-10 md:mb-12">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea]">{t.capabilities.eyebrow}</span>
             <h2 className="text-3xl md:text-4xl font-black mt-2 tracking-tight">{t.capabilities.heading}</h2>
           </div>
-          <div className="grid sm:grid-cols-3 gap-x-10 gap-y-10">
-            {capabilityItems.map((f, i) => (
-              <div key={f.title} ref={ref} className={`do-reveal ${["", "do-d1", "do-d2"][i] ?? ""}`}>
-                <f.icon className="w-6 h-6 text-[#7d9bea] mb-5" strokeWidth={1.5} />
-                <h3 className="text-[15px] font-bold mb-2.5 leading-snug">{f.title}</h3>
+          <div ref={ref} className="do-reveal grid sm:grid-cols-3 sm:divide-x sm:divide-white/10 border-t border-white/10">
+            {t.capabilities.items.map((f: { title: string; desc: string }, i: number) => (
+              <div key={f.title} className="py-7 sm:py-8 sm:pl-8 sm:first:pl-0 sm:pr-4 border-b sm:border-b-0 border-white/10 last:border-b-0">
+                <span className="text-[11px] font-black text-[#7d9bea] tabular-nums block mb-4">0{i + 1}</span>
+                <h3 className="text-[17px] font-bold mb-2.5 leading-snug">{f.title}</h3>
                 <p className="text-white/60 text-[13.5px] leading-relaxed">{f.desc}</p>
               </div>
             ))}

@@ -175,16 +175,25 @@ const content = {
  *
  * Yeni konsept: "kinetik manifesto". Yedi ilke normal dikey akışta,
  * her biri kendi büyük gölge numarasıyla (oversized editorial tipografi) —
- * ama statik değil: useSectionProgress('transit') bu bloğun kendi TAM
- * scroll geçişini 0→1 izler (bölüm kasıtlı olarak viewport'tan uzun, 16:9
- * kısıtı YOK — bkz. hook'un 'transit' modu notu), buradan sürekli bir
- * "hangi ilke şu an odakta" değeri türetilir (continuousActive). Her madde,
- * bu odaktan UZAKLIĞINA göre opaklık/ölçek/renk kazanır — ekranı kaydırdıkça
- * vurgu listede aşağı doğru DALGA gibi ilerler ("bir baskın ilke + değişen
+ * ama statik değil: useSectionProgress('story') bu bloğun kendi scroll
+ * geçişini 0→1 izler (bölüm kasıtlı olarak viewport'tan uzun, 16:9 kısıtı
+ * YOK — bkz. hook'un 'story' modu notu), buradan sürekli bir "hangi ilke
+ * şu an odakta" değeri türetilir (continuousActive). Her madde, bu odaktan
+ * UZAKLIĞINA göre opaklık/ölçek/renk kazanır — ekranı kaydırdıkça vurgu
+ * listede aşağı doğru DALGA gibi ilerler ("bir baskın ilke + değişen
  * destekleyiciler", kullanıcının önerdiği yönlerden biri). Solda ince bir
  * ilerleme rayı (nokta dizisi) aynı odağı yansıtır — HakkimizdaPage'deki
  * zaman çizgisi nokta-navigasyonuyla aynı görsel dil, yeni icat edilmiş bir
  * desen değil.
+ *
+ * Görsel/UX Düzeltme Turu §2 (canlı incelemede bulunan hata): 'transit'
+ * modu progress=1'i, bölümün ALT kenarı viewport'un ÜST kenarından TAM
+ * ÇIKTIĞI anda veriyordu — yani son ilke (07/Saygı) odaklanana kadar bölüm
+ * zaten tamamen ekranın dışına çıkmış oluyordu (kullanıcı: "kullanıcı
+ * modülü etkin biçimde geçtikten SONRA aktifleşiyor"). 'story' modu bunun
+ * yerine progress=1'i bölümün ALT kenarı viewport'un hâlâ rahatça içindeyken
+ * (~%70'inde) veriyor — 07 odağa ulaştığında Culture bölümü henüz "geçilmiş"
+ * olmuyor, hâlâ ekranın büyük kısmını kaplıyor (bkz. use-motion.ts).
  *
  * Reduced-motion / statik gereksinim (§15-16): usePrefersReducedMotion
  * true ise TÜM maddeler focus=1'e sabitlenir — yedi ilke de tam opaklık/
@@ -197,7 +206,7 @@ const content = {
  * hiç kaydırılmadan bile "tasarlanmış bir kültür deneyimi" izlenimi verir.
  */
 function CultureManifesto({ items }: { items: { title: string; desc: string }[] }) {
-  const [sectionRef, progress] = useSectionProgress<HTMLDivElement>("transit");
+  const [sectionRef, progress] = useSectionProgress<HTMLDivElement>("story");
   const reducedMotion = usePrefersReducedMotion();
   const continuousActive = progress * (items.length - 1);
 

@@ -113,8 +113,8 @@ export function useParallax<T extends HTMLElement>(speed = 0.12) {
  * a sequence built on this must read as fully resolved without motion,
  * never as "stuck mid-way".
  *
- * Two modes, because "how far through" means different things for a short
- * single-screen module vs. a long scroll-driven list:
+ * Three modes, because "how far through" means different things depending
+ * on the shape of the content and what "done" needs to mean:
  *
  * - 'settle' (default): for a section comfortably shorter than the
  *   viewport (e.g. Operasyon's 4-step row). Progress reaches 1 once the
@@ -130,15 +130,26 @@ export function useParallax<T extends HTMLElement>(speed = 0.12) {
  *   that), with a small safety margin and a guaranteed minimum scroll
  *   distance so the change never reads as an instant jump.
  * - 'transit': the original full top-to-bottom sweep — 0 when the
- *   section's top just enters the viewport bottom, 1 when its bottom exits
- *   the viewport top. For a section intentionally taller than the viewport
- *   and meant to be scrolled THROUGH as a sequence (e.g. Kariyer's culture
- *   list, where each scroll position should map to a different "active"
- *   entry across the section's full length) — 'settle' would degenerate
- *   here, since a section far taller than the viewport can never be
- *   "fully visible at once".
+ *   section's top just enters the viewport bottom, 1 when its BOTTOM
+ *   EXITS the viewport top (the section has fully scrolled past). Fine for
+ *   a section whose last beat doesn't itself need to stay readable — but
+ *   wrong for a long scroll-story where the FINAL entry must still be on
+ *   screen when it becomes "active", which is exactly the bug 'story'
+ *   (below) fixes.
+ * - 'story': for a section intentionally taller than the viewport and
+ *   meant to be scrolled THROUGH as a sequence, where the LAST beat must
+ *   still be comfortably visible at the moment progress reaches 1 (e.g.
+ *   Kariyer's 7-principle culture list — principle 07 was reaching its
+ *   dominant/focused state only once the section had already scrolled
+ *   past, using 'transit''s full-exit endpoint). Progress instead reaches
+ *   1 once the section's BOTTOM edge has scrolled up to ~70% of the
+ *   viewport height — comfortably inside the visible area, not flush with
+ *   the bottom edge and nowhere near having exited — so content anchored
+ *   near the end of a long section is still on screen exactly when its
+ *   "moment" arrives. Degrades gracefully for a short section too (the
+ *   endpoint just becomes an early, 'settle'-like point).
  */
-export function useSectionProgress<T extends HTMLElement>(mode: "settle" | "transit" = "settle") {
+export function useSectionProgress<T extends HTMLElement>(mode: "settle" | "transit" | "story" = "settle") {
   const ref = React.useRef<T | null>(null)
   const [progress, setProgress] = React.useState(0)
   React.useEffect(() => {
@@ -156,6 +167,9 @@ export function useSectionProgress<T extends HTMLElement>(mode: "settle" | "tran
         let end: number
         if (mode === "transit") {
           end = -rect.height
+        } else if (mode === "story") {
+          const bottomTarget = 0.7 * vh   // progress=1 once the section's bottom reaches ~70% down the viewport — still clearly on screen
+          end = bottomTarget - rect.height
         } else {
           const topSafeMargin = 0.12 * vh   // stay clear of a sticky header near the top of the viewport
           const bottomSafeMargin = 24        // small breathing room above the viewport's bottom edge

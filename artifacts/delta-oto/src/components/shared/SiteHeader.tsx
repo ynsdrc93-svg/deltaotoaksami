@@ -50,15 +50,46 @@ export function SiteHeader() {
               silinmedi. Yeni asset'in kırpılmış en-boy oranı (883:240 ≈
               3.68:1) eskisinden (963:240 ≈ 4.01:1) biraz daha dar olduğu için
               aynı yükseklik sınıflarında biraz daha az yatay yer kaplıyor —
-              header taşması riski azaldı, ek bir boyut düzeltmesi gerekmedi. */}
-          <Link href={routeFor("home", lang)} className="flex items-center shrink-0">
-            <img
-              src="/images/delta-oto-header-logo.webp"
-              alt="Delta Oto 50. Yıl"
-              width={883}
-              height={240}
-              className={`w-auto transition-[height] duration-300 -mt-0.5 sm:mt-0 ${scrolled ? "h-9 sm:h-12" : "h-[58px] sm:h-20"}`}
-            />
+              header taşması riski azaldı, ek bir boyut düzeltmesi gerekmedi.
+
+              Görsel/UX Düzeltme Turu §1: scrolled (küçülmüş) durumda motto
+              satırı ("Dünyanın Parçası 50 Yıldır...") okunmaz hâle geliyordu.
+              Motto'yu CSS ile GİZLEMEK yerine (istenmedi), zaten var olan
+              motto'suz "delta50.yıl" varyantı (delta-oto-logo-classic.webp —
+              SiteFooter'da halihazırda kullanılıyor, aynı marka ailesinden
+              doğrulanmış bir asset, yeniden kırpma/rekonstrüksiyon riski yok)
+              scrolled durumda devreye giriyor. İki görselin doğal en-boy
+              oranı FARKLI (883:240 vs 918:222) — düz bir src değişimi ani bir
+              genişlik sıçraması (CLS) yaratırdı. Çözüm: sarmalayıcının
+              yüksekliği VE genişliği birlikte, her iki görselin KENDİ gerçek
+              oranına göre hesaplanmış hedef piksel değerlerine geçiş yapıyor
+              (aşağıdaki w-[…] değerleri elle hesaplandı — bkz. görev raporu);
+              içerideki iki <img> mutlak konumlu, object-contain ile bu kutuyu
+              hizasını bozmadan dolduruyor ve opacity ile çapraz geçiş yapıyor.
+              Sonuç: pürüzsüz crossfade, sıçrama/jitter/nav kayması yok. */}
+          <Link href={routeFor("home", lang)} className="flex items-center shrink-0" aria-label="Delta Oto 50. Yıl">
+            <span
+              className={`relative inline-block shrink-0 transition-[height,width] duration-300 -mt-0.5 sm:mt-0 ${
+                scrolled ? "h-9 sm:h-12 w-[133px] sm:w-[177px]" : "h-[58px] sm:h-20 w-[213px] sm:w-[294px]"
+              }`}
+            >
+              <img
+                src="/images/delta-oto-header-logo.webp"
+                alt=""
+                aria-hidden="true"
+                width={883}
+                height={240}
+                className={`absolute inset-0 h-full w-full object-contain object-left transition-opacity duration-300 ${scrolled ? "opacity-0" : "opacity-100"}`}
+              />
+              <img
+                src="/images/delta-oto-logo-classic.webp"
+                alt=""
+                aria-hidden="true"
+                width={918}
+                height={222}
+                className={`absolute inset-0 h-full w-full object-contain object-left transition-opacity duration-300 ${scrolled ? "opacity-100" : "opacity-0"}`}
+              />
+            </span>
           </Link>
 
           {/* Sağ grup: nav + dil + B2B Portal butonu — Header Rebalance
