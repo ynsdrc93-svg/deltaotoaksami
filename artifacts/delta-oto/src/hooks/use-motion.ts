@@ -105,6 +105,48 @@ export function useParallax<T extends HTMLElement>(speed = 0.12) {
   return ref
 }
 
+/** Scroll-linked progress (0→1) for how far a section has moved through the
+ * viewport — used for the Operasyon "Siparişten Teslimata" step sequence, so
+ * the process visibly advances as the user scrolls through it rather than
+ * just fading in once (görev talimatı §24: "the user should FEEL the
+ * process advancing"). Same rAF-throttled window-scroll pattern as
+ * useScrollProgress/useParallax above — no new library, no per-frame
+ * IntersectionObserver churn. Under prefers-reduced-motion, progress locks
+ * to 1 (final/complete state) immediately, matching how useCounter/
+ * useParallax already degrade — the sequence must read as fully resolved
+ * without motion, never as "stuck mid-way". */
+export function useSectionProgress<T extends HTMLElement>() {
+  const ref = React.useRef<T | null>(null)
+  const [progress, setProgress] = React.useState(0)
+  React.useEffect(() => {
+    if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setProgress(1)
+      return
+    }
+    let raf = 0
+    const update = () => {
+      const el = ref.current
+      if (el) {
+        const rect = el.getBoundingClientRect()
+        const vh = window.innerHeight
+        // 0 when the section's top just enters the viewport bottom, 1 when
+        // its bottom exits the viewport top — i.e. progress tracks the
+        // section's own transit, not the whole page's.
+        const total = rect.height + vh
+        const passed = vh - rect.top
+        setProgress(Math.min(Math.max(passed / total, 0), 1))
+      }
+      raf = 0
+    }
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update) }
+    update()
+    window.addEventListener("scroll", onScroll, { passive: true })
+    window.addEventListener("resize", onScroll)
+    return () => { window.removeEventListener("scroll", onScroll); window.removeEventListener("resize", onScroll); cancelAnimationFrame(raf) }
+  }, [])
+  return [ref, progress] as const
+}
+
 /** Escape-to-close for dismissible panels (mobile nav, etc). */
 export function useEscapeKey(onEscape: () => void, active: boolean) {
   React.useEffect(() => {

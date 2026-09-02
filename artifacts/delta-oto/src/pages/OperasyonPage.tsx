@@ -1,8 +1,8 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Truck, Shield, Zap, Network, PackageCheck, BarChart3, ChevronRight, Calendar, ArrowRight, Handshake } from "lucide-react";
+import { Truck, Shield, Zap, PackageCheck, BarChart3, ChevronRight, ChevronDown, Calendar, ArrowRight } from "lucide-react";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
-import { useReveal, useCounter } from "../hooks/use-motion";
+import { useReveal, useCounter, useSectionProgress } from "../hooks/use-motion";
 import { useDocumentMeta } from "@/hooks/use-document-meta";
 import { useLang, type Lang } from "@/lib/i18n";
 
@@ -19,83 +19,11 @@ function CountUp({ target, suffix = "", duration = 1600, className = "" }: { tar
   return <span ref={spanRef} className={className}>{(started ? count : 0).toLocaleString("tr-TR")}{suffix}</span>;
 }
 
-// Erişim noktaları (81 il temsili) — Ümraniye merkezinden sağa doğru açılan
-// bir yelpazede, iki değişken yarıçapta (95/110) düzenlendi. Koordinatlar
-// viewBox 0 0 440 260 üzerinde elle hesaplandı (bkz. görev raporu) — gerçek
-// bir Türkiye haritası DEĞİL, soyut bir "erişim alanı" temsili.
-const NETWORK_DOTS: { x: number; y: number }[] = [
-  { x: 294.5, y: 52.2 }, { x: 320.7, y: 55.2 }, { x: 321.8, y: 81.7 },
-  { x: 344.4, y: 95.4 }, { x: 334.5, y: 119.9 }, { x: 349.4, y: 141.7 },
-  { x: 330.2, y: 159.9 }, { x: 334.7, y: 185.9 }, { x: 309.7, y: 194.6 },
-  { x: 303.1, y: 220.1 },
-];
-
-/** Operasyon Altyapısı'nın soyut ağ diyagramı: Gebze/İzmir → Ümraniye (merkez)
- * kenarları + Ümraniye'den 81 ile yayılan erişim noktaları. Metinsiz tutuldu
- * (etiketler yan taraftaki editoryal listede) — tek istisna, nokta
- * yelpazesinin anlamını açıklayan "81 İl" etiketi. Node/edge çizim + pulse
- * animasyonu .do-network-* sınıflarıyla (index.css) yönetilir, aynı do-in
- * tetikleyicisini (useReveal) kullanır. */
-function NetworkDiagram({ reveal, reachLabel }: { reveal: (el: Element | null) => void; reachLabel: string }) {
-  return (
-    <div className="relative">
-      <div
-        className="absolute pointer-events-none"
-        style={{
-          left: "56%", top: "6%", width: "50%", height: "88%",
-          background: "radial-gradient(ellipse at center, rgba(27,58,143,0.09) 0%, rgba(27,58,143,0) 72%)",
-        }}
-        aria-hidden="true"
-      />
-      <svg
-        ref={reveal}
-        viewBox="0 0 440 260"
-        className="do-network-layer relative w-full h-auto"
-        role="img"
-        aria-label="Gebze ve İzmir operasyon merkezlerinden Ümraniye merkez koordinasyonuna, oradan 81 ile uzanan dağıtım ağı"
-      >
-        <path d="M66,64 Q160,80 240,130" className="do-network-edge" stroke="#1B3A8F" strokeWidth="2" pathLength={100} style={{ animationDelay: "80ms" }} />
-        <path d="M66,196 Q160,180 240,130" className="do-network-edge" stroke="#1B3A8F" strokeWidth="2" pathLength={100} style={{ animationDelay: "200ms" }} />
-
-        {NETWORK_DOTS.map((d, i) => (
-          <circle
-            key={i}
-            cx={d.x}
-            cy={d.y}
-            r={i % 2 === 0 ? 3.2 : 2.4}
-            className="do-network-dot"
-            fill="#7d9bea"
-            style={{ animationDelay: `${420 + i * 45}ms` }}
-          />
-        ))}
-
-        <circle cx="66" cy="64" r="7" className="do-network-node" fill="#fff" stroke="#1B3A8F" strokeWidth="2.5" style={{ animationDelay: "0ms" }} />
-        <circle cx="66" cy="196" r="7" className="do-network-node" fill="#fff" stroke="#1B3A8F" strokeWidth="2.5" style={{ animationDelay: "120ms" }} />
-
-        <circle cx="240" cy="130" r="15" className="do-network-pulse-ring" fill="none" stroke="#1B3A8F" strokeWidth="2" />
-        <circle cx="240" cy="130" r="15" className="do-network-node" fill="#1B3A8F" style={{ animationDelay: "340ms" }} />
-      </svg>
-
-      <div ref={reveal} className="do-reveal do-d3 absolute flex items-center gap-1.5" style={{ left: "80%", top: "48%" }}>
-        <span className="w-1.5 h-1.5 rounded-full bg-[#7d9bea]" aria-hidden="true" />
-        <span className="text-[11px] font-black uppercase tracking-[0.1em] text-[#1B3A8F] whitespace-nowrap">{reachLabel}</span>
-      </div>
-    </div>
-  );
-}
-
-// Operasyonel Yetkinlikler ikonları — sıra content.tr/en.capabilities.features ile birebir
-// eşleşir (bkz. içerik nesnesi aşağıda). Metinler dile göre değiştiği için content'e taşındı;
-// ikon atamaları (yapısal, dilden bağımsız) burada, modül seviyesinde kalıyor.
-const CAPABILITY_ICONS = [Truck, Zap, Handshake, Shield, BarChart3, PackageCheck, Network, Shield];
-
-// Operasyonel Yetkinlikler'i iki tematik başlık altında sunmak için features'tan türetilen
-// görünüm gruplaması (index referansları) — 8 yetkinliğin içeriği (title/desc) birebir korunur,
-// yalnızca sunum kümeleniyor. Grup etiketleri (groupLabels) dile göre content içinde tutulur.
-const CAPABILITY_GROUPS: number[][] = [
-  [0, 1, 2, 6],
-  [3, 4, 5, 7],
-];
+// Operasyonel Yetkinlikler ikonları — sıra content.tr/en.capabilities.items ile
+// birebir eşleşir. Hard-edit sonrası (§21-22) yalnızca 3 madde kaldı, hepsi
+// gerçekten operasyonel: WMS, Stok Derinliği & Planlama, Sevkiyat Kalite
+// Kontrolü.
+const CAPABILITY_ICONS = [PackageCheck, BarChart3, Shield];
 
 // Teslimat kartı ikonları — sıra content.tr/en.delivery.cards ile birebir eşleşir.
 const DELIVERY_ICONS = [Zap, Truck, Calendar];
@@ -115,16 +43,6 @@ const content = {
         { target: 50000, suffix: "+", label: "SKU", sub: "Sürekli stok derinliği" },
         { value: "18:00", label: "Son Sipariş Saati", sub: "Aynı gün sevkiyat" },
         { target: 81, label: "İl", sub: "Ulusal dağıtım kapsamı" },
-      ],
-    },
-    network: {
-      eyebrow: "Altyapı Özeti",
-      heading: "Operasyonel Ağ Yapımız",
-      body: "Üç operasyon merkezinden yönetilen lojistik ağımız, bölgeden bölgeye değişen teslimat takvimi taahhütleriyle çalışır.",
-      stats: [
-        { target: 50000, suffix: "+", label: "Aktif SKU", sub: "Sürekli güncellenen stok" },
-        { value: "7/24", label: "B2B Erişimi", sub: "Dijital sipariş kanalı" },
-        { value: "WMS", label: "Depo Yönetimi", sub: "Yazılım destekli operasyon" },
       ],
     },
     delivery: {
@@ -153,22 +71,27 @@ const content = {
         },
       ],
     },
+    // Sanat Yönetimi Turu (§18-22): Operasyon Altyapısı'nın soyut nokta/
+    // düğüm SVG diyagramı TAMAMEN kaldırıldı — kullanıcı bunu anlamsız
+    // buluyordu ve bu, konseptin ÜÇÜNCÜ varyasyonıydı (hub&spoke → network
+    // diyagramı → ???). Bu turda sıfırdan, farklı bir MEDYUM: saf tipografi
+    // + düzen, SVG yok. "Zincirleme Sorumluluk" konsepti — Gebze ve İzmir'in
+    // BESLEDİĞİ, Ümraniye'nin KARAR VERDİĞİ, 81 ile ÇIKTI verdiği gerçek bir
+    // AKIŞ hikâyesi (bkz. JSX'teki OperationsChain bileşeni). Ayrıca fact-
+    // ownership denetimi (§20-22): eski statTrio (18:00/81/03) kaldırıldı —
+    // 18:00'in birincil yeri Teslimat Hız Güvencesi bölümü, 81'in birincil
+    // yeri artık bu bölümün kendi kapanış satırı, "03" ise zaten üç
+    // lokasyonu isimleriyle listelemenin kendisiyle gereksiz hale geliyordu.
     depots: {
       eyebrow: "Operasyon Altyapısı",
-      heading: "Tek Merkezden Yönetilen, Ülke Geneline Yayılan Ağ",
-      body: "Ümraniye'deki merkez koordinasyon noktası, Gebze ve İzmir'deki operasyon merkezleriyle aynı ritimde çalışır: tek karar noktası, 81 ile kesintisiz erişim.",
-      networkLabel: "Dağıtım Ağı",
-      reachLabel: "81 İl",
-      locationsLabel: "Operasyon Noktaları",
-      statTrio: [
-        { value: "18:00", label: "Aynı Gün Sevk İçin Son Sipariş" },
-        { value: "81", label: "İl Kapsamı" },
-        { value: "03", label: "Operasyon Noktası" },
-      ],
+      heading: "İki Bölge, Tek Karar Noktası",
+      body: "Gebze ve İzmir'den beslenen operasyon, Ümraniye'deki tek karar noktasından Türkiye'nin 81 iline yayılır.",
+      reachValue: "81",
+      reachLabel: "İl",
+      reachBody: "Türkiye'nin tamamına düzenli, planlı dağıtım.",
       items: [
         {
-          title: "Gebze Operasyon Noktası",
-          city: "Kocaeli",
+          title: "Gebze",
           plate: "41",
           roleTag: "Doğu Marmara Sevkiyat Noktası",
           address: "Barış, 1804. Sk. No:4, 41400 Gebze / Kocaeli",
@@ -176,17 +99,15 @@ const content = {
           central: false,
         },
         {
-          title: "İzmir Operasyon Noktası",
-          city: "İzmir",
+          title: "İzmir",
           plate: "35",
           roleTag: "Ege Bölgesi Dağıtım Merkezi",
           address: "Kemalpaşa Kızılüzüm Kırovası Kümeevleri No: 12/1, Kemalpaşa / İzmir",
-          body: "Ege'nin dağıtım omurgasıdır; bölge geneline düzenli sevkiyat ve bayi erişimi taşır.",
+          body: "Opar Ege Bölge Bayiliği ile birlikte Ege'nin dağıtım omurgasıdır; bölge geneline düzenli sevkiyat ve bayi erişimi taşır.",
           central: false,
         },
         {
-          title: "Ümraniye Merkez Depo",
-          city: "İstanbul",
+          title: "Ümraniye",
           plate: "34",
           roleTag: "Merkez Koordinasyon",
           address: "Barbaros Cd. Beyit Sk. No:17, Yukarı Dudullu — Ümraniye / İstanbul",
@@ -195,20 +116,19 @@ const content = {
         },
       ],
     },
+    // Hard-edit (§21-22): 8 madde → 3. Kalan 5 madde bu sayfada BAŞKA YERDE
+    // (hero/Teslimat/yukarıdaki Operasyon Altyapısı) zaten söylenmişti veya
+    // konu dışıydı (GROUPAUTO ağı ve tek-tedarikçi kolaylığı bu sayfanın
+    // değil, İş Ortaklarımız'ın konusu). Yalnızca üç GERÇEKTEN operasyonel
+    // ve BAŞKA YERDE anlatılmamış yetkinlik kaldı — sayı simetrisi için 8'de
+    // tutulmadı.
     capabilities: {
       eyebrow: "Lojistik Altyapı",
-      heading: "Operasyonel Yetkinliklerimiz",
-      body: "Her operasyonel süreç, müşteri teslimat deneyimini optimize etmek amacıyla yapılandırılmıştır.",
-      groupLabels: ["Dağıtım & Kapsama", "Sistem, Kalite & Güvence"],
-      features: [
-        { title: "Üç Merkezden Ulusal Dağıtım", desc: "Gebze, İzmir ve Ümraniye'deki operasyon merkezlerimizden Türkiye'nin 81 iline anlaşmalı lojistik partnerleriyle düzenli teslimat gerçekleştiriyoruz." },
-        { title: "Aynı Gün Sevkiyat Garantisi", desc: "Saat 18:00'e kadar iletilen siparişler, stokta olan ürünler için aynı gün yüklenir. Acil ihtiyaçta servis sürekliliği önceliğimizdir." },
-        { title: "Opar Ege Bölge Bayiliği", desc: "Opar'ın Ege bölgesi operasyonunu devralarak İzmir merkezli bölgesel stok derinliğimizi ve teslimat kapasitemizi genişlettik." },
+      heading: "Sistem ve Kalite",
+      items: [
         { title: "WMS Destekli Depo Yönetimi", desc: "Ambar yönetim sistemi stok doğruluğunu ve sipariş hazırlık sürecini kontrol altında tutar; hata payı sistem düzeyinde sıfıra yakın tutulur." },
         { title: "Stok Derinliği & Planlama", desc: "Talep bazlı envanter planlaması ve dönemsel analiz ile kritik ürünlerde yüksek doluluk oranı sürdürülür. Stokta yok cevabı istisnai kalır." },
         { title: "Sevkiyat Kalite Kontrolü", desc: "Her sipariş çıkışı önce WMS kontrolünden, ardından fiziksel doğrulamadan geçer; hasarlı ve eksik gönderim oranı operasyonel sıfır hedefinde tutulur." },
-        { title: "GROUPAUTO Türkiye Ağı", desc: "GROUPAUTO Türkiye yapılanması içerisindeki konumumuz; güçlü tedarik bağlantıları ve sektörel iş birliğini doğrudan yurt içi operasyonel kapasitemize taşır." },
-        { title: "Tek Tedarikçi Kolaylığı", desc: "100'den fazla marka tek çatı altında. Çoklu tedarikçi yönetiminin operasyonel yükü ortadan kalkar, müşteri enerjisi satışa odaklanır." },
       ],
     },
     process: {
@@ -245,16 +165,6 @@ const content = {
         { target: 81, label: "Provinces", sub: "Nationwide distribution coverage" },
       ],
     },
-    network: {
-      eyebrow: "Infrastructure Overview",
-      heading: "Our Operational Network",
-      body: "Our logistics network, managed from three operations centers, runs on delivery-time commitments that vary from region to region.",
-      stats: [
-        { target: 50000, suffix: "+", label: "Active SKUs", sub: "Continuously updated stock" },
-        { value: "7/24", label: "B2B Access", sub: "Digital ordering channel" },
-        { value: "WMS", label: "Warehouse Management", sub: "Software-supported operations" },
-      ],
-    },
     delivery: {
       eyebrow: "Delivery Commitment",
       heading: "A Promise You Can Make to Your Customers",
@@ -283,20 +193,14 @@ const content = {
     },
     depots: {
       eyebrow: "Operations Infrastructure",
-      heading: "A Nationwide Network, Directed From One Center",
-      body: "The central coordination point in Ümraniye runs on the same rhythm as the operations centers in Gebze and İzmir: one decision point, uninterrupted reach across all 81 provinces.",
-      networkLabel: "Distribution Network",
-      reachLabel: "81 Provinces",
-      locationsLabel: "Operations Points",
-      statTrio: [
-        { value: "18:00", label: "Same-Day Dispatch Cutoff" },
-        { value: "81", label: "Provinces Covered" },
-        { value: "03", label: "Operations Sites" },
-      ],
+      heading: "Two Regions, One Decision Point",
+      body: "Fed by Gebze and İzmir, the operation reaches all 81 provinces of Türkiye from the single decision point in Ümraniye.",
+      reachValue: "81",
+      reachLabel: "Provinces",
+      reachBody: "Regular, planned distribution across all of Türkiye.",
       items: [
         {
-          title: "Gebze Operations Site",
-          city: "Kocaeli",
+          title: "Gebze",
           plate: "41",
           roleTag: "Eastern Marmara Dispatch Point",
           address: "Barış, 1804. Sk. No:4, 41400 Gebze / Kocaeli",
@@ -304,17 +208,15 @@ const content = {
           central: false,
         },
         {
-          title: "İzmir Operations Site",
-          city: "İzmir",
+          title: "İzmir",
           plate: "35",
           roleTag: "Aegean Region Distribution Hub",
           address: "Kemalpaşa Kızılüzüm Kırovası Kümeevleri No: 12/1, Kemalpaşa / İzmir",
-          body: "The Aegean's distribution backbone; carries regular dispatch and dealer access across the region.",
+          body: "Together with the Opar Aegean Regional Dealership, the Aegean's distribution backbone — carrying regular dispatch and dealer access across the region.",
           central: false,
         },
         {
-          title: "Ümraniye Central Warehouse",
-          city: "İstanbul",
+          title: "Ümraniye",
           plate: "34",
           roleTag: "Central Coordination",
           address: "Barbaros Cd. Beyit Sk. No:17, Yukarı Dudullu — Ümraniye / İstanbul",
@@ -325,18 +227,11 @@ const content = {
     },
     capabilities: {
       eyebrow: "Logistics Infrastructure",
-      heading: "Our Operational Capabilities",
-      body: "Every operational process is structured to optimize the customer delivery experience.",
-      groupLabels: ["Distribution & Coverage", "Systems, Quality & Assurance"],
-      features: [
-        { title: "Nationwide Distribution from Three Centers", desc: "From our operations centers in Gebze, İzmir and Ümraniye, we deliver regularly to all 81 provinces of Türkiye through contracted logistics partners." },
-        { title: "Same-Day Dispatch Guarantee", desc: "Orders placed before 18:00 are loaded the same day for items in stock. Service continuity is our priority for urgent needs." },
-        { title: "Opar Aegean Regional Dealership", desc: "By taking over Opar's Aegean region operation, we expanded our regional stock depth and delivery capacity from our İzmir base." },
+      heading: "Systems and Quality",
+      items: [
         { title: "WMS-Supported Warehouse Management", desc: "Our warehouse management system keeps stock accuracy and order preparation under control, holding the error margin close to zero at the system level." },
         { title: "Stock Depth & Planning", desc: "Demand-based inventory planning and periodic analysis maintain a high fill rate on critical products, keeping out-of-stock responses the exception." },
         { title: "Dispatch Quality Control", desc: "Every outgoing order passes a WMS check followed by physical verification; damaged and incomplete shipments are held to an operational zero target." },
-        { title: "GROUPAUTO Türkiye Network", desc: "Our position within the GROUPAUTO Türkiye structure brings strong supply connections and industry collaboration directly into our domestic operational capacity." },
-        { title: "Single-Supplier Convenience", desc: "More than 100 brands under one roof. The operational burden of managing multiple suppliers disappears, freeing customer energy to focus on sales." },
       ],
     },
     process: {
@@ -365,14 +260,15 @@ export function OperasyonPage() {
   const t = content[lang];
   useDocumentMeta(t.meta.title, t.meta.description);
 
-  const capabilityGroups = CAPABILITY_GROUPS.map((indices, gi) => ({
-    label: t.capabilities.groupLabels[gi],
-    items: indices.map((i) => ({
-      icon: CAPABILITY_ICONS[i],
-      title: t.capabilities.features[i].title,
-      desc: t.capabilities.features[i].desc,
-    })),
-  }));
+  const capabilityItems = t.capabilities.items.map((f: { title: string; desc: string }, i: number) => ({ ...f, icon: CAPABILITY_ICONS[i] }));
+
+  // Dört adımlık süreç artık scroll'a bağlı gerçek bir ilerleme (§23-24):
+  // processProgress bu bölümün kendi viewport geçişini 0→1 izler, her adım
+  // sırayla "geçildi" durumuna döner. prefers-reduced-motion'da hook 1
+  // döndürür (bkz. useSectionProgress) — dört adım da baştan tam/okunur
+  // durumda gelir, animasyona bağlı bilgi kaybı olmaz.
+  const [processRef, processProgress] = useSectionProgress<HTMLDivElement>();
+  const activeStep = Math.min(3, Math.floor(processProgress * 4));
 
   return (
     <div className="do-site bg-white min-h-screen">
@@ -480,27 +376,13 @@ export function OperasyonPage() {
         </div>
       </section>
 
-      {/* ALTYAPI RAKAMLARI — light */}
-      <section className="bg-white py-20 border-b border-slate-100">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="mb-12">
-            <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">{t.network.eyebrow}</span>
-            <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-2 tracking-tight">{t.network.heading}</h2>
-            <p className="text-slate-500 mt-3 max-w-2xl text-[15px]">{t.network.body}</p>
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-5">
-            {t.network.stats.map(({ target, suffix, value, label, sub }) => (
-              <div key={label} className="text-center p-6 rounded-xl border border-slate-200 hover:border-[#1B3A8F]/30 hover:shadow-md transition-all">
-                <div className="text-[22px] font-black text-[#1B3A8F] leading-tight tabular-nums">
-                  {target !== undefined ? <CountUp target={target} suffix={suffix} /> : value}
-                </div>
-                <div className="text-[12px] font-bold text-slate-900 uppercase tracking-wide mt-1.5">{label}</div>
-                <div className="text-[11px] text-slate-400 mt-1 leading-snug">{sub}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* "Altyapı Rakamları" bölümü kaldırıldı (fact-ownership denetimi,
+          §20-22): SKU rakamı yukarıdaki hero stat şeridiyle, WMS aşağıdaki
+          Sistem ve Kalite bölümüyle birebir aynı gerçeği tekrar ediyordu;
+          7/24 B2B erişimi sitede zaten defalarca (footer, İletişim, B2B
+          CTA'ları) söylenmiş, tek başına bir bölümü hak etmeyen küçük bir
+          detaydı. Hero'nun hemen ardından İKİNCİ bir rakam şeridi olması da
+          kendi başına bir tekrar hissi yaratıyordu. */}
 
       {/* TESLİMAT HIZ GÜVENCESİ — navy */}
       <section className="bg-[#1B3A8F] py-20 text-white">
@@ -546,28 +428,18 @@ export function OperasyonPage() {
         </div>
       </section>
 
-      {/* OPERASYON ALTYAPISI — white. Yaratıcı Yeniden Kurgu Turu: bir önceki
-          HUB & SPOKE sürümü (üç sütun, ikisi sade, biri panelli) kullanıcı
-          tarafından hâlâ yetersiz bulundu — "özünde hâlâ kart sırası,
-          yeterince yaratıcı/dinamik değil". Bu turda modül BAŞTAN, farklı bir
-          bilgi tasarımı ekseniyle kuruldu: kart ızgarası TAMAMEN terk edildi.
-          Artık iki asimetrik bölge var — SOL: soyut bir DÜĞÜM/KENAR ağ
-          diyagramı (NetworkDiagram — gerçek SVG path'lerle çizilen, scroll'da
-          canlı canlı "kuruluyormuş" gibi beliren bir görsel; Gebze/İzmir'den
-          Ümraniye'ye kenarlar, Ümraniye'den 81 ile yayılan erişim noktaları,
-          merkez düğümde sürekli nabız halkası — "operasyon ritmi" hissini
-          MOTION'UN KENDİSİ taşıyor, metinle anlatılmıyor) + altında ağ-geneli
-          rakam üçlüsü (18:00/81/03). SAĞ: bir "lokasyon dosyası" — üç eşit
-          kutu değil, editoryal bir HİYERARŞİ: Ümraniye önce ve büyük (tez
-          paragrafı + rol rozeti), altında ince bir ayraç, sonra Gebze/İzmir
-          SIKI bir iki satırlık ikincil liste olarak (kendi başlıklarıyla ama
-          çok daha az görsel ağırlıkla) geliyor — "merkez öne çıkar, uçlar
-          destekler" hissi artık DÜZEN'in kendisinden okunuyor, ayrı bir panel
-          rengine ihtiyaç kalmadan. Plaka kodları (41/35/34) kimlik etiketi
-          olarak korundu ama artık dev arkaplan rakamı değil, ince bir üst
-          satır. Motion: sol diyagram + rakam üçlüsü do-reveal-left, sağ
-          lokasyon dosyası do-reveal-right — sayfanın onaylı sola/sağa giriş
-          dili burada da birebir sürüyor. */}
+      {/* OPERASYON ALTYAPISI — white. Sanat Yönetimi Turu (§18-19): eski
+          soyut nokta/düğüm SVG ağ diyagramı (bu modülün ÜÇÜNCÜ konsept
+          denemesiydi: hub&spoke kart ızgarası → network diyagramı → bu)
+          kullanıcı tarafından anlamsız bulunduğu için TAMAMEN kaldırıldı —
+          dördüncü bir "dots + lines" varyasyonu denenmedi. Sıfırdan, farklı
+          bir MEDYUM: SVG yok, saf tipografi + düzen. "Zincirleme
+          Sorumluluk" — gerçek bir operasyonel akış: Gebze ve İzmir
+          (bölgesel, küçük görsel ağırlık) BESLER → Ümraniye (büyük, vurgulu
+          panel) KARAR VERİR → 81 il (büyük kapanış rakamı) ÇIKTI alır.
+          İnce dikey bağlayıcılar (.do-flow-line, index.css) SVG değil, tek
+          bir <div> — scroll'da BÜYÜYEREK "bağlantı kuruluyor" hissi verir;
+          bu, dekoratif bir çizim değil, sıranın/nedenselliğin kendisi. */}
       <section className="bg-white py-24 md:py-28 overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div ref={ref} className="do-reveal max-w-2xl mb-16 md:mb-20">
@@ -576,111 +448,95 @@ export function OperasyonPage() {
             <p className="text-slate-500 mt-4 text-[15px] leading-relaxed">{t.depots.body}</p>
           </div>
 
-          <div className="grid lg:grid-cols-[1fr_1.05fr] gap-y-14 lg:gap-x-16 items-start">
-            {/* SOL — ağ diyagramı + ağ-geneli rakamlar */}
-            <div ref={ref} className="do-reveal-left">
-              <span className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400">{t.depots.networkLabel}</span>
-              <div className="mt-6">
-                <NetworkDiagram reveal={ref} reachLabel={t.depots.reachLabel} />
-              </div>
-              <div className="grid grid-cols-3 gap-4 mt-10 pt-7 border-t border-slate-200">
-                {t.depots.statTrio.map(({ value, label }: { value: string; label: string }) => (
-                  <div key={label}>
-                    <div className="text-2xl md:text-[28px] font-black text-[#1B3A8F] tabular-nums tracking-tight leading-none">{value}</div>
-                    <div className="text-[10.5px] text-slate-500 uppercase tracking-wide font-bold mt-2 leading-tight">{label}</div>
+          <div className="max-w-2xl">
+            {t.depots.items.filter((it: { central: boolean }) => !it.central).map((loc: { title: string; plate: string; roleTag: string; address: string; body: string }, i: number) => (
+              <React.Fragment key={loc.title}>
+                <div ref={ref} className={`do-reveal ${i === 0 ? "" : "do-d1"} flex items-start gap-5 md:gap-7`}>
+                  <span className="shrink-0 w-11 h-11 rounded-lg border-2 border-slate-300 flex items-center justify-center text-[13px] font-black text-slate-400 tabular-nums">
+                    {loc.plate}
+                  </span>
+                  <div className="min-w-0 pt-1">
+                    <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                      <h3 className="text-lg font-black text-slate-900">{loc.title}</h3>
+                      <span className="text-[10.5px] font-black uppercase tracking-[0.12em] text-[#1B3A8F]/70">{loc.roleTag}</span>
+                    </div>
+                    <p className="text-slate-500 text-[14px] leading-relaxed mt-1.5 max-w-md">{loc.body}</p>
+                    <p className="text-slate-400 text-[11.5px] mt-2">{loc.address}</p>
                   </div>
-                ))}
-              </div>
+                </div>
+                <div className="pl-5 py-3" aria-hidden="true">
+                  <div ref={ref} className="do-flow-line w-px h-6 bg-slate-200" />
+                </div>
+              </React.Fragment>
+            ))}
+
+            <div className="pl-5 -mt-3 mb-3" aria-hidden="true">
+              <ChevronDown className="w-4 h-4 text-slate-300" />
             </div>
 
-            {/* SAĞ — lokasyon dosyası: Ümraniye önce/büyük, Gebze+İzmir kompakt ikincil liste */}
-            <div ref={ref} className="do-reveal-right">
-              <span className="text-[11px] font-black uppercase tracking-[0.2em] text-slate-400">{t.depots.locationsLabel}</span>
+            {t.depots.items.filter((it: { central: boolean }) => it.central).map((hub: { title: string; plate: string; roleTag: string; address: string; body: string }) => (
+              <div key={hub.title} ref={ref} className="do-reveal do-d2 bg-[#1B3A8F] text-white rounded-2xl p-8 md:p-10">
+                <div className="flex flex-wrap items-baseline gap-x-4 gap-y-1.5 mb-3">
+                  <span className="text-[13px] font-black text-[#7d9bea] tabular-nums">{hub.plate}</span>
+                  <h3 className="text-2xl md:text-3xl font-black tracking-tight">{hub.title}</h3>
+                  <span className="text-[11px] font-black uppercase tracking-[0.15em] text-[#7d9bea]">{hub.roleTag}</span>
+                </div>
+                <p className="text-white/75 text-[15px] leading-relaxed max-w-lg">{hub.body}</p>
+                <p className="text-white/45 text-[12px] mt-4">{hub.address}</p>
+              </div>
+            ))}
 
-              {(() => {
-                const hub = t.depots.items.find((it: { central: boolean }) => it.central);
-                const satellites = t.depots.items.filter((it: { central: boolean }) => !it.central);
-                if (!hub) return null;
-                return (
-                  <>
-                    <div className="mt-6 pb-8 border-b border-slate-200">
-                      <div className="flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-[#1B3A8F]" aria-hidden="true" />
-                        <span className="text-[11px] font-black uppercase tracking-[0.15em] text-slate-400 tabular-nums">{hub.plate}</span>
-                        <span className="w-1 h-1 rounded-full bg-slate-300" aria-hidden="true" />
-                        <span className="text-[11px] font-black uppercase tracking-[0.15em] text-[#1B3A8F]">{hub.roleTag}</span>
-                      </div>
-                      <h3 className="text-2xl md:text-[28px] font-black text-slate-900 tracking-tight mt-3">{hub.title}</h3>
-                      <p className="text-slate-600 text-[15px] leading-relaxed mt-3 max-w-lg">{hub.body}</p>
-                      <p className="text-slate-400 text-[12px] leading-relaxed mt-4">{hub.address}</p>
-                    </div>
+            <div className="flex flex-col items-start pl-9 mt-3 mb-2" aria-hidden="true">
+              <div ref={ref} className="do-flow-line w-px h-8 bg-slate-200" />
+              <ChevronDown className="w-4 h-4 text-slate-300 -mt-0.5" />
+            </div>
 
-                    <div className="divide-y divide-slate-100">
-                      {satellites.map((loc: { title: string; city: string; plate: string; roleTag: string; address: string; body: string }) => (
-                        <div key={loc.title} className="py-6 flex items-start gap-5">
-                          <span className="shrink-0 w-9 pt-0.5 text-[13px] font-black text-slate-300 tabular-nums">{loc.plate}</span>
-                          <div className="min-w-0">
-                            <div className="flex flex-wrap items-baseline gap-x-2.5 gap-y-0.5">
-                              <h4 className="text-[15px] font-bold text-slate-900">{loc.title}</h4>
-                              <span className="text-[10.5px] font-bold uppercase tracking-[0.12em] text-[#1B3A8F]/70">{loc.roleTag}</span>
-                            </div>
-                            <p className="text-slate-500 text-[13.5px] leading-relaxed mt-1.5">{loc.body}</p>
-                            <p className="text-slate-400 text-[11.5px] leading-relaxed mt-2">{loc.address}</p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-                  </>
-                );
-              })()}
+            <div ref={ref} className="do-reveal do-d3 flex items-baseline gap-5 pt-3">
+              <span className="text-6xl md:text-7xl font-black text-[#1B3A8F] tabular-nums leading-none">{t.depots.reachValue}</span>
+              <div>
+                <div className="text-base font-black text-slate-900 uppercase tracking-tight">{t.depots.reachLabel}</div>
+                <p className="text-slate-500 text-[14px] mt-1">{t.depots.reachBody}</p>
+              </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* OPERASYONEL GÜÇLER — dark (bir önceki ve sonraki bölüm navy; iki navy'nin arasına aynı tonu tekrarlamamak için koyu zemin) */}
+      {/* SİSTEM VE KALİTE — dark. Hard-edit (§21-22): eskiden 8 madde, iki
+          tematik grup altında. Beşi kaldırıldı — üç merkezden dağıtım/18:00/
+          Opar zaten yukarıdaki Operasyon Altyapısı ve Teslimat bölümlerinde
+          söylendi; GROUPAUTO ağı ve tek-tedarikçi kolaylığı bu sayfanın değil
+          İş Ortaklarımız'ın konusuydu. Kalan 3 madde gerçekten operasyonel ve
+          BAŞKA YERDE yok — grup/2-sütun ayrımına gerek kalmadı, düz 3 sütun. */}
       <section className="relative bg-[#0e1016] py-24 text-white overflow-hidden">
         <div className="absolute inset-0 do-grid-bg opacity-40" />
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-          <div className="mb-14">
+          <div ref={ref} className="do-reveal mb-14">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea]">{t.capabilities.eyebrow}</span>
             <h2 className="text-3xl md:text-4xl font-black mt-2 tracking-tight">{t.capabilities.heading}</h2>
-            <p className="text-white/60 mt-3 max-w-2xl text-[15px]">{t.capabilities.body}</p>
           </div>
-          {/* 8 yetkinlik, iki tematik başlık altında büyük indeks numaralı satırlar halinde —
-              kart ızgarası yerine editoryal bir liste; içerik (title/desc) aynen korunuyor. */}
-          <div className="grid lg:grid-cols-2 gap-x-16 gap-y-4">
-            {capabilityGroups.map((group, gi) => (
-              <div key={group.label} ref={ref} className={gi === 0 ? "do-reveal-left" : "do-reveal-right"}>
-                <div className="flex items-center gap-3 pb-4 mb-1 border-b border-white/15">
-                  <span className="text-[11px] font-black text-[#7d9bea] tabular-nums">{gi === 0 ? "01—04" : "05—08"}</span>
-                  <span className="w-1 h-1 rounded-full bg-white/25" />
-                  <h3 className="text-[12px] font-bold uppercase tracking-[0.22em] text-white/85">{group.label}</h3>
-                </div>
-                {group.items.map((f, i) => (
-                  <div
-                    key={f.title}
-                    className="group/row flex items-start gap-5 py-6 border-b border-white/10 last:border-b-0 hover:bg-white/[0.03] transition-colors rounded-lg -mx-3 px-3"
-                  >
-                    <span className="shrink-0 w-11 pt-0.5 text-4xl font-black text-white/[0.15] group-hover/row:text-[#7d9bea]/50 tabular-nums leading-none transition-colors">
-                      {String(gi * 4 + i + 1).padStart(2, "0")}
-                    </span>
-                    <div className="shrink-0 w-10 h-10 mt-0.5 rounded-lg bg-white/[0.06] border border-white/10 flex items-center justify-center group-hover/row:bg-[#7d9bea]/15 group-hover/row:border-[#7d9bea]/30 transition-colors">
-                      <f.icon className="w-[18px] h-[18px] text-[#7d9bea]" />
-                    </div>
-                    <div className="min-w-0">
-                      <h4 className="text-[15px] font-bold mb-1.5 leading-snug">{f.title}</h4>
-                      <p className="text-white/60 text-[13.5px] leading-relaxed">{f.desc}</p>
-                    </div>
-                  </div>
-                ))}
+          <div className="grid sm:grid-cols-3 gap-x-10 gap-y-10">
+            {capabilityItems.map((f, i) => (
+              <div key={f.title} ref={ref} className={`do-reveal ${["", "do-d1", "do-d2"][i] ?? ""}`}>
+                <f.icon className="w-6 h-6 text-[#7d9bea] mb-5" strokeWidth={1.5} />
+                <h3 className="text-[15px] font-bold mb-2.5 leading-snug">{f.title}</h3>
+                <p className="text-white/60 text-[13.5px] leading-relaxed">{f.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* SİPARİŞ SÜRECİ — navy */}
+      {/* SİPARİŞ SÜRECİ — navy. Motion artık dekoratif değil, tasarımın
+          kendisi (§23-24): processProgress bu bloğun kendi scroll geçişini
+          izler (useSectionProgress), üstteki ince çubuk gerçek zamanlı
+          dolar ve her adım sırayla "geçildi" durumuna döner (renk/opaklık —
+          boyut/metin DEĞİŞMEZ, sıra animasyon olmadan da tam okunur kalır).
+          prefers-reduced-motion'da hook progress'i 1'e kilitler → dört adım
+          da baştan tam/aktif görünür (bkz. useSectionProgress yorumu) —
+          sitenin genel reduced-motion geçiş-süresi-sıfırlama kuralı
+          (index.css) buradaki transition-colors'ı da otomatik kapsar, ek
+          bir CSS istisnasına gerek kalmadı. */}
       <section className="relative bg-[#1B3A8F] text-white py-24 overflow-hidden">
         <div className="absolute inset-0 do-grid-bg opacity-25" />
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
@@ -689,19 +545,29 @@ export function OperasyonPage() {
             <h2 className="text-3xl md:text-4xl font-black mt-2 tracking-tight">{t.process.heading}</h2>
             <p className="text-white/70 mt-3 max-w-xl text-[15px]">{t.process.body}</p>
           </div>
-          <div className="grid md:grid-cols-4 gap-6">
-            {t.process.steps.map((s: { num: string; title: string; desc: string }, i: number) => (
-              <div key={s.num} className="relative">
-                <div className="text-7xl font-black text-white/[0.07] mb-4 leading-none select-none">{s.num}</div>
-                <h3 className="text-[15px] font-bold mb-2 leading-snug">{s.title}</h3>
-                <p className="text-white/70 text-[13.5px] leading-relaxed">{s.desc}</p>
-                {i < 3 && (
-                  <div className="hidden md:block absolute top-8 -right-3 text-white/15">
-                    <ChevronRight className="w-5 h-5" />
+
+          <div ref={processRef}>
+            <div className="relative h-[3px] bg-white/10 rounded-full mb-12 overflow-hidden" aria-hidden="true">
+              <div className="absolute inset-y-0 left-0 bg-[#7d9bea] rounded-full transition-[width] duration-150 ease-out" style={{ width: `${processProgress * 100}%` }} />
+            </div>
+            <div className="grid md:grid-cols-4 gap-6">
+              {t.process.steps.map((s: { num: string; title: string; desc: string }, i: number) => {
+                const isActive = i <= activeStep;
+                return (
+                  <div key={s.num} className="relative">
+                    <div className={`w-2 h-2 rounded-full mb-5 transition-colors duration-300 ${isActive ? "bg-[#7d9bea]" : "bg-white/15"}`} aria-hidden="true" />
+                    <div className={`text-7xl font-black mb-4 leading-none select-none transition-colors duration-300 ${isActive ? "text-white/25" : "text-white/[0.07]"}`}>{s.num}</div>
+                    <h3 className={`text-[15px] font-bold mb-2 leading-snug transition-colors duration-300 ${isActive ? "text-white" : "text-white/50"}`}>{s.title}</h3>
+                    <p className={`text-[13.5px] leading-relaxed transition-colors duration-300 ${isActive ? "text-white/70" : "text-white/35"}`}>{s.desc}</p>
+                    {i < 3 && (
+                      <div className="hidden md:block absolute top-8 -right-3">
+                        <ChevronRight className={`w-5 h-5 transition-colors duration-300 ${isActive ? "text-[#7d9bea]" : "text-white/15"}`} />
+                      </div>
+                    )}
                   </div>
-                )}
-              </div>
-            ))}
+                );
+              })}
+            </div>
           </div>
 
           {/* Kapanış CTA'sı — aynı navy section içinde ama kendi çerçeveli paneliyle net şekilde

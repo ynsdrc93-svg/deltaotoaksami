@@ -29,8 +29,19 @@ const OPS_HUB_POINTS: [number, number][] = [
 // [277.6, 519.5] karada DEĞİL). Yerine, aynı path verisi üzerinde ızgara
 // tabanlı bir "erişilemezlik kutbu" (pole of inaccessibility) hesabıyla
 // bulunan, kara parçasının en derin/merkezi noktası kullanılıyor — sınırdan
-// ~26 birim içeride, karada olduğu doğrulanmış. Diğer tüm uçlar (İzmir ->
-// Muğla dahil) aynı yöntemle ayrıca doğrulandı ve değiştirilmedi.
+// ~26 birim içeride, karada olduğu doğrulanmış. Diğer tüm uçlar aynı
+// yöntemle ayrıca doğrulandı.
+// İzmir Rota Genişletme Turu: İzmir eskiden yalnızca 2 rotayla (Antalya,
+// Muğla) haritada "küçük bir uç nokta" gibi okunuyordu — kullanıcı bunu
+// bölgesel bir operasyon merkezi gibi HİSSETTİRECEK şekilde genişletmemizi
+// istedi. Aydın/Manisa/Denizli eklendi (kullanıcının kendi önerdiği liste).
+// Üçü de turkey-map-react'in gerçek path verisi üzerinden aynı Playwright +
+// isPointInFill() yöntemiyle doğrulandı — üçünün de düz bbox-centroid'i
+// zaten karada çıktı (Antalya'daki gibi bir kıyı girintisi/pole-of-
+// inaccessibility gerekmedi): Aydın [122.4, 438.9], Manisa [137.3, 372.2],
+// Denizli [197.3, 450.6]. Sonuç: İzmir artık 5 rotalı — Ümraniye'nin (12
+// rota) baskınlığını bozmadan, ama artık "sadece batıda 2 nokta" değil,
+// gerçek bir bölgesel merkez gibi okunuyor.
 const DISTRIBUTION_ROUTES: { from: [number, number]; to: [number, number] }[] = [
   { from: [193.6, 211.0], to: [555.7, 218.6] }, // Ümraniye -> Samsun (Karadeniz)
   { from: [193.6, 211.0], to: [750.7, 246.5] }, // Ümraniye -> Trabzon (Doğu Karadeniz)
@@ -48,8 +59,11 @@ const DISTRIBUTION_ROUTES: { from: [number, number]; to: [number, number] }[] = 
   { from: [241.0, 236.5], to: [295.8, 323.5] }, // Gebze -> Eskişehir (İç Anadolu batı)
   { from: [241.0, 236.5], to: [437.4, 207.8] }, // Gebze -> Kastamonu (Batı Karadeniz)
   { from: [241.0, 236.5], to: [387.5, 437.6] }, // Gebze -> Konya (İç Anadolu güney)
-  { from: [96.7, 376.5],  to: [243.5, 503.1] }, // İzmir -> Antalya (Akdeniz) — bkz. aşağıdaki not
+  { from: [96.7, 376.5],  to: [243.5, 503.1] }, // İzmir -> Antalya (Akdeniz) — bkz. yukarıdaki not
   { from: [96.7, 376.5],  to: [149.2, 495.1] }, // İzmir -> Muğla (Ege güney)
+  { from: [96.7, 376.5],  to: [122.4, 438.9] }, // İzmir -> Aydın (Ege güney)
+  { from: [96.7, 376.5],  to: [137.3, 372.2] }, // İzmir -> Manisa (Ege, bitişik)
+  { from: [96.7, 376.5],  to: [197.3, 450.6] }, // İzmir -> Denizli (Ege iç/güneydoğu)
 ];
 
 // Her rotaya hafif rastgele bir gecikme/süre ata — hepsi aynı anda değil,

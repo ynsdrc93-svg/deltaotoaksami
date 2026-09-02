@@ -47,10 +47,37 @@ export function routeFor(key: RouteKey, lang: Lang): string {
   return ROUTES[key][lang];
 }
 
+// Gündem detay sayfaları parametrik (:slug) olduğu için sabit ROUTES
+// tablosuna sığmıyor — kendi küçük yardımcıları var. Anchor (gundem/agenda),
+// Anasayfa'nın "Tüm Gündem" CTA'sının Hakkımızda'daki Gündem bölümüne
+// zıplaması için (bkz. görev talimatı §7: "/hakkimizda#gundem" / "/en/about#agenda").
+const GUNDEM_DETAIL_PREFIX: Record<Lang, string> = {
+  tr: "/hakkimizda/gundem/",
+  en: "/en/about/agenda/",
+};
+
+export function gundemAnchor(lang: Lang): string {
+  return lang === "tr" ? "gundem" : "agenda";
+}
+
+export function gundemDetailRoute(slug: string, lang: Lang): string {
+  return `${GUNDEM_DETAIL_PREFIX[lang]}${slug}`;
+}
+
 /** Dil değiştirici için: verilen mevcut yolun DİĞER dildeki karşılığı. */
 export function otherLanguageHref(currentPath: string): string {
   const isEn = currentPath === "/en" || currentPath.startsWith("/en/");
   const targetLang: Lang = isEn ? "tr" : "en";
+  // Gündem detay sayfaları parametrik olduğu için ROUTES tablosunda yok —
+  // slug'ı koruyarak diğer dildeki karşılığını üret (aksi halde kullanıcı
+  // dil değiştirince yanlışlıkla anasayfaya düşerdi).
+  for (const lang of Object.keys(GUNDEM_DETAIL_PREFIX) as Lang[]) {
+    const prefix = GUNDEM_DETAIL_PREFIX[lang];
+    if (currentPath.startsWith(prefix)) {
+      const slug = currentPath.slice(prefix.length);
+      return gundemDetailRoute(slug, lang === "en" ? "tr" : "en");
+    }
+  }
   for (const key of Object.keys(ROUTES) as RouteKey[]) {
     if (ROUTES[key].tr === currentPath || ROUTES[key].en === currentPath) {
       return ROUTES[key][targetLang];

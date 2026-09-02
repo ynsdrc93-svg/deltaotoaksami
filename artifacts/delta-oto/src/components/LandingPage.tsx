@@ -7,7 +7,8 @@ import { SiteFooter } from "./shared/SiteFooter";
 import { BrandLogo } from "./shared/BrandLogo";
 import { LanguageSwitcher } from "./shared/LanguageSwitcher";
 import { CLASSIFIED_BRANDS, type Brand } from "../lib/brands";
-import { useLang, routeFor, type Lang, type RouteKey } from "../lib/i18n";
+import { latestAgendaItems } from "../lib/agenda";
+import { useLang, routeFor, gundemAnchor, gundemDetailRoute, type Lang, type RouteKey } from "../lib/i18n";
 
 // turkey-map-react, LandingPage'in JS entry chunk'ının en büyük tek
 // katkısıydı (bkz. LogisticsMap.tsx üst notu) — bu yüzden ayrı bir dosyaya
@@ -101,11 +102,14 @@ const content = {
       titleLine2: "Türkiye Genelinde Güçlü Dağıtım.",
       body: "Gebze, İzmir ve Ümraniye'deki operasyon merkezlerimizden Türkiye genelinde planlı, hızlı ve güvenilir dağıtım sağlıyoruz. 100'den fazla markayı güçlü stok yapımız ve düzenli sevkiyat operasyonumuzla müşterilerimize ulaştırıyoruz.",
       hubs: [{ label: "Gebze", plate: 41 }, { label: "İzmir", plate: 35 }, { label: "Ümraniye", plate: 34 }],
+      // İçerik/Sanat Yönetimi Turu (§36): eskiden 4 kart vardı — "Her İş Günü
+      // Sevkiyat" ve "Türkiye Geneli Dağıtım" bu bölümün kendi başlığı VE
+      // gövde metniyle (üç merkez, Türkiye geneli dağıtım) aynı gerçeği
+      // ÜÇÜNCÜ kez tekrarlıyordu. Yalnızca bu bölümde henüz söylenmemiş, somut
+      // iki fark yaratan kart kaldı: 18:00 kesim saati ve 50.000+ SKU derinliği.
       cards: [
-        { title: "Her İş Günü Sevkiyat", desc: "Hafta içi her gün düzenli yükleme. Cumartesi sevkiyat kapasitesiyle hizmet sürekliliği korunur." },
         { title: "Aynı Gün Sevk", desc: "18:00'e kadar iletilen siparişler, stokta olan ürünler için aynı gün yola çıkar." },
         { title: "Derin Stok", desc: "50.000'i aşkın aktif SKU ile talep edilen ürünün büyük bölümü hazır stoktan karşılanır." },
-        { title: "Türkiye Geneli Dağıtım", desc: "Gebze, İzmir ve Ümraniye operasyon merkezlerinden Türkiye genelinde planlı sevkiyat." },
       ],
     },
     partners: {
@@ -115,20 +119,11 @@ const content = {
       cta: "Tüm iş ortaklarımızı inceleyin",
     },
     agenda: {
-      eyebrow: "Gündem & Vizyon",
+      eyebrow: "Gündem",
       titleA: "Sahadaki",
       titleB: "Gelişmeler",
-      body: "Sektördeki gelişmeleri ve Delta Oto'nun sahaya yansıyan adımlarını buradan takip edebilirsiniz.",
-      card1: {
-        tag1: "Mayıs 2026", tag2: "Yeni Operasyon",
-        title: "Opar Ege Bölge Bayiliği Operasyonu Başladı",
-        body: "Mayıs 2026 itibarıyla Opar Ege Bölge Bayiliği operasyonunu devralarak Ege bölgesindeki tedarik ağımızı doğrudan genişlettik. Bu adımla birlikte bölgeye yönelik ürün çeşitliliğimiz ve teslimat kapasitemiz önemli ölçüde güçlendi.",
-      },
-      card2: {
-        tag1: "2025 · Dubai", tag2: "Küresel Zirve",
-        title: "Dubai O2O Tedarikçi Günleri 2025",
-        body: "Dubai'de düzenlenen O2O Tedarikçi Günleri'nde Türkiye'yi ve Delta Oto'yu temsil ettik. 35'ten fazla global üreticiyle gerçekleştirilen görüşmelerde tedarik portföyümüzü ve piyasa trendlerini ele aldık.",
-      },
+      cta: "Tüm Gündem",
+      readMore: "Devamını Oku",
     },
     cta: {
       title: "Yedek Parça Siparişleriniz için B2B Portalımız",
@@ -189,10 +184,8 @@ const content = {
       body: "From our operations centers in Gebze, İzmir and Ümraniye, we provide planned, fast and reliable distribution across Türkiye. Our strong inventory structure and regular delivery operations support a portfolio of more than 100 brands.",
       hubs: [{ label: "Gebze", plate: 41 }, { label: "İzmir", plate: 35 }, { label: "Ümraniye", plate: 34 }],
       cards: [
-        { title: "Shipping Every Business Day", desc: "Regular loading every weekday, with Saturday shipping capacity for uninterrupted service." },
         { title: "Same-Day Dispatch", desc: "Orders placed before 18:00 ship the same day for items in stock." },
         { title: "Deep Inventory", desc: "With more than 50,000 active SKUs, most orders are fulfilled directly from stock." },
-        { title: "Nationwide Distribution", desc: "Planned distribution across Türkiye from our Gebze, İzmir and Ümraniye operations centers." },
       ],
     },
     partners: {
@@ -202,20 +195,11 @@ const content = {
       cta: "View all our partners",
     },
     agenda: {
-      eyebrow: "News & Vision",
+      eyebrow: "Agenda",
       titleA: "Recent",
       titleB: "Developments",
-      body: "Follow industry developments and how they translate into action at Delta Oto.",
-      card1: {
-        tag1: "May 2026", tag2: "New Operation",
-        title: "Opar Aegean Regional Dealership Operations Begin",
-        body: "As of May 2026, we took over the Opar Aegean Regional Dealership operation, directly expanding our supply network in the Aegean region. This step significantly strengthened our product range and delivery capacity for the region.",
-      },
-      card2: {
-        tag1: "2025 · Dubai", tag2: "Global Summit",
-        title: "Dubai O2O Supplier Days 2025",
-        body: "We represented Türkiye and Delta Oto at the O2O Supplier Days held in Dubai. In meetings with more than 35 global manufacturers, we discussed our supply portfolio and market trends.",
-      },
+      cta: "View All Updates",
+      readMore: "Read More",
     },
     cta: {
       title: "Your B2B Portal for Spare Parts Orders",
@@ -238,6 +222,10 @@ export function LandingPage() {
   const t = content[lang];
   useDocumentMeta(t.meta.title, t.meta.description);
   const ref = useReveal();
+  // Anasayfa önizlemesi: en yeni 2 gündem öğesi, Hakkımızda'daki tam Gündem
+  // bölümüyle AYNI kaynaktan (agenda.ts) — kopya içerik yok (bkz. görev
+  // talimatı §6).
+  const agendaPreview = latestAgendaItems(2);
   // Çift eşik (90 gir / 20 çık): header'ın kendi yükseklik geçişi scroll
   // pozisyonunu hafifçe kaydırabildiği (scroll anchoring) için tek eşik,
   // sınırda ileri-geri salınıma (jitter) yol açıyordu — bkz. useScrolled.
@@ -653,7 +641,7 @@ export function LandingPage() {
             </div>
           </div>
 
-          <div ref={ref} className="do-reveal do-d3 grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          <div ref={ref} className="do-reveal do-d3 grid sm:grid-cols-2 gap-4 max-w-2xl">
             {t.logistics.cards.map((card, i) => (
               <div key={card.title} ref={ref} className={`do-reveal ${i > 0 ? `do-d${i}` : ""} group relative border border-white/10 rounded-xl p-6 hover:border-white/30 hover:bg-white/[0.06] transition-all duration-300 cursor-default`}>
                 <div className="w-1.5 h-1.5 rounded-full bg-[#4d74d6] mb-4"></div>
@@ -724,56 +712,63 @@ export function LandingPage() {
         </div>
       </section>
 
-      {/* AGENDA & VISION (light) */}
+      {/* GÜNDEM (light) — eskiden "Gündem & Vizyon", eşit iki kutulu bir
+          ızgaraydı. Bu turda: "Vizyon" kavramı kaldırıldı (kullanıcı kararı,
+          bkz. görev talimatı §4); veri artık paylaşılan agenda.ts'ten geliyor
+          (Hakkımızda'nın tam Gündem bölümüyle AYNI kaynak — kopya içerik
+          yok); sunum eşit-kutu ızgarasından editoryal bir hiyerarşiye
+          geçti — büyük/öncelikli bir gelişim + ona göre daha sakin ikincil
+          bir gelişim, tıklanabilir (kendi detay sayfasına gider). "Tüm
+          Gündem" CTA'sı Hakkımızda'daki tam Gündem bölümüne gider. */}
       <section className="py-20 md:py-28 bg-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="mb-14">
-            <p ref={ref} className="do-reveal text-[#1B3A8F] text-xs font-bold uppercase tracking-[0.3em] mb-4 flex items-center gap-3">
-              <span className="w-8 h-[2px] bg-[#1B3A8F] inline-block"></span>
-              {t.agenda.eyebrow}
-            </p>
-            <h2 ref={ref} className="do-reveal do-d1 text-4xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight mb-4">
-              {t.agenda.titleA} <span className="text-[#1B3A8F]">{t.agenda.titleB}</span>
-            </h2>
-            <p ref={ref} className="do-reveal do-d2 text-slate-600 text-sm max-w-xl leading-relaxed">
-              {t.agenda.body}
-            </p>
+          <div className="mb-14 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-6">
+            <div>
+              <p ref={ref} className="do-reveal text-[#1B3A8F] text-xs font-bold uppercase tracking-[0.3em] mb-4 flex items-center gap-3">
+                <span className="w-8 h-[2px] bg-[#1B3A8F] inline-block"></span>
+                {t.agenda.eyebrow}
+              </p>
+              <h2 ref={ref} className="do-reveal do-d1 text-4xl md:text-5xl font-black text-slate-900 tracking-tight leading-tight">
+                {t.agenda.titleA} <span className="text-[#1B3A8F]">{t.agenda.titleB}</span>
+              </h2>
+            </div>
+            <Link
+              ref={ref}
+              href={`${routeFor("about", lang)}#${gundemAnchor(lang)}`}
+              className="do-reveal do-d2 inline-flex items-center gap-2 text-[#1B3A8F] font-semibold text-sm hover:text-[#2547B5] transition-colors shrink-0 group"
+            >
+              {t.agenda.cta}
+              <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div
-              ref={ref}
-              className="do-reveal-left do-card bg-[#f4f6f9] border border-slate-200 rounded-xl p-10 group relative overflow-hidden"
-            >
-              <div className="absolute top-0 right-0 w-32 h-32 bg-[#1B3A8F]/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-500"></div>
-              <div className="flex items-center gap-2 mb-6">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-[#1B3A8F] bg-[#1B3A8F]/10 border border-[#1B3A8F]/20 px-2.5 py-1 rounded">{t.agenda.card1.tag1}</span>
-                <span className="text-[10px] text-slate-600 uppercase tracking-wider">{t.agenda.card1.tag2}</span>
-              </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-5 leading-snug">
-                {t.agenda.card1.title}
-              </h3>
-              <p className="text-[15px] text-slate-600 leading-[1.8] font-light">
-                {t.agenda.card1.body}
-              </p>
-            </div>
-
-            <div
-              ref={ref}
-              className="do-reveal-right do-card bg-[#f4f6f9] border border-slate-200 rounded-xl p-10 group relative overflow-hidden"
-            >
-              <div className="absolute top-0 right-0 w-32 h-32 bg-[#1B3A8F]/5 rounded-full -translate-y-1/2 translate-x-1/2 group-hover:scale-150 transition-transform duration-500"></div>
-              <div className="flex items-center gap-2 mb-6">
-                <span className="text-[10px] font-bold uppercase tracking-widest text-[#1B3A8F] bg-[#1B3A8F]/10 border border-[#1B3A8F]/20 px-2.5 py-1 rounded">{t.agenda.card2.tag1}</span>
-                <span className="text-[10px] text-slate-600 uppercase tracking-wider">{t.agenda.card2.tag2}</span>
-              </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-5 leading-snug">
-                {t.agenda.card2.title}
-              </h3>
-              <p className="text-[15px] text-slate-600 leading-[1.8] font-light">
-                {t.agenda.card2.body}
-              </p>
-            </div>
+          <div className="grid lg:grid-cols-5 gap-10 lg:gap-14 items-start">
+            {agendaPreview.map((item, i) => {
+              const isLead = i === 0;
+              return (
+                <Link
+                  key={item.slug}
+                  href={gundemDetailRoute(item.slug, lang)}
+                  ref={ref}
+                  className={`group block ${isLead ? "lg:col-span-3 do-reveal-left" : "lg:col-span-2 do-reveal-right lg:pl-10 lg:border-l lg:border-slate-200"}`}
+                >
+                  <div className="flex items-center gap-3 mb-4 text-[11px] font-bold uppercase tracking-[0.15em]">
+                    <span className="text-[#1B3A8F]">{item.date[lang]}</span>
+                    <span className="w-1 h-1 rounded-full bg-slate-300" aria-hidden="true" />
+                    <span className="text-slate-400">{item.category[lang]}</span>
+                  </div>
+                  <h3 className={`font-black text-slate-900 leading-snug group-hover:text-[#1B3A8F] transition-colors ${isLead ? "text-2xl md:text-3xl mb-4" : "text-lg mb-3"}`}>
+                    {item.title[lang]}
+                  </h3>
+                  <p className={`text-slate-500 leading-[1.8] font-light ${isLead ? "text-[15px] max-w-xl" : "text-[14px]"}`}>
+                    {item.summary[lang]}
+                  </p>
+                  <span className="inline-flex items-center gap-1.5 mt-5 text-[13px] font-semibold text-[#1B3A8F] opacity-0 group-hover:opacity-100 transition-opacity">
+                    {t.agenda.readMore} <ArrowRight className="w-3.5 h-3.5" />
+                  </span>
+                </Link>
+              );
+            })}
           </div>
         </div>
       </section>

@@ -12,19 +12,17 @@ import {
   BadgeCheck,
   Gauge,
   Sprout,
-  Package,
-  Tag,
-  Truck,
-  Network,
   Route,
   Recycle,
   Laptop,
+  ArrowRight,
 } from "lucide-react";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
 import { useCounter, useReveal } from "../hooks/use-motion";
 import { useDocumentMeta } from "@/hooks/use-document-meta";
-import { useLang, routeFor, type Lang } from "@/lib/i18n";
+import { useLang, routeFor, gundemAnchor, gundemDetailRoute, type Lang } from "@/lib/i18n";
+import { AGENDA_ITEMS } from "@/lib/agenda";
 
 // do-d1..do-d4: index.css'te tanımlı sabit stagger gecikmeleri (80/160/240/320ms).
 // Tailwind'in JIT taraması bu sınıfları görmese de sorun değil — bunlar Tailwind
@@ -63,7 +61,6 @@ const MILESTONE_META: { year: string; pending: boolean }[] = [
 ];
 
 const VALUE_ICONS = [ShieldCheck, BadgeCheck, Gauge, Sprout];
-const BUSINESS_UNIT_ICONS = [Package, Tag, Truck, Network];
 const ESG_ICONS = [Route, Recycle, Laptop];
 
 // İçerik/UX Revizyon Notu (zorunlu düzeltmeler):
@@ -138,16 +135,24 @@ const content = {
         { title: "Sürdürülebilir Büyüme", desc: "Müşteri portföyünün rekabet gücünü artırmak ve uzun vadeli iş ortaklıkları kurmak, Delta Oto'nun büyüme stratejisinin merkezindedir. Kısa vadeli kâr yerine ilişki kalitesi önceliklidir." },
       ],
     },
+    // Sanat Yönetimi Turu (§11): eskiden 4 eşit kart (her biri kendi ikonu +
+    // etiket bulutuyla) — "100+ Marka/50.000+ SKU/B2B Portal" gibi etiketler
+    // sayfanın kendi Kurumsal Rakamlar/GROUPAUTO bölümlerinde zaten söyleniyordu,
+    // gerçek yeni bilgi yalnızca Ağır Vasıta Grubu'ydu. Dört kartlık AI-şablon
+    // hissi tamamen kaldırıldı; tek bir kesin cümle + üç iş kolunun sade bir
+    // adlandırma satırına indirildi (kutu/etiket/ikon yok). B2B artık ayrı bir
+    // "iş birimi" gibi listelenmiyor — üç iş kolunun ORTAK erişim kanalı olarak
+    // kapanış cümlesine taşındı (kategori karışıklığı da düzeltilmiş oldu).
     businessUnits: {
-      eyebrow: "Faaliyet Alanları",
-      heading: "İş Birimlerimiz",
-      body: "Delta Oto, birbirini tamamlayan iş kollarıyla otomotiv satış sonrası sektöründe kapsamlı bir tedarik gücü sunmaktadır.",
-      items: [
-        { title: "Aftermarket Dağıtım", desc: "Binek ve hafif ticari araç kategorilerinde 100'den fazla küresel ve yerel marka distribütörlüğü. Türkiye'nin tamamına B2B kanalı üzerinden tedarik.", tags: ["100+ Marka", "50.000+ SKU", "B2B Portal"] },
-        { title: "SPART Private Label", desc: "Delta Oto'nun özel dağıtım markası SPART; OEM eşdeğeri kaliteyi rekabetçi fiyat yapısıyla sunar. Fren, süspansiyon, motor ve elektrik kategorilerinde aktif portföy.", tags: ["OEM Eşdeğeri", "Rekabetçi Fiyat", "Geniş SKU Gamı"] },
-        { title: "Ağır Vasıta Grubu", desc: "Kamyon, otobüs ve iş makinesi kategorilerinde seçilmiş marka ve ürün gamıyla ağır vasıta segmentine özel tedarik hizmeti.", tags: ["Kamyon", "Otobüs", "İş Makinesi"] },
-        { title: "B2B Dijital Kanal", desc: "7/24 erişilebilen B2B portalı üzerinden anlık stok sorgulama, fiyat listeleri ve sipariş yönetimi. Müşteri operasyonlarına entegre dijital tedarik deneyimi.", tags: ["7/24 Erişim", "Anlık Stok", "Dijital Sipariş"] },
-      ],
+      eyebrow: "Yapımız",
+      heading: "Üç İş Kolu, Tek Altyapı",
+      body: "Binek ve hafif ticari araç yedek parça dağıtımı, SPART özel markası ve ağır vasıta segmentine özel tedarik — üçü de aynı B2B altyapısı üzerinden yönetilir.",
+      lines: ["Aftermarket Dağıtım", "SPART Private Label", "Ağır Vasıta Grubu"],
+    },
+    gundem: {
+      eyebrow: "Gündem",
+      heading: "Sahadaki Gelişmeler",
+      readMore: "Devamını Oku",
     },
     groupauto: {
       eyebrow: "Küresel Ağ",
@@ -237,15 +242,15 @@ const content = {
       ],
     },
     businessUnits: {
-      eyebrow: "Areas of Activity",
-      heading: "Our Business Units",
-      body: "With complementary lines of business, Delta Oto offers comprehensive supply capability in the automotive aftersales industry.",
-      items: [
-        { title: "Aftermarket Distribution", desc: "Distribution of more than 100 global and domestic brands across passenger and light commercial vehicle categories, supplying all of Turkey through the B2B channel.", tags: ["100+ Brands", "50,000+ SKUs", "B2B Portal"] },
-        { title: "SPART Private Label", desc: "SPART, Delta Oto's private-label distribution brand, delivers OEM-equivalent quality at a competitive price structure, with an active portfolio in brake, suspension, engine and electrical categories.", tags: ["OEM Equivalent", "Competitive Pricing", "Wide SKU Range"] },
-        { title: "Heavy-Duty Vehicle Group", desc: "Dedicated supply service for the heavy-duty vehicle segment, with a select range of brands and products in the truck, bus and heavy-equipment categories.", tags: ["Trucks", "Buses", "Heavy Equipment"] },
-        { title: "B2B Digital Channel", desc: "Real-time stock lookup, price lists and order management through a B2B portal accessible around the clock — a digital supply experience integrated into customer operations.", tags: ["24/7 Access", "Real-Time Stock", "Digital Ordering"] },
-      ],
+      eyebrow: "Our Structure",
+      heading: "Three Business Lines, One Infrastructure",
+      body: "Passenger and light commercial vehicle parts distribution, the SPART private label, and dedicated supply for the heavy-duty vehicle segment — all managed through the same B2B infrastructure.",
+      lines: ["Aftermarket Distribution", "SPART Private Label", "Heavy-Duty Vehicle Group"],
+    },
+    gundem: {
+      eyebrow: "Agenda",
+      heading: "Recent Developments",
+      readMore: "Read More",
     },
     groupauto: {
       eyebrow: "Global Network",
@@ -517,8 +522,11 @@ export function HakkimizdaPage() {
   // burada index'e göre birleştirilir — bkz. modül üstü FACT_META/VALUE_ICONS/vb. notu.
   const FACT_STATS = FACT_META.map((m, i) => ({ ...m, icon: FACT_ICONS[i], label: t.facts.items[i].label, sub: t.facts.items[i].sub }));
   const VALUES = t.values.items.map((v, i) => ({ ...v, icon: VALUE_ICONS[i] }));
-  const BUSINESS_UNITS = t.businessUnits.items.map((b, i) => ({ ...b, icon: BUSINESS_UNIT_ICONS[i] }));
   const ESG_ITEMS = t.esg.items.map((e, i) => ({ ...e, icon: ESG_ICONS[i] }));
+  // Gündem: dizi zaten en-yeniden-en-eskiye sıralı (bkz. agenda.ts) — ilk öğe
+  // "lead" (büyük), geri kalanı kompakt editoryal liste. Bugün 2 öğe var ama
+  // düzen kaç öğe eklenirse eklensin aynı şekilde büyür (görev talimatı §8).
+  const [gundemLead, ...gundemRest] = AGENDA_ITEMS;
 
   return (
     <div className="do-site bg-white min-h-screen">
@@ -580,6 +588,62 @@ export function HakkimizdaPage() {
 
       <MilestoneTimeline t={t.timeline} />
 
+      {/* GÜNDEM — white. Anasayfa'nın kısa önizlemesinin (2 öğe) tam
+          karşılığı: burası "Tüm Gündem"in gittiği gerçek hedef. Aynı
+          AGENDA_ITEMS kaynağı (kopya içerik yok). 6 eşit kart/karusel/sahte
+          dergi DEĞİL (görev talimatı §8) — bir "lead" (öne çıkan, büyük) +
+          geri kalanı ince ayraçlı kompakt bir liste. Bu düzen kaç öğe
+          eklenirse eklensin aynı şekilde büyür; liste satırları kart değil,
+          sayfanın geri kalanında zaten kurulu "editoryal indeks" diliyle
+          (bkz. Operasyon capabilities, Tedarikçiler CategoryExplorer) tutarlı. */}
+      <section id={lang === "tr" ? "gundem" : "agenda"} className="bg-white py-24 scroll-mt-24 sm:scroll-mt-28">
+        <div className="max-w-7xl mx-auto px-6 lg:px-8">
+          <div ref={reveal} className="do-reveal mb-14 max-w-2xl">
+            <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">{t.gundem.eyebrow}</span>
+            <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-2 tracking-tight">{t.gundem.heading}</h2>
+          </div>
+
+          <div className="grid lg:grid-cols-5 gap-10 lg:gap-14">
+            {gundemLead && (
+              <Link
+                href={gundemDetailRoute(gundemLead.slug, lang)}
+                ref={reveal}
+                className="do-reveal-left group block lg:col-span-3"
+              >
+                <div className="flex items-center gap-3 mb-4 text-[11px] font-bold uppercase tracking-[0.15em]">
+                  <span className="text-[#1B3A8F]">{gundemLead.date[lang]}</span>
+                  <span className="w-1 h-1 rounded-full bg-slate-300" aria-hidden="true" />
+                  <span className="text-slate-400">{gundemLead.category[lang]}</span>
+                </div>
+                <h3 className="text-2xl md:text-3xl font-black text-slate-900 leading-snug mb-4 group-hover:text-[#1B3A8F] transition-colors">
+                  {gundemLead.title[lang]}
+                </h3>
+                <p className="text-slate-500 text-[15px] leading-[1.8] font-light max-w-xl">{gundemLead.summary[lang]}</p>
+                <span className="inline-flex items-center gap-1.5 mt-5 text-[13px] font-semibold text-[#1B3A8F] opacity-0 group-hover:opacity-100 transition-opacity">
+                  {t.gundem.readMore} <ArrowRight className="w-3.5 h-3.5" />
+                </span>
+              </Link>
+            )}
+
+            {gundemRest.length > 0 && (
+              <div ref={reveal} className="do-reveal-right lg:col-span-2 lg:border-l lg:border-slate-200 lg:pl-10 divide-y divide-slate-100">
+                {gundemRest.map((item) => (
+                  <Link key={item.slug} href={gundemDetailRoute(item.slug, lang)} className="group block py-5 first:pt-0 last:pb-0">
+                    <div className="flex items-center gap-3 mb-2 text-[10.5px] font-bold uppercase tracking-[0.12em]">
+                      <span className="text-[#1B3A8F]">{item.date[lang]}</span>
+                      <span className="w-1 h-1 rounded-full bg-slate-300" aria-hidden="true" />
+                      <span className="text-slate-400">{item.category[lang]}</span>
+                    </div>
+                    <h4 className="text-[15px] font-bold text-slate-900 leading-snug group-hover:text-[#1B3A8F] transition-colors">{item.title[lang]}</h4>
+                    <p className="text-slate-500 text-[13px] leading-relaxed mt-1.5">{item.summary[lang]}</p>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </section>
+
       {/* DEĞERLER — white, kart-grid yerine tam genişlik bölmeli editorial panel */}
       <section className="bg-white py-24">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
@@ -616,41 +680,24 @@ export function HakkimizdaPage() {
         </div>
       </section>
 
-      {/* İŞ BİRİMLERİ — navy */}
-      <section className="bg-[#1B3A8F] py-24 text-white">
+      {/* YAPIMIZ — navy. Eskiden "İş Birimlerimiz": 4 eşit kart, her biri
+          kendi ikonu ve etiket bulutuyla — kullanıcı geri bildirimiyle
+          "AI-şablon" olarak işaretlendi. Test: "Bu bölüm, başka yerde
+          söylenmemiş gerçek bilgi mi taşıyor?" Yalnızca Ağır Vasıta Grubu
+          taşıyordu (100+ Marka/50.000+ SKU/B2B zaten Kurumsal Rakamlar ve
+          GROUPAUTO bölümlerinde var). Sonuç: kart/etiket/ikon tamamen
+          kaldırıldı — tek bir kesin cümle + üç iş kolunun sade, ince
+          ayraçlı bir adlandırma satırı. */}
+      <section className="bg-[#1B3A8F] py-20 text-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div ref={reveal} className="do-reveal mb-14">
+          <div ref={reveal} className="do-reveal max-w-2xl">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea]">{t.businessUnits.eyebrow}</span>
-            <h2 className="text-3xl md:text-4xl font-black mt-2 tracking-tight">{t.businessUnits.heading}</h2>
-            <p className="text-white/75 mt-3 max-w-xl text-[15px]">{t.businessUnits.body}</p>
+            <h2 className="text-3xl md:text-4xl font-black mt-2 tracking-tight leading-tight">{t.businessUnits.heading}</h2>
+            <p className="text-white/70 mt-4 text-[15px] leading-relaxed">{t.businessUnits.body}</p>
           </div>
-          {/* Kart ızgarası yerine numaralı editoryal satır listesi — bu sayfada
-              iki bölüm üstteki VALUES paneli ve Operasyon'un OPS_GROUPS listesi
-              aynı deseni (büyük soluk index numarası + ikon + metin, kart değil)
-              kullanıyor; İş Birimlerimiz aynı ızgara+kart tekrarını kırıyor. */}
-          <div className="divide-y divide-white/10 border-t border-b border-white/10">
-            {BUSINESS_UNITS.map(({ icon: Icon, title, desc, tags }, i) => (
-              <div
-                key={title}
-                ref={reveal}
-                className={`do-reveal ${STAGGER_CLASSES[i] ?? ""} group/row flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-8 py-7 hover:bg-white/[0.03] transition-colors duration-300 rounded-lg -mx-4 px-4`}
-              >
-                <div className="flex items-center gap-5 shrink-0 sm:w-72">
-                  <span className="text-4xl sm:text-5xl font-black text-white/[0.12] group-hover/row:text-[#7d9bea]/40 tabular-nums leading-none transition-colors duration-300 shrink-0">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                  <div className="w-11 h-11 bg-white/10 border border-white/15 rounded-xl flex items-center justify-center shrink-0 group-hover/row:bg-[#7d9bea]/15 group-hover/row:border-[#7d9bea]/30 transition-colors duration-300">
-                    <Icon className="w-5 h-5 text-[#7d9bea]" />
-                  </div>
-                  <h3 className="text-[15px] font-bold leading-snug">{title}</h3>
-                </div>
-                <div className="min-w-0 flex-1">
-                  <p className="text-white/75 text-sm leading-relaxed">{desc}</p>
-                  <div className="flex flex-wrap gap-1.5 mt-3.5">
-                    {tags.map(tag => <span key={tag} className="text-[11px] bg-white/10 border border-white/15 text-white/70 px-2.5 py-1 rounded-full">{tag}</span>)}
-                  </div>
-                </div>
-              </div>
+          <div ref={reveal} className="do-reveal do-d2 mt-10 flex flex-col sm:flex-row sm:items-center gap-3 sm:gap-0 sm:divide-x sm:divide-white/15">
+            {t.businessUnits.lines.map((line) => (
+              <span key={line} className="text-[15px] font-bold tracking-tight sm:px-6 sm:first:pl-0">{line}</span>
             ))}
           </div>
         </div>

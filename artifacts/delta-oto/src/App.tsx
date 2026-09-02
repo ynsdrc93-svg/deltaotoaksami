@@ -11,6 +11,7 @@ import { useLang } from "@/lib/i18n";
 // React.lazy'nin beklediği { default } şekline sarılıyor; not-found zaten
 // default export olduğu için doğrudan kullanılabiliyor.
 const HakkimizdaPage = lazy(() => import("@/pages/HakkimizdaPage").then((m) => ({ default: m.HakkimizdaPage })));
+const GundemDetailPage = lazy(() => import("@/pages/GundemDetailPage").then((m) => ({ default: m.GundemDetailPage })));
 const TedarikciPage = lazy(() => import("@/pages/TedarikciPage").then((m) => ({ default: m.TedarikciPage })));
 const OperasyonPage = lazy(() => import("@/pages/OperasyonPage").then((m) => ({ default: m.OperasyonPage })));
 const KariyerPage = lazy(() => import("@/pages/KariyerPage").then((m) => ({ default: m.KariyerPage })));
@@ -47,6 +48,8 @@ function App() {
           <Route path="/en" component={LandingPage} />
           <Route path="/hakkimizda" component={HakkimizdaPage} />
           <Route path="/en/about" component={HakkimizdaPage} />
+          <Route path="/hakkimizda/gundem/:slug" component={GundemDetailPage} />
+          <Route path="/en/about/agenda/:slug" component={GundemDetailPage} />
           <Route path="/tedarikciler" component={TedarikciPage} />
           <Route path="/en/partners" component={TedarikciPage} />
           <Route path="/operasyon" component={OperasyonPage} />

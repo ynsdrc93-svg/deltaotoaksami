@@ -100,61 +100,21 @@
 }
 .do-reveal-right.do-in { opacity: 1; transform: none; }
 
-/* Operasyon Altyapısı ağ diyagramı (Yaratıcı Yeniden Kurgu Turu) — küçük,
-   soyut bir node/edge (düğüm/kenar) SVG diyagramı: Gebze/İzmir → Ümraniye
-   kenarları + Ümraniye'den 81 ile yayılan "erişim" nokta yelpazesi.
-   do-route-line'ın (ana sayfa Türkiye haritası) aksine BURADA path uzunluğu
-   ölçmeye gerek yok — her path'e SVG'nin pathLength="100" özniteliği
-   veriliyor (path'in GERÇEK geometrik uzunluğunu normalize eder), böylece
-   stroke-dasharray/dashoffset her zaman sabit 100 birim üzerinden çalışır.
-   Aynı do-in tetikleyicisiyle (useReveal) çalışır; kenarlar sırayla çizilir,
-   düğümler ve erişim noktaları hafif gecikmeli belirir. */
-.do-network-edge {
-  fill: none;
-  stroke-dasharray: 100;
-  stroke-dashoffset: 100;
-  opacity: 0;
+/* Operasyon Altyapısı "zincirleme sorumluluk" düzeni (Sanat Yönetimi Turu,
+   §18-19) — eskiki soyut node/edge SVG ağ diyagramının YERİNE geçti; o
+   görsel dil ("dots + lines + circles") kullanıcı tarafından anlamsız
+   bulunduğu için tamamen kaldırıldı. Yeni düzen saf tipografi + düzen: iki
+   bölgesel satır (Gebze/İzmir) → bağlantı çizgisi → büyütülmüş Ümraniye
+   satırı → bağlantı çizgisi → "81 İl" kapanış satırı. Bağlayıcı çizgiler
+   SVG değil, tek bir <div> (dikey ince çubuk) — do-reveal'daki aynı do-in
+   tetikleyicisiyle (useReveal) büyür (scaleY), "bağlantı kuruluyor" hissini
+   dekoratif değil, anlamlı bir geçiş olarak taşır. */
+.do-flow-line {
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.5s cubic-bezier(.22,1,.36,1);
 }
-.do-network-layer.do-in .do-network-edge {
-  animation: do-network-draw 1.1s cubic-bezier(.22,1,.36,1) forwards;
-}
-.do-network-node {
-  opacity: 0;
-  transform: scale(0.5);
-  transform-box: fill-box;
-  transform-origin: center;
-}
-.do-network-layer.do-in .do-network-node {
-  animation: do-network-pop 0.5s cubic-bezier(.22,1,.36,1) forwards;
-}
-.do-network-dot {
-  opacity: 0;
-}
-.do-network-layer.do-in .do-network-dot {
-  animation: do-network-dot-in 0.5s ease forwards;
-}
-@keyframes do-network-draw {
-  0% { opacity: 1; stroke-dashoffset: 100; }
-  100% { opacity: 1; stroke-dashoffset: 0; }
-}
-@keyframes do-network-pop {
-  to { opacity: 1; transform: scale(1); }
-}
-@keyframes do-network-dot-in {
-  to { opacity: 1; }
-}
-/* Merkez (Ümraniye) düğümünün etrafındaki yavaş nabız halkası — sürekli/
-   sonsuz döngü, "operasyon ritmi" hissi verir. prefers-reduced-motion'da
-   aşağıdaki genel blokta (mevcut .animate-pulse kuralı) zaten devre dışı. */
-@keyframes do-network-pulse-ring {
-  0% { transform: scale(0.85); opacity: 0.5; }
-  100% { transform: scale(1.9); opacity: 0; }
-}
-.do-network-pulse-ring {
-  transform-box: fill-box;
-  transform-origin: center;
-  animation: do-network-pulse-ring 2.6s cubic-bezier(.22,.61,.36,1) infinite;
-}
+.do-flow-line.do-in { transform: scaleY(1); }
 
 /* Cards */
 .do-card {
@@ -515,9 +475,7 @@
      kalır — rota okları için bunu ezip sabit/tam görünür bırakıyoruz. */
   .do-route-line { animation: none !important; stroke-dashoffset: 0 !important; opacity: 1 !important; }
   .do-route-dest { animation: none !important; opacity: 1 !important; transform: none !important; }
-  .do-network-edge { animation: none !important; stroke-dashoffset: 0 !important; opacity: 1 !important; }
-  .do-network-node, .do-network-dot { animation: none !important; opacity: 1 !important; transform: none !important; }
-  .do-network-pulse-ring { animation: none !important; opacity: 0 !important; }
+  .do-flow-line { transition: none !important; transform: scaleY(1) !important; }
   *, *::before, *::after {
     transition-duration: 0.001ms !important;
     animation-duration: 0.001ms !important;

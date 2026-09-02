@@ -21,18 +21,16 @@ import { useLang, type Lang } from "@/lib/i18n";
 
 // Dil-bağımsız yapısal veri (ikon/URL/renk) — metinler content{} objesinde.
 // İki dil dalı arasında ikon bileşenlerini tekrar etmemek için ayrı tutulur;
-// sıralama content.*.benefits.groups / content.*.platforms.items ile birebir eşleşir.
+// sıralama content.*.benefits.items / content.*.platforms.items ile birebir eşleşir.
 const JOB_PLATFORMS = [
   { name: "LinkedIn", url: "https://www.linkedin.com/company/delta-oto-aksam%C4%B1-san-ve-tic-a-%C5%9F/?viewAsMember=true", Icon: Linkedin },
   { name: "Kariyer.net", url: "https://www.kariyer.net", Icon: ExternalLink },
 ];
 
-// Aynı 8 gerçek yan hak; sunumu daha anlamlı kılmak için iki başlık altında gruplandı
-// (sağlık/beslenme/gündelik ritim vs. bilgi/kariyer gelişimi). İçerik değişmedi, sadece düzen.
-const BENEFIT_ICONS = [
-  { featured: HeartPulse, rest: [Utensils, Clock, Bus] },
-  { featured: GraduationCap, rest: [CalendarCheck, BookOpen, Users] },
-];
+// Aynı 8 gerçek yan hak; tek sistem olarak sunulur (eski "Yaşam Dengesi / Kariyer
+// Yatırımı" iki panelli ayrımı kaldırıldı — kullanıcı bu yapay ikiliyi istemiyor).
+// Sıra content.*.benefits.items ile birebir eşleşir.
+const BENEFIT_ICONS = [HeartPulse, Utensils, Clock, Bus, GraduationCap, CalendarCheck, BookOpen, Users];
 
 const content = {
   tr: {
@@ -42,8 +40,8 @@ const content = {
     },
     hero: {
       eyebrow: "İnsan Kaynakları · Kariyer Fırsatları",
-      title: ["GELECEĞİ", "BİZİMLE", "İNŞA EDİN"],
-      body: "50 yıllık kurumsal birikimin parçası olun. Delta Oto'da kariyer; güçlü sektör yetkinliği, dinamik bir ekip yapısı ve uzun vadeli profesyonel gelişim fırsatı anlamına gelir.",
+      title: ["50 YILLIK", "BİR EKİBİN", "PARÇASI OLUN"],
+      body: "Otomotiv yedek parça dağıtımında yarım asırlık bir ekip; sahada edinilen bilgi, net sorumluluklar ve uzun soluklu çalışma ilişkileriyle şekilleniyor.",
       cta: "Açık Pozisyonları Gör",
     },
     culture: {
@@ -55,6 +53,9 @@ const content = {
         { title: "Birlikte Çalışmak", desc: "Tek başına iyi olmak yetmez; bilgiyi paylaşan, birbirinin işini kolaylaştıran bir ekip yapısı önceliklidir." },
         { title: "İşin Başında Öğrenmek", desc: "Sektör bilgisi büyük ölçüde sahada, zamanla edinilir; bu süreç eğitim desteği ve kıdemli çalışan tecrübesiyle güçlenir." },
         { title: "Dürüst İlişkiler", desc: "Müşteriyle, tedarikçiyle ve ekip arkadaşlarıyla ilişkide gerçekçi konuşmak, söz vermeden önce iki kez düşünmek esastır." },
+        { title: "Sahiplenmek", desc: "Bir işi üstlenen kişi, sonucunu da üstlenir. Sorumluluk iş bitene kadar başkasına devredilmez." },
+        { title: "Sonuç Disiplini", desc: "Bir plana karar verildiğinde ona göre çalışılır; değişen koşullar mazeret değil, yeni bir çözüm arayışı doğurur." },
+        { title: "Saygı", desc: "Depoda, sahada ya da ofiste; yapılan işin niteliği fark etmeksizin herkesin katkısı aynı ciddiyetle karşılanır." },
       ],
     },
     testimonials: {
@@ -85,28 +86,16 @@ const content = {
     benefits: {
       eyebrow: "Çalışan Avantajları",
       heading: "Yan Haklar ve İmkânlar",
-      desc: "Uzun vadeli kurumsal ilişkilerde çalışanların gelişimine yatırım yapıyoruz. Sekiz destek, iki ana başlıkta toplanıyor: yaşam dengesi ve kariyer yatırımı.",
-      groups: [
-        {
-          title: "Yaşam Dengesi",
-          desc: "Sağlığınız, beslenmeniz ve günlük ritminiz için sunduğumuz destekler.",
-          featured: { label: "Özel sağlık sigortası", sub: "Tüm çalışanlar için" },
-          rest: [
-            { label: "Yemek kartı katkısı", sub: "Her iş günü için sağlanır" },
-            { label: "Esnek çalışma saatleri", sub: "Pozisyona göre uygulanır" },
-            { label: "Ulaşım desteği", sub: "Servis hattı veya yol bedeli" },
-          ],
-        },
-        {
-          title: "Kariyer Yatırımı",
-          desc: "Bilginize, becerinize ve kariyer yolculuğunuza yaptığımız yatırımlar.",
-          featured: { label: "Sektörel eğitim bütçesi", sub: "Yıllık gelişim programı" },
-          rest: [
-            { label: "Yıllık kariyer görüşmesi", sub: "Şeffaf performans değerlendirmesi" },
-            { label: "Marka ve ürün eğitimleri", sub: "Tedarikçi işbirliğiyle" },
-            { label: "Mentorluk programı", sub: "Kıdemli çalışan rehberliği" },
-          ],
-        },
+      desc: "Uzun vadeli kurumsal ilişkilerde çalışanların gelişimine yatırım yapıyoruz.",
+      items: [
+        { label: "Özel sağlık sigortası", sub: "Tüm çalışanlar için" },
+        { label: "Yemek kartı katkısı", sub: "Her iş günü için sağlanır" },
+        { label: "Esnek çalışma saatleri", sub: "Pozisyona göre uygulanır" },
+        { label: "Ulaşım desteği", sub: "Servis hattı veya yol bedeli" },
+        { label: "Sektörel eğitim bütçesi", sub: "Yıllık gelişim programı" },
+        { label: "Yıllık kariyer görüşmesi", sub: "Şeffaf performans değerlendirmesi" },
+        { label: "Marka ve ürün eğitimleri", sub: "Tedarikçi işbirliğiyle" },
+        { label: "Mentorluk programı", sub: "Kıdemli çalışan rehberliği" },
       ],
     },
   },
@@ -117,8 +106,8 @@ const content = {
     },
     hero: {
       eyebrow: "Human Resources · Career Opportunities",
-      title: ["BUILD", "THE FUTURE", "WITH US"],
-      body: "Become part of 50 years of institutional experience. A career at Delta Oto means strong industry expertise, a dynamic team, and long-term opportunities for professional growth.",
+      title: ["FIFTY YEARS", "OF EXPERTISE.", "ADD YOURS."],
+      body: "Half a century in automotive parts distribution — built on knowledge earned in the field, clear responsibility, and working relationships that last.",
       cta: "View Open Positions",
     },
     culture: {
@@ -130,6 +119,9 @@ const content = {
         { title: "Working Together", desc: "Being good on your own isn't enough; what matters most is a team that shares knowledge and makes each other's work easier." },
         { title: "Learning on the Job", desc: "Industry knowledge is largely gained in the field, over time; this process is reinforced by training support and the experience of senior colleagues." },
         { title: "Honest Relationships", desc: "Speaking realistically with customers, suppliers and teammates, and thinking twice before making a promise, is fundamental." },
+        { title: "Taking Ownership", desc: "Whoever takes on a task also takes on its outcome. Responsibility isn't handed off until the work is done." },
+        { title: "Discipline in Execution", desc: "Once a plan is set, we work to it. Changing conditions are not an excuse — they call for a new solution." },
+        { title: "Respect", desc: "In the warehouse, in the field or in the office, every contribution is met with the same seriousness, regardless of the nature of the work." },
       ],
     },
     testimonials: {
@@ -160,28 +152,16 @@ const content = {
     benefits: {
       eyebrow: "Employee Benefits",
       heading: "Benefits and Perks",
-      desc: "We invest in our employees' growth as part of long-term working relationships. Eight benefits are organized under two headings: work-life balance and career investment.",
-      groups: [
-        {
-          title: "Work-Life Balance",
-          desc: "The support we provide for your health, nutrition and daily routine.",
-          featured: { label: "Private health insurance", sub: "For all employees" },
-          rest: [
-            { label: "Meal card allowance", sub: "Provided for every working day" },
-            { label: "Flexible working hours", sub: "Applied depending on the role" },
-            { label: "Transportation support", sub: "Shuttle service or commuting allowance" },
-          ],
-        },
-        {
-          title: "Career Investment",
-          desc: "The investments we make in your knowledge, skills and career path.",
-          featured: { label: "Industry training budget", sub: "Annual development program" },
-          rest: [
-            { label: "Annual career review", sub: "Transparent performance evaluation" },
-            { label: "Brand and product training", sub: "Delivered in collaboration with suppliers" },
-            { label: "Mentorship program", sub: "Guidance from senior colleagues" },
-          ],
-        },
+      desc: "We invest in our employees' growth as part of long-term working relationships.",
+      items: [
+        { label: "Private health insurance", sub: "For all employees" },
+        { label: "Meal card allowance", sub: "Provided for every working day" },
+        { label: "Flexible working hours", sub: "Applied depending on the role" },
+        { label: "Transportation support", sub: "Shuttle service or commuting allowance" },
+        { label: "Industry training budget", sub: "Annual development program" },
+        { label: "Annual career review", sub: "Transparent performance evaluation" },
+        { label: "Brand and product training", sub: "Delivered in collaboration with suppliers" },
+        { label: "Mentorship program", sub: "Guidance from senior colleagues" },
       ],
     },
   },
@@ -252,15 +232,15 @@ export function KariyerPage() {
             <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-2 tracking-tight">{t.culture.heading}</h2>
             <p className="text-slate-500 mt-3 text-[15px] max-w-2xl">{t.culture.desc}</p>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="max-w-4xl border-t border-slate-200">
             {t.culture.items.map((item, i) => (
               <div
                 key={item.title}
                 ref={reveal}
-                className={`do-reveal do-d${(i % 4) + 1} border border-slate-200 rounded-xl p-7 hover:border-[#1B3A8F]/30 hover:shadow-lg transition-all`}
+                className={`do-reveal do-d${(i % 4) + 1} grid sm:grid-cols-[13rem_1fr] gap-x-10 gap-y-2 py-7 sm:py-8 border-b border-slate-200`}
               >
-                <h3 className="text-[15px] font-bold text-slate-900 mb-3 leading-snug">{item.title}</h3>
-                <p className="text-slate-500 text-[13.5px] leading-relaxed">{item.desc}</p>
+                <h3 className="text-lg font-black text-slate-900 tracking-tight leading-snug">{item.title}</h3>
+                <p className="text-slate-500 text-[14px] sm:text-[15px] leading-relaxed max-w-lg">{item.desc}</p>
               </div>
             ))}
           </div>
@@ -340,9 +320,10 @@ export function KariyerPage() {
         </div>
       </section>
 
-      {/* YAN HAKLAR — navy. İki anlamlı kategoriye ayrılmış editoryal bento düzeni: her panelde
-          1 öne çıkan hak (yatay, büyük tipografi) + 3 destekleyici hak (kompakt 3'lü sıra).
-          Tüm 8 gerçek hak korunuyor — değişen yalnızca sunum. */}
+      {/* YAN HAKLAR — navy. Tek sistem: eski "Yaşam Dengesi / Kariyer Yatırımı" iki panelli
+          ayrım kaldırıldı. Aynı 8 gerçek hak, tek çerçeveli ızgarada iç kılcal çizgilerle
+          bölünmüş — 8 ayrı kutu yerine tek bütün bir yapı. Kademeli (stagger) giriş, iki
+          zıt kart değil, tek akışın parçaları olarak hissettiriyor. */}
       <section className="relative bg-[#1B3A8F] text-white py-24 overflow-hidden">
         <div className="absolute inset-0">
           <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&q=80" alt="" className="w-full h-full object-cover opacity-10" />
@@ -358,55 +339,18 @@ export function KariyerPage() {
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-2 gap-6 lg:gap-8">
-            {t.benefits.groups.map((group, gi) => {
-              const icons = BENEFIT_ICONS[gi];
+          <div className="grid grid-cols-2 lg:grid-cols-4 rounded-2xl border-t border-l border-white/10 overflow-hidden">
+            {t.benefits.items.map((item, i) => {
+              const Icon = BENEFIT_ICONS[i];
               return (
                 <div
-                  key={group.title}
+                  key={item.label}
                   ref={reveal}
-                  className={`${gi === 0 ? "do-reveal-left" : "do-reveal-right"} relative overflow-hidden rounded-2xl border border-white/10 bg-white/[0.045] p-7 md:p-8 transition-colors duration-300 hover:border-white/20`}
+                  className={`do-reveal do-d${(i % 4) + 1} border-r border-b border-white/10 p-6 md:p-7 transition-colors duration-300 hover:bg-white/[0.06]`}
                 >
-                  <span
-                    aria-hidden="true"
-                    className="pointer-events-none select-none absolute -top-5 -right-2 md:-right-3 text-[120px] md:text-[140px] font-black leading-none text-white/[0.06] tabular-nums"
-                  >
-                    0{gi + 1}
-                  </span>
-
-                  <div className="relative mb-7">
-                    <h3 className="text-xl md:text-2xl font-black tracking-tight text-white">{group.title}</h3>
-                    <p className="text-white/60 text-[13px] mt-2 max-w-xs leading-relaxed">{group.desc}</p>
-                  </div>
-
-                  {/* Öne çıkan hak */}
-                  <div className="group relative flex items-center gap-5 rounded-xl border border-white/10 bg-white/[0.05] p-5 mb-4 overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:border-[#7d9bea]/40 hover:bg-white/[0.08] hover:shadow-[0_20px_45px_rgba(125,155,234,0.16)]">
-                    <div className="do-card-beam" />
-                    <div className="relative z-10 shrink-0 w-14 h-14 rounded-full bg-white/10 border border-white/10 flex items-center justify-center transition-colors duration-300 group-hover:bg-[#7d9bea]/20 group-hover:border-[#7d9bea]/30">
-                      <icons.featured className="w-6 h-6 text-[#7d9bea]" />
-                    </div>
-                    <div className="relative z-10 min-w-0">
-                      <div className="text-base md:text-lg font-black text-white leading-snug">{group.featured.label}</div>
-                      <div className="text-white/60 text-[13px] mt-1">{group.featured.sub}</div>
-                    </div>
-                  </div>
-
-                  {/* Destekleyici haklar */}
-                  <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    {group.rest.map((r, ri) => {
-                      const Icon = icons.rest[ri];
-                      return (
-                        <div
-                          key={r.label}
-                          className="rounded-xl border border-white/10 bg-white/[0.035] p-4 transition-all duration-300 hover:-translate-y-1 hover:bg-white/[0.08] hover:border-white/20"
-                        >
-                          <Icon className="w-4 h-4 text-[#7d9bea] mb-2.5" />
-                          <div className="text-[12.5px] font-bold text-white leading-snug">{r.label}</div>
-                          <div className="text-[11px] text-white/60 mt-1 leading-snug">{r.sub}</div>
-                        </div>
-                      );
-                    })}
-                  </div>
+                  <Icon className="w-5 h-5 text-[#7d9bea] mb-4" />
+                  <div className="text-[13px] md:text-[13.5px] font-bold text-white leading-snug">{item.label}</div>
+                  <div className="text-white/55 text-[11.5px] mt-1.5 leading-snug">{item.sub}</div>
                 </div>
               );
             })}

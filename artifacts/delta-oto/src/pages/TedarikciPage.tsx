@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { ChevronRight, ChevronLeft, ChevronDown, ArrowRight, CheckCircle2, Check, Globe, Package, Shield, Zap, Handshake, Search, X } from "lucide-react";
+import { ChevronRight, ChevronLeft, ChevronDown, ArrowRight, Check, Search, X } from "lucide-react";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
 import { BrandLogo } from "@/components/shared/BrandLogo";
@@ -8,8 +8,6 @@ import { PRODUCT_CATEGORIES, MACRO_FAMILIES, type ProductCategory } from "@/lib/
 import { useEscapeKey, useReveal } from "@/hooks/use-motion";
 import { useDocumentMeta } from "@/hooks/use-document-meta";
 import { useLang, type Lang } from "@/lib/i18n";
-
-const ADVANTAGE_ICONS = [Package, Globe, Shield, Zap, Handshake];
 
 const content = {
   tr: {
@@ -50,35 +48,33 @@ const content = {
       allFamiliesTitle: "Tüm Ürün Aileleri",
       close: "Kapat",
     },
+    // Sanat Yönetimi Turu (§14-17): eskiden bu iki bölüm sitedeki en "AI
+    // tarafından yazılmış" hissi veren yerlerdi — uzun paragraf + 6 maddelik
+    // checklist + 4 istatistik kartı (Kalite), 5 mini-satış-denemesi (Neden
+    // Delta). İkisi de sayfanın kendi hero/kategori/avantaj bölümlerinde
+    // ZATEN söylenmiş rakamları (100+, 50.000+, OEM, GROUPAUTO) tekrar
+    // ediyordu. Kalite artık TEK bir kesin ifade + yalnızca ELDE OLMAYAN iki
+    // somut ilke (üretici belgelendirmesi/lot takibi, süregelen denetim) —
+    // OEM/GROUPAUTO/stok maddeleri kaldırıldı çünkü zaten başka yerde var.
+    // Neden Delta artık 5 madde değil, "ön bilgi yeterli" ilkesiyle 4 kısa
+    // kavram (kullanıcı talimatı: "İnsanlara ön bilgi vermek yeterli").
     quality: {
       eyebrow: "Kalite Güvencesi",
-      heading: "Tedarikçi Kalite Kriterleri",
-      body: "Portföyümüze alınan her marka, titiz bir ön değerlendirme ve süregelen denetim sürecine tabidir. GROUPAUTO'nun global satın alma standartları bu sürecin omurgasını oluşturur. Sahte ve düşük kaliteli ürüne karşı sıfır tolerans politikamız; müşterilerimizin saha güvenilirliğini korumanın temel güvencesidir.",
-      items: [
-        "OEM veya OEM eşdeğeri sertifikasyon zorunluluğu",
-        "Kayıt dışı ve taklit ürün sıfır toleranstır",
-        "Üretici belgelendirmesi ve lot takip zorunluluğu",
-        "Periyodik ürün denetimleri ve saha geri bildirim sistemi",
-        "GROUPAUTO'nun global satın alma standartları",
-        "Stok tutarlılığı ve teslimat performansı SLA takibi",
-      ],
-      stats: [
-        { n: "100+", l: "Aktif Marka", d: "Sürekli büyüyen portföy" },
-        { n: "50.000+", l: "Aktif SKU", d: "Geniş stok derinliği" },
-        { n: "OEM", l: "Standart", d: "OEM veya eşdeğeri zorunlu" },
-        { n: "Groupauto", l: "Üyeliği", d: "Global satın alma ağı" },
+      statement: "Kayıt Dışı ve Sahte Ürüne Sıfır Tolerans",
+      intro: "Portföyümüzdeki her marka, denetimli kaynak doğrulamasından geçer.",
+      principles: [
+        { title: "Üretici Belgelendirmesi", desc: "Her ürün, zorunlu lot takibiyle kaynağına kadar izlenebilir." },
+        { title: "Süregelen Denetim", desc: "Periyodik ürün denetimleri ve saha geri bildirimi, standardı sürekli günceller." },
       ],
     },
     advantages: {
       eyebrow: "Tedarik Üstünlüğü",
       heading: "Neden Delta Oto?",
-      body: "Tek tedarikçi kolaylığı, global satın alma gücü ve OEM kalite güvencesi — hepsi tek çatı altında.",
       items: [
-        { title: "Kapsamlı Ürün Gamı", desc: "100'den fazla markanın 50.000'i aşkın SKU'sundan oluşan portföy; tek tedarikçi ilişkisiyle uçtan uca karşılanır. Çoklu tedarikçi koordinasyonu yükü kalkar." },
-        { title: "GROUPAUTO Tedarik Ayrıcalığı", desc: "GROUPAUTO Türkiye üyeliği; 118 ülkedeki 71 referans tedarikçi gücünü satın alma kaldıracımıza dönüştürür. Global fiyat avantajı doğrudan portföyümüze yansır." },
-        { title: "OEM Standart Kalite Güvencesi", desc: "Yalnızca orijinal ve OEM eşdeğeri ürün kategorilerinde faaliyet gösteriyoruz. Sahte ve düşük kaliteli ürün portföyde kesinlikle yer almaz." },
-        { title: "Dinamik Katalog Yönetimi", desc: "Yeni araç modelleri ve marka genişlemeleri portföye sürekli eklenir. Güncel stok bilgisine B2B portalı üzerinden anlık erişilir, bekleme olmadan sipariş verilir." },
-        { title: "Opar Ege Bölge Bayiliği", desc: "Opar'ın Ege bölgesi operasyonunu devralarak İzmir ve çevresinde bölgesel stok derinliğimizi ve teslimat hızımızı doğrudan güçlendirdik." },
+        { title: "Stok", desc: "Aradığınız parça büyük olasılıkla zaten depoda." },
+        { title: "Erişim", desc: "Global tedarik ağına tek noktadan bağlanırsınız." },
+        { title: "Süreklilik", desc: "Katalog sürekli genişler, stok hiç durmaz." },
+        { title: "Tek Muhatap", desc: "Onlarca tedarikçi yerine tek bir ilişki." },
       ],
     },
     cta: {
@@ -127,33 +123,21 @@ const content = {
     },
     quality: {
       eyebrow: "Quality Assurance",
-      heading: "Supplier Quality Criteria",
-      body: "Every brand admitted to our portfolio undergoes rigorous pre-qualification and ongoing audit. GROUPAUTO's global purchasing standards form the backbone of this process. Our zero-tolerance policy on counterfeit and substandard products is the core guarantee behind our customers' field reliability.",
-      items: [
-        "Mandatory OEM or OEM-equivalent certification",
-        "Zero tolerance for unregistered and counterfeit products",
-        "Mandatory manufacturer certification and lot traceability",
-        "Periodic product audits and field feedback system",
-        "GROUPAUTO's global purchasing standards",
-        "Stock consistency and delivery performance SLA tracking",
-      ],
-      stats: [
-        { n: "100+", l: "Active Brands", d: "A continuously growing portfolio" },
-        { n: "50,000+", l: "Active SKUs", d: "Deep stock coverage" },
-        { n: "OEM", l: "Standard", d: "OEM or equivalent required" },
-        { n: "GROUPAUTO", l: "Membership", d: "Global purchasing network" },
+      statement: "Zero Tolerance for Counterfeit or Unregistered Product",
+      intro: "Every brand in our portfolio undergoes audited source verification.",
+      principles: [
+        { title: "Manufacturer Certification", desc: "Every product is traceable to its source through mandatory lot tracking." },
+        { title: "Ongoing Audits", desc: "Periodic product audits and field feedback keep the standard continuously current." },
       ],
     },
     advantages: {
       eyebrow: "Supply Advantage",
       heading: "Why Delta Oto?",
-      body: "Single-supplier convenience, global purchasing power and OEM quality assurance — all under one roof.",
       items: [
-        { title: "Comprehensive Product Range", desc: "A portfolio of more than 100 brands and over 50,000 SKUs, covered end-to-end through a single supplier relationship — removing the burden of coordinating multiple suppliers." },
-        { title: "GROUPAUTO Purchasing Advantage", desc: "Our GROUPAUTO Türkiye membership turns the strength of 71 referenced suppliers across 118 countries into purchasing leverage, translating directly into portfolio-wide price advantages." },
-        { title: "OEM-Standard Quality Assurance", desc: "We operate exclusively in original and OEM-equivalent product categories. Counterfeit and substandard products have no place in our portfolio." },
-        { title: "Dynamic Catalog Management", desc: "New vehicle models and brand expansions are added to the portfolio continuously. Current stock information is available instantly through the B2B portal, so orders can be placed without delay." },
-        { title: "Aegean Regional Dealership with Opar", desc: "By taking over Opar's Aegean region operation, we directly strengthened our regional stock depth and delivery speed in and around İzmir." },
+        { title: "Stock", desc: "The part you need is most likely already in the warehouse." },
+        { title: "Access", desc: "One connection to the global supply network." },
+        { title: "Continuity", desc: "The catalog keeps growing — stock never stops." },
+        { title: "One Point of Contact", desc: "A single relationship instead of dozens of suppliers." },
       ],
     },
     cta: {
@@ -730,31 +714,31 @@ export function TedarikciPage() {
         </div>
       </section>
 
-      {/* TEDARİKÇİ KALİTE KRİTERLERİ — navy */}
+      {/* KALİTE GÜVENCESİ — navy. Eskiden: uzun paragraf + 6 maddelik
+          checklist + 4 istatistik kartı (OEM/GROUPAUTO/100+/50.000+ zaten
+          bu sayfanın hero/kategori/avantaj bölümlerinde söyleniyordu). Artık
+          tek sütun: bir kesin ifade (statement, sayfanın gerçek başlığı) +
+          bir destekleyici cümle + yalnızca BAŞKA YERDE söylenmemiş iki somut
+          ilke. İstatistik kartı yok — tekrar eden rakamı yeniden kutulamak
+          "kalite" ispatlamaz. */}
       <section className="bg-[#1B3A8F] py-24 text-white overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16 items-center">
-            <div ref={reveal} className="do-reveal-left">
-              <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea] block mb-4">{t.quality.eyebrow}</span>
-              <h2 className="text-3xl md:text-4xl font-black tracking-tight mb-6">{t.quality.heading}</h2>
-              <p className="text-white/65 leading-[1.85] text-[15.5px] mb-8">
-                {t.quality.body}
-              </p>
-              <div className="space-y-3">
-                {t.quality.items.map((q) => (
-                  <div key={q} className="flex items-start gap-3">
-                    <CheckCircle2 className="w-4 h-4 text-[#7d9bea] shrink-0 mt-0.5" />
-                    <span className="text-white/80 text-[14px] leading-snug">{q}</span>
+          <div className="max-w-2xl">
+            <span ref={reveal} className="do-reveal text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea] block mb-6">{t.quality.eyebrow}</span>
+            <p ref={reveal} className="do-reveal do-d1 text-[26px] sm:text-[32px] md:text-[36px] font-black leading-[1.2] tracking-tight mb-5">
+              {t.quality.statement}
+            </p>
+            <p ref={reveal} className="do-reveal do-d2 text-white/65 text-[15.5px] leading-relaxed mb-12">
+              {t.quality.intro}
+            </p>
+            <div ref={reveal} className="do-reveal do-d3 space-y-7 border-t border-white/15 pt-8">
+              {t.quality.principles.map((p, i) => (
+                <div key={p.title} className="flex items-start gap-5">
+                  <span className="text-[11px] font-black text-[#7d9bea] tabular-nums pt-1 shrink-0">0{i + 1}</span>
+                  <div>
+                    <h3 className="text-[15px] font-bold mb-1.5">{p.title}</h3>
+                    <p className="text-white/60 text-[14px] leading-relaxed">{p.desc}</p>
                   </div>
-                ))}
-              </div>
-            </div>
-            <div ref={reveal} className="do-reveal-right grid grid-cols-2 gap-4">
-              {t.quality.stats.map(({ n, l, d }) => (
-                <div key={l} className="bg-white/[0.08] border border-white/[0.12] rounded-xl p-6 hover:bg-white/[0.14] transition-colors">
-                  <div className="text-2xl font-black text-white mb-1">{n}</div>
-                  <div className="text-[12px] font-bold text-[#7d9bea] uppercase tracking-wide">{l}</div>
-                  <div className="text-[12px] text-white/50 mt-1">{d}</div>
                 </div>
               ))}
             </div>
@@ -762,29 +746,25 @@ export function TedarikciPage() {
         </div>
       </section>
 
-      {/* AVANTAJLAR — white */}
-      <section className="bg-white py-20">
+      {/* NEDEN DELTA OTO — white. Eskiden 5 madde, her biri kendi
+          paragrafında 100+/GROUPAUTO/OEM/Opar rakamlarını sayfanın geri
+          kalanında zaten anlatılmış haliyle TEKRAR ediyordu. Kullanıcı
+          talimatı birebir: "İnsanlara ön bilgi vermek yeterli." Artık kart
+          yok, ikon yok, rakam tekrarı yok — dört kısa kavram, büyük tipografi,
+          ince dikey ayraçlarla bölünmüş tek satır. */}
+      <section className="bg-white py-24">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div ref={reveal} className="do-reveal mb-12">
+          <div ref={reveal} className="do-reveal mb-16">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">{t.advantages.eyebrow}</span>
             <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-2 tracking-tight">{t.advantages.heading}</h2>
-            <p className="text-slate-500 mt-3 text-[15px] max-w-2xl">{t.advantages.body}</p>
           </div>
-          <div className="grid md:grid-cols-2 gap-5">
-            {t.advantages.items.map(({ title, desc }, i) => {
-              const Icon = ADVANTAGE_ICONS[i];
-              return (
-                <div key={title} ref={reveal} className={`do-reveal ${i % 2 === 1 ? "do-d1" : ""} do-card flex gap-6 border border-slate-200 rounded-xl p-8 group`}>
-                  <div className="shrink-0 w-12 h-12 bg-[#1B3A8F]/[0.08] rounded-xl flex items-center justify-center group-hover:bg-[#1B3A8F] transition-colors">
-                    <Icon className="w-5 h-5 text-[#1B3A8F] group-hover:text-white transition-colors" />
-                  </div>
-                  <div>
-                    <h3 className="text-[15px] font-bold text-slate-900 mb-3 leading-snug">{title}</h3>
-                    <p className="text-slate-500 text-[14px] leading-relaxed">{desc}</p>
-                  </div>
-                </div>
-              );
-            })}
+          <div ref={reveal} className="do-reveal do-d1 grid grid-cols-2 lg:grid-cols-4 gap-y-10 gap-x-6 lg:divide-x lg:divide-slate-200">
+            {t.advantages.items.map(({ title, desc }) => (
+              <div key={title} className="lg:px-8 lg:first:pl-0">
+                <div className="text-3xl sm:text-4xl font-black text-slate-900 tracking-tight mb-3">{title}</div>
+                <p className="text-slate-500 text-[14px] leading-relaxed">{desc}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
