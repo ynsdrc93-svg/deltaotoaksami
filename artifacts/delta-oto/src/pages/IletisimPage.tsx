@@ -324,50 +324,24 @@ export function IletisimPage() {
     <div className="do-site bg-white min-h-screen">
       <SiteHeader />
 
-      {/* HERO — gerçek yerel fotoğraf (935×1400 dikey kaynak; bkz.
-          public/images/iletisim-hero-bosphorus.jpg). Kaynak dikey olduğu için
-          tek asset + breakpoint'e göre farklı object-position kullanılıyor.
-          "Daha fazla fotoğraf görünsün" isteği CSS scale() ile SAHTE bir
-          zoom-out olarak değil, hero'nun kendi yüksekliğini artırarak
-          çözüldü — object-cover matematiğinde (bkz. object-cover crop
-          hesapları) sabit genişlikte bir full-bleed hero'da yükseklik
-          artışı, kaynağın DAHA FAZLA dikey aralığını görünür kılar, boş
-          kenar/letterbox riski olmadan:
-          - mobilde (~390px genişlik) container zaten kaynağa çok yakındı
-            (~%96 yükseklik görünüyordu) — 560→590px ile pratikte tam kare
-            (~%100 yükseklik, ~%97 genişlik) görünür oldu; buradan alınacak
-            görünür-alan kazancı zaten sınırlıydı.
-          - masaüstünde (1440px genişlik) önceki 560px yükseklikte görünen
-            dikey şerit ~%26 idi; 650px'e çıkarınca ~%30'a yükseliyor
-            (~%15 daha fazla kaynak alanı) — köprü kulesi/güverte/kablo
-            örgüsü hâlâ net, sadece etrafında biraz daha bağlam (gökyüzü/
-            güverte) görünüyor.
-
-          GÖRÜNTÜ KALİTESİ NOTU (Faz 2 incelemesi): "hafif pikselli/yumuşak"
-          görünümün kök nedeni araştırıldı — kaynak 935×1400px, bu hero
-          masaüstünde ~1440px+ genişliğe object-cover ile geriliyor (≈1.54x
-          upscale, retina ekranlarda fiilen ~3x). Bu saf bir çözünürlük
-          yetersizliği; CSS/object-position tarafında telafi edilebilecek bir
-          render hatası DEĞİL. Gerçek, daha yüksek çözünürlüklü bir Boğaz
-          Köprüsü fotoğrafı için: (1) genel web araması, (2) bu fotoğrafın
-          kaynağı olan fotoğrafçının GitHub portföyündeki TÜM diğer
-          Istanbul-2023 görselleri (dahil ham "DSC_*" dosyalar) tek tek
-          kontrol edildi — o depodaki hiçbir dosya 1400px uzun kenarı
-          aşmıyor ve hiçbiri bu kadar iyi bir köprü kompozisyonu sunmuyor.
-          Wikimedia Commons'ta 2048×1161'lik daha büyük bir sürüm MEVCUT
-          ama bu sandbox'ın ağ politikası wikimedia.org'u (ve Unsplash/
-          Pexels'i) tamamen engelliyor — daha önce bu oturumda doğrulandı.
-          Sahte keskinleştirme filtresi/upscale eklenmedi (istenmiyor).
-          Sonuç: gerçek, ulaşılabilir daha iyi bir alternatif yok — aynı
-          asset ve crop bilinçli olarak KORUNDU. Kurumsal lisanslı/daha
-          yüksek çözünürlüklü bir çekim sağlanırsa asset swap teknik olarak
-          basit (tek dosya + aynı object-position mantığı). */}
+      {/* HERO — kurumsal olarak sağlanan, lisansı belirsiz olmayan yeni bir
+          Boğaz Köprüsü fotoğrafı (bkz. public/images/iletisim-hero-bosphorus.webp),
+          eski GitHub-kaynaklı/lisansı doğrulanamayan 935×1400 dikey asset'in
+          yerine geçti. Yeni kaynak 2000×903 YATAY — eski dikey kaynağın
+          object-position mantığı burada geçerli değil, sıfırdan hesaplandı:
+          masaüstünde (container kaynaktan çok daha geniş/kısa) dikey kırpma
+          olur, tam genişlik korunur — object-[center_48%] köprü kulesi +
+          güverte + su şeridini ortada tutar, boş gökyüzünün bir kısmı
+          kırpılır. Mobilde (container kaynaktan çok daha dar/uzun) yatay
+          kırpma olur — merkezi kullanmak köprünün kendisini kadraj dışına
+          atardı (ana kule sağ-orta üçte birde), bu yüzden object-[64%_42%]
+          ile kule + güverte + ışık izleri kadrajda tutuluyor. */}
       <section className="relative min-h-[590px] sm:min-h-[650px] flex items-center text-white overflow-hidden bg-[#0e1016]">
         <div className="absolute inset-0">
           <img
-            src="/images/iletisim-hero-bosphorus.jpg"
+            src="/images/iletisim-hero-bosphorus.webp"
             alt=""
-            className="w-full h-full object-cover object-[center_45%] sm:object-[center_34%]"
+            className="w-full h-full object-cover object-[64%_42%] sm:object-[center_48%]"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-[#0e1016] via-[#0e1016]/70 to-[#0e1016]/25" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0e1016] via-transparent to-transparent" />

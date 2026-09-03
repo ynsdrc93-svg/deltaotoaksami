@@ -309,14 +309,21 @@ export function KariyerPage() {
     <div className="do-site bg-white min-h-screen">
       <SiteHeader />
 
-      {/* HERO */}
+      {/* HERO — kurumsal olarak sağlanan gerçek fotoğraf (bkz.
+          public/images/kariyer-hero-team.webp, 2000×1349), Unsplash
+          placeholder'ın yerine geçti. Kompozisyonun odağı (birleşen eller)
+          kareye zaten yatay/dikey olarak yakın merkezli — bu yüzden hem
+          masaüstünde (dikey kırpma) hem mobilde (yatay kırpma) tek bir
+          object-position civarı yeterli, İletişim'in köprü fotoğrafındaki
+          gibi keskin bir breakpoint ayrımı gerekmedi. İletişim hero'sundaki
+          gibi opacity-20 soluk yerine tam görünürlük — kurumsal fotoğraf
+          artık gerçek hero görseli, dekoratif placeholder değil. */}
       <section className="relative min-h-[560px] flex items-center text-white overflow-hidden bg-[#0e1016]">
         <div className="absolute inset-0">
           <img
-            src="https://images.unsplash.com/photo-1521737711867-e3b97375f902?w=1920&q=80"
+            src="/images/kariyer-hero-team.webp"
             alt=""
-            className="w-full h-full object-cover opacity-20"
-            style={{ objectPosition: "center 30%" }}
+            className="w-full h-full object-cover object-[center_50%] sm:object-[center_52%]"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-[#0e1016] via-[#0e1016]/80 to-[#0e1016]/30" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0e1016] via-transparent to-transparent" />
@@ -399,7 +406,15 @@ export function KariyerPage() {
               {t.platforms.desc}
             </p>
           </div>
-          <div className="grid md:grid-cols-2 gap-6 mb-10">
+          {/* overflow-x-clip: bu iki kartın do-reveal-left/right pre-reveal
+              durumu (opacity:0, translateX(±32px)) rest konumundan taşıyor —
+              içerik hiçbir zaman görünür değil (opacity 0) ama sayfanın
+              scrollWidth'ine katılıp mobilde ~8px yatay taşmaya yol açıyordu.
+              .do-reveal-left/right SİTE GENELİNDE paylaşılan sınıflar (bkz.
+              Hakkımızda/Spart/Anasayfa/İletişim) — bu yüzden fix o paylaşılan
+              CSS'i DEĞİL, yalnızca bu grid'i kapsıyor; animasyonun kendisi
+              (mesafe, süre, masaüstü davranışı) hiç değişmedi. */}
+          <div className="grid md:grid-cols-2 gap-6 mb-10 overflow-x-clip">
             {JOB_PLATFORMS.map(({ name, url, Icon }, i) => {
               const p = t.platforms.items[i];
               return (
