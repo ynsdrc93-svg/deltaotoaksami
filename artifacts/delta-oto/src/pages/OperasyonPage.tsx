@@ -35,7 +35,7 @@ const content = {
       stats: [
         { target: 3, label: "Operasyon Merkezi", sub: "Gebze · İzmir · Ümraniye" },
         { target: 50000, suffix: "+", label: "SKU", sub: "Sürekli stok derinliği" },
-        { value: "18:00", label: "Son Sipariş Saati", sub: "Aynı gün sevkiyat" },
+        { value: "17:00", label: "Son Sipariş Saati", sub: "Aynı gün sevkiyat" },
         { target: 81, label: "İl", sub: "Ulusal dağıtım kapsamı" },
       ],
     },
@@ -47,8 +47,8 @@ const content = {
       cards: [
         {
           title: "Aynı Gün Sevkiyat",
-          highlight: "18:00 Son Sipariş Saati",
-          desc: "Stokta olan ürünler için 18:00'e kadar iletilen siparişler, sipariş saatine bakılmaksızın aynı gün kargoya verilir. Acil ihtiyaçlarınızda net ve güvenilir bir taahhüt.",
+          highlight: "17:00 Son Sipariş Saati",
+          desc: "Stokta olan ürünler için 17:00'e kadar iletilen siparişler, sipariş saatine bakılmaksızın aynı gün kargoya verilir. Acil ihtiyaçlarınızda net ve güvenilir bir taahhüt.",
           featured: true,
         },
         {
@@ -145,7 +145,7 @@ const content = {
       stats: [
         { target: 3, label: "Operations Centers", sub: "Gebze · İzmir · Ümraniye" },
         { target: 50000, suffix: "+", label: "SKU", sub: "Continuous stock depth" },
-        { value: "18:00", label: "Order Cutoff Time", sub: "Same-day dispatch" },
+        { value: "17:00", label: "Order Cutoff Time", sub: "Same-day dispatch" },
         { target: 81, label: "Provinces", sub: "Nationwide distribution coverage" },
       ],
     },
@@ -157,8 +157,8 @@ const content = {
       cards: [
         {
           title: "Same-Day Dispatch",
-          highlight: "18:00 Order Cutoff",
-          desc: "For in-stock items, orders placed by 18:00 ship the same day, regardless of exactly when they came in. A clear, reliable commitment when you need it most.",
+          highlight: "17:00 Order Cutoff",
+          desc: "For in-stock items, orders placed by 17:00 ship the same day, regardless of exactly when they came in. A clear, reliable commitment when you need it most.",
           featured: true,
         },
         {
@@ -525,7 +525,7 @@ export function OperasyonPage() {
 
       {/* SİSTEM VE KALİTE — dark. Hard-edit (§21-22, önceki tur): eskiden 8
           madde, iki tematik grup altında. Beşi kaldırıldı — üç merkezden
-          dağıtım/18:00/Opar zaten yukarıdaki Operasyon Altyapısı ve Teslimat
+          dağıtım/17:00/Opar zaten yukarıdaki Operasyon Altyapısı ve Teslimat
           bölümlerinde söylendi; GROUPAUTO ağı ve tek-tedarikçi kolaylığı bu
           sayfanın değil İş Ortaklarımız'ın konusuydu. Kalan 3 madde gerçekten
           operasyonel ve BAŞKA YERDE yok.

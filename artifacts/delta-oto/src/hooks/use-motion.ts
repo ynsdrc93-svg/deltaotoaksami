@@ -113,7 +113,7 @@ export function useParallax<T extends HTMLElement>(speed = 0.12) {
  * a sequence built on this must read as fully resolved without motion,
  * never as "stuck mid-way".
  *
- * Three modes, because "how far through" means different things depending
+ * Two modes, because "how far through" means different things depending
  * on the shape of the content and what "done" needs to mean:
  *
  * - 'settle' (default): for a section comfortably shorter than the
@@ -130,26 +130,19 @@ export function useParallax<T extends HTMLElement>(speed = 0.12) {
  *   that), with a small safety margin and a guaranteed minimum scroll
  *   distance so the change never reads as an instant jump.
  * - 'transit': the original full top-to-bottom sweep — 0 when the
- *   section's top just enters the viewport bottom, 1 when its BOTTOM
- *   EXITS the viewport top (the section has fully scrolled past). Fine for
- *   a section whose last beat doesn't itself need to stay readable — but
- *   wrong for a long scroll-story where the FINAL entry must still be on
- *   screen when it becomes "active", which is exactly the bug 'story'
- *   (below) fixes.
- * - 'story': for a section intentionally taller than the viewport and
- *   meant to be scrolled THROUGH as a sequence, where the LAST beat must
- *   still be comfortably visible at the moment progress reaches 1 (e.g.
- *   Kariyer's 7-principle culture list — principle 07 was reaching its
- *   dominant/focused state only once the section had already scrolled
- *   past, using 'transit''s full-exit endpoint). Progress instead reaches
- *   1 once the section's BOTTOM edge has scrolled up to ~70% of the
- *   viewport height — comfortably inside the visible area, not flush with
- *   the bottom edge and nowhere near having exited — so content anchored
- *   near the end of a long section is still on screen exactly when its
- *   "moment" arrives. Degrades gracefully for a short section too (the
- *   endpoint just becomes an early, 'settle'-like point).
+ *   section's top just enters the viewport bottom, 1 when its bottom exits
+ *   the viewport top (the section has fully scrolled past). Fine for a
+ *   section whose last beat doesn't itself need to stay readable.
+ *
+ * (A third 'story' mode briefly lived here for Kariyer's culture list —
+ * mapping progress across the section's transit so its LAST item stayed
+ * on screen at progress=1. It was removed: any single section-wide
+ * progress number is the wrong tool for "which item is the user reading" —
+ * see useViewportFocusIndex below, which measures each item's own
+ * position directly instead of inferring it from where the section as a
+ * whole has scrolled to.)
  */
-export function useSectionProgress<T extends HTMLElement>(mode: "settle" | "transit" | "story" = "settle") {
+export function useSectionProgress<T extends HTMLElement>(mode: "settle" | "transit" = "settle") {
   const ref = React.useRef<T | null>(null)
   const [progress, setProgress] = React.useState(0)
   React.useEffect(() => {
@@ -167,9 +160,6 @@ export function useSectionProgress<T extends HTMLElement>(mode: "settle" | "tran
         let end: number
         if (mode === "transit") {
           end = -rect.height
-        } else if (mode === "story") {
-          const bottomTarget = 0.7 * vh   // progress=1 once the section's bottom reaches ~70% down the viewport — still clearly on screen
-          end = bottomTarget - rect.height
         } else {
           const topSafeMargin = 0.12 * vh   // stay clear of a sticky header near the top of the viewport
           const bottomSafeMargin = 24        // small breathing room above the viewport's bottom edge
@@ -188,6 +178,82 @@ export function useSectionProgress<T extends HTMLElement>(mode: "settle" | "tran
     return () => { window.removeEventListener("scroll", onScroll); window.removeEventListener("resize", onScroll); cancelAnimationFrame(raf) }
   }, [mode])
   return [ref, progress] as const
+}
+
+/** Drives a "what is the user actually looking at" active index for a list
+ * of scroll-sequenced items — each item reports its own position via one
+ * of the returned ref callbacks, and on every scroll frame the item whose
+ * vertical CENTER sits nearest a fixed focus line (a fraction of viewport
+ * height — default 0.5, the visual middle) becomes active. This replaces
+ * inferring "which item is being read" from an abstract section-wide
+ * scroll percentage (see the removed 'story' mode above, which this
+ * replaced for Kariyer's culture list) — that could only ever approximate
+ * the real answer, and for a long list it consistently activated items
+ * before the reader could actually see them centered. Measuring each
+ * item's own real position is the direct, correct signal: "the principle
+ * nearest the center of the viewport is active", full stop.
+ *
+ * A candidate must clear TWO gates, not one:
+ *  1. It must actually intersect the viewport (`rect.top < vh && rect.bottom
+ *     > 0`) — a hard visibility floor. A distance fraction alone is not a
+ *     reliable proxy for "on screen": at a tall viewport, an item can sit
+ *     within a generous distance fraction of the focus line while its whole
+ *     box is still below `vh`, i.e. not rendered anywhere the reader can see
+ *     it — exactly the "already active before it arrives on screen" bug this
+ *     hook exists to prevent.
+ *  2. Its center must be within `maxDistanceFraction` of a viewport height
+ *     from the focus line — so that merely grazing the bottom edge of the
+ *     viewport isn't enough either; it has to be reasonably on its way
+ *     toward the center, not just technically visible.
+ * Both gates apply equally to every item, including the first — there is no
+ * special-cased "item 0" logic. With no qualifying candidate, activeIndex
+ * simply holds its last value (starts at -1, meaning "nothing has entered
+ * focus range yet" — callers should render that as every item "upcoming").
+ *
+ * Under prefers-reduced-motion the scroll listener never attaches — there
+ * is no "current reading position" without scrolling, so activeIndex stays
+ * -1 and callers are expected to render every item at its most legible,
+ * non-upcoming state (matching how the rest of the site's reduced-motion
+ * fallbacks favor full legibility over any one item holding priority). */
+export function useViewportFocusIndex(count: number, focusFraction = 0.5, maxDistanceFraction = 0.4) {
+  const refs = React.useRef<(HTMLElement | null)[]>([])
+  const [activeIndex, setActiveIndex] = React.useState(-1)
+  const setRefs = React.useMemo(
+    () => Array.from({ length: count }, (_, i) => (el: HTMLElement | null) => { refs.current[i] = el }),
+    [count]
+  )
+
+  React.useEffect(() => {
+    if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return
+    }
+    let raf = 0
+    const update = () => {
+      const vh = window.innerHeight
+      const focusY = vh * focusFraction
+      const maxDist = vh * maxDistanceFraction
+      let bestIdx = -1
+      let bestDist = Infinity
+      refs.current.forEach((el, i) => {
+        if (!el) return
+        const rect = el.getBoundingClientRect()
+        const onScreen = rect.top < vh && rect.bottom > 0
+        if (!onScreen) return
+        const centerY = rect.top + rect.height / 2
+        const dist = Math.abs(centerY - focusY)
+        if (dist < maxDist && dist < bestDist) { bestDist = dist; bestIdx = i }
+      })
+      if (bestIdx >= 0) setActiveIndex(bestIdx)
+      raf = 0
+    }
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update) }
+    update()
+    window.addEventListener("scroll", onScroll, { passive: true })
+    window.addEventListener("resize", onScroll)
+    return () => { window.removeEventListener("scroll", onScroll); window.removeEventListener("resize", onScroll); cancelAnimationFrame(raf) }
+  }, [count, focusFraction, maxDistanceFraction])
+
+  return [setRefs, activeIndex] as const
 }
 
 /** One-time (mount-only) prefers-reduced-motion read, matching the inline

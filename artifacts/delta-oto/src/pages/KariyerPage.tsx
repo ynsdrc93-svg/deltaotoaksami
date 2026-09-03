@@ -15,7 +15,7 @@ import {
 } from "lucide-react";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
-import { useReveal, useSectionProgress, usePrefersReducedMotion } from "../hooks/use-motion";
+import { useReveal, useViewportFocusIndex, usePrefersReducedMotion } from "../hooks/use-motion";
 import { useDocumentMeta } from "@/hooks/use-document-meta";
 import { useLang, type Lang } from "@/lib/i18n";
 
@@ -168,61 +168,77 @@ const content = {
 } satisfies Record<Lang, any>;
 
 /**
- * Kültür bölümü — Görsel/UX Düzeltme Turu (§11-17): önceki ince-ayraçlı
- * düz metin listesi kullanıcı tarafından reddedildi ("sıkıcı, düz metin,
- * ucuz, okul projesi gibi"). İçerik (7 ilke) AYNI kaldı — istenen sadece
- * sunumun sıfırdan yeniden tasarlanmasıydı.
+ * Kültür bölümü — Görsel/UX Düzeltme Turu (§11-17, önceki tur): önceki
+ * ince-ayraçlı düz metin listesi kullanıcı tarafından reddedildi ("sıkıcı,
+ * düz metin, ucuz, okul projesi gibi"). İçerik (7 ilke) AYNI kaldı —
+ * istenen sadece sunumun sıfırdan yeniden tasarlanmasıydı. "Kinetik
+ * manifesto" konsepti (büyük gölge numaralar + oversized editorial
+ * tipografi + solda ilerleme rayı) KORUNUYOR — bu turda değişen yalnızca
+ * HANGİ maddenin "aktif" sayıldığını belirleyen mekanizma.
  *
- * Yeni konsept: "kinetik manifesto". Yedi ilke normal dikey akışta,
- * her biri kendi büyük gölge numarasıyla (oversized editorial tipografi) —
- * ama statik değil: useSectionProgress('story') bu bloğun kendi scroll
- * geçişini 0→1 izler (bölüm kasıtlı olarak viewport'tan uzun, 16:9 kısıtı
- * YOK — bkz. hook'un 'story' modu notu), buradan sürekli bir "hangi ilke
- * şu an odakta" değeri türetilir (continuousActive). Her madde, bu odaktan
- * UZAKLIĞINA göre opaklık/ölçek/renk kazanır — ekranı kaydırdıkça vurgu
- * listede aşağı doğru DALGA gibi ilerler ("bir baskın ilke + değişen
- * destekleyiciler", kullanıcının önerdiği yönlerden biri). Solda ince bir
- * ilerleme rayı (nokta dizisi) aynı odağı yansıtır — HakkimizdaPage'deki
- * zaman çizgisi nokta-navigasyonuyla aynı görsel dil, yeni icat edilmiş bir
- * desen değil.
+ * Canlı İnceleme Turu (bu tur): önceki iki deneme de ("transit", sonra
+ * "story" modu) bölümün TÜM YÜKSEKLİĞİNE yayılan TEK bir scroll-yüzdesi
+ * hesaplayıp buradan "hangi madde aktif" çıkarımı yapıyordu — kullanıcının
+ * kendi sözleriyle: "1'den itibaren ekrana gelmeden aslında
+ * animasyonlanıyor... ekranın ortasına geldiğinde sırasıyla highlight
+ * olmalı". Bölüm-geneli bir yüzde, HİÇBİR eşleştirmeyle "kullanıcının o an
+ * gerçekten neyi okuduğu" ile birebir örtüşmüyor — yaklaşık bir tahmin.
  *
- * Görsel/UX Düzeltme Turu §2 (canlı incelemede bulunan hata): 'transit'
- * modu progress=1'i, bölümün ALT kenarı viewport'un ÜST kenarından TAM
- * ÇIKTIĞI anda veriyordu — yani son ilke (07/Saygı) odaklanana kadar bölüm
- * zaten tamamen ekranın dışına çıkmış oluyordu (kullanıcı: "kullanıcı
- * modülü etkin biçimde geçtikten SONRA aktifleşiyor"). 'story' modu bunun
- * yerine progress=1'i bölümün ALT kenarı viewport'un hâlâ rahatça içindeyken
- * (~%70'inde) veriyor — 07 odağa ulaştığında Culture bölümü henüz "geçilmiş"
- * olmuyor, hâlâ ekranın büyük kısmını kaplıyor (bkz. use-motion.ts).
+ * Kesin çözüm: useViewportFocusIndex (use-motion.ts) — artık madde-geneli
+ * BİR yüzde yok; her maddenin KENDİ DOM konumu ölçülüyor, viewport'un dikey
+ * ORTASINA (odak çizgisi, ~%50) en yakın MERKEZE sahip madde aktif olur.
+ * "Ben şu an bunu okuyorum, o yüzden aktif oluyor" hissi — "bölüm-geneli
+ * hesaplama bunun aktif olacağına önceden karar verdi" değil. Bir madde
+ * viewport'tan (odak çizgisinden) çok uzaktaysa ADAY bile sayılmıyor
+ * (maxDistanceFraction koruması) — bu, ilk maddenin daha bölüm ekrana
+ * gelmeden "aktif" görünmesini engelliyor.
  *
- * Reduced-motion / statik gereksinim (§15-16): usePrefersReducedMotion
- * true ise TÜM maddeler focus=1'e sabitlenir — yedi ilke de tam opaklık/
- * ölçek/renkte, eksiksiz okunur durur (hook'un kendi progress=1 kilidini
- * kullanmıyoruz, çünkü o durumda continuousActive son maddeye sabitlenip
- * SADECE o madde odaklı kalırdı — burada davranış kasıtlı olarak override
- * ediliyor, "tüm ilkeler görünür, hiçbiri gizli değil" gereksinimini
- * karşılamak için). İlk kare (hiç scroll olmadan, §16): progress=0 →
- * continuousActive=0 → ilk ilke tam odakta, geri kalanı sakin — sayfa
- * hiç kaydırılmadan bile "tasarlanmış bir kültür deneyimi" izlenimi verir.
- */
+ * Üç durum (§3, "keep the art direction, only change WHEN each state
+ * fires"): UPCOMING (henüz sırası gelmedi, sakin) → ACTIVE (viewport
+ * ortasına en yakın, en güçlü vurgu) → PASSED (geçildi, hâlâ okunur ama
+ * ACTIVE'den sakin — ASLA kaybolmaz). activeIndex'ten türetilir:
+ * i < activeIndex → passed, i === activeIndex → active, i > activeIndex
+ * (veya activeIndex henüz hiç ayarlanmadıysa, -1) → upcoming.
+ *
+ * Numara rengi (§4): nötr gri yerine AYNI marka-mavisi ailesinin (#1B3A8F)
+ * üç opaklık kademesi — upcoming/passed/active net ayrışıyor ama numara
+ * hiçbir zaman başlığın (text-slate-900, en yüksek kontrast) önüne
+ * geçmiyor.
+ *
+ * Reduced-motion: useViewportFocusIndex reduced-motion'da scroll
+ * dinleyicisini HİÇ eklemez, activeIndex -1'de sabit kalır — bu component
+ * o -1'i "scroll dinlemiyoruz" (reducedMotion true) ile "henüz odak
+ * aralığına girmedi" (reducedMotion false, sayfa henüz kaydırılmadı) diye
+ * AYIRT ediyor: reduced-motion'da her yedi madde ACTIVE muamelesi görür
+ * (maksimum okunurluk, hiçbiri gizli/sönük değil); normal ilk karede ise
+ * hepsi UPCOMING'de başlar (kullanıcı henüz bölümü görmedi demek doğru). */
 function CultureManifesto({ items }: { items: { title: string; desc: string }[] }) {
-  const [sectionRef, progress] = useSectionProgress<HTMLDivElement>("story");
   const reducedMotion = usePrefersReducedMotion();
-  const continuousActive = progress * (items.length - 1);
+  const [setItemRef, activeIndex] = useViewportFocusIndex(items.length, 0.5, 0.4);
+
+  const stateOf = (i: number): "upcoming" | "active" | "passed" => {
+    if (reducedMotion) return "active";
+    if (activeIndex < 0) return "upcoming";
+    if (i === activeIndex) return "active";
+    return i < activeIndex ? "passed" : "upcoming";
+  };
 
   return (
-    <div ref={sectionRef} className="relative">
+    <div className="relative">
       {/* İlerleme rayı — yalnızca masaüstü; HakkimizdaPage zaman çizgisi
-          nokta-navigasyonuyla aynı görsel dil (küçük/büyük nokta geçişi). */}
+          nokta-navigasyonuyla aynı görsel dil (küçük/büyük nokta geçişi),
+          şimdi üç durumlu (upcoming/active/passed) aynı renk kademesiyle. */}
       <div className="hidden lg:block absolute left-0 top-2 bottom-2 w-1.5" aria-hidden="true">
         <div className="absolute left-1/2 -translate-x-1/2 top-0 bottom-0 w-px bg-slate-200" />
         <div className="relative h-full flex flex-col justify-between py-1">
           {items.map((_, i) => {
-            const focus = reducedMotion ? 1 : Math.max(0, 1 - Math.abs(i - continuousActive) / 1.6);
+            const state = stateOf(i);
             return (
               <div
                 key={i}
-                className={`w-1.5 rounded-full transition-all duration-300 ${focus > 0.6 ? "h-9 bg-[#1B3A8F]" : "h-2.5 bg-slate-300"}`}
+                className={`w-1.5 rounded-full transition-all duration-300 ${
+                  state === "active" ? "h-9 bg-[#1B3A8F]" : state === "passed" ? "h-2.5 bg-[#1B3A8F]/40" : "h-2.5 bg-slate-300"
+                }`}
               />
             );
           })}
@@ -231,32 +247,37 @@ function CultureManifesto({ items }: { items: { title: string; desc: string }[] 
 
       <div className="lg:pl-16 space-y-14 sm:space-y-16 md:space-y-20">
         {items.map((item, i) => {
-          const focus = reducedMotion ? 1 : Math.max(0, 1 - Math.abs(i - continuousActive) / 1.6);
-          const isFocused = focus > 0.6;
+          const state = stateOf(i);
+          const isActive = state === "active";
+          const isPassed = state === "passed";
           return (
             <div
               key={item.title}
-              style={{ opacity: 0.4 + focus * 0.6, transform: `scale(${0.95 + focus * 0.05})` }}
-              className="origin-left transition-[opacity,transform] duration-150 ease-out"
+              ref={setItemRef[i]}
+              data-state={state}
+              style={{ transform: isActive ? "scale(1.02)" : "scale(1)" }}
+              className="origin-left transition-transform duration-300 ease-out"
             >
               <div className="flex items-start gap-5 sm:gap-8 md:gap-10">
                 <span
                   aria-hidden="true"
-                  className="shrink-0 select-none font-black leading-none tabular-nums text-slate-100 text-[56px] sm:text-[80px] md:text-[112px]"
+                  className={`shrink-0 select-none font-black leading-none tabular-nums text-[56px] sm:text-[80px] md:text-[112px] transition-colors duration-300 ${
+                    isActive ? "text-[#1B3A8F]/60" : isPassed ? "text-[#1B3A8F]/25" : "text-[#1B3A8F]/[0.08]"
+                  }`}
                 >
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <div className="pt-1 sm:pt-3 md:pt-6 min-w-0">
                   <h3
-                    className={`font-black tracking-tight leading-[1.05] text-2xl sm:text-3xl md:text-5xl transition-colors duration-150 ${
-                      isFocused ? "text-slate-900" : "text-slate-300"
+                    className={`font-black tracking-tight leading-[1.05] text-2xl sm:text-3xl md:text-5xl transition-colors duration-300 ${
+                      isActive ? "text-slate-900" : isPassed ? "text-slate-600" : "text-slate-300"
                     }`}
                   >
                     {item.title}
                   </h3>
                   <p
-                    className={`mt-3 md:mt-4 max-w-xl leading-relaxed text-[14px] sm:text-[15px] transition-colors duration-150 ${
-                      isFocused ? "text-slate-600" : "text-slate-400"
+                    className={`mt-3 md:mt-4 max-w-xl leading-relaxed text-[14px] sm:text-[15px] transition-colors duration-300 ${
+                      isActive ? "text-slate-600" : isPassed ? "text-slate-500" : "text-slate-400"
                     }`}
                   >
                     {item.desc}

@@ -173,10 +173,14 @@ export function SiteFooter() {
                 ))}
               </div>
             )}
-            {/* GroupAuto Türkiye rozeti (bu tur): h-10 → h-12 — kullanıcı
-                talebiyle biraz daha büyütüldü, hâlâ ana Delta logosunun
-                (64-76px) belirgin şekilde altında, baskın değil. */}
-            <div className="mt-6 pt-6 border-t border-white/5 flex items-center gap-3">
+            {/* GroupAuto Türkiye rozeti — düzeltme turu: önceki sürüm rozet+
+                metni yan yana (flex items-center) diziyordu; doğru hiyerarşi
+                metin ÖNCE, rozet doğrudan ALTINDA (dikey yığın) olmalı —
+                rozet metnin altına "asılı" duruyor, yan yana değil, ayrı
+                yüzen bir ikon da değil. Rozetin kendisi büyütülmedi (h-12
+                korunur), yalnızca dizilim dikeyleşti. */}
+            <div className="mt-6 pt-6 border-t border-white/5">
+              <span className="block text-[12.5px] text-gray-300 font-semibold leading-tight mb-3">{T.groupautoMember[lang]}</span>
               <img
                 src="/images/groupauto-turkiye-badge.webp"
                 alt="GROUPAUTO Türkiye"
@@ -184,7 +188,6 @@ export function SiteFooter() {
                 height={199}
                 className="h-12 w-auto shrink-0 rounded-[3px]"
               />
-              <span className="text-[12.5px] text-gray-300 font-semibold leading-tight">{T.groupautoMember[lang]}</span>
             </div>
           </div>
 
