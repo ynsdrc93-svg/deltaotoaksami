@@ -6,7 +6,7 @@ import { useDocumentMeta } from "../hooks/use-document-meta";
 import { SiteFooter } from "./shared/SiteFooter";
 import { BrandLogo } from "./shared/BrandLogo";
 import { LanguageSwitcher } from "./shared/LanguageSwitcher";
-import { CLASSIFIED_BRANDS, type Brand } from "../lib/brands";
+import { VERIFIED_CLASSIFIED_BRANDS, type Brand } from "../lib/brands";
 import { latestAgendaItems } from "../lib/agenda";
 import { useLang, routeFor, gundemAnchor, gundemDetailRoute, type Lang, type RouteKey } from "../lib/i18n";
 
@@ -16,18 +16,20 @@ import { useLang, routeFor, gundemAnchor, gundemDetailRoute, type Lang, type Rou
 // (yalnızca harita alt-bileşeni erteleniyor).
 const LogisticsMap = lazy(() => import("./LogisticsMap").then((m) => ({ default: m.LogisticsMap })));
 
-// Şerit, Tedarikçiler sayfasıyla AYNI kaynağı (CLASSIFIED_BRANDS — Excel'in
-// 61 markası) kullanır; Excel'de olmayan markalar burada da gösterilmez
-// (bkz. brands.ts UNCLASSIFIED_BRANDS notu). hasVerifiedLogo:false olan
-// markalar gerçek logo yerine tipografik yer tutucuyla akar — bkz.
-// shared/BrandLogo.tsx (size="strip"). 3 satıra, sabit dilim yerine
+// Şerit, Tedarikçiler sayfasıyla AYNI kaynağı (VERIFIED_CLASSIFIED_BRANDS —
+// Excel'in sınıflandırılmış markalarından yalnızca doğrulanmış logo asseti
+// olanlar, bkz. brands.ts) kullanır; Excel'de olmayan markalar burada da
+// gösterilmez (bkz. brands.ts UNCLASSIFIED_BRANDS notu). Marka Görsel
+// Hijyeni Turu: doğrulanmış görseli olmayan marka (Taifun) artık tipografik
+// yer tutucuyla akmıyor — bu görsel vitrinden tamamen omit edildi (bkz.
+// brands.ts VERIFIED_CLASSIFIED_BRANDS notu). 3 satıra, sabit dilim yerine
 // dinamik olarak eşit bölünür; böylece marka sayısı Excel güncellendiğinde
 // satırlar otomatik dengelenir. NOT: "100+ marka" (görünür genel iddia,
-// bkz. content.partners.body) ile buradaki 61 GERÇEK sınıflandırılmış logo
+// bkz. content.partners.body) ile buradaki GERÇEK sınıflandırılmış logo
 // sayısı FARKLI kasıtlı şeyler — biri kamuya açık portföy iddiası, diğeri
 // şerit/duvarda gösterilen doğrulanmış logo veri kümesi (bkz. Content/UX
 // Pass 01 görev tanımı §5).
-const STRIP_BRANDS = CLASSIFIED_BRANDS;
+const STRIP_BRANDS = VERIFIED_CLASSIFIED_BRANDS;
 const STRIP_ROWS = 3;
 const STRIP_CHUNK = Math.ceil(STRIP_BRANDS.length / STRIP_ROWS);
 const BRAND_STRIPS = Array.from({ length: STRIP_ROWS }, (_, i) =>
@@ -63,10 +65,10 @@ const content = {
       title: "Delta Oto — Otomotiv Yedek Parça Distribütörü | Kuruluş 1976",
       description: "Delta Oto, 1976'dan bu yana 100+ marka ile Türkiye genelinde binek ve hafif ticari araç yedek parça dağıtımı, geniş ürün portföyü ve güçlü lojistik altyapısı sunar. Groupauto üyesi, 81 il dağıtım ağı.",
     },
-    tickerItems: ["100+ Marka", "81 İl Dağıtım", "Kuruluş 1976", "GROUPAUTO Üyesi", "Opar Ege Bölge Bayiliği", "Ümraniye Merkez", "Binek & Hafif Ticari", "3 Operasyon Merkezi"],
+    tickerItems: ["100+ Marka", "81 İl Dağıtım", "Kuruluş 1976", "GROUPAUTO Üyesi", "Opar Ege Bölge Bayiliği", "Ümraniye Merkez", "Binek & Hafif Ticari", "2 Operasyon Merkezi"],
     hero: {
       eyebrow: "Kuruluş 1976 · Delta Oto",
-      titleLine1: "50 YILDIR OTOMOTİV AFTERMARKET'İN",
+      titleLine1: "50+ YILDIR OTOMOTİV AFTERMARKET'İN",
       titleLine2: "KESİNTİSİZ GÜCÜ",
       body: "Binek ve hafif ticari araç yedek parça pazarında, bağımsız yenileme sektörünü güçlü lojistik altyapımız ve küresel tedarik ağımızla yönlendiriyoruz.",
       ctaContact: "Bize Ulaşın",
@@ -98,10 +100,10 @@ const content = {
     },
     logistics: {
       eyebrow: "Lojistik Altyapı",
-      titleLine1: "Üç Operasyon Merkezi.",
+      titleLine1: "Gebze ve İzmir'den.",
       titleLine2: "Türkiye Genelinde Güçlü Dağıtım.",
-      body: "Gebze, İzmir ve Ümraniye'deki operasyon merkezlerimizden Türkiye genelinde planlı, hızlı ve güvenilir dağıtım sağlıyoruz. 100'den fazla markayı güçlü stok yapımız ve düzenli sevkiyat operasyonumuzla müşterilerimize ulaştırıyoruz.",
-      hubs: [{ label: "Gebze", plate: 41 }, { label: "İzmir", plate: 35 }, { label: "Ümraniye", plate: 34 }],
+      body: "Gebze ve İzmir'deki operasyon noktalarımızdan Türkiye genelinde planlı, hızlı ve güvenilir dağıtım sağlıyoruz. 100'den fazla markayı güçlü stok yapımız ve düzenli sevkiyat operasyonumuzla müşterilerimize ulaştırıyoruz.",
+      hubs: [{ label: "Gebze", plate: 41 }, { label: "İzmir", plate: 35 }],
       // İçerik/Sanat Yönetimi Turu (§36): eskiden 4 kart vardı — "Her İş Günü
       // Sevkiyat" ve "Türkiye Geneli Dağıtım" bu bölümün kendi başlığı VE
       // gövde metniyle (üç merkez, Türkiye geneli dağıtım) aynı gerçeği
@@ -144,10 +146,10 @@ const content = {
       title: "Delta Oto — Automotive Aftermarket Parts Distributor | Est. 1976",
       description: "Since 1976, Delta Oto has supplied 100+ brands of passenger and light commercial vehicle aftermarket parts across Türkiye, backed by a broad product portfolio and strong logistics infrastructure. GROUPAUTO member, distribution to 81 provinces.",
     },
-    tickerItems: ["100+ Brands", "81 Provinces", "Est. 1976", "GROUPAUTO Member", "Opar Aegean Dealership", "Ümraniye HQ", "Passenger & Light Commercial", "3 Operations Centers"],
+    tickerItems: ["100+ Brands", "81 Provinces", "Est. 1976", "GROUPAUTO Member", "Opar Aegean Dealership", "Ümraniye HQ", "Passenger & Light Commercial", "2 Operations Centers"],
     hero: {
       eyebrow: "Established 1976 · Delta Oto",
-      titleLine1: "50 YEARS OF AUTOMOTIVE AFTERMARKET'S",
+      titleLine1: "50+ YEARS OF AUTOMOTIVE AFTERMARKET'S",
       titleLine2: "UNINTERRUPTED STRENGTH",
       body: "In the passenger and light commercial vehicle spare parts market, we guide the independent aftermarket with our strong logistics infrastructure and global supply network.",
       ctaContact: "Contact Us",
@@ -179,10 +181,10 @@ const content = {
     },
     logistics: {
       eyebrow: "Logistics Infrastructure",
-      titleLine1: "Three Operations Centers.",
+      titleLine1: "From Gebze and İzmir.",
       titleLine2: "Strong Distribution Across Türkiye.",
-      body: "From our operations centers in Gebze, İzmir and Ümraniye, we provide planned, fast and reliable distribution across Türkiye. Our strong inventory structure and regular delivery operations support a portfolio of more than 100 brands.",
-      hubs: [{ label: "Gebze", plate: 41 }, { label: "İzmir", plate: 35 }, { label: "Ümraniye", plate: 34 }],
+      body: "From our operations points in Gebze and İzmir, we provide planned, fast and reliable distribution across Türkiye. Our strong inventory structure and regular delivery operations support a portfolio of more than 100 brands.",
+      hubs: [{ label: "Gebze", plate: 41 }, { label: "İzmir", plate: 35 }],
       cards: [
         { title: "Same-Day Dispatch", desc: "Orders placed before 17:00 ship the same day for items in stock." },
         { title: "Deep Inventory", desc: "With more than 50,000 active SKUs, most orders are fulfilled directly from stock." },
@@ -540,6 +542,75 @@ export function LandingPage() {
         </div>
       </section>
 
+      {/* İŞ ORTAKLARIMIZ (navy) — 3 şerit, dönüşümlü yönlerde kayan marka logoları.
+          Homepage Logo Reposition Turu: bu bölüm eskiden Operasyon & Lojistik'in
+          ALTINDAYDI (sayfanın çok aşağısında) — kullanıcı talebiyle Power
+          Metrics'in HEMEN ALTINA taşındı, böylece ölçek iddiası (100+ Marka/
+          81 İl/Kuruluş) hemen ardından somut marka kanıtıyla pekişiyor. JSX
+          birebir taşındı — yeniden yazılmadı, kopyalanmadı (eski konumundan
+          tamamen kaldırıldı, tek bir yerde var). IntersectionObserver tabanlı
+          tickerReady lazy-load (rootMargin: 1200px) konumdan bağımsız çalışır
+          — bkz. üstteki hook tanımı — bu taşımayla bozulmadı, yalnızca bölüm
+          artık ilk viewport'a daha yakın olduğu için tetiklenmesi erken olur
+          (beklenen/istenen sonuç, "önce güven sinyali" hedefiyle tutarlı).
+          Eskiden "Tedarikçilerimiz" — görünür terminoloji güncellendi (bkz.
+          görev talimatı §4, §11). Logolar artık orijinal marka renklerinde
+          (grayscale kaldırıldı, bkz. shared/BrandLogo.tsx). */}
+      <section className="bg-[#1B3A8F] py-20 md:py-24 overflow-hidden relative">
+        <div className="absolute inset-0 do-grid-bg opacity-20"></div>
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 mb-14">
+          <p ref={ref} className="do-reveal text-[#7d9bea] text-xs font-bold uppercase tracking-[0.3em] mb-4 flex items-center gap-3">
+            <span className="w-8 h-[2px] bg-[#7d9bea] inline-block"></span>
+            {t.partners.eyebrow}
+          </p>
+          <h2 ref={ref} className="do-reveal do-d1 text-4xl md:text-5xl font-black text-white tracking-tight leading-tight mb-4">
+            {t.partners.title}
+          </h2>
+          <p ref={ref} className="do-reveal do-d2 text-white/60 text-sm max-w-xl leading-relaxed">
+            {t.partners.body}
+          </p>
+        </div>
+
+        <div ref={tickerRef} className="relative z-10 flex flex-col gap-5">
+          {BRAND_STRIPS.map((strip, rowIndex) => (
+            <div
+              key={rowIndex}
+              className="overflow-hidden h-16"
+              onTouchStart={() => setPausedRow(rowIndex)}
+              onTouchEnd={() => setPausedRow((r) => (r === rowIndex ? null : r))}
+              onTouchCancel={() => setPausedRow((r) => (r === rowIndex ? null : r))}
+            >
+              {tickerReady && (
+                <div
+                  className={rowIndex === 1 ? "do-brand-ticker" : "do-brand-ticker-reverse"}
+                  style={{ animationPlayState: pausedRow === rowIndex || confirmBrand?.rowIndex === rowIndex ? "paused" : undefined }}
+                >
+                  {[...strip, ...strip].map((b, i) => {
+                    const isDuplicate = i >= strip.length;
+                    return (
+                      <BrandLogo
+                        key={`${b.slug}-${i}`}
+                        brand={b}
+                        size="strip"
+                        hidden={isDuplicate}
+                        onNavigateAttempt={(brand) => setConfirmBrand({ brand, rowIndex })}
+                      />
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+
+        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 mt-12 text-center">
+          <Link href={routeFor("partners", lang)} className="inline-flex items-center gap-2 text-white font-semibold text-sm hover:text-[#7d9bea] transition-colors group">
+            {t.partners.cta}
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </div>
+      </section>
+
       {/* STRATEGIC PARTNERSHIP (navy) — GROUPAUTO Türkiye ve Opar BİREBİR eşit
           boyutta iki editoryal panel: aynı kart çerçevesi, aynı tip ölçeği,
           aynı boşluk/dolgu, aynı bilgi mimarisi (logo → açıklama → metinsel
@@ -668,65 +739,6 @@ export function LandingPage() {
               </div>
             ))}
           </div>
-        </div>
-      </section>
-
-      {/* İŞ ORTAKLARIMIZ (navy) — 3 şerit, dönüşümlü yönlerde kayan marka logoları.
-          Eskiden "Tedarikçilerimiz" — görünür terminoloji güncellendi (bkz.
-          görev talimatı §4, §11). Logolar artık orijinal marka renklerinde
-          (grayscale kaldırıldı, bkz. shared/BrandLogo.tsx). */}
-      <section className="bg-[#1B3A8F] py-20 md:py-24 overflow-hidden relative">
-        <div className="absolute inset-0 do-grid-bg opacity-20"></div>
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 mb-14">
-          <p ref={ref} className="do-reveal text-[#7d9bea] text-xs font-bold uppercase tracking-[0.3em] mb-4 flex items-center gap-3">
-            <span className="w-8 h-[2px] bg-[#7d9bea] inline-block"></span>
-            {t.partners.eyebrow}
-          </p>
-          <h2 ref={ref} className="do-reveal do-d1 text-4xl md:text-5xl font-black text-white tracking-tight leading-tight mb-4">
-            {t.partners.title}
-          </h2>
-          <p ref={ref} className="do-reveal do-d2 text-white/60 text-sm max-w-xl leading-relaxed">
-            {t.partners.body}
-          </p>
-        </div>
-
-        <div ref={tickerRef} className="relative z-10 flex flex-col gap-5">
-          {BRAND_STRIPS.map((strip, rowIndex) => (
-            <div
-              key={rowIndex}
-              className="overflow-hidden h-16"
-              onTouchStart={() => setPausedRow(rowIndex)}
-              onTouchEnd={() => setPausedRow((r) => (r === rowIndex ? null : r))}
-              onTouchCancel={() => setPausedRow((r) => (r === rowIndex ? null : r))}
-            >
-              {tickerReady && (
-                <div
-                  className={rowIndex === 1 ? "do-brand-ticker" : "do-brand-ticker-reverse"}
-                  style={{ animationPlayState: pausedRow === rowIndex || confirmBrand?.rowIndex === rowIndex ? "paused" : undefined }}
-                >
-                  {[...strip, ...strip].map((b, i) => {
-                    const isDuplicate = i >= strip.length;
-                    return (
-                      <BrandLogo
-                        key={`${b.slug}-${i}`}
-                        brand={b}
-                        size="strip"
-                        hidden={isDuplicate}
-                        onNavigateAttempt={(brand) => setConfirmBrand({ brand, rowIndex })}
-                      />
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
-
-        <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10 mt-12 text-center">
-          <Link href={routeFor("partners", lang)} className="inline-flex items-center gap-2 text-white font-semibold text-sm hover:text-[#7d9bea] transition-colors group">
-            {t.partners.cta}
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-          </Link>
         </div>
       </section>
 

@@ -40,8 +40,8 @@ const content = {
     },
     hero: {
       eyebrow: "İnsan Kaynakları · Kariyer Fırsatları",
-      title: ["50 YILLIK", "BİR EKİBİN", "PARÇASI OLUN"],
-      body: "Otomotiv yedek parça dağıtımında yarım asırlık bir ekip; sahada edinilen bilgi, net sorumluluklar ve uzun soluklu çalışma ilişkileriyle şekilleniyor.",
+      title: ["50+ YILDIR", "OTOMOTİVDE", "BİR EKİBİN PARÇASI OLUN"],
+      body: "Otomotiv yedek parça dağıtımında 50+ yıllık bir ekip; sahada edinilen bilgi, net sorumluluklar ve uzun soluklu çalışma ilişkileriyle şekilleniyor.",
       cta: "Açık Pozisyonları Gör",
     },
     culture: {
@@ -106,8 +106,8 @@ const content = {
     },
     hero: {
       eyebrow: "Human Resources · Career Opportunities",
-      title: ["FIFTY YEARS", "OF EXPERTISE.", "ADD YOURS."],
-      body: "Half a century in automotive parts distribution — built on knowledge earned in the field, clear responsibility, and working relationships that last.",
+      title: ["50+ YEARS", "IN AUTOMOTIVE.", "JOIN THE TEAM."],
+      body: "50+ years in automotive parts distribution — built on knowledge earned in the field, clear responsibility, and working relationships that last.",
       cta: "View Open Positions",
     },
     culture: {

@@ -3,7 +3,7 @@ import { ChevronRight, ChevronLeft, ChevronDown, ArrowRight, Check, Search, X } 
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
 import { BrandLogo } from "@/components/shared/BrandLogo";
-import { CLASSIFIED_BRANDS, GLOBAL_BRANDS, YERLI_BRANDS, type Brand } from "@/lib/brands";
+import { CLASSIFIED_BRANDS, VERIFIED_CLASSIFIED_BRANDS, GLOBAL_BRANDS, YERLI_BRANDS, type Brand } from "@/lib/brands";
 import { PRODUCT_CATEGORIES, MACRO_FAMILIES, type ProductCategory } from "@/lib/categories";
 import { useEscapeKey, useReveal } from "@/hooks/use-motion";
 import { useDocumentMeta } from "@/hooks/use-document-meta";
@@ -17,8 +17,8 @@ const content = {
     },
     hero: {
       eyebrow: "Ürün Portföyü · 100+ Marka",
-      title: ["GLOBAL KALİTE,", "TEK ÇATI,", "DERİN STOK"],
-      body: "Binek ve hafif ticari araç kategorilerinde dünyanın önde gelen OEM üreticileriyle doğrudan çalışıyoruz. 100'den fazla marka ve 50.000'i aşkın SKU; tek tedarikçi ilişkisiyle eksiksiz karşılanır. GROUPAUTO Türkiye üyeliğiyle global satın alma gücü, yerel hız ve servis kalitesiyle buluşuyor.",
+      title: ["GLOBAL KALİTE,", "TEK ÇATI"],
+      body: "Global ve yerli aftermarket üreticilerini, güçlü stok yapımızla tek portföyde bir araya getiriyoruz.",
       cta: "B2B Portal",
     },
     brandWall: {
@@ -48,32 +48,25 @@ const content = {
       allFamiliesTitle: "Tüm Ürün Aileleri",
       close: "Kapat",
     },
-    // Sanat Yönetimi Turu (§14-17): eskiden bu iki bölüm sitedeki en "AI
-    // tarafından yazılmış" hissi veren yerlerdi — uzun paragraf + 6 maddelik
-    // checklist + 4 istatistik kartı (Kalite), 5 mini-satış-denemesi (Neden
-    // Delta). İkisi de sayfanın kendi hero/kategori/avantaj bölümlerinde
-    // ZATEN söylenmiş rakamları (100+, 50.000+, OEM, GROUPAUTO) tekrar
-    // ediyordu. Kalite artık TEK bir kesin ifade + yalnızca ELDE OLMAYAN iki
-    // somut ilke (üretici belgelendirmesi/lot takibi, süregelen denetim) —
-    // OEM/GROUPAUTO/stok maddeleri kaldırıldı çünkü zaten başka yerde var.
-    // Neden Delta artık 5 madde değil, "ön bilgi yeterli" ilkesiyle 4 kısa
-    // kavram (kullanıcı talimatı: "İnsanlara ön bilgi vermek yeterli").
-    quality: {
-      eyebrow: "Kalite Güvencesi",
-      statement: "Kayıt Dışı ve Sahte Ürüne Sıfır Tolerans",
-      intro: "Portföyümüzdeki her marka, denetimli kaynak doğrulamasından geçer.",
-      principles: [
-        { title: "Üretici Belgelendirmesi", desc: "Her ürün, zorunlu lot takibiyle kaynağına kadar izlenebilir." },
-        { title: "Süregelen Denetim", desc: "Periyodik ürün denetimleri ve saha geri bildirimi, standardı sürekli günceller." },
-      ],
-    },
+    // İçerik/Görsel Hijyeni Turu: standalone "Kalite Güvencesi" bölümü
+    // (statement/intro/principles) TAMAMEN kaldırıldı — kullanıcı bunu
+    // yapay/fazla-açıklamalı/AI tarafından yazılmış hissi veren, gereksiz
+    // bir bağımsız modül olarak reddetti. Mesajın kendisi (kayıt dışı/sahte
+    // ürüne sıfır tolerans) silinmedi — Operasyon > Sistem ve Kalite'ye
+    // taşındı (bkz. OperasyonPage.tsx capabilities.items[0]), burada tekrar
+    // etmeye gerek yok.
+    //
+    // "Neden Delta Oto" artık dört eşit madde değil: 50+ yıllık kurumsal
+    // güven baskın çapa, üç kısa kavram (Stok/Erişim/Tek Muhatap) onu
+    // destekliyor. "Süreklilik" kaldırıldı — 50+ yıl/güvenilirlik mesajıyla
+    // fazlalaşıyordu.
     advantages: {
       eyebrow: "Tedarik Üstünlüğü",
       heading: "Neden Delta Oto?",
+      trust: { value: "50+", label: "Yıldır Otomotiv" },
       items: [
         { title: "Stok", desc: "Aradığınız parça büyük olasılıkla zaten depoda." },
         { title: "Erişim", desc: "Global tedarik ağına tek noktadan bağlanırsınız." },
-        { title: "Süreklilik", desc: "Katalog sürekli genişler, stok hiç durmaz." },
         { title: "Tek Muhatap", desc: "Onlarca tedarikçi yerine tek bir ilişki." },
       ],
     },
@@ -90,8 +83,8 @@ const content = {
     },
     hero: {
       eyebrow: "Product Portfolio · 100+ Brands",
-      title: ["GLOBAL QUALITY,", "ONE ROOF,", "DEEP STOCK"],
-      body: "We work directly with the world's leading OEM manufacturers across passenger and light commercial vehicle categories. More than 100 brands and over 50,000 SKUs are covered end-to-end through a single supplier relationship. Our GROUPAUTO Türkiye membership brings global purchasing power together with local speed and service quality.",
+      title: ["GLOBAL QUALITY,", "ONE ROOF"],
+      body: "We bring global and domestic aftermarket manufacturers together in a single portfolio, backed by strong stock depth.",
       cta: "B2B Portal",
     },
     brandWall: {
@@ -121,22 +114,13 @@ const content = {
       allFamiliesTitle: "All Product Families",
       close: "Close",
     },
-    quality: {
-      eyebrow: "Quality Assurance",
-      statement: "Zero Tolerance for Counterfeit or Unregistered Product",
-      intro: "Every brand in our portfolio undergoes audited source verification.",
-      principles: [
-        { title: "Manufacturer Certification", desc: "Every product is traceable to its source through mandatory lot tracking." },
-        { title: "Ongoing Audits", desc: "Periodic product audits and field feedback keep the standard continuously current." },
-      ],
-    },
     advantages: {
       eyebrow: "Supply Advantage",
       heading: "Why Delta Oto?",
+      trust: { value: "50+", label: "Years in Automotive" },
       items: [
         { title: "Stock", desc: "The part you need is most likely already in the warehouse." },
         { title: "Access", desc: "One connection to the global supply network." },
-        { title: "Continuity", desc: "The catalog keeps growing — stock never stops." },
         { title: "One Point of Contact", desc: "A single relationship instead of dozens of suppliers." },
       ],
     },
@@ -642,8 +626,7 @@ export function TedarikciPage() {
           </div>
           <h1 ref={reveal} className="do-reveal do-d1 text-4xl sm:text-5xl md:text-6xl lg:text-[72px] font-black leading-[1.05] tracking-[-0.02em] mb-4 lg:mb-6">
             <span className="do-hero-line">{t.hero.title[0]}</span><br />
-            <span className="text-white">{t.hero.title[1]}</span><br />
-            <span className="text-[#7d9bea]">{t.hero.title[2]}</span>
+            <span className="text-[#7d9bea]">{t.hero.title[1]}</span>
           </h1>
           <p ref={reveal} className="do-reveal do-d2 text-[17px] text-gray-300 leading-[1.8] max-w-2xl mb-6 lg:mb-10 font-light">
             {t.hero.body}
@@ -669,7 +652,7 @@ export function TedarikciPage() {
           <div ref={reveal} className="do-reveal mb-8 lg:mb-14 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
             <div>
               <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea]">{t.brandWall.eyebrow}</span>
-              <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight mt-2">{t.brandWall.heading(CLASSIFIED_BRANDS.length)}</h2>
+              <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight mt-2">{t.brandWall.heading(VERIFIED_CLASSIFIED_BRANDS.length)}</h2>
               <p className="text-white/45 text-[14px] max-w-xl mt-3 leading-relaxed">{t.brandWall.desc}</p>
             </div>
             <div className="relative w-full lg:w-72 shrink-0">
@@ -714,69 +697,39 @@ export function TedarikciPage() {
         </div>
       </section>
 
-      {/* KALİTE GÜVENCESİ — navy. Eskiden: uzun paragraf + 6 maddelik
-          checklist + 4 istatistik kartı (OEM/GROUPAUTO/100+/50.000+ zaten
-          bu sayfanın hero/kategori/avantaj bölümlerinde söyleniyordu). Artık
-          tek sütun: bir kesin ifade (statement, sayfanın gerçek başlığı) +
-          bir destekleyici cümle + yalnızca BAŞKA YERDE söylenmemiş iki somut
-          ilke. İstatistik kartı yok — tekrar eden rakamı yeniden kutulamak
-          "kalite" ispatlamaz. */}
-      <section className="bg-[#1B3A8F] py-24 text-white overflow-hidden">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="max-w-2xl">
-            <span ref={reveal} className="do-reveal text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea] block mb-6">{t.quality.eyebrow}</span>
-            <p ref={reveal} className="do-reveal do-d1 text-[26px] sm:text-[32px] md:text-[36px] font-black leading-[1.2] tracking-tight mb-5">
-              {t.quality.statement}
-            </p>
-            <p ref={reveal} className="do-reveal do-d2 text-white/65 text-[15.5px] leading-relaxed mb-12">
-              {t.quality.intro}
-            </p>
-            <div ref={reveal} className="do-reveal do-d3 space-y-7 border-t border-white/15 pt-8">
-              {t.quality.principles.map((p, i) => (
-                <div key={p.title} className="flex items-start gap-5">
-                  <span className="text-[11px] font-black text-[#7d9bea] tabular-nums pt-1 shrink-0">0{i + 1}</span>
-                  <div>
-                    <h3 className="text-[15px] font-bold mb-1.5">{p.title}</h3>
-                    <p className="text-white/60 text-[14px] leading-relaxed">{p.desc}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* NEDEN DELTA OTO — white. Eskiden 5 madde, her biri kendi
-          paragrafında 100+/GROUPAUTO/OEM/Opar rakamlarını sayfanın geri
-          kalanında zaten anlatılmış haliyle TEKRAR ediyordu. Kullanıcı
-          talimatı birebir: "İnsanlara ön bilgi vermek yeterli." Artık kart
-          yok, ikon yok, rakam tekrarı yok — dört kısa kavram, büyük tipografi,
-          ince dikey ayraçlarla bölünmüş tek satır. */}
+      {/* NEDEN DELTA OTO — white. Görsel/İçerik Hijyeni Turu: standalone
+          "Kalite Güvencesi" navy bölümü tamamen kaldırıldı (mesajı Operasyon >
+          Sistem ve Kalite'ye taşındı). Bu bölüm artık dört eşit madde değil —
+          en güçlü ayırt edici (50+ yıl) sol tarafta baskın bir çapa olarak
+          büyük tipografiyle duruyor, sağda üç kısa destekleyici kavram
+          (Stok/Erişim/Tek Muhatap) ince bir dikey ayraçla ondan ayrılıyor.
+          "Süreklilik" kaldırıldı (50+ yıl mesajıyla fazlalaşıyordu). */}
       <section className="bg-white py-24">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div ref={reveal} className="do-reveal mb-16">
+          <div ref={reveal} className="do-reveal mb-14">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">{t.advantages.eyebrow}</span>
             <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-2 tracking-tight">{t.advantages.heading}</h2>
           </div>
-          {/* Görsel/UX Düzeltme Turu (§2): "Tek Muhatap" (tek maddesi 2
-              kelimeli, diğer üçü tek kelime) 1024-1440px aralığında eski
-              lg:px-8 dolgusunun dar sütununda satır kırıyordu. Kesin çözüm —
-              tek maddeye özel bir küçültme DEĞİL, dördü için eşit uygulanan
-              üç değişiklik: whitespace-nowrap (asla kırılmaz garantisi),
-              boşluğu sütun iç dolgusundan (padding, metin genişliğini
-              yiyor) grid gap'ine taşımak (gap sütunlar ARASINDA kalır,
-              metin genişliğini yemez), ve kademeli tip ölçeği (dar 1024-
-              1279 aralığında bir basamak küçük, geniş 1280+'ta yeniden
-              büyüyor). divide-x çizgisi artık ince bir sol dolgu (pl-4)
-              ile metinden ayrılıyor. 1440/1280/390'da doğrulandı (bkz.
-              görev raporu). */}
-          <div ref={reveal} className="do-reveal do-d1 grid grid-cols-2 lg:grid-cols-4 gap-y-10 gap-x-6 lg:gap-x-10 lg:divide-x lg:divide-slate-200">
-            {t.advantages.items.map(({ title, desc }) => (
-              <div key={title} className="lg:pl-4 lg:first:pl-0">
-                <div className="text-xl sm:text-2xl xl:text-3xl font-black text-slate-900 tracking-tight mb-3 whitespace-nowrap">{title}</div>
-                <p className="text-slate-500 text-[14px] leading-relaxed">{desc}</p>
+          <div ref={reveal} className="do-reveal do-d1 grid lg:grid-cols-[auto_1fr] gap-10 lg:gap-16 items-center border-t border-slate-200 pt-12">
+            <div className="lg:pr-16 lg:border-r lg:border-slate-200">
+              <div className="text-7xl lg:text-8xl font-black text-[#1B3A8F] tracking-tight leading-none tabular-nums">
+                {t.advantages.trust.value}
               </div>
-            ))}
+              <p className="mt-3 text-slate-500 text-[13px] font-bold uppercase tracking-[0.15em]">{t.advantages.trust.label}</p>
+            </div>
+            {/* Görsel/UX Düzeltme Turu (§2, hâlâ geçerli): "Tek Muhatap"
+                satır kırmasın diye whitespace-nowrap + boşluğu padding
+                yerine grid gap'ine taşıma tekniği korundu — üç maddeye
+                indirilince satır kırma riski zaten azaldı ama teknik
+                değişmedi. 1440/1280/390'da doğrulandı. */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-y-8 gap-x-6 lg:gap-x-10 sm:divide-x sm:divide-slate-200">
+              {t.advantages.items.map(({ title, desc }) => (
+                <div key={title} className="sm:pl-6 sm:first:pl-0">
+                  <div className="text-xl sm:text-2xl xl:text-3xl font-black text-slate-900 tracking-tight mb-3 whitespace-nowrap">{title}</div>
+                  <p className="text-slate-500 text-[14px] leading-relaxed">{desc}</p>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </section>

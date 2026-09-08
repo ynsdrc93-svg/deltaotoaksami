@@ -17,22 +17,19 @@ const DEPT_ICONS = [Package, MonitorSmartphone, Users, Globe];
 // Merkez Adres kartındaki satırların ikonları — aynı index-eşleme deseni.
 const ADDRESS_ICONS = [MapPin, Phone, Mail, Globe];
 
-// LOKASYON SIRASI: Gebze, İzmir, Ümraniye — bu proje geçişinde (Content/UX
-// Pass 01) bilingual hale getirilen diğer sayfayla (LandingPage.tsx, hem
-// hubs dizisi hem de gövde metni "Gebze, İzmir ve Ümraniye" sırasını
-// kullanıyor) tutarlılık için BİLEREK bu sırada. Ümraniye'nin merkez/HQ
-// olduğu; sıradan bağımsız, telefon alanının dolu olmasıyla tetiklenen
-// isPrimary rozetiyle (bkz. "Santral Hattı"/"Switchboard" etiketi) zaten
-// ayrıca vurgulanıyor — sırada son olması bu vurguyu değiştirmiyor.
-// OperasyonPage.tsx ve SpartPage.tsx henüz bu pass'te bilingual hale
-// getirilmedi (hâlâ salt Türkçe, eski Ümraniye-önce sırasını koruyorlar) —
-// bu bir tutarsızlık değil, henüz sırası gelmemiş ayrı bir iş kalemi.
+// Sayfa Kısaltma Turu: eskiden burada "LOKASYON SIRASI" notuyla belgelenen
+// "Bizi Nerede Bulabilirsiniz" / Operasyon Merkezlerimiz modülü TAMAMEN
+// kaldırıldı (kullanıcı kararı — sayfa çok uzundu, bu modül gereksizdi).
+// Gebze/İzmir/Ümraniye adresleri artık bu sayfada tekrarlanmıyor; aynı bilgi
+// Operasyon sayfasının kendi depo modülünde zaten var. Ana Adres kartı
+// (addressCard, aşağıda) — Ümraniye merkez ofis bilgisini taşıyan asıl genel
+// iletişim bloğu — DOKUNULMADI.
 
 const content = {
   tr: {
     meta: {
       title: "Bize Ulaşın — Satış, B2B ve Kurumsal İletişim | Delta Oto",
-      description: "Delta Oto ile iletişime geçin: satış ve sipariş, B2B portal desteği, insan kaynakları ve kurumsal iletişim için doğrudan hat, e-posta, iletişim formu ve üç operasyon merkezimizin adresleri.",
+      description: "Delta Oto ile iletişime geçin: satış ve sipariş, B2B portal desteği, insan kaynakları ve kurumsal iletişim için doğrudan hat, e-posta ve iletişim formu.",
     },
     hero: {
       eyebrow: "İletişim Kanallarımız · Ümraniye, İstanbul",
@@ -132,40 +129,11 @@ const content = {
       privacy: "Verileriniz yalnızca talebinizi karşılamak amacıyla kullanılır.",
       privacyLinkLabel: "KVKK Aydınlatma Metni'ni inceleyin",
     },
-    locations: {
-      eyebrow: "Operasyon Merkezlerimiz",
-      heading: "Bizi Nerede Bulabilirsiniz",
-      body: "Gebze, İzmir ve Ümraniye'deki üç merkezimizden Türkiye'nin tamamına hizmet veriyoruz.",
-      primaryBadge: "Santral Hattı",
-      list: [
-        {
-          name: "Gebze Deposu",
-          city: "Gebze, Kocaeli",
-          address: "Barış, 1804. Sk. No:4, 41400 Gebze / Kocaeli",
-          phone: null as string | null,
-          type: "Kocaeli",
-        },
-        {
-          name: "Opar Ege Bölge Bayiliği",
-          city: "Kemalpaşa, İzmir",
-          address: "Kemalpaşa Kızılüzüm Kırovası Kümeevleri No: 12/1, Kemalpaşa / İzmir",
-          phone: null as string | null,
-          type: "Ege Bölge",
-        },
-        {
-          name: "Ümraniye Merkez Depo",
-          city: "Ümraniye, İstanbul",
-          address: "Barbaros Cd. Beyit Sk. No:17, Yukarı Dudullu — Ümraniye / İstanbul",
-          phone: "0216 526 64 64 / 0216 526 33 44" as string | null,
-          type: "Merkez",
-        },
-      ],
-    },
   },
   en: {
     meta: {
       title: "Contact Us — Sales, B2B and Corporate Contacts | Delta Oto",
-      description: "Get in touch with Delta Oto: direct lines and email for sales and orders, B2B portal support, human resources and corporate affairs, plus a contact form and the addresses of our three operations centers.",
+      description: "Get in touch with Delta Oto: direct lines and email for sales and orders, B2B portal support, human resources and corporate affairs, plus a contact form.",
     },
     hero: {
       eyebrow: "Contact Channels · Ümraniye, İstanbul",
@@ -264,35 +232,6 @@ const content = {
       submit: "Send Request",
       privacy: "Your information is used only to process your request.",
       privacyLinkLabel: "Read our KVKK Notice",
-    },
-    locations: {
-      eyebrow: "Our Operations Centers",
-      heading: "Where to Find Us",
-      body: "From our three centers in Gebze, İzmir and Ümraniye, we serve the whole of Türkiye.",
-      primaryBadge: "Switchboard",
-      list: [
-        {
-          name: "Gebze Warehouse",
-          city: "Gebze, Kocaeli",
-          address: "Barış, 1804. Sk. No:4, 41400 Gebze / Kocaeli",
-          phone: null as string | null,
-          type: "Kocaeli",
-        },
-        {
-          name: "Opar Aegean Regional Dealership",
-          city: "Kemalpaşa, İzmir",
-          address: "Kemalpaşa Kızılüzüm Kırovası Kümeevleri No: 12/1, Kemalpaşa / İzmir",
-          phone: null as string | null,
-          type: "Aegean Region",
-        },
-        {
-          name: "Ümraniye Main Warehouse",
-          city: "Ümraniye, İstanbul",
-          address: "Barbaros Cd. Beyit Sk. No:17, Yukarı Dudullu — Ümraniye / İstanbul",
-          phone: "0216 526 64 64 / 0216 526 33 44" as string | null,
-          type: "Head Office",
-        },
-      ],
     },
   },
 } satisfies Record<Lang, any>;
@@ -609,54 +548,6 @@ export function IletisimPage() {
                 </Link>
               </p>
             </form>
-          </div>
-        </div>
-      </section>
-
-      {/* LOKASYONLAR — navy. Footer'dan hemen önceki bölüm olduğu için proje kuralı
-          gereği navy (#1B3A8F) kalıyor; sırası Form+Adres ile değiştirildi. Liste
-          sırası: Gebze, İzmir, Ümraniye (bkz. dosya başındaki not). */}
-      <section className="bg-[#1B3A8F] py-20 text-white">
-        <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div ref={reveal} className="do-reveal mb-10">
-            <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea] block mb-3">{t.locations.eyebrow}</span>
-            <h2 className="text-3xl font-black tracking-tight">{t.locations.heading}</h2>
-            <p className="text-white/55 mt-3 text-[15px]">{t.locations.body}</p>
-          </div>
-          <div className="grid md:grid-cols-3 gap-5">
-            {t.locations.list.map((loc, i) => {
-              const isPrimary = Boolean(loc.phone);
-              return (
-                <div
-                  key={loc.name}
-                  ref={reveal}
-                  className={`do-reveal do-d${i + 1} do-card bg-white/[0.08] border rounded-xl p-7 ${isPrimary ? "border-[#7d9bea]/40" : "border-white/[0.12]"}`}
-                >
-                  <div className="flex items-start justify-between mb-4">
-                    <div>
-                      <span className="text-[11px] font-bold uppercase tracking-widest text-[#7d9bea]">{loc.type}</span>
-                      <h3 className="text-[16px] font-bold mt-1">{loc.name}</h3>
-                      <p className="text-white/70 text-[12px] mt-0.5">{loc.city}</p>
-                    </div>
-                    <div className="flex flex-col items-end gap-2 shrink-0 mt-1">
-                      {isPrimary && (
-                        <span className="text-[9.5px] font-bold uppercase tracking-wider text-[#0e1016] bg-[#7d9bea] rounded-full px-2.5 py-1">
-                          {t.locations.primaryBadge}
-                        </span>
-                      )}
-                      <MapPin className="w-5 h-5 text-[#7d9bea]" />
-                    </div>
-                  </div>
-                  <p className="text-white/65 text-[13px] leading-relaxed mb-3">{loc.address}</p>
-                  {loc.phone && (
-                    <div className="flex items-center gap-2 mt-2">
-                      <Phone className="w-3.5 h-3.5 text-[#7d9bea] shrink-0" />
-                      <span className="text-[13px] text-white/80">{loc.phone}</span>
-                    </div>
-                  )}
-                </div>
-              );
-            })}
           </div>
         </div>
       </section>

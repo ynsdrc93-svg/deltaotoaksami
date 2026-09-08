@@ -52,7 +52,7 @@ const content = {
       eyebrow: "Delta Oto Özel Markası",
       titleLine1: "ORİJİNAL KALİTE,",
       titleLine2: "AKILLI FİYAT.",
-      body: "Delta Oto'nun 50 yıllık aftermarket deneyimiyle geliştirilen SPART; OEM eşdeğeri kaliteyi, bağımsız servis ve bayi ağına rekabetçi fiyatla sunar.",
+      body: "Delta Oto'nun 50+ yıllık aftermarket deneyimiyle geliştirilen SPART; OEM eşdeğeri kaliteyi, bağımsız servis ve bayi ağına rekabetçi fiyatla sunar.",
       ctaCategories: "Ürün Kategorileri",
       ctaContact: "SPART İçin Bize Ulaşın",
     },
@@ -69,7 +69,7 @@ const content = {
       body1: "SPART, 1976'dan bu yana Türkiye aftermarket pazarının içinde büyümüş Delta Oto'nun öz markasıdır. Yıllar içinde edinilen tedarik zinciri bilgisi, kalite standartları ve saha geribildirimlerinin tamamı SPART ürünlerinin tasarım ve üretim süreçlerine aktarılmıştır.",
       body2: "\"Original Replacement\" felsefesi basittir: parça değişimi için orijinal kaliteden taviz vermek zorunda değilsiniz. SPART, araç üreticisinin toleranslarını karşılayacak şekilde geliştirilmiştir.",
       imageAlt: "SPART kalite kontrol",
-      badgeValue: "50 Yıl",
+      badgeValue: "50+ Yıl",
       badgeLabel: "Sektör Deneyimi",
       perks: [
         { text: "2 Yıl Ürün Garantisi" },
@@ -100,7 +100,7 @@ const content = {
         { title: "OEM Toleranslarında Üretim", desc: "Her parça, orijinal üretici spesifikasyonları esas alınarak, boyutsal hassasiyet ve malzeme kalitesinde orijinaline eşdeğer olacak şekilde üretilir." },
         { title: "Kapsamlı Test Süreçleri", desc: "Ürünler, sahaya çıkmadan önce çok aşamalı kalite kontrol süreçlerinden geçirilir." },
         { title: "Geniş Araç Kapsama Alanı", desc: "Binek ve hafif ticari araç pazarındaki başlıca marka ve modelleri kapsayan, sürekli büyüyen bir katalog. Doğru parçayı ilk seferinde bulun." },
-        { title: "50 Yıllık Sektör Birikimi", desc: "Delta Oto'nun 50 yıllık aftermarket deneyimi, SPART'ın ürün seçimi ve kalite standartlarının temelidir. Bilgi, fiyattan önce gelir." },
+        { title: "50+ Yıllık Sektör Birikimi", desc: "Delta Oto'nun 50+ yıllık aftermarket deneyimi, SPART'ın ürün seçimi ve kalite standartlarının temelidir. Bilgi, fiyattan önce gelir." },
       ],
     },
     distribution: {
@@ -132,12 +132,12 @@ const content = {
     partnership: {
       eyebrow: "İş Ortaklığı Fırsatı",
       heading: "SPART, Ürünün Ötesinde Bir Ortaklıktır",
-      body: "SPART'ı servisinize veya mağazanıza taşımak, yalnızca yeni bir ürün hattı eklemek değildir — Delta Oto'nun 50 yıllık tedarik zinciri deneyimini, lojistik altyapısını ve marka güvencesini de yanınıza almaktır. Aşağıdaki başlıklar, bir SPART iş ortağı olarak elde edeceğiniz somut karşılığı özetliyor.",
+      body: "SPART'ı servisinize veya mağazanıza taşımak, yalnızca yeni bir ürün hattı eklemek değildir — Delta Oto'nun 50+ yıllık tedarik zinciri deneyimini, lojistik altyapısını ve marka güvencesini de yanınıza almaktır. Aşağıdaki başlıklar, bir SPART iş ortağı olarak elde edeceğiniz somut karşılığı özetliyor.",
       items: [
         { title: "Kanıtlanmış Ürün Gücü", desc: "800+ referans, 50+ araç markası kapsamında sürekli büyüyen bir katalog — raf karmaşası değil, net bir portföy." },
         { title: "Rekabetçi Bayi Fiyatlandırması", desc: "Doğrudan üretici-distribütör ilişkisine dayanan bayi fiyatlandırma yapısı, rekabetçi bir maliyet tabanı sunar." },
         { title: "Operasyonel Destek", desc: "Gebze, İzmir ve Ümraniye'deki 3 depodan aynı gün/ertesi gün sevkiyat altyapısından doğrudan yararlanın." },
-        { title: "Marka Güvencesi", desc: "2 yıl ürün garantisi ve OEM toleranslarında üretim; Delta Oto'nun 50 yıllık sektör deneyimiyle şekillenen bir marka güvencesi." },
+        { title: "Marka Güvencesi", desc: "2 yıl ürün garantisi ve OEM toleranslarında üretim; Delta Oto'nun 50+ yıllık sektör deneyimiyle şekillenen bir marka güvencesi." },
         { title: "Sürekli Genişleyen Katalog", desc: "Yeni araç modelleriyle sürekli genişleyen bir ürün katalogu yapısı." },
         { title: "Marka İletişim Desteği", desc: "Ürün bilgisi ve teknik konularda, Delta Oto'nun saha deneyimine dayanan bir iletişim ve destek yaklaşımıyla ekibinizin yanındayız." },
       ],
@@ -159,7 +159,7 @@ const content = {
       eyebrow: "Delta Oto's Own Brand",
       titleLine1: "ORIGINAL QUALITY,",
       titleLine2: "SMART PRICE.",
-      body: "Developed with Delta Oto's 50 years of aftermarket experience, SPART brings OEM-equivalent quality to the independent service and dealer network at a competitive price.",
+      body: "Developed with Delta Oto's 50+ years in automotive, SPART brings OEM-equivalent quality to the independent service and dealer network at a competitive price.",
       ctaCategories: "Product Categories",
       ctaContact: "Contact Us About SPART",
     },
@@ -176,7 +176,7 @@ const content = {
       body1: "SPART is Delta Oto's own brand, grown from within the Turkish aftermarket since 1976. The supply chain knowledge, quality standards and field feedback gathered over the years all feed directly into the design and production of SPART products.",
       body2: "The \"Original Replacement\" philosophy is simple: you shouldn't have to compromise on original quality when replacing a part. SPART is engineered to meet the vehicle manufacturer's tolerances.",
       imageAlt: "SPART quality control",
-      badgeValue: "50 Years",
+      badgeValue: "50+ Years",
       badgeLabel: "Industry Experience",
       perks: [
         { text: "2-Year Product Warranty" },
@@ -207,7 +207,7 @@ const content = {
         { title: "Manufactured to OEM Tolerances", desc: "Every part is manufactured against original manufacturer specifications, matching the original in dimensional precision and material quality." },
         { title: "Comprehensive Testing", desc: "Products go through multi-stage quality control before they reach the field." },
         { title: "Broad Vehicle Coverage", desc: "A continuously growing catalog covering the leading brands and models in the passenger and light commercial vehicle market — find the right part the first time." },
-        { title: "50 Years of Industry Expertise", desc: "Delta Oto's 50 years of aftermarket experience underpin SPART's product selection and quality standards — knowledge comes before price." },
+        { title: "50+ Years of Industry Expertise", desc: "Delta Oto's 50+ years in automotive underpin SPART's product selection and quality standards — knowledge comes before price." },
       ],
     },
     distribution: {
@@ -239,12 +239,12 @@ const content = {
     partnership: {
       eyebrow: "Partnership Opportunity",
       heading: "SPART Is a Partnership, Not Just a Product",
-      body: "Bringing SPART into your workshop or store isn't just adding a new product line — it means gaining Delta Oto's 50 years of supply chain experience, logistics infrastructure and brand assurance alongside it. The points below summarize the concrete value you gain as a SPART partner.",
+      body: "Bringing SPART into your workshop or store isn't just adding a new product line — it means gaining Delta Oto's 50+ years of supply chain experience, logistics infrastructure and brand assurance alongside it. The points below summarize the concrete value you gain as a SPART partner.",
       items: [
         { title: "Proven Product Strength", desc: "A continuously growing catalog spanning 800+ references and 50+ vehicle makes — a focused portfolio, not shelf clutter." },
         { title: "Competitive Dealer Pricing", desc: "A dealer pricing structure built on a direct manufacturer-distributor relationship gives you a competitive cost base." },
         { title: "Operational Support", desc: "Benefit directly from same-day/next-day shipping infrastructure across our 3 warehouses in Gebze, İzmir and Ümraniye." },
-        { title: "Brand Assurance", desc: "A 2-year product warranty and manufacturing to OEM tolerances — brand assurance shaped by Delta Oto's 50 years of industry experience." },
+        { title: "Brand Assurance", desc: "A 2-year product warranty and manufacturing to OEM tolerances — brand assurance shaped by Delta Oto's 50+ years of industry experience." },
         { title: "Continuously Expanding Catalog", desc: "A product catalog that keeps growing alongside new vehicle models." },
         { title: "Brand Communication Support", desc: "For product information and technical questions, our team stands behind yours with a support approach grounded in Delta Oto's field experience." },
       ],

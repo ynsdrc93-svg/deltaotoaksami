@@ -133,8 +133,22 @@ export function useParallax<T extends HTMLElement>(speed = 0.12) {
  *   section's top just enters the viewport bottom, 1 when its bottom exits
  *   the viewport top (the section has fully scrolled past). Fine for a
  *   section whose last beat doesn't itself need to stay readable.
+ * - 'reveal': like 'settle', but the START point is later — progress holds
+ *   at 0 until the element's top has scrolled up to roughly the lower 75%
+ *   of the viewport (entryFraction below), not merely the literal 100%
+ *   bottom edge that 'settle' (and 'transit') use as start. Bug this fixes
+ *   (Operasyon's 4-step process, live QA): under 'settle', progress began
+ *   accumulating the instant a single pixel of the element entered the
+ *   viewport, and — because 'settle' also targets an early, comfortable-
+ *   visibility END point — reached 1 within well under one viewport height
+ *   of scrolling. For a short module this meant 2+ of 4 steps could already
+ *   read as "current/passed" while the module itself was still only
+ *   half-visible: the animation looked like it had already started, or
+ *   nearly finished, before the reader could actually see it. 'reveal'
+ *   keeps 'settle's same comfortable END target, only delaying the START
+ *   until the module has genuinely, visibly arrived.
  *
- * (A third 'story' mode briefly lived here for Kariyer's culture list —
+ * (A fourth 'story' mode briefly lived here for Kariyer's culture list —
  * mapping progress across the section's transit so its LAST item stayed
  * on screen at progress=1. It was removed: any single section-wide
  * progress number is the wrong tool for "which item is the user reading" —
@@ -142,7 +156,7 @@ export function useParallax<T extends HTMLElement>(speed = 0.12) {
  * position directly instead of inferring it from where the section as a
  * whole has scrolled to.)
  */
-export function useSectionProgress<T extends HTMLElement>(mode: "settle" | "transit" = "settle") {
+export function useSectionProgress<T extends HTMLElement>(mode: "settle" | "transit" | "reveal" = "settle") {
   const ref = React.useRef<T | null>(null)
   const [progress, setProgress] = React.useState(0)
   React.useEffect(() => {
@@ -156,7 +170,11 @@ export function useSectionProgress<T extends HTMLElement>(mode: "settle" | "tran
       if (el) {
         const rect = el.getBoundingClientRect()
         const vh = window.innerHeight
-        const start = vh
+        // Tuned via live QA at 1440x810 / 1920x1080 / 390x844 (see task
+        // report) — the module's top must reach roughly the lower quarter
+        // of the viewport before progress starts moving at all.
+        const entryFraction = 0.75
+        const start = mode === "reveal" ? vh * entryFraction : vh
         let end: number
         if (mode === "transit") {
           end = -rect.height

@@ -138,8 +138,20 @@ export const CLASSIFIED_BRANDS: Brand[] = [
   { slug: "marelli", name: "Marelli", website: "https://www.magnetimarelli-parts-and-services.com/", origin: "global", hasVerifiedLogo: true, logoFormat: "webp", logoScale: 1.3 },
 ];
 
-export const GLOBAL_BRANDS: Brand[] = CLASSIFIED_BRANDS.filter((b) => b.origin === "global");
-export const YERLI_BRANDS: Brand[] = CLASSIFIED_BRANDS.filter((b) => b.origin === "yerli");
+// Marka Görsel Hijyeni Turu: "wall" (Tedarikçiler marka duvarı) ve "strip"
+// (ana sayfa rotasyon şeridi) SALT-GÖRSEL güven vitrinleridir — doğrulanmış
+// logosu olmayan bir markanın (yalnızca Taifun) tipografik yer tutucusu bu
+// vitrinlerde komşu gerçek logo görsellerinin yanında "ezik"/sahte bir kimlik
+// gibi durduğu için (kullanıcı geri bildirimi) bu iki vitrinden omit edildi —
+// SAHTE BİR LOGO ÜRETİLMEDİ, yalnızca doğrulanmış görseli olmayan marka
+// görsel listeden çıkarıldı. Taifun'un kendisi/sınıflandırması SİLİNMEDİ:
+// CLASSIFIED_BRANDS'te ve kategori sayfasındaki brandSlugs referanslarında
+// (categories.ts) hâlâ mevcut — yalnızca bu iki görsel vitrinde tile
+// göstermiyor. Doğrulanmış bir logo asseti sağlandığında hasVerifiedLogo
+// true'ya çevrilmesi yeterli, bu filtre otomatik olarak onu geri gösterir.
+export const VERIFIED_CLASSIFIED_BRANDS: Brand[] = CLASSIFIED_BRANDS.filter((b) => b.hasVerifiedLogo);
+export const GLOBAL_BRANDS: Brand[] = VERIFIED_CLASSIFIED_BRANDS.filter((b) => b.origin === "global");
+export const YERLI_BRANDS: Brand[] = VERIFIED_CLASSIFIED_BRANDS.filter((b) => b.origin === "yerli");
 
 // DORMANT — Excel kaynağında ("Kopya Delta Markalar -kategoriler.xlsx") yer
 // almayan, önceki çalışmada resmi kaynaklardan doğrulanmış ek markalar.

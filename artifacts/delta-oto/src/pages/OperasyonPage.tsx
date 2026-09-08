@@ -25,93 +25,97 @@ const DELIVERY_ICONS = [Zap, Truck, Calendar];
 const content = {
   tr: {
     meta: {
-      title: "Operasyon ve Lojistik — Üç Merkezden 81 İle | Delta Oto",
-      description: "Delta Oto'nun Gebze, İzmir ve Ümraniye operasyon merkezlerinden 81 ile ulaşan lojistik altyapısı: aynı gün sevkiyat, WMS destekli depo yönetimi ve güvenilir teslimat ağı.",
+      title: "Operasyon ve Lojistik — Gebze ve İzmir'den 81 İle | Delta Oto",
+      description: "Delta Oto'nun Gebze ve İzmir operasyon noktalarından 81 ile ulaşan lojistik altyapısı: aynı gün sevkiyat, WMS destekli depo yönetimi ve güvenilir teslimat ağı.",
     },
     hero: {
       eyebrow: "Lojistik & Operasyon Altyapısı",
-      title: ["ÜÇ MERKEZDEN", "81 İLE", "YAYGIN DAĞITIM"],
-      body: "Lojistik ağımız; Gebze, İzmir ve Ümraniye'deki operasyon merkezlerimizden 81 ile hızlı, güvenilir ve planlı dağıtım sunar.",
+      title: ["GEBZE VE İZMİR'DEN", "81 İLE", "PLANLI DAĞITIM"],
+      body: "Lojistik ağımız; Gebze ve İzmir'deki operasyon noktalarımızdan 81 ile hızlı, güvenilir ve planlı dağıtım sunar.",
       stats: [
-        { target: 3, label: "Operasyon Merkezi", sub: "Gebze · İzmir · Ümraniye" },
+        { target: 2, label: "Operasyon Merkezi", sub: "Gebze · İzmir" },
         { target: 50000, suffix: "+", label: "SKU", sub: "Sürekli stok derinliği" },
         { value: "17:00", label: "Son Sipariş Saati", sub: "Aynı gün sevkiyat" },
         { target: 81, label: "İl", sub: "Ulusal dağıtım kapsamı" },
       ],
     },
+    // Copy Discipline Turu: "Müşterinize Söz Verebilirsiniz" başlığı ve
+    // "yanınızdayız" / "net ve güvenilir bir taahhüt" / "müşterilerinizi
+    // korumuş olursunuz" gibi satış-dili ifadeler kaldırıldı — kullanıcı
+    // bunları yapay/çocuksu/AI-copy hissi veren fazlalık olarak reddetti.
+    // Aynı operasyonel gerçekler (17:00 kesim, ertesi gün, Cumartesi) sade
+    // B2B diliyle kaldı; hiçbir taahhüt güçlendirilmedi.
     delivery: {
-      eyebrow: "Teslimat Taahhüdü",
-      heading: "Müşterinize Söz Verebilirsiniz",
-      body: "Stok derinliğimiz ve geniş lojistik ağımız; acil ihtiyaçta aynı gün, standart siparişlerde ertesi iş günü teslimatı mümkün kılar. Cumartesi sevkiyat kapasitemizle hafta sonu da yanınızdayız.",
+      eyebrow: "Teslimat Yapısı",
+      heading: "Planlı Sevkiyat",
+      body: "Stok derinliğimiz ve geniş lojistik ağımız; acil ihtiyaçta aynı gün, standart siparişlerde ertesi iş günü sevkiyatı mümkün kılar. Cumartesi sevkiyat kapasitesiyle hafta sonu kesintisi yaşanmaz.",
       featuredBadge: "Öne Çıkan",
       cards: [
         {
           title: "Aynı Gün Sevkiyat",
           highlight: "17:00 Son Sipariş Saati",
-          desc: "Stokta olan ürünler için 17:00'e kadar iletilen siparişler, sipariş saatine bakılmaksızın aynı gün kargoya verilir. Acil ihtiyaçlarınızda net ve güvenilir bir taahhüt.",
+          desc: "Stokta olan ürünler için 17:00'e kadar iletilen siparişler, sipariş saatine bakılmaksızın aynı gün kargoya verilir.",
           featured: true,
         },
         {
           title: "Ertesi Gün Teslimat",
           highlight: "İstanbul ve Çevre İller",
-          desc: "Standart siparişlerde İstanbul ve yakın il müşterileriniz için ertesi iş günü teslimat hedeflenir. Güvenilir ve öngörülebilir bir deneyim.",
+          desc: "Standart siparişlerde İstanbul ve yakın il müşterileri için ertesi iş günü teslimat hedeflenir.",
           featured: false,
         },
         {
           title: "Cumartesi Operasyonu",
           highlight: "Hafta Sonu Kesintisiz",
-          desc: "Cumartesi günleri de sevkiyat kapasitemiz açıktır. Hafta içi geç saatte gelen siparişler için Cumartesi yükleme seçeneğiyle müşterilerinizi korumuş olursunuz.",
+          desc: "Cumartesi günleri de sevkiyat kapasitemiz açıktır. Hafta içi geç saatte gelen siparişler, Cumartesi yükleme seçeneğiyle karşılanır.",
           featured: false,
         },
       ],
     },
-    // Görsel/UX Düzeltme Turu (§3-4): önceki dikey "Zincirleme Sorumluluk"
-    // düzeni (Gebze satırı → İzmir satırı → büyük Ümraniye paneli → 81 İl
-    // kapanışı, hepsi alt alta) 1440×810'da TEK SAHNE olarak sığmıyordu —
-    // kullanıcı geri bildirimi net: "16:9 porsiyona sığmıyor". Konsept
-    // (bölgesel besleme → merkezi karar → ulusal çıktı) KORUNDU, sunum
-    // sıfırdan YATAY bir bileşime dönüştürüldü: üç blok artık ALT ALTA değil
-    // YAN YANA (bkz. JSX) — dikey yığın yerine genişlik kullanan, tek bakışta
-    // okunan bir kompozisyon. Kopya de buna göre sıkılaştırıldı: adres
-    // satırları kaldırıldı (bu bilginin birincil yeri zaten İletişim
-    // sayfası — burada tekrar etmek "az kopya, az kutu" ilkesine aykırıydı),
-    // roleTag'ler tek/iki kelimeye indirildi, body cümleleri tek kısa
-    // ifadeye indirildi. Masaüstünde yatay, mobilde (16:9 zorunluluğu
-    // masaüstüne özgü) doğal biçimde dikey yığılır.
-    // Görsel/UX Düzeltme Turu §3 (canlı incelemede bulunan): "İki Bölge, Tek
-    // Karar Noktası" operasyonu coğrafi olarak sınırlıymış gibi gösteriyordu
-    // ve Ümraniye'yi TEK fiziksel merkezmiş gibi yanlış çerçeveliyordu.
-    // Gerçek hikaye: Türkiye geneli dağıtım/operasyon, Ümraniye'den MERKEZİ
-    // KOORDİNASYON — Gebze ve İzmir birer operasyon noktası, "bölge" değil.
-    // Başlık ve Ümraniye paneli metni bu yönde yeniden yazıldı; "tek karar
-    // noktası" / "tüm karar burada alınır" gibi mutlaklık ifade eden
-    // kelimeler kaldırıldı. Diğer her şey (Gebze/İzmir/Ümraniye/81 İl,
-    // yatay 16:9 kompozisyon) KORUNDU.
+    // Fotoğraf-Öncelikli Depo Modülü Turu: eski tipografi-ağırlıklı "Gebze/
+    // İzmir sütunu → Ümraniye navy panel → 81 İl kapanışı" yatay kompozisyonu
+    // (plaka numaralı, node/flow-line bağlantılı) TAMAMEN kaldırıldı —
+    // kullanıcı artık plaka-numarası ağırlıklı bir infografik değil, GERÇEK
+    // fotoğrafla anlatılan iki eşit-ağırlıklı operasyon noktası istiyor.
+    // Ümraniye bu modülden ÇIKARILDI (dağıtım anlatısı artık yalnızca Gebze +
+    // İzmir → Türkiye geneli; Ümraniye merkez/HQ kimliği İletişim sayfasında
+    // ve footer'da zaten var, oradan SİLİNMEDİ — bkz. görev talimatı §K).
+    // Görsel varlık notu: repo içinde Gebze'ye veya İzmir'e ÖZGÜ, doğrulanmış
+    // ayrı fotoğraf yok — yalnızca iki GERÇEK (fabrikasyon değil, AI-üretimi
+    // değil) Delta tesis fotoğrafı mevcut (delta-oto-hero-facility.webp,
+    // delta-oto-depot.webp — muhtemelen ikisi de aynı/benzer kampüsü
+    // gösteriyor, coğrafi olarak Gebze/İzmir'e özel değil). Bu iki gerçek
+    // fotoğraf, panel arka planı olarak (atmosferik/kurumsal doku) kullanıldı
+    // — panel metninde "bu fotoğraf Gebze'nin binası" gibi bir iddia YOK,
+    // yalnızca GEBZE/İZMİR kimliği HTML/CSS metin+logo katmanı olarak
+    // bindiriliyor (bkz. JSX). Sahte tabela/uydurma bina YOK. Detay görev
+    // raporunda belirtildi.
     depots: {
       eyebrow: "Operasyon Altyapısı",
-      heading: "Türkiye Geneli, Tek Merkezden Koordinasyon",
-      body: "Gebze ve İzmir operasyon noktalarımızı, Ümraniye'deki merkezden koordine ediyoruz.",
+      heading: "Gebze ve İzmir'den Türkiye Geneline Dağıtım",
+      body: "İki operasyon noktamızdan, Türkiye'nin tamamına planlı ve düzenli dağıtım sağlıyoruz.",
       reachValue: "81",
       reachLabel: "İl",
       reachBody: "Türkiye'nin tamamına planlı dağıtım.",
-      items: [
-        { title: "Gebze", plate: "41", tag: "Doğu Marmara", body: "Kocaeli ve Sakarya'ya hızlı erişim.", central: false },
-        { title: "İzmir", plate: "35", tag: "Ege Bölgesi · Opar", body: "Ege'nin dağıtım omurgası.", central: false },
-        { title: "Ümraniye", plate: "34", tag: "Merkez Koordinasyon", body: "Stok ve sevkiyat koordinasyonu, Ümraniye merkezden yönetilir.", central: true },
+      panels: [
+        { title: "Gebze", plate: "41", tag: "Doğu Marmara", body: "Kocaeli ve Sakarya'ya hızlı erişim.", image: "/images/delta-oto-hero-facility.webp", logo: "/images/delta-oto-logo-classic.webp", logoAlt: "Delta Oto" },
+        { title: "İzmir", plate: "35", tag: "Ege Bölgesi · Opar", body: "Ege'nin dağıtım omurgası.", image: "/images/delta-oto-depot.webp", logo: "/images/opar-logo-white.svg", logoAlt: "Opar" },
       ],
     },
     // Hard-edit (§21-22): 8 madde → 3. Kalan 5 madde bu sayfada BAŞKA YERDE
     // (hero/Teslimat/yukarıdaki Operasyon Altyapısı) zaten söylenmişti veya
     // konu dışıydı (GROUPAUTO ağı ve tek-tedarikçi kolaylığı bu sayfanın
-    // değil, İş Ortaklarımız'ın konusu). Yalnızca üç GERÇEKTEN operasyonel
-    // ve BAŞKA YERDE anlatılmamış yetkinlik kaldı — sayı simetrisi için 8'de
-    // tutulmadı.
+    // değil, İş Ortaklarımız'ın konusu).
+    // Kalite Mesajı Taşıma Turu: İş Ortaklarımız'daki standalone "Kayıt Dışı
+    // ve Sahte Ürüne Sıfır Tolerans" modülü kaldırıldı — o mesajın MANTIKLI
+    // sahibi burası. "Stok Derinliği & Planlama" (sitede başka yerlerde zaten
+    // ağırlıkla söylenmiş bir gerçek — hero stat, homepage metrics) bu yeni
+    // maddeyle DEĞİŞTİRİLDİ; tek cümlelik özet, eski modülün TÜMÜ taşınmadı.
     capabilities: {
       eyebrow: "Lojistik Altyapı",
       heading: "Sistem ve Kalite",
       items: [
+        { title: "Tedarik Kaynağı & Ürün Güveni", desc: "Kayıt dışı ve sahte ürüne sıfır tolerans; her marka denetimli kaynak doğrulamasından ve süregelen kontrolden geçer." },
         { title: "WMS Destekli Depo Yönetimi", desc: "Stok doğruluğu ve sipariş hazırlığı sistem kontrolünde; hata payı sıfıra yakın." },
-        { title: "Stok Derinliği & Planlama", desc: "Talep bazlı planlama, kritik ürünlerde yüksek doluluk sağlar; stokta yok yanıtı istisnadır." },
         { title: "Sevkiyat Kalite Kontrolü", desc: "Her sevkiyat WMS ve fiziksel kontrolden geçer; hasarlı/eksik gönderim oranı hedefte sıfır." },
       ],
     },
@@ -135,65 +139,64 @@ const content = {
   },
   en: {
     meta: {
-      title: "Operations & Logistics — Nationwide From Three Centers | Delta Oto",
-      description: "Delta Oto's logistics infrastructure reaches all 81 provinces from operations centers in Gebze, İzmir and Ümraniye: same-day dispatch, WMS-supported warehousing and reliable delivery.",
+      title: "Operations & Logistics — From Gebze and İzmir to 81 Provinces | Delta Oto",
+      description: "Delta Oto's logistics infrastructure reaches all 81 provinces from our Gebze and İzmir operations points: same-day dispatch, WMS-supported warehousing and reliable delivery.",
     },
     hero: {
       eyebrow: "Logistics & Operations Infrastructure",
-      title: ["THREE CENTERS", "81 PROVINCES", "NATIONWIDE DELIVERY"],
-      body: "Our logistics network delivers fast, reliable and planned distribution to all 81 provinces from our operations centers in Gebze, İzmir and Ümraniye.",
+      title: ["FROM GEBZE AND İZMİR", "TO 81 PROVINCES", "PLANNED DELIVERY"],
+      body: "Our logistics network delivers fast, reliable and planned distribution to all 81 provinces from our operations points in Gebze and İzmir.",
       stats: [
-        { target: 3, label: "Operations Centers", sub: "Gebze · İzmir · Ümraniye" },
+        { target: 2, label: "Operations Centers", sub: "Gebze · İzmir" },
         { target: 50000, suffix: "+", label: "SKU", sub: "Continuous stock depth" },
         { value: "17:00", label: "Order Cutoff Time", sub: "Same-day dispatch" },
         { target: 81, label: "Provinces", sub: "Nationwide distribution coverage" },
       ],
     },
     delivery: {
-      eyebrow: "Delivery Commitment",
-      heading: "A Promise You Can Make to Your Customers",
-      body: "Our stock depth and broad logistics network make same-day delivery possible for urgent needs and next-business-day delivery for standard orders. With our Saturday dispatch capacity, we're with you through the weekend too.",
+      eyebrow: "Delivery Structure",
+      heading: "Planned Dispatch",
+      body: "Our stock depth and broad logistics network enable same-day dispatch for urgent needs and next-business-day dispatch for standard orders. Our Saturday dispatch capacity keeps the weekend covered.",
       featuredBadge: "Featured",
       cards: [
         {
           title: "Same-Day Dispatch",
           highlight: "17:00 Order Cutoff",
-          desc: "For in-stock items, orders placed by 17:00 ship the same day, regardless of exactly when they came in. A clear, reliable commitment when you need it most.",
+          desc: "For in-stock items, orders placed by 17:00 ship the same day, regardless of exactly when they came in.",
           featured: true,
         },
         {
           title: "Next-Day Delivery",
           highlight: "İstanbul and Surrounding Provinces",
-          desc: "For standard orders, next-business-day delivery is targeted for your customers in İstanbul and neighboring provinces. A reliable, predictable experience.",
+          desc: "For standard orders, next-business-day delivery is targeted for customers in İstanbul and neighboring provinces.",
           featured: false,
         },
         {
           title: "Saturday Operations",
           highlight: "Uninterrupted Through the Weekend",
-          desc: "Our dispatch capacity stays open on Saturdays as well. For orders that come in late during the week, the Saturday loading option keeps your customers covered.",
+          desc: "Our dispatch capacity stays open on Saturdays as well. Orders that come in late during the week are covered by the Saturday loading option.",
           featured: false,
         },
       ],
     },
     depots: {
       eyebrow: "Operations Infrastructure",
-      heading: "Nationwide Operations, Centrally Coordinated",
-      body: "We coordinate our operation points in Gebze and İzmir from our center in Ümraniye.",
+      heading: "Nationwide Distribution from Gebze and İzmir",
+      body: "From our two operations points, we provide planned, regular distribution across the whole of Türkiye.",
       reachValue: "81",
       reachLabel: "Provinces",
       reachBody: "Regular, planned distribution across Türkiye.",
-      items: [
-        { title: "Gebze", plate: "41", tag: "Eastern Marmara", body: "Fast access to Kocaeli and Sakarya.", central: false },
-        { title: "İzmir", plate: "35", tag: "Aegean Region · Opar", body: "The Aegean's distribution backbone.", central: false },
-        { title: "Ümraniye", plate: "34", tag: "Central Coordination", body: "Stock and dispatch coordination is managed from the Ümraniye center.", central: true },
+      panels: [
+        { title: "Gebze", plate: "41", tag: "Eastern Marmara", body: "Fast access to Kocaeli and Sakarya.", image: "/images/delta-oto-hero-facility.webp", logo: "/images/delta-oto-logo-classic.webp", logoAlt: "Delta Oto" },
+        { title: "İzmir", plate: "35", tag: "Aegean Region · Opar", body: "The Aegean's distribution backbone.", image: "/images/delta-oto-depot.webp", logo: "/images/opar-logo-white.svg", logoAlt: "Opar" },
       ],
     },
     capabilities: {
       eyebrow: "Logistics Infrastructure",
       heading: "Systems and Quality",
       items: [
+        { title: "Supply Source & Product Trust", desc: "Zero tolerance for unregistered or counterfeit product; every brand undergoes audited source verification and ongoing controls." },
         { title: "WMS-Supported Warehouse Management", desc: "Stock accuracy and order prep run under system control — error margin near zero." },
-        { title: "Stock Depth & Planning", desc: "Demand-based planning keeps critical products in stock; out-of-stock stays the exception." },
         { title: "Dispatch Quality Control", desc: "Every shipment passes a WMS and physical check — damaged or incomplete stays near zero." },
       ],
     },
@@ -223,17 +226,20 @@ export function OperasyonPage() {
   const t = content[lang];
   useDocumentMeta(t.meta.title, t.meta.description);
 
-  // Dört adımlık süreç scroll'a bağlı gerçek bir ilerleme izler. Görsel/UX
-  // Düzeltme Turu (§6-9): 'settle' modu (useSectionProgress'in artık
-  // parametreli hale gelen hook'u, bkz. use-motion.ts) burada KRİTİK — eski
-  // tek-formül davranışı (şimdi 'transit') progress'i bölümün TÜM viewport
-  // geçişine (giriş→tam çıkış) yayıyordu; bu satır boyu kısa bir blok için
-  // bu, progress'in ancak kullanıcı bölümü zaten geçtikten SONRA 1'e
-  // ulaşması demekti — adım 3/4 kullanıcı modülü etkin biçimde terk
-  // ETTİKTEN sonra yanıyordu (bildirilen hata). 'settle', bölüm hâlâ
-  // rahatça tam görünürken 1'e ulaşacak şekilde hedefliyor. explicit mode
-  // parametresi (default zaten 'settle') niyeti belgelemek için yazılı.
-  const [processRef, processProgress] = useSectionProgress<HTMLDivElement>("settle");
+  // Dört adımlık süreç scroll'a bağlı gerçek bir ilerleme izler.
+  // Animasyon Zamanlama Turu: 'settle' modu (start=vh, yani viewport'un
+  // TAM alt kenarı) burada YANLIŞ tetikleyiciydi — modülün İLK pikseli
+  // görünür olur olmaz progress artmaya başlıyor ve 'settle'ın erken/
+  // konforlu bitiş hedefiyle birleşince tam bir viewport yüksekliğinden
+  // ÇOK DAHA AZ scroll'da 1'e ulaşıyordu; sonuç, modül hâlâ yarı görünürken
+  // 2+ adımın zaten "current/passed" görünmesiydi (bildirilen hata: "modül
+  // anlamlı biçimde girmeden animasyon zaten başlamış/bitmiş görünüyor").
+  // 'reveal' modu (bkz. use-motion.ts) AYNI konforlu bitiş hedefini korur,
+  // yalnızca BAŞLANGIÇ noktasını geciktirir — progress, modülün üstü
+  // viewport'un alt ÇEYREĞİNE (yaklaşık %75) ulaşana kadar sıfırda kalır.
+  // 1440×810/1920×1080/390×844'te canlı QA ile doğrulandı (bkz. görev
+  // raporu): modül viewport'a gerçekten GİRMEDEN 01 asla yanmıyor.
+  const [processRef, processProgress] = useSectionProgress<HTMLDivElement>("reveal");
   const activeStep = Math.min(3, Math.floor(processProgress * 4));
 
   return (
@@ -394,18 +400,14 @@ export function OperasyonPage() {
         </div>
       </section>
 
-      {/* OPERASYON ALTYAPISI — white. Görsel/UX Düzeltme Turu (§3-4): önceki
-          tur bu bölümü soyut node/edge SVG diyagramından kurtarıp saf
-          tipografiye taşımıştı ("Zincirleme Sorumluluk": Gebze/İzmir besler
-          → Ümraniye karar verir → 81 il çıktı alır) — konsept doğruydu, ama
-          dikey yığın (satır→satır→büyük panel→kapanış, alt alta) 1440×810'da
-          TEK SAHNE olarak sığmıyordu (kullanıcı: "16:9 porsiyona sığmıyor").
-          Bu turda konsept AYNI kaldı, MEDYUM yatay bir bileşime döndü: aynı
-          üç blok artık masaüstünde YAN YANA (bölgesel sütun → Ümraniye paneli
-          → 81 İl kapanışı), aralarında .do-flow-line-h (yatay büyüyen
-          bağlayıcı, index.css) ile bağlı. Mobilde (16:9 zorunluluğu yalnızca
-          masaüstüne özgü) aynı üç blok doğal biçimde dikey yığılır — dikey
-          .do-flow-line kardeşi burada devrede kalıyor. */}
+      {/* OPERASYON ALTYAPISI — white, foto-öncelikli. Fotoğraf-Öncelikli Depo
+          Modülü Turu: eski plaka-numaralı/flow-line'lı tipografik kompozisyon
+          TAMAMEN kaldırıldı. Artık iki eşit ağırlıklı fotoğrafik panel
+          (Gebze/İzmir) — koyu gradyan + üzerinde tipografi, kart-ızgara
+          hissi yok. Ümraniye paneli kaldırıldı (bkz. depots veri yorumu).
+          Delta/Opar kimliği panel üzerinde temiz bir HTML/CSS logo katmanı
+          (mevcut doğrulanmış asset'ler) — fotoğrafın kendisine sahte tabela
+          eklenmedi. Masaüstünde yan yana, mobilde doğal biçimde alt alta. */}
       <section className="bg-white py-16 md:py-20 lg:py-16 overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div ref={ref} className="do-reveal max-w-2xl mb-8 md:mb-10 lg:mb-12">
@@ -414,110 +416,33 @@ export function OperasyonPage() {
             <p className="text-slate-500 mt-3 text-[15px] leading-relaxed">{t.depots.body}</p>
           </div>
 
-          {/* MASAÜSTÜ — yatay tek sahne: bölgesel sütun (Gebze/İzmir, alt
-              alta, küçük görsel ağırlık) → bağlayıcı → Ümraniye (dolgun navy
-              panel, en büyük ağırlık) → bağlayıcı → 81 İl (büyük kapanış
-              rakamı). Üç blok arasındaki KONTRAST (küçük/büyük/büyük-rakam)
-              bölgesel-merkezi ayrımını, ayrı bir "MERKEZ" etiketinden daha
-              güçlü anlatıyor. */}
-          <div className="hidden lg:flex items-stretch">
-            <div className="flex-1 flex flex-col justify-center gap-5 pr-8 min-w-0">
-              {t.depots.items.filter((it: { central: boolean }) => !it.central).map((loc: { title: string; plate: string; tag: string; body: string }, i: number) => (
-                <React.Fragment key={loc.title}>
-                  {i > 0 && <div ref={ref} className="do-flow-line-h h-px bg-slate-200 w-full" aria-hidden="true" />}
-                  <div ref={ref} className={`do-reveal ${i === 0 ? "" : "do-d1"} flex items-start gap-4`}>
-                    <span className="shrink-0 w-9 h-9 rounded-lg border-2 border-slate-300 flex items-center justify-center text-[12px] font-black text-slate-400 tabular-nums">
-                      {loc.plate}
-                    </span>
-                    <div className="min-w-0 pt-0.5">
-                      <div className="flex flex-wrap items-baseline gap-x-2.5">
-                        <h3 className="text-base font-black text-slate-900">{loc.title}</h3>
-                        <span className="text-[10px] font-black uppercase tracking-[0.1em] text-[#1B3A8F]/70">{loc.tag}</span>
-                      </div>
-                      <p className="text-slate-500 text-[12.5px] leading-snug mt-1">{loc.body}</p>
-                    </div>
+          <div className="grid md:grid-cols-2 gap-5 lg:gap-6">
+            {t.depots.panels.map((panel: { title: string; plate: string; tag: string; body: string; image: string; logo: string; logoAlt: string }, i: number) => (
+              <div
+                key={panel.title}
+                ref={ref}
+                className={`do-reveal ${i === 1 ? "do-d1" : ""} relative rounded-2xl overflow-hidden aspect-[4/3] md:aspect-[3/4] lg:aspect-[4/3]`}
+              >
+                <img src={panel.image} alt="" className="absolute inset-0 w-full h-full object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0e1016] via-[#0e1016]/55 to-[#0e1016]/10" />
+                <div className="absolute inset-0 p-6 md:p-7 lg:p-8 flex flex-col justify-end text-white">
+                  <img src={panel.logo} alt={panel.logoAlt} className="h-6 md:h-7 w-auto mb-4 opacity-90 object-contain object-left" />
+                  <div className="flex items-baseline gap-3 mb-1.5">
+                    <span className="text-[11px] font-black text-[#7d9bea] tabular-nums">{panel.plate}</span>
+                    <h3 className="text-2xl md:text-3xl font-black tracking-tight">{panel.title}</h3>
                   </div>
-                </React.Fragment>
-              ))}
-            </div>
-
-            <div className="flex items-center px-5 shrink-0" aria-hidden="true">
-              <div ref={ref} className="do-flow-line-h w-10 h-px bg-slate-300" />
-            </div>
-
-            {t.depots.items.filter((it: { central: boolean }) => it.central).map((hub: { title: string; plate: string; tag: string; body: string }) => (
-              <div key={hub.title} className="flex-[1.3] min-w-0">
-                <div ref={ref} className="do-reveal do-d2 h-full bg-[#1B3A8F] text-white rounded-2xl p-7 flex flex-col justify-center">
-                  <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-2.5">
-                    <span className="text-[12px] font-black text-[#7d9bea] tabular-nums">{hub.plate}</span>
-                    <h3 className="text-2xl font-black tracking-tight">{hub.title}</h3>
-                  </div>
-                  <span className="text-[10.5px] font-black uppercase tracking-[0.15em] text-[#7d9bea] mb-2.5 block">{hub.tag}</span>
-                  <p className="text-white/75 text-[13.5px] leading-relaxed max-w-xs">{hub.body}</p>
+                  <span className="text-[10.5px] font-black uppercase tracking-[0.15em] text-[#7d9bea] mb-2.5 block">{panel.tag}</span>
+                  <p className="text-white/75 text-[13.5px] leading-relaxed max-w-xs">{panel.body}</p>
                 </div>
               </div>
             ))}
-
-            <div className="flex items-center px-5 shrink-0" aria-hidden="true">
-              <div ref={ref} className="do-flow-line-h w-10 h-px bg-slate-300" />
-            </div>
-
-            <div ref={ref} className="do-reveal do-d3 flex-1 flex flex-col justify-center pl-2 min-w-0">
-              <span className="text-6xl font-black text-[#1B3A8F] tabular-nums leading-none">{t.depots.reachValue}</span>
-              <div className="text-sm font-black text-slate-900 uppercase tracking-tight mt-2">{t.depots.reachLabel}</div>
-              <p className="text-slate-500 text-[12.5px] mt-1 max-w-[13rem] leading-snug">{t.depots.reachBody}</p>
-            </div>
           </div>
 
-          {/* MOBİL/TABLET — aynı üç blok doğal biçimde dikey yığılır (16:9
-              tek-sahne zorunluluğu yalnızca masaüstüne özgü). */}
-          <div className="lg:hidden max-w-lg">
-            {t.depots.items.filter((it: { central: boolean }) => !it.central).map((loc: { title: string; plate: string; tag: string; body: string }, i: number) => (
-              <React.Fragment key={loc.title}>
-                <div ref={ref} className={`do-reveal ${i === 0 ? "" : "do-d1"} flex items-start gap-4`}>
-                  <span className="shrink-0 w-10 h-10 rounded-lg border-2 border-slate-300 flex items-center justify-center text-[12px] font-black text-slate-400 tabular-nums">
-                    {loc.plate}
-                  </span>
-                  <div className="min-w-0 pt-0.5">
-                    <div className="flex flex-wrap items-baseline gap-x-2.5 gap-y-1">
-                      <h3 className="text-base font-black text-slate-900">{loc.title}</h3>
-                      <span className="text-[10px] font-black uppercase tracking-[0.1em] text-[#1B3A8F]/70">{loc.tag}</span>
-                    </div>
-                    <p className="text-slate-500 text-[13px] leading-snug mt-1">{loc.body}</p>
-                  </div>
-                </div>
-                <div className="pl-5 py-2.5" aria-hidden="true">
-                  <div ref={ref} className="do-flow-line w-px h-5 bg-slate-200" />
-                </div>
-              </React.Fragment>
-            ))}
-
-            <div className="pl-5 -mt-2.5 mb-2.5" aria-hidden="true">
-              <ChevronDown className="w-4 h-4 text-slate-300" />
-            </div>
-
-            {t.depots.items.filter((it: { central: boolean }) => it.central).map((hub: { title: string; plate: string; tag: string; body: string }) => (
-              <div key={hub.title} ref={ref} className="do-reveal do-d2 bg-[#1B3A8F] text-white rounded-2xl p-6">
-                <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1 mb-2">
-                  <span className="text-[12px] font-black text-[#7d9bea] tabular-nums">{hub.plate}</span>
-                  <h3 className="text-xl font-black tracking-tight">{hub.title}</h3>
-                  <span className="text-[10.5px] font-black uppercase tracking-[0.12em] text-[#7d9bea]">{hub.tag}</span>
-                </div>
-                <p className="text-white/75 text-[13.5px] leading-relaxed">{hub.body}</p>
-              </div>
-            ))}
-
-            <div className="flex flex-col items-start pl-9 mt-2.5 mb-2" aria-hidden="true">
-              <div ref={ref} className="do-flow-line w-px h-6 bg-slate-200" />
-              <ChevronDown className="w-4 h-4 text-slate-300 -mt-0.5" />
-            </div>
-
-            <div ref={ref} className="do-reveal do-d3 flex items-baseline gap-4 pt-2">
-              <span className="text-5xl font-black text-[#1B3A8F] tabular-nums leading-none">{t.depots.reachValue}</span>
-              <div>
-                <div className="text-sm font-black text-slate-900 uppercase tracking-tight">{t.depots.reachLabel}</div>
-                <p className="text-slate-500 text-[13px] mt-1">{t.depots.reachBody}</p>
-              </div>
+          <div ref={ref} className="do-reveal do-d2 flex items-baseline gap-4 mt-8 md:mt-10">
+            <span className="text-5xl md:text-6xl font-black text-[#1B3A8F] tabular-nums leading-none">{t.depots.reachValue}</span>
+            <div>
+              <div className="text-sm font-black text-slate-900 uppercase tracking-tight">{t.depots.reachLabel}</div>
+              <p className="text-slate-500 text-[13px] mt-1">{t.depots.reachBody}</p>
             </div>
           </div>
         </div>

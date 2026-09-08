@@ -84,12 +84,12 @@ const ESG_ICONS = [Route, Recycle, Laptop];
 const content = {
   tr: {
     meta: {
-      title: "Hakkımızda — 50 Yıllık Kurumsal Birikim | Delta Oto",
+      title: "Hakkımızda — 50+ Yıllık Kurumsal Birikim | Delta Oto",
       description: "Delta Oto'nun 1976'dan bugüne kurumsal tarihçesi, değer çerçevesi, iş birimleri ve GROUPAUTO Türkiye üyeliği; 118 ülkede küresel tedarik gücü.",
     },
     hero: {
       eyebrow: "Kuruluş 1976 · Delta Oto",
-      title: ["YARIM ASRIN", "KURUMSAL", "BİRİKİMİ"],
+      title: ["50+ YILLIK", "KURUMSAL", "BİRİKİMİ"],
       body: "1976'dan bu yana otomotiv yedek parça dağıtım sektöründe faaliyet gösteren Delta Oto; güçlü tedarik altyapısı, geniş marka portföyü ve GROUPAUTO Türkiye üyeliğiyle sektörün yapıcı güçlerinden biri olmaya devam etmektedir.",
       cta: "Operasyon Altyapımızı İnceleyin",
     },
@@ -97,7 +97,7 @@ const content = {
       eyebrow: "Rakamlarla Delta Oto",
       heading: "Kurumsal Ölçek ve Erişim",
       items: [
-        { label: "Kuruluş Yılı", sub: "50 yıl sektör deneyimi" },
+        { label: "Kuruluş Yılı", sub: "50+ yıl sektör deneyimi" },
         { label: "Ülke Ağı", sub: "GROUPAUTO Türkiye" },
         { label: "Groupauto Üyesi", sub: "Küresel distribütör ağı" },
         { label: "Aktif Marka", sub: "Sürekli güncellenen portföy" },
@@ -105,7 +105,7 @@ const content = {
     },
     timeline: {
       eyebrow: "Kurumsal Tarihçe",
-      heading: "50 Yıllık Gelişim Kronolojisi",
+      heading: "50+ Yıllık Gelişim Kronolojisi",
       body: "Kuruluştan bugüne kat edilen mesafe; stratejik kararların, güçlü ortaklıkların ve disiplinli operasyonun bir ürünüdür. Dönemler arasında gezinmek için kartları kaydırın.",
       regionAriaLabel: "Kurumsal tarihçe, yatay kaydırılabilir zaman çizelgesi",
       comingSoon: "Yakında",
@@ -121,13 +121,13 @@ const content = {
         { label: "", desc: "" },
         { label: "Ulusal Lojistik Ağı", desc: "Türkiye'nin 81 iline kesintisiz teslimat kapasitesi kuruldu. Opar Ege bölge operasyonuyla dağıtım coğrafyası İzmir ve Ege'ye yayıldı." },
         { label: "", desc: "" },
-        { label: "50. Kuruluş Yılı", desc: "100'den fazla aktif marka, binlerce müşteri ilişkisi ve yarım asrın kurumsal birikimiyle sektördeki yapıcı konumunu pekiştiriyor." },
+        { label: "50. Kuruluş Yılı", desc: "100'den fazla aktif marka, binlerce müşteri ilişkisi ve 50+ yıllık kurumsal birikimiyle sektördeki yapıcı konumunu pekiştiriyor." },
       ],
     },
     values: {
       eyebrow: "Kurumsal İlkeler",
       heading: "Değer Çerçevemiz",
-      body: "50 yıllık deneyim, dört temel kurumsal ilke üzerine inşa edilmiştir. Bu ilkeler her karar sürecinde referans alınır.",
+      body: "50+ yıllık deneyim, dört temel kurumsal ilke üzerine inşa edilmiştir. Bu ilkeler her karar sürecinde referans alınır.",
       items: [
         { title: "Kurumsal Güvenilirlik", desc: "Ticari ilişkilerde öngörülebilirlik ve taahhüt bütünlüğü, Delta Oto'nun temel kurumsal kimliğini oluşturur. Her sipariş ve her iş birliği bu güven çerçevesinde yürütülür." },
         { title: "Ürün Kalite Güvencesi", desc: "Portföydeki her marka, denetimli kaynak doğrulamasından geçer. Kayıt dışı ve sahte ürün sıfır toleranstır; OEM ve OEM eşdeğeri standart zorunluluğu istisnasız uygulanır." },
@@ -169,19 +169,19 @@ const content = {
     },
     cta: {
       heading: "Delta Oto ile İş Ortaklığına Başlayın",
-      body: "50 yıllık kurumsal birikimimizle tanışın; B2B portalımızdan sipariş verin veya ekibimizle doğrudan iletişime geçin.",
+      body: "50+ yıllık kurumsal birikimimizle tanışın; B2B portalımızdan sipariş verin veya ekibimizle doğrudan iletişime geçin.",
       b2b: "B2B Portal",
       contact: "İletişim",
     },
   },
   en: {
     meta: {
-      title: "About Us — 50 Years of Institutional Heritage | Delta Oto",
+      title: "About Us — 50+ Years in Automotive | Delta Oto",
       description: "Delta Oto's corporate history, value framework, business units and GROUPAUTO Türkiye membership since 1976 — global supply strength across 118 countries.",
     },
     hero: {
       eyebrow: "Founded 1976 · Delta Oto",
-      title: ["HALF A CENTURY OF", "INSTITUTIONAL", "HERITAGE"],
+      title: ["50+ YEARS OF", "INSTITUTIONAL", "HERITAGE"],
       body: "Delta Oto has operated in the automotive spare parts distribution industry since 1976. With a strong supply infrastructure, a broad brand portfolio and its GROUPAUTO Türkiye membership, it continues to be one of the industry's constructive forces.",
       cta: "Explore Our Operations Infrastructure",
     },
@@ -189,7 +189,7 @@ const content = {
       eyebrow: "Delta Oto by the Numbers",
       heading: "Corporate Scale and Reach",
       items: [
-        { label: "Founding Year", sub: "50 years of industry experience" },
+        { label: "Founding Year", sub: "50+ years of industry experience" },
         { label: "Country Network", sub: "GROUPAUTO Türkiye" },
         { label: "GROUPAUTO Members", sub: "Global distributor network" },
         { label: "Active Brands", sub: "Continuously updated portfolio" },
@@ -197,7 +197,7 @@ const content = {
     },
     timeline: {
       eyebrow: "Corporate History",
-      heading: "A 50-Year Timeline of Growth",
+      heading: "A 50+ Year Timeline of Growth",
       body: "The distance covered from our founding to today is the product of strategic decisions, strong partnerships and disciplined operations. Scroll the cards to move between periods.",
       regionAriaLabel: "Corporate history, horizontally scrollable timeline",
       comingSoon: "Coming Soon",
@@ -213,13 +213,13 @@ const content = {
         { label: "", desc: "" },
         { label: "National Logistics Network", desc: "Uninterrupted delivery capacity to all 81 provinces of Turkey was established. With the Opar Aegean regional operation, distribution coverage expanded to İzmir and the Aegean region." },
         { label: "", desc: "" },
-        { label: "50th Anniversary", desc: "With more than 100 active brands, thousands of customer relationships and half a century of institutional heritage, the company reinforces its constructive position in the industry." },
+        { label: "50th Anniversary", desc: "With more than 100 active brands, thousands of customer relationships and 50+ years of institutional heritage, the company reinforces its constructive position in the industry." },
       ],
     },
     values: {
       eyebrow: "Corporate Principles",
       heading: "Our Value Framework",
-      body: "Fifty years of experience are built on four core corporate principles. These principles are the reference point in every decision-making process.",
+      body: "50+ years of experience are built on four core corporate principles. These principles are the reference point in every decision-making process.",
       items: [
         { title: "Corporate Reliability", desc: "Predictability and integrity of commitment in business relationships form the core of Delta Oto's corporate identity. Every order and every partnership is carried out within this framework of trust." },
         { title: "Product Quality Assurance", desc: "Every brand in the portfolio undergoes audited source verification. Unregistered and counterfeit products are subject to zero tolerance; the OEM or OEM-equivalent standard requirement is applied without exception." },
@@ -261,7 +261,7 @@ const content = {
     },
     cta: {
       heading: "Start a Business Partnership with Delta Oto",
-      body: "Get to know our 50 years of institutional heritage; place an order through our B2B portal or contact our team directly.",
+      body: "Get to know our 50+ years of institutional heritage; place an order through our B2B portal or contact our team directly.",
       b2b: "B2B Portal",
       contact: "Contact",
     },
