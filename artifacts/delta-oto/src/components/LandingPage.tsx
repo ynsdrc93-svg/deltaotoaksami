@@ -6,7 +6,7 @@ import { useDocumentMeta } from "../hooks/use-document-meta";
 import { SiteFooter } from "./shared/SiteFooter";
 import { BrandLogo } from "./shared/BrandLogo";
 import { LanguageSwitcher } from "./shared/LanguageSwitcher";
-import { VERIFIED_CLASSIFIED_BRANDS, type Brand } from "../lib/brands";
+import { CLASSIFIED_BRANDS, type Brand } from "../lib/brands";
 import { latestAgendaItems } from "../lib/agenda";
 import { useLang, routeFor, gundemAnchor, gundemDetailRoute, type Lang, type RouteKey } from "../lib/i18n";
 
@@ -16,20 +16,18 @@ import { useLang, routeFor, gundemAnchor, gundemDetailRoute, type Lang, type Rou
 // (yalnızca harita alt-bileşeni erteleniyor).
 const LogisticsMap = lazy(() => import("./LogisticsMap").then((m) => ({ default: m.LogisticsMap })));
 
-// Şerit, Tedarikçiler sayfasıyla AYNI kaynağı (VERIFIED_CLASSIFIED_BRANDS —
-// Excel'in sınıflandırılmış markalarından yalnızca doğrulanmış logo asseti
-// olanlar, bkz. brands.ts) kullanır; Excel'de olmayan markalar burada da
-// gösterilmez (bkz. brands.ts UNCLASSIFIED_BRANDS notu). Marka Görsel
-// Hijyeni Turu: doğrulanmış görseli olmayan marka (Taifun) artık tipografik
-// yer tutucuyla akmıyor — bu görsel vitrinden tamamen omit edildi (bkz.
-// brands.ts VERIFIED_CLASSIFIED_BRANDS notu). 3 satıra, sabit dilim yerine
+// Şerit, Tedarikçiler sayfasıyla AYNI kaynağı (CLASSIFIED_BRANDS — Excel'in
+// sınıflandırılmış markaları) kullanır; Excel'de olmayan markalar burada da
+// gösterilmez (bkz. brands.ts UNCLASSIFIED_BRANDS notu). hasVerifiedLogo:false
+// olan markalar gerçek logo yerine tipografik yer tutucuyla akar — bkz.
+// shared/BrandLogo.tsx (size="strip"). 3 satıra, sabit dilim yerine
 // dinamik olarak eşit bölünür; böylece marka sayısı Excel güncellendiğinde
 // satırlar otomatik dengelenir. NOT: "100+ marka" (görünür genel iddia,
 // bkz. content.partners.body) ile buradaki GERÇEK sınıflandırılmış logo
 // sayısı FARKLI kasıtlı şeyler — biri kamuya açık portföy iddiası, diğeri
 // şerit/duvarda gösterilen doğrulanmış logo veri kümesi (bkz. Content/UX
 // Pass 01 görev tanımı §5).
-const STRIP_BRANDS = VERIFIED_CLASSIFIED_BRANDS;
+const STRIP_BRANDS = CLASSIFIED_BRANDS;
 const STRIP_ROWS = 3;
 const STRIP_CHUNK = Math.ceil(STRIP_BRANDS.length / STRIP_ROWS);
 const BRAND_STRIPS = Array.from({ length: STRIP_ROWS }, (_, i) =>

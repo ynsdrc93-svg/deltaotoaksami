@@ -3,7 +3,7 @@ import { ChevronRight, ChevronLeft, ChevronDown, ArrowRight, Check, Search, X } 
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
 import { BrandLogo } from "@/components/shared/BrandLogo";
-import { CLASSIFIED_BRANDS, VERIFIED_CLASSIFIED_BRANDS, GLOBAL_BRANDS, YERLI_BRANDS, type Brand } from "@/lib/brands";
+import { CLASSIFIED_BRANDS, GLOBAL_BRANDS, YERLI_BRANDS, type Brand } from "@/lib/brands";
 import { PRODUCT_CATEGORIES, MACRO_FAMILIES, type ProductCategory } from "@/lib/categories";
 import { useEscapeKey, useReveal } from "@/hooks/use-motion";
 import { useDocumentMeta } from "@/hooks/use-document-meta";
@@ -652,7 +652,7 @@ export function TedarikciPage() {
           <div ref={reveal} className="do-reveal mb-8 lg:mb-14 flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6">
             <div>
               <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea]">{t.brandWall.eyebrow}</span>
-              <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight mt-2">{t.brandWall.heading(VERIFIED_CLASSIFIED_BRANDS.length)}</h2>
+              <h2 className="text-3xl md:text-4xl font-black text-white tracking-tight mt-2">{t.brandWall.heading(CLASSIFIED_BRANDS.length)}</h2>
               <p className="text-white/45 text-[14px] max-w-xl mt-3 leading-relaxed">{t.brandWall.desc}</p>
             </div>
             <div className="relative w-full lg:w-72 shrink-0">
