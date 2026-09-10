@@ -450,18 +450,22 @@ export function KariyerPage() {
         </div>
       </section>
 
-      {/* YAN HAKLAR — navy. Tek sistem: eski "Yaşam Dengesi / Kariyer Yatırımı" iki panelli
-          ayrım kaldırıldı. Aynı 8 gerçek hak, tek çerçeveli ızgarada iç kılcal çizgilerle
-          bölünmüş — 8 ayrı kutu yerine tek bütün bir yapı. Kademeli (stagger) giriş, iki
-          zıt kart değil, tek akışın parçaları olarak hissettiriyor. */}
+      {/* YAN HAKLAR — Editorial Yenileme Turu: eski sürüm 8 eşit kutunun
+          çerçeveli ızgarası (her kutu kendi ikonu + kalın label + küçük sub
+          ile) idi — komşu modüllerin (Çalışan Sesi'nin geniş nefes alan
+          alıntı kartları, Kariyer Platformları'nın büyük ikon-rozetli 2
+          kartı) tonundan kopuk, "yan hak panosu" gibi duruyordu; ayrıca
+          arkada konuyla ilgisiz bir stok fotoğraf vardı (kaldırıldı — hero'da
+          da kullanılan do-grid-bg dokusu yeterli). Yeni sunum: kutu-ızgara
+          yerine tek bir numaralı/bölünmüş liste — sıra bilgisi taşımadığı
+          için 01-08 rakamları dekoratif değil, sekiz gerçek hakkın SAYILABİLİR
+          bir bütün olduğunu okutan yapısal bir işaret. İkonlar küçük ve
+          ikincil (etiketin yanında, büyük bir görsel odak değil) — "ikon çok
+          sınırlı" yönü seçildi. */}
       <section className="relative bg-[#1B3A8F] text-white py-24 overflow-hidden">
-        <div className="absolute inset-0">
-          <img src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=1920&q=80" alt="" className="w-full h-full object-cover opacity-10" />
-          <div className="absolute inset-0 bg-[#1B3A8F]/80" />
-        </div>
         <div className="absolute inset-0 do-grid-bg opacity-25" />
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-          <div ref={reveal} className="do-reveal mb-14">
+          <div ref={reveal} className="do-reveal mb-16 max-w-2xl">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea] block mb-3">{t.benefits.eyebrow}</span>
             <h2 className="text-4xl md:text-5xl font-black tracking-tight leading-[1.1]">{t.benefits.heading}</h2>
             <p className="text-white/60 mt-4 text-[15px] leading-relaxed max-w-xl">
@@ -469,18 +473,23 @@ export function KariyerPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-2 lg:grid-cols-4 rounded-2xl border-t border-l border-white/10 overflow-hidden">
+          <div className="grid lg:grid-cols-2 lg:gap-x-16 border-t border-white/10">
             {t.benefits.items.map((item, i) => {
               const Icon = BENEFIT_ICONS[i];
               return (
                 <div
                   key={item.label}
                   ref={reveal}
-                  className={`do-reveal do-d${(i % 4) + 1} border-r border-b border-white/10 p-6 md:p-7 transition-colors duration-300 hover:bg-white/[0.06]`}
+                  className={`do-reveal do-d${(i % 4) + 1} group flex items-start gap-5 py-7 border-b border-white/10`}
                 >
-                  <Icon className="w-5 h-5 text-[#7d9bea] mb-4" />
-                  <div className="text-[13px] md:text-[13.5px] font-bold text-white leading-snug">{item.label}</div>
-                  <div className="text-white/55 text-[11.5px] mt-1.5 leading-snug">{item.sub}</div>
+                  <span className="text-[13px] font-black text-[#7d9bea]/70 tabular-nums pt-0.5 shrink-0 w-6">{String(i + 1).padStart(2, "0")}</span>
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-2.5">
+                      <Icon className="w-4 h-4 text-[#7d9bea] shrink-0" strokeWidth={1.75} />
+                      <div className="text-white font-bold text-[15px] leading-snug">{item.label}</div>
+                    </div>
+                    <div className="text-white/50 text-[13px] mt-1.5 leading-snug pl-[26px]">{item.sub}</div>
+                  </div>
                 </div>
               );
             })}

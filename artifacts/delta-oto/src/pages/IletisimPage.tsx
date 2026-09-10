@@ -272,15 +272,26 @@ export function IletisimPage() {
           olur, tam genişlik korunur — object-[center_48%] köprü kulesi +
           güverte + su şeridini ortada tutar, boş gökyüzünün bir kısmı
           kırpılır. Mobilde (container kaynaktan çok daha dar/uzun) yatay
-          kırpma olur — merkezi kullanmak köprünün kendisini kadraj dışına
-          atardı (ana kule sağ-orta üçte birde), bu yüzden object-[64%_42%]
-          ile kule + güverte + ışık izleri kadrajda tutuluyor. */}
-      <section className="relative min-h-[590px] sm:min-h-[650px] flex items-center text-white overflow-hidden bg-[#0e1016]">
+          kırpma olur.
+          Fotoğraf Kalitesi Düzeltme Turu: mobilde eski min-h-[590px], 390px
+          genişlikte 2.21:1 oranlı bu geniş fotoğrafın yalnızca ~%30'unu
+          gösteriyordu — tek bir kule aşırı yakınlaştırılmış/kadraj taşmış
+          gibi duruyordu. min-h düşürüldü (min-h, içerik daha uzunsa hâlâ
+          büyüyebilir — metin hiçbir zaman kırpılmaz); aynı yükseklik/genişlik
+          oranında container kısaldıkça object-cover görüntünün daha GENİŞ bir
+          dilimini gösterir — kule + güverte + iki yakanın silueti artık
+          birlikte okunuyor, çözünürlük hissi de aynı kaynağın daha az
+          büyütülmesiyle toparlanıyor. Genişleyen kadrajla birlikte eski
+          %64 yatay çapa da metnin üzerine kuleyi getiriyordu (okunabilirlik
+          düşüyordu) — %50'ye çekilerek kule kadrajın sağına, metin ise
+          kablo/gökyüzü gibi daha sakin bir zemine oturuyor. sm/lg
+          değerlerine (tablet/masaüstü, zaten iyi kadrajlıydı) dokunulmadı. */}
+      <section className="relative min-h-[440px] sm:min-h-[650px] flex items-center text-white overflow-hidden bg-[#0e1016]">
         <div className="absolute inset-0">
           <img
             src="/images/iletisim-hero-bosphorus.webp"
             alt=""
-            className="w-full h-full object-cover object-[64%_42%] sm:object-[center_48%]"
+            className="w-full h-full object-cover object-[50%_42%] sm:object-[center_48%]"
           />
           <div className="absolute inset-0 bg-gradient-to-r from-[#0e1016] via-[#0e1016]/70 to-[#0e1016]/25" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0e1016] via-transparent to-transparent" />

@@ -12,15 +12,22 @@ import { cities as turkeyCities } from "turkey-map-react/lib/data";
 // önceden indiriliyor, boş bir bölüme scroll edilmiyor. Harita/rota/tooltip
 // davranışı ve tasarımı BİREBİR aynı — yalnızca kod konumu değişti.
 
-const OPS_HUB_PLATES = [34, 41, 35]; // İstanbul (Ümraniye), Kocaeli (Gebze), İzmir
+// Gebze/İstanbul Tek Merkez Turu: İstanbul (Ümraniye) artık ayrı, kendi
+// başına parlayan bir hub noktası DEĞİL — Marmara/İstanbul/Trakya hattı
+// görsel olarak Gebze'den beslenen bir rota ucu olarak temsil ediliyor (bkz.
+// aşağıdaki DISTRIBUTION_ROUTES'taki Gebze -> Marmara/İstanbul/Trakya
+// satırı). Bunun nedeni: gerçek dağıtım hikayesi artık Gebze + İzmir üzerine
+// kurulu; Ümraniye ayrı bir dağıtım merkezi değil, Delta'nın genel merkezi/
+// iletişim adresi (bu, sitedeki diğer meşru İletişim/Hakkımızda kullanımını
+// etkilemez — yalnızca bu harita, salt dağıtım hikayesini anlatıyor).
+const OPS_HUB_PLATES = [41, 35]; // Kocaeli (Gebze), İzmir
 const OPS_HUB_PATHS = turkeyCities.filter((c) => OPS_HUB_PLATES.includes(c.plateNumber));
 const OPS_HUB_POINTS: [number, number][] = [
-  [193.6, 211.0], // Ümraniye / İstanbul
   [241.0, 236.5], // Gebze / Kocaeli
   [96.7, 376.5],  // İzmir
 ];
 
-// Dağıtım rotaları: 3 merkezden ülke geneline uzanan ok çizgileri.
+// Dağıtım rotaları: Gebze ve İzmir'den ülke geneline uzanan ok çizgileri.
 // Uçlar turkey-map-react'in path verisinden hesaplanan yaklaşık il merkezleri
 // (bounding-box centroid), haritayla aynı viewBox ("0 80 1050 585") üzerinde.
 // Antalya İSTİSNASI: Antalya kıyı şeridi girintili (Antalya Körfezi bbox'ın
@@ -43,18 +50,19 @@ const OPS_HUB_POINTS: [number, number][] = [
 // rota) baskınlığını bozmadan, ama artık "sadece batıda 2 nokta" değil,
 // gerçek bir bölgesel merkez gibi okunuyor.
 const DISTRIBUTION_ROUTES: { from: [number, number]; to: [number, number] }[] = [
-  { from: [193.6, 211.0], to: [555.7, 218.6] }, // Ümraniye -> Samsun (Karadeniz)
-  { from: [193.6, 211.0], to: [750.7, 246.5] }, // Ümraniye -> Trabzon (Doğu Karadeniz)
-  { from: [193.6, 211.0], to: [911.6, 256.6] }, // Ümraniye -> Kars (uç kuzeydoğu)
-  { from: [193.6, 211.0], to: [836.8, 293.1] }, // Ümraniye -> Erzurum (Doğu Anadolu)
-  { from: [193.6, 211.0], to: [959.2, 387.8] }, // Ümraniye -> Van (uç doğu)
-  { from: [193.6, 211.0], to: [365.1, 325.1] }, // Ümraniye -> Ankara (İç Anadolu)
-  { from: [193.6, 211.0], to: [550.4, 406.2] }, // Ümraniye -> Kayseri (İç Anadolu)
-  { from: [193.6, 211.0], to: [623.3, 336.2] }, // Ümraniye -> Sivas (İç/Doğu geçiş)
-  { from: [193.6, 211.0], to: [621.8, 498.8] }, // Ümraniye -> Gaziantep (Güneydoğu Anadolu)
-  { from: [193.6, 211.0], to: [780.0, 425.9] }, // Ümraniye -> Diyarbakır (Güneydoğu Anadolu)
-  { from: [193.6, 211.0], to: [717.9, 480.5] }, // Ümraniye -> Şanlıurfa (Güneydoğu Anadolu)
-  { from: [193.6, 211.0], to: [533.1, 476.7] }, // Ümraniye -> Adana (Akdeniz/Çukurova)
+  { from: [241.0, 236.5], to: [193.6, 211.0] }, // Gebze -> Marmara/İstanbul/Trakya hattı (eski Ümraniye hub noktası, artık salt bir rota ucu)
+  { from: [241.0, 236.5], to: [555.7, 218.6] }, // Gebze -> Samsun (Karadeniz)
+  { from: [241.0, 236.5], to: [750.7, 246.5] }, // Gebze -> Trabzon (Doğu Karadeniz)
+  { from: [241.0, 236.5], to: [911.6, 256.6] }, // Gebze -> Kars (uç kuzeydoğu)
+  { from: [241.0, 236.5], to: [836.8, 293.1] }, // Gebze -> Erzurum (Doğu Anadolu)
+  { from: [241.0, 236.5], to: [959.2, 387.8] }, // Gebze -> Van (uç doğu)
+  { from: [241.0, 236.5], to: [365.1, 325.1] }, // Gebze -> Ankara (İç Anadolu)
+  { from: [241.0, 236.5], to: [550.4, 406.2] }, // Gebze -> Kayseri (İç Anadolu)
+  { from: [241.0, 236.5], to: [623.3, 336.2] }, // Gebze -> Sivas (İç/Doğu geçiş)
+  { from: [241.0, 236.5], to: [621.8, 498.8] }, // Gebze -> Gaziantep (Güneydoğu Anadolu)
+  { from: [241.0, 236.5], to: [780.0, 425.9] }, // Gebze -> Diyarbakır (Güneydoğu Anadolu)
+  { from: [241.0, 236.5], to: [717.9, 480.5] }, // Gebze -> Şanlıurfa (Güneydoğu Anadolu)
+  { from: [241.0, 236.5], to: [533.1, 476.7] }, // Gebze -> Adana (Akdeniz/Çukurova)
   { from: [241.0, 236.5], to: [195.1, 287.0] }, // Gebze -> Bursa (yakın Marmara)
   { from: [241.0, 236.5], to: [295.8, 323.5] }, // Gebze -> Eskişehir (İç Anadolu batı)
   { from: [241.0, 236.5], to: [437.4, 207.8] }, // Gebze -> Kastamonu (Batı Karadeniz)
@@ -117,8 +125,8 @@ export function LogisticsMap() {
           bozuk görünüyordu, bu yüzden haritayı olduğu gibi (temiz) bırakıyoruz.
           Harita artık salt görsel/dekoratif (Content/UX Pass 01) — il bazlı
           hover/tooltip/tıklama kaldırıldı, kullanıcı illeri seçemez. Silüet,
-          3 operasyon merkezi vurgusu ve animasyonlu dağıtım rotaları AYNEN
-          korunuyor. */}
+          operasyon merkezi vurgusu (Gebze + İzmir) ve animasyonlu dağıtım
+          rotaları AYNEN korunuyor. */}
       {/* .do-map-decorative: turkey-map-react HER zaman kendi path'lerine
           satır-içi `cursor: pointer` stili basıyor — bu, hoverable={false}
           olsa bile değişmiyor (kütüphanenin kendi kaynağında doğrulandı;
@@ -136,7 +144,7 @@ export function LogisticsMap() {
           customStyle={{ idleColor: "#1B3A8F", hoverColor: "#1B3A8F" }}
         />
       </div>
-      {/* turkey-map-react has no per-city color prop; overlay the 3 hub
+      {/* turkey-map-react has no per-city color prop; overlay the 2 hub
           provinces' own path data (same viewBox) with the accent fill. */}
       <svg
         viewBox="0 80 1050 585"
@@ -147,8 +155,8 @@ export function LogisticsMap() {
           <path key={c.id} d={c.path} fill="#7d9bea" />
         ))}
       </svg>
-      {/* 3 merkezden ülke geneline dağıtımı görselleştiren, scroll'da
-          kendini çizen rota okları — "sadece batıda 3 nokta" algısını
+      {/* Gebze ve İzmir'den ülke geneline dağıtımı görselleştiren, scroll'da
+          kendini çizen rota okları — "sadece batıda birkaç nokta" algısını
           "buradan tüm ülkeye" hikayesine dönüştürür. */}
       <svg
         ref={routeLayerRef}

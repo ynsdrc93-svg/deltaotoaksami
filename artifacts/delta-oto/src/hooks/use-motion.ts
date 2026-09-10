@@ -155,6 +155,20 @@ export function useParallax<T extends HTMLElement>(speed = 0.12) {
  * see useViewportFocusIndex below, which measures each item's own
  * position directly instead of inferring it from where the section as a
  * whole has scrolled to.)
+ *
+ * 'reveal' Turu #2 (hâlâ Operasyon'un 4-adımlık sürecinde, canlı QA):
+ * ilk 'reveal' turu START'ı geciktirdi ama END'i hâlâ 'settle' ile AYNI
+ * formülden alıyordu — 'settle'in amacı kısa bir bölüm için 1'e MÜMKÜN
+ * OLDUĞUNCA ERKEN ulaşmak (rect.height tabanlı, + 80px'lik minTravel
+ * tabanı). Bu modülün rect.height'ı (kısa, yatay 4-adım satırı) küçük
+ * olduğundan rawEnd neredeyse hep minTravel tabanına çarpıyordu — 0→1
+ * aralığı yalnızca ~80px'lik bir scroll'a sığıyordu, yani 4 adım
+ * kullanıcı fark etmeden art arda yanıp bitiyordu. 'reveal' artık END'i
+ * de 'settle'den ayırıyor: rect.height'a değil, viewport yüksekliğinin
+ * sabit bir oranına (aşağıdaki revealTravelFraction) bağlı, bölümün kendi
+ * boyutundan bağımsız GERÇEK bir scroll mesafesi garantiliyor — 4 adımın
+ * her biri algılanabilir bir scroll payı alıyor. 1440×900 / 1920×1080 /
+ * 390×844'te canlı QA ile doğrulandı.
  */
 export function useSectionProgress<T extends HTMLElement>(mode: "settle" | "transit" | "reveal" = "settle") {
   const ref = React.useRef<T | null>(null)
@@ -178,6 +192,10 @@ export function useSectionProgress<T extends HTMLElement>(mode: "settle" | "tran
         let end: number
         if (mode === "transit") {
           end = -rect.height
+        } else if (mode === "reveal") {
+          const topSafeMargin = 0.12 * vh        // stay clear of a sticky header near the top of the viewport
+          const revealTravelFraction = 0.6       // 0→1 always spans ~60% of a viewport height, regardless of the section's own (short) height
+          end = Math.max(topSafeMargin, start - vh * revealTravelFraction)
         } else {
           const topSafeMargin = 0.12 * vh   // stay clear of a sticky header near the top of the viewport
           const bottomSafeMargin = 24        // small breathing room above the viewport's bottom edge

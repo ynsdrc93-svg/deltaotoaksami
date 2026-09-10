@@ -491,10 +491,11 @@ export function OperasyonPage() {
       </section>
 
       {/* SİPARİŞ SÜRECİ — navy. Motion dekoratif değil, tasarımın kendisi:
-          processProgress bu bloğun kendi scroll geçişini izler ('settle'
-          modu, bkz. yukarıdaki hook yorumu ve use-motion.ts — Görsel/UX
-          Düzeltme Turu §6-9, adım 4'ün kullanıcı modülü terk ETMEDEN
-          tamamlanmasını garanti eden düzeltme), üstteki ince çubuk gerçek
+          processProgress bu bloğun kendi scroll geçişini izler ('reveal'
+          modu — bkz. use-motion.ts'teki hook yorumu: modül viewport'a
+          gerçekten girmeden progress 0'da kalır, sonra 4 adımın her birine
+          algılanabilir bir scroll payı düşecek şekilde ~viewport
+          yüksekliğinin %60'ına yayılır), üstteki ince çubuk gerçek
           zamanlı dolar. Üç durum (§8, "gerçek bir yolculuk hissi"): quiet
           (henüz sırası gelmedi) → passed (geçildi, okunur/açık kalır, asla
           solmaz) → current (şu an "buradayız", ayrıca büyütülmüş nokta +

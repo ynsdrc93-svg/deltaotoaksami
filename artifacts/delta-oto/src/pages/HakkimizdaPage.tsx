@@ -624,8 +624,15 @@ export function HakkimizdaPage() {
         </div>
       </section>
 
-      {/* DEĞERLER — white, kart-grid yerine tam genişlik bölmeli editorial panel */}
-      <section className="bg-white py-24">
+      {/* DEĞERLER — Görsel Ayrışma Turu: hemen üstündeki Gündem bölümü de
+          bg-white olduğu için ikisi ayrım çizgisi olmadan tek bir beyaz
+          blok gibi akıyordu (kullanıcı geri bildirimi). Çözüm: sayfanın
+          zaten kullandığı, kurumsal renk sisteminde tanımlı "light section"
+          tonuna (#f8fafc — bkz. aşağıdaki SÜRDÜRÜLEBİLİRLİK bölümünde aynı
+          desen) + ince bir üst kenarlığa geçildi; yeni bir renk icat
+          edilmedi, mevcut tasarım sistemi tekrar kullanıldı. Kart-grid
+          yerine tam genişlik bölmeli editorial panel aynen korunuyor. */}
+      <section className="bg-[#f8fafc] py-24 border-t border-slate-200">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div ref={reveal} className="do-reveal mb-14 max-w-xl">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">{t.values.eyebrow}</span>
@@ -633,7 +640,7 @@ export function HakkimizdaPage() {
             <p className="text-slate-500 mt-3 text-[15px]">{t.values.body}</p>
           </div>
 
-          <div className="rounded-xl border border-slate-200 overflow-hidden">
+          <div className="rounded-xl border border-slate-200 overflow-hidden bg-white">
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-px bg-slate-200">
               {VALUES.map(({ icon: Icon, title, desc }, i) => (
                 <div

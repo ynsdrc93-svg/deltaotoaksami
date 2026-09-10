@@ -63,7 +63,7 @@ const content = {
     advantages: {
       eyebrow: "Tedarik Üstünlüğü",
       heading: "Neden Delta Oto?",
-      trust: { value: "50+", label: "Yıldır Otomotiv" },
+      trust: { value: "50+", label: "Yıldır Otomotiv Aftermarket'te" },
       items: [
         { title: "Stok", desc: "Aradığınız parça büyük olasılıkla zaten depoda." },
         { title: "Erişim", desc: "Global tedarik ağına tek noktadan bağlanırsınız." },
@@ -117,7 +117,7 @@ const content = {
     advantages: {
       eyebrow: "Supply Advantage",
       heading: "Why Delta Oto?",
-      trust: { value: "50+", label: "Years in Automotive" },
+      trust: { value: "50+", label: "Years in Automotive Aftermarket" },
       items: [
         { title: "Stock", desc: "The part you need is most likely already in the warehouse." },
         { title: "Access", desc: "One connection to the global supply network." },
