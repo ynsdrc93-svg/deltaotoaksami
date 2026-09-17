@@ -93,12 +93,11 @@ const content = {
       eyebrow: "Operasyon Altyapısı",
       heading: "Gebze ve İzmir'den Türkiye Geneline Dağıtım",
       body: "İki operasyon noktamızdan, Türkiye'nin tamamına planlı ve düzenli dağıtım sağlıyoruz.",
-      reachValue: "81",
-      reachLabel: "İl",
-      reachBody: "Türkiye'nin tamamına planlı dağıtım.",
+      reachValue: "81 İl",
+      reachLabel: "Türkiye Geneline Dağıtım",
       panels: [
-        { title: "Gebze", plate: "41", tag: "Doğu Marmara", body: "Kocaeli ve Sakarya'ya hızlı erişim.", image: "/images/delta-oto-hero-facility.webp", logo: "/images/delta-oto-logo-classic.webp", logoAlt: "Delta Oto" },
-        { title: "İzmir", plate: "35", tag: "Ege Bölgesi · Opar", body: "Ege'nin dağıtım omurgası.", image: "/images/delta-oto-depot.webp", logo: "/images/opar-logo-white.svg", logoAlt: "Opar" },
+        { title: "Gebze", image: "/images/delta-oto-hero-facility.webp" },
+        { title: "İzmir", image: "/images/delta-oto-depot.webp" },
       ],
     },
     // Hard-edit (§21-22): 8 madde → 3. Kalan 5 madde bu sayfada BAŞKA YERDE
@@ -183,12 +182,11 @@ const content = {
       eyebrow: "Operations Infrastructure",
       heading: "Nationwide Distribution from Gebze and İzmir",
       body: "From our two operations points, we provide planned, regular distribution across the whole of Türkiye.",
-      reachValue: "81",
-      reachLabel: "Provinces",
-      reachBody: "Regular, planned distribution across Türkiye.",
+      reachValue: "81 Provinces",
+      reachLabel: "Nationwide Distribution",
       panels: [
-        { title: "Gebze", plate: "41", tag: "Eastern Marmara", body: "Fast access to Kocaeli and Sakarya.", image: "/images/delta-oto-hero-facility.webp", logo: "/images/delta-oto-logo-classic.webp", logoAlt: "Delta Oto" },
-        { title: "İzmir", plate: "35", tag: "Aegean Region · Opar", body: "The Aegean's distribution backbone.", image: "/images/delta-oto-depot.webp", logo: "/images/opar-logo-white.svg", logoAlt: "Opar" },
+        { title: "Gebze", image: "/images/delta-oto-hero-facility.webp" },
+        { title: "İzmir", image: "/images/delta-oto-depot.webp" },
       ],
     },
     capabilities: {
@@ -400,51 +398,52 @@ export function OperasyonPage() {
         </div>
       </section>
 
-      {/* OPERASYON ALTYAPISI — white, foto-öncelikli. Fotoğraf-Öncelikli Depo
-          Modülü Turu: eski plaka-numaralı/flow-line'lı tipografik kompozisyon
-          TAMAMEN kaldırıldı. Artık iki eşit ağırlıklı fotoğrafik panel
-          (Gebze/İzmir) — koyu gradyan + üzerinde tipografi, kart-ızgara
-          hissi yok. Ümraniye paneli kaldırıldı (bkz. depots veri yorumu).
-          Delta/Opar kimliği panel üzerinde temiz bir HTML/CSS logo katmanı
-          (mevcut doğrulanmış asset'ler) — fotoğrafın kendisine sahte tabela
-          eklenmedi. Masaüstünde yan yana, mobilde doğal biçimde alt alta. */}
+      {/* OPERASYON ALTYAPISI — Mimari Sadeleştirme Turu: eski sürümde her
+          panelin üzerinde bindirilmiş bir logo görseli, plaka numarası,
+          bölge etiketi ve bir cümlelik açıklama vardı — kullanıcı bunu
+          "ucuz fotoğraf-altyazı" hissi olarak reddetti. Artık fotoğrafın
+          üzerinde YALNIZCA şehir adı var (Gebze/İzmir) — logo bindirmesi
+          TAMAMEN kaldırıldı (gerçek fotoğrafın içinde doğal olarak bir marka
+          görünüyorsa dokunulmaz, ama HTML/CSS katmanıyla üstüne EKLENMEZ).
+          "81 İl" artık bu bölümün küçük bir köşe notu değil — fotoğraflardan
+          sonra gelen, kendi navy bandıyla ayrılmış, büyük ve merkezi bir
+          KAPANIŞ ifadesi (bkz. aşağıdaki ayrı bölüm). Başlık tek satıra
+          sığması için geniş bir konteynerde (max-w-4xl), dar bir okuma
+          ölçüsüne zorlanmıyor. */}
       <section className="bg-white py-16 md:py-20 lg:py-16 overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div ref={ref} className="do-reveal max-w-2xl mb-8 md:mb-10 lg:mb-12">
+          <div ref={ref} className="do-reveal max-w-4xl mb-8 md:mb-10 lg:mb-12">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">{t.depots.eyebrow}</span>
-            <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-2 tracking-tight">{t.depots.heading}</h2>
-            <p className="text-slate-500 mt-3 text-[15px] leading-relaxed">{t.depots.body}</p>
+            <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-slate-900 mt-2 tracking-tight">{t.depots.heading}</h2>
+            <p className="text-slate-500 mt-3 text-[15px] leading-relaxed max-w-xl">{t.depots.body}</p>
           </div>
 
           <div className="grid md:grid-cols-2 gap-5 lg:gap-6">
-            {t.depots.panels.map((panel: { title: string; plate: string; tag: string; body: string; image: string; logo: string; logoAlt: string }, i: number) => (
+            {t.depots.panels.map((panel: { title: string; image: string }, i: number) => (
               <div
                 key={panel.title}
                 ref={ref}
                 className={`do-reveal ${i === 1 ? "do-d1" : ""} relative rounded-2xl overflow-hidden aspect-[4/3] md:aspect-[3/4] lg:aspect-[4/3]`}
               >
                 <img src={panel.image} alt="" className="absolute inset-0 w-full h-full object-cover" />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0e1016] via-[#0e1016]/55 to-[#0e1016]/10" />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0e1016]/70 via-[#0e1016]/10 to-transparent" />
                 <div className="absolute inset-0 p-6 md:p-7 lg:p-8 flex flex-col justify-end text-white">
-                  <img src={panel.logo} alt={panel.logoAlt} className="h-6 md:h-7 w-auto mb-4 opacity-90 object-contain object-left" />
-                  <div className="flex items-baseline gap-3 mb-1.5">
-                    <span className="text-[11px] font-black text-[#7d9bea] tabular-nums">{panel.plate}</span>
-                    <h3 className="text-2xl md:text-3xl font-black tracking-tight">{panel.title}</h3>
-                  </div>
-                  <span className="text-[10.5px] font-black uppercase tracking-[0.15em] text-[#7d9bea] mb-2.5 block">{panel.tag}</span>
-                  <p className="text-white/75 text-[13.5px] leading-relaxed max-w-xs">{panel.body}</p>
+                  <h3 className="text-2xl md:text-3xl font-black tracking-tight">{panel.title}</h3>
                 </div>
               </div>
             ))}
           </div>
+        </div>
+      </section>
 
-          <div ref={ref} className="do-reveal do-d2 flex items-baseline gap-4 mt-8 md:mt-10">
-            <span className="text-5xl md:text-6xl font-black text-[#1B3A8F] tabular-nums leading-none">{t.depots.reachValue}</span>
-            <div>
-              <div className="text-sm font-black text-slate-900 uppercase tracking-tight">{t.depots.reachLabel}</div>
-              <p className="text-slate-500 text-[13px] mt-1">{t.depots.reachBody}</p>
-            </div>
-          </div>
+      {/* 81 İL — navy, tam genişlik kapanış bandı. Fotoğraf bölümüyle
+          Sistem ve Kalite (dark) bölümü arasında kendi başına bir durak;
+          ne bir köşe rozeti ne de fotoğrafın üzerine bindirilmiş bir sayı —
+          büyük, ortalanmış, tek başına okunan bir sonuç ifadesi. */}
+      <section className="bg-[#1B3A8F] py-14 md:py-16 text-white text-center">
+        <div ref={ref} className="do-reveal max-w-7xl mx-auto px-6 lg:px-8">
+          <div className="text-5xl md:text-6xl lg:text-7xl font-black tracking-tight tabular-nums">{t.depots.reachValue}</div>
+          <p className="mt-2 text-[#7d9bea] text-sm md:text-base font-bold uppercase tracking-[0.15em]">{t.depots.reachLabel}</p>
         </div>
       </section>
 

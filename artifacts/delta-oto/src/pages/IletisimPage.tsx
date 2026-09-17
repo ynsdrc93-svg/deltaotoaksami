@@ -285,7 +285,23 @@ export function IletisimPage() {
           %64 yatay çapa da metnin üzerine kuleyi getiriyordu (okunabilirlik
           düşüyordu) — %50'ye çekilerek kule kadrajın sağına, metin ise
           kablo/gökyüzü gibi daha sakin bir zemine oturuyor. sm/lg
-          değerlerine (tablet/masaüstü, zaten iyi kadrajlıydı) dokunulmadı. */}
+          değerlerine (tablet/masaüstü, zaten iyi kadrajlıydı) dokunulmadı.
+          Fotoğraf Kalitesi Düzeltme Turu #2: min-h/object-position zaten
+          doğruydu — asıl sorun, masaüstünde bile (1920'de object-cover
+          gerçekte YATAYDA hiç kırpma yapmıyor, tam genişlik gösteriliyor)
+          sol taraftaki köprünün UZAK/küçük ayağının okunabilirlik gradyanı
+          altında neredeyse görünmez kalmasıydı — bu da fotoğrafı "tek bir
+          kulenin yakın çekimi" gibi hissettiriyordu, halbuki köprünün tamamı
+          zaten kadrajdaydı. Kaynak dosya (202KB, 2000×903, tek versiyon —
+          git geçmişinde başka/daha yüksek çözünürlüklü bir öncülü yok)
+          quality=95'te yeniden export edilip karşılaştırıldı: yalnızca
+          ~%20 boyut farkı çıktı, yani zaten iyi kalitede kodlanmış —
+          yeniden export'un görünür bir katkısı olmadığından asset
+          değiştirilmedi. Asıl düzeltme: yatay gradyan biraz açıldı
+          (from-90/via-50/to-10, önceden from-100/via-70/to-25) — metin hâlâ
+          tam okunur kalıyor (üç viewport'ta da doğrulandı) ama uzak kule ve
+          şehir silüeti artık seçilebiliyor; "tek kule" hissi yerini
+          köprünün bütününe bırakıyor. */}
       <section className="relative min-h-[440px] sm:min-h-[650px] flex items-center text-white overflow-hidden bg-[#0e1016]">
         <div className="absolute inset-0">
           <img
@@ -293,7 +309,7 @@ export function IletisimPage() {
             alt=""
             className="w-full h-full object-cover object-[50%_42%] sm:object-[center_48%]"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0e1016] via-[#0e1016]/70 to-[#0e1016]/25" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#0e1016]/90 via-[#0e1016]/50 to-[#0e1016]/10" />
           <div className="absolute inset-0 bg-gradient-to-t from-[#0e1016] via-transparent to-transparent" />
         </div>
         <div className="absolute inset-0 do-grid-bg opacity-20" />

@@ -84,12 +84,12 @@ const ESG_ICONS = [Route, Recycle, Laptop];
 const content = {
   tr: {
     meta: {
-      title: "Hakkımızda — 50+ Yıllık Kurumsal Birikim | Delta Oto",
+      title: "Hakkımızda — Otomotiv Aftermarket'in 50+ Yıllık Kurumsal Birikimi | Delta Oto",
       description: "Delta Oto'nun 1976'dan bugüne kurumsal tarihçesi, değer çerçevesi, iş birimleri ve GROUPAUTO Türkiye üyeliği; 118 ülkede küresel tedarik gücü.",
     },
     hero: {
       eyebrow: "Kuruluş 1976 · Delta Oto",
-      title: ["50+ YILLIK", "KURUMSAL", "BİRİKİMİ"],
+      title: ["OTOMOTİV AFTERMARKET'İN", "50+ YILLIK", "KURUMSAL BİRİKİMİ"],
       body: "1976'dan bu yana otomotiv yedek parça dağıtım sektöründe faaliyet gösteren Delta Oto; güçlü tedarik altyapısı, geniş marka portföyü ve GROUPAUTO Türkiye üyeliğiyle sektörün yapıcı güçlerinden biri olmaya devam etmektedir.",
       cta: "Operasyon Altyapımızı İnceleyin",
     },
@@ -176,12 +176,12 @@ const content = {
   },
   en: {
     meta: {
-      title: "About Us — 50+ Years in Automotive | Delta Oto",
+      title: "About Us — 50+ Years of Corporate Experience in the Automotive Aftermarket | Delta Oto",
       description: "Delta Oto's corporate history, value framework, business units and GROUPAUTO Türkiye membership since 1976 — global supply strength across 118 countries.",
     },
     hero: {
       eyebrow: "Founded 1976 · Delta Oto",
-      title: ["50+ YEARS OF", "INSTITUTIONAL", "HERITAGE"],
+      title: ["50+ YEARS OF", "CORPORATE EXPERIENCE", "IN THE AUTOMOTIVE AFTERMARKET"],
       body: "Delta Oto has operated in the automotive spare parts distribution industry since 1976. With a strong supply infrastructure, a broad brand portfolio and its GROUPAUTO Türkiye membership, it continues to be one of the industry's constructive forces.",
       cta: "Explore Our Operations Infrastructure",
     },
@@ -502,6 +502,21 @@ export function HakkimizdaPage() {
   // burada index'e göre birleştirilir — bkz. modül üstü FACT_META/VALUE_ICONS/vb. notu.
   const FACT_STATS = FACT_META.map((m, i) => ({ ...m, icon: FACT_ICONS[i], label: t.facts.items[i].label, sub: t.facts.items[i].sub }));
   const VALUES = t.values.items.map((v, i) => ({ ...v, icon: VALUE_ICONS[i] }));
+  // Değer Çerçevemiz Etkileşim Turu: açıklama artık varsayılan olarak
+  // gizli — yalnızca başlık/ikon görünür (temiz, editoryal ilk görünüm).
+  // Masaüstünde hover/focus (salt CSS, group-hover/group-focus-within) açığa
+  // çıkarır; dokunmatikte hover olmadığından, aynı öğeye dokunmak bu React
+  // state üzerinden kalıcı biçimde açar/kapatır (accordion gibi TEK açık
+  // zorunluluğu yok — birden fazla madde aynı anda açık kalabilir, daha
+  // az "FAQ" hissi verir). İki mekanizma (CSS hover/focus VE bu state)
+  // sınıf düzeyinde birleştiriliyor (bkz. JSX) — böylece masaüstünde fare
+  // hover'ı anlık önizleme, tıklama/dokunma ise kalıcı açma sağlıyor.
+  const [expandedValues, setExpandedValues] = React.useState<Set<number>>(new Set());
+  const toggleValue = (i: number) => setExpandedValues((prev) => {
+    const next = new Set(prev);
+    if (next.has(i)) next.delete(i); else next.add(i);
+    return next;
+  });
   const ESG_ITEMS = t.esg.items.map((e, i) => ({ ...e, icon: ESG_ICONS[i] }));
   // Gündem: dizi zaten en-yeniden-en-eskiye sıralı (bkz. agenda.ts) — ilk öğe
   // "lead" (büyük), geri kalanı kompakt editoryal liste. Bugün 2 öğe var ama
@@ -583,7 +598,14 @@ export function HakkimizdaPage() {
             <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-2 tracking-tight">{t.gundem.heading}</h2>
           </div>
 
-          <div className="grid lg:grid-cols-5 gap-10 lg:gap-14">
+          {/* overflow-x-clip: Kariyer sayfasındaki AYNI kök nedenin
+              (do-reveal-left/right'ın pre-reveal translateX(±32px)
+              durumu, .do-in eklenmeden önce) burada da ~8px mobil yatay
+              taşmaya yol açtığı bulundu (390/375px QA) — aynı kanıtlanmış,
+              yerel/kapsamlı çözüm uygulandı: paylaşılan .do-reveal-left/
+              right CSS'i veya animasyonun kendisi DEĞİŞMEDİ, yalnızca bu
+              ızgara taşmayı kırpıyor. */}
+          <div className="grid lg:grid-cols-5 gap-10 lg:gap-14 overflow-x-clip">
             {gundemLead && (
               <Link
                 href={gundemDetailRoute(gundemLead.slug, lang)}
@@ -642,26 +664,45 @@ export function HakkimizdaPage() {
 
           <div className="rounded-xl border border-slate-200 overflow-hidden bg-white">
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-px bg-slate-200">
-              {VALUES.map(({ icon: Icon, title, desc }, i) => (
-                <div
-                  key={title}
-                  ref={reveal}
-                  className={`do-reveal ${STAGGER_CLASSES[i] ?? ""} group relative bg-white px-7 py-10 lg:py-12 overflow-hidden`}
-                >
-                  <div className="absolute inset-0 bg-[#1B3A8F] origin-bottom scale-y-0 group-hover:scale-y-100 transition-transform duration-500" />
-                  <span
-                    aria-hidden="true"
-                    className="absolute -top-3 right-4 text-[104px] leading-none font-black text-slate-100 group-hover:text-white/10 transition-colors duration-500 select-none"
+              {VALUES.map(({ icon: Icon, title, desc }, i) => {
+                const isOpen = expandedValues.has(i);
+                return (
+                  <div
+                    key={title}
+                    ref={reveal}
+                    className={`do-reveal ${STAGGER_CLASSES[i] ?? ""} group relative bg-white px-7 py-9 lg:py-10`}
                   >
-                    0{i + 1}
-                  </span>
-                  <div className="relative">
-                    <Icon className="w-8 h-8 text-[#1B3A8F] group-hover:text-white mb-8 transition-colors duration-300" strokeWidth={1.5} />
-                    <h3 className="text-xl font-black text-slate-900 group-hover:text-white mb-4 leading-snug transition-colors duration-300">{title}</h3>
-                    <p className="text-slate-500 group-hover:text-white/80 text-sm leading-relaxed transition-colors duration-300">{desc}</p>
+                    <span
+                      aria-hidden="true"
+                      className="absolute -top-3 right-4 text-[104px] leading-none font-black text-slate-50 select-none"
+                    >
+                      0{i + 1}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => toggleValue(i)}
+                      aria-expanded={isOpen}
+                      className="relative block w-full text-left rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1B3A8F]/40 focus-visible:ring-offset-2"
+                    >
+                      <Icon className="w-7 h-7 text-[#1B3A8F]/60 group-hover:text-[#1B3A8F] group-focus-within:text-[#1B3A8F] mb-6 transition-colors duration-300" strokeWidth={1.5} />
+                      <h3 className="text-xl font-black text-slate-900 group-hover:text-[#1B3A8F] group-focus-within:text-[#1B3A8F] leading-snug transition-colors duration-300">
+                        {title}
+                      </h3>
+                      <span
+                        aria-hidden="true"
+                        className={`block h-[2px] bg-[#1B3A8F] mt-3 transition-all duration-300 ${isOpen ? "w-12" : "w-6 group-hover:w-12 group-focus-within:w-12"} opacity-25 group-hover:opacity-100 group-focus-within:opacity-100 ${isOpen ? "opacity-100" : ""}`}
+                      />
+                      <p
+                        className={`text-slate-500 text-sm leading-relaxed overflow-hidden transition-all duration-300 ease-out ${
+                          isOpen ? "max-h-32 opacity-100 mt-4" : "max-h-0 opacity-0 mt-0"
+                        } group-hover:max-h-32 group-hover:opacity-100 group-hover:mt-4 group-focus-within:max-h-32 group-focus-within:opacity-100 group-focus-within:mt-4`}
+                      >
+                        {desc}
+                      </p>
+                    </button>
                   </div>
-                </div>
-              ))}
+                );
+              })}
             </div>
           </div>
         </div>

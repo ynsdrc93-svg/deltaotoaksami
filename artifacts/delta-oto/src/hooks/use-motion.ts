@@ -156,19 +156,34 @@ export function useParallax<T extends HTMLElement>(speed = 0.12) {
  * position directly instead of inferring it from where the section as a
  * whole has scrolled to.)
  *
- * 'reveal' Turu #2 (hâlâ Operasyon'un 4-adımlık sürecinde, canlı QA):
- * ilk 'reveal' turu START'ı geciktirdi ama END'i hâlâ 'settle' ile AYNI
- * formülden alıyordu — 'settle'in amacı kısa bir bölüm için 1'e MÜMKÜN
- * OLDUĞUNCA ERKEN ulaşmak (rect.height tabanlı, + 80px'lik minTravel
- * tabanı). Bu modülün rect.height'ı (kısa, yatay 4-adım satırı) küçük
- * olduğundan rawEnd neredeyse hep minTravel tabanına çarpıyordu — 0→1
- * aralığı yalnızca ~80px'lik bir scroll'a sığıyordu, yani 4 adım
- * kullanıcı fark etmeden art arda yanıp bitiyordu. 'reveal' artık END'i
- * de 'settle'den ayırıyor: rect.height'a değil, viewport yüksekliğinin
- * sabit bir oranına (aşağıdaki revealTravelFraction) bağlı, bölümün kendi
- * boyutundan bağımsız GERÇEK bir scroll mesafesi garantiliyor — 4 adımın
- * her biri algılanabilir bir scroll payı alıyor. 1440×900 / 1920×1080 /
- * 390×844'te canlı QA ile doğrulandı.
+ * 'reveal' Turu #2 (Operasyon'un 4-adımlık sürecinde, canlı QA): ilk 'reveal'
+ * turu START'ı geciktirdi ama END'i hâlâ 'settle' ile AYNI formülden
+ * alıyordu — 'settle'in amacı kısa bir bölüm için 1'e MÜMKÜN OLDUĞUNCA ERKEN
+ * ulaşmak (rect.height tabanlı, + 80px'lik minTravel tabanı). Bu modülün
+ * rect.height'ı (kısa, yatay 4-adım satırı) küçük olduğundan rawEnd
+ * neredeyse hep minTravel tabanına çarpıyordu — 0→1 aralığı yalnızca
+ * ~80px'lik bir scroll'a sığıyordu.
+ *
+ * 'reveal' Turu #3 (canlı QA, hâlâ aynı modül — kullanıcı turu #2'nin de
+ * yetersiz kaldığını bildirdi): #2'de END, viewport yüksekliğinin sabit bir
+ * oranına (o zamanki revealTravelFraction=0.6) bağlıydı AMA bir
+ * topSafeMargin TABANIYLA (0.12·vh) sınırlıydı — bu taban aslında start
+ * (0.75·vh) ile birlikte gerçek tavan mesafeyi ~0.63·vh'de KİLİTLİYORDU;
+ * revealTravelFraction'ı ne kadar büyütürsem büyüteyim end hep aynı tabana
+ * çarpıyordu, gerçekte hiçbir şey uzamıyordu (bu, ilk düzeltmenin neden
+ * "hâlâ çok erken/az" hissettirdiğini açıklıyor). Kök neden: taban, sabit
+ * bir viewport oranıydı — modülün KENDİ boyutundan bağımsızdı, bu yüzden
+ * hem "sticky header'a değmesin" hem "gerçekte ne kadar yol kat edilsin"
+ * ikisini aynı anda temsil edemiyordu. Çözüm: taban artık modülün KENDİ
+ * yüksekliğine (rect.height) bağlı — progress 1'e ulaştığında satırın en az
+ * %60'ı (aşağıdaki minEndHeightFraction) hâlâ viewport'un üst kenarının
+ * ALTINDA kalacak şekilde end hesaplanıyor; bu, hem 4 kartın kendisinin her
+ * zaman görünür kalmasını GARANTİ EDİYOR hem de revealTravelFraction'ın
+ * (artık 1.1) gerçekten işe yaramasına izin veriyor — 0→1 aralığı artık
+ * modülün kendi yüksekliğine göre ~0.85-0.95·vh'ye yayılıyor (önceki
+ * ~0.63·vh'nin ~%40 üzerinde), 4 adımın her biri gerçekten okunabilecek
+ * kadar scroll payı alıyor. 1440×900 / 1920×1080 / 390×844'te canlı QA ile
+ * doğrulandı (bkz. görev raporu — eski/yeni scroll aralığı ölçümleri).
  */
 export function useSectionProgress<T extends HTMLElement>(mode: "settle" | "transit" | "reveal" = "settle") {
   const ref = React.useRef<T | null>(null)
@@ -193,9 +208,10 @@ export function useSectionProgress<T extends HTMLElement>(mode: "settle" | "tran
         if (mode === "transit") {
           end = -rect.height
         } else if (mode === "reveal") {
-          const topSafeMargin = 0.12 * vh        // stay clear of a sticky header near the top of the viewport
-          const revealTravelFraction = 0.6       // 0→1 always spans ~60% of a viewport height, regardless of the section's own (short) height
-          end = Math.max(topSafeMargin, start - vh * revealTravelFraction)
+          const revealTravelFraction = 1.1        // raw travel budget requested — the height-based floor below decides how much of it is actually usable
+          const minEndHeightFraction = 0.6        // at progress=1, at least this fraction of the section's OWN height must still sit below the viewport's top edge (keeps the 4 cards themselves always visible, unlike a fixed-viewport-fraction floor which can't adapt to the section's real size)
+          const minEnd = -(rect.height * minEndHeightFraction)
+          end = Math.max(minEnd, start - vh * revealTravelFraction)
         } else {
           const topSafeMargin = 0.12 * vh   // stay clear of a sticky header near the top of the viewport
           const bottomSafeMargin = 24        // small breathing room above the viewport's bottom edge

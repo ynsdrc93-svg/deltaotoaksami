@@ -49,8 +49,19 @@ const OPS_HUB_POINTS: [number, number][] = [
 // Denizli [197.3, 450.6]. Sonuç: İzmir artık 5 rotalı — Ümraniye'nin (12
 // rota) baskınlığını bozmadan, ama artık "sadece batıda 2 nokta" değil,
 // gerçek bir bölgesel merkez gibi okunuyor.
+// Trakya Turu: eskiden Trakya'nın kendi rotası yoktu — Gebze'den çıkan tek
+// yakın-batı rotası eski Ümraniye/İstanbul hub noktasını (bir İstanbul
+// noktası) "Marmara/İstanbul/Trakya" diye ETİKETLİYORDU, coğrafi olarak
+// yanlıştı (Trakya, Boğaz'ın karşı/batı yakası). Bunun yerine GERÇEK bir
+// Trakya ili (Tekirdağ, plaka 59 — Marmara kıyısında, organize sanayi
+// bölgeleriyle bölgenin en tanınır lojistik noktalarından biri) ayrı bir
+// rota ucu olarak eklendi. Nokta turkey-map-react'in gerçek path verisi
+// üzerinden aynı Playwright + isPointInFill() yöntemiyle doğrulandı: düz
+// bbox-centroid'i [117.8, 214.1] zaten karada çıktı. Eski nokta
+// [193.6, 211.0] artık yalnızca İstanbul/yakın Marmara'yı temsil ediyor.
 const DISTRIBUTION_ROUTES: { from: [number, number]; to: [number, number] }[] = [
-  { from: [241.0, 236.5], to: [193.6, 211.0] }, // Gebze -> Marmara/İstanbul/Trakya hattı (eski Ümraniye hub noktası, artık salt bir rota ucu)
+  { from: [241.0, 236.5], to: [193.6, 211.0] }, // Gebze -> İstanbul / yakın Marmara
+  { from: [241.0, 236.5], to: [117.8, 214.1] }, // Gebze -> Tekirdağ (Trakya)
   { from: [241.0, 236.5], to: [555.7, 218.6] }, // Gebze -> Samsun (Karadeniz)
   { from: [241.0, 236.5], to: [750.7, 246.5] }, // Gebze -> Trabzon (Doğu Karadeniz)
   { from: [241.0, 236.5], to: [911.6, 256.6] }, // Gebze -> Kars (uç kuzeydoğu)

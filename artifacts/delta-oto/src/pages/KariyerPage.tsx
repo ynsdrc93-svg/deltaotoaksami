@@ -4,14 +4,6 @@ import {
   Quote,
   Linkedin,
   ChevronDown,
-  HeartPulse,
-  Utensils,
-  GraduationCap,
-  Clock,
-  CalendarCheck,
-  Bus,
-  BookOpen,
-  Users,
 } from "lucide-react";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
@@ -27,10 +19,15 @@ const JOB_PLATFORMS = [
   { name: "Kariyer.net", url: "https://www.kariyer.net", Icon: ExternalLink },
 ];
 
-// Aynı 8 gerçek yan hak; tek sistem olarak sunulur (eski "Yaşam Dengesi / Kariyer
-// Yatırımı" iki panelli ayrımı kaldırıldı — kullanıcı bu yapay ikiliyi istemiyor).
-// Sıra content.*.benefits.items ile birebir eşleşir.
-const BENEFIT_ICONS = [HeartPulse, Utensils, Clock, Bus, GraduationCap, CalendarCheck, BookOpen, Users];
+// Yan Haklar Sadeleştirme Turu #2: sekiz madde artık kendi başına duran,
+// numaralı/ikonlu ayrı birimler değil — mevcut 8 gerçek hak iki başlık
+// altında GRUPLANIYOR (content.*.benefits.groupHeadings): ilk 4'ü günlük
+// yaşam/refah konusu (sağlık, yemek, ulaşım, esnek saat), son 4'ü gelişim/
+// kariyer konusu (eğitim bütçesi, kariyer görüşmesi, marka eğitimi,
+// mentorluk) — bu ayrım, mevcut 8 maddenin içeriğine zaten UYUYOR, yeni bir
+// hak icat edilmedi. İkon/numara tamamen kaldırıldı; salt tipografik bir
+// liste — "yan hak panosu" değil, olgun bir kurumsal bilgi bloğu hedefleniyor.
+const BENEFIT_GROUP_SIZE = 4; // ilk 4 → groupHeadings[0], kalan 4 → groupHeadings[1]
 
 const content = {
   tr: {
@@ -38,10 +35,18 @@ const content = {
       title: "Kariyer Fırsatları — İnsan Kaynakları | Delta Oto",
       description: "Delta Oto'da kariyer: kurumsal kültür değerlerimiz, çalışan deneyimlerimiz, açık pozisyonlarımız ve sunduğumuz yan haklar hakkında bilgi edinin.",
     },
+    // Kariyer Hero Yeniden Yazım Turu: eski "BİR EKİBİN PARÇASI OLUN" (join
+    // a team) kapanışı işe alım ajansı diline yakın duruyordu — kullanıcı
+    // "aile" veya "katıl" çağrısı yerine, 50+ yıllık kurumsal bilgi
+    // birikimine KİŞİSEL KATKI çerçevesi istedi. Yeni başlık "Sizinkini
+    // Ekleyin" ile deneyimli/kendinden emin bir ton kuruyor; gövde metni de
+    // aynı çerçeveye (bilgi + uzmanlık + sorumluluk + gelişim) oturacak
+    // şekilde güncellendi. Hero mimarisi (3 satırlı başlık, tek CTA)
+    // DEĞİŞMEDİ — yalnızca metin.
     hero: {
       eyebrow: "İnsan Kaynakları · Kariyer Fırsatları",
-      title: ["50+ YILDIR", "OTOMOTİVDE", "BİR EKİBİN PARÇASI OLUN"],
-      body: "Otomotiv yedek parça dağıtımında 50+ yıllık bir ekip; sahada edinilen bilgi, net sorumluluklar ve uzun soluklu çalışma ilişkileriyle şekilleniyor.",
+      title: ["50+ YILLIK", "SEKTÖR UZMANLIĞI.", "SİZİNKİNİ EKLEYİN."],
+      body: "Otomotiv yedek parça dağıtımında 50+ yıllık bilgi birikimi; sahada kazanılan uzmanlık, net sorumluluklar ve kişisel gelişime açık bir çalışma kültürüyle şekilleniyor.",
       cta: "Açık Pozisyonları Gör",
     },
     culture: {
@@ -87,11 +92,12 @@ const content = {
       eyebrow: "Çalışan Avantajları",
       heading: "Yan Haklar ve İmkânlar",
       desc: "Uzun vadeli kurumsal ilişkilerde çalışanların gelişimine yatırım yapıyoruz.",
+      groupHeadings: ["Günlük Yaşam", "Gelişim ve Kariyer"],
       items: [
         { label: "Özel sağlık sigortası", sub: "Tüm çalışanlar için" },
         { label: "Yemek kartı katkısı", sub: "Her iş günü için sağlanır" },
-        { label: "Esnek çalışma saatleri", sub: "Pozisyona göre uygulanır" },
         { label: "Ulaşım desteği", sub: "Servis hattı veya yol bedeli" },
+        { label: "Esnek çalışma saatleri", sub: "Pozisyona göre uygulanır" },
         { label: "Sektörel eğitim bütçesi", sub: "Yıllık gelişim programı" },
         { label: "Yıllık kariyer görüşmesi", sub: "Şeffaf performans değerlendirmesi" },
         { label: "Marka ve ürün eğitimleri", sub: "Tedarikçi işbirliğiyle" },
@@ -106,8 +112,8 @@ const content = {
     },
     hero: {
       eyebrow: "Human Resources · Career Opportunities",
-      title: ["50+ YEARS", "IN AUTOMOTIVE.", "JOIN THE TEAM."],
-      body: "50+ years in automotive parts distribution — built on knowledge earned in the field, clear responsibility, and working relationships that last.",
+      title: ["50+ YEARS OF", "INDUSTRY EXPERTISE.", "ADD YOURS."],
+      body: "Built on more than 50 years of knowledge in automotive parts distribution — expertise earned in the field, clear responsibility, and a culture that invests in professional growth.",
       cta: "View Open Positions",
     },
     culture: {
@@ -153,11 +159,12 @@ const content = {
       eyebrow: "Employee Benefits",
       heading: "Benefits and Perks",
       desc: "We invest in our employees' growth as part of long-term working relationships.",
+      groupHeadings: ["Daily Life", "Growth and Career"],
       items: [
         { label: "Private health insurance", sub: "For all employees" },
         { label: "Meal card allowance", sub: "Provided for every working day" },
-        { label: "Flexible working hours", sub: "Applied depending on the role" },
         { label: "Transportation support", sub: "Shuttle service or commuting allowance" },
+        { label: "Flexible working hours", sub: "Applied depending on the role" },
         { label: "Industry training budget", sub: "Annual development program" },
         { label: "Annual career review", sub: "Transparent performance evaluation" },
         { label: "Brand and product training", sub: "Delivered in collaboration with suppliers" },
@@ -450,18 +457,13 @@ export function KariyerPage() {
         </div>
       </section>
 
-      {/* YAN HAKLAR — Editorial Yenileme Turu: eski sürüm 8 eşit kutunun
-          çerçeveli ızgarası (her kutu kendi ikonu + kalın label + küçük sub
-          ile) idi — komşu modüllerin (Çalışan Sesi'nin geniş nefes alan
-          alıntı kartları, Kariyer Platformları'nın büyük ikon-rozetli 2
-          kartı) tonundan kopuk, "yan hak panosu" gibi duruyordu; ayrıca
-          arkada konuyla ilgisiz bir stok fotoğraf vardı (kaldırıldı — hero'da
-          da kullanılan do-grid-bg dokusu yeterli). Yeni sunum: kutu-ızgara
-          yerine tek bir numaralı/bölünmüş liste — sıra bilgisi taşımadığı
-          için 01-08 rakamları dekoratif değil, sekiz gerçek hakkın SAYILABİLİR
-          bir bütün olduğunu okutan yapısal bir işaret. İkonlar küçük ve
-          ikincil (etiketin yanında, büyük bir görsel odak değil) — "ikon çok
-          sınırlı" yönü seçildi. */}
+      {/* YAN HAKLAR — Sadeleştirme Turu #2: eski numaralı/ikonlu bölünmüş
+          liste hâlâ "sekiz eşit birim" hissi veriyordu. Artık sekiz madde,
+          içeriklerine zaten uyan iki başlık altında gruplanıyor (Günlük
+          Yaşam / Gelişim ve Kariyer) — yeni bir hak icat edilmedi, yalnızca
+          mevcut 8 madde anlamlı iki kümeye ayrıldı. Numara ve ikon TAMAMEN
+          kaldırıldı; salt başlık + kısa liste — olgun bir kurumsal bilgi
+          bloğu, "yan hak panosu" değil. */}
       <section className="relative bg-[#1B3A8F] text-white py-24 overflow-hidden">
         <div className="absolute inset-0 do-grid-bg opacity-25" />
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
@@ -473,26 +475,22 @@ export function KariyerPage() {
             </p>
           </div>
 
-          <div className="grid lg:grid-cols-2 lg:gap-x-16 border-t border-white/10">
-            {t.benefits.items.map((item, i) => {
-              const Icon = BENEFIT_ICONS[i];
-              return (
-                <div
-                  key={item.label}
-                  ref={reveal}
-                  className={`do-reveal do-d${(i % 4) + 1} group flex items-start gap-5 py-7 border-b border-white/10`}
-                >
-                  <span className="text-[13px] font-black text-[#7d9bea]/70 tabular-nums pt-0.5 shrink-0 w-6">{String(i + 1).padStart(2, "0")}</span>
-                  <div className="min-w-0">
-                    <div className="flex items-center gap-2.5">
-                      <Icon className="w-4 h-4 text-[#7d9bea] shrink-0" strokeWidth={1.75} />
+          <div className="grid md:grid-cols-2 gap-x-16 gap-y-12">
+            {t.benefits.groupHeadings.map((groupHeading, g) => (
+              <div key={groupHeading} ref={reveal} className={`do-reveal ${g === 1 ? "do-d1" : ""}`}>
+                <h3 className="text-[13px] font-black uppercase tracking-[0.2em] text-[#7d9bea] pb-4 mb-5 border-b border-white/15">
+                  {groupHeading}
+                </h3>
+                <div className="space-y-5">
+                  {t.benefits.items.slice(g * BENEFIT_GROUP_SIZE, g * BENEFIT_GROUP_SIZE + BENEFIT_GROUP_SIZE).map((item) => (
+                    <div key={item.label}>
                       <div className="text-white font-bold text-[15px] leading-snug">{item.label}</div>
+                      <div className="text-white/50 text-[13px] mt-1 leading-snug">{item.sub}</div>
                     </div>
-                    <div className="text-white/50 text-[13px] mt-1.5 leading-snug pl-[26px]">{item.sub}</div>
-                  </div>
+                  ))}
                 </div>
-              );
-            })}
+              </div>
+            ))}
           </div>
         </div>
       </section>

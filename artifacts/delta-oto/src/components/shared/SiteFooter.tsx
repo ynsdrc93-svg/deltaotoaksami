@@ -1,7 +1,14 @@
 import React from "react";
 import { Link } from "wouter";
-import { MapPin, Mail, Phone, BadgeCheck, Linkedin, Instagram } from "lucide-react";
+import { MapPin, Mail, Phone, BadgeCheck, Linkedin, Instagram, ArrowUpRight } from "lucide-react";
 import { useLang, routeFor, type Lang, type RouteKey } from "@/lib/i18n";
+
+// Google Maps Yol Tarifi Turu: koordinat UYDURULMADI — mevcut, tek adres
+// metninden (aşağıdaki JSX'teki aynı satır) standart bir "directions" arama
+// sorgusu kuruluyor; Google, adresi kendi tarafında çözümlüyor. Yalnızca bu
+// footer'da kullanıldığı için tek bir sabitte tutuluyor.
+const HQ_ADDRESS = "Barbaros Caddesi Beyit Sokak No:17, Yukarı Dudullu, Ümraniye, İstanbul";
+const HQ_DIRECTIONS_URL = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(HQ_ADDRESS)}`;
 
 // "Private Label" başlığı kaldırıldı (kullanıcı kararı, Content/UX Pass 01) —
 // SPART kendi marka/ürün hedefi olarak kalıyor, yalnızca üst başlık gitti.
@@ -59,6 +66,7 @@ const T = {
   quickLinks: { tr: "Hızlı Bağlantılar", en: "Quick Links" },
   certsHeading: { tr: "Sertifikalar & Üyelikler", en: "Certifications & Memberships" },
   rights: { tr: "© 2026 Delta Oto. Tüm hakları saklıdır.", en: "© 2026 Delta Oto. All rights reserved." },
+  directions: { tr: "Yol Tarifi", en: "Directions" },
   established: { tr: "Delta Oto · Kuruluş 1976", en: "Delta Oto · Established 1976" },
   groupautoMember: { tr: "GROUPAUTO Türkiye Üyesi", en: "GROUPAUTO Türkiye Member" },
 } satisfies Record<string, Record<Lang, string>>;
@@ -67,9 +75,9 @@ export function SiteFooter() {
   const lang = useLang();
 
   return (
-    <footer className="bg-[#0a0c11] pt-16 md:pt-20 pb-10 border-t border-white/5 text-white">
+    <footer className="bg-[#0a0c11] pt-14 md:pt-16 pb-8 border-t border-white/5 text-white">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-14 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
 
           <div>
             {/* Klasik (50. yıl kampanya etiketi eklenmeden önceki) Delta Oto
@@ -104,12 +112,23 @@ export function SiteFooter() {
               alt="Delta Oto"
               width={918}
               height={222}
-              className="h-[64px] md:h-[76px] w-auto do-logo-invert mb-8 opacity-90"
+              className="h-[64px] md:h-[76px] w-auto do-logo-invert mb-6 opacity-90"
             />
             <ul className="space-y-4 text-sm text-gray-500">
               <li className="flex items-start gap-3">
                 <MapPin className="w-4 h-4 shrink-0 text-gray-500 mt-0.5" />
-                <span className="leading-relaxed">Barbaros Cd. Beyit Sk. No:17,<br />Yukarı Dudullu - Ümraniye / İstanbul</span>
+                <div>
+                  <span className="leading-relaxed block">Barbaros Cd. Beyit Sk. No:17,<br />Yukarı Dudullu - Ümraniye / İstanbul</span>
+                  <a
+                    href={HQ_DIRECTIONS_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 text-[12.5px] font-semibold text-[#7d9bea] hover:text-white transition-colors mt-1.5 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7d9bea]/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0c11]"
+                  >
+                    {T.directions[lang]}
+                    <ArrowUpRight className="w-3 h-3" strokeWidth={2} />
+                  </a>
+                </div>
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="w-4 h-4 shrink-0 text-gray-500" />
@@ -123,7 +142,7 @@ export function SiteFooter() {
           </div>
 
           <div className="md:pl-6">
-            <h4 className="text-white text-xs font-bold uppercase tracking-[0.2em] mb-7">{T.quickLinks[lang]}</h4>
+            <h4 className="text-white text-xs font-bold uppercase tracking-[0.2em] mb-6">{T.quickLinks[lang]}</h4>
             <ul className="space-y-3.5">
               {QUICK_LINKS.map(({ key, label }) => (
                 <li key={key}>
@@ -142,8 +161,8 @@ export function SiteFooter() {
           </div>
 
           <div>
-            <h4 className="text-white text-xs font-bold uppercase tracking-[0.2em] mb-7">{T.certsHeading[lang]}</h4>
-            <div className="flex gap-4 mb-8">
+            <h4 className="text-white text-xs font-bold uppercase tracking-[0.2em] mb-6">{T.certsHeading[lang]}</h4>
+            <div className="flex gap-4 mb-6">
               {CERTS.map(({ label }) => (
                 <div key={label.tr} className="w-20 h-16 border border-white/8 rounded-lg flex flex-col items-center justify-center gap-1 bg-white/3 hover:border-white/15 transition-colors">
                   <BadgeCheck className="w-3.5 h-3.5 text-gray-500" />
@@ -179,7 +198,7 @@ export function SiteFooter() {
                 rozet metnin altına "asılı" duruyor, yan yana değil, ayrı
                 yüzen bir ikon da değil. Rozetin kendisi büyütülmedi (h-12
                 korunur), yalnızca dizilim dikeyleşti. */}
-            <div className="mt-6 pt-6 border-t border-white/5">
+            <div className="mt-5 pt-5 border-t border-white/5">
               <span className="block text-[12.5px] text-gray-300 font-semibold leading-tight mb-3">{T.groupautoMember[lang]}</span>
               <img
                 src="/images/groupauto-turkiye-badge.webp"
@@ -193,8 +212,11 @@ export function SiteFooter() {
 
         </div>
 
-        <div className="pt-8 border-t border-white/5 flex flex-col gap-5">
-          <div className="flex flex-wrap items-center justify-center sm:justify-start gap-x-5 gap-y-2">
+        <div className="pt-6 border-t border-white/5 flex flex-col gap-4">
+          {/* Footer Sıkılaştırma Turu: yasal bağlantılar artık HER
+              genişlikte (yalnızca mobilde değil) grup olarak ortalanıyor —
+              eski sm:justify-start deseni masaüstünde sola yaslıyordu. */}
+          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
             {LEGAL_LINKS.map(({ key, label }) => (
               <Link key={key} href={routeFor(key, lang)} className="text-xs text-gray-500 hover:text-white transition-colors">
                 {label[lang]}

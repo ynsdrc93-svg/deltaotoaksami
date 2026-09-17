@@ -63,7 +63,7 @@ const content = {
     advantages: {
       eyebrow: "Tedarik Üstünlüğü",
       heading: "Neden Delta Oto?",
-      trust: { value: "50+", label: "Yıldır Otomotiv Aftermarket'te" },
+      trust: { value: "50+", unit: "Yıldır", sub: "Otomotiv Aftermarket Deneyimi" },
       items: [
         { title: "Stok", desc: "Aradığınız parça büyük olasılıkla zaten depoda." },
         { title: "Erişim", desc: "Global tedarik ağına tek noktadan bağlanırsınız." },
@@ -117,7 +117,7 @@ const content = {
     advantages: {
       eyebrow: "Supply Advantage",
       heading: "Why Delta Oto?",
-      trust: { value: "50+", label: "Years in Automotive Aftermarket" },
+      trust: { value: "50+", unit: "Years", sub: "Automotive Aftermarket Experience" },
       items: [
         { title: "Stock", desc: "The part you need is most likely already in the warehouse." },
         { title: "Access", desc: "One connection to the global supply network." },
@@ -703,7 +703,14 @@ export function TedarikciPage() {
           en güçlü ayırt edici (50+ yıl) sol tarafta baskın bir çapa olarak
           büyük tipografiyle duruyor, sağda üç kısa destekleyici kavram
           (Stok/Erişim/Tek Muhatap) ince bir dikey ayraçla ondan ayrılıyor.
-          "Süreklilik" kaldırıldı (50+ yıl mesajıyla fazlalaşıyordu). */}
+          "Süreklilik" kaldırıldı (50+ yıl mesajıyla fazlalaşıyordu).
+          Güven Çapası Turu #2: "50+" ve etiketi eskiden iki ayrı kayıt
+          gibi duruyordu (dev rakam + altında küçük harf aralıklı bir
+          caption). Artık "50+ Yıldır" TEK bir taban çizgisinde (items-baseline)
+          birlikte okunuyor — "Yıldır" rakamla aynı renk/ağırlıkta, yalnızca
+          ölçekçe küçük; ikinci satır ("Otomotiv Aftermarket Deneyimi") artık
+          küçük harf aralıklı bir dipnot değil, kendi başına güçlü bir alt
+          başlık — ikisi de aynı sol kenara hizalı, rakamla aynı ritimde. */}
       <section className="bg-white py-24">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div ref={reveal} className="do-reveal mb-14">
@@ -712,10 +719,17 @@ export function TedarikciPage() {
           </div>
           <div ref={reveal} className="do-reveal do-d1 grid lg:grid-cols-[auto_1fr] gap-10 lg:gap-16 items-center border-t border-slate-200 pt-12">
             <div className="lg:pr-16 lg:border-r lg:border-slate-200">
-              <div className="text-7xl lg:text-8xl font-black text-[#1B3A8F] tracking-tight leading-none tabular-nums">
-                {t.advantages.trust.value}
+              <div className="flex items-baseline gap-3">
+                <span className="text-7xl lg:text-8xl font-black text-[#1B3A8F] tracking-tight leading-none tabular-nums">
+                  {t.advantages.trust.value}
+                </span>
+                <span className="text-2xl lg:text-3xl font-black text-[#1B3A8F] tracking-tight">
+                  {t.advantages.trust.unit}
+                </span>
               </div>
-              <p className="mt-3 text-slate-500 text-[13px] font-bold uppercase tracking-[0.15em]">{t.advantages.trust.label}</p>
+              <p className="mt-3 text-slate-800 text-base lg:text-lg font-bold tracking-tight leading-snug">
+                {t.advantages.trust.sub}
+              </p>
             </div>
             {/* Görsel/UX Düzeltme Turu (§2, hâlâ geçerli): "Tek Muhatap"
                 satır kırmasın diye whitespace-nowrap + boşluğu padding
