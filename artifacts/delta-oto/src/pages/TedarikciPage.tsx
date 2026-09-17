@@ -717,8 +717,17 @@ export function TedarikciPage() {
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">{t.advantages.eyebrow}</span>
             <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-2 tracking-tight">{t.advantages.heading}</h2>
           </div>
-          <div ref={reveal} className="do-reveal do-d1 grid lg:grid-cols-[auto_1fr] gap-10 lg:gap-16 items-center border-t border-slate-200 pt-12">
-            <div className="lg:pr-16 lg:border-r lg:border-slate-200">
+          {/* Hizalama Düzeltme Turu: eski `items-center` iki sütunu birbirine
+              göre DİKEY OLARAK ORTALIYORDU — sütunların doğal içerik
+              yükseklikleri farklı olduğundan (güven bloğu vs. 3 madde satırı),
+              bu da lg:border-r / sm:divide-x ayraçlarının farklı üst/alt
+              noktalarda başlayıp bitmesine (biri diğerinden kısa/uzun
+              görünmesine) yol açıyordu. `items-stretch` (varsayılan) her iki
+              sütunu da satırın tam yüksekliğine geriyor ve içerik doğal
+              olarak üstten hizalandığından, tüm ayraçlar ve başlıklar artık
+              aynı ortak "ray" üzerinde başlıyor. */}
+          <div ref={reveal} className="do-reveal do-d1 grid lg:grid-cols-[auto_1fr] gap-10 lg:gap-16 items-stretch border-t border-slate-200 pt-12">
+            <div className="pb-8 mb-2 border-b border-slate-200 lg:pb-0 lg:mb-0 lg:border-b-0 lg:pr-16 lg:border-r">
               <div className="flex items-baseline gap-3">
                 <span className="text-7xl lg:text-8xl font-black text-[#1B3A8F] tracking-tight leading-none tabular-nums">
                   {t.advantages.trust.value}
@@ -736,7 +745,7 @@ export function TedarikciPage() {
                 yerine grid gap'ine taşıma tekniği korundu — üç maddeye
                 indirilince satır kırma riski zaten azaldı ama teknik
                 değişmedi. 1440/1280/390'da doğrulandı. */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-y-8 gap-x-6 lg:gap-x-10 sm:divide-x sm:divide-slate-200">
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-y-8 gap-x-6 lg:gap-x-10 sm:divide-x sm:divide-slate-200 sm:items-stretch">
               {t.advantages.items.map(({ title, desc }) => (
                 <div key={title} className="sm:pl-6 sm:first:pl-0">
                   <div className="text-xl sm:text-2xl xl:text-3xl font-black text-slate-900 tracking-tight mb-3 whitespace-nowrap">{title}</div>

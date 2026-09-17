@@ -69,6 +69,7 @@ const T = {
   directions: { tr: "Yol Tarifi", en: "Directions" },
   established: { tr: "Delta Oto · Kuruluş 1976", en: "Delta Oto · Established 1976" },
   groupautoMember: { tr: "GROUPAUTO Türkiye Üyesi", en: "GROUPAUTO Türkiye Member" },
+  mersis: { tr: "MERSİS No: 0274002057500013", en: "MERSIS No: 0274002057500013" },
 } satisfies Record<string, Record<Lang, string>>;
 
 export function SiteFooter() {
@@ -128,6 +129,12 @@ export function SiteFooter() {
                     {T.directions[lang]}
                     <ArrowUpRight className="w-3 h-3" strokeWidth={2} />
                   </a>
+                  {/* MERSİS Turu: resmi şirket bilgisi — adres bloğuyla aynı
+                      hiyerarşi ailesinde (metin, rozet değil), diğer iletişim
+                      satırlarından daha soluk/küçük bir ikincil satır olarak
+                      eklendi. Footer'da hâlihazırda kullanılan bir tüzel kişilik
+                      adı ("A.Ş." vb.) yok — biri uydurulmadı, yalnızca numara. */}
+                  <span className="block text-[11.5px] text-gray-600 mt-1.5 tracking-wide">{T.mersis[lang]}</span>
                 </div>
               </li>
               <li className="flex items-center gap-3">

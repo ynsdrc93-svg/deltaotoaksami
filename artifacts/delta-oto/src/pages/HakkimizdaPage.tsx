@@ -502,21 +502,16 @@ export function HakkimizdaPage() {
   // burada index'e göre birleştirilir — bkz. modül üstü FACT_META/VALUE_ICONS/vb. notu.
   const FACT_STATS = FACT_META.map((m, i) => ({ ...m, icon: FACT_ICONS[i], label: t.facts.items[i].label, sub: t.facts.items[i].sub }));
   const VALUES = t.values.items.map((v, i) => ({ ...v, icon: VALUE_ICONS[i] }));
-  // Değer Çerçevemiz Etkileşim Turu: açıklama artık varsayılan olarak
-  // gizli — yalnızca başlık/ikon görünür (temiz, editoryal ilk görünüm).
-  // Masaüstünde hover/focus (salt CSS, group-hover/group-focus-within) açığa
-  // çıkarır; dokunmatikte hover olmadığından, aynı öğeye dokunmak bu React
-  // state üzerinden kalıcı biçimde açar/kapatır (accordion gibi TEK açık
-  // zorunluluğu yok — birden fazla madde aynı anda açık kalabilir, daha
-  // az "FAQ" hissi verir). İki mekanizma (CSS hover/focus VE bu state)
-  // sınıf düzeyinde birleştiriliyor (bkz. JSX) — böylece masaüstünde fare
-  // hover'ı anlık önizleme, tıklama/dokunma ise kalıcı açma sağlıyor.
-  const [expandedValues, setExpandedValues] = React.useState<Set<number>>(new Set());
-  const toggleValue = (i: number) => setExpandedValues((prev) => {
-    const next = new Set(prev);
-    if (next.has(i)) next.delete(i); else next.add(i);
-    return next;
-  });
+  // Değer Çerçevemiz Etkileşim Turu 2: varsayılan yüzey beyaz + lacivert
+  // başlık (editoryal indeks); aktif öğe (hover/focus/dokunma) TÜM hücreyi
+  // Delta lacivertine çeviriyor, başlık+açıklama beyaza dönüyor — masaüstünde
+  // CSS group-hover/group-focus-within ile anlık önizleme, dokunmatikte bu
+  // React state ile kalıcı açma sağlanıyor. Tek index tutuluyor (Set değil):
+  // bir öğeye dokunmak, açıksa başka bir öğeyi otomatik kapatıp aktif durumu
+  // temiz biçimde taşıyor — aynı anda yalnızca bir hücre lacivert olabilir,
+  // komşular her zaman sakin kalır.
+  const [activeValueIndex, setActiveValueIndex] = React.useState<number | null>(null);
+  const toggleValue = (i: number) => setActiveValueIndex((prev) => (prev === i ? null : i));
   const ESG_ITEMS = t.esg.items.map((e, i) => ({ ...e, icon: ESG_ICONS[i] }));
   // Gündem: dizi zaten en-yeniden-en-eskiye sıralı (bkz. agenda.ts) — ilk öğe
   // "lead" (büyük), geri kalanı kompakt editoryal liste. Bugün 2 öğe var ama
@@ -665,16 +660,30 @@ export function HakkimizdaPage() {
           <div className="rounded-xl border border-slate-200 overflow-hidden bg-white">
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-px bg-slate-200">
               {VALUES.map(({ icon: Icon, title, desc }, i) => {
-                const isOpen = expandedValues.has(i);
+                const isOpen = activeValueIndex === i;
+                // React/useReveal Çakışma Turu: aşağıdaki div ref={reveal} taşıyor —
+                // useReveal()'ın IntersectionObserver'ı görünür olunca .do-in
+                // sınıfını doğrudan DOM'a (React'ın bilgisi DIŞINDA) ekliyor.
+                // isOpen'a göre className STRING'i değişirse, React yeniden
+                // render'da bu elementin class attribute'unu YENİDEN YAZAR ve
+                // elle eklenmiş .do-in'i SİLER (kart kalıcı opacity:0'da
+                // takılı kalır — canlı QA'da yakalandı). Çözüm: bu elementin
+                // className'i i'ye göre SABİT tutuluyor (asla isOpen'a göre
+                // değişmiyor); aktif navy arka plan onun yerine className'den
+                // bağımsız bir style prop'uyla uygulanıyor (React style'ı
+                // class'tan ayrı yönetir, .do-in'e dokunmaz).
                 return (
                   <div
                     key={title}
                     ref={reveal}
-                    className={`do-reveal ${STAGGER_CLASSES[i] ?? ""} group relative bg-white px-7 py-9 lg:py-10`}
+                    className={`do-reveal ${STAGGER_CLASSES[i] ?? ""} group relative px-7 py-9 lg:py-10 transition-colors duration-300 bg-white hover:bg-[#1B3A8F] focus-within:bg-[#1B3A8F]`}
+                    style={isOpen ? { backgroundColor: "#1B3A8F" } : undefined}
                   >
                     <span
                       aria-hidden="true"
-                      className="absolute -top-3 right-4 text-[104px] leading-none font-black text-slate-50 select-none"
+                      className={`absolute -top-3 right-4 text-[104px] leading-none font-black select-none transition-colors duration-300 ${
+                        isOpen ? "text-white/10" : "text-slate-50"
+                      } group-hover:text-white/10 group-focus-within:text-white/10`}
                     >
                       0{i + 1}
                     </span>
@@ -682,20 +691,31 @@ export function HakkimizdaPage() {
                       type="button"
                       onClick={() => toggleValue(i)}
                       aria-expanded={isOpen}
-                      className="relative block w-full text-left rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1B3A8F]/40 focus-visible:ring-offset-2"
+                      className="relative block w-full text-left rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white/70 focus-visible:ring-offset-2 focus-visible:ring-offset-[#1B3A8F]"
                     >
-                      <Icon className="w-7 h-7 text-[#1B3A8F]/60 group-hover:text-[#1B3A8F] group-focus-within:text-[#1B3A8F] mb-6 transition-colors duration-300" strokeWidth={1.5} />
-                      <h3 className="text-xl font-black text-slate-900 group-hover:text-[#1B3A8F] group-focus-within:text-[#1B3A8F] leading-snug transition-colors duration-300">
+                      <Icon
+                        className={`w-7 h-7 mb-6 transition-colors duration-300 ${
+                          isOpen ? "text-white" : "text-[#1B3A8F]/60"
+                        } group-hover:text-white group-focus-within:text-white`}
+                        strokeWidth={1.5}
+                      />
+                      <h3
+                        className={`text-xl font-black leading-snug transition-colors duration-300 ${
+                          isOpen ? "text-white" : "text-[#1B3A8F]"
+                        } group-hover:text-white group-focus-within:text-white`}
+                      >
                         {title}
                       </h3>
                       <span
                         aria-hidden="true"
-                        className={`block h-[2px] bg-[#1B3A8F] mt-3 transition-all duration-300 ${isOpen ? "w-12" : "w-6 group-hover:w-12 group-focus-within:w-12"} opacity-25 group-hover:opacity-100 group-focus-within:opacity-100 ${isOpen ? "opacity-100" : ""}`}
+                        className={`block h-[2px] mt-3 transition-all duration-300 ${
+                          isOpen ? "w-12 bg-white" : "w-6 bg-[#1B3A8F]/30"
+                        } group-hover:w-12 group-hover:bg-white group-focus-within:w-12 group-focus-within:bg-white`}
                       />
                       <p
-                        className={`text-slate-500 text-sm leading-relaxed overflow-hidden transition-all duration-300 ease-out ${
-                          isOpen ? "max-h-32 opacity-100 mt-4" : "max-h-0 opacity-0 mt-0"
-                        } group-hover:max-h-32 group-hover:opacity-100 group-hover:mt-4 group-focus-within:max-h-32 group-focus-within:opacity-100 group-focus-within:mt-4`}
+                        className={`text-sm leading-relaxed overflow-hidden transition-all duration-300 ease-out ${
+                          isOpen ? "max-h-32 opacity-100 mt-4 text-white/85" : "max-h-0 opacity-0 mt-0 text-slate-500"
+                        } group-hover:max-h-32 group-hover:opacity-100 group-hover:mt-4 group-hover:text-white/85 group-focus-within:max-h-32 group-focus-within:opacity-100 group-focus-within:mt-4 group-focus-within:text-white/85`}
                       >
                         {desc}
                       </p>

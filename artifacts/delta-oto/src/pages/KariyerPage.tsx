@@ -35,18 +35,16 @@ const content = {
       title: "Kariyer Fırsatları — İnsan Kaynakları | Delta Oto",
       description: "Delta Oto'da kariyer: kurumsal kültür değerlerimiz, çalışan deneyimlerimiz, açık pozisyonlarımız ve sunduğumuz yan haklar hakkında bilgi edinin.",
     },
-    // Kariyer Hero Yeniden Yazım Turu: eski "BİR EKİBİN PARÇASI OLUN" (join
-    // a team) kapanışı işe alım ajansı diline yakın duruyordu — kullanıcı
-    // "aile" veya "katıl" çağrısı yerine, 50+ yıllık kurumsal bilgi
-    // birikimine KİŞİSEL KATKI çerçevesi istedi. Yeni başlık "Sizinkini
-    // Ekleyin" ile deneyimli/kendinden emin bir ton kuruyor; gövde metni de
-    // aynı çerçeveye (bilgi + uzmanlık + sorumluluk + gelişim) oturacak
-    // şekilde güncellendi. Hero mimarisi (3 satırlı başlık, tek CTA)
-    // DEĞİŞMEDİ — yalnızca metin.
+    // Kariyer Hero Yeniden Yazım Turu 2: "50+ Yıllık Sektör Uzmanlığı" başlığı
+    // hâlâ jenerik işe alım ilanı gibi okunuyordu (heritage mesajı zaten
+    // sitenin başka yerlerinde veriliyor) — kullanıcı 50+'ı başlığa tekrar
+    // zorlamadan, ortak uzmanlık/gelişim çerçevesine odaklanan daha kısa bir
+    // başlık istedi. Hero mimarisi (3 satırlı başlık, tek CTA, mevcut hero
+    // fotoğrafı) DEĞİŞMEDİ — yalnızca metin.
     hero: {
       eyebrow: "İnsan Kaynakları · Kariyer Fırsatları",
-      title: ["50+ YILLIK", "SEKTÖR UZMANLIĞI.", "SİZİNKİNİ EKLEYİN."],
-      body: "Otomotiv yedek parça dağıtımında 50+ yıllık bilgi birikimi; sahada kazanılan uzmanlık, net sorumluluklar ve kişisel gelişime açık bir çalışma kültürüyle şekilleniyor.",
+      title: ["BİRLİKTE", "UZMANLAŞIYOR,", "BİRLİKTE GELİŞİYORUZ."],
+      body: "Delta Oto'da deneyim; sorumluluk, uzmanlık ve sürekli gelişim kültürüyle büyür.",
       cta: "Açık Pozisyonları Gör",
     },
     culture: {
@@ -112,8 +110,8 @@ const content = {
     },
     hero: {
       eyebrow: "Human Resources · Career Opportunities",
-      title: ["50+ YEARS OF", "INDUSTRY EXPERTISE.", "ADD YOURS."],
-      body: "Built on more than 50 years of knowledge in automotive parts distribution — expertise earned in the field, clear responsibility, and a culture that invests in professional growth.",
+      title: ["WE BUILD", "EXPERTISE", "TOGETHER."],
+      body: "At Delta Oto, experience grows through responsibility, expertise and a culture of continuous development.",
       cta: "View Open Positions",
     },
     culture: {
@@ -304,6 +302,14 @@ export function KariyerPage() {
   const t = content[lang];
   useDocumentMeta(t.meta.title, t.meta.description);
   const reveal = useReveal();
+  // Yan Haklar Etkileşim Turu: sabit gri tablo hissi veren "başlık + her
+  // zaman görünür açıklama" listesi yerine, Hakkımızda'nın Değer Çerçevemiz
+  // ile AYNI dilde ama bu bölümün zaten lacivert zemini için uyarlanmış bir
+  // aktif durum kullanılıyor — açıklama varsayılan gizli, yalnızca aktif
+  // maddenin başlığı/satırı öne çıkıyor. Grup ayrımından bağımsız TEK bir
+  // index tutuluyor: bir maddeye dokunmak diğerini temiz biçimde kapatır.
+  const [activeBenefit, setActiveBenefit] = React.useState<number | null>(null);
+  const toggleBenefit = (i: number) => setActiveBenefit((prev) => (prev === i ? null : i));
 
   const scrollToPlatforms = () => {
     const target = document.getElementById("kariyer-platformlari");
@@ -457,13 +463,17 @@ export function KariyerPage() {
         </div>
       </section>
 
-      {/* YAN HAKLAR — Sadeleştirme Turu #2: eski numaralı/ikonlu bölünmüş
-          liste hâlâ "sekiz eşit birim" hissi veriyordu. Artık sekiz madde,
-          içeriklerine zaten uyan iki başlık altında gruplanıyor (Günlük
-          Yaşam / Gelişim ve Kariyer) — yeni bir hak icat edilmedi, yalnızca
-          mevcut 8 madde anlamlı iki kümeye ayrıldı. Numara ve ikon TAMAMEN
-          kaldırıldı; salt başlık + kısa liste — olgun bir kurumsal bilgi
-          bloğu, "yan hak panosu" değil. */}
+      {/* YAN HAKLAR — Etkileşim Turu: iki-sütunlu gruplama (Günlük Yaşam /
+          Gelişim ve Kariyer) korunuyor, ama önceki hâl açıklamayı HER ZAMAN
+          gösterdiğinden düz bir tablo gibi okunuyordu. Artık varsayılan
+          olarak yalnızca başlıklar görünür (temiz editoryal indeks);
+          hover/focus/dokunma ile aktif madde beyaza çıkar ve açıklaması
+          altına açılır — Hakkımızda'nın Değer Çerçevemiz ile AYNI dil
+          (varsayılan sakin, aktifte öne çıkan tek öğe) ama bu bölümün zaten
+          lacivert zemini için uyarlanmış: yüzey rengi değişmiyor, bunun
+          yerine başlık opaklığı + ince bir açık-mavi (#7d9bea) alt çizgi
+          aktif durumu taşıyor. Numara, ikon ve kalın gri panel YOK; sekiz
+          gerçek hak aynen korunuyor, yalnızca sunum etkileşimli hale geldi. */}
       <section className="relative bg-[#1B3A8F] text-white py-24 overflow-hidden">
         <div className="absolute inset-0 do-grid-bg opacity-25" />
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
@@ -475,19 +485,47 @@ export function KariyerPage() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-x-16 gap-y-12">
+          <div className="grid md:grid-cols-2 gap-x-16 gap-y-2">
             {t.benefits.groupHeadings.map((groupHeading, g) => (
               <div key={groupHeading} ref={reveal} className={`do-reveal ${g === 1 ? "do-d1" : ""}`}>
-                <h3 className="text-[13px] font-black uppercase tracking-[0.2em] text-[#7d9bea] pb-4 mb-5 border-b border-white/15">
+                <h3 className="text-[13px] font-black uppercase tracking-[0.2em] text-[#7d9bea] pb-4 mb-2 border-b border-white/15">
                   {groupHeading}
                 </h3>
-                <div className="space-y-5">
-                  {t.benefits.items.slice(g * BENEFIT_GROUP_SIZE, g * BENEFIT_GROUP_SIZE + BENEFIT_GROUP_SIZE).map((item) => (
-                    <div key={item.label}>
-                      <div className="text-white font-bold text-[15px] leading-snug">{item.label}</div>
-                      <div className="text-white/50 text-[13px] mt-1 leading-snug">{item.sub}</div>
-                    </div>
-                  ))}
+                <div className="divide-y divide-white/10">
+                  {t.benefits.items.slice(g * BENEFIT_GROUP_SIZE, g * BENEFIT_GROUP_SIZE + BENEFIT_GROUP_SIZE).map((item, li) => {
+                    const i = g * BENEFIT_GROUP_SIZE + li;
+                    const isOpen = activeBenefit === i;
+                    return (
+                      <button
+                        key={item.label}
+                        type="button"
+                        onClick={() => toggleBenefit(i)}
+                        aria-expanded={isOpen}
+                        className="group block w-full text-left py-4 focus-visible:outline-none"
+                      >
+                        <span
+                          className={`font-bold text-[15px] leading-snug transition-colors duration-300 ${
+                            isOpen ? "text-white" : "text-white/65"
+                          } group-hover:text-white group-focus-visible:text-white`}
+                        >
+                          {item.label}
+                        </span>
+                        <span
+                          aria-hidden="true"
+                          className={`block h-px mt-2 transition-all duration-300 bg-[#7d9bea] ${
+                            isOpen ? "w-10 opacity-100" : "w-0 opacity-0"
+                          } group-hover:w-10 group-hover:opacity-100 group-focus-visible:w-10 group-focus-visible:opacity-100`}
+                        />
+                        <span
+                          className={`block text-white/55 text-[13px] leading-relaxed overflow-hidden transition-all duration-300 ease-out ${
+                            isOpen ? "max-h-12 opacity-100 mt-2" : "max-h-0 opacity-0 mt-0"
+                          } group-hover:max-h-12 group-hover:opacity-100 group-hover:mt-2 group-focus-visible:max-h-12 group-focus-visible:opacity-100 group-focus-visible:mt-2`}
+                        >
+                          {item.sub}
+                        </span>
+                      </button>
+                    );
+                  })}
                 </div>
               </div>
             ))}

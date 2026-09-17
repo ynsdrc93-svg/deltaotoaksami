@@ -11,10 +11,12 @@ import { useLang, routeFor, type Lang } from "@/lib/i18n";
 // Çerez Politikası içeriği — canlı kodda document.cookie/analytics/pixel
 // araması sıfır sonuç verdi). (2) İçerik "genel taslak" olarak yazıldı —
 // şirket unvanı/adres/e-posta/telefon SİTEDE ZATEN DOĞRULANMIŞ gerçek
-// bilgilerdir (footer, İletişim sayfası ile birebir); ancak MERSİS/vergi
-// no gibi bu oturumda doğrulanamayan alanlar UYDURULMADI, sayfa içinde
-// açıkça "taslak" ibaresiyle ve LegalPageLayout'taki uyarı kutusuyla
-// işaretlendi. Yayından önce hukuki inceleme gerekir.
+// bilgilerdir (footer, İletişim sayfası ile birebir). MERSİS Turu: resmî
+// olarak sağlanan MERSİS numarası (0274002057500013) artık Veri
+// Sorumlusunun Kimliği bölümüne eklendi; vergi kimlik numarası hâlâ
+// doğrulanmadığı için UYDURULMADI, sayfa içinde açıkça "taslak" ibaresiyle
+// ve LegalPageLayout'taki uyarı kutusuyla işaretlendi. Yayından önce hukuki
+// inceleme gerekir.
 const content = {
   tr: {
     meta: {
@@ -33,9 +35,9 @@ const content = {
         heading: "1. Veri Sorumlusunun Kimliği",
         paragraphs: [
           "6698 sayılı Kişisel Verilerin Korunması Kanunu (\"KVKK\") uyarınca, bu internet sitesi (www.deltaoto.com.tr) üzerinden elde edilen kişisel verileriniz bakımından veri sorumlusu, Delta Oto markası altında faaliyet gösteren Delta Oto Aksamı San. ve Tic. A.Ş.'dir (\"Delta Oto\" veya \"Şirket\").",
-          "İletişim adresi: Barbaros Cd. Beyit Sk. No:17, Yukarı Dudullu — Ümraniye / İstanbul. E-posta: info@deltaoto.com. Telefon: 0216 526 64 64 / 0216 526 33 44.",
+          "İletişim adresi: Barbaros Cd. Beyit Sk. No:17, Yukarı Dudullu — Ümraniye / İstanbul. E-posta: info@deltaoto.com. Telefon: 0216 526 64 64 / 0216 526 33 44. MERSİS No: 0274002057500013.",
         ],
-        list: ["Taslak notu: Şirketin MERSİS ve vergi kimlik numarası bu taslakta yer almamaktadır; yayın öncesi eklenmesi gerekir."],
+        list: ["Taslak notu: Şirketin vergi kimlik numarası bu taslakta yer almamaktadır; yayın öncesi eklenmesi gerekir."],
       },
       {
         id: "islenen-veriler",
@@ -119,9 +121,9 @@ const content = {
         heading: "1. Identity of the Data Controller",
         paragraphs: [
           "Under Law No. 6698 on the Protection of Personal Data (\"KVKK\"), the data controller for personal data obtained through this website (www.deltaoto.com.tr) is Delta Oto Aksamı San. ve Tic. A.Ş., operating under the Delta Oto brand (\"Delta Oto\" or \"the Company\").",
-          "Contact address: Barbaros Cd. Beyit Sk. No:17, Yukarı Dudullu — Ümraniye / İstanbul, Türkiye. Email: info@deltaoto.com. Phone: 0216 526 64 64 / 0216 526 33 44.",
+          "Contact address: Barbaros Cd. Beyit Sk. No:17, Yukarı Dudullu — Ümraniye / İstanbul, Türkiye. Email: info@deltaoto.com. Phone: 0216 526 64 64 / 0216 526 33 44. MERSIS No: 0274002057500013.",
         ],
-        list: ["Draft note: the Company's MERSİS and tax identification numbers are not included in this draft and must be added before publication."],
+        list: ["Draft note: the Company's tax identification number is not included in this draft and must be added before publication."],
       },
       {
         id: "islenen-veriler",

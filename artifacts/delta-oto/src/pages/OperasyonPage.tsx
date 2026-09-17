@@ -79,16 +79,17 @@ const content = {
     // Ümraniye bu modülden ÇIKARILDI (dağıtım anlatısı artık yalnızca Gebze +
     // İzmir → Türkiye geneli; Ümraniye merkez/HQ kimliği İletişim sayfasında
     // ve footer'da zaten var, oradan SİLİNMEDİ — bkz. görev talimatı §K).
-    // Görsel varlık notu: repo içinde Gebze'ye veya İzmir'e ÖZGÜ, doğrulanmış
-    // ayrı fotoğraf yok — yalnızca iki GERÇEK (fabrikasyon değil, AI-üretimi
-    // değil) Delta tesis fotoğrafı mevcut (delta-oto-hero-facility.webp,
-    // delta-oto-depot.webp — muhtemelen ikisi de aynı/benzer kampüsü
-    // gösteriyor, coğrafi olarak Gebze/İzmir'e özel değil). Bu iki gerçek
-    // fotoğraf, panel arka planı olarak (atmosferik/kurumsal doku) kullanıldı
-    // — panel metninde "bu fotoğraf Gebze'nin binası" gibi bir iddia YOK,
-    // yalnızca GEBZE/İZMİR kimliği HTML/CSS metin+logo katmanı olarak
-    // bindiriliyor (bkz. JSX). Sahte tabela/uydurma bina YOK. Detay görev
-    // raporunda belirtildi.
+    // Görsel varlık notu — Gerçek Depo Fotoğrafı Turu: artık Gebze'ye ve
+    // İzmir'e ÖZGÜ, gerçek depo içi fotoğraflar repoda mevcut
+    // (operations-gebze-interior.png/webp, operations-izmir-interior.png/webp
+    // — eski jenerik stand-in'lerin (delta-oto-hero-facility.webp,
+    // delta-oto-depot.webp) yerini bu modülde aldı; o iki dosya kaldırılmadı,
+    // yalnızca burada kullanılmıyor). Her iki fotoğrafta da rafların
+    // üzerinde doğal olarak asılı "delta50" tabelaları var; İzmir'de ayrıca
+    // Opar tabelası da doğal biçimde görünüyor — bu HTML/CSS ile eklenmiş bir
+    // logo bindirmesi DEĞİL, fotoğrafın kendi içeriği. Panel üzerine yalnızca
+    // şehir adı (Gebze/İzmir) metin katmanı bindiriliyor, başka hiçbir
+    // logo/tabela eklenmedi ya da kaldırılmadı.
     depots: {
       eyebrow: "Operasyon Altyapısı",
       heading: "Gebze ve İzmir'den Türkiye Geneline Dağıtım",
@@ -96,8 +97,8 @@ const content = {
       reachValue: "81 İl",
       reachLabel: "Türkiye Geneline Dağıtım",
       panels: [
-        { title: "Gebze", image: "/images/delta-oto-hero-facility.webp" },
-        { title: "İzmir", image: "/images/delta-oto-depot.webp" },
+        { title: "Gebze", image: "/images/operations-gebze-interior.webp", position: "50% 50%" },
+        { title: "İzmir", image: "/images/operations-izmir-interior.webp", position: "78% 50%" },
       ],
     },
     // Hard-edit (§21-22): 8 madde → 3. Kalan 5 madde bu sayfada BAŞKA YERDE
@@ -185,8 +186,8 @@ const content = {
       reachValue: "81 Provinces",
       reachLabel: "Nationwide Distribution",
       panels: [
-        { title: "Gebze", image: "/images/delta-oto-hero-facility.webp" },
-        { title: "İzmir", image: "/images/delta-oto-depot.webp" },
+        { title: "Gebze", image: "/images/operations-gebze-interior.webp", position: "50% 50%" },
+        { title: "İzmir", image: "/images/operations-izmir-interior.webp", position: "78% 50%" },
       ],
     },
     capabilities: {
@@ -418,14 +419,26 @@ export function OperasyonPage() {
             <p className="text-slate-500 mt-3 text-[15px] leading-relaxed max-w-xl">{t.depots.body}</p>
           </div>
 
+          {/* Kırpma notu: kaynak fotoğraflar geniş-format depo iç mekanı
+              (1672x941, ~16:9) — eski md:aspect-[3/4] (dikey) kırpımı
+              genişliğin yarısından fazlasını kesip "aşırı yakınlaştırılmış"
+              hissi veriyordu. Artık tüm kırılımlarda ölçüsüz olmayan, geniş-
+              formata daha sadık bir oran kullanılıyor; her panelin kendi
+              object-position'ı (bkz. veri: Gebze ortalı, İzmir sağa yaslı —
+              Opar tabelasının kadraj dışı kalmaması için) korunuyor. */}
           <div className="grid md:grid-cols-2 gap-5 lg:gap-6">
-            {t.depots.panels.map((panel: { title: string; image: string }, i: number) => (
+            {t.depots.panels.map((panel: { title: string; image: string; position: string }, i: number) => (
               <div
                 key={panel.title}
                 ref={ref}
-                className={`do-reveal ${i === 1 ? "do-d1" : ""} relative rounded-2xl overflow-hidden aspect-[4/3] md:aspect-[3/4] lg:aspect-[4/3]`}
+                className={`do-reveal ${i === 1 ? "do-d1" : ""} relative rounded-2xl overflow-hidden aspect-[4/3] lg:aspect-[16/10]`}
               >
-                <img src={panel.image} alt="" className="absolute inset-0 w-full h-full object-cover" />
+                <img
+                  src={panel.image}
+                  alt=""
+                  className="absolute inset-0 w-full h-full object-cover"
+                  style={{ objectPosition: panel.position }}
+                />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0e1016]/70 via-[#0e1016]/10 to-transparent" />
                 <div className="absolute inset-0 p-6 md:p-7 lg:p-8 flex flex-col justify-end text-white">
                   <h3 className="text-2xl md:text-3xl font-black tracking-tight">{panel.title}</h3>
@@ -443,7 +456,8 @@ export function OperasyonPage() {
       <section className="bg-[#1B3A8F] py-14 md:py-16 text-white text-center">
         <div ref={ref} className="do-reveal max-w-7xl mx-auto px-6 lg:px-8">
           <div className="text-5xl md:text-6xl lg:text-7xl font-black tracking-tight tabular-nums">{t.depots.reachValue}</div>
-          <p className="mt-2 text-[#7d9bea] text-sm md:text-base font-bold uppercase tracking-[0.15em]">{t.depots.reachLabel}</p>
+          <div aria-hidden="true" className="w-10 h-px bg-white/25 mx-auto my-4 md:my-5" />
+          <p className="text-[#7d9bea] text-sm md:text-base font-bold uppercase tracking-[0.15em]">{t.depots.reachLabel}</p>
         </div>
       </section>
 
