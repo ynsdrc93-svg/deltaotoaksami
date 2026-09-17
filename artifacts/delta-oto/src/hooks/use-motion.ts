@@ -209,8 +209,17 @@ export function useSectionProgress<T extends HTMLElement>(mode: "settle" | "tran
           end = -rect.height
         } else if (mode === "reveal") {
           const revealTravelFraction = 1.1        // raw travel budget requested — the height-based floor below decides how much of it is actually usable
-          const minEndHeightFraction = 0.6        // at progress=1, at least this fraction of the section's OWN height must still sit below the viewport's top edge (keeps the 4 cards themselves always visible, unlike a fixed-viewport-fraction floor which can't adapt to the section's real size)
-          const minEnd = -(rect.height * minEndHeightFraction)
+          // minVisibleAtEnd Düzeltme Turu: eski formül `-(rect.height * 0.6)`
+          // yorumun aksine "en az %60 görünür kalsın" DEĞİL, "en az %60'ı
+          // KAYBOLSUN" anlamına geliyordu (işaret ters kurulmuştu) — canlı
+          // QA'da doğrulandı: tamamlanma anında yalnızca ~%40 görünür
+          // kalıyordu, bu da "adım 04 aktifleşirken modül neredeyse
+          // ekrandan çıkıyor" hissinin asıl kaynağıydı. Doğru formül,
+          // hedeflenen görünür oranı (minVisibleAtEnd) DOĞRUDAN kullanıyor:
+          // progress=1'de elementin en az bu kadarı hâlâ viewport'un üst
+          // kenarının altında (görünür) kalıyor.
+          const minVisibleAtEnd = 0.6
+          const minEnd = -(rect.height * (1 - minVisibleAtEnd))
           end = Math.max(minEnd, start - vh * revealTravelFraction)
         } else {
           const topSafeMargin = 0.12 * vh   // stay clear of a sticky header near the top of the viewport

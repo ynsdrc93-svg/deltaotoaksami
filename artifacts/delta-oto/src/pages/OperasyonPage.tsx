@@ -93,12 +93,12 @@ const content = {
     depots: {
       eyebrow: "Operasyon Altyapısı",
       heading: "Gebze ve İzmir'den Türkiye Geneline Dağıtım",
-      body: "İki operasyon noktamızdan, Türkiye'nin tamamına planlı ve düzenli dağıtım sağlıyoruz.",
+      body: "İki operasyon noktamızdan, Türkiye'nin tamamına düzenli sevkiyat ağıyla ulaşıyoruz.",
       reachValue: "81 İl",
       reachLabel: "Türkiye Geneline Dağıtım",
       panels: [
-        { title: "Gebze", image: "/images/operations-gebze-interior.webp", position: "50% 50%" },
-        { title: "İzmir", image: "/images/operations-izmir-interior.webp", position: "78% 50%" },
+        { title: "Gebze", caption: "Marmara merkezli ulusal sevkiyat noktası.", image: "/images/operations-gebze-interior.webp", position: "50% 50%" },
+        { title: "İzmir", caption: "Ege merkezli bölgesel sevkiyat noktası.", image: "/images/operations-izmir-interior.webp", position: "78% 50%" },
       ],
     },
     // Hard-edit (§21-22): 8 madde → 3. Kalan 5 madde bu sayfada BAŞKA YERDE
@@ -182,12 +182,12 @@ const content = {
     depots: {
       eyebrow: "Operations Infrastructure",
       heading: "Nationwide Distribution from Gebze and İzmir",
-      body: "From our two operations points, we provide planned, regular distribution across the whole of Türkiye.",
+      body: "From our two operations points, we reach the whole of Türkiye through a regular, structured dispatch network.",
       reachValue: "81 Provinces",
       reachLabel: "Nationwide Distribution",
       panels: [
-        { title: "Gebze", image: "/images/operations-gebze-interior.webp", position: "50% 50%" },
-        { title: "İzmir", image: "/images/operations-izmir-interior.webp", position: "78% 50%" },
+        { title: "Gebze", caption: "Marmara-based national dispatch point.", image: "/images/operations-gebze-interior.webp", position: "50% 50%" },
+        { title: "İzmir", caption: "Aegean-based regional dispatch point.", image: "/images/operations-izmir-interior.webp", position: "78% 50%" },
       ],
     },
     capabilities: {
@@ -399,18 +399,17 @@ export function OperasyonPage() {
         </div>
       </section>
 
-      {/* OPERASYON ALTYAPISI — Mimari Sadeleştirme Turu: eski sürümde her
-          panelin üzerinde bindirilmiş bir logo görseli, plaka numarası,
-          bölge etiketi ve bir cümlelik açıklama vardı — kullanıcı bunu
-          "ucuz fotoğraf-altyazı" hissi olarak reddetti. Artık fotoğrafın
-          üzerinde YALNIZCA şehir adı var (Gebze/İzmir) — logo bindirmesi
-          TAMAMEN kaldırıldı (gerçek fotoğrafın içinde doğal olarak bir marka
-          görünüyorsa dokunulmaz, ama HTML/CSS katmanıyla üstüne EKLENMEZ).
-          "81 İl" artık bu bölümün küçük bir köşe notu değil — fotoğraflardan
-          sonra gelen, kendi navy bandıyla ayrılmış, büyük ve merkezi bir
-          KAPANIŞ ifadesi (bkz. aşağıdaki ayrı bölüm). Başlık tek satıra
-          sığması için geniş bir konteynerde (max-w-4xl), dar bir okuma
-          ölçüsüne zorlanmıyor. */}
+      {/* OPERASYON ALTYAPISI — Bütünleşik Modül Turu: fotoğraflar ve "81 İl"
+          artık İKİ AYRI <section> DEĞİL, TEK bir modül — 81 İl şeridi bu
+          section'ın kendi içinde, fotoğrafların hemen devamında, aynı
+          kapsayıcının bir parçası olarak akıyor (görev talimatı §4, Seçenek
+          A). Fotoğraf üzerinde YALNIZCA şehir adı + kısa bir editoryal satır
+          var — logo bindirmesi YOK (gerçek fotoğrafın içinde doğal olarak
+          bir marka görünüyorsa dokunulmaz, ama HTML/CSS katmanıyla üstüne
+          EKLENMEZ). Gradyan artık tek yönlü alttan-yukarı değil, sol-alt
+          köşeden çapraz (bg-gradient-to-tr) — metnin oturduğu köşede derinlik
+          yaratıyor, fotoğrafın geri kalanı (özellikle sağ/üst) büyük ölçüde
+          açık kalıyor. */}
       <section className="bg-white py-16 md:py-20 lg:py-16 overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div ref={ref} className="do-reveal max-w-4xl mb-8 md:mb-10 lg:mb-12">
@@ -427,7 +426,7 @@ export function OperasyonPage() {
               object-position'ı (bkz. veri: Gebze ortalı, İzmir sağa yaslı —
               Opar tabelasının kadraj dışı kalmaması için) korunuyor. */}
           <div className="grid md:grid-cols-2 gap-5 lg:gap-6">
-            {t.depots.panels.map((panel: { title: string; image: string; position: string }, i: number) => (
+            {t.depots.panels.map((panel: { title: string; caption: string; image: string; position: string }, i: number) => (
               <div
                 key={panel.title}
                 ref={ref}
@@ -439,25 +438,25 @@ export function OperasyonPage() {
                   className="absolute inset-0 w-full h-full object-cover"
                   style={{ objectPosition: panel.position }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0e1016]/70 via-[#0e1016]/10 to-transparent" />
-                <div className="absolute inset-0 p-6 md:p-7 lg:p-8 flex flex-col justify-end text-white">
+                <div className="absolute inset-0 bg-gradient-to-tr from-[#0e1016]/90 via-[#0e1016]/35 to-transparent" />
+                <div className="absolute inset-0 p-6 md:p-7 lg:p-8 flex flex-col justify-end text-white max-w-[80%] sm:max-w-[60%]">
                   <h3 className="text-2xl md:text-3xl font-black tracking-tight">{panel.title}</h3>
+                  <p className="mt-1.5 text-[13px] md:text-sm text-white/75 font-medium leading-snug">{panel.caption}</p>
                 </div>
               </div>
             ))}
           </div>
         </div>
-      </section>
 
-      {/* 81 İL — navy, tam genişlik kapanış bandı. Fotoğraf bölümüyle
-          Sistem ve Kalite (dark) bölümü arasında kendi başına bir durak;
-          ne bir köşe rozeti ne de fotoğrafın üzerine bindirilmiş bir sayı —
-          büyük, ortalanmış, tek başına okunan bir sonuç ifadesi. */}
-      <section className="bg-[#1B3A8F] py-14 md:py-16 text-white text-center">
-        <div ref={ref} className="do-reveal max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="text-5xl md:text-6xl lg:text-7xl font-black tracking-tight tabular-nums">{t.depots.reachValue}</div>
-          <div aria-hidden="true" className="w-10 h-px bg-white/25 mx-auto my-4 md:my-5" />
-          <p className="text-[#7d9bea] text-sm md:text-base font-bold uppercase tracking-[0.15em]">{t.depots.reachLabel}</p>
+        {/* 81 İL — aynı modülün kapanış şeridi (bkz. yukarıdaki not); tam
+            genişlik olması için bilerek max-w-7xl kapsayıcının DIŞINDA, ama
+            section'ın kendi içinde — ayrı bir bölüm hissi vermiyor. */}
+        <div ref={ref} className="do-reveal mt-12 md:mt-14 lg:mt-16 bg-[#1B3A8F] py-14 md:py-16 text-white text-center">
+          <div className="max-w-7xl mx-auto px-6 lg:px-8">
+            <div className="text-5xl md:text-6xl lg:text-7xl font-black tracking-tight tabular-nums">{t.depots.reachValue}</div>
+            <div aria-hidden="true" className="w-10 h-px bg-white/25 mx-auto my-4 md:my-5" />
+            <p className="text-[#7d9bea] text-sm md:text-base font-bold uppercase tracking-[0.15em]">{t.depots.reachLabel}</p>
+          </div>
         </div>
       </section>
 

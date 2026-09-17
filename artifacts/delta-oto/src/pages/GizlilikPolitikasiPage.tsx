@@ -77,6 +77,16 @@ const content = {
         paragraphs: [
           "Gizlilik uygulamalarımızla ilgili sorularınız için info@deltaoto.com adresinden veya İletişim sayfamızdaki kanallardan bize ulaşabilirsiniz.",
         ],
+        // MERSİS Tutarlılık Turu: bu sayfada daha önce hiçbir resmî şirket
+        // kimliği/iletişim bloğu yoktu. Yeni icat edilmiş bir bilgi değil —
+        // yalnızca sitede zaten (footer, KVKK Aydınlatma Metni) doğrulanmış
+        // olan unvan/adres/MERSİS, "Bize Ulaşın" bölümünün doğal bir uzantısı
+        // olarak küçük bir liste halinde ekleniyor.
+        list: [
+          "Delta Oto Aksamı San. ve Tic. A.Ş.",
+          "Barbaros Cd. Beyit Sk. No:17, Yukarı Dudullu — Ümraniye / İstanbul",
+          "MERSİS No: 0274002057500013",
+        ],
       },
     ],
   },
@@ -150,6 +160,11 @@ const content = {
         paragraphs: [
           "For questions about our privacy practices, reach us at info@deltaoto.com or through the channels on our Contact page.",
         ],
+        list: [
+          "Delta Oto Aksamı San. ve Tic. A.Ş.",
+          "Barbaros Cd. Beyit Sk. No:17, Yukarı Dudullu — Ümraniye / İstanbul, Türkiye",
+          "MERSIS No: 0274002057500013",
+        ],
       },
     ],
   },
@@ -178,6 +193,11 @@ export function GizlilikPolitikasiPage() {
         <section key={s.id} id={s.id}>
           <h2>{s.heading}</h2>
           {s.paragraphs.map((p, i) => <p key={i}>{p}</p>)}
+          {s.list && (
+            <ul>
+              {s.list.map((li, i) => <li key={i}>{li}</li>)}
+            </ul>
+          )}
         </section>
       ))}
     </LegalPageLayout>

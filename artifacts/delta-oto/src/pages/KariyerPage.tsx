@@ -302,14 +302,12 @@ export function KariyerPage() {
   const t = content[lang];
   useDocumentMeta(t.meta.title, t.meta.description);
   const reveal = useReveal();
-  // Yan Haklar Etkileşim Turu: sabit gri tablo hissi veren "başlık + her
-  // zaman görünür açıklama" listesi yerine, Hakkımızda'nın Değer Çerçevemiz
-  // ile AYNI dilde ama bu bölümün zaten lacivert zemini için uyarlanmış bir
-  // aktif durum kullanılıyor — açıklama varsayılan gizli, yalnızca aktif
-  // maddenin başlığı/satırı öne çıkıyor. Grup ayrımından bağımsız TEK bir
-  // index tutuluyor: bir maddeye dokunmak diğerini temiz biçimde kapatır.
+  // Yan Haklar Yatay Akordeon Turu: hangi maddenin genişleyip hangi
+  // şeritteki diğerlerinin daralacağını belirleyen TEK index. Kapatma
+  // "toggle" ile değil, hover-out/blur ile ya da başka bir maddeye
+  // geçilerek olur (bkz. JSX) — bu yüzden burada salt bir setter yeterli,
+  // ayrı bir toggle fonksiyonuna gerek yok.
   const [activeBenefit, setActiveBenefit] = React.useState<number | null>(null);
-  const toggleBenefit = (i: number) => setActiveBenefit((prev) => (prev === i ? null : i));
 
   const scrollToPlatforms = () => {
     const target = document.getElementById("kariyer-platformlari");
@@ -463,17 +461,23 @@ export function KariyerPage() {
         </div>
       </section>
 
-      {/* YAN HAKLAR — Etkileşim Turu: iki-sütunlu gruplama (Günlük Yaşam /
-          Gelişim ve Kariyer) korunuyor, ama önceki hâl açıklamayı HER ZAMAN
-          gösterdiğinden düz bir tablo gibi okunuyordu. Artık varsayılan
-          olarak yalnızca başlıklar görünür (temiz editoryal indeks);
-          hover/focus/dokunma ile aktif madde beyaza çıkar ve açıklaması
-          altına açılır — Hakkımızda'nın Değer Çerçevemiz ile AYNI dil
-          (varsayılan sakin, aktifte öne çıkan tek öğe) ama bu bölümün zaten
-          lacivert zemini için uyarlanmış: yüzey rengi değişmiyor, bunun
-          yerine başlık opaklığı + ince bir açık-mavi (#7d9bea) alt çizgi
-          aktif durumu taşıyor. Numara, ikon ve kalın gri panel YOK; sekiz
-          gerçek hak aynen korunuyor, yalnızca sunum etkileşimli hale geldi. */}
+      {/* YAN HAKLAR — Yatay Akordeon Turu: önceki iki-sütunlu dikey liste
+          (başlık üstte, açıklama altta) hâlâ "durağan iki sütunlu tablo"
+          hissi veriyordu. Artık her tematik grup (Günlük Yaşam / Gelişim ve
+          Kariyer) kendi TAM GENİŞLİK yatay şeridi — içindeki 4 madde birer
+          flex kardeş: dinlenme halinde eşit pay (flex-1), hover/focus/
+          dokunma ile o madde flex-grow'unu artırıp GENİŞLER (açıklaması
+          içine sığar), aynı şeritteki diğer üçü orantılı olarak DARALIR
+          (flex-grow küçülür) — sağa/sola kontrollü bir "kayma" hissi verir,
+          komşular sabit durmaz. Yalnızca flex-grow (transition-[flex-grow])
+          animasyonlu; layout tekrar hesaplaması ucuz ve akıcı. Masaüstünde
+          hover/focus canlı önizleme (mouseleave/blur ile sıfırlanır);
+          dokunmatikte hover olmadığından dokunma kalıcı açar (bir sonraki
+          maddeye dokunmak öncekini temiz biçimde kapatır — tek index
+          tutuluyor). 640px altında (mobil) yatay akordeon KAPALI — tek
+          sütun, önceki (onaylanmış) dikey liste + açıklama-reveal davranışı
+          aynen korunuyor, regresyon yok. Sekiz gerçek hak aynen korundu,
+          hiçbiri eklenmedi/çıkarılmadı — yalnızca sunum. */}
       <section className="relative bg-[#1B3A8F] text-white py-24 overflow-hidden">
         <div className="absolute inset-0 do-grid-bg opacity-25" />
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
@@ -485,41 +489,48 @@ export function KariyerPage() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-x-16 gap-y-2">
+          <div className="space-y-14">
             {t.benefits.groupHeadings.map((groupHeading, g) => (
               <div key={groupHeading} ref={reveal} className={`do-reveal ${g === 1 ? "do-d1" : ""}`}>
                 <h3 className="text-[13px] font-black uppercase tracking-[0.2em] text-[#7d9bea] pb-4 mb-2 border-b border-white/15">
                   {groupHeading}
                 </h3>
-                <div className="divide-y divide-white/10">
+                <div className="flex flex-col sm:flex-row divide-y divide-white/10 sm:divide-y-0 sm:divide-x">
                   {t.benefits.items.slice(g * BENEFIT_GROUP_SIZE, g * BENEFIT_GROUP_SIZE + BENEFIT_GROUP_SIZE).map((item, li) => {
                     const i = g * BENEFIT_GROUP_SIZE + li;
                     const isOpen = activeBenefit === i;
+                    const railHasActive = activeBenefit !== null && Math.floor(activeBenefit / BENEFIT_GROUP_SIZE) === g;
                     return (
                       <button
                         key={item.label}
                         type="button"
-                        onClick={() => toggleBenefit(i)}
+                        onMouseEnter={() => setActiveBenefit(i)}
+                        onMouseLeave={() => setActiveBenefit((prev) => (prev === i ? null : prev))}
+                        onFocus={() => setActiveBenefit(i)}
+                        onBlur={() => setActiveBenefit((prev) => (prev === i ? null : prev))}
+                        onClick={() => setActiveBenefit(i)}
                         aria-expanded={isOpen}
-                        className="group block w-full text-left py-4 focus-visible:outline-none"
+                        className={`group relative text-left py-5 sm:py-6 px-0 sm:px-6 min-w-0 overflow-hidden transition-[flex-grow] duration-500 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7d9bea]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#1B3A8F] rounded-sm ${
+                          isOpen ? "sm:flex-[2.4_1_0%]" : railHasActive ? "sm:flex-[0.7_1_0%]" : "sm:flex-1"
+                        }`}
                       >
                         <span
-                          className={`font-bold text-[15px] leading-snug transition-colors duration-300 ${
-                            isOpen ? "text-white" : "text-white/65"
-                          } group-hover:text-white group-focus-visible:text-white`}
+                          className={`block font-bold text-[15px] leading-snug transition-colors duration-300 ${
+                            isOpen ? "text-white" : "text-white/60"
+                          }`}
                         >
                           {item.label}
                         </span>
                         <span
                           aria-hidden="true"
-                          className={`block h-px mt-2 transition-all duration-300 bg-[#7d9bea] ${
+                          className={`block h-px mt-2.5 bg-[#7d9bea] transition-all duration-300 ${
                             isOpen ? "w-10 opacity-100" : "w-0 opacity-0"
-                          } group-hover:w-10 group-hover:opacity-100 group-focus-visible:w-10 group-focus-visible:opacity-100`}
+                          }`}
                         />
                         <span
-                          className={`block text-white/55 text-[13px] leading-relaxed overflow-hidden transition-all duration-300 ease-out ${
-                            isOpen ? "max-h-12 opacity-100 mt-2" : "max-h-0 opacity-0 mt-0"
-                          } group-hover:max-h-12 group-hover:opacity-100 group-hover:mt-2 group-focus-visible:max-h-12 group-focus-visible:opacity-100 group-focus-visible:mt-2`}
+                          className={`block text-white/55 text-[13px] leading-relaxed whitespace-normal overflow-hidden transition-all duration-300 ease-out ${
+                            isOpen ? "max-h-16 opacity-100 mt-2 delay-150" : "max-h-0 opacity-0 mt-0"
+                          }`}
                         >
                           {item.sub}
                         </span>

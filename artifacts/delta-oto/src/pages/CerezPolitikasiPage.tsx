@@ -59,6 +59,23 @@ const content = {
           "Bu politika, sitede çerez kullanımı başladığında veya ilgili mevzuat değiştiğinde güncellenecektir. Güncel sürüm her zaman bu sayfada yayınlanır.",
         ],
       },
+      {
+        // MERSİS Tutarlılık Turu: bu sayfada daha önce hiçbir resmî şirket
+        // kimliği bloğu yoktu (sayfanın var olan 5 bölümünden hiçbiri buna
+        // uygun değildi) — küçük, ayrı bir kapanış bölümü olarak eklendi;
+        // yalnızca sitede zaten doğrulanmış (footer, KVKK Aydınlatma Metni)
+        // unvan/adres/MERSİS bilgisi, yeni bir şey icat edilmedi.
+        id: "sirket-bilgileri",
+        heading: "6. Şirket Bilgileri",
+        paragraphs: [
+          "Bu politikanın muhatabı olan veri sorumlusu şirketimizin resmî bilgileri aşağıdadır.",
+        ],
+        list: [
+          "Delta Oto Aksamı San. ve Tic. A.Ş.",
+          "Barbaros Cd. Beyit Sk. No:17, Yukarı Dudullu — Ümraniye / İstanbul",
+          "MERSİS No: 0274002057500013",
+        ],
+      },
     ],
   },
   en: {
@@ -109,6 +126,18 @@ const content = {
           "This policy will be updated when cookie use begins on the site or when applicable law changes. The current version is always published on this page.",
         ],
       },
+      {
+        id: "sirket-bilgileri",
+        heading: "6. Company Information",
+        paragraphs: [
+          "The official information of the data controller responsible for this policy is set out below.",
+        ],
+        list: [
+          "Delta Oto Aksamı San. ve Tic. A.Ş.",
+          "Barbaros Cd. Beyit Sk. No:17, Yukarı Dudullu — Ümraniye / İstanbul, Türkiye",
+          "MERSIS No: 0274002057500013",
+        ],
+      },
     ],
   },
 } satisfies Record<Lang, any>;
@@ -136,6 +165,11 @@ export function CerezPolitikasiPage() {
         <section key={s.id} id={s.id}>
           <h2>{s.heading}</h2>
           {s.paragraphs.map((p, i) => <p key={i}>{p}</p>)}
+          {s.list && (
+            <ul>
+              {s.list.map((li, i) => <li key={i}>{li}</li>)}
+            </ul>
+          )}
         </section>
       ))}
     </LegalPageLayout>

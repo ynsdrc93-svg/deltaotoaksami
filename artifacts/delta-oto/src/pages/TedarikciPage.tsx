@@ -699,60 +699,53 @@ export function TedarikciPage() {
 
       {/* NEDEN DELTA OTO — white. Görsel/İçerik Hijyeni Turu: standalone
           "Kalite Güvencesi" navy bölümü tamamen kaldırıldı (mesajı Operasyon >
-          Sistem ve Kalite'ye taşındı). Bu bölüm artık dört eşit madde değil —
-          en güçlü ayırt edici (50+ yıl) sol tarafta baskın bir çapa olarak
-          büyük tipografiyle duruyor, sağda üç kısa destekleyici kavram
-          (Stok/Erişim/Tek Muhatap) ince bir dikey ayraçla ondan ayrılıyor.
-          "Süreklilik" kaldırıldı (50+ yıl mesajıyla fazlalaşıyordu).
-          Güven Çapası Turu #2: "50+" ve etiketi eskiden iki ayrı kayıt
-          gibi duruyordu (dev rakam + altında küçük harf aralıklı bir
-          caption). Artık "50+ Yıldır" TEK bir taban çizgisinde (items-baseline)
-          birlikte okunuyor — "Yıldır" rakamla aynı renk/ağırlıkta, yalnızca
-          ölçekçe küçük; ikinci satır ("Otomotiv Aftermarket Deneyimi") artık
-          küçük harf aralıklı bir dipnot değil, kendi başına güçlü bir alt
-          başlık — ikisi de aynı sol kenara hizalı, rakamla aynı ritimde. */}
+          Sistem ve Kalite'ye taşındı). "Süreklilik" kaldırıldı (50+ yıl
+          mesajıyla fazlalaşıyordu). "50+ Yıldır" TEK bir taban çizgisinde
+          (items-baseline) birlikte okunuyor.
+
+          Geometri Yeniden Kurulum Turu: önceki iç-içe grid mimarisi (dış
+          [auto_1fr] 2 sütun + güven bloğunda TEK BAŞINA bir lg:border-r,
+          içeride AYRI bir 3 sütunlu sm:divide-x grid) iki FARKLI ayraç
+          mekanizmasını yan yana koyuyordu — items-stretch ile piksel
+          yüksekliği eşitlense bile, güven bloğunun kendi padding/gap'i içteki
+          gridin gap'inden farklı olduğundan ritim hâlâ tutarsız okunuyor ve
+          sol blok "yapıştırılmış ayrı bir kompozisyon" gibi duruyordu. Artık
+          TEK, DÜZ bir 4 sütunlu grid — güven birimi üç maddeyle birebir aynı
+          satırda, birebir aynı kardeş seviyesinde. Tek bir divide-x
+          mekanizması TÜM sütun aralarında aynı çizgiyi üretiyor (yükseklik
+          grid satırının kendisine bağlı, her çocuğun kendi içerik
+          yüksekliğine değil — bu yüzden hepsi yapısal olarak aynı üst/alt
+          rayda başlayıp bitiyor). Mobilde (<lg) tek sütun + divide-y aynı
+          mantığı yatay yerine dikey ayraca çeviriyor. */}
       <section className="bg-white py-24">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div ref={reveal} className="do-reveal mb-14">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">{t.advantages.eyebrow}</span>
             <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-2 tracking-tight">{t.advantages.heading}</h2>
           </div>
-          {/* Hizalama Düzeltme Turu: eski `items-center` iki sütunu birbirine
-              göre DİKEY OLARAK ORTALIYORDU — sütunların doğal içerik
-              yükseklikleri farklı olduğundan (güven bloğu vs. 3 madde satırı),
-              bu da lg:border-r / sm:divide-x ayraçlarının farklı üst/alt
-              noktalarda başlayıp bitmesine (biri diğerinden kısa/uzun
-              görünmesine) yol açıyordu. `items-stretch` (varsayılan) her iki
-              sütunu da satırın tam yüksekliğine geriyor ve içerik doğal
-              olarak üstten hizalandığından, tüm ayraçlar ve başlıklar artık
-              aynı ortak "ray" üzerinde başlıyor. */}
-          <div ref={reveal} className="do-reveal do-d1 grid lg:grid-cols-[auto_1fr] gap-10 lg:gap-16 items-stretch border-t border-slate-200 pt-12">
-            <div className="pb-8 mb-2 border-b border-slate-200 lg:pb-0 lg:mb-0 lg:border-b-0 lg:pr-16 lg:border-r">
+          <div
+            ref={reveal}
+            className="do-reveal do-d1 grid grid-cols-1 lg:grid-cols-4 lg:gap-x-10 divide-y divide-slate-200 lg:divide-y-0 lg:divide-x border-t border-slate-200 pt-12"
+          >
+            <div className="py-8 lg:py-0 lg:pr-10">
               <div className="flex items-baseline gap-3">
-                <span className="text-7xl lg:text-8xl font-black text-[#1B3A8F] tracking-tight leading-none tabular-nums">
+                <span className="text-6xl lg:text-7xl font-black text-[#1B3A8F] tracking-tight leading-none tabular-nums">
                   {t.advantages.trust.value}
                 </span>
-                <span className="text-2xl lg:text-3xl font-black text-[#1B3A8F] tracking-tight">
+                <span className="text-xl lg:text-2xl font-black text-[#1B3A8F] tracking-tight">
                   {t.advantages.trust.unit}
                 </span>
               </div>
-              <p className="mt-3 text-slate-800 text-base lg:text-lg font-bold tracking-tight leading-snug">
+              <p className="mt-3 text-slate-800 text-[15px] lg:text-base font-bold tracking-tight leading-snug">
                 {t.advantages.trust.sub}
               </p>
             </div>
-            {/* Görsel/UX Düzeltme Turu (§2, hâlâ geçerli): "Tek Muhatap"
-                satır kırmasın diye whitespace-nowrap + boşluğu padding
-                yerine grid gap'ine taşıma tekniği korundu — üç maddeye
-                indirilince satır kırma riski zaten azaldı ama teknik
-                değişmedi. 1440/1280/390'da doğrulandı. */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-y-8 gap-x-6 lg:gap-x-10 sm:divide-x sm:divide-slate-200 sm:items-stretch">
-              {t.advantages.items.map(({ title, desc }) => (
-                <div key={title} className="sm:pl-6 sm:first:pl-0">
-                  <div className="text-xl sm:text-2xl xl:text-3xl font-black text-slate-900 tracking-tight mb-3 whitespace-nowrap">{title}</div>
-                  <p className="text-slate-500 text-[14px] leading-relaxed">{desc}</p>
-                </div>
-              ))}
-            </div>
+            {t.advantages.items.map(({ title, desc }) => (
+              <div key={title} className="py-8 lg:py-0 lg:pl-10">
+                <div className="text-xl lg:text-2xl font-black text-slate-900 tracking-tight mb-3">{title}</div>
+                <p className="text-slate-500 text-[14px] leading-relaxed">{desc}</p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
