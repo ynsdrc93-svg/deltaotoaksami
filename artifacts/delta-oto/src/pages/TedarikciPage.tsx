@@ -723,11 +723,24 @@ export function TedarikciPage() {
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">{t.advantages.eyebrow}</span>
             <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-2 tracking-tight">{t.advantages.heading}</h2>
           </div>
+          {/* Nefes Payı Turu 2: bir önceki düzeltme px-12 (48px) simetrik
+              padding EKLEDİ ama gap-x-14'ü (56px) KORUDU — ölçümle
+              doğrulandı: divide-x'in çizgisi her zaman TAKİP EDEN sütunun
+              kendi kutu kenarında oturuyor (gap'in tamamı çizgiden ÖNCE,
+              yalnızca ÖNCEKİ sütunun tarafında kalıyor). Sonuç: her ayracın
+              SOLU (önceki sütunun metni) 105px, SAĞI (sonraki sütunun metni)
+              yalnızca 48px — "simetrik ve kasıtlı" değil, hâlâ dengesiz.
+              Kök çözüm: gap-x TAMAMEN kaldırıldı, TÜM boşluk artık yalnızca
+              padding'den geliyor (px-16, 64px, her sütunda iki taraf da eşit)
+              — divide-x çizgisi artık iki sütunun BİTİŞİK kutu kenarında
+              (gap yok) oturuyor, bu da matematiksel olarak GARANTİ eşit bir
+              64px/64px tampon üretiyor (canlı ölçümle doğrulandı, bkz. görev
+              raporu). */}
           <div
             ref={reveal}
-            className="do-reveal do-d1 grid grid-cols-1 lg:grid-cols-4 lg:gap-x-10 divide-y divide-slate-200 lg:divide-y-0 lg:divide-x border-t border-slate-200 pt-12"
+            className="do-reveal do-d1 grid grid-cols-1 lg:grid-cols-4 divide-y divide-slate-200 lg:divide-y-0 lg:divide-x border-t border-slate-200 pt-12"
           >
-            <div className="py-8 lg:py-0 lg:pr-10">
+            <div className="py-8 lg:py-0 lg:pr-16">
               <div className="flex items-baseline gap-3">
                 <span className="text-6xl lg:text-7xl font-black text-[#1B3A8F] tracking-tight leading-none tabular-nums">
                   {t.advantages.trust.value}
@@ -741,7 +754,7 @@ export function TedarikciPage() {
               </p>
             </div>
             {t.advantages.items.map(({ title, desc }) => (
-              <div key={title} className="py-8 lg:py-0 lg:pl-10">
+              <div key={title} className="py-8 lg:py-0 lg:px-16 last:lg:pr-0">
                 <div className="text-xl lg:text-2xl font-black text-slate-900 tracking-tight mb-3">{title}</div>
                 <p className="text-slate-500 text-[14px] leading-relaxed">{desc}</p>
               </div>

@@ -302,12 +302,13 @@ export function KariyerPage() {
   const t = content[lang];
   useDocumentMeta(t.meta.title, t.meta.description);
   const reveal = useReveal();
-  // Yan Haklar Yatay Akordeon Turu: hangi maddenin genişleyip hangi
-  // şeritteki diğerlerinin daralacağını belirleyen TEK index. Kapatma
-  // "toggle" ile değil, hover-out/blur ile ya da başka bir maddeye
-  // geçilerek olur (bkz. JSX) — bu yüzden burada salt bir setter yeterli,
-  // ayrı bir toggle fonksiyonuna gerek yok.
-  const [activeBenefit, setActiveBenefit] = React.useState<number | null>(null);
+  // Yan Haklar İndeks + Sahne Turu: hangi hakkın büyük "sahne" panelinde
+  // gösterildiğini tutar. Tedarikçiler'in CategoryExplorer'ıyla AYNI,
+  // zaten onaylanmış etkileşim dilini kullanıyor (tıkla-seç index satırı +
+  // .do-fade-up geçişli sahne) — varsayılan 0 (null değil): sahne hiçbir
+  // zaman boş başlamıyor, sayfa ilk render'da bile tam bir kompozisyon
+  // gösteriyor.
+  const [activeBenefit, setActiveBenefit] = React.useState(0);
 
   const scrollToPlatforms = () => {
     const target = document.getElementById("kariyer-platformlari");
@@ -461,23 +462,33 @@ export function KariyerPage() {
         </div>
       </section>
 
-      {/* YAN HAKLAR — Yatay Akordeon Turu: önceki iki-sütunlu dikey liste
-          (başlık üstte, açıklama altta) hâlâ "durağan iki sütunlu tablo"
-          hissi veriyordu. Artık her tematik grup (Günlük Yaşam / Gelişim ve
-          Kariyer) kendi TAM GENİŞLİK yatay şeridi — içindeki 4 madde birer
-          flex kardeş: dinlenme halinde eşit pay (flex-1), hover/focus/
-          dokunma ile o madde flex-grow'unu artırıp GENİŞLER (açıklaması
-          içine sığar), aynı şeritteki diğer üçü orantılı olarak DARALIR
-          (flex-grow küçülür) — sağa/sola kontrollü bir "kayma" hissi verir,
-          komşular sabit durmaz. Yalnızca flex-grow (transition-[flex-grow])
-          animasyonlu; layout tekrar hesaplaması ucuz ve akıcı. Masaüstünde
-          hover/focus canlı önizleme (mouseleave/blur ile sıfırlanır);
-          dokunmatikte hover olmadığından dokunma kalıcı açar (bir sonraki
-          maddeye dokunmak öncekini temiz biçimde kapatır — tek index
-          tutuluyor). 640px altında (mobil) yatay akordeon KAPALI — tek
-          sütun, önceki (onaylanmış) dikey liste + açıklama-reveal davranışı
-          aynen korunuyor, regresyon yok. Sekiz gerçek hak aynen korundu,
-          hiçbiri eklenmedi/çıkarılmadı — yalnızca sunum. */}
+      {/* YAN HAKLAR — İndeks + Sahne Turu: önceki yatay flex-akordeon canlı
+          incelemede hâlâ "ucuz/jenerik" hissettirdi (rejected) — küçük
+          renkli hücrelerin genişleyip daralması, ne kadar akıcı olursa
+          olsun, "SaaS özellik şeridi" izlenimini kırmıyordu. Yeniden
+          tasarım öncesi Tedarikçiler sayfasındaki CategoryExplorer
+          incelendi: bu SİTENİN KENDİ İÇİNDE zaten onaylanmış, kanıtlanmış
+          bir "indeks satırı → tıkla-seç → büyük sahne paneli" mimarisi var
+          (aynı .do-index-list/.do-index-row/.do-fade-up paylaşılan
+          sınıfları, index.css). O bileşene DOKUNULMADI — yalnızca aynı
+          dili, bu bölümün lacivert zeminine uyarlayarak burada tekrar
+          kullanıyoruz (mekanik bir kopya değil, aynı tasarım sistemi).
+
+          Mimari: solda ince bir indeks (8 hak, iki tematik başlık altında,
+          küçük harf, sade metin — kutu/ikon/numara YOK), sağda TEK bir
+          büyük "sahne" — aktif hakkın başlığı + açıklaması büyük tipografiyle
+          okunuyor. Tıklama seçimi commit eder (CategoryExplorer'daki gibi);
+          hover yalnızca saf CSS ile komşu satırları hafifçe soluklaştırıp
+          "spotlight" hissi verir (React state'e dokunmaz). Sahne her
+          değiştiğinde do-fade-up ile hafif fade+yükseliş. Varsayılan olarak
+          bile (hiç etkileşim öncesi) sayfa dolu, sanatsal yönü belli bir
+          kompozisyon gösteriyor — boş/bekleyen bir durum yok.
+
+          Mobil (<lg): sahne paneli tamamen gizli; onun yerine her indeks
+          satırı aktifken kendi açıklamasını YERİNDE açar (önceki, kanıtlanmış
+          mobil davranışla aynı teknik) — ayrı bir mobil bileşen inşa
+          edilmedi, bu turun kapsamı masaüstü. Sekiz gerçek hak aynen
+          korundu, hiçbiri eklenmedi/çıkarılmadı. */}
       <section className="relative bg-[#1B3A8F] text-white py-24 overflow-hidden">
         <div className="absolute inset-0 do-grid-bg opacity-25" />
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
@@ -489,57 +500,60 @@ export function KariyerPage() {
             </p>
           </div>
 
-          <div className="space-y-14">
-            {t.benefits.groupHeadings.map((groupHeading, g) => (
-              <div key={groupHeading} ref={reveal} className={`do-reveal ${g === 1 ? "do-d1" : ""}`}>
-                <h3 className="text-[13px] font-black uppercase tracking-[0.2em] text-[#7d9bea] pb-4 mb-2 border-b border-white/15">
-                  {groupHeading}
-                </h3>
-                <div className="flex flex-col sm:flex-row divide-y divide-white/10 sm:divide-y-0 sm:divide-x">
-                  {t.benefits.items.slice(g * BENEFIT_GROUP_SIZE, g * BENEFIT_GROUP_SIZE + BENEFIT_GROUP_SIZE).map((item, li) => {
-                    const i = g * BENEFIT_GROUP_SIZE + li;
-                    const isOpen = activeBenefit === i;
-                    const railHasActive = activeBenefit !== null && Math.floor(activeBenefit / BENEFIT_GROUP_SIZE) === g;
-                    return (
-                      <button
-                        key={item.label}
-                        type="button"
-                        onMouseEnter={() => setActiveBenefit(i)}
-                        onMouseLeave={() => setActiveBenefit((prev) => (prev === i ? null : prev))}
-                        onFocus={() => setActiveBenefit(i)}
-                        onBlur={() => setActiveBenefit((prev) => (prev === i ? null : prev))}
-                        onClick={() => setActiveBenefit(i)}
-                        aria-expanded={isOpen}
-                        className={`group relative text-left py-5 sm:py-6 px-0 sm:px-6 min-w-0 overflow-hidden transition-[flex-grow] duration-500 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7d9bea]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#1B3A8F] rounded-sm ${
-                          isOpen ? "sm:flex-[2.4_1_0%]" : railHasActive ? "sm:flex-[0.7_1_0%]" : "sm:flex-1"
-                        }`}
-                      >
-                        <span
-                          className={`block font-bold text-[15px] leading-snug transition-colors duration-300 ${
-                            isOpen ? "text-white" : "text-white/60"
-                          }`}
-                        >
-                          {item.label}
-                        </span>
-                        <span
-                          aria-hidden="true"
-                          className={`block h-px mt-2.5 bg-[#7d9bea] transition-all duration-300 ${
-                            isOpen ? "w-10 opacity-100" : "w-0 opacity-0"
-                          }`}
-                        />
-                        <span
-                          className={`block text-white/55 text-[13px] leading-relaxed whitespace-normal overflow-hidden transition-all duration-300 ease-out ${
-                            isOpen ? "max-h-16 opacity-100 mt-2 delay-150" : "max-h-0 opacity-0 mt-0"
-                          }`}
-                        >
-                          {item.sub}
-                        </span>
-                      </button>
-                    );
-                  })}
+          <div
+            ref={reveal}
+            className="do-reveal do-d1 lg:grid lg:grid-cols-[38%_62%] lg:divide-x divide-white/15 rounded-2xl border border-white/15 bg-white/[0.03] overflow-hidden"
+          >
+            {/* İNDEKS */}
+            <div className="do-index-list">
+              {t.benefits.groupHeadings.map((groupHeading, g) => (
+                <div key={groupHeading}>
+                  <div className="px-6 pt-6 pb-2">
+                    <span className="text-[10.5px] font-bold uppercase tracking-[0.2em] text-[#7d9bea]">{groupHeading}</span>
+                  </div>
+                  <div className="border-t border-white/10">
+                    {t.benefits.items.slice(g * BENEFIT_GROUP_SIZE, g * BENEFIT_GROUP_SIZE + BENEFIT_GROUP_SIZE).map((item, li) => {
+                      const i = g * BENEFIT_GROUP_SIZE + li;
+                      const isActive = i === activeBenefit;
+                      return (
+                        <div key={item.label} className={li > 0 ? "border-t border-white/10 -mt-px" : ""}>
+                          <button
+                            type="button"
+                            onClick={() => setActiveBenefit(i)}
+                            aria-current={isActive}
+                            aria-expanded={isActive}
+                            className={`do-index-row group w-full flex items-center gap-3 py-3.5 px-6 text-left border-l-2 transition-colors duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7d9bea]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#1B3A8F] ${
+                              isActive ? "do-index-row-active border-l-[#7d9bea] bg-white/[0.07]" : "border-l-transparent hover:bg-white/[0.04]"
+                            }`}
+                          >
+                            <span className={`flex-1 text-[14px] leading-snug transition-colors duration-150 ${
+                              isActive ? "text-white font-bold" : "text-white/55 font-medium group-hover:text-white/80"
+                            }`}>
+                              {item.label}
+                            </span>
+                          </button>
+                          {/* Mobil (<lg) yerinde açıklama — sağdaki sahne panelinin yerini alır. */}
+                          <p className={`lg:hidden px-6 text-white/55 text-[13px] leading-relaxed overflow-hidden transition-all duration-300 ease-out ${
+                            isActive ? "max-h-16 opacity-100 pb-4" : "max-h-0 opacity-0"
+                          }`}>
+                            {item.sub}
+                          </p>
+                        </div>
+                      );
+                    })}
+                  </div>
                 </div>
-              </div>
-            ))}
+              ))}
+            </div>
+
+            {/* SAHNE — yalnızca lg+; aktif hak burada büyük tipografiyle okunur. */}
+            <div key={activeBenefit} className="do-fade-up hidden lg:flex flex-col justify-center p-10 lg:p-12 min-h-[280px]">
+              <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#7d9bea] block mb-4">
+                {t.benefits.groupHeadings[Math.floor(activeBenefit / BENEFIT_GROUP_SIZE)]}
+              </span>
+              <h3 className="text-3xl font-black text-white tracking-tight mb-4">{t.benefits.items[activeBenefit].label}</h3>
+              <p className="text-white/70 text-base leading-relaxed max-w-md">{t.benefits.items[activeBenefit].sub}</p>
+            </div>
           </div>
         </div>
       </section>

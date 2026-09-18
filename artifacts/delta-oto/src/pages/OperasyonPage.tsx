@@ -97,8 +97,8 @@ const content = {
       reachValue: "81 İl",
       reachLabel: "Türkiye Geneline Dağıtım",
       panels: [
-        { title: "Gebze", caption: "Marmara merkezli ulusal sevkiyat noktası.", image: "/images/operations-gebze-interior.webp", position: "50% 50%" },
-        { title: "İzmir", caption: "Ege merkezli bölgesel sevkiyat noktası.", image: "/images/operations-izmir-interior.webp", position: "78% 50%" },
+        { title: "Gebze", caption: "Marmara'dan Türkiye geneline sevkiyat.", image: "/images/operations-gebze-interior.webp", position: "50% 50%" },
+        { title: "İzmir", caption: "Ege'den bölgesel sevkiyat.", image: "/images/operations-izmir-interior.webp", position: "78% 50%" },
       ],
     },
     // Hard-edit (§21-22): 8 madde → 3. Kalan 5 madde bu sayfada BAŞKA YERDE
@@ -186,8 +186,8 @@ const content = {
       reachValue: "81 Provinces",
       reachLabel: "Nationwide Distribution",
       panels: [
-        { title: "Gebze", caption: "Marmara-based national dispatch point.", image: "/images/operations-gebze-interior.webp", position: "50% 50%" },
-        { title: "İzmir", caption: "Aegean-based regional dispatch point.", image: "/images/operations-izmir-interior.webp", position: "78% 50%" },
+        { title: "Gebze", caption: "Nationwide dispatch from Marmara.", image: "/images/operations-gebze-interior.webp", position: "50% 50%" },
+        { title: "İzmir", caption: "Regional dispatch from the Aegean.", image: "/images/operations-izmir-interior.webp", position: "78% 50%" },
       ],
     },
     capabilities: {
@@ -239,7 +239,18 @@ export function OperasyonPage() {
   // 1440×810/1920×1080/390×844'te canlı QA ile doğrulandı (bkz. görev
   // raporu): modül viewport'a gerçekten GİRMEDEN 01 asla yanmıyor.
   const [processRef, processProgress] = useSectionProgress<HTMLDivElement>("reveal");
-  const activeStep = Math.min(3, Math.floor(processProgress * 4));
+  // Adım Eşiği Öne Yükleme Turu: eşit çeyrekler (Math.floor(progress*4)) 04'ü
+  // her zaman %75'te aktifleştiriyordu — canlı QA'da bu, kullanıcı modülü
+  // terk ederken 04'ün "az önce" yanması gibi hissettiriyordu; 04 sadece o
+  // anda TEKNİK olarak aktifti, okunacak gerçek bir süre kalmıyordu. Eşit
+  // bölünme yerine 01→03 progress'in İLK %62'sine sıkıştırılıyor (04, 62-100
+  // aralığının TAMAMINI alıyor — eskiden %25 olan payı artık %38'e çıktı,
+  // yani tamamlanmadan önce 04'ün ekranda kalma süresi ~%50 arttı). 01-03
+  // kendi aralarında hâlâ eşit adımlarla ilerliyor (yalnızca toplam payları
+  // küçüldü, ~%21 her biri — %25'ten büyük bir sıkışma değil), bu yüzden
+  // ilerlemeleri kısa bir patlamaya dönüşmüyor.
+  const STEP_THRESHOLDS = [0, 0.20, 0.42, 0.62]
+  const activeStep = STEP_THRESHOLDS.filter((t) => processProgress >= t).length - 1
 
   return (
     <div className="do-site bg-white min-h-screen">
@@ -399,17 +410,17 @@ export function OperasyonPage() {
         </div>
       </section>
 
-      {/* OPERASYON ALTYAPISI — Bütünleşik Modül Turu: fotoğraflar ve "81 İl"
-          artık İKİ AYRI <section> DEĞİL, TEK bir modül — 81 İl şeridi bu
-          section'ın kendi içinde, fotoğrafların hemen devamında, aynı
-          kapsayıcının bir parçası olarak akıyor (görev talimatı §4, Seçenek
-          A). Fotoğraf üzerinde YALNIZCA şehir adı + kısa bir editoryal satır
-          var — logo bindirmesi YOK (gerçek fotoğrafın içinde doğal olarak
-          bir marka görünüyorsa dokunulmaz, ama HTML/CSS katmanıyla üstüne
-          EKLENMEZ). Gradyan artık tek yönlü alttan-yukarı değil, sol-alt
-          köşeden çapraz (bg-gradient-to-tr) — metnin oturduğu köşede derinlik
-          yaratıyor, fotoğrafın geri kalanı (özellikle sağ/üst) büyük ölçüde
-          açık kalıyor. */}
+      {/* OPERASYON ALTYAPISI — Görsel Bütünleşme Turu 2: önceki turda "81 İl"
+          DOM'da aynı <section>'a taşınmıştı ama hâlâ ayrı, tam genişlikte,
+          kendi büyük lacivert bloğuyla (py-14/16, max-w-7xl'in DIŞINA taşan
+          full-bleed) canlı QA'da "farklı bir bölüm" gibi okunuyordu — DOM
+          bütünleşmesi görsel bütünleşme YERİNE GEÇMEDİ. Artık "81 İl" ayrı
+          bir blok değil: fotoğraf çiftiyle AYNI konteynerde (aynı max-w-7xl,
+          aynı yatay kenarlar), fotoğraf grid'iyle aynı dar boşlukla (mt-5
+          lg:mt-6 — panel arası gap-5/gap-6 ile birebir aynı ritim) hemen
+          altına oturan, aynı köşe yarıçapına (rounded-2xl) sahip KOMPAKT bir
+          kapanış rayı — iki fotoğrafın "ulusal sonucu" gibi okunuyor, ayrı
+          bir bölüm/KPI kartı/banner gibi değil. */}
       <section className="bg-white py-16 md:py-20 lg:py-16 overflow-hidden">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div ref={ref} className="do-reveal max-w-4xl mb-8 md:mb-10 lg:mb-12">
@@ -438,7 +449,7 @@ export function OperasyonPage() {
                   className="absolute inset-0 w-full h-full object-cover"
                   style={{ objectPosition: panel.position }}
                 />
-                <div className="absolute inset-0 bg-gradient-to-tr from-[#0e1016]/90 via-[#0e1016]/35 to-transparent" />
+                <div className="absolute inset-0 bg-gradient-to-tr from-[#0e1016]/92 from-0% via-[#0e1016]/55 via-[35%] to-transparent to-[72%]" />
                 <div className="absolute inset-0 p-6 md:p-7 lg:p-8 flex flex-col justify-end text-white max-w-[80%] sm:max-w-[60%]">
                   <h3 className="text-2xl md:text-3xl font-black tracking-tight">{panel.title}</h3>
                   <p className="mt-1.5 text-[13px] md:text-sm text-white/75 font-medium leading-snug">{panel.caption}</p>
@@ -446,16 +457,17 @@ export function OperasyonPage() {
               </div>
             ))}
           </div>
-        </div>
 
-        {/* 81 İL — aynı modülün kapanış şeridi (bkz. yukarıdaki not); tam
-            genişlik olması için bilerek max-w-7xl kapsayıcının DIŞINDA, ama
-            section'ın kendi içinde — ayrı bir bölüm hissi vermiyor. */}
-        <div ref={ref} className="do-reveal mt-12 md:mt-14 lg:mt-16 bg-[#1B3A8F] py-14 md:py-16 text-white text-center">
-          <div className="max-w-7xl mx-auto px-6 lg:px-8">
-            <div className="text-5xl md:text-6xl lg:text-7xl font-black tracking-tight tabular-nums">{t.depots.reachValue}</div>
-            <div aria-hidden="true" className="w-10 h-px bg-white/25 mx-auto my-4 md:my-5" />
-            <p className="text-[#7d9bea] text-sm md:text-base font-bold uppercase tracking-[0.15em]">{t.depots.reachLabel}</p>
+          {/* 81 İL — fotoğraf grid'iyle AYNI konteyner/genişlik, AYNI dar
+              ritim (mt-5/6 = panel gap'i) ile bağlanan kompakt kapanış rayı.
+              Ayrı bir tam-genişlik section DEĞİL. */}
+          <div
+            ref={ref}
+            className="do-reveal do-d1 mt-5 lg:mt-6 rounded-2xl bg-[#1B3A8F] px-8 md:px-12 py-7 md:py-8 flex items-center justify-center gap-4 md:gap-5 text-white text-center"
+          >
+            <span className="text-4xl md:text-5xl font-black tracking-tight tabular-nums">{t.depots.reachValue}</span>
+            <span aria-hidden="true" className="w-px h-8 md:h-9 bg-white/25 shrink-0" />
+            <span className="text-[#7d9bea] text-xs md:text-sm font-bold uppercase tracking-[0.2em]">{t.depots.reachLabel}</span>
           </div>
         </div>
       </section>
