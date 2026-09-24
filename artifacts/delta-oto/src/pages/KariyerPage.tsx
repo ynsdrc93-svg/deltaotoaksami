@@ -4,6 +4,14 @@ import {
   Quote,
   Linkedin,
   ChevronDown,
+  HeartPulse,
+  Utensils,
+  Bus,
+  Clock,
+  GraduationCap,
+  CalendarCheck,
+  Award,
+  Users,
 } from "lucide-react";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
@@ -19,15 +27,14 @@ const JOB_PLATFORMS = [
   { name: "Kariyer.net", url: "https://www.kariyer.net", Icon: ExternalLink },
 ];
 
-// Yan Haklar Sadeleştirme Turu #2: sekiz madde artık kendi başına duran,
-// numaralı/ikonlu ayrı birimler değil — mevcut 8 gerçek hak iki başlık
-// altında GRUPLANIYOR (content.*.benefits.groupHeadings): ilk 4'ü günlük
-// yaşam/refah konusu (sağlık, yemek, ulaşım, esnek saat), son 4'ü gelişim/
-// kariyer konusu (eğitim bütçesi, kariyer görüşmesi, marka eğitimi,
-// mentorluk) — bu ayrım, mevcut 8 maddenin içeriğine zaten UYUYOR, yeni bir
-// hak icat edilmedi. İkon/numara tamamen kaldırıldı; salt tipografik bir
-// liste — "yan hak panosu" değil, olgun bir kurumsal bilgi bloğu hedefleniyor.
+// Yan Haklar Akış Kartları Turu: sekiz gerçek hak, iki tematik grup altında
+// (content.*.benefits.groupHeadings) — ilk 4'ü günlük yaşam/refah (sağlık,
+// yemek, ulaşım, esnek saat), son 4'ü gelişim/kariyer (eğitim bütçesi,
+// kariyer görüşmesi, marka eğitimi, mentorluk). Her grup kendi yatay akış
+// rayında (bkz. JSX) — ikon burada, içerikten bağımsız yapısal bir dizi
+// olarak, index bazında items ile eşleşiyor.
 const BENEFIT_GROUP_SIZE = 4; // ilk 4 → groupHeadings[0], kalan 4 → groupHeadings[1]
+const BENEFIT_ICONS = [HeartPulse, Utensils, Bus, Clock, GraduationCap, CalendarCheck, Award, Users];
 
 const content = {
   tr: {
@@ -302,13 +309,6 @@ export function KariyerPage() {
   const t = content[lang];
   useDocumentMeta(t.meta.title, t.meta.description);
   const reveal = useReveal();
-  // Yan Haklar İndeks + Sahne Turu: hangi hakkın büyük "sahne" panelinde
-  // gösterildiğini tutar. Tedarikçiler'in CategoryExplorer'ıyla AYNI,
-  // zaten onaylanmış etkileşim dilini kullanıyor (tıkla-seç index satırı +
-  // .do-fade-up geçişli sahne) — varsayılan 0 (null değil): sahne hiçbir
-  // zaman boş başlamıyor, sayfa ilk render'da bile tam bir kompozisyon
-  // gösteriyor.
-  const [activeBenefit, setActiveBenefit] = React.useState(0);
 
   const scrollToPlatforms = () => {
     const target = document.getElementById("kariyer-platformlari");
@@ -462,99 +462,74 @@ export function KariyerPage() {
         </div>
       </section>
 
-      {/* YAN HAKLAR — İndeks + Sahne Turu: önceki yatay flex-akordeon canlı
-          incelemede hâlâ "ucuz/jenerik" hissettirdi (rejected) — küçük
-          renkli hücrelerin genişleyip daralması, ne kadar akıcı olursa
-          olsun, "SaaS özellik şeridi" izlenimini kırmıyordu. Yeniden
-          tasarım öncesi Tedarikçiler sayfasındaki CategoryExplorer
-          incelendi: bu SİTENİN KENDİ İÇİNDE zaten onaylanmış, kanıtlanmış
-          bir "indeks satırı → tıkla-seç → büyük sahne paneli" mimarisi var
-          (aynı .do-index-list/.do-index-row/.do-fade-up paylaşılan
-          sınıfları, index.css). O bileşene DOKUNULMADI — yalnızca aynı
-          dili, bu bölümün lacivert zeminine uyarlayarak burada tekrar
-          kullanıyoruz (mekanik bir kopya değil, aynı tasarım sistemi).
-
-          Mimari: solda ince bir indeks (8 hak, iki tematik başlık altında,
-          küçük harf, sade metin — kutu/ikon/numara YOK), sağda TEK bir
-          büyük "sahne" — aktif hakkın başlığı + açıklaması büyük tipografiyle
-          okunuyor. Tıklama seçimi commit eder (CategoryExplorer'daki gibi);
-          hover yalnızca saf CSS ile komşu satırları hafifçe soluklaştırıp
-          "spotlight" hissi verir (React state'e dokunmaz). Sahne her
-          değiştiğinde do-fade-up ile hafif fade+yükseliş. Varsayılan olarak
-          bile (hiç etkileşim öncesi) sayfa dolu, sanatsal yönü belli bir
-          kompozisyon gösteriyor — boş/bekleyen bir durum yok.
-
-          Mobil (<lg): sahne paneli tamamen gizli; onun yerine her indeks
-          satırı aktifken kendi açıklamasını YERİNDE açar (önceki, kanıtlanmış
-          mobil davranışla aynı teknik) — ayrı bir mobil bileşen inşa
-          edilmedi, bu turun kapsamı masaüstü. Sekiz gerçek hak aynen
-          korundu, hiçbiri eklenmedi/çıkarılmadı. */}
+      {/* YAN HAKLAR — Akış Kartları Turu: önceki "indeks + sahne" mimarisi
+          (CategoryExplorer'dan uyarlanmış) canlı incelemede fazla statik ve
+          "kurumsal panel" gibi hissettirdi (rejected). Kullanıcı özellikle
+          KART tabanlı, EN AZ İKİ ters yönlü yatay akış istedi. Sıfırdan icat
+          etmek yerine sitenin KENDİ İÇİNDE zaten onaylanmış, kanıtlanmış bir
+          çift-yönlü marquee mimarisi var — ana sayfa/Tedarikçiler marka
+          duvarı (.do-brand-ticker / .do-brand-ticker-reverse, index.css,
+          22-26s linear infinite, dur-on-hover, dokunmada dur-on-touch,
+          %50 kaydırma için içerik ikiye katlanmış). O bileşene
+          DOKUNULMADI — aynı, zaten test edilmiş CSS sınıfları burada kart
+          içeriğiyle yeniden kullanılıyor. Grup 1 (Günlük Yaşam) soldan sağa
+          (-reverse), Grup 2 (Gelişim ve Kariyer) sağdan sola (düz) akıyor —
+          iki ray da ters yönde. Her kart: sade/zarif line-icon (BENEFIT_ICONS,
+          jenerik "AI ikon" hissi vermesin diye tutarlı ince stroke + yumuşak
+          lacivert-mavi rozet içinde), kısa başlık, kısa açıklama. Grup adı
+          artık sert blok değil — her rayın başında küçük bir "pill" etiket.
+          Hover: CSS zaten rayı durduruyor (established); ayrıca hover
+          edilen kartın kendisi hafifçe yükselip parlıyor. Sekiz gerçek hak
+          aynen korundu, hiçbiri eklenmedi/çıkarılmadı — yalnızca sunum. */}
       <section className="relative bg-[#1B3A8F] text-white py-24 overflow-hidden">
         <div className="absolute inset-0 do-grid-bg opacity-25" />
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-          <div ref={reveal} className="do-reveal mb-16 max-w-2xl">
+          <div ref={reveal} className="do-reveal mb-14 max-w-2xl">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea] block mb-3">{t.benefits.eyebrow}</span>
             <h2 className="text-4xl md:text-5xl font-black tracking-tight leading-[1.1]">{t.benefits.heading}</h2>
             <p className="text-white/60 mt-4 text-[15px] leading-relaxed max-w-xl">
               {t.benefits.desc}
             </p>
           </div>
+        </div>
 
-          <div
-            ref={reveal}
-            className="do-reveal do-d1 lg:grid lg:grid-cols-[38%_62%] lg:divide-x divide-white/15 rounded-2xl border border-white/15 bg-white/[0.03] overflow-hidden"
-          >
-            {/* İNDEKS */}
-            <div className="do-index-list">
-              {t.benefits.groupHeadings.map((groupHeading, g) => (
-                <div key={groupHeading}>
-                  <div className="px-6 pt-6 pb-2">
-                    <span className="text-[10.5px] font-bold uppercase tracking-[0.2em] text-[#7d9bea]">{groupHeading}</span>
-                  </div>
-                  <div className="border-t border-white/10">
-                    {t.benefits.items.slice(g * BENEFIT_GROUP_SIZE, g * BENEFIT_GROUP_SIZE + BENEFIT_GROUP_SIZE).map((item, li) => {
-                      const i = g * BENEFIT_GROUP_SIZE + li;
-                      const isActive = i === activeBenefit;
+        <div className="relative z-10 flex flex-col gap-10">
+          {t.benefits.groupHeadings.map((groupHeading, g) => {
+            const groupItems = t.benefits.items
+              .map((item, i) => ({ ...item, i }))
+              .slice(g * BENEFIT_GROUP_SIZE, g * BENEFIT_GROUP_SIZE + BENEFIT_GROUP_SIZE);
+            const tickerClass = g === 0 ? "do-brand-ticker-reverse" : "do-brand-ticker";
+            return (
+              <div key={groupHeading}>
+                <div className="max-w-7xl mx-auto px-6 lg:px-8 mb-4">
+                  <span className="inline-flex items-center px-3 py-1 rounded-full bg-white/10 text-[10px] font-bold uppercase tracking-[0.15em] text-[#7d9bea]">
+                    {groupHeading}
+                  </span>
+                </div>
+                <div className="overflow-hidden">
+                  <div className={tickerClass}>
+                    {[...groupItems, ...groupItems].map(({ label, sub, i }, di) => {
+                      const isDuplicate = di >= groupItems.length;
+                      const Icon = BENEFIT_ICONS[i];
                       return (
-                        <div key={item.label} className={li > 0 ? "border-t border-white/10 -mt-px" : ""}>
-                          <button
-                            type="button"
-                            onClick={() => setActiveBenefit(i)}
-                            aria-current={isActive}
-                            aria-expanded={isActive}
-                            className={`do-index-row group w-full flex items-center gap-3 py-3.5 px-6 text-left border-l-2 transition-colors duration-150 ease-out focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7d9bea]/60 focus-visible:ring-offset-2 focus-visible:ring-offset-[#1B3A8F] ${
-                              isActive ? "do-index-row-active border-l-[#7d9bea] bg-white/[0.07]" : "border-l-transparent hover:bg-white/[0.04]"
-                            }`}
-                          >
-                            <span className={`flex-1 text-[14px] leading-snug transition-colors duration-150 ${
-                              isActive ? "text-white font-bold" : "text-white/55 font-medium group-hover:text-white/80"
-                            }`}>
-                              {item.label}
-                            </span>
-                          </button>
-                          {/* Mobil (<lg) yerinde açıklama — sağdaki sahne panelinin yerini alır. */}
-                          <p className={`lg:hidden px-6 text-white/55 text-[13px] leading-relaxed overflow-hidden transition-all duration-300 ease-out ${
-                            isActive ? "max-h-16 opacity-100 pb-4" : "max-h-0 opacity-0"
-                          }`}>
-                            {item.sub}
-                          </p>
+                        <div
+                          key={`${label}-${di}`}
+                          aria-hidden={isDuplicate}
+                          className="shrink-0 w-[270px] mx-3 rounded-2xl border border-white/12 bg-white/[0.05] p-6 transition-all duration-300 ease-out hover:-translate-y-1 hover:bg-white/[0.1] hover:border-white/25"
+                        >
+                          <div className="w-11 h-11 rounded-full bg-[#7d9bea]/15 flex items-center justify-center mb-5">
+                            <Icon className="w-[19px] h-[19px] text-[#7d9bea]" strokeWidth={1.75} />
+                          </div>
+                          <h3 className="text-white font-bold text-[15px] leading-snug mb-1.5">{label}</h3>
+                          <p className="text-white/55 text-[13px] leading-relaxed">{sub}</p>
                         </div>
                       );
                     })}
                   </div>
                 </div>
-              ))}
-            </div>
-
-            {/* SAHNE — yalnızca lg+; aktif hak burada büyük tipografiyle okunur. */}
-            <div key={activeBenefit} className="do-fade-up hidden lg:flex flex-col justify-center p-10 lg:p-12 min-h-[280px]">
-              <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#7d9bea] block mb-4">
-                {t.benefits.groupHeadings[Math.floor(activeBenefit / BENEFIT_GROUP_SIZE)]}
-              </span>
-              <h3 className="text-3xl font-black text-white tracking-tight mb-4">{t.benefits.items[activeBenefit].label}</h3>
-              <p className="text-white/70 text-base leading-relaxed max-w-md">{t.benefits.items[activeBenefit].sub}</p>
-            </div>
-          </div>
+              </div>
+            );
+          })}
         </div>
       </section>
 

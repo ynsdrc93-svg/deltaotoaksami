@@ -184,8 +184,32 @@ export function useParallax<T extends HTMLElement>(speed = 0.12) {
  * ~0.63·vh'nin ~%40 üzerinde), 4 adımın her biri gerçekten okunabilecek
  * kadar scroll payı alıyor. 1440×900 / 1920×1080 / 390×844'te canlı QA ile
  * doğrulandı (bkz. görev raporu — eski/yeni scroll aralığı ölçümleri).
+ *
+ * 'focus' — Adım Zamanlaması Turu #4 (canlı inceleme, hâlâ aynı Operasyon
+ * 4-adımı; kullanıcı üç 'reveal' turundan sonra da "04 hâlâ fazla geç,
+ * modül neredeyse biterken değil hâlâ rahat görünürken aktifleşmeli"
+ * dedi). Kök sorun artık eşik ŞEKLİ değil, 'reveal'in END hedefiydi:
+ * minVisibleAtEnd (%60) elementin YÜKSEKLİĞİNE göre bir taban veriyordu,
+ * ama bu modülün satırı KISA olduğundan taban çoğu zaman devreye giriyor
+ * ve progress=1'de rect.top NEGATİFE düşebiliyordu (satırın üstü viewport
+ * üst kenarının ÜSTÜNE taşmış) — yani "current" olan 04, kendi aktif
+ * penceresinin sonuna doğru zaten kısmen kırpılıyordu; bu da "geç ve
+ * sıkışık" hissinin asıl kaynağıydı, eşiklerin ön-yüklenmesi bunu
+ * düzeltemedi çünkü sorun eşik dağılımında değil, END konumundaydı.
+ *
+ * 'focus' modu elementin TEPESİ yerine MERKEZİNİ izler ve hem giriş hem
+ * çıkış hedefini viewport'un KENDİ yüksekliğinin sabit bir oranı olarak
+ * tanımlar (element yüksekliğine bağlı bir taban yok) — tam olarak
+ * kullanıcının istediği "viewport merkezine yakınlık temelli" mantık:
+ * progress=0 when the element's center is still low in the viewport
+ * (~%88, henüz yeni giriyor), progress=1 when its center has risen to
+ * ~%16 — hep viewport'un ÜST kenarının içinde, asla negatife düşmüyor.
+ * Eşit çeyreklere bölündüğünde (bkz. OperasyonPage STEP_THRESHOLDS) 04
+ * artık merkez ~%34 (üst-orta) konumdayken aktifleşiyor — hâlâ rahatça
+ * ekranda, kırpılma riski yok. 1440×900/1920×1080/390×844'te canlı QA ile
+ * doğrulandı (bkz. görev raporu).
  */
-export function useSectionProgress<T extends HTMLElement>(mode: "settle" | "transit" | "reveal" = "settle") {
+export function useSectionProgress<T extends HTMLElement>(mode: "settle" | "transit" | "reveal" | "focus" = "settle") {
   const ref = React.useRef<T | null>(null)
   const [progress, setProgress] = React.useState(0)
   React.useEffect(() => {
@@ -203,10 +227,21 @@ export function useSectionProgress<T extends HTMLElement>(mode: "settle" | "tran
         // report) — the module's top must reach roughly the lower quarter
         // of the viewport before progress starts moving at all.
         const entryFraction = 0.75
-        const start = mode === "reveal" ? vh * entryFraction : vh
+        // 'focus': element merkezinin viewport'a göre giriş/çıkış oranları —
+        // aşağıda start/end'e (rect.top karşılığına) çevrilirken rect.height/2
+        // düşülüyor, böylece asıl formül (start-rect.top)/(start-end) hiç
+        // değişmeden merkez-tabanlı hâle geliyor.
+        const focusEnterFraction = 0.88
+        const focusExitFraction = 0.16
+        const start =
+          mode === "focus" ? vh * focusEnterFraction - rect.height / 2 :
+          mode === "reveal" ? vh * entryFraction :
+          vh
         let end: number
         if (mode === "transit") {
           end = -rect.height
+        } else if (mode === "focus") {
+          end = vh * focusExitFraction - rect.height / 2
         } else if (mode === "reveal") {
           const revealTravelFraction = 1.1        // raw travel budget requested — the height-based floor below decides how much of it is actually usable
           // minVisibleAtEnd Düzeltme Turu: eski formül `-(rect.height * 0.6)`

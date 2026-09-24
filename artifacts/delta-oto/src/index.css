@@ -460,6 +460,11 @@
 @media (prefers-reduced-motion: reduce) {
   .do-beam, .do-beam-delay { animation: none; opacity: 0; }
   .do-ticker-inner, .do-ticker-inner-reverse { animation: none; }
+  /* .do-brand-ticker/-reverse bu kuralın DIŞINDA kalmıştı (yalnızca marka
+     duvarında kullanılıyordu, azaltılmış hareket testinde fark edilmemişti) —
+     Yan Haklar akış kartları bu sınıfları şimdi çok daha görünür/uzun bir
+     bölümde kullandığından açık bir eksiklik oldu; düzeltildi. */
+  .do-brand-ticker, .do-brand-ticker-reverse { animation: none; }
   .do-card-beam { display: none; }
   .do-reveal, .do-reveal-left, .do-reveal-right {
     opacity: 1 !important;

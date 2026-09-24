@@ -226,30 +226,23 @@ export function OperasyonPage() {
   useDocumentMeta(t.meta.title, t.meta.description);
 
   // Dört adımlık süreç scroll'a bağlı gerçek bir ilerleme izler.
-  // Animasyon Zamanlama Turu: 'settle' modu (start=vh, yani viewport'un
-  // TAM alt kenarı) burada YANLIŞ tetikleyiciydi — modülün İLK pikseli
-  // görünür olur olmaz progress artmaya başlıyor ve 'settle'ın erken/
-  // konforlu bitiş hedefiyle birleşince tam bir viewport yüksekliğinden
-  // ÇOK DAHA AZ scroll'da 1'e ulaşıyordu; sonuç, modül hâlâ yarı görünürken
-  // 2+ adımın zaten "current/passed" görünmesiydi (bildirilen hata: "modül
-  // anlamlı biçimde girmeden animasyon zaten başlamış/bitmiş görünüyor").
-  // 'reveal' modu (bkz. use-motion.ts) AYNI konforlu bitiş hedefini korur,
-  // yalnızca BAŞLANGIÇ noktasını geciktirir — progress, modülün üstü
-  // viewport'un alt ÇEYREĞİNE (yaklaşık %75) ulaşana kadar sıfırda kalır.
-  // 1440×810/1920×1080/390×844'te canlı QA ile doğrulandı (bkz. görev
-  // raporu): modül viewport'a gerçekten GİRMEDEN 01 asla yanmıyor.
-  const [processRef, processProgress] = useSectionProgress<HTMLDivElement>("reveal");
-  // Adım Eşiği Öne Yükleme Turu: eşit çeyrekler (Math.floor(progress*4)) 04'ü
-  // her zaman %75'te aktifleştiriyordu — canlı QA'da bu, kullanıcı modülü
-  // terk ederken 04'ün "az önce" yanması gibi hissettiriyordu; 04 sadece o
-  // anda TEKNİK olarak aktifti, okunacak gerçek bir süre kalmıyordu. Eşit
-  // bölünme yerine 01→03 progress'in İLK %62'sine sıkıştırılıyor (04, 62-100
-  // aralığının TAMAMINI alıyor — eskiden %25 olan payı artık %38'e çıktı,
-  // yani tamamlanmadan önce 04'ün ekranda kalma süresi ~%50 arttı). 01-03
-  // kendi aralarında hâlâ eşit adımlarla ilerliyor (yalnızca toplam payları
-  // küçüldü, ~%21 her biri — %25'ten büyük bir sıkışma değil), bu yüzden
-  // ilerlemeleri kısa bir patlamaya dönüşmüyor.
-  const STEP_THRESHOLDS = [0, 0.20, 0.42, 0.62]
+  // Adım Zamanlaması Turu #4 (canlı inceleme): üç 'reveal' + eşik-ayarı
+  // turundan sonra da 04 "hâlâ fazla geç, modül neredeyse biterken değil
+  // rahat görünürken aktifleşmeli" bulundu. Kök neden eşik dağılımı değildi
+  // — 'reveal'in END hedefi (minVisibleAtEnd, elementin YÜKSEKLİĞİNE göre
+  // bir taban) bu KISA satır için progress=1'de rect.top'ı NEGATİFE
+  // düşürebiliyordu, yani 04 kendi penceresinin sonuna doğru zaten kısmen
+  // kırpılıyordu. 'focus' modu (bkz. use-motion.ts) elementin TEPESİ yerine
+  // MERKEZİNİ izler, giriş/çıkış hedefleri sabit viewport oranları (%88→%16)
+  // — element yüksekliğinden bağımsız, progress=1'de bile satır her zaman
+  // viewport'un üst kenarının İÇİNDE kalır, asla kırpılmaz.
+  const [processRef, processProgress] = useSectionProgress<HTMLDivElement>("focus");
+  // 'focus'un END'i artık kendi başına "hâlâ rahat görünür" garantisi
+  // verdiğinden (üstteki not), eşit dağılım öne-yüklemeden daha okunaklı:
+  // 04 progress %75'te aktifleşiyor — o anda satırın merkezi viewport'un
+  // ~%34'ünde (üst-orta), hâlâ tamamen ekranda. 01-03 da kendi aralarında
+  // eşit adımlarla, doğal bir ritimle ilerliyor.
+  const STEP_THRESHOLDS = [0, 0.25, 0.5, 0.75]
   const activeStep = STEP_THRESHOLDS.filter((t) => processProgress >= t).length - 1
 
   return (
@@ -435,39 +428,51 @@ export function OperasyonPage() {
               hissi veriyordu. Artık tüm kırılımlarda ölçüsüz olmayan, geniş-
               formata daha sadık bir oran kullanılıyor; her panelin kendi
               object-position'ı (bkz. veri: Gebze ortalı, İzmir sağa yaslı —
-              Opar tabelasının kadraj dışı kalmaması için) korunuyor. */}
-          <div className="grid md:grid-cols-2 gap-5 lg:gap-6">
-            {t.depots.panels.map((panel: { title: string; caption: string; image: string; position: string }, i: number) => (
-              <div
-                key={panel.title}
-                ref={ref}
-                className={`do-reveal ${i === 1 ? "do-d1" : ""} relative rounded-2xl overflow-hidden aspect-[4/3] lg:aspect-[16/10]`}
-              >
-                <img
-                  src={panel.image}
-                  alt=""
-                  className="absolute inset-0 w-full h-full object-cover"
-                  style={{ objectPosition: panel.position }}
-                />
-                <div className="absolute inset-0 bg-gradient-to-tr from-[#0e1016]/92 from-0% via-[#0e1016]/55 via-[35%] to-transparent to-[72%]" />
-                <div className="absolute inset-0 p-6 md:p-7 lg:p-8 flex flex-col justify-end text-white max-w-[80%] sm:max-w-[60%]">
-                  <h3 className="text-2xl md:text-3xl font-black tracking-tight">{panel.title}</h3>
-                  <p className="mt-1.5 text-[13px] md:text-sm text-white/75 font-medium leading-snug">{panel.caption}</p>
-                </div>
-              </div>
-            ))}
-          </div>
+              Opar tabelasının kadraj dışı kalmaması için) korunuyor.
 
-          {/* 81 İL — fotoğraf grid'iyle AYNI konteyner/genişlik, AYNI dar
-              ritim (mt-5/6 = panel gap'i) ile bağlanan kompakt kapanış rayı.
-              Ayrı bir tam-genişlik section DEĞİL. */}
-          <div
-            ref={ref}
-            className="do-reveal do-d1 mt-5 lg:mt-6 rounded-2xl bg-[#1B3A8F] px-8 md:px-12 py-7 md:py-8 flex items-center justify-center gap-4 md:gap-5 text-white text-center"
-          >
-            <span className="text-4xl md:text-5xl font-black tracking-tight tabular-nums">{t.depots.reachValue}</span>
-            <span aria-hidden="true" className="w-px h-8 md:h-9 bg-white/25 shrink-0" />
-            <span className="text-[#7d9bea] text-xs md:text-sm font-bold uppercase tracking-[0.2em]">{t.depots.reachLabel}</span>
+              Görsel Bütünleşme Turu 3 (canlı inceleme — kullanıcı Turu 2'den
+              SONRA da "81 İl hâlâ ayrı bir bant gibi duruyor" dedi): DOM
+              bitişikliği ve eşit dış ritim (mt-5/6) yeterli gelmedi, çünkü
+              üç eleman hâlâ GÖRSEL OLARAK üç ayrı köşeli/yuvarlatılmış kutu
+              olarak kodlanıyordu (her biri kendi rounded-2xl + aralarında
+              gerçek boşluk) — bir "galeri + ayrı banner" gibi okunmaya devam
+              etti. Kök çözüm: üçü artık TEK bir dıştan yuvarlatılmış
+              (rounded-2xl overflow-hidden) kap içinde, aralarında hiç boşluk
+              olmadan bitişik — iki fotoğraf `gap-px` (bir piksellik nötr
+              ayraç, galeri hissi) ile yan yana, 81 İl şeridi hemen altında
+              sıfır boşlukla devam ediyor. Artık üç ayrı kart değil, TEK bir
+              bileşik panel — 81 İl artık fotoğrafların "kapanışı" gibi değil,
+              aynı nesnenin bir PARÇASI gibi okunuyor. */}
+          <div ref={ref} className="do-reveal rounded-2xl overflow-hidden">
+            <div className="grid md:grid-cols-2 gap-px bg-slate-200">
+              {t.depots.panels.map((panel: { title: string; caption: string; image: string; position: string }) => (
+                <div
+                  key={panel.title}
+                  className="relative aspect-[4/3] lg:aspect-[16/10]"
+                >
+                  <img
+                    src={panel.image}
+                    alt=""
+                    className="absolute inset-0 w-full h-full object-cover"
+                    style={{ objectPosition: panel.position }}
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-tr from-[#0e1016]/92 from-0% via-[#0e1016]/55 via-[35%] to-transparent to-[72%]" />
+                  <div className="absolute inset-0 p-6 md:p-7 lg:p-8 flex flex-col justify-end text-white max-w-[85%] sm:max-w-[70%] lg:max-w-[88%]">
+                    <h3 className="text-2xl md:text-3xl font-black tracking-tight">{panel.title}</h3>
+                    <p className="mt-1.5 text-[13px] md:text-sm text-white/75 font-medium leading-snug">{panel.caption}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {/* 81 İL — artık ayrı bir kart DEĞİL, yukarıdaki fotoğraf
+                ızgarasıyla aynı dış çerçevenin bitişik devamı (bkz. üstteki
+                not). Kendi köşe yarıçapı/boşluğu yok. */}
+            <div className="bg-[#1B3A8F] px-8 md:px-12 py-7 md:py-8 flex items-center justify-center gap-4 md:gap-5 text-white text-center">
+              <span className="text-4xl md:text-5xl font-black tracking-tight tabular-nums">{t.depots.reachValue}</span>
+              <span aria-hidden="true" className="w-px h-8 md:h-9 bg-white/25 shrink-0" />
+              <span className="text-[#7d9bea] text-xs md:text-sm font-bold uppercase tracking-[0.2em]">{t.depots.reachLabel}</span>
+            </div>
           </div>
         </div>
       </section>
@@ -515,11 +520,13 @@ export function OperasyonPage() {
       </section>
 
       {/* SİPARİŞ SÜRECİ — navy. Motion dekoratif değil, tasarımın kendisi:
-          processProgress bu bloğun kendi scroll geçişini izler ('reveal'
+          processProgress bu bloğun kendi scroll geçişini izler ('focus'
           modu — bkz. use-motion.ts'teki hook yorumu: modül viewport'a
-          gerçekten girmeden progress 0'da kalır, sonra 4 adımın her birine
-          algılanabilir bir scroll payı düşecek şekilde ~viewport
-          yüksekliğinin %60'ına yayılır), üstteki ince çubuk gerçek
+          gerçekten girmeden progress 0'da kalır, satırın MERKEZİ viewport'un
+          ~%88'inden ~%16'sına yükselirken 0→1'e ilerler — element
+          yüksekliğinden bağımsız sabit bir viewport oranı olduğundan satır
+          progress=1'de bile her zaman tamamen ekranda kalır, hiçbir adım
+          kendi penceresinin sonunda kırpılmaz), üstteki ince çubuk gerçek
           zamanlı dolar. Üç durum (§8, "gerçek bir yolculuk hissi"): quiet
           (henüz sırası gelmedi) → passed (geçildi, okunur/açık kalır, asla
           solmaz) → current (şu an "buradayız", ayrıca büyütülmüş nokta +
