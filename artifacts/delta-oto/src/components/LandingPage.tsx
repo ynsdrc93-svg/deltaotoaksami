@@ -243,6 +243,26 @@ export function LandingPage() {
   // bağımsız çalışmaya devam eder — ikisi hiç çakışmaz.
   const [pausedRow, setPausedRow] = useState<number | null>(null);
   const [confirmBrand, setConfirmBrand] = useState<{ brand: Brand; rowIndex: number } | null>(null);
+  // GROUPAUTO/Opar Aktif Durum Turu: tek bir activePanel state'i — hangi
+  // panel "aktif" (beyaz yüzey) olduğunu tutar, aynı anda yalnızca biri.
+  // hover (yalnızca gerçek fare/trackpad — (hover:hover) ile ayrıştırılıyor,
+  // BrandLogo.tsx'teki onNavigateAttempt ile BİREBİR AYNI desen) + klavye
+  // focus otomatik açar/kapar; onClick dokunmatik için YETKİLİ etkileşim —
+  // toggle eder (aynı panele tekrar dokununca kapanır).
+  //
+  // Dokunmatik Çifte-Tetikleme Turu (canlı iPhone 13 dokunma emülasyonu ile
+  // bulundu): (hover:hover) koruması onMouseEnter'ı doğru şekilde engelliyor
+  // AMA bir dokunuş aynı zamanda GERÇEK bir `focus` olayı da üretiyor (bir
+  // düğmeye ilk dokunuş odağı da o düğmeye taşır) — bu, klavye desteği için
+  // KASITLI ve GEREKLİ (focus hover'dan bağımsız çalışmalı). Sorun: focus
+  // paneli AÇIYOR, sonra AYNI dokunuşun ürettiği click de ateşleniyor ve
+  // toggle mantığı ("zaten açıksa kapat") onu HEMEN KAPATIYOR — net sonuç,
+  // bir panelin İLK dokunuşu ters çalışıyordu (açması gerekirken kapanıyordu).
+  // Çözüm: bu dokunuşta focus'un ZATEN açtığını hatırlayan bir ref (id
+  // bazlı Set) — o an açıksa click bunu bir kez atlıyor, sonraki gerçek
+  // dokunuşlar/tıklamalar normal toggle'a devam ediyor.
+  const [activePartnerPanel, setActivePartnerPanel] = useState<string | null>(null);
+  const justFocusedPanelRef = useRef<Set<string>>(new Set());
   const cancelLeaveRef = useRef<HTMLButtonElement>(null);
   useEscapeKey(() => setConfirmBrand(null), confirmBrand !== null);
 
@@ -645,44 +665,107 @@ export function LandingPage() {
                 dönüştürüldü, sanat yeniden çizilmedi/bozulmadı. Zaten beyaz-
                 negatif olarak geldiği için doğrudan panelin lacivert
                 zemininde duruyor, Opar'ın beyaz SVG'siyle birebir aynı
-                muamele (kutu/chip/border yok, ortak h-11 hizalama bandı). */}
+                muamele (kutu/chip/border yok, ortak h-11 hizalama bandı).
+
+                Aktif Durum Turu (bu tur): her panelin artık bir
+                activeLogoSrc'si var — dolduysa panel etkileşimli (hover/
+                focus/tap ile beyaz yüzeye geçer, ilgili renkli logo çapraz
+                geçişle görünür). Opar için gerçek renkli kaynak repo'da
+                bulundu (opar-logo.svg — opar-logo-white.svg ile AYNI path
+                geometrisi, yalnızca dolgu rengi lacivert rgb(0,47,135);
+                görsel olarak doğrulandı, farklı bir kompozisyon/rozet
+                DEĞİL). GROUPAUTO Türkiye için ise repo'da yalnızca beyaz-
+                negatif wordmark (groupauto-turkiye-logo.webp) ve TAMAMEN
+                FARKLI bir kompozisyon olan üyelik rozeti
+                (groupauto-turkiye-badge.webp — dairesel/köşeli rozet + araba
+                ikonu, footer'da kullanılıyor) var; International logosu da
+                yanlış kuruluş. Kesin kural gereği ("CSS filtresiyle
+                dönüştürme yok, rozet/farklı kompozisyon yok, renk tahmin
+                etme yok") activeLogoSrc: null bırakıldı — bu panel şimdilik
+                yalnızca normal (lacivert) durumda kalıyor, aktif durum
+                UYGULANMADI (bkz. görev raporu, eksik dosya). Simetri
+                isteniyordu ama beyaz zeminde beyaz logo görünmez bir hataya
+                yol açardı — bu, hiç uygulamamaktan daha kötü olurdu. */}
             {[
-              { data: t.partnership.groupauto, logoSrc: "/images/groupauto-turkiye-logo.webp", logoAlt: "GROUPAUTO Türkiye", logoW: 900, logoH: 183, refClass: "do-reveal-left" },
-              { data: t.partnership.opar, logoSrc: "/images/opar-logo-white.svg", logoAlt: "Opar", logoW: 849, logoH: 341, refClass: "do-reveal-right" },
-            ].map(({ data, logoSrc, logoAlt, logoW, logoH, refClass }) => (
-              <div
-                key={data.title}
-                ref={ref}
-                className={`${refClass} relative rounded-xl border border-white/15 bg-white/[0.06] backdrop-blur-sm overflow-hidden group p-8 flex flex-col`}
-              >
-                <div className="do-card-beam"></div>
-                {/* Logo çerçevesiz: her iki logo da (GROUPAUTO zaten beyaz-negatif,
-                    Opar artık beyaz-negatif SVG olarak) doğrudan panelin lacivert
-                    zemininde duruyor — kutu/chip/border yok. Ortak h-11 yükseklik
-                    bandı yalnızca hizalama için, görsel bir çerçeve değil. */}
-                <div className="relative z-10 flex items-center justify-between gap-4 mb-7">
-                  <div className="h-11 flex items-center shrink-0">
-                    <img src={logoSrc} alt={logoAlt} width={logoW} height={logoH} className="h-full w-auto object-contain" />
-                  </div>
-                  <span className="text-[10px] font-black tracking-[0.25em] text-blue-200/50 uppercase text-right">{data.eyebrow}</span>
+              { id: "groupauto", data: t.partnership.groupauto, logoSrc: "/images/groupauto-turkiye-logo.webp", logoAlt: "GROUPAUTO Türkiye", logoW: 900, logoH: 183, activeLogoSrc: null as string | null, refClass: "do-reveal-left" },
+              { id: "opar", data: t.partnership.opar, logoSrc: "/images/opar-logo-white.svg", logoAlt: "Opar", logoW: 849, logoH: 341, activeLogoSrc: "/images/opar-logo.svg" as string | null, refClass: "do-reveal-right" },
+            ].map(({ id, data, logoSrc, logoAlt, logoW, logoH, activeLogoSrc, refClass }) => {
+              const isInteractive = !!activeLogoSrc;
+              const isActive = isInteractive && activePartnerPanel === id;
+              const Tag = isInteractive ? "button" : "div";
+              return (
+                <div key={data.title} ref={ref} className={`${refClass} relative`}>
+                  <Tag
+                    type={isInteractive ? "button" : undefined}
+                    aria-pressed={isInteractive ? isActive : undefined}
+                    onMouseEnter={isInteractive ? () => { if (window.matchMedia("(hover: hover)").matches) setActivePartnerPanel(id); } : undefined}
+                    onMouseLeave={isInteractive ? () => { if (window.matchMedia("(hover: hover)").matches) setActivePartnerPanel((c) => (c === id ? null : c)); } : undefined}
+                    onFocus={isInteractive ? () => { justFocusedPanelRef.current.add(id); setActivePartnerPanel(id); } : undefined}
+                    onBlur={isInteractive ? () => { justFocusedPanelRef.current.delete(id); setActivePartnerPanel((c) => (c === id ? null : c)); } : undefined}
+                    onClick={isInteractive ? () => {
+                      if (justFocusedPanelRef.current.has(id)) { justFocusedPanelRef.current.delete(id); return; }
+                      setActivePartnerPanel((c) => (c === id ? null : id));
+                    } : undefined}
+                    className={`do-partner-panel relative rounded-xl overflow-hidden group p-8 flex flex-col w-full text-left transition-colors duration-300 ${
+                      isActive
+                        ? "bg-white border border-transparent shadow-xl shadow-black/20"
+                        : "border border-white/15 bg-white/[0.06] backdrop-blur-sm"
+                    } ${isInteractive ? "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#1B3A8F]" : ""}`}
+                  >
+                    {!isActive && <div className="do-card-beam"></div>}
+                    {/* Logo çerçevesiz: her iki logo da (GROUPAUTO zaten beyaz-negatif,
+                        Opar artık beyaz-negatif SVG olarak) doğrudan panelin lacivert
+                        zemininde duruyor — kutu/chip/border yok. Ortak h-11 yükseklik
+                        bandı yalnızca hizalama için, görsel bir çerçeve değil. */}
+                    <div className="relative z-10 flex items-center justify-between gap-4 mb-7">
+                      <div className="h-11 flex items-center shrink-0 relative">
+                        {/* Çapraz geçiş: iki görsel de baştan render edilip opacity ile
+                            geçiş yapıyor (src DEĞİŞTİRİLMİYOR) — "logo değişiminde
+                            yükleme parlaması/boş görüntü olmasın" kısıtı için; ikinci
+                            görsel önceden yüklenmemiş olsaydı ilk hover'da bir an boş
+                            kalabilirdi. */}
+                        <img
+                          src={logoSrc}
+                          alt={logoAlt}
+                          width={logoW}
+                          height={logoH}
+                          className={`do-partner-logo h-11 w-auto object-contain transition-opacity duration-300 ${isActive ? "opacity-0" : "opacity-100"}`}
+                        />
+                        {activeLogoSrc && (
+                          <img
+                            src={activeLogoSrc}
+                            alt={logoAlt}
+                            width={logoW}
+                            height={logoH}
+                            className={`do-partner-logo absolute inset-0 h-11 w-auto object-contain transition-opacity duration-300 ${isActive ? "opacity-100" : "opacity-0"}`}
+                          />
+                        )}
+                      </div>
+                      <span className={`text-[10px] font-black tracking-[0.25em] uppercase text-right transition-colors duration-300 ${isActive ? "text-slate-500" : "text-blue-200/50"}`}>
+                        {data.eyebrow}
+                      </span>
+                    </div>
+                    {/* Logo altında marka adı tekrarı kaldırıldı — logo kendisi
+                        kimliği zaten taşıyor (görev talimatı). Açıklama, logo
+                        satırının mb-7 boşluğunun hemen ardından doğal olarak
+                        başlıyor; ayrı bir üst boşluk eklenmedi. */}
+                    <p className={`relative z-10 text-sm leading-relaxed font-light transition-colors duration-300 ${isActive ? "text-[#1B3A8F]/85" : "text-blue-100/70"}`}>
+                      {data.body}
+                    </p>
+                    {/* GROUPAUTO Türkiye ve Opar artık aynı biçimde: doğrulanmamış
+                        uluslararası rakamlar yerine sessiz, metinsel bir kimlik
+                        satırı — iki panel arasında birebir aynı bilgi mimarisi,
+                        tam görsel simetri (görev talimatı: "equal content
+                        hierarchy"). */}
+                    <div className={`relative z-10 mt-6 pt-6 border-t transition-colors duration-300 ${isActive ? "border-slate-200" : "border-white/10"}`}>
+                      <div className={`text-xs font-black uppercase tracking-[0.2em] transition-colors duration-300 ${isActive ? "text-[#1B3A8F]" : "text-white"}`}>
+                        {data.identifier}
+                      </div>
+                    </div>
+                  </Tag>
                 </div>
-                {/* Logo altında marka adı tekrarı kaldırıldı — logo kendisi
-                    kimliği zaten taşıyor (görev talimatı). Açıklama, logo
-                    satırının mb-7 boşluğunun hemen ardından doğal olarak
-                    başlıyor; ayrı bir üst boşluk eklenmedi. */}
-                <p className="relative z-10 text-sm text-blue-100/70 leading-relaxed font-light">
-                  {data.body}
-                </p>
-                {/* GROUPAUTO Türkiye ve Opar artık aynı biçimde: doğrulanmamış
-                    uluslararası rakamlar yerine sessiz, metinsel bir kimlik
-                    satırı — iki panel arasında birebir aynı bilgi mimarisi,
-                    tam görsel simetri (görev talimatı: "equal content
-                    hierarchy"). */}
-                <div className="relative z-10 mt-6 pt-6 border-t border-white/10">
-                  <div className="text-xs font-black text-white uppercase tracking-[0.2em]">{data.identifier}</div>
-                </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </div>
       </section>
@@ -778,7 +861,11 @@ export function LandingPage() {
                   key={item.slug}
                   href={gundemDetailRoute(item.slug, lang)}
                   ref={ref}
-                  className={`group block ${isLead ? "lg:col-span-3 do-reveal-left" : "lg:col-span-2 do-reveal-right lg:pl-10 lg:border-l lg:border-slate-200"}`}
+                  className={`group block ${
+                    isLead
+                      ? "lg:col-span-3 do-reveal-left"
+                      : "lg:col-span-2 do-reveal-right pt-6 border-t border-slate-200 lg:pt-0 lg:border-t-0 lg:pl-10 lg:border-l"
+                  }`}
                 >
                   <div className="flex items-center gap-3 mb-4 text-[11px] font-bold uppercase tracking-[0.15em]">
                     <span className="text-[#1B3A8F]">{item.date[lang]}</span>
@@ -791,7 +878,12 @@ export function LandingPage() {
                   <p className={`text-slate-500 leading-[1.8] font-light ${isLead ? "text-[15px] max-w-xl" : "text-[14px]"}`}>
                     {item.summary[lang]}
                   </p>
-                  <span className="inline-flex items-center gap-1.5 mt-5 text-[13px] font-semibold text-[#1B3A8F] opacity-0 group-hover:opacity-100 transition-opacity">
+                  {/* Mobil Okunurluk Turu: dokunmatik cihazda hover hiç
+                      tetiklenmediği için "Devamını Oku" ipucu görünmez
+                      kalıyordu — artık varsayılan görünür, yalnızca GERÇEK
+                      hover destekleyen cihazlarda (fare/trackpad) başlangıçta
+                      soluk kalıp hover'da beliriyor. */}
+                  <span className="inline-flex items-center gap-1.5 mt-5 text-[13px] font-semibold text-[#1B3A8F] opacity-100 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100 transition-opacity">
                     {t.agenda.readMore} <ArrowRight className="w-3.5 h-3.5" />
                   </span>
                 </Link>

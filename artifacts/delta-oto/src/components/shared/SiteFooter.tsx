@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "wouter";
-import { MapPin, Mail, Phone, BadgeCheck, Linkedin, Instagram, ArrowUpRight } from "lucide-react";
+import { MapPin, Mail, Phone, Printer, BadgeCheck, Linkedin, Instagram } from "lucide-react";
 import { useLang, routeFor, type Lang, type RouteKey } from "@/lib/i18n";
 
 // Google Maps Yol Tarifi Turu: koordinat UYDURULMADI — mevcut, tek adres
@@ -66,7 +66,12 @@ const T = {
   quickLinks: { tr: "Hızlı Bağlantılar", en: "Quick Links" },
   certsHeading: { tr: "Sertifikalar & Üyelikler", en: "Certifications & Memberships" },
   rights: { tr: "© 2026 Delta Oto. Tüm hakları saklıdır.", en: "© 2026 Delta Oto. All rights reserved." },
+  // "Yol Tarifi" artık ayrı görünür bir bağlantı DEĞİL (bkz. adres <li>'si) —
+  // yalnızca ekran okuyucular için o linkin AMACINI netleştiren bir
+  // aria-label parçası olarak kullanılıyor, yeni bir görünür metin satırı
+  // eklemiyor.
   directions: { tr: "Yol Tarifi", en: "Directions" },
+  fax: { tr: "Faks", en: "Fax" },
   established: { tr: "Delta Oto · Kuruluş 1976", en: "Delta Oto · Established 1976" },
   groupautoMember: { tr: "GROUPAUTO Türkiye Üyesi", en: "GROUPAUTO Türkiye Member" },
 } satisfies Record<string, Record<Lang, string>>;
@@ -115,28 +120,44 @@ export function SiteFooter() {
               className="h-[64px] md:h-[76px] w-auto do-logo-invert mb-6 opacity-90"
             />
             <ul className="space-y-4 text-sm text-gray-500">
+              {/* Footer İletişim Turu: ayrı "Yol Tarifi" bağlantısı kaldırıldı
+                  — artık adres metninin TAMAMI (ikonuyla birlikte) tek bir
+                  tıklanabilir alan, aynı Google Maps hedefine gidiyor. Görünür
+                  metin hâlâ yalnızca adres; "Yol Tarifi" amacı yalnızca
+                  aria-label'da (ekran okuyucu için netlik, yeni görünür satır
+                  değil). */}
               <li className="flex items-start gap-3">
-                <MapPin className="w-4 h-4 shrink-0 text-gray-500 mt-0.5" />
-                <div>
-                  <span className="leading-relaxed block">Barbaros Cd. Beyit Sk. No:17,<br />Yukarı Dudullu - Ümraniye / İstanbul</span>
-                  <a
-                    href={HQ_DIRECTIONS_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-[12.5px] font-semibold text-[#7d9bea] hover:text-white transition-colors mt-1.5 rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7d9bea]/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0c11]"
-                  >
-                    {T.directions[lang]}
-                    <ArrowUpRight className="w-3 h-3" strokeWidth={2} />
-                  </a>
-                </div>
+                <MapPin className="w-4 h-4 shrink-0 text-gray-500 mt-0.5" aria-hidden="true" />
+                <a
+                  href={HQ_DIRECTIONS_URL}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${T.directions[lang]}: Barbaros Cd. Beyit Sk. No:17, Yukarı Dudullu - Ümraniye / İstanbul`}
+                  className="leading-relaxed hover:text-white transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7d9bea]/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0c11]"
+                >
+                  Barbaros Cd. Beyit Sk. No:17,<br />Yukarı Dudullu - Ümraniye / İstanbul
+                </a>
               </li>
               <li className="flex items-center gap-3">
-                <Mail className="w-4 h-4 shrink-0 text-gray-500" />
+                <Mail className="w-4 h-4 shrink-0 text-gray-500" aria-hidden="true" />
                 <a href="mailto:info@deltaoto.com" className="hover:text-white transition-colors">info@deltaoto.com</a>
               </li>
               <li className="flex items-center gap-3">
-                <Phone className="w-4 h-4 shrink-0 text-gray-500" />
-                <span>0216 526 64 64 / 0216 526 33 44</span>
+                <Phone className="w-4 h-4 shrink-0 text-gray-500" aria-hidden="true" />
+                <a href="tel:+902165266464" className="hover:text-white transition-colors">0216 526 64 64</a>
+              </li>
+              {/* Faks: telefonun HEMEN ALTINDA AYRI bir satır, gerçek bir faks
+                  ikonuyla (lucide-react'te özel bir "fax" ikonu yok — Printer,
+                  faks için sitelerde/uygulamalarda evrensel olarak kullanılan
+                  gerçek/mevcut bir ikon, uydurma değil) + küçük görünür "Faks"
+                  etiketiyle telefonla karıştırılmasın diye. tel: bağlantısı
+                  YOK (düz metin) — numara yine de seçilebilir/kopyalanabilir. */}
+              <li className="flex items-center gap-3">
+                <Printer className="w-4 h-4 shrink-0 text-gray-500" aria-label={T.fax[lang]} />
+                <span>
+                  <span className="text-[11px] font-bold uppercase tracking-wide text-gray-600 mr-1.5">{T.fax[lang]}</span>
+                  0216 526 33 44
+                </span>
               </li>
             </ul>
           </div>

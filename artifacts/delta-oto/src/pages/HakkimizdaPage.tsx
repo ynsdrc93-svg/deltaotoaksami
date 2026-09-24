@@ -334,6 +334,30 @@ function MilestoneTimeline({ t }: { t: (typeof content)["tr"]["timeline"] }) {
   const hasScrolledRef = React.useRef(false);
   const navigateTimeoutRef = React.useRef<number | undefined>(undefined);
 
+  // Mobil Yıl Şeridi Turu: <sm'de eski büyük-kart karuseli ("sadece swipe +
+  // küçük noktalar", canlı telefon incelemesinde yetersiz bulundu — "altında
+  // sadece küçük çizgiler, gezilebildiğini yeterince anlatmıyor") yerine
+  // üstte dokunulabilir bir yıl şeridi + altında ortak detay paneli
+  // kullanılıyor (bkz. JSX). AYNI `active` state ve AYNI MILESTONES verisi
+  // paylaşılıyor — mobil/masaüstü için ayrı kopya yok. İkisi de DOM'da
+  // birlikte var, yalnızca CSS (hidden sm:block / sm:hidden) ile karşılıklı
+  // dışlanıyor; masaüstü karuselin IntersectionObserver'ı display:none
+  // durumunda hiç tetiklenmediğinden (isIntersecting hep false) iki
+  // mekanizma birbirine karışmıyor. Mobil seçim YALNIZCA dokunmayla değişir
+  // (otomatik scroll-algılama YOK) — "kullanıcı okurken içerik kendiliğinden
+  // başka yıla geçmesin" kısıtı için kasıtlı: scroll şeridi gözden geçirmek
+  // için serbest ama seçimi tetiklemiyor, yalnızca seçili yılın kendisi
+  // şeridi kendi konumuna kaydırıyor (sayfa değil).
+  const mobileYearRefs = React.useRef<(HTMLButtonElement | null)[]>([]);
+  const selectMobileYear = (i: number) => {
+    setActive(i);
+    const el = mobileYearRefs.current[i];
+    if (el) {
+      const reduceMotion = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      el.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", inline: "center", block: "nearest" });
+    }
+  };
+
   React.useEffect(() => {
     const scroller = scrollerRef.current;
     if (!scroller) return;
@@ -395,7 +419,75 @@ function MilestoneTimeline({ t }: { t: (typeof content)["tr"]["timeline"] }) {
         </div>
       </div>
 
-      <div className="relative">
+      {/* MOBİL: Yıl Şeridi + Ortak Detay — bkz. component üstündeki not.
+          <sm'de eski büyük-kart karuseli tamamen gizli (sm:hidden), bu blok
+          onun yerine geçer. En az üç yıl aynı anda görünür (ortalama telefon
+          genişliğinde ölçülüp doğrulandı, bkz. görev raporu). */}
+      <div className="sm:hidden">
+        <div className="relative">
+          <div className="do-hide-scrollbar overflow-x-auto pl-6 pr-6">
+            <div className="relative flex items-center gap-8 w-max pb-1 pt-1">
+              <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-px bg-white/15" aria-hidden="true" />
+              {MILESTONES.map((m, i) => {
+                const isActive = active === i;
+                return (
+                  <button
+                    key={m.year}
+                    type="button"
+                    ref={(el) => { mobileYearRefs.current[i] = el; }}
+                    onClick={() => selectMobileYear(i)}
+                    aria-current={isActive}
+                    aria-controls="hakkimizda-timeline-mobile-detail"
+                    aria-label={t.dotLabel(m.year)}
+                    className="relative shrink-0 flex flex-col items-center gap-2.5 focus-visible:outline-none rounded-md"
+                  >
+                    <span
+                      className={`block rounded-full transition-all duration-300 ${
+                        isActive ? "w-3 h-3 bg-[#7d9bea] shadow-[0_0_0_4px_rgba(125,155,234,0.25)]" : "w-2 h-2 bg-white/30"
+                      }`}
+                      aria-hidden="true"
+                    />
+                    <span
+                      className={`font-black tabular-nums leading-none transition-all duration-300 ${
+                        isActive ? "text-2xl text-white" : "text-base text-white/50"
+                      }`}
+                    >
+                      {m.year}
+                    </span>
+                  </button>
+                );
+              })}
+              <div className="shrink-0 w-2" aria-hidden="true" />
+            </div>
+          </div>
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-[#1B3A8F] to-transparent" aria-hidden="true" />
+        </div>
+
+        <div
+          id="hakkimizda-timeline-mobile-detail"
+          role="region"
+          aria-live="polite"
+          className="mt-6 mx-6 rounded-xl border border-white/10 bg-white/[0.04] p-6"
+        >
+          <div key={active} className="do-fade-up">
+            {MILESTONES[active].pending ? (
+              <>
+                <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-white/45 mb-3">
+                  <Clock className="w-3.5 h-3.5" strokeWidth={2} /> {t.comingSoon}
+                </span>
+                <p className="text-white/55 text-[13px] italic leading-relaxed">{t.pendingText}</p>
+              </>
+            ) : (
+              <>
+                <h3 className="text-[17px] font-bold text-white mb-2 leading-snug">{MILESTONES[active].label}</h3>
+                <p className="text-white/70 text-[13.5px] leading-relaxed">{MILESTONES[active].desc}</p>
+              </>
+            )}
+          </div>
+        </div>
+      </div>
+
+      <div className="hidden sm:block relative">
         <div
           ref={scrollerRef}
           role="region"
@@ -473,7 +565,10 @@ function MilestoneTimeline({ t }: { t: (typeof content)["tr"]["timeline"] }) {
         </button>
       </div>
 
-      <div className="max-w-7xl mx-auto px-6 lg:px-8 mt-8 flex items-center gap-2 flex-wrap">
+      {/* Eski nokta göstergesi yalnızca masaüstü karuseli kontrol ediyor —
+          mobilde artık kendi seçim arayüzü (yıl şeridi) var, bu satır
+          tekrar/karışıklık olmasın diye <sm'de gizli. */}
+      <div className="hidden sm:flex max-w-7xl mx-auto px-6 lg:px-8 mt-8 items-center gap-2 flex-wrap">
         {MILESTONES.map((m, i) => (
           <button
             key={m.year}
@@ -550,11 +645,16 @@ export function HakkimizdaPage() {
           <p className="text-base text-gray-300 leading-[1.8] max-w-2xl mb-6 lg:mb-10 font-light">
             {t.hero.body}
           </p>
+          {/* Mobil CTA Turu: eskiden px-8/py-4 (masaüstü ölçüsüyle aynı) —
+              telefonda gereksiz büyük, tam genişlik hissi veriyordu (canlı
+              inceleme). Mobilde kompakt bağlantı ölçüsü (py-3+text-sm ≈
+              44px dokunma alanı, hâlâ rahat dokunulabilir), sm+ (masaüstü)
+              BİREBİR eski ölçü. */}
           <Link
             href={routeFor("operations", lang)}
-            className="inline-flex items-center gap-2.5 bg-[#1B3A8F] hover:bg-[#2547B5] text-white font-semibold px-8 py-4 rounded-md transition-colors shadow-[0_0_32px_rgba(27,58,143,0.3)] group"
+            className="inline-flex items-center gap-2 sm:gap-2.5 bg-[#1B3A8F] hover:bg-[#2547B5] text-white font-semibold text-sm sm:text-base px-5 py-3 sm:px-8 sm:py-4 rounded-md transition-colors shadow-[0_0_32px_rgba(27,58,143,0.3)] group"
           >
-            {t.hero.cta} <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            {t.hero.cta} <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
       </section>
@@ -616,14 +716,26 @@ export function HakkimizdaPage() {
                   {gundemLead.title[lang]}
                 </h3>
                 <p className="text-slate-500 text-[15px] leading-[1.8] font-light max-w-xl">{gundemLead.summary[lang]}</p>
-                <span className="inline-flex items-center gap-1.5 mt-5 text-[13px] font-semibold text-[#1B3A8F] opacity-0 group-hover:opacity-100 transition-opacity">
+                {/* Mobil Okunurluk Turu: bkz. LandingPage.tsx'teki birebir
+                    aynı gerekçe — dokunmatik cihazda hover tetiklenmediği
+                    için ipucu görünmez kalıyordu, artık varsayılan görünür,
+                    yalnızca gerçek hover destekleyen cihazlarda soluk başlar. */}
+                <span className="inline-flex items-center gap-1.5 mt-5 text-[13px] font-semibold text-[#1B3A8F] opacity-100 [@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100 transition-opacity">
                   {t.gundem.readMore} <ArrowRight className="w-3.5 h-3.5" />
                 </span>
               </Link>
             )}
 
+            {/* Mobil Okunurluk Turu: lead ile "rest" grubu arasındaki sınır
+                masaüstünde lg:border-l ile ayrışıyordu ama <lg'de (dikey
+                istifte) hiç ayraç yoktu — iki haber grubu birbirine
+                karışıyordu (canlı telefon incelemesinde bulundu). "rest"
+                grubunun İÇİNDEKİ öğeler zaten divide-y ile ayrışıyor
+                (değişmedi) — yalnızca lead→rest sınırına mobil üst
+                ayraç eklendi, lg+'da devre dışı (mevcut lg:border-l
+                korunuyor, üst üste binmiyor). */}
             {gundemRest.length > 0 && (
-              <div ref={reveal} className="do-reveal-right lg:col-span-2 lg:border-l lg:border-slate-200 lg:pl-10 divide-y divide-slate-100">
+              <div ref={reveal} className="do-reveal-right lg:col-span-2 pt-6 border-t border-slate-200 lg:pt-0 lg:border-t-0 lg:border-l lg:border-slate-200 lg:pl-10 divide-y divide-slate-100">
                 {gundemRest.map((item) => (
                   <Link key={item.slug} href={gundemDetailRoute(item.slug, lang)} className="group block py-5 first:pt-0 last:pb-0">
                     <div className="flex items-center gap-3 mb-2 text-[10.5px] font-bold uppercase tracking-[0.12em]">
@@ -747,7 +859,15 @@ export function HakkimizdaPage() {
       <section className="relative bg-[#0e1016] text-white py-24 overflow-hidden">
         <div className="absolute inset-0 do-grid-bg opacity-30" />
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
-          <div className="grid lg:grid-cols-2 gap-14 items-start">
+          {/* Mobil Taşma Turu (regresyon): bu gridin do-reveal-left/right
+              çifti, Gündem gridindeki AYNI kök nedenle (bkz. o bölümdeki
+              yorum — pre-reveal translateX(±32px), .do-in eklenmeden önce)
+              320/768px'te ~8px yatay sayfa taşmasına yol açıyordu; canlı
+              QA'da bulundu, git stash ile bu turun DEĞİŞİKLİKLERİNDEN ÖNCE
+              de var olduğu (regresyon, önceki bir turda başka bir bölüme
+              uygulanan düzeltme buraya hiç taşınmamış) doğrulandı. Aynı
+              kanıtlanmış yerel çözüm: overflow-x-clip. */}
+          <div className="grid lg:grid-cols-2 gap-14 items-start overflow-x-clip">
             <div ref={reveal} className="do-reveal-left">
               <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea] block mb-4">{t.groupauto.eyebrow}</span>
               <h2 className="text-3xl md:text-4xl font-black tracking-tight mb-6">{t.groupauto.heading}</h2>
@@ -824,7 +944,7 @@ export function HakkimizdaPage() {
       </section>
 
       {/* KAPANIŞ CTA — navy (footer öncesi son bölüm daima #1B3A8F olmalı; ESG'nin rengi değişmedi, araya yeni bant eklendi) */}
-      <section className="bg-[#1B3A8F] py-16 text-white">
+      <section className="bg-[#1B3A8F] py-16 text-white overflow-x-clip">
         <div className="max-w-7xl mx-auto px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-8 text-center md:text-left">
           <div ref={reveal} className="do-reveal-left">
             <h2 className="text-3xl md:text-4xl font-black tracking-tight">{t.cta.heading}</h2>

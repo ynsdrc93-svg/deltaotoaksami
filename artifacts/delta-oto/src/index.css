@@ -466,6 +466,7 @@
      bölümde kullandığından açık bir eksiklik oldu; düzeltildi. */
   .do-brand-ticker, .do-brand-ticker-reverse { animation: none; }
   .do-card-beam { display: none; }
+  .do-partner-panel, .do-partner-logo { transition: none; }
   .do-reveal, .do-reveal-left, .do-reveal-right {
     opacity: 1 !important;
     transform: none !important;

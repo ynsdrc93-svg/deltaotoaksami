@@ -736,11 +736,19 @@ export function TedarikciPage() {
               (gap yok) oturuyor, bu da matematiksel olarak GARANTİ eşit bir
               64px/64px tampon üretiyor (canlı ölçümle doğrulandı, bkz. görev
               raporu). */}
+          {/* Mobil Bütünlük Turu: divide-y mekanizması zaten vardı ama her
+              satırın py-8 (32px) dolgusu bitişik satırlarla arasında ~64px'lik
+              bir boşluk bırakıyordu — ince çizgiye rağmen "bağımsız, geniş
+              nefesli kartlar" gibi okunuyordu (canlı telefon incelemesinde
+              bulundu), "tek bağlı kompozisyon" değil. py-5'e sıkıştırıldı
+              (~40px satır arası) — aynı divide-y çizgisi artık gerçekten bir
+              LİSTE hissi veriyor. lg: (masaüstü, py-0 zaten kullanılmıyordu)
+              HİÇ değişmedi. */}
           <div
             ref={reveal}
             className="do-reveal do-d1 grid grid-cols-1 lg:grid-cols-4 divide-y divide-slate-200 lg:divide-y-0 lg:divide-x border-t border-slate-200 pt-12"
           >
-            <div className="py-8 lg:py-0 lg:pr-16">
+            <div className="py-5 lg:py-0 lg:pr-16">
               <div className="flex items-baseline gap-3">
                 <span className="text-6xl lg:text-7xl font-black text-[#1B3A8F] tracking-tight leading-none tabular-nums">
                   {t.advantages.trust.value}
@@ -754,8 +762,8 @@ export function TedarikciPage() {
               </p>
             </div>
             {t.advantages.items.map(({ title, desc }) => (
-              <div key={title} className="py-8 lg:py-0 lg:px-16 last:lg:pr-0">
-                <div className="text-xl lg:text-2xl font-black text-slate-900 tracking-tight mb-3">{title}</div>
+              <div key={title} className="py-5 lg:py-0 lg:px-16 last:lg:pr-0">
+                <div className="text-xl lg:text-2xl font-black text-slate-900 tracking-tight mb-2 lg:mb-3">{title}</div>
                 <p className="text-slate-500 text-[14px] leading-relaxed">{desc}</p>
               </div>
             ))}

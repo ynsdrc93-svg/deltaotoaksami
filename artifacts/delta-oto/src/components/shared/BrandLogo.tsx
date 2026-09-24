@@ -61,11 +61,20 @@ const SIZES: Record<BrandLogoSize, SizeStyle> = {
     textSize: "text-[11px] tracking-tight",
     textHover: "",
   },
+  // Mobil Yoğunluk Turu: <sm kart ayrı ölçülere sahip — hedef, 360/390/430px
+  // genişliklerde bir sırada ~3 kart sığması (eskiden w-170px+mx-2.5=190px
+  // ayak izi yalnızca ~2 kart veriyordu, canlı ölçümle doğrulandı). Yeni ayak
+  // izi 90+2×6=102px → 360/102≈3.5, 390/102≈3.8, 430/102≈4.2 — üçü de
+  // rahatça 3 kart+kenarda kısmi görünüm. sm ve üzeri (masaüstü) TÜM
+  // değerler birebir eskisiyle aynı — yalnızca <sm tier'ı eklendi. img de
+  // aynı şekilde responsive: max-w mobilde daraltılmış kart genişliğine
+  // (90px - 2×8px padding = 74px kullanılabilir alan) göre küçültüldü,
+  // aksi halde geniş wordmark'lar (ör. BorgWarner) dar karttan taşardı.
   strip: {
-    light: "group relative shrink-0 mx-2.5 w-[170px] bg-white rounded-lg h-16 px-4 flex items-center justify-center shadow-sm hover:shadow-lg hover:z-10 transition-shadow duration-300",
-    dark: "group relative shrink-0 mx-2.5 w-[170px] bg-[#0e1016] border border-white/10 rounded-lg h-16 px-4 flex items-center justify-center shadow-sm hover:shadow-lg hover:z-10 transition-shadow duration-300",
-    img: "max-h-7 max-w-[110px] w-auto h-auto object-contain group-hover:scale-125 transition-transform duration-300",
-    textSize: "text-[11px] tracking-tight",
+    light: "group relative shrink-0 mx-1.5 sm:mx-2.5 w-[90px] sm:w-[170px] bg-white rounded-lg h-16 px-2 sm:px-4 flex items-center justify-center shadow-sm hover:shadow-lg hover:z-10 transition-shadow duration-300",
+    dark: "group relative shrink-0 mx-1.5 sm:mx-2.5 w-[90px] sm:w-[170px] bg-[#0e1016] border border-white/10 rounded-lg h-16 px-2 sm:px-4 flex items-center justify-center shadow-sm hover:shadow-lg hover:z-10 transition-shadow duration-300",
+    img: "max-h-6 sm:max-h-7 max-w-[70px] sm:max-w-[110px] w-auto h-auto object-contain group-hover:scale-125 transition-transform duration-300",
+    textSize: "text-[10px] sm:text-[11px] tracking-tight",
     textHover: "group-hover:scale-110 transition-transform duration-300",
   },
 };

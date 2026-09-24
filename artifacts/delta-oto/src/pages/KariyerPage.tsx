@@ -379,7 +379,7 @@ function BenefitCard({
       onFocus={accessible ? onFocusOpen : undefined}
       onBlur={accessible ? onClose : undefined}
       onClick={onOpen}
-      className="group relative shrink-0 w-[250px] sm:w-[280px] aspect-[3/4] rounded-2xl overflow-hidden text-left appearance-none cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7d9bea] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1B3A8F]"
+      className="group relative shrink-0 w-[148px] sm:w-[280px] aspect-[3/4] rounded-2xl overflow-hidden text-left appearance-none cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7d9bea] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1B3A8F]"
     >
       {/* Fotoğraf katmanı — bkz. BENEFIT_VISUALS yorumu: gerçek lifestyle
           fotoğrafı bu oturumda eklenemedi, marka paleti degrade + ince doku
@@ -391,7 +391,12 @@ function BenefitCard({
           isOpen ? "opacity-100 from-[85%]" : "opacity-90 from-[55%]"
         }`}
       />
-      <div className="relative h-full p-5 flex flex-col justify-end">
+      {/* Mobil Yoğunluk Turu: p-5→p-4 yalnızca <sm — kart genişliğiyle (148px)
+          orantılı, açıklama açıldığında sabit (aspect-[3/4]) yükseklikte
+          kesilme/taşma riskini azaltır; canlı ölçümle doğrulandı (bkz. görev
+          raporu). Font boyutları KORUNDU — okunurluk küçültülerek
+          sığdırılmadı, yalnızca genişlik/dolgu/boşluk ayarlandı. */}
+      <div className="relative h-full p-4 sm:p-5 flex flex-col justify-end">
         <h3
           className={`text-white font-bold text-[16px] leading-snug transition-transform duration-300 ease-out ${
             isOpen ? "-translate-y-1" : ""
@@ -435,7 +440,7 @@ function BenefitsRail({
   if (reducedMotion) {
     return (
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="flex gap-5 overflow-x-auto pb-2 -mx-1 px-1">
+        <div className="flex gap-3 sm:gap-5 overflow-x-auto pb-2 -mx-1 px-1">
           {items.map((item, i) => (
             <BenefitCard
               key={item.label}
@@ -467,7 +472,7 @@ function BenefitsRail({
         </button>
       </div>
       <div ref={cropRef} className="overflow-hidden">
-        <div ref={trackRef} className="flex gap-5 px-6 lg:px-8 w-max">
+        <div ref={trackRef} className="flex gap-3 sm:gap-5 px-4 sm:px-6 lg:px-8 w-max">
           {items.map((item, i) => (
             <BenefitCard
               key={`a-${item.label}`}
