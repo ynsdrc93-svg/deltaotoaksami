@@ -209,9 +209,32 @@ export function useParallax<T extends HTMLElement>(speed = 0.12) {
  * ekranda, kırpılma riski yok. 1440×900/1920×1080/390×844'te canlı QA ile
  * doğrulandı (bkz. görev raporu).
  */
-export function useSectionProgress<T extends HTMLElement>(mode: "settle" | "transit" | "reveal" | "focus" = "settle") {
+export function useSectionProgress<T extends HTMLElement>(
+  mode: "settle" | "transit" | "reveal" | "focus" = "settle",
+  // 'focus' Zamanlama Turu #2 (bu tur): kullanıcı 04'ün hem aktivasyon hem
+  // TAMAMLANMA anının öne alınmasını istedi, "gerekirse yalnız bu kullanım
+  // için küçük bir ayar parametresi ekle, hook'un diğer alanlarını
+  // değiştirme" talimatıyla. Varsayılan [0.88, 0.16] ÖNCEKİ turun aynı
+  // değerleri — parametre verilmeyen hiçbir çağıran (şu an tek çağıran
+  // OperasyonPage, kendi değerini açıkça veriyor) etkilenmez. OperasyonPage
+  // yalnızca ÇIKIŞ ucunu (0.16→0.32) büyütüyor; GİRİŞ ucu (0.88) bilinçli
+  // olarak AYNI bırakıldı — bu değer "satır gerçekten görünür olmadan
+  // animasyon başlamasın" kısıtını canlı QA ile kanıtlamıştı, büyütmek bu
+  // kısıtı riske atardı. Yalnızca çıkışı büyütmek toplam kat edilecek scroll
+  // mesafesini kısaltıyor — 02/03/04 hepsi AYNI oransal (0/0.25/0.5/0.75)
+  // eşiklerde ama artık daha KISA bir mesafede, yani daha ERKEN aktifleşiyor;
+  // 04 tamamlandığında satırın referans noktası viewport'un ~%32'sinde
+  // (eskiden ~%16) — sticky header'a iki kat daha uzak, kırpılma riski yok.
+  focusRange: readonly [number, number] = [0.88, 0.16]
+) {
   const ref = React.useRef<T | null>(null)
   const [progress, setProgress] = React.useState(0)
+  // Primitiflere burada, effect'in DIŞINDA ayrıştırılıyor — çağıran her
+  // render'da yeni bir dizi referansı geçse bile (ör. satır içi [0.88, 0.32]
+  // literal'i), aşağıdaki deps dizisi referans değil DEĞER karşılaştırması
+  // yapsın diye (gereksiz effect yeniden kurulumunu/scroll dinleyici
+  // thrash'ini önler).
+  const [focusEnterFraction, focusExitFraction] = focusRange
   React.useEffect(() => {
     if (typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       setProgress(1)
@@ -231,8 +254,6 @@ export function useSectionProgress<T extends HTMLElement>(mode: "settle" | "tran
         // aşağıda start/end'e (rect.top karşılığına) çevrilirken rect.height/2
         // düşülüyor, böylece asıl formül (start-rect.top)/(start-end) hiç
         // değişmeden merkez-tabanlı hâle geliyor.
-        const focusEnterFraction = 0.88
-        const focusExitFraction = 0.16
         const start =
           mode === "focus" ? vh * focusEnterFraction - rect.height / 2 :
           mode === "reveal" ? vh * entryFraction :
@@ -272,7 +293,7 @@ export function useSectionProgress<T extends HTMLElement>(mode: "settle" | "tran
     window.addEventListener("scroll", onScroll, { passive: true })
     window.addEventListener("resize", onScroll)
     return () => { window.removeEventListener("scroll", onScroll); window.removeEventListener("resize", onScroll); cancelAnimationFrame(raf) }
-  }, [mode])
+  }, [mode, focusEnterFraction, focusExitFraction])
   return [ref, progress] as const
 }
 

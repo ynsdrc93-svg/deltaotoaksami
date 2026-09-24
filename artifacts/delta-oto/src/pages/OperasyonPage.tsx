@@ -93,7 +93,7 @@ const content = {
     depots: {
       eyebrow: "Operasyon Altyapısı",
       heading: "Gebze ve İzmir'den Türkiye Geneline Dağıtım",
-      body: "İki operasyon noktamızdan, Türkiye'nin tamamına düzenli sevkiyat ağıyla ulaşıyoruz.",
+      body: "Gebze ve İzmir'den Türkiye'nin 81 iline sevkiyat sağlıyoruz.",
       reachValue: "81 İl",
       reachLabel: "Türkiye Geneline Dağıtım",
       panels: [
@@ -182,7 +182,7 @@ const content = {
     depots: {
       eyebrow: "Operations Infrastructure",
       heading: "Nationwide Distribution from Gebze and İzmir",
-      body: "From our two operations points, we reach the whole of Türkiye through a regular, structured dispatch network.",
+      body: "We dispatch to all 81 provinces of Türkiye from Gebze and İzmir.",
       reachValue: "81 Provinces",
       reachLabel: "Nationwide Distribution",
       panels: [
@@ -233,15 +233,25 @@ export function OperasyonPage() {
   // bir taban) bu KISA satır için progress=1'de rect.top'ı NEGATİFE
   // düşürebiliyordu, yani 04 kendi penceresinin sonuna doğru zaten kısmen
   // kırpılıyordu. 'focus' modu (bkz. use-motion.ts) elementin TEPESİ yerine
-  // MERKEZİNİ izler, giriş/çıkış hedefleri sabit viewport oranları (%88→%16)
-  // — element yüksekliğinden bağımsız, progress=1'de bile satır her zaman
-  // viewport'un üst kenarının İÇİNDE kalır, asla kırpılmaz.
-  const [processRef, processProgress] = useSectionProgress<HTMLDivElement>("focus");
-  // 'focus'un END'i artık kendi başına "hâlâ rahat görünür" garantisi
-  // verdiğinden (üstteki not), eşit dağılım öne-yüklemeden daha okunaklı:
-  // 04 progress %75'te aktifleşiyor — o anda satırın merkezi viewport'un
-  // ~%34'ünde (üst-orta), hâlâ tamamen ekranda. 01-03 da kendi aralarında
-  // eşit adımlarla, doğal bir ritimle ilerliyor.
+  // MERKEZİNİ izler, giriş/çıkış hedefleri sabit viewport oranları — element
+  // yüksekliğinden bağımsız, satır her zaman viewport'un üst kenarının
+  // İÇİNDE kalır, asla kırpılmaz.
+  //
+  // Adım Zamanlaması Turu #5 (bu tur, canlı ölçüm): kullanıcı 04'ün hem
+  // aktivasyon hem TAMAMLANMA anının daha da öne alınmasını istedi — önceki
+  // turun ÇIKIŞ ucu (%16, neredeyse viewport'un tepesi) 04 tamamlandığında
+  // satırı sticky header'a çok yaklaştırıyordu. GİRİŞ ucuna (%88)
+  // DOKUNULMADI — bu değer "satır gerçekten görünür olmadan animasyon
+  // başlamasın" kısıtını canlı QA ile kanıtlamıştı, büyütmek bu kısıtı riske
+  // atardı (bkz. use-motion.ts'teki hook yorumu). Yalnızca ÇIKIŞ ucu %16→%32
+  // büyütüldü — bu, useSectionProgress'in YENİ (bu modüle özel) üçüncü
+  // parametresiyle veriliyor, hook'un varsayılanı (diğer olası çağıranlar
+  // için) DEĞİŞMEDİ. Sonuç: aynı oransal eşikler (0/0.25/0.5/0.75) artık
+  // daha KISA bir scroll mesafesine yayılıyor → 02/03/04 hepsi daha erken
+  // aktifleşiyor, 04 tamamlandığında satırın referans noktası viewport'un
+  // ~%32'sinde (eskiden ~%16) — sticky header'dan iki kat daha uzak. Önce/
+  // sonra ölçümü görev raporunda.
+  const [processRef, processProgress] = useSectionProgress<HTMLDivElement>("focus", [0.88, 0.32]);
   const STEP_THRESHOLDS = [0, 0.25, 0.5, 0.75]
   const activeStep = STEP_THRESHOLDS.filter((t) => processProgress >= t).length - 1
 
@@ -419,7 +429,13 @@ export function OperasyonPage() {
           <div ref={ref} className="do-reveal max-w-4xl mb-8 md:mb-10 lg:mb-12">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">{t.depots.eyebrow}</span>
             <h2 className="text-2xl md:text-3xl lg:text-4xl font-black text-slate-900 mt-2 tracking-tight">{t.depots.heading}</h2>
-            <p className="text-slate-500 mt-3 text-[15px] leading-relaxed max-w-xl">{t.depots.body}</p>
+            {/* Ana Başlık Açıklaması Turu: önceki tur yanlışlıkla fotoğraf
+                caption'larına odaklanmıştı — asıl kısılan yer buradaki
+                max-w-xl (576px) idi. Cümle artık kısa/vurucu, sınır tamamen
+                kaldırıldı — dış max-w-4xl konteyner zaten yeterli sınırı
+                sağlıyor; masaüstünde (1280/1440/1920) canlı ölçümle tek
+                satır doğrulandı (bkz. görev raporu). */}
+            <p className="text-slate-500 mt-3 text-[15px] leading-relaxed">{t.depots.body}</p>
           </div>
 
           {/* Kırpma notu: kaynak fotoğraflar geniş-format depo iç mekanı
@@ -521,9 +537,10 @@ export function OperasyonPage() {
 
       {/* SİPARİŞ SÜRECİ — navy. Motion dekoratif değil, tasarımın kendisi:
           processProgress bu bloğun kendi scroll geçişini izler ('focus'
-          modu — bkz. use-motion.ts'teki hook yorumu: modül viewport'a
+          modu, [0.88, 0.32] — bkz. use-motion.ts'teki hook yorumu ve
+          yukarıdaki "Adım Zamanlaması Turu #5" notu: modül viewport'a
           gerçekten girmeden progress 0'da kalır, satırın MERKEZİ viewport'un
-          ~%88'inden ~%16'sına yükselirken 0→1'e ilerler — element
+          ~%88'inden ~%32'sine yükselirken 0→1'e ilerler — element
           yüksekliğinden bağımsız sabit bir viewport oranı olduğundan satır
           progress=1'de bile her zaman tamamen ekranda kalır, hiçbir adım
           kendi penceresinin sonunda kırpılmaz), üstteki ince çubuk gerçek

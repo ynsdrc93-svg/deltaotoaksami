@@ -4,18 +4,13 @@ import {
   Quote,
   Linkedin,
   ChevronDown,
-  HeartPulse,
-  Utensils,
-  Bus,
-  Clock,
-  GraduationCap,
-  CalendarCheck,
-  Award,
-  Users,
+  Pause,
+  Play,
 } from "lucide-react";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
 import { useReveal, useViewportFocusIndex, usePrefersReducedMotion } from "../hooks/use-motion";
+import { useMeasuredMarquee } from "../hooks/use-measured-marquee";
 import { useDocumentMeta } from "@/hooks/use-document-meta";
 import { useLang, type Lang } from "@/lib/i18n";
 
@@ -27,14 +22,39 @@ const JOB_PLATFORMS = [
   { name: "Kariyer.net", url: "https://www.kariyer.net", Icon: ExternalLink },
 ];
 
-// Yan Haklar Akış Kartları Turu: sekiz gerçek hak, iki tematik grup altında
-// (content.*.benefits.groupHeadings) — ilk 4'ü günlük yaşam/refah (sağlık,
-// yemek, ulaşım, esnek saat), son 4'ü gelişim/kariyer (eğitim bütçesi,
-// kariyer görüşmesi, marka eğitimi, mentorluk). Her grup kendi yatay akış
-// rayında (bkz. JSX) — ikon burada, içerikten bağımsız yapısal bir dizi
-// olarak, index bazında items ile eşleşiyor.
-const BENEFIT_GROUP_SIZE = 4; // ilk 4 → groupHeadings[0], kalan 4 → groupHeadings[1]
-const BENEFIT_ICONS = [HeartPulse, Utensils, Bus, Clock, GraduationCap, CalendarCheck, Award, Users];
+// Yan Haklar Tek Bant Turu: önceki iki-bantlı/ikonlu kart tasarımı
+// REDDEDİLDİ — kullanıcı TEK yönlü, kesintisiz, fotoğraf-öncelikli bir bant
+// istedi (bkz. BenefitsRail). Sekiz gerçek hak artık grup ayrımı OLMADAN
+// (groupHeadings kaldırıldı) tek sırada.
+//
+// GÖRSEL KAYNAK NOTU (dürüst durum): Bu turda her hak için temsili bir
+// lifestyle fotoğrafı planlandı (yönergeler: sağlık→sakin iyi yaşam sahnesi,
+// yemek→özenli öğün, ulaşım→kent içi ulaşım, esnek saat→doğal çalışma
+// sahnesi, eğitim bütçesi→yetişkin mesleki öğrenme, kariyer görüşmesi→iki
+// profesyonelin görüşmesi, marka/ürün eğitimi→teknik parça incelemesi,
+// mentorluk→deneyim paylaşımı). BU OTURUMDA GERÇEK FOTOĞRAF EKLENEMEDİ:
+// ortamın ağ çıkışı (egress proxy) unsplash.com/pexels.com/genel web
+// erişimini politika gereği engelliyor (WebFetch + doğrudan curl ile
+// doğrulandı, 3 farklı harici alan adında hepsi EGRESS_BLOCKED) — bu yüzden
+// lisansı doğrulanabilir hiçbir dış görsel indirilemedi; mevcut repo/
+// attached_assets içinde de bu sekiz temayla eşleşen kullanılmamış bir
+// lifestyle fotoğrafı yok (yalnızca tesis/ürün/logo görselleri var, aynı
+// fotoğrafı sekiz karta dağıtmamak için onlar da kullanılmadı). Geçici
+// çözüm: her kart kendi BENEFIT_VISUALS degrade rengiyle (marka paleti,
+// gerçek fotoğraf İDDİA ETMİYOR) render ediliyor — yapı (tek bant, ölçülü
+// döngü, hover/focus/tap açıklama) TAM teslim edildi, yalnızca nihai
+// fotoğraf malzemesi bekliyor. Gerçek fotoğraflar geldiğinde tek yapılacak,
+// her BenefitsRail kartına bir `photo` src'i eklemek (bkz. BenefitCard).
+const BENEFIT_VISUALS = [
+  "bg-gradient-to-br from-[#1B3A8F] via-[#2547B5] to-[#0e1016]",
+  "bg-gradient-to-tr from-[#0e1016] via-[#1B3A8F] to-[#4d74d6]",
+  "bg-gradient-to-b from-[#2547B5] via-[#1B3A8F] to-[#0e1016]",
+  "bg-gradient-to-bl from-[#4d74d6] via-[#1B3A8F] to-[#0e1016]",
+  "bg-gradient-to-t from-[#0e1016] via-[#2547B5] to-[#7d9bea]",
+  "bg-gradient-to-r from-[#0e1016] via-[#1B3A8F] to-[#0e1016]",
+  "bg-gradient-to-bl from-[#7d9bea] via-[#1B3A8F] to-[#0e1016]",
+  "bg-gradient-to-t from-[#1B3A8F] via-[#2547B5] to-[#0e1016]",
+];
 
 const content = {
   tr: {
@@ -97,7 +117,8 @@ const content = {
       eyebrow: "Çalışan Avantajları",
       heading: "Yan Haklar ve İmkânlar",
       desc: "Uzun vadeli kurumsal ilişkilerde çalışanların gelişimine yatırım yapıyoruz.",
-      groupHeadings: ["Günlük Yaşam", "Gelişim ve Kariyer"],
+      pause: "Duraklat",
+      resume: "Devam Et",
       items: [
         { label: "Özel sağlık sigortası", sub: "Tüm çalışanlar için" },
         { label: "Yemek kartı katkısı", sub: "Her iş günü için sağlanır" },
@@ -164,7 +185,8 @@ const content = {
       eyebrow: "Employee Benefits",
       heading: "Benefits and Perks",
       desc: "We invest in our employees' growth as part of long-term working relationships.",
-      groupHeadings: ["Daily Life", "Growth and Career"],
+      pause: "Pause",
+      resume: "Resume",
       items: [
         { label: "Private health insurance", sub: "For all employees" },
         { label: "Meal card allowance", sub: "Provided for every working day" },
@@ -299,6 +321,179 @@ function CultureManifesto({ items }: { items: { title: string; desc: string }[] 
             </div>
           );
         })}
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Yan Haklar — Tek Bant Turu: bkz. üstteki BENEFIT_VISUALS yorumu (görsel
+ * kaynak notu). Yapı:
+ *  - TEK yönlü (sağdan sola), TEK bant — ikinci sıra yok, grup pill'i yok.
+ *  - Varsayılan: görsel + degrade + kısa başlık. Açıklama KAPALI.
+ *  - Hover/focus/tap: bant durur (useMeasuredMarquee pausedRef), o kartın
+ *    gradyanı hafifçe güçlenir, başlık yukarı kayar, açıklama grid-rows
+ *    0fr→1fr ile (layout'u itmeden, kendi katmanında) açılır.
+ *  - Her benzersiz hak GERÇEK bir <button> (klavye odaklanabilir, görünür
+ *    focus-visible ring); ikinci (görsel) kopya aria-hidden + tabIndex=-1 —
+ *    ekran okuyucu sekiz hakkı iki kez duymaz, Tab asla görünmeyen kopyaya
+ *    girmez. Fare her iki kopyada da çalışır (aria-hidden mouse'u etkilemez)
+ *    — hangi kopya "görünürse" o da doğru açıklamayı gösterir.
+ *  - Klavye odağı bandı durdurur VE odaklanan kart kırpma penceresinin
+ *    dışındaysa içine kaydırır (useMeasuredMarquee.focusItemIntoView) —
+ *    transform tabanlı bir bant native scrollIntoView'e cevap vermediği
+ *    için.
+ *  - prefers-reduced-motion: otomatik akış tamamen kapalı; sekiz hak TEK
+ *    kopya olarak yatay kaydırılabilir (overflow-x-auto) bir sırada —
+ *    hiçbiri overflow-hidden içinde kaybolmuyor.
+ */
+function BenefitCard({
+  item,
+  index,
+  isOpen,
+  accessible,
+  onOpen,
+  onClose,
+  onFocusOpen,
+  setRef,
+}: {
+  item: { label: string; sub: string };
+  index: number;
+  isOpen: boolean;
+  accessible: boolean;
+  onOpen: () => void;
+  onClose: () => void;
+  onFocusOpen?: () => void;
+  setRef?: (el: HTMLButtonElement | null) => void;
+}) {
+  const visual = BENEFIT_VISUALS[index % BENEFIT_VISUALS.length];
+  return (
+    <button
+      type="button"
+      ref={setRef}
+      tabIndex={accessible ? 0 : -1}
+      aria-hidden={accessible ? undefined : true}
+      aria-expanded={accessible ? isOpen : undefined}
+      onMouseEnter={onOpen}
+      onMouseLeave={onClose}
+      onFocus={accessible ? onFocusOpen : undefined}
+      onBlur={accessible ? onClose : undefined}
+      onClick={onOpen}
+      className="group relative shrink-0 w-[250px] sm:w-[280px] aspect-[3/4] rounded-2xl overflow-hidden text-left appearance-none cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7d9bea] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1B3A8F]"
+    >
+      {/* Fotoğraf katmanı — bkz. BENEFIT_VISUALS yorumu: gerçek lifestyle
+          fotoğrafı bu oturumda eklenemedi, marka paleti degrade + ince doku
+          geçici olarak yerini tutuyor (fotoğraf İDDİA ETMİYOR). */}
+      <div className={`absolute inset-0 ${visual}`} />
+      <div className="absolute inset-0 do-grid-bg opacity-[0.15]" aria-hidden="true" />
+      <div
+        className={`absolute inset-0 bg-gradient-to-t from-[#0e1016] to-transparent transition-[opacity] duration-300 ${
+          isOpen ? "opacity-100 from-[85%]" : "opacity-90 from-[55%]"
+        }`}
+      />
+      <div className="relative h-full p-5 flex flex-col justify-end">
+        <h3
+          className={`text-white font-bold text-[16px] leading-snug transition-transform duration-300 ease-out ${
+            isOpen ? "-translate-y-1" : ""
+          }`}
+        >
+          {item.label}
+        </h3>
+        <div
+          className={`grid transition-[grid-template-rows] duration-300 ease-out ${
+            isOpen ? "grid-rows-[1fr] mt-1.5" : "grid-rows-[0fr] mt-0"
+          }`}
+        >
+          <p className="overflow-hidden text-white/75 text-[12.5px] leading-relaxed">{item.sub}</p>
+        </div>
+      </div>
+    </button>
+  );
+}
+
+function BenefitsRail({
+  items,
+  pauseLabel,
+  resumeLabel,
+}: {
+  items: { label: string; sub: string }[];
+  pauseLabel: string;
+  resumeLabel: string;
+}) {
+  const reducedMotion = usePrefersReducedMotion();
+  const count = items.length;
+  const { cropRef, trackRef, setItemRef, setSeqBStart, setPaused, focusItemIntoView } = useMeasuredMarquee(count, 42);
+  const [openIndex, setOpenIndex] = React.useState<number | null>(null);
+  const [manualPaused, setManualPaused] = React.useState(false);
+
+  React.useEffect(() => {
+    setPaused(manualPaused || openIndex !== null);
+  }, [manualPaused, openIndex, setPaused]);
+
+  const close = (i: number) => setOpenIndex((cur) => (cur === i ? null : cur));
+
+  if (reducedMotion) {
+    return (
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        <div className="flex gap-5 overflow-x-auto pb-2 -mx-1 px-1">
+          {items.map((item, i) => (
+            <BenefitCard
+              key={item.label}
+              item={item}
+              index={i}
+              isOpen={openIndex === i}
+              accessible
+              onOpen={() => setOpenIndex(i)}
+              onClose={() => close(i)}
+              onFocusOpen={() => setOpenIndex(i)}
+            />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 mb-6 flex justify-end">
+        <button
+          type="button"
+          onClick={() => setManualPaused((p) => !p)}
+          aria-pressed={manualPaused}
+          className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.15em] text-[#7d9bea] hover:text-white transition-colors rounded-full border border-white/15 hover:border-white/30 px-4 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7d9bea] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1B3A8F]"
+        >
+          {manualPaused ? <Play className="w-3.5 h-3.5" strokeWidth={2} /> : <Pause className="w-3.5 h-3.5" strokeWidth={2} />}
+          {manualPaused ? resumeLabel : pauseLabel}
+        </button>
+      </div>
+      <div ref={cropRef} className="overflow-hidden">
+        <div ref={trackRef} className="flex gap-5 px-6 lg:px-8 w-max">
+          {items.map((item, i) => (
+            <BenefitCard
+              key={`a-${item.label}`}
+              item={item}
+              index={i}
+              isOpen={openIndex === i}
+              accessible
+              setRef={setItemRef[i]}
+              onOpen={() => setOpenIndex(i)}
+              onClose={() => close(i)}
+              onFocusOpen={() => { setOpenIndex(i); focusItemIntoView(i); }}
+            />
+          ))}
+          {items.map((item, i) => (
+            <BenefitCard
+              key={`b-${item.label}`}
+              item={item}
+              index={i}
+              isOpen={openIndex === i}
+              accessible={false}
+              setRef={i === 0 ? setSeqBStart : undefined}
+              onOpen={() => setOpenIndex(i)}
+              onClose={() => close(i)}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
@@ -462,25 +657,12 @@ export function KariyerPage() {
         </div>
       </section>
 
-      {/* YAN HAKLAR — Akış Kartları Turu: önceki "indeks + sahne" mimarisi
-          (CategoryExplorer'dan uyarlanmış) canlı incelemede fazla statik ve
-          "kurumsal panel" gibi hissettirdi (rejected). Kullanıcı özellikle
-          KART tabanlı, EN AZ İKİ ters yönlü yatay akış istedi. Sıfırdan icat
-          etmek yerine sitenin KENDİ İÇİNDE zaten onaylanmış, kanıtlanmış bir
-          çift-yönlü marquee mimarisi var — ana sayfa/Tedarikçiler marka
-          duvarı (.do-brand-ticker / .do-brand-ticker-reverse, index.css,
-          22-26s linear infinite, dur-on-hover, dokunmada dur-on-touch,
-          %50 kaydırma için içerik ikiye katlanmış). O bileşene
-          DOKUNULMADI — aynı, zaten test edilmiş CSS sınıfları burada kart
-          içeriğiyle yeniden kullanılıyor. Grup 1 (Günlük Yaşam) soldan sağa
-          (-reverse), Grup 2 (Gelişim ve Kariyer) sağdan sola (düz) akıyor —
-          iki ray da ters yönde. Her kart: sade/zarif line-icon (BENEFIT_ICONS,
-          jenerik "AI ikon" hissi vermesin diye tutarlı ince stroke + yumuşak
-          lacivert-mavi rozet içinde), kısa başlık, kısa açıklama. Grup adı
-          artık sert blok değil — her rayın başında küçük bir "pill" etiket.
-          Hover: CSS zaten rayı durduruyor (established); ayrıca hover
-          edilen kartın kendisi hafifçe yükselip parlıyor. Sekiz gerçek hak
-          aynen korundu, hiçbiri eklenmedi/çıkarılmadı — yalnızca sunum. */}
+      {/* YAN HAKLAR — Tek Bant Turu: önceki iki-bantlı/ikonlu kart tasarımı
+          REDDEDİLDİ ("temiz ama kurumsal panel gibi, ucuz"). Bkz.
+          BenefitsRail/BenefitCard üstündeki yorumlar: artık TEK yönlü, TEK
+          bant, sekiz hak grup ayrımı olmadan aynı sırada; varsayılan
+          görünüm fotoğraf(yerine geçici degrade)+başlık, açıklama yalnızca
+          hover/focus/tap ile açılıyor. Sekiz gerçek hak aynen korundu. */}
       <section className="relative bg-[#1B3A8F] text-white py-24 overflow-hidden">
         <div className="absolute inset-0 do-grid-bg opacity-25" />
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
@@ -493,43 +675,8 @@ export function KariyerPage() {
           </div>
         </div>
 
-        <div className="relative z-10 flex flex-col gap-10">
-          {t.benefits.groupHeadings.map((groupHeading, g) => {
-            const groupItems = t.benefits.items
-              .map((item, i) => ({ ...item, i }))
-              .slice(g * BENEFIT_GROUP_SIZE, g * BENEFIT_GROUP_SIZE + BENEFIT_GROUP_SIZE);
-            const tickerClass = g === 0 ? "do-brand-ticker-reverse" : "do-brand-ticker";
-            return (
-              <div key={groupHeading}>
-                <div className="max-w-7xl mx-auto px-6 lg:px-8 mb-4">
-                  <span className="inline-flex items-center px-3 py-1 rounded-full bg-white/10 text-[10px] font-bold uppercase tracking-[0.15em] text-[#7d9bea]">
-                    {groupHeading}
-                  </span>
-                </div>
-                <div className="overflow-hidden">
-                  <div className={tickerClass}>
-                    {[...groupItems, ...groupItems].map(({ label, sub, i }, di) => {
-                      const isDuplicate = di >= groupItems.length;
-                      const Icon = BENEFIT_ICONS[i];
-                      return (
-                        <div
-                          key={`${label}-${di}`}
-                          aria-hidden={isDuplicate}
-                          className="shrink-0 w-[270px] mx-3 rounded-2xl border border-white/12 bg-white/[0.05] p-6 transition-all duration-300 ease-out hover:-translate-y-1 hover:bg-white/[0.1] hover:border-white/25"
-                        >
-                          <div className="w-11 h-11 rounded-full bg-[#7d9bea]/15 flex items-center justify-center mb-5">
-                            <Icon className="w-[19px] h-[19px] text-[#7d9bea]" strokeWidth={1.75} />
-                          </div>
-                          <h3 className="text-white font-bold text-[15px] leading-snug mb-1.5">{label}</h3>
-                          <p className="text-white/55 text-[13px] leading-relaxed">{sub}</p>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+        <div className="relative z-10">
+          <BenefitsRail items={t.benefits.items} pauseLabel={t.benefits.pause} resumeLabel={t.benefits.resume} />
         </div>
       </section>
 
