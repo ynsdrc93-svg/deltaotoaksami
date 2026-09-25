@@ -456,6 +456,19 @@
   font-weight: 700;
 }
 
+/* İnce/yatay CTA'lar: görünen yüzey 36-40px'e küçültüldüğünde dokunma
+   alanını konfor için ~44px'e tamamlar — çevresindeki layout'u/akışı
+   etkilemeden (position: relative + mutlak konumlu ::before ile). Sadece
+   dokunma alanını genişletir, görsel bir stil eklemez. */
+.do-tap-target {
+  position: relative;
+}
+.do-tap-target::before {
+  content: "";
+  position: absolute;
+  inset: -6px;
+}
+
 /* Respect prefers-reduced-motion everywhere, not just one page */
 @media (prefers-reduced-motion: reduce) {
   .do-beam, .do-beam-delay { animation: none; opacity: 0; }

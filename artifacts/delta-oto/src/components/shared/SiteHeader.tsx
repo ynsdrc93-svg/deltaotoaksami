@@ -180,7 +180,7 @@ export function SiteHeader() {
                 href="https://b2b.parcabul.com.tr/login.aspx"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="mt-3 bg-[#1B3A8F] hover:bg-[#2547B5] active:scale-[0.98] text-white text-[15px] font-semibold px-5 py-3 rounded-md transition-all duration-200 flex items-center justify-center gap-1.5"
+                className="do-tap-target mt-3 bg-[#1B3A8F] hover:bg-[#2547B5] active:scale-[0.98] text-white text-[13.5px] font-semibold px-6 py-2.5 rounded-md transition-all duration-200 flex items-center justify-center gap-1.5"
               >
                 {B2B_LABEL[lang]}
                 <ArrowRight className="w-4 h-4" />

@@ -431,7 +431,7 @@ export function LandingPage() {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setMobileOpen(false)}
-                className="mt-3 bg-[#1B3A8F] hover:bg-[#2547B5] active:scale-[0.98] text-white text-[15px] font-semibold px-5 py-3 rounded-md transition-all duration-200 flex items-center justify-center gap-1.5"
+                className="do-tap-target mt-3 bg-[#1B3A8F] hover:bg-[#2547B5] active:scale-[0.98] text-white text-[13.5px] font-semibold px-6 py-2.5 rounded-md transition-all duration-200 flex items-center justify-center gap-1.5"
               >
                 {t.hero.ctaB2B}
                 <ArrowRight className="w-4 h-4" />
@@ -512,12 +512,12 @@ export function LandingPage() {
 
             <div ref={ref} className="do-reveal do-d3 flex flex-wrap gap-4 items-center">
               <Link to={routeFor("contact", lang)}>
-                <button className="bg-[#1B3A8F] hover:bg-[#2547B5] active:scale-[0.98] text-white font-semibold px-8 py-4 rounded-md text-base transition-all duration-200 flex items-center gap-2.5 group shadow-[0_0_32px_rgba(27,58,143,0.3)] hover:shadow-[0_0_48px_rgba(27,58,143,0.45)]">
+                <button className="do-tap-target bg-[#1B3A8F] hover:bg-[#2547B5] active:scale-[0.98] text-white font-semibold px-6 py-2.5 rounded-md text-[13.5px] transition-all duration-200 flex items-center gap-2.5 group shadow-[0_0_32px_rgba(27,58,143,0.3)] hover:shadow-[0_0_48px_rgba(27,58,143,0.45)]">
                   {t.hero.ctaContact}
-                  <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
                 </button>
               </Link>
-              <a href="https://b2b.parcabul.com.tr/login.aspx" target="_blank" rel="noopener noreferrer" className="text-gray-200 hover:text-white active:scale-[0.98] text-base font-medium flex items-center gap-2 border border-white/15 hover:border-white/30 px-8 py-4 rounded-md transition-all duration-200">
+              <a href="https://b2b.parcabul.com.tr/login.aspx" target="_blank" rel="noopener noreferrer" className="do-tap-target text-gray-200 hover:text-white active:scale-[0.98] text-[13.5px] font-medium flex items-center gap-2 border border-white/15 hover:border-white/30 px-6 py-2.5 rounded-md transition-all duration-200">
                 {t.hero.ctaB2B}
               </a>
             </div>
@@ -667,31 +667,31 @@ export function LandingPage() {
                 zemininde duruyor, Opar'ın beyaz SVG'siyle birebir aynı
                 muamele (kutu/chip/border yok, ortak h-11 hizalama bandı).
 
-                Aktif Durum Turu (bu tur): her panelin artık bir
-                activeLogoSrc'si var — dolduysa panel etkileşimli (hover/
-                focus/tap ile beyaz yüzeye geçer, ilgili renkli logo çapraz
-                geçişle görünür). Opar için gerçek renkli kaynak repo'da
-                bulundu (opar-logo.svg — opar-logo-white.svg ile AYNI path
-                geometrisi, yalnızca dolgu rengi lacivert rgb(0,47,135);
-                görsel olarak doğrulandı, farklı bir kompozisyon/rozet
-                DEĞİL). GROUPAUTO Türkiye için ise repo'da yalnızca beyaz-
-                negatif wordmark (groupauto-turkiye-logo.webp) ve TAMAMEN
-                FARKLI bir kompozisyon olan üyelik rozeti
-                (groupauto-turkiye-badge.webp — dairesel/köşeli rozet + araba
-                ikonu, footer'da kullanılıyor) var; International logosu da
-                yanlış kuruluş. Kesin kural gereği ("CSS filtresiyle
-                dönüştürme yok, rozet/farklı kompozisyon yok, renk tahmin
-                etme yok") activeLogoSrc: null bırakıldı — bu panel şimdilik
-                yalnızca normal (lacivert) durumda kalıyor, aktif durum
-                UYGULANMADI (bkz. görev raporu, eksik dosya). Simetri
-                isteniyordu ama beyaz zeminde beyaz logo görünmez bir hataya
-                yol açardı — bu, hiç uygulamamaktan daha kötü olurdu. */}
+                Aktif Durum Turu: her panelin bir activeLogoSrc'si var —
+                dolduysa panel etkileşimli (hover/focus/tap ile beyaz
+                yüzeye geçer, ilgili renkli logo çapraz geçişle görünür).
+                Opar: opar-logo.svg (opar-logo-white.svg ile AYNI path
+                geometrisi, yalnızca dolgu rengi lacivert). GROUPAUTO
+                Türkiye Turu 2 (bu tur): kullanıcı orijinal renkli logoyu
+                sağladı (groupauto-turkiye-logo-color.webp) — mevcut beyaz-
+                negatif wordmarkla (groupauto-turkiye-logo.webp) AYNI
+                kompozisyon (G-simge + GROUPAUTO + Türkiye), rozet değil;
+                en-boy oranı doğrulandı (900:183 ≈ 4.92:1 negatif,
+                2000:408 ≈ 4.90:1 renkli — aynı sanatın farklı çözünürlükte
+                dışa aktarımı, kırpma/oran farkı yok). Artık Opar ile
+                BİREBİR aynı etkileşim MEKANİĞİni kullanıyor (hover/focus/tap
+                machinery ortak) — yalnızca aktif YÜZEY RENGİ marka bazlı
+                ayrıştı: GROUPAUTO aktifte beyaz zemin, Opar aktifte sarı
+                zemin (bg-[#FBBF24], kullanıcı talebi) kullanıyor; lacivert
+                logo/metin renkleri her iki zeminde de yeterli kontrastla
+                okunduğu için değişmedi. */}
             {[
-              { id: "groupauto", data: t.partnership.groupauto, logoSrc: "/images/groupauto-turkiye-logo.webp", logoAlt: "GROUPAUTO Türkiye", logoW: 900, logoH: 183, activeLogoSrc: null as string | null, refClass: "do-reveal-left" },
+              { id: "groupauto", data: t.partnership.groupauto, logoSrc: "/images/groupauto-turkiye-logo.webp", logoAlt: "GROUPAUTO Türkiye", logoW: 900, logoH: 183, activeLogoSrc: "/images/groupauto-turkiye-logo-color.webp" as string | null, refClass: "do-reveal-left" },
               { id: "opar", data: t.partnership.opar, logoSrc: "/images/opar-logo-white.svg", logoAlt: "Opar", logoW: 849, logoH: 341, activeLogoSrc: "/images/opar-logo.svg" as string | null, refClass: "do-reveal-right" },
             ].map(({ id, data, logoSrc, logoAlt, logoW, logoH, activeLogoSrc, refClass }) => {
               const isInteractive = !!activeLogoSrc;
               const isActive = isInteractive && activePartnerPanel === id;
+              const isOpar = id === "opar";
               const Tag = isInteractive ? "button" : "div";
               return (
                 <div key={data.title} ref={ref} className={`${refClass} relative`}>
@@ -708,7 +708,9 @@ export function LandingPage() {
                     } : undefined}
                     className={`do-partner-panel relative rounded-xl overflow-hidden group p-8 flex flex-col w-full text-left transition-colors duration-300 ${
                       isActive
-                        ? "bg-white border border-transparent shadow-xl shadow-black/20"
+                        ? isOpar
+                          ? "bg-[#FBBF24] border border-transparent shadow-xl shadow-black/20"
+                          : "bg-white border border-transparent shadow-xl shadow-black/20"
                         : "border border-white/15 bg-white/[0.06] backdrop-blur-sm"
                     } ${isInteractive ? "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[#1B3A8F]" : ""}`}
                   >
@@ -741,7 +743,7 @@ export function LandingPage() {
                           />
                         )}
                       </div>
-                      <span className={`text-[10px] font-black tracking-[0.25em] uppercase text-right transition-colors duration-300 ${isActive ? "text-slate-500" : "text-blue-200/50"}`}>
+                      <span className={`text-[10px] font-black tracking-[0.25em] uppercase text-right transition-colors duration-300 ${isActive ? (isOpar ? "text-[#1B3A8F]/70" : "text-slate-500") : "text-blue-200/50"}`}>
                         {data.eyebrow}
                       </span>
                     </div>
@@ -757,7 +759,7 @@ export function LandingPage() {
                         satırı — iki panel arasında birebir aynı bilgi mimarisi,
                         tam görsel simetri (görev talimatı: "equal content
                         hierarchy"). */}
-                    <div className={`relative z-10 mt-6 pt-6 border-t transition-colors duration-300 ${isActive ? "border-slate-200" : "border-white/10"}`}>
+                    <div className={`relative z-10 mt-6 pt-6 border-t transition-colors duration-300 ${isActive ? (isOpar ? "border-[#1B3A8F]/15" : "border-slate-200") : "border-white/10"}`}>
                       <div className={`text-xs font-black uppercase tracking-[0.2em] transition-colors duration-300 ${isActive ? "text-[#1B3A8F]" : "text-white"}`}>
                         {data.identifier}
                       </div>
@@ -907,12 +909,12 @@ export function LandingPage() {
             </p>
           </div>
           <div ref={ref} className="do-reveal do-d2 flex gap-4 shrink-0">
-            <a href="https://b2b.parcabul.com.tr/login.aspx" target="_blank" rel="noopener noreferrer" className="bg-white text-[#1B3A8F] font-bold px-8 py-4 rounded-md hover:bg-gray-100 active:scale-[0.98] transition-colors text-sm flex items-center gap-2 group">
+            <a href="https://b2b.parcabul.com.tr/login.aspx" target="_blank" rel="noopener noreferrer" className="do-tap-target bg-white text-[#1B3A8F] font-bold px-6 py-2.5 rounded-md hover:bg-gray-100 active:scale-[0.98] transition-colors text-[13.5px] flex items-center gap-2 group">
               {t.hero.ctaB2B}
               <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
             </a>
             <Link to={routeFor("contact", lang)}>
-              <button className="border border-white/30 hover:border-white/60 active:scale-[0.98] text-white font-medium px-8 py-4 rounded-md transition-colors text-sm">
+              <button className="do-tap-target border border-white/30 hover:border-white/60 active:scale-[0.98] text-white font-medium px-6 py-2.5 rounded-md transition-colors text-[13.5px]">
                 {t.cta.contact}
               </button>
             </Link>

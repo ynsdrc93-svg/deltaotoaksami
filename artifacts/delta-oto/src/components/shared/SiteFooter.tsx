@@ -35,13 +35,17 @@ const SOCIAL_LINKS: { label: string; href: string; Icon: typeof Linkedin }[] = [
   { label: "LinkedIn", href: "https://www.linkedin.com/company/delta-oto-aksam%C4%B1-san-ve-tic-a-%C5%9F/?viewAsMember=true", Icon: Linkedin },
   { label: "Instagram", href: "https://www.instagram.com/delta_oto/", Icon: Instagram },
 ];
+// Sıra Turu 3: "İletişim" artık son sırada, "Temsilcilerimiz"in HEMEN
+// altında (görev talimatı) — yalnızca bu dizinin sırası değişti, header'ın
+// kendi nav dizisi (SiteHeader.tsx'teki NAV) ve adres/iletişim bloğunun
+// footer içindeki konumu DOKUNULMADI.
 const QUICK_LINKS: { key: RouteKey; label: Record<Lang, string> }[] = [
   { key: "about", label: { tr: "Hakkımızda", en: "About Us" } },
   { key: "partners", label: { tr: "İş Ortaklarımız", en: "Partners" } },
   { key: "operations", label: { tr: "Operasyon ve Lojistik", en: "Operations & Logistics" } },
   { key: "careers", label: { tr: "Kariyer", en: "Careers" } },
-  { key: "contact", label: { tr: "İletişim", en: "Contact" } },
   { key: "representatives", label: { tr: "Temsilcilerimiz", en: "Representatives" } },
+  { key: "contact", label: { tr: "İletişim", en: "Contact" } },
 ];
 
 // Yasal Belgeler satırı: telif/established rozet satırının HEMEN üzerine,
@@ -50,10 +54,17 @@ const QUICK_LINKS: { key: RouteKey; label: Record<Lang, string> }[] = [
 // yalnızca üstüne yeni bir satır kondu. Üç sayfa da henüz taslak (bkz.
 // LegalPageLayout'taki uyarı) — bu yüzden burada da ayrı bir vurgu/rozet
 // eklenmedi, diğer QUICK_LINKS ile aynı sade stil kullanıldı.
-const LEGAL_LINKS: { key: RouteKey; label: Record<Lang, string> }[] = [
-  { key: "privacy", label: { tr: "Gizlilik Politikası", en: "Privacy Policy" } },
-  { key: "cookies", label: { tr: "Çerez Politikası", en: "Cookie Policy" } },
-  { key: "kvkk", label: { tr: "KVKK Aydınlatma Metni", en: "KVKK Notice" } },
+//
+// Kısa Etiket Turu: uzun `label` (sayfa başlığı) DEĞİŞMEDİ — hâlâ linkin
+// erişilebilir adı (aria-label) olarak ve sayfanın kendi başlığı olarak
+// kullanılıyor. Görünür metin artık ayrı bir `shortLabel` alanından geliyor
+// (yalnızca footer'ın kendi linki kısalıyor; sayfa içeriği/URL/MERSİS
+// dokunulmadı). Uzun başlıklar 320px'te üç ayrı tam-genişlik satıra
+// bölünmeye zorluyordu — kısa etiketlerle tek satırda ortalanıyor.
+const LEGAL_LINKS: { key: RouteKey; label: Record<Lang, string>; shortLabel: Record<Lang, string> }[] = [
+  { key: "privacy", label: { tr: "Gizlilik Politikası", en: "Privacy Policy" }, shortLabel: { tr: "Gizlilik", en: "Privacy" } },
+  { key: "cookies", label: { tr: "Çerez Politikası", en: "Cookie Policy" }, shortLabel: { tr: "Çerezler", en: "Cookies" } },
+  { key: "kvkk", label: { tr: "KVKK Aydınlatma Metni", en: "KVKK Notice" }, shortLabel: { tr: "KVKK", en: "KVKK" } },
 ];
 
 const CERTS: { label: Record<Lang, string> }[] = [
@@ -80,9 +91,16 @@ export function SiteFooter() {
   const lang = useLang();
 
   return (
-    <footer className="bg-[#0a0c11] pt-14 md:pt-16 pb-8 border-t border-white/5 text-white">
+    <footer className="bg-[#0a0c11] pt-10 md:pt-14 pb-5 border-t border-white/5 text-white">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-12 mb-12">
+        {/* Yükseklik Sıkılaştırma Turu: dış dolgu (pt-14/16→pt-10/14, pb-8→pb-5)
+            ve gruplar arası boşluk (gap-12→gap-x-12 gap-y-7) azaltıldı. Mobilde
+            (tek sütun) gap-12 (48px) her zaman sabitti — içeriğin gerçek
+            yoğunluğundan bağımsız, yalnızca "üç ayrı bağımsız blok" hissi
+            veriyordu; gap-y-7 (28px) aynı ayrımı, daha az boşlukla koruyor.
+            Masaüstünde (md+, 3 sütun TEK satırda) gap-y hiç görünmez, yalnızca
+            gap-x-12 (yatay oluk) etkili — o değer DEĞİŞMEDİ. */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-x-12 gap-y-7 mb-8">
 
           <div>
             {/* Klasik (50. yıl kampanya etiketi eklenmeden önceki) Delta Oto
@@ -117,9 +135,9 @@ export function SiteFooter() {
               alt="Delta Oto"
               width={918}
               height={222}
-              className="h-[64px] md:h-[76px] w-auto do-logo-invert mb-6 opacity-90"
+              className="h-[64px] md:h-[76px] w-auto do-logo-invert mb-4 opacity-90"
             />
-            <ul className="space-y-4 text-sm text-gray-500">
+            <ul className="space-y-3 text-sm text-gray-500">
               {/* Footer İletişim Turu: ayrı "Yol Tarifi" bağlantısı kaldırıldı
                   — artık adres metninin TAMAMI (ikonuyla birlikte) tek bir
                   tıklanabilir alan, aynı Google Maps hedefine gidiyor. Görünür
@@ -146,16 +164,19 @@ export function SiteFooter() {
                 <Phone className="w-4 h-4 shrink-0 text-gray-500" aria-hidden="true" />
                 <a href="tel:+902165266464" className="hover:text-white transition-colors">0216 526 64 64</a>
               </li>
-              {/* Faks: telefonun HEMEN ALTINDA AYRI bir satır, gerçek bir faks
-                  ikonuyla (lucide-react'te özel bir "fax" ikonu yok — Printer,
-                  faks için sitelerde/uygulamalarda evrensel olarak kullanılan
-                  gerçek/mevcut bir ikon, uydurma değil) + küçük görünür "Faks"
-                  etiketiyle telefonla karıştırılmasın diye. tel: bağlantısı
-                  YOK (düz metin) — numara yine de seçilebilir/kopyalanabilir. */}
+              {/* Faks Turu 2: görünür "Faks" etiketi KALDIRILDI (kullanıcı bu
+                  turda önceki kararı geri aldı) — satır artık yalnızca
+                  [Printer ikonu] + numara, telefonun hemen altında ayrı bir
+                  satır olarak duruyor (KORUNDU). Anlamı ekran okuyucu için
+                  hâlâ taşınıyor — ikon `aria-hidden`, numaradan hemen önce
+                  görsel olarak gizli (sr-only) bir "Faks:" ön eki var, bu
+                  yüzden anlam kaybı yok, yalnızca görünür metin gitti. tel:
+                  bağlantısı YOK (düz metin) — numara yine de seçilebilir/
+                  kopyalanabilir. */}
               <li className="flex items-center gap-3">
-                <Printer className="w-4 h-4 shrink-0 text-gray-500" aria-label={T.fax[lang]} />
+                <Printer className="w-4 h-4 shrink-0 text-gray-500" aria-hidden="true" />
                 <span>
-                  <span className="text-[11px] font-bold uppercase tracking-wide text-gray-600 mr-1.5">{T.fax[lang]}</span>
+                  <span className="sr-only">{T.fax[lang]}: </span>
                   0216 526 33 44
                 </span>
               </li>
@@ -163,8 +184,8 @@ export function SiteFooter() {
           </div>
 
           <div className="md:pl-6">
-            <h4 className="text-white text-xs font-bold uppercase tracking-[0.2em] mb-6">{T.quickLinks[lang]}</h4>
-            <ul className="space-y-3.5">
+            <h4 className="text-white text-xs font-bold uppercase tracking-[0.2em] mb-4">{T.quickLinks[lang]}</h4>
+            <ul className="space-y-3">
               {QUICK_LINKS.map(({ key, label }) => (
                 <li key={key}>
                   <Link href={routeFor(key, lang)} className="text-sm text-gray-500 hover:text-white transition-colors flex items-center gap-2 group">
@@ -174,7 +195,7 @@ export function SiteFooter() {
                 </li>
               ))}
             </ul>
-            <div className="mt-4">
+            <div className="mt-3">
               <Link href={routeFor("spart", lang)}>
                 <img src="/images/spart-logo.png" alt="SPART Original Replacement" className="h-9 w-auto rounded-md opacity-90 hover:opacity-100 transition-opacity" />
               </Link>
@@ -182,8 +203,8 @@ export function SiteFooter() {
           </div>
 
           <div>
-            <h4 className="text-white text-xs font-bold uppercase tracking-[0.2em] mb-6">{T.certsHeading[lang]}</h4>
-            <div className="flex gap-4 mb-6">
+            <h4 className="text-white text-xs font-bold uppercase tracking-[0.2em] mb-4">{T.certsHeading[lang]}</h4>
+            <div className="flex gap-4 mb-4">
               {CERTS.map(({ label }) => (
                 <div key={label.tr} className="w-20 h-16 border border-white/8 rounded-lg flex flex-col items-center justify-center gap-1 bg-white/3 hover:border-white/15 transition-colors">
                   <BadgeCheck className="w-3.5 h-3.5 text-gray-500" />
@@ -219,8 +240,8 @@ export function SiteFooter() {
                 rozet metnin altına "asılı" duruyor, yan yana değil, ayrı
                 yüzen bir ikon da değil. Rozetin kendisi büyütülmedi (h-12
                 korunur), yalnızca dizilim dikeyleşti. */}
-            <div className="mt-5 pt-5 border-t border-white/5">
-              <span className="block text-[12.5px] text-gray-300 font-semibold leading-tight mb-3">{T.groupautoMember[lang]}</span>
+            <div className="mt-3.5 pt-3.5 border-t border-white/5">
+              <span className="block text-[12.5px] text-gray-300 font-semibold leading-tight mb-2.5">{T.groupautoMember[lang]}</span>
               <img
                 src="/images/groupauto-turkiye-badge.webp"
                 alt="GROUPAUTO Türkiye"
@@ -233,18 +254,30 @@ export function SiteFooter() {
 
         </div>
 
-        <div className="pt-6 border-t border-white/5 flex flex-col gap-4">
-          {/* Footer Sıkılaştırma Turu: yasal bağlantılar artık HER
-              genişlikte (yalnızca mobilde değil) grup olarak ortalanıyor —
-              eski sm:justify-start deseni masaüstünde sola yaslıyordu. */}
-          <div className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
-            {LEGAL_LINKS.map(({ key, label }) => (
-              <Link key={key} href={routeFor(key, lang)} className="text-xs text-gray-500 hover:text-white transition-colors">
-                {label[lang]}
-              </Link>
+        <div className="pt-4 border-t border-white/5 flex flex-col gap-2.5">
+          {/* Kısa Etiket Turu: üç yasal link artık TEK satırda, ortalanmış,
+              aralarında yalnızca dekoratif (aria-hidden, odaklanamaz) bir
+              nokta ayraçla — "Gizlilik · Çerezler · KVKK" tek bir okunabilir
+              grup gibi duruyor. Görünür metin kısaldı ama erişilebilir isim
+              (aria-label) hâlâ tam sayfa başlığı — ekran okuyucu belirsiz bir
+              "Gizlilik" değil, "Gizlilik Politikası" duyar. Kısa etiketler
+              320px'te bile tek satıra sığdığından (ölçümle doğrulandı) normal
+              durum artık üç ayrı tam-genişlik satıra bölünme DEĞİL. */}
+          <div className="flex flex-wrap items-center justify-center gap-x-1 gap-y-1.5">
+            {LEGAL_LINKS.map(({ key, label, shortLabel }, i) => (
+              <React.Fragment key={key}>
+                {i > 0 && <span aria-hidden="true" className="text-gray-700 select-none px-1.5 text-xs">·</span>}
+                <Link
+                  href={routeFor(key, lang)}
+                  aria-label={label[lang]}
+                  className="text-[12.5px] text-gray-500 hover:text-white transition-colors rounded-sm px-1 py-1 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7d9bea]/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0c11]"
+                >
+                  {shortLabel[lang]}
+                </Link>
+              </React.Fragment>
             ))}
           </div>
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-500">
             <span>{T.rights[lang]}</span>
             <div className="flex items-center gap-1.5">
               <div className="w-1.5 h-1.5 rounded-full bg-[#1B3A8F] animate-pulse" />

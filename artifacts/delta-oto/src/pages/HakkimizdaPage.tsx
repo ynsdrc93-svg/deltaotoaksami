@@ -2,7 +2,6 @@ import React from "react";
 import { Link } from "wouter";
 import {
   ChevronRight,
-  ChevronLeft,
   Clock,
   Globe,
   Award,
@@ -106,13 +105,9 @@ const content = {
     timeline: {
       eyebrow: "Kurumsal Tarihçe",
       heading: "50+ Yıllık Gelişim Kronolojisi",
-      body: "Kuruluştan bugüne kat edilen mesafe; stratejik kararların, güçlü ortaklıkların ve disiplinli operasyonun bir ürünüdür. Dönemler arasında gezinmek için kartları kaydırın.",
-      regionAriaLabel: "Kurumsal tarihçe, yatay kaydırılabilir zaman çizelgesi",
+      listAriaLabel: "Kuruluştan bugüne kurumsal tarihçe zaman çizelgesi",
       comingSoon: "Yakında",
       pendingText: "Bu döneme ait detaylar yakında eklenecek.",
-      prevAria: "Önceki dönem",
-      nextAria: "Sonraki dönem",
-      dotLabel: (year: string) => `${year} dönemine git`,
       items: [
         { label: "Kuruluş", desc: "Ümraniye'de temelleri atılan şirket, otomotiv aftermarket sektörünün kurucu distribütörleri arasında yerini aldı." },
         { label: "Portföy Genişlemesi", desc: "Tedarik ağının derinleşmesiyle birlikte İstanbul bölgesinde lider distribütör konumuna ulaşıldı; ürün kategorileri sistematik biçimde genişletildi." },
@@ -198,13 +193,9 @@ const content = {
     timeline: {
       eyebrow: "Corporate History",
       heading: "A 50+ Year Timeline of Growth",
-      body: "The distance covered from our founding to today is the product of strategic decisions, strong partnerships and disciplined operations. Scroll the cards to move between periods.",
-      regionAriaLabel: "Corporate history, horizontally scrollable timeline",
+      listAriaLabel: "Corporate history timeline from founding to today",
       comingSoon: "Coming Soon",
       pendingText: "Details for this period will be added soon.",
-      prevAria: "Previous period",
-      nextAria: "Next period",
-      dotLabel: (year: string) => `Go to ${year}`,
       items: [
         { label: "Founding", desc: "Founded in Ümraniye, the company took its place among the founding distributors of the automotive aftermarket industry." },
         { label: "Portfolio Expansion", desc: "As the supply network deepened, the company reached a leading distributor position in the İstanbul region; product categories were systematically expanded." },
@@ -306,279 +297,84 @@ function StatCard({ icon: Icon, target, plus, grouped, label, sub }: {
 }
 
 /**
- * Zaman Çizgisi: dikey liste yerine yatay scroll-snap kart rayı. Ortalanan kart
- * IntersectionObserver ile "aktif" işaretlenip büyütülür — StatCard'daki gözlemci
- * kurulumuyla aynı temel API (yeni bir animasyon sistemi değil), sadece amacı
- * sayaç tetiklemek yerine hangi kartın odakta olduğunu takip etmek.
+ * Zaman Çizgisi: yukarıdan aşağıya akan tek dikey liste (Tur 3 — eski yatay
+ * scroll-snap karusel/yıl şeridi TAMAMEN kaldırıldı, aktif kart/IntersectionObserver
+ * mekanizması yok; kronoloji okuması artık hiçbir etkileşime/animasyona bağlı
+ * değil). Her satır AYNI ANDA render edilir (mobilde ve masaüstünde tek yapı,
+ * ayrı kopya yok) — solda yıl, ortada bağlayıcı çizgi+düğüm, sağda başlık/açıklama;
+ * satır yüksekliği içerik kadar, sabit değil. Görünürlüğe girdikçe hafif bir
+ * giriş vurgusu için mevcut sayfa çapındaki `useReveal`/`.do-reveal` yeniden
+ * kullanılıyor — salt kozmetik, okumayı geciktirmiyor ve azaltılmış hareket
+ * modunda (index.css'teki global kural) tamamen devre dışı kalıyor.
  *
- * `pending: true` kayıtlar (bkz. MILESTONE_META üstteki not) kesikli kenarlık, düşük
- * opaklık ve açık "Yakında" etiketiyle dürüst placeholder olarak kalır; uydurma
+ * `pending: true` kayıtlar (bkz. MILESTONE_META üstteki not) düşük opaklıklı
+ * düğüm ve açık "Yakında" etiketiyle dürüst placeholder olarak kalır; uydurma
  * başlık/açıklama eklenmez.
+ *
+ * Çizgi konumlandırma notu: bağlayıcı dikey çizgi her satırın kendi `relative`
+ * kutusu içinde `top-0 bottom-0` ile çiziliyor — yüzde tabanlı olduğu için
+ * satırın gerçek (içerik + alt boşluk) yüksekliğini otomatik kapsıyor, JS ile
+ * ölçüm gerekmiyor; ardışık satırların çizgileri sınırda kesintisiz birleşiyor.
+ * Yatay `left` değeri yıl/düğüm kolon genişlikleriyle birebir hesaplanmış sabit
+ * bir px değeri (breakpoint başına), düğümün yatay merkeziyle örtüşüyor.
  */
 function MilestoneTimeline({ t }: { t: (typeof content)["tr"]["timeline"] }) {
   const MILESTONES = MILESTONE_META.map((m, i) => ({ ...m, ...t.items[i] }));
   const reveal = useReveal();
-  const scrollerRef = React.useRef<HTMLDivElement>(null);
-  const cardRefs = React.useRef<(HTMLDivElement | null)[]>([]);
-  const [active, setActive] = React.useState(0);
-  // İlk/son birkaç kart, rayın dolgusu/genişliği yüzünden hiçbir zaman TAM
-  // ortalanamıyor (scrollIntoView'ın hedeflediği scrollLeft negatif çıkıyor ya
-  // da maxScrollLeft'i aşıyor, tarayıcı 0'a/maxScrollLeft'e klipliyor) — bu da
-  // örn. kart 0 ve 1'in (aynı şekilde son iki kartın) AYNI fiziksel
-  // scrollLeft'e kliplenmesine yol açar. IntersectionObserver salt geometriyle
-  // bu iki index'i hiçbir zaman ayırt edemez ve "sol" hep aynı komşu karta
-  // geri sıçrar/takılır kalırdı. Çözüm: programatik gezinmede (buton/nokta
-  // tıklaması) hedef index doğrudan ve iyimser olarak yazılır; observer
-  // yalnızca elle/organik kaydırma sırasında devrede kalır.
-  const navigatingRef = React.useRef(false);
-  const hasScrolledRef = React.useRef(false);
-  const navigateTimeoutRef = React.useRef<number | undefined>(undefined);
-
-  // Mobil Yıl Şeridi Turu: <sm'de eski büyük-kart karuseli ("sadece swipe +
-  // küçük noktalar", canlı telefon incelemesinde yetersiz bulundu — "altında
-  // sadece küçük çizgiler, gezilebildiğini yeterince anlatmıyor") yerine
-  // üstte dokunulabilir bir yıl şeridi + altında ortak detay paneli
-  // kullanılıyor (bkz. JSX). AYNI `active` state ve AYNI MILESTONES verisi
-  // paylaşılıyor — mobil/masaüstü için ayrı kopya yok. İkisi de DOM'da
-  // birlikte var, yalnızca CSS (hidden sm:block / sm:hidden) ile karşılıklı
-  // dışlanıyor; masaüstü karuselin IntersectionObserver'ı display:none
-  // durumunda hiç tetiklenmediğinden (isIntersecting hep false) iki
-  // mekanizma birbirine karışmıyor. Mobil seçim YALNIZCA dokunmayla değişir
-  // (otomatik scroll-algılama YOK) — "kullanıcı okurken içerik kendiliğinden
-  // başka yıla geçmesin" kısıtı için kasıtlı: scroll şeridi gözden geçirmek
-  // için serbest ama seçimi tetiklemiyor, yalnızca seçili yılın kendisi
-  // şeridi kendi konumuna kaydırıyor (sayfa değil).
-  const mobileYearRefs = React.useRef<(HTMLButtonElement | null)[]>([]);
-  const selectMobileYear = (i: number) => {
-    setActive(i);
-    const el = mobileYearRefs.current[i];
-    if (el) {
-      const reduceMotion = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-      el.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", inline: "center", block: "nearest" });
-    }
-  };
-
-  React.useEffect(() => {
-    const scroller = scrollerRef.current;
-    if (!scroller) return;
-    const onScroll = () => { hasScrolledRef.current = true; };
-    scroller.addEventListener("scroll", onScroll, { passive: true });
-    const obs = new IntersectionObserver(
-      (entries) => {
-        // Mount anında (henüz hiç kaydırma olmamışken) observer'ın kendi ilk
-        // ölçümüyle veya programatik bir gezinme sürerken `active`'i ezmesini
-        // engeller — bkz. yukarıdaki not.
-        if (navigatingRef.current || !hasScrolledRef.current) return;
-        entries.forEach((entry) => {
-          if (!entry.isIntersecting) return;
-          const idx = Number((entry.target as HTMLElement).dataset.index);
-          if (!Number.isNaN(idx)) setActive(idx);
-        });
-      },
-      // Kök olarak scroller'ın kendisi kullanılır (sayfa değil); sadece orta
-      // ~24%'lik bant kesişim sayılır, böylece o an ortalanan kart "aktif" olur.
-      { root: scroller, threshold: 0, rootMargin: "0px -38% 0px -38%" }
-    );
-    cardRefs.current.forEach((el) => el && obs.observe(el));
-    return () => {
-      obs.disconnect();
-      scroller.removeEventListener("scroll", onScroll);
-      window.clearTimeout(navigateTimeoutRef.current);
-    };
-  }, []);
-
-  const scrollToIndex = (i: number) => {
-    const el = cardRefs.current[i];
-    if (!el) return;
-    setActive(i);
-    navigatingRef.current = true;
-    window.clearTimeout(navigateTimeoutRef.current);
-    const reduceMotion = typeof window !== "undefined" && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    el.scrollIntoView({ behavior: reduceMotion ? "auto" : "smooth", inline: "center", block: "nearest" });
-    // Smooth scroll (+ CSS snap'in kendi yerleşmesi) tamamlanana kadar
-    // observer'ı devre dışı tut; scrollend desteği varsa onu, yoksa süre
-    // bazlı bir geri dönüşü kullan.
-    const scroller = scrollerRef.current;
-    const clearNavigating = () => { navigatingRef.current = false; };
-    if (scroller && "onscrollend" in scroller) {
-      scroller.addEventListener("scrollend", clearNavigating, { once: true });
-    } else {
-      navigateTimeoutRef.current = window.setTimeout(clearNavigating, reduceMotion ? 50 : 600);
-    }
-  };
-
-  const step = (dir: 1 | -1) => scrollToIndex(Math.min(Math.max(active + dir, 0), MILESTONES.length - 1));
 
   return (
-    <section className="bg-[#1B3A8F] py-24 text-white overflow-hidden">
+    <section className="bg-[#1B3A8F] py-20 md:py-24 lg:py-28 text-white overflow-x-clip">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div ref={reveal} className="do-reveal mb-14 max-w-2xl">
+        <div ref={reveal} className="do-reveal mb-12 md:mb-16 max-w-2xl">
           <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea]">{t.eyebrow}</span>
           <h2 className="text-3xl md:text-4xl font-black mt-2 tracking-tight">{t.heading}</h2>
-          <p className="text-white/75 mt-3 text-[15px]">{t.body}</p>
-        </div>
-      </div>
-
-      {/* MOBİL: Yıl Şeridi + Ortak Detay — bkz. component üstündeki not.
-          <sm'de eski büyük-kart karuseli tamamen gizli (sm:hidden), bu blok
-          onun yerine geçer. En az üç yıl aynı anda görünür (ortalama telefon
-          genişliğinde ölçülüp doğrulandı, bkz. görev raporu). */}
-      <div className="sm:hidden">
-        <div className="relative">
-          <div className="do-hide-scrollbar overflow-x-auto pl-6 pr-6">
-            <div className="relative flex items-center gap-8 w-max pb-1 pt-1">
-              <div className="absolute left-0 right-0 top-1/2 -translate-y-1/2 h-px bg-white/15" aria-hidden="true" />
-              {MILESTONES.map((m, i) => {
-                const isActive = active === i;
-                return (
-                  <button
-                    key={m.year}
-                    type="button"
-                    ref={(el) => { mobileYearRefs.current[i] = el; }}
-                    onClick={() => selectMobileYear(i)}
-                    aria-current={isActive}
-                    aria-controls="hakkimizda-timeline-mobile-detail"
-                    aria-label={t.dotLabel(m.year)}
-                    className="relative shrink-0 flex flex-col items-center gap-2.5 focus-visible:outline-none rounded-md"
-                  >
-                    <span
-                      className={`block rounded-full transition-all duration-300 ${
-                        isActive ? "w-3 h-3 bg-[#7d9bea] shadow-[0_0_0_4px_rgba(125,155,234,0.25)]" : "w-2 h-2 bg-white/30"
-                      }`}
-                      aria-hidden="true"
-                    />
-                    <span
-                      className={`font-black tabular-nums leading-none transition-all duration-300 ${
-                        isActive ? "text-2xl text-white" : "text-base text-white/50"
-                      }`}
-                    >
-                      {m.year}
-                    </span>
-                  </button>
-                );
-              })}
-              <div className="shrink-0 w-2" aria-hidden="true" />
-            </div>
-          </div>
-          <div className="pointer-events-none absolute inset-y-0 right-0 w-10 bg-gradient-to-l from-[#1B3A8F] to-transparent" aria-hidden="true" />
         </div>
 
-        <div
-          id="hakkimizda-timeline-mobile-detail"
-          role="region"
-          aria-live="polite"
-          className="mt-6 mx-6 rounded-xl border border-white/10 bg-white/[0.04] p-6"
-        >
-          <div key={active} className="do-fade-up">
-            {MILESTONES[active].pending ? (
-              <>
-                <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-white/45 mb-3">
-                  <Clock className="w-3.5 h-3.5" strokeWidth={2} /> {t.comingSoon}
-                </span>
-                <p className="text-white/55 text-[13px] italic leading-relaxed">{t.pendingText}</p>
-              </>
-            ) : (
-              <>
-                <h3 className="text-[17px] font-bold text-white mb-2 leading-snug">{MILESTONES[active].label}</h3>
-                <p className="text-white/70 text-[13.5px] leading-relaxed">{MILESTONES[active].desc}</p>
-              </>
-            )}
-          </div>
-        </div>
-      </div>
-
-      <div className="hidden sm:block relative">
-        <div
-          ref={scrollerRef}
-          role="region"
-          aria-label={t.regionAriaLabel}
-          tabIndex={0}
-          className="do-hide-scrollbar flex gap-5 overflow-x-auto snap-x snap-mandatory pb-4 pl-6 pr-6 lg:pl-8 lg:pr-8"
-        >
+        <ol className="relative max-w-4xl list-none pl-0" aria-label={t.listAriaLabel}>
           {MILESTONES.map((m, i) => {
-            const isActive = active === i;
+            const isLast = i === MILESTONES.length - 1;
             return (
-              <div
+              <li
                 key={m.year}
-                ref={(el) => { cardRefs.current[i] = el; }}
-                data-index={i}
-                className={[
-                  "shrink-0 snap-center rounded-xl border flex flex-col overflow-hidden transition-all duration-500",
-                  "w-[78vw] sm:w-[340px] lg:w-[360px]",
-                  m.pending
-                    ? "border-dashed border-white/25 bg-white/[0.03]"
-                    : isActive
-                      ? "border-[#7d9bea]/50 bg-white/[0.10]"
-                      : "border-white/[0.12] bg-white/[0.05]",
-                  isActive ? "opacity-100" : "opacity-50",
-                ].join(" ")}
+                ref={reveal}
+                className={`do-reveal relative flex ${isLast ? "" : "pb-9 sm:pb-11 lg:pb-14"}`}
               >
-                <div className="aspect-video do-grid-bg bg-black/10 flex items-end p-6 relative">
+                {!isLast && (
                   <span
-                    className={`inline-block font-black text-6xl leading-none tracking-tight text-white origin-bottom-left transition-transform duration-500 ${isActive ? "scale-100" : "scale-[0.7]"}`}
-                  >
-                    {m.year}
-                  </span>
-                </div>
-                <div className="h-px bg-white/10 mx-6" />
-                <div className="p-6 pt-5 flex-1 flex flex-col">
+                    className="absolute top-0 bottom-0 w-px bg-white/15 left-[72px] sm:left-[116px] lg:left-[140px]"
+                    aria-hidden="true"
+                  />
+                )}
+                <span className="w-12 sm:w-20 lg:w-24 shrink-0 pt-0.5 font-black tabular-nums leading-none text-xl sm:text-2xl lg:text-3xl text-white">
+                  {m.year}
+                </span>
+                <span className="w-6 sm:w-8 lg:w-10 shrink-0 flex justify-center">
+                  <span
+                    className={`relative z-10 mt-2 block w-3 h-3 rounded-full ring-4 ring-[#1B3A8F] ${
+                      m.pending ? "bg-white/25" : "bg-[#7d9bea]"
+                    }`}
+                    aria-hidden="true"
+                  />
+                </span>
+                <div className="flex-1 min-w-0 pb-1">
                   {m.pending ? (
                     <>
-                      <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-white/45 mb-3">
+                      <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-white/45 mb-2">
                         <Clock className="w-3.5 h-3.5" strokeWidth={2} /> {t.comingSoon}
                       </span>
-                      <p className="text-white/55 text-[13px] italic leading-relaxed">{t.pendingText}</p>
+                      <p className="text-white/55 text-[13px] italic leading-relaxed max-w-xl">{t.pendingText}</p>
                     </>
                   ) : (
                     <>
-                      <h3 className="text-[15px] font-bold text-white mb-2 leading-snug">{m.label}</h3>
-                      <p className="text-white/70 text-[13px] leading-relaxed">{m.desc}</p>
+                      <h3 className="text-[16px] sm:text-[18px] lg:text-[20px] font-bold text-white mb-1.5 sm:mb-2 leading-snug">{m.label}</h3>
+                      <p className="text-white/70 text-[13.5px] sm:text-[14.5px] lg:text-[15px] leading-relaxed max-w-2xl">{m.desc}</p>
                     </>
                   )}
                 </div>
-              </div>
+              </li>
             );
           })}
-          <div className="shrink-0 w-1" aria-hidden="true" />
-        </div>
-
-        <div className="pointer-events-none absolute inset-y-0 left-0 w-10 lg:w-20 bg-gradient-to-r from-[#1B3A8F] to-transparent" />
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-10 lg:w-20 bg-gradient-to-l from-[#1B3A8F] to-transparent" />
-
-        <button
-          type="button"
-          onClick={() => step(-1)}
-          disabled={active === 0}
-          aria-label={t.prevAria}
-          className="hidden lg:flex items-center justify-center absolute left-3 top-[38%] -translate-y-1/2 w-11 h-11 rounded-full bg-white/10 border border-white/15 text-white hover:bg-white/20 hover:border-white/30 transition-colors disabled:opacity-25 disabled:pointer-events-none"
-        >
-          <ChevronLeft className="w-5 h-5" />
-        </button>
-        <button
-          type="button"
-          onClick={() => step(1)}
-          disabled={active === MILESTONES.length - 1}
-          aria-label={t.nextAria}
-          className="hidden lg:flex items-center justify-center absolute right-3 top-[38%] -translate-y-1/2 w-11 h-11 rounded-full bg-white/10 border border-white/15 text-white hover:bg-white/20 hover:border-white/30 transition-colors disabled:opacity-25 disabled:pointer-events-none"
-        >
-          <ChevronRight className="w-5 h-5" />
-        </button>
-      </div>
-
-      {/* Eski nokta göstergesi yalnızca masaüstü karuseli kontrol ediyor —
-          mobilde artık kendi seçim arayüzü (yıl şeridi) var, bu satır
-          tekrar/karışıklık olmasın diye <sm'de gizli. */}
-      <div className="hidden sm:flex max-w-7xl mx-auto px-6 lg:px-8 mt-8 items-center gap-2 flex-wrap">
-        {MILESTONES.map((m, i) => (
-          <button
-            key={m.year}
-            type="button"
-            onClick={() => scrollToIndex(i)}
-            aria-current={active === i}
-            aria-label={t.dotLabel(m.year)}
-            className={`h-1.5 rounded-full transition-all duration-300 ${active === i ? "w-9 bg-[#7d9bea]" : "w-4 bg-white/25 hover:bg-white/45"}`}
-          />
-        ))}
+        </ol>
       </div>
     </section>
   );
@@ -645,16 +441,14 @@ export function HakkimizdaPage() {
           <p className="text-base text-gray-300 leading-[1.8] max-w-2xl mb-6 lg:mb-10 font-light">
             {t.hero.body}
           </p>
-          {/* Mobil CTA Turu: eskiden px-8/py-4 (masaüstü ölçüsüyle aynı) —
-              telefonda gereksiz büyük, tam genişlik hissi veriyordu (canlı
-              inceleme). Mobilde kompakt bağlantı ölçüsü (py-3+text-sm ≈
-              44px dokunma alanı, hâlâ rahat dokunulabilir), sm+ (masaüstü)
-              BİREBİR eski ölçü. */}
+          {/* Sitewide ince/yatay CTA ölçüsü: tüm breakpoint'lerde tek, tutarlı
+              px-6 py-2.5 + text-[13.5px] — artık ayrı bir mobil/masaüstü
+              ölçüsü yok, .do-tap-target görünmez dokunma payını genişletiyor. */}
           <Link
             href={routeFor("operations", lang)}
-            className="inline-flex items-center gap-2 sm:gap-2.5 bg-[#1B3A8F] hover:bg-[#2547B5] text-white font-semibold text-sm sm:text-base px-5 py-3 sm:px-8 sm:py-4 rounded-md transition-colors shadow-[0_0_32px_rgba(27,58,143,0.3)] group"
+            className="do-tap-target inline-flex items-center gap-2.5 bg-[#1B3A8F] hover:bg-[#2547B5] text-white font-semibold text-[13.5px] px-6 py-2.5 rounded-md transition-colors shadow-[0_0_32px_rgba(27,58,143,0.3)] group"
           >
-            {t.hero.cta} <ChevronRight className="w-4 h-4 sm:w-5 sm:h-5 group-hover:translate-x-1 transition-transform" />
+            {t.hero.cta} <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
         </div>
       </section>
@@ -951,11 +745,11 @@ export function HakkimizdaPage() {
             <p className="text-white/75 text-sm mt-2 max-w-lg">{t.cta.body}</p>
           </div>
           <div ref={reveal} className="do-reveal-right flex gap-4 shrink-0">
-            <a href="https://b2b.parcabul.com.tr/login.aspx" target="_blank" rel="noopener noreferrer" className="bg-white text-[#1B3A8F] font-bold px-7 py-3.5 rounded-md hover:bg-gray-100 transition-colors text-sm inline-flex items-center gap-2 group">
+            <a href="https://b2b.parcabul.com.tr/login.aspx" target="_blank" rel="noopener noreferrer" className="do-tap-target bg-white text-[#1B3A8F] font-bold px-6 py-2.5 rounded-md hover:bg-gray-100 transition-colors text-[13.5px] inline-flex items-center gap-2 group">
               {t.cta.b2b}
               <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
             </a>
-            <Link href={routeFor("contact", lang)} className="border border-white/30 hover:border-white/60 text-white font-medium px-7 py-3.5 rounded-md transition-colors text-sm">
+            <Link href={routeFor("contact", lang)} className="do-tap-target border border-white/30 hover:border-white/60 text-white font-medium px-6 py-2.5 rounded-md transition-colors text-[13.5px]">
               {t.cta.contact}
             </Link>
           </div>

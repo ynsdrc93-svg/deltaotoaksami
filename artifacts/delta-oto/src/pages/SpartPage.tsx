@@ -275,7 +275,14 @@ function StatCount({ target, suffix = "", label }: { target: number; suffix?: st
 
   return (
     <div ref={ref}>
-      <div className="text-3xl font-black tracking-tight mb-1 tabular-nums">
+      {/* break-words: EN "Warehouses" soneki (4. istatistik), dar 2 sütunlu
+          mobil grid hücresinde (~120px) tek kelime olarak taşıyordu (ölçümle
+          doğrulandı, /en/spart 320px'te 38px sayfa taşması — round-3 QA
+          sırasında bulundu, bu turun CTA/footer değişikliklerinden önce de
+          mevcuttu, `git stash` ile doğrulandı). Gerçek kök neden: büyük
+          font-black rakam+sonek birleşimi + dar sütun — kelime kısaltılmadı,
+          CSS'in kendisi artık gerekirse kelime içinde satır kırabiliyor. */}
+      <div className="text-3xl font-black tracking-tight mb-1 tabular-nums break-words">
         {started ? count : 0}{suffix}
       </div>
       <div className="text-[13px] text-white/65 font-medium uppercase tracking-wider">{label}</div>
@@ -325,14 +332,14 @@ export function SpartPage() {
           <div ref={reveal} className="do-reveal do-d3 flex flex-wrap gap-4">
             <a
               href="#kategoriler"
-              className="inline-flex items-center gap-2 bg-[#1B3A8F] hover:bg-[#2547B5] text-white font-semibold px-8 py-4 rounded-md transition-colors shadow-[0_0_32px_rgba(27,58,143,0.3)] group"
+              className="do-tap-target inline-flex items-center gap-2 bg-[#1B3A8F] hover:bg-[#2547B5] text-white font-semibold px-6 py-2.5 text-[13.5px] rounded-md transition-colors shadow-[0_0_32px_rgba(27,58,143,0.3)] group"
             >
               {t.hero.ctaCategories}
               <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
             </a>
             <Link
               href={routeFor("contact", lang)}
-              className="inline-flex items-center gap-2 border border-white/20 hover:border-white/50 text-white font-semibold px-8 py-4 rounded-md transition-colors"
+              className="do-tap-target inline-flex items-center gap-2 border border-white/20 hover:border-white/50 text-white font-semibold px-6 py-2.5 text-[13.5px] rounded-md transition-colors"
             >
               {t.hero.ctaContact}
             </Link>
@@ -348,7 +355,15 @@ export function SpartPage() {
       {/* STAT BAR */}
       <section className="bg-[#1B3A8F] py-10 text-white">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+          {/* grid-cols-1/sm:2/lg:4: en dar genişliklerde (<sm) tek sütun,
+              768px'te (eski md:4 eşiği) HÂLÂ 2 sütun, 4 sütuna yalnızca
+              lg (1024px+) genişlikte geçiliyor — dar hücre (~120-156px)
+              İngilizce "Warehouses" soneğini tek kelime olarak taşırıyordu
+              (bkz. StatCount içindeki not; 320px VE 768px'te ayrı ayrı
+              doğrulandı, ikisi de round-3'ün zorunlu QA genişlikleri).
+              4 sütun yalnızca lg'de (960px net konteyner genişliği / 4 ≈
+              216px hücre) kelimeyi taşımadan sığdırıyor. */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 text-center">
             {t.stats.map((s) => (
               <StatCount key={s.label} target={s.target} suffix={s.suffix} label={s.label} />
             ))}
@@ -564,14 +579,14 @@ export function SpartPage() {
               href="https://b2b.parcabul.com.tr/login.aspx"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 bg-white text-[#1B3A8F] hover:bg-white/90 font-bold px-10 py-4 rounded-md transition-colors group"
+              className="do-tap-target inline-flex items-center gap-2 bg-white text-[#1B3A8F] hover:bg-white/90 font-bold px-6 py-2.5 text-[13.5px] rounded-md transition-colors group"
             >
               {t.cta.ctaPortal}
               <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
             </a>
             <Link
               href={routeFor("contact", lang)}
-              className="inline-flex items-center gap-2 border border-white/25 hover:border-white/60 text-white font-semibold px-10 py-4 rounded-md transition-colors"
+              className="do-tap-target inline-flex items-center gap-2 border border-white/25 hover:border-white/60 text-white font-semibold px-6 py-2.5 text-[13.5px] rounded-md transition-colors"
             >
               {t.cta.ctaContact}
             </Link>

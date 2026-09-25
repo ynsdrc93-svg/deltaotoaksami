@@ -1,13 +1,33 @@
 import React, { useEffect, useState } from "react";
-import { ChevronRight, ChevronLeft, ChevronDown, ArrowRight, Check, Search, X } from "lucide-react";
+import { ChevronRight, ChevronLeft, ChevronDown, ArrowRight, Check, Search, X, Pause, Play } from "lucide-react";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
 import { BrandLogo } from "@/components/shared/BrandLogo";
 import { CLASSIFIED_BRANDS, GLOBAL_BRANDS, YERLI_BRANDS, type Brand } from "@/lib/brands";
 import { PRODUCT_CATEGORIES, MACRO_FAMILIES, type ProductCategory } from "@/lib/categories";
-import { useEscapeKey, useReveal } from "@/hooks/use-motion";
+import { useEscapeKey, useReveal, usePrefersReducedMotion } from "@/hooks/use-motion";
+import { useMeasuredMarquee } from "@/hooks/use-measured-marquee";
 import { useDocumentMeta } from "@/hooks/use-document-meta";
 import { useLang, type Lang } from "@/lib/i18n";
+
+// Neden Delta Oto — CMS Hazırlık Notu: dil-bağımsız kimlik/sıra/yayın alanı
+// (id/order/published), HakkimizdaPage.tsx'teki MILESTONE_META ile AYNI
+// kurulan kalıp — dile göre değişen title/desc content.*.advantages.items[i]'de
+// kalıyor, burada yalnızca yapısal alanlar var. `published: false` bir
+// kaydı ileride bir panelden yayından kaldırmayı (silmeden) mümkün kılar;
+// bugün hepsi true. Sıra dizinin kendisiyle değil `order` alanıyla
+// belirleniyor — ileride bir panelde yalnızca `order` değişse bile hangi
+// kaydın hangi içerikle eşleştiği (id sabit) asla karışmaz. Kod hiçbir
+// yerde "7 kart" varsayımı yapmıyor (bkz. ReasonsRail: `count = items.length`).
+const REASON_META: { id: string; order: number; published: boolean }[] = [
+  { id: "stok", order: 1, published: true },
+  { id: "erisim", order: 2, published: true },
+  { id: "tek-muhatap", order: 3, published: true },
+  { id: "guven", order: 4, published: true },
+  { id: "deneyim", order: 5, published: true },
+  { id: "urun-cesitliligi", order: 6, published: true },
+  { id: "dijital-kolaylik", order: 7, published: true },
+];
 
 const content = {
   tr: {
@@ -56,18 +76,27 @@ const content = {
     // taşındı (bkz. OperasyonPage.tsx capabilities.items[0]), burada tekrar
     // etmeye gerek yok.
     //
-    // "Neden Delta Oto" artık dört eşit madde değil: 50+ yıllık kurumsal
-    // güven baskın çapa, üç kısa kavram (Stok/Erişim/Tek Muhatap) onu
-    // destekliyor. "Süreklilik" kaldırıldı — 50+ yıl/güvenilirlik mesajıyla
-    // fazlalaşıyordu.
+    // Neden Delta Oto — Tur 3 Yeniden Kurulum: eski 4 sütunlu eşit-grid
+    // (50+ güven bloğu + 3 madde) TAMAMEN kaldırıldı. Yeni hiyerarşi:
+    // başlık → tek seferlik, ortalanmış "50+ Yıldır / Otomotiv Aftermarket
+    // Deneyimi" güçlü deneyim ifadesi (artık kartların içinde tekrar
+    // etmiyor) → yedi kartlık tek yönlü kayan bant (bkz. NedenDeltaRail).
+    // Metinler bu turun editoryal taslağı — olduğu gibi kullanıldı, yeni
+    // istatistik/sertifika/garanti iddiası eklenmedi.
     advantages: {
       eyebrow: "Tedarik Üstünlüğü",
       heading: "Neden Delta Oto?",
       trust: { value: "50+", unit: "Yıldır", sub: "Otomotiv Aftermarket Deneyimi" },
+      pause: "Duraklat",
+      resume: "Devam Et",
       items: [
-        { title: "Stok", desc: "Aradığınız parça büyük olasılıkla zaten depoda." },
-        { title: "Erişim", desc: "Global tedarik ağına tek noktadan bağlanırsınız." },
-        { title: "Tek Muhatap", desc: "Onlarca tedarikçi yerine tek bir ilişki." },
+        { title: "Stok", desc: "Geniş ürün portföyünü destekleyen güçlü stok yapısı." },
+        { title: "Erişim", desc: "Global ve yerli üreticilere tek tedarik noktası üzerinden erişim." },
+        { title: "Tek Muhatap", desc: "Tedarik sürecinde tek iletişim noktası." },
+        { title: "Güven", desc: "Açık iletişim ve uzun vadeli iş ortaklığı odağı." },
+        { title: "Deneyim", desc: "Ürün ve pazar bilgisini bir araya getiren sektörel birikim." },
+        { title: "Ürün Çeşitliliği", desc: "Farklı parça ihtiyaçlarını buluşturan kapsamlı ürün kategorileri." },
+        { title: "Dijital Kolaylık", desc: "B2B portalından stok, fiyat ve sipariş işlemlerine erişim." },
       ],
     },
     cta: {
@@ -118,10 +147,16 @@ const content = {
       eyebrow: "Supply Advantage",
       heading: "Why Delta Oto?",
       trust: { value: "50+", unit: "Years", sub: "Automotive Aftermarket Experience" },
+      pause: "Pause",
+      resume: "Resume",
       items: [
-        { title: "Stock", desc: "The part you need is most likely already in the warehouse." },
-        { title: "Access", desc: "One connection to the global supply network." },
-        { title: "One Point of Contact", desc: "A single relationship instead of dozens of suppliers." },
+        { title: "Stock", desc: "Strong stock depth supporting a broad product portfolio." },
+        { title: "Access", desc: "Access to global and domestic manufacturers through a single supply point." },
+        { title: "One Point of Contact", desc: "A single point of contact throughout the supply process." },
+        { title: "Trust", desc: "A focus on open communication and long-term business partnership." },
+        { title: "Experience", desc: "Industry expertise that brings together product and market knowledge." },
+        { title: "Product Range", desc: "Comprehensive product categories covering diverse parts needs." },
+        { title: "Digital Convenience", desc: "Stock, pricing and order access through the B2B portal." },
       ],
     },
     cta: {
@@ -588,6 +623,154 @@ function CategoryExplorer({ categories, brands, lang, t }: { categories: Product
   );
 }
 
+/**
+ * Neden Delta Oto — Tek Bant Turu: Kariyer'in Yan Haklar bandıyla AYNI akış/
+ * etkileşim MANTIĞI yeniden kullanılıyor (useMeasuredMarquee + hover/focus/
+ * tap ile aç/kapa, duraklat-devam et kontrolü) — ama Kariyer'in kendi HR
+ * fotoğraf planı/metni KOPYALANMADI (görev talimatı: iki bant birbirinden
+ * bağımsız). Bu yüzden kart görseli fotoğraf değil, düz lacivert degrade —
+ * "yeni bir ikon kataloğu/gösterge paneli kurma" kısıtı nedeniyle ikon da
+ * yok, yalnızca kalın başlık + hover/focus/tap ile açılan kısa açıklama.
+ * Kendi bağımsız state'i var (openIndex/manualPaused burada, Kariyer'inkiyle
+ * PAYLAŞILMIYOR) — Kariyer'in kendi mobil kart ölçüleri de dokunulmadı.
+ */
+function ReasonCard({
+  item,
+  isOpen,
+  accessible,
+  onOpen,
+  onClose,
+  onFocusOpen,
+  setRef,
+}: {
+  item: { id: string; title: string; desc: string };
+  isOpen: boolean;
+  accessible: boolean;
+  onOpen: () => void;
+  onClose: () => void;
+  onFocusOpen?: () => void;
+  setRef?: (el: HTMLButtonElement | null) => void;
+}) {
+  return (
+    <button
+      type="button"
+      ref={setRef}
+      tabIndex={accessible ? 0 : -1}
+      aria-hidden={accessible ? undefined : true}
+      aria-expanded={accessible ? isOpen : undefined}
+      onMouseEnter={onOpen}
+      onMouseLeave={onClose}
+      onFocus={accessible ? onFocusOpen : undefined}
+      onBlur={accessible ? onClose : undefined}
+      onClick={onOpen}
+      className="group relative shrink-0 w-[172px] h-[172px] sm:w-[260px] sm:h-[200px] lg:w-[300px] lg:h-[220px] rounded-2xl overflow-hidden text-left appearance-none cursor-pointer bg-gradient-to-br from-[#1B3A8F] to-[#0e1016] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7d9bea] focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+    >
+      <div className="absolute inset-0 do-grid-bg opacity-[0.12]" aria-hidden="true" />
+      <div className="relative h-full p-5 sm:p-6 flex flex-col justify-center">
+        <h3
+          className={`text-white font-black text-[17px] sm:text-[19px] lg:text-[21px] leading-snug transition-transform duration-300 ease-out ${
+            isOpen ? "-translate-y-1" : ""
+          }`}
+        >
+          {item.title}
+        </h3>
+        <div
+          className={`grid transition-[grid-template-rows] duration-300 ease-out ${
+            isOpen ? "grid-rows-[1fr] mt-2.5" : "grid-rows-[0fr] mt-0"
+          }`}
+        >
+          <p className="overflow-hidden text-white/75 text-[12.5px] sm:text-[13px] leading-relaxed">{item.desc}</p>
+        </div>
+      </div>
+    </button>
+  );
+}
+
+function ReasonsRail({
+  items,
+  pauseLabel,
+  resumeLabel,
+}: {
+  items: { id: string; title: string; desc: string }[];
+  pauseLabel: string;
+  resumeLabel: string;
+}) {
+  const reducedMotion = usePrefersReducedMotion();
+  const count = items.length;
+  const { cropRef, trackRef, setItemRef, setSeqBStart, setPaused, focusItemIntoView } = useMeasuredMarquee(count, 38);
+  const [openIndex, setOpenIndex] = React.useState<number | null>(null);
+  const [manualPaused, setManualPaused] = React.useState(false);
+
+  React.useEffect(() => {
+    setPaused(manualPaused || openIndex !== null);
+  }, [manualPaused, openIndex, setPaused]);
+
+  const close = (i: number) => setOpenIndex((cur) => (cur === i ? null : cur));
+
+  if (reducedMotion) {
+    return (
+      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+        <div className="flex gap-3 sm:gap-5 overflow-x-auto pb-2 -mx-1 px-1">
+          {items.map((item, i) => (
+            <ReasonCard
+              key={item.id}
+              item={item}
+              isOpen={openIndex === i}
+              accessible
+              onOpen={() => setOpenIndex(i)}
+              onClose={() => close(i)}
+              onFocusOpen={() => setOpenIndex(i)}
+            />
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 mb-6 flex justify-end">
+        <button
+          type="button"
+          onClick={() => setManualPaused((p) => !p)}
+          aria-pressed={manualPaused}
+          className="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.15em] text-[#1B3A8F] hover:text-[#2547B5] transition-colors rounded-full border border-slate-200 hover:border-[#1B3A8F]/30 px-4 py-2 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#1B3A8F] focus-visible:ring-offset-2"
+        >
+          {manualPaused ? <Play className="w-3.5 h-3.5" strokeWidth={2} /> : <Pause className="w-3.5 h-3.5" strokeWidth={2} />}
+          {manualPaused ? resumeLabel : pauseLabel}
+        </button>
+      </div>
+      <div ref={cropRef} className="overflow-hidden">
+        <div ref={trackRef} className="flex gap-3 sm:gap-5 px-4 sm:px-6 lg:px-8 w-max">
+          {items.map((item, i) => (
+            <ReasonCard
+              key={`a-${item.id}`}
+              item={item}
+              isOpen={openIndex === i}
+              accessible
+              setRef={setItemRef[i]}
+              onOpen={() => setOpenIndex(i)}
+              onClose={() => close(i)}
+              onFocusOpen={() => { setOpenIndex(i); focusItemIntoView(i); }}
+            />
+          ))}
+          {items.map((item, i) => (
+            <ReasonCard
+              key={`b-${item.id}`}
+              item={item}
+              isOpen={openIndex === i}
+              accessible={false}
+              setRef={i === 0 ? setSeqBStart : undefined}
+              onOpen={() => setOpenIndex(i)}
+              onClose={() => close(i)}
+            />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export function TedarikciPage() {
   const lang = useLang();
   const t = content[lang];
@@ -598,6 +781,14 @@ export function TedarikciPage() {
   const filteredYerli = YERLI_BRANDS.filter((b) => b.name.toLowerCase().includes(query));
   const noBrandResults = filteredGlobal.length === 0 && filteredYerli.length === 0;
   const reveal = useReveal();
+  // REASON_META (yapısal: id/order/published) + content.*.advantages.items
+  // (dile göre title/desc) — HakkimizdaPage.tsx'teki FACT_STATS/MILESTONES
+  // birleştirme kalıbıyla AYNI: `order` alanına göre sıralanır, `published`
+  // false olanlar bant'a hiç gitmez (bugün hepsi true).
+  const REASONS = REASON_META
+    .filter((m) => m.published)
+    .sort((a, b) => a.order - b.order)
+    .map((m, i) => ({ id: m.id, ...t.advantages.items[i] }));
 
   return (
     <div className="do-site bg-white min-h-screen">
@@ -636,7 +827,7 @@ export function TedarikciPage() {
             href="https://b2b.parcabul.com.tr/login.aspx"
             target="_blank"
             rel="noopener noreferrer"
-            className="do-reveal do-d3 inline-flex items-center gap-2.5 bg-[#1B3A8F] hover:bg-[#2547B5] text-white font-semibold px-8 py-4 rounded-md transition-colors shadow-[0_0_32px_rgba(27,58,143,0.3)] group"
+            className="do-reveal do-d3 do-tap-target inline-flex items-center gap-2.5 bg-[#1B3A8F] hover:bg-[#2547B5] text-white font-semibold px-6 py-2.5 text-[13.5px] rounded-md transition-colors shadow-[0_0_32px_rgba(27,58,143,0.3)] group"
           >
             {t.hero.cta}
             <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
@@ -697,78 +888,38 @@ export function TedarikciPage() {
         </div>
       </section>
 
-      {/* NEDEN DELTA OTO — white. Görsel/İçerik Hijyeni Turu: standalone
-          "Kalite Güvencesi" navy bölümü tamamen kaldırıldı (mesajı Operasyon >
-          Sistem ve Kalite'ye taşındı). "Süreklilik" kaldırıldı (50+ yıl
-          mesajıyla fazlalaşıyordu). "50+ Yıldır" TEK bir taban çizgisinde
-          (items-baseline) birlikte okunuyor.
-
-          Geometri Yeniden Kurulum Turu: önceki iç-içe grid mimarisi (dış
-          [auto_1fr] 2 sütun + güven bloğunda TEK BAŞINA bir lg:border-r,
-          içeride AYRI bir 3 sütunlu sm:divide-x grid) iki FARKLI ayraç
-          mekanizmasını yan yana koyuyordu — items-stretch ile piksel
-          yüksekliği eşitlense bile, güven bloğunun kendi padding/gap'i içteki
-          gridin gap'inden farklı olduğundan ritim hâlâ tutarsız okunuyor ve
-          sol blok "yapıştırılmış ayrı bir kompozisyon" gibi duruyordu. Artık
-          TEK, DÜZ bir 4 sütunlu grid — güven birimi üç maddeyle birebir aynı
-          satırda, birebir aynı kardeş seviyesinde. Tek bir divide-x
-          mekanizması TÜM sütun aralarında aynı çizgiyi üretiyor (yükseklik
-          grid satırının kendisine bağlı, her çocuğun kendi içerik
-          yüksekliğine değil — bu yüzden hepsi yapısal olarak aynı üst/alt
-          rayda başlayıp bitiyor). Mobilde (<lg) tek sütun + divide-y aynı
-          mantığı yatay yerine dikey ayraca çeviriyor. */}
-      <section className="bg-white py-24">
+      {/* NEDEN DELTA OTO — white. Tur 3 Yeniden Kurulum: eski 4 sütunlu
+          eşit-grid (50+ güven bloğu + 3 madde yan yana) TAMAMEN kaldırıldı.
+          Yeni hiyerarşi yukarıdan aşağıya: başlık → tek seferlik, ortalanmış
+          "50+ Yıldır / Otomotiv Aftermarket Deneyimi" güçlü deneyim ifadesi
+          (artık dar bir ilk-sütun kutusuna sıkışmıyor, section'ın tam
+          genişliğini kullanıyor) → yedi kartlık tek yönlü kayan bant (bkz.
+          ReasonsRail — Kariyer'in Yan Haklar bant MANTIĞI yeniden kullanıldı,
+          fotoğraf/metin içeriği değil). "50+" yalnızca burada bir kez
+          geçiyor, kartların hiçbirinde tekrar etmiyor. */}
+      <section className="bg-white py-20 md:py-24 overflow-x-clip">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
-          <div ref={reveal} className="do-reveal mb-14">
+          <div ref={reveal} className="do-reveal mb-10 md:mb-14 text-center">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">{t.advantages.eyebrow}</span>
             <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-2 tracking-tight">{t.advantages.heading}</h2>
           </div>
-          {/* Nefes Payı Turu 2: bir önceki düzeltme px-12 (48px) simetrik
-              padding EKLEDİ ama gap-x-14'ü (56px) KORUDU — ölçümle
-              doğrulandı: divide-x'in çizgisi her zaman TAKİP EDEN sütunun
-              kendi kutu kenarında oturuyor (gap'in tamamı çizgiden ÖNCE,
-              yalnızca ÖNCEKİ sütunun tarafında kalıyor). Sonuç: her ayracın
-              SOLU (önceki sütunun metni) 105px, SAĞI (sonraki sütunun metni)
-              yalnızca 48px — "simetrik ve kasıtlı" değil, hâlâ dengesiz.
-              Kök çözüm: gap-x TAMAMEN kaldırıldı, TÜM boşluk artık yalnızca
-              padding'den geliyor (px-16, 64px, her sütunda iki taraf da eşit)
-              — divide-x çizgisi artık iki sütunun BİTİŞİK kutu kenarında
-              (gap yok) oturuyor, bu da matematiksel olarak GARANTİ eşit bir
-              64px/64px tampon üretiyor (canlı ölçümle doğrulandı, bkz. görev
-              raporu). */}
-          {/* Mobil Bütünlük Turu: divide-y mekanizması zaten vardı ama her
-              satırın py-8 (32px) dolgusu bitişik satırlarla arasında ~64px'lik
-              bir boşluk bırakıyordu — ince çizgiye rağmen "bağımsız, geniş
-              nefesli kartlar" gibi okunuyordu (canlı telefon incelemesinde
-              bulundu), "tek bağlı kompozisyon" değil. py-5'e sıkıştırıldı
-              (~40px satır arası) — aynı divide-y çizgisi artık gerçekten bir
-              LİSTE hissi veriyor. lg: (masaüstü, py-0 zaten kullanılmıyordu)
-              HİÇ değişmedi. */}
-          <div
-            ref={reveal}
-            className="do-reveal do-d1 grid grid-cols-1 lg:grid-cols-4 divide-y divide-slate-200 lg:divide-y-0 lg:divide-x border-t border-slate-200 pt-12"
-          >
-            <div className="py-5 lg:py-0 lg:pr-16">
-              <div className="flex items-baseline gap-3">
-                <span className="text-6xl lg:text-7xl font-black text-[#1B3A8F] tracking-tight leading-none tabular-nums">
-                  {t.advantages.trust.value}
-                </span>
-                <span className="text-xl lg:text-2xl font-black text-[#1B3A8F] tracking-tight">
-                  {t.advantages.trust.unit}
-                </span>
-              </div>
-              <p className="mt-3 text-slate-800 text-[15px] lg:text-base font-bold tracking-tight leading-snug">
-                {t.advantages.trust.sub}
-              </p>
+          {/* "50+" baskın vurgu, "Yıldır" ona ORANTILI (em birimiyle ana
+              rakamın font-size'ına bağlı — her breakpoint'te otomatik doğru
+              oran, ayrı sm/md/lg sınıfı tekrarına gerek yok). whitespace-nowrap:
+              320px'te bile ölçümle doğrulandı ("50+ Yıldır" ~221px < 272px
+              kullanılabilir genişlik) — iki sözcük ASLA satır arasında
+              bölünmüyor, "tek anlamsal birim" kısıtı garanti altında. */}
+          <div ref={reveal} className="do-reveal do-d1 text-center mb-14 md:mb-20">
+            <div className="whitespace-nowrap text-6xl sm:text-7xl md:text-8xl lg:text-9xl font-black tracking-tight leading-none">
+              <span className="text-[#1B3A8F]">{t.advantages.trust.value}</span>{" "}
+              <span className="text-slate-900 text-[0.46em]">{t.advantages.trust.unit}</span>
             </div>
-            {t.advantages.items.map(({ title, desc }) => (
-              <div key={title} className="py-5 lg:py-0 lg:px-16 last:lg:pr-0">
-                <div className="text-xl lg:text-2xl font-black text-slate-900 tracking-tight mb-2 lg:mb-3">{title}</div>
-                <p className="text-slate-500 text-[14px] leading-relaxed">{desc}</p>
-              </div>
-            ))}
+            <p className="mt-4 sm:mt-5 text-xl sm:text-2xl md:text-3xl font-bold text-slate-700 tracking-tight text-center">
+              {t.advantages.trust.sub}
+            </p>
           </div>
         </div>
+        <ReasonsRail items={REASONS} pauseLabel={t.advantages.pause} resumeLabel={t.advantages.resume} />
       </section>
 
       {/* CTA — navy */}
@@ -781,9 +932,9 @@ export function TedarikciPage() {
             href="https://b2b.parcabul.com.tr/login.aspx"
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-white text-[#1B3A8F] hover:bg-gray-100 active:scale-[0.98] font-bold px-10 py-4 rounded-md transition-all inline-flex items-center gap-2 shadow-lg group"
+            className="do-tap-target bg-white text-[#1B3A8F] hover:bg-gray-100 active:scale-[0.98] font-bold px-6 py-2.5 text-[13.5px] rounded-md transition-all inline-flex items-center gap-2 shadow-lg group"
           >
-            {t.cta.button} <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            {t.cta.button} <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </a>
         </div>
       </section>

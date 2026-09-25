@@ -46,7 +46,7 @@ export default function NotFound() {
           <p className="text-gray-300 text-[15px] leading-relaxed max-w-md mx-auto mb-10">{t.body}</p>
           <Link
             href={routeFor("home", lang)}
-            className="inline-flex items-center gap-2.5 bg-[#1B3A8F] hover:bg-[#2547B5] text-white font-semibold px-8 py-4 rounded-md transition-colors shadow-[0_0_32px_rgba(27,58,143,0.3)] group"
+            className="do-tap-target inline-flex items-center gap-2.5 bg-[#1B3A8F] hover:bg-[#2547B5] text-white font-semibold px-6 py-2.5 text-[13.5px] rounded-md transition-colors shadow-[0_0_32px_rgba(27,58,143,0.3)] group"
           >
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-0.5 transition-transform" />
             {t.cta}

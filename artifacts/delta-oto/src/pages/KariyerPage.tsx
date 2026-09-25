@@ -560,10 +560,10 @@ export function KariyerPage() {
             ref={reveal}
             type="button"
             onClick={scrollToPlatforms}
-            className="do-reveal do-d3 inline-flex items-center gap-2.5 bg-[#1B3A8F] hover:bg-[#2547B5] text-white font-semibold px-8 py-4 rounded-md transition-colors shadow-[0_0_32px_rgba(27,58,143,0.3)] group"
+            className="do-reveal do-d3 do-tap-target inline-flex items-center gap-2.5 bg-[#1B3A8F] hover:bg-[#2547B5] text-white font-semibold px-6 py-2.5 text-[13.5px] rounded-md transition-colors shadow-[0_0_32px_rgba(27,58,143,0.3)] group"
           >
             {t.hero.cta}
-            <ChevronDown className="w-5 h-5 group-hover:translate-y-0.5 transition-transform" />
+            <ChevronDown className="w-4 h-4 group-hover:translate-y-0.5 transition-transform" />
           </button>
         </div>
       </section>

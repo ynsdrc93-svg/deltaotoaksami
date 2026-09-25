@@ -331,14 +331,14 @@ export function IletisimPage() {
             <button
               type="button"
               onClick={() => setRepModalOpen(true)}
-              className="bg-[#1B3A8F] hover:bg-[#2547B5] active:scale-[0.98] text-white font-semibold px-6 sm:px-8 py-3.5 sm:py-4 rounded-md text-[14px] sm:text-base transition-all duration-200 flex items-center gap-2 sm:gap-2.5 shadow-[0_0_32px_rgba(27,58,143,0.3)] hover:shadow-[0_0_48px_rgba(27,58,143,0.45)]"
+              className="do-tap-target bg-[#1B3A8F] hover:bg-[#2547B5] active:scale-[0.98] text-white font-semibold px-6 py-2.5 rounded-md text-[13.5px] transition-all duration-200 flex items-center gap-2 shadow-[0_0_32px_rgba(27,58,143,0.3)] hover:shadow-[0_0_48px_rgba(27,58,143,0.45)]"
             >
-              <MapPin className="w-4 h-4 sm:w-5 sm:h-5" />
+              <MapPin className="w-4 h-4" />
               {t.hero.findRep}
             </button>
             <a
               href="#iletisim-formu"
-              className="text-gray-200 hover:text-white active:scale-[0.98] text-[14px] sm:text-base font-medium flex items-center gap-2 border border-white/15 hover:border-white/30 px-6 sm:px-8 py-3.5 sm:py-4 rounded-md transition-all duration-200"
+              className="do-tap-target text-gray-200 hover:text-white active:scale-[0.98] text-[13.5px] font-medium flex items-center gap-2 border border-white/15 hover:border-white/30 px-6 py-2.5 rounded-md transition-all duration-200"
             >
               <Mail className="w-4 h-4" />
               {t.hero.contactForm}
@@ -347,7 +347,7 @@ export function IletisimPage() {
               href="https://b2b.parcabul.com.tr/login.aspx"
               target="_blank"
               rel="noopener noreferrer"
-              className="group text-gray-200 hover:text-white active:scale-[0.98] text-[14px] sm:text-base font-medium flex items-center gap-2 border border-white/15 hover:border-white/30 px-6 sm:px-8 py-3.5 sm:py-4 rounded-md transition-all duration-200"
+              className="do-tap-target group text-gray-200 hover:text-white active:scale-[0.98] text-[13.5px] font-medium flex items-center gap-2 border border-white/15 hover:border-white/30 px-6 py-2.5 rounded-md transition-all duration-200"
             >
               {t.hero.b2bPortal}
               <ArrowRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" />
