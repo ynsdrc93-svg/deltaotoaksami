@@ -7,34 +7,48 @@ import { CLASSIFIED_BRANDS, GLOBAL_BRANDS, YERLI_BRANDS, type Brand } from "@/li
 import { PRODUCT_CATEGORIES, MACRO_FAMILIES, type ProductCategory } from "@/lib/categories";
 import { useEscapeKey, useReveal, usePrefersReducedMotion } from "@/hooks/use-motion";
 import { useMeasuredMarquee } from "@/hooks/use-measured-marquee";
+import { joinById } from "@/lib/join-by-id";
 import { useDocumentMeta } from "@/hooks/use-document-meta";
 import { useLang, type Lang } from "@/lib/i18n";
 
-// Neden Delta Oto — CMS Hazırlık Notu: dil-bağımsız kimlik/sıra/yayın alanı
-// (id/order/published), HakkimizdaPage.tsx'teki MILESTONE_META ile AYNI
-// kurulan kalıp — dile göre değişen title/desc content.*.advantages.items[i]'de
-// kalıyor, burada yalnızca yapısal alanlar var. `published: false` bir
-// kaydı ileride bir panelden yayından kaldırmayı (silmeden) mümkün kılar;
-// bugün hepsi true. Sıra dizinin kendisiyle değil `order` alanıyla
-// belirleniyor — ileride bir panelde yalnızca `order` değişse bile hangi
-// kaydın hangi içerikle eşleştiği (id sabit) asla karışmaz. Kod hiçbir
-// yerde "7 kart" varsayımı yapmıyor (bkz. ReasonsRail: `count = items.length`).
+// Neden Delta Oto — veri modeli (Turu 6): her kartın YAPISAL alanları burada,
+// dil-bağımsız (id/order/published/image/focalPoint); dile göre değişen METİN
+// (title/desc/alt) content.*.advantages.items içinde AYNI `id` ile anahtarlanan
+// bir SÖZLÜKTE. İkisi `joinById` ile id üzerinden birleşir (bkz.
+// src/lib/join-by-id.ts) — index'e göre eşleme YOK.
 //
-// `image` (Turu 5): düz lacivert dolgu "cansız" bulundu (kullanıcı geri
-// bildirimi) — gerçek fotoğraf bu ortamda erişilemediğinden (egress politikası,
-// önceki turlarda doğrulandı) her kavram için elle çizilmiş, kurumsal/temsili
-// bir yerel SVG illüstrasyon üretildi (bkz. public/images/reasons/). Yol da
-// diğer alanlar gibi ayrı bir yapısal veri — ileride bir panelden yalnızca
-// bu alan değiştirilerek görsel güncellenebilir, kod DEĞİŞMEZ.
-const REASON_META: { id: string; order: number; published: boolean; image: string }[] = [
-  { id: "stok", order: 1, published: true, image: "/images/reasons/stok.svg" },
-  { id: "erisim", order: 2, published: true, image: "/images/reasons/erisim.svg" },
-  { id: "tek-muhatap", order: 3, published: true, image: "/images/reasons/tek-muhatap.svg" },
-  { id: "guven", order: 4, published: true, image: "/images/reasons/guven.svg" },
-  { id: "deneyim", order: 5, published: true, image: "/images/reasons/deneyim.svg" },
-  { id: "urun-cesitliligi", order: 6, published: true, image: "/images/reasons/urun-cesitliligi.svg" },
-  { id: "dijital-kolaylik", order: 7, published: true, image: "/images/reasons/dijital-kolaylik.svg" },
+// ESKİ HATA: `REASON_META.filter(published).sort(order).map((m, i) => ({...m,
+// ...t.advantages.items[i]}))` — `i` filtre+sıralama SONRASI konumdur, metin
+// dizisi ise sabit orijinal sıradadır; bir kart gizlenince ya da `order`
+// değişince her kart bir başkasının başlığını/açıklamasını alırdı (id tek
+// başına çözmüyordu, çünkü birleştirmede hiç kullanılmıyordu). Artık görsel,
+// başlık, açıklama, alt metin, sıra ve yayın durumu aynı kaydın id'sine bağlı.
+// `published: false` bir kartı silmeden yayından kaldırır; sıra yalnızca
+// `order` alanıyla belirlenir. Kod hiçbir yerde "7 kart" varsayımı yapmıyor.
+//
+// `image` / `focalPoint` (object-position): kart görseli ve odak noktası.
+// BUGÜN: her kavram için elle çizilmiş, kurumsal/temsili yerel SVG illüstrasyon
+// (Turu 5; gerçek fotoğraf henüz teslim edilmedi — taslak WebP'ler nihai
+// üretim görseli DEĞİL, bu yüzden kullanılmadı). Fotoğraflar bağımsız dosya
+// olarak geldiğinde yalnızca bu iki alan (ve dile göre `alt`) değişir, kod
+// DEĞİŞMEZ. Beklenen eşleşme (klasör: public/images/reasons/):
+//   stok → neden-delta-stok.webp            erisim → neden-delta-erisim.webp
+//   tek-muhatap → neden-delta-tek-muhatap.webp   guven → neden-delta-guven.webp
+//   deneyim → neden-delta-deneyim.webp      urun-cesitliligi → neden-delta-urun-cesitliligi.webp
+//   dijital-kolaylik → neden-delta-dijital-kolaylik.webp
+// (Kariyer "Yan Haklar"ın sekiz lifestyle fotoğrafı ayrı bir açık iştir; bu
+// yedi görselle karıştırılmaz.)
+const REASON_META: { id: string; order: number; published: boolean; image: string; focalPoint: string }[] = [
+  { id: "stok", order: 1, published: true, image: "/images/reasons/stok.svg", focalPoint: "50% 50%" },
+  { id: "erisim", order: 2, published: true, image: "/images/reasons/erisim.svg", focalPoint: "50% 50%" },
+  { id: "tek-muhatap", order: 3, published: true, image: "/images/reasons/tek-muhatap.svg", focalPoint: "50% 50%" },
+  { id: "guven", order: 4, published: true, image: "/images/reasons/guven.svg", focalPoint: "50% 50%" },
+  { id: "deneyim", order: 5, published: true, image: "/images/reasons/deneyim.svg", focalPoint: "50% 50%" },
+  { id: "urun-cesitliligi", order: 6, published: true, image: "/images/reasons/urun-cesitliligi.svg", focalPoint: "50% 50%" },
+  { id: "dijital-kolaylik", order: 7, published: true, image: "/images/reasons/dijital-kolaylik.svg", focalPoint: "50% 50%" },
 ];
+
+type ReasonCopy = { title: string; desc: string; alt: string };
 
 const content = {
   tr: {
@@ -96,15 +110,19 @@ const content = {
       trust: { value: "50+", unit: "Yıldır", sub: "Otomotiv Aftermarket Deneyimi" },
       pause: "Duraklat",
       resume: "Devam Et",
-      items: [
-        { title: "Stok", desc: "Geniş ürün portföyünü destekleyen güçlü stok yapısı." },
-        { title: "Erişim", desc: "Global ve yerli üreticilere tek tedarik noktası üzerinden erişim." },
-        { title: "Tek Muhatap", desc: "Tedarik sürecinde tek iletişim noktası." },
-        { title: "Güven", desc: "Açık iletişim ve uzun vadeli iş ortaklığı odağı." },
-        { title: "Deneyim", desc: "Ürün ve pazar bilgisini bir araya getiren sektörel birikim." },
-        { title: "Ürün Çeşitliliği", desc: "Farklı parça ihtiyaçlarını buluşturan kapsamlı ürün kategorileri." },
-        { title: "Dijital Kolaylık", desc: "B2B portalından stok, fiyat ve sipariş işlemlerine erişim." },
-      ],
+      // `alt`: kart görselinin dile göre alternatif metni. Görsel şu an TEMSİLİ,
+      // soyut bir illüstrasyon — metin bunu açıkça söyler ve Delta Oto'nun
+      // gerçek deposu/personeli/portalı olduğunu ASLA iddia etmez (gerçek
+      // fotoğraflar geldiğinde de "temsili" niteliği korunacak).
+      items: {
+        "stok": { title: "Stok", desc: "Geniş ürün portföyünü destekleyen güçlü stok yapısı.", alt: "Temsili soyut illüstrasyon: düzenli dizilmiş stok kutuları" },
+        "erisim": { title: "Erişim", desc: "Global ve yerli üreticilere tek tedarik noktası üzerinden erişim.", alt: "Temsili soyut illüstrasyon: merkezden dışa yayılan bağlantı ağı" },
+        "tek-muhatap": { title: "Tek Muhatap", desc: "Tedarik sürecinde tek iletişim noktası.", alt: "Temsili soyut illüstrasyon: dağınık noktaların tek merkezde birleşmesi" },
+        "guven": { title: "Güven", desc: "Açık iletişim ve uzun vadeli iş ortaklığı odağı.", alt: "Temsili soyut illüstrasyon: iç içe geçen iki halka" },
+        "deneyim": { title: "Deneyim", desc: "Ürün ve pazar bilgisini bir araya getiren sektörel birikim.", alt: "Temsili soyut illüstrasyon: ortak merkezli, genişleyen halkalar" },
+        "urun-cesitliligi": { title: "Ürün Çeşitliliği", desc: "Farklı parça ihtiyaçlarını buluşturan kapsamlı ürün kategorileri.", alt: "Temsili soyut illüstrasyon: farklı boyut ve biçimlerde geometrik şekiller" },
+        "dijital-kolaylik": { title: "Dijital Kolaylık", desc: "B2B portalından stok, fiyat ve sipariş işlemlerine erişim.", alt: "Temsili soyut illüstrasyon: ekran çerçevesi, sütun grafik ve durum noktaları" },
+      } as Record<string, ReasonCopy>,
     },
     cta: {
       heading: "Stok Sorgulama ve Sipariş için B2B Portal",
@@ -156,15 +174,15 @@ const content = {
       trust: { value: "50+", unit: "Years", sub: "Automotive Aftermarket Experience" },
       pause: "Pause",
       resume: "Resume",
-      items: [
-        { title: "Stock", desc: "Strong stock depth supporting a broad product portfolio." },
-        { title: "Access", desc: "Access to global and domestic manufacturers through a single supply point." },
-        { title: "One Point of Contact", desc: "A single point of contact throughout the supply process." },
-        { title: "Trust", desc: "A focus on open communication and long-term business partnership." },
-        { title: "Experience", desc: "Industry expertise that brings together product and market knowledge." },
-        { title: "Product Range", desc: "Comprehensive product categories covering diverse parts needs." },
-        { title: "Digital Convenience", desc: "Stock, pricing and order access through the B2B portal." },
-      ],
+      items: {
+        "stok": { title: "Stock", desc: "Strong stock depth supporting a broad product portfolio.", alt: "Representative abstract illustration: neatly arranged stock boxes" },
+        "erisim": { title: "Access", desc: "Access to global and domestic manufacturers through a single supply point.", alt: "Representative abstract illustration: a network radiating outward from a central hub" },
+        "tek-muhatap": { title: "One Point of Contact", desc: "A single point of contact throughout the supply process.", alt: "Representative abstract illustration: scattered points converging on a single hub" },
+        "guven": { title: "Trust", desc: "A focus on open communication and long-term business partnership.", alt: "Representative abstract illustration: two interlocking rings" },
+        "deneyim": { title: "Experience", desc: "Industry expertise that brings together product and market knowledge.", alt: "Representative abstract illustration: expanding concentric rings" },
+        "urun-cesitliligi": { title: "Product Range", desc: "Comprehensive product categories covering diverse parts needs.", alt: "Representative abstract illustration: geometric shapes of varied sizes and forms" },
+        "dijital-kolaylik": { title: "Digital Convenience", desc: "Stock, pricing and order access through the B2B portal.", alt: "Representative abstract illustration: a screen frame, bar chart and status dots" },
+      } as Record<string, ReasonCopy>,
     },
     cta: {
       heading: "B2B Portal for Stock Inquiries and Orders",
@@ -630,16 +648,22 @@ function CategoryExplorer({ categories, brands, lang, t }: { categories: Product
   );
 }
 
+type ReasonItem = { id: string; title: string; desc: string; image: string; alt: string; focalPoint: string };
+
 /**
- * Neden Delta Oto — Tek Bant Turu: Kariyer'in Yan Haklar bandıyla AYNI akış/
+ * Neden Delta Oto — Tek Bant: Kariyer'in Yan Haklar bandıyla AYNI akış/
  * etkileşim MANTIĞI yeniden kullanılıyor (useMeasuredMarquee + hover/focus/
  * tap ile aç/kapa, duraklat-devam et kontrolü) — ama Kariyer'in kendi HR
- * fotoğraf planı/metni KOPYALANMADI (görev talimatı: iki bant birbirinden
- * bağımsız). Bu yüzden kart görseli fotoğraf değil, düz lacivert degrade —
- * "yeni bir ikon kataloğu/gösterge paneli kurma" kısıtı nedeniyle ikon da
- * yok, yalnızca kalın başlık + hover/focus/tap ile açılan kısa açıklama.
- * Kendi bağımsız state'i var (openIndex/manualPaused burada, Kariyer'inkiyle
- * PAYLAŞILMIYOR) — Kariyer'in kendi mobil kart ölçüleri de dokunulmadı.
+ * fotoğraf planı/metni KOPYALANMADI (iki bant birbirinden bağımsız). Kart
+ * görseli bugün kavrama özgü, temsili bir yerel SVG illüstrasyon
+ * (bkz. REASON_META `image` notu); kalın başlık + hover/focus/tap ile
+ * açılan kısa açıklama. Kendi bağımsız state'i var (openId/manualPaused
+ * burada, Kariyer'inkiyle PAYLAŞILMIYOR) — Kariyer'in mobil kart ölçüleri
+ * de dokunulmadı.
+ *
+ * Turu 6: açık kart artık INDEX değil kart `id`'siyle tutulur (kartlar
+ * gizlenir/yeniden sıralanırsa açık kart başka bir kartla karışmaz) ve her
+ * kartta `data-reason-id` var (id ↔ görsel/metin bağını doğrulamak için).
  */
 function ReasonCard({
   item,
@@ -650,7 +674,7 @@ function ReasonCard({
   onFocusOpen,
   setRef,
 }: {
-  item: { id: string; title: string; desc: string; image: string };
+  item: ReasonItem;
   isOpen: boolean;
   accessible: boolean;
   onOpen: () => void;
@@ -662,6 +686,7 @@ function ReasonCard({
     <button
       type="button"
       ref={setRef}
+      data-reason-id={item.id}
       tabIndex={accessible ? 0 : -1}
       aria-hidden={accessible ? undefined : true}
       aria-expanded={accessible ? isOpen : undefined}
@@ -672,21 +697,29 @@ function ReasonCard({
       onClick={onOpen}
       className="group relative shrink-0 w-[172px] h-[172px] sm:w-[260px] sm:h-[200px] lg:w-[300px] lg:h-[220px] rounded-2xl overflow-hidden text-left appearance-none cursor-pointer bg-[#0e1016] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7d9bea] focus-visible:ring-offset-2 focus-visible:ring-offset-white"
     >
-      {/* Kart görseli — Turu 5: eski düz lacivert degrade yerine kavrama özgü
-          yerel SVG illüstrasyon (bkz. REASON_META `image` notu). Kart
-          boyutu (yukarıdaki w-/h- sınıfları) DEĞİŞMEDİ — useMeasuredMarquee
-          döngü ölçümü hâlâ geçerli. object-cover: kartın kendi en-boy oranı
-          breakpoint'e göre değiştiği için (172×172 kare → 300×220 geniş)
-          görsel her zaman kutuyu doldurup gerekirse kırpılıyor, hiçbir zaman
-          gerilmiyor/boşluk bırakmıyor. */}
-      <img src={item.image} alt="" aria-hidden="true" className="absolute inset-0 w-full h-full object-cover" />
+      {/* Kart görseli: kavrama özgü yerel SVG illüstrasyon (bkz. REASON_META
+          `image`/`focalPoint`). Kart boyutu (yukarıdaki w-/h- sınıfları)
+          DEĞİŞMEDİ — döngü ölçümü hâlâ geçerli. object-cover: kartın kendi
+          en-boy oranı breakpoint'e göre değiştiği için (172×172 kare →
+          300×220 geniş) görsel her zaman kutuyu doldurup gerekirse
+          kırpılıyor, hiçbir zaman gerilmiyor/boşluk bırakmıyor; kırpmada
+          hangi bölgenin korunacağını `focalPoint` (object-position) belirler.
+          `alt` dile göre kayıttan gelir ve görselin TEMSİLİ olduğunu söyler;
+          görsel yine de `aria-hidden` — kartın erişilebilir adı başlık +
+          açıklamadır, dekoratif bir görsel ekran okuyucuda tekrar okunmaz.
+          Görsel absolute konumlu olduğu için yüklenmesi düzeni/döngü
+          ölçümünü etkilemez. */}
+      <img
+        src={item.image}
+        alt={item.alt}
+        aria-hidden="true"
+        draggable={false}
+        className="absolute inset-0 w-full h-full object-cover"
+        style={{ objectPosition: item.focalPoint }}
+      />
       {/* Koyu overlay — metnin illüstrasyonun üstünde her zaman okunur
           kalması için (açık/kapalı fark etmeksizin), açıkken biraz daha
-          güçleniyor (aynı BenefitCard/KariyerPage.tsx deseni, oradaki
-          from-black gradyan yerine burada düz bir lacivert-siyah katman —
-          kartın içeriği köşeden köşeye değil ortalanmış olduğundan salt alt-
-          ağırlıklı bir gradyan yerine tüm kart yüzeyinde tutarlı kontrast
-          gerekiyordu). */}
+          güçleniyor. */}
       <div className={`absolute inset-0 bg-[#0e1016] transition-opacity duration-300 ${isOpen ? "opacity-75" : "opacity-60"}`} aria-hidden="true" />
       <div className="absolute inset-0 do-grid-bg opacity-[0.1]" aria-hidden="true" />
       <div className="relative h-full p-5 sm:p-6 flex flex-col justify-center">
@@ -709,40 +742,91 @@ function ReasonCard({
   );
 }
 
+/**
+ * Tek yönlü sonsuz bant. Döngü mesafesi VARSAYILMAZ, ÖLÇÜLÜR: `useMeasuredMarquee`
+ * ilk özgün kartla ikinci kopyanın ilk kartı arasındaki gerçek piksel
+ * mesafesini (getBoundingClientRect) ölçer, ResizeObserver ile yeniden ölçer.
+ *
+ * Turu 6 — kopya sayısı ölçüme dayalı: eski "tam iki kopya" varsayımı
+ * yalnızca görünür pencere ≤ döngü mesafesi (~2240px masaüstü) iken boşluksuz
+ * kalırdı; çok geniş bir viewport'ta ya da az kartta sağda boşluk açılırdı.
+ * Artık `copies = ceil(pencereGenişliği / döngüMesafesi) + 1` (en az 2) —
+ * bant sola en fazla bir döngü mesafesi kaydığından (x ∈ (−D, 0]) toplam içerik
+ * (copies − 1)·D ≥ pencere olmak zorunda. Hesap resize'da ve kart sayısı
+ * değişince yeniden yapılır; kopya eklemek/çıkarmak ölçülen D'yi değiştirmez.
+ *
+ * Pürüzsüz birleşim: iz (track) soldan yalnızca kart ARALIĞI kadar (`pl` = gap)
+ * boşluk taşır — böylece her kartın önünde bir boşluk vardır ve desen tam
+ * D periyotlu olur. (Eski `px-4/6/8` sol dolgusu gap'ten büyüktü: sarma anında
+ * önceki kopyanın son kartının 4–12px'lik ucu sol dolgu bölgesinde görünüp bir
+ * karede yok oluyordu — "birleşim sıçraması".)
+ *
+ * Ekran okuyucu: yalnızca İLK kopya erişilebilir (özgün kartlar bir kez
+ * okunur); diğer kopyalar `aria-hidden` + `tabIndex=-1` — tab hedefi yok.
+ * Azaltılmış hareket: bant hiç hareket etmez, tüm özgün kartlar native yatay
+ * kaydırılan statik bir satırdadır.
+ */
 function ReasonsRail({
   items,
   pauseLabel,
   resumeLabel,
 }: {
-  items: { id: string; title: string; desc: string; image: string }[];
+  items: ReasonItem[];
   pauseLabel: string;
   resumeLabel: string;
 }) {
   const reducedMotion = usePrefersReducedMotion();
   const count = items.length;
   const { cropRef, trackRef, setItemRef, setSeqBStart, setPaused, focusItemIntoView } = useMeasuredMarquee(count, 38);
-  const [openIndex, setOpenIndex] = React.useState<number | null>(null);
+  const [openId, setOpenId] = React.useState<string | null>(null);
   const [manualPaused, setManualPaused] = React.useState(false);
+  const [copies, setCopies] = React.useState(2);
+  const firstA = React.useRef<HTMLElement | null>(null);
+  const firstB = React.useRef<HTMLElement | null>(null);
 
   React.useEffect(() => {
-    setPaused(manualPaused || openIndex !== null);
-  }, [manualPaused, openIndex, setPaused]);
+    setPaused(manualPaused || openId !== null);
+  }, [manualPaused, openId, setPaused]);
 
-  const close = (i: number) => setOpenIndex((cur) => (cur === i ? null : cur));
+  // Kanca (hook) ilk özgün kartı ve ikinci kopyanın ilk kartını kendi ölçümü
+  // için tutuyor; aynı iki öğeyi kopya-sayısı hesabı için de burada tutuyoruz.
+  const setFirstA = React.useCallback((el: HTMLElement | null) => { firstA.current = el; setItemRef[0]?.(el); }, [setItemRef]);
+  const setFirstB = React.useCallback((el: HTMLElement | null) => { firstB.current = el; setSeqBStart(el); }, [setSeqBStart]);
+
+  React.useLayoutEffect(() => {
+    const crop = cropRef.current;
+    if (!crop || reducedMotion) return;
+    const update = () => {
+      const a = firstA.current;
+      const b = firstB.current;
+      if (!a || !b) return;
+      const loop = b.getBoundingClientRect().left - a.getBoundingClientRect().left;
+      const view = crop.clientWidth;
+      if (loop > 0 && view > 0) setCopies(Math.max(2, Math.ceil(view / loop) + 1));
+    };
+    update();
+    if (typeof ResizeObserver === "undefined") return;
+    const ro = new ResizeObserver(update);
+    ro.observe(crop);
+    if (trackRef.current) ro.observe(trackRef.current);
+    return () => ro.disconnect();
+  }, [count, reducedMotion, cropRef, trackRef]);
+
+  const close = (id: string) => setOpenId((cur) => (cur === id ? null : cur));
 
   if (reducedMotion) {
     return (
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex gap-3 sm:gap-5 overflow-x-auto pb-2 -mx-1 px-1">
-          {items.map((item, i) => (
+          {items.map((item) => (
             <ReasonCard
               key={item.id}
               item={item}
-              isOpen={openIndex === i}
+              isOpen={openId === item.id}
               accessible
-              onOpen={() => setOpenIndex(i)}
-              onClose={() => close(i)}
-              onFocusOpen={() => setOpenIndex(i)}
+              onOpen={() => setOpenId(item.id)}
+              onClose={() => close(item.id)}
+              onFocusOpen={() => setOpenId(item.id)}
             />
           ))}
         </div>
@@ -764,30 +848,21 @@ function ReasonsRail({
         </button>
       </div>
       <div ref={cropRef} className="overflow-hidden">
-        <div ref={trackRef} className="flex gap-3 sm:gap-5 px-4 sm:px-6 lg:px-8 w-max">
-          {items.map((item, i) => (
-            <ReasonCard
-              key={`a-${item.id}`}
-              item={item}
-              isOpen={openIndex === i}
-              accessible
-              setRef={setItemRef[i]}
-              onOpen={() => setOpenIndex(i)}
-              onClose={() => close(i)}
-              onFocusOpen={() => { setOpenIndex(i); focusItemIntoView(i); }}
-            />
-          ))}
-          {items.map((item, i) => (
-            <ReasonCard
-              key={`b-${item.id}`}
-              item={item}
-              isOpen={openIndex === i}
-              accessible={false}
-              setRef={i === 0 ? setSeqBStart : undefined}
-              onOpen={() => setOpenIndex(i)}
-              onClose={() => close(i)}
-            />
-          ))}
+        <div ref={trackRef} className="flex gap-3 sm:gap-5 pl-3 sm:pl-5 w-max">
+          {Array.from({ length: copies }, (_, c) =>
+            items.map((item, i) => (
+              <ReasonCard
+                key={`${c}-${item.id}`}
+                item={item}
+                isOpen={openId === item.id}
+                accessible={c === 0}
+                setRef={c === 0 ? (i === 0 ? setFirstA : setItemRef[i]) : c === 1 && i === 0 ? setFirstB : undefined}
+                onOpen={() => setOpenId(item.id)}
+                onClose={() => close(item.id)}
+                onFocusOpen={c === 0 ? () => { setOpenId(item.id); focusItemIntoView(i); } : undefined}
+              />
+            )),
+          )}
         </div>
       </div>
     </div>
@@ -804,14 +879,13 @@ export function TedarikciPage() {
   const filteredYerli = YERLI_BRANDS.filter((b) => b.name.toLowerCase().includes(query));
   const noBrandResults = filteredGlobal.length === 0 && filteredYerli.length === 0;
   const reveal = useReveal();
-  // REASON_META (yapısal: id/order/published) + content.*.advantages.items
-  // (dile göre title/desc) — HakkimizdaPage.tsx'teki FACT_STATS/MILESTONES
-  // birleştirme kalıbıyla AYNI: `order` alanına göre sıralanır, `published`
-  // false olanlar bant'a hiç gitmez (bugün hepsi true).
-  const REASONS = REASON_META
-    .filter((m) => m.published)
-    .sort((a, b) => a.order - b.order)
-    .map((m, i) => ({ id: m.id, image: m.image, ...t.advantages.items[i] }));
+  // REASON_META (yapısal: id/order/published/image/focalPoint) + content.*.
+  // advantages.items (dile göre title/desc/alt) `id` üzerinden birleşir —
+  // index eşlemesi YOK (bkz. REASON_META üstündeki not ve src/lib/join-by-id.ts):
+  // `order`'a göre sıralanır, `published: false` olanlar banda hiç gitmez,
+  // her kartın görseli/başlığı/açıklaması hangi konumda olursa olsun aynı
+  // id'den gelir.
+  const REASONS = joinById(REASON_META, t.advantages.items);
 
   return (
     <div className="do-site bg-white min-h-screen">

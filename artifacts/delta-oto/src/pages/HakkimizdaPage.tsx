@@ -4,9 +4,7 @@ import {
   ChevronRight,
   ChevronDown,
   Clock,
-  Globe,
   Award,
-  Users,
   TrendingUp,
   ShieldCheck,
   BadgeCheck,
@@ -19,60 +17,66 @@ import {
 } from "lucide-react";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
-import { useCounter, useReveal, useViewportFocusIndex } from "../hooks/use-motion";
+import { useCounter, useReveal } from "../hooks/use-motion";
 import { useDocumentMeta } from "@/hooks/use-document-meta";
 import { useLang, routeFor, gundemAnchor, gundemDetailRoute, type Lang } from "@/lib/i18n";
 import { AGENDA_ITEMS } from "@/lib/agenda";
+import { joinById } from "@/lib/join-by-id";
 
 // do-d1..do-d4: index.css'te tanımlı sabit stagger gecikmeleri (80/160/240/320ms).
 // Tailwind'in JIT taraması bu sınıfları görmese de sorun değil — bunlar Tailwind
 // utility'si değil, index.css'te elle yazılmış düz CSS kuralları.
 const STAGGER_CLASSES = ["do-d1", "do-d2", "do-d3", "do-d4"];
 
-// Dil-bağımsız yapısal veri (ikon, hedef sayı, yıl, pending bayrağı) modül
-// seviyesinde sabit kalır; sadece görüntülenen metin (label/sub/title/desc)
-// `content.tr`/`content.en`'den gelir ve component içinde index'e göre
-// eşlenir (bkz. TedarikciPage'deki ADVANTAGE_ICONS deseni).
-const FACT_ICONS = [Award, Globe, Users, TrendingUp];
-
+// Turu 6 — veri modeli: her kaydın YAPISAL alanları (id/order/published, ikon,
+// hedef sayı, yıl…) dil-bağımsız olarak burada; dile göre değişen METİN ise
+// `content.tr`/`content.en` içinde AYNI `id` ile anahtarlanan bir sözlükte
+// (bkz. `facts.items` / `timeline.items`). İkisi `joinById` ile id üzerinden
+// birleşir — index'e göre eşleme YOK (bkz. src/lib/join-by-id.ts). Bir kaydın
+// sırası/yayın durumu değişse de hangi metni aldığı asla değişmez.
+//
+// "Rakamlarla Delta Oto": YALNIZCA Delta Oto'nun kendi verileri (kuruluş yılı,
+// aktif marka). Turu 6'da kullanıcı kararıyla "Ağ / Ekosistem Erişimi" alt
+// bölümü (GROUPAUTO Türkiye üyeliği üzerinden gelen 118 ülke / 29 üye rakamları,
+// GROUPAUTO rozetleri, grup başlıkları) TAMAMEN kaldırıldı — gizlenmedi,
+// başka bir bölüme taşınmadı, yerine yeni ağ rakamı konmadı.
+//
 // grouped: tr-TR binlik ayraç (nokta) uygulanır — sadece 1000 ve üzeri gerçek miktarlarda kullanılır (1976 bir yıl, ayraç almaz).
 // NOT: toLocaleString("tr-TR") çağrısı StatCard içinde sabit — bu, sitedeki
 // diğer sayaç bileşenleriyle (LandingPage CountUp, OperasyonPage CountUp)
 // aynı, önceden kurulmuş davranıştır; bu görevin kapsamı dışında değiştirilmedi.
-// Turu 5 düzeltmesi: `group` alanı eklendi — "Rakamlarla Delta Oto" eskiden
-// dört rakamı TEK, ayrışmamış bir gridde gösteriyordu; bunlardan ikisi
-// (1976, 100+) Delta Oto'NUN KENDİ rakamı, diğer ikisi (118, 29) ise
-// GROUPAUTO International'ın KENDİ resmi rakamı (Delta yalnızca üyesi
-// olduğu bir ağın parçası) — hiçbir görsel/metinsel ayrım olmadan yan yana
-// durmaları "bu sayı kime ait?" belirsizliğine yol açıyordu (canlı geri
-// bildirim). Artık render iki ayrı, açıkça etiketli alt gruba bölünüyor
-// (bkz. aşağıdaki render'da DELTA_FACTS/NETWORK_FACTS filtrelemesi) — sayı
-// değerleri DEĞİŞMEDİ, yalnızca hangi gruba ait oldukları artık açık.
-// `id` (Turu 5, CMS Hazırlık): önceden React key'i doğrudan `target`
-// (rakamın kendisi) idi — kırılgan, çünkü rakam ileride güncellenirse
-// (ör. "100" → "105") aynı zamanda kaydın "kimliği" de değişmiş olurdu.
-// Artık ayrı, rakamdan bağımsız sabit bir string id var — REASON_META
-// (TedarikciPage.tsx) ve MILESTONE_META ile aynı kalıp.
-const FACT_META: { id: string; target: number; plus: boolean; grouped: boolean; group: "delta" | "network" }[] = [
-  { id: "founding-year", target: 1976, plus: false, grouped: false, group: "delta" },
-  { id: "country-network", target: 118,  plus: false, grouped: false, group: "network" }, // Düzeltme: eskiden 40+ idi — sayfanın kendi groupauto.stats'ıyla (118 Ülke) tutarsızdı, gerçek resmi rakamla eşitlendi
-  { id: "groupauto-members", target: 29,   plus: false, grouped: false, group: "network" }, // Düzeltme: resmi Groupauto International üye sayısı (29 Members) — bkz. aşağıdaki not
-  { id: "active-brands", target: 100,  plus: true,  grouped: false, group: "delta" }, // İçerik/UX Revizyon Notu: sitewide marka iddiası 250+ → 100+ değişti (bkz. content.*.facts.items[3])
+const FACT_META: {
+  id: string;
+  order: number;
+  published: boolean;
+  icon: React.ElementType;
+  target: number;
+  plus: boolean;
+  grouped: boolean;
+}[] = [
+  { id: "founding-year", order: 1, published: true, icon: Award, target: 1976, plus: false, grouped: false },
+  { id: "active-brands", order: 2, published: true, icon: TrendingUp, target: 100, plus: true, grouped: false }, // İçerik/UX Revizyon Notu: sitewide marka iddiası 250+ → 100+ değişti
 ];
 
 // `pending: true` kayıtlar gerçek bir tarih ama henüz yazılmamış içerik demektir —
 // uydurma olay eklemek yerine dürüstçe "detaylar ekleniyor" olarak işaretlenir.
-// year/pending dil-bağımsızdır; label/desc content.*.timeline.items[i]'den gelir.
-const MILESTONE_META: { year: string; pending: boolean }[] = [
-  { year: "1976", pending: false },
-  { year: "1990", pending: false },
-  { year: "1998", pending: true },
-  { year: "2005", pending: false },
-  { year: "2010", pending: true },
-  { year: "2015", pending: false },
-  { year: "2020", pending: true },
-  { year: "2026", pending: false },
+// `id` yıl metninden BAĞIMSIZ, kararlı bir kimliktir (olay kimliği; aynı yıla
+// ileride ikinci bir olay eklenirse ayrı id alır, sıra `order` ile belirlenir).
+// Açık kayıt da bu id ile tutulur (bkz. MilestoneTimeline). year/pending
+// dil-bağımsızdır; label/desc content.*.timeline.items[id]'den gelir.
+const MILESTONE_META: { id: string; order: number; published: boolean; year: string; pending: boolean }[] = [
+  { id: "founding", order: 1, published: true, year: "1976", pending: false },
+  { id: "portfolio-expansion", order: 2, published: true, year: "1990", pending: false },
+  { id: "pending-1", order: 3, published: true, year: "1998", pending: true },
+  { id: "groupauto-membership", order: 4, published: true, year: "2005", pending: false },
+  { id: "pending-2", order: 5, published: true, year: "2010", pending: true },
+  { id: "national-logistics", order: 6, published: true, year: "2015", pending: false },
+  { id: "pending-3", order: 7, published: true, year: "2020", pending: true },
+  { id: "anniversary-50", order: 8, published: true, year: "2026", pending: false },
 ];
+
+type FactCopy = { label: string; sub: string };
+type MilestoneCopy = { label: string; desc: string };
 
 const VALUE_ICONS = [ShieldCheck, BadgeCheck, Gauge, Sprout];
 const ESG_ICONS = [Route, Recycle, Laptop];
@@ -84,17 +88,20 @@ const ESG_ICONS = [Route, Recycle, Laptop];
 //    yasaklıyor (Delta yalnızca Türkiye çapında dağıtım yapar; yalnızca
 //    Groupauto International özel adı/ağı uluslararası olarak nitelenebilir).
 // 2) Sitewide marka sayısı iddiası "250+" → "100+" olarak değişti (bkz.
-//    FACT_META[3], BUSINESS_UNITS[0], MILESTONES[7]).
+//    FACT_META["active-brands"], BUSINESS_UNITS[0], timeline "anniversary-50").
 // 3) 2015 dönüm noktasındaki bir cümle kaldırıldı — Delta'nın kendisinin
 //    ihracat yaptığı iddiasıydı; şirket Türkiye çapında bir distribütör
 //    olarak konumlandırılır.
 // 4) Düzeltme turu: yukarıdaki (1) maddesinin İLK düzeltmesinde yerine
 //    konan "3.000+ Üye Firma" rakamı da desteksizdi (uydurma/doğrulanmamış
-//    bir sayıydı, gerçek bir kaynağa dayanmıyordu). FACT_META[2] ve
-//    groupauto.stats artık YALNIZCA GROUPAUTO International'ın kendi resmi
-//    kamuya açık rakamlarından (29 Members / 71 Referenced Suppliers /
-//    1.958 Distributors) alınan üç değeri kullanıyor — hiçbiri yukarı
-//    yuvarlanmadı veya yeniden yorumlanmadı.
+//    bir sayıydı, gerçek bir kaynağa dayanmıyordu). `groupauto.stats`
+//    YALNIZCA GROUPAUTO International'ın kendi resmi kamuya açık
+//    rakamlarından (29 Members / 71 Referenced Suppliers / 1.958
+//    Distributors) alınan üç değeri kullanıyor — hiçbiri yukarı
+//    yuvarlanmadı veya yeniden yorumlanmadı. (Turu 6: aynı rakamların
+//    "Rakamlarla Delta Oto" içindeki kopyaları — 118 ülke / 29 üye kartları —
+//    kullanıcı kararıyla kaldırıldı; GROUPAUTO anlatısının kendisi, bu
+//    bölüm dahil, değişmedi.)
 const content = {
   tr: {
     meta: {
@@ -110,16 +117,10 @@ const content = {
     facts: {
       eyebrow: "Rakamlarla Delta Oto",
       heading: "Kurumsal Ölçek ve Erişim",
-      groupDeltaLabel: "Delta Oto Ölçeği",
-      groupNetworkLabel: "Ağ / Ekosistem Erişimi",
-      groupNetworkNote: "GROUPAUTO Türkiye üyeliği üzerinden",
-      networkBadge: "GROUPAUTO",
-      items: [
-        { label: "Kuruluş Yılı", sub: "50+ yıl sektör deneyimi" },
-        { label: "Ülke Ağı", sub: "Distribütör kapsama alanı" },
-        { label: "Groupauto Üyesi", sub: "Küresel distribütör ağı" },
-        { label: "Aktif Marka", sub: "Sürekli güncellenen portföy" },
-      ],
+      items: {
+        "founding-year": { label: "Kuruluş Yılı", sub: "50+ yıl sektör deneyimi" },
+        "active-brands": { label: "Aktif Marka", sub: "Sürekli güncellenen portföy" },
+      } as Record<string, FactCopy>,
     },
     timeline: {
       eyebrow: "Kurumsal Tarihçe",
@@ -127,16 +128,16 @@ const content = {
       listAriaLabel: "Kuruluştan bugüne kurumsal tarihçe zaman çizelgesi",
       comingSoon: "Yakında",
       pendingText: "Bu döneme ait detaylar yakında eklenecek.",
-      items: [
-        { label: "Kuruluş", desc: "Ümraniye'de temelleri atılan şirket, otomotiv aftermarket sektörünün kurucu distribütörleri arasında yerini aldı." },
-        { label: "Portföy Genişlemesi", desc: "Tedarik ağının derinleşmesiyle birlikte İstanbul bölgesinde lider distribütör konumuna ulaşıldı; ürün kategorileri sistematik biçimde genişletildi." },
-        { label: "", desc: "" },
-        { label: "GROUPAUTO Üyeliği", desc: "Avrupa merkezli bağımsız aftermarket ağına tam üye olunarak küresel tedarik kanallarına, üretici anlaşmalarına ve piyasa bilgisine erişim sağlandı." },
-        { label: "", desc: "" },
-        { label: "Ulusal Lojistik Ağı", desc: "Türkiye'nin 81 iline kesintisiz teslimat kapasitesi kuruldu. Opar Ege bölge operasyonuyla dağıtım coğrafyası İzmir ve Ege'ye yayıldı." },
-        { label: "", desc: "" },
-        { label: "50. Kuruluş Yılı", desc: "100'den fazla aktif marka, binlerce müşteri ilişkisi ve 50+ yıllık kurumsal birikimiyle sektördeki yapıcı konumunu pekiştiriyor." },
-      ],
+      items: {
+        "founding": { label: "Kuruluş", desc: "Ümraniye'de temelleri atılan şirket, otomotiv aftermarket sektörünün kurucu distribütörleri arasında yerini aldı." },
+        "portfolio-expansion": { label: "Portföy Genişlemesi", desc: "Tedarik ağının derinleşmesiyle birlikte İstanbul bölgesinde lider distribütör konumuna ulaşıldı; ürün kategorileri sistematik biçimde genişletildi." },
+        "pending-1": { label: "", desc: "" },
+        "groupauto-membership": { label: "GROUPAUTO Üyeliği", desc: "Avrupa merkezli bağımsız aftermarket ağına tam üye olunarak küresel tedarik kanallarına, üretici anlaşmalarına ve piyasa bilgisine erişim sağlandı." },
+        "pending-2": { label: "", desc: "" },
+        "national-logistics": { label: "Ulusal Lojistik Ağı", desc: "Türkiye'nin 81 iline kesintisiz teslimat kapasitesi kuruldu. Opar Ege bölge operasyonuyla dağıtım coğrafyası İzmir ve Ege'ye yayıldı." },
+        "pending-3": { label: "", desc: "" },
+        "anniversary-50": { label: "50. Kuruluş Yılı", desc: "100'den fazla aktif marka, binlerce müşteri ilişkisi ve 50+ yıllık kurumsal birikimiyle sektördeki yapıcı konumunu pekiştiriyor." },
+      } as Record<string, MilestoneCopy>,
     },
     values: {
       eyebrow: "Kurumsal İlkeler",
@@ -202,16 +203,10 @@ const content = {
     facts: {
       eyebrow: "Delta Oto by the Numbers",
       heading: "Corporate Scale and Reach",
-      groupDeltaLabel: "Delta Oto Scale",
-      groupNetworkLabel: "Network / Ecosystem Access",
-      groupNetworkNote: "Through GROUPAUTO Türkiye membership",
-      networkBadge: "GROUPAUTO",
-      items: [
-        { label: "Founding Year", sub: "50+ years of industry experience" },
-        { label: "Country Network", sub: "Distributor coverage area" },
-        { label: "GROUPAUTO Members", sub: "Global distributor network" },
-        { label: "Active Brands", sub: "Continuously updated portfolio" },
-      ],
+      items: {
+        "founding-year": { label: "Founding Year", sub: "50+ years of industry experience" },
+        "active-brands": { label: "Active Brands", sub: "Continuously updated portfolio" },
+      } as Record<string, FactCopy>,
     },
     timeline: {
       eyebrow: "Corporate History",
@@ -219,16 +214,16 @@ const content = {
       listAriaLabel: "Corporate history timeline from founding to today",
       comingSoon: "Coming Soon",
       pendingText: "Details for this period will be added soon.",
-      items: [
-        { label: "Founding", desc: "Founded in Ümraniye, the company took its place among the founding distributors of the automotive aftermarket industry." },
-        { label: "Portfolio Expansion", desc: "As the supply network deepened, the company reached a leading distributor position in the İstanbul region; product categories were systematically expanded." },
-        { label: "", desc: "" },
-        { label: "GROUPAUTO Membership", desc: "Full membership in the Europe-based independent aftermarket network provided access to global supply channels, manufacturer agreements and market intelligence." },
-        { label: "", desc: "" },
-        { label: "National Logistics Network", desc: "Uninterrupted delivery capacity to all 81 provinces of Turkey was established. With the Opar Aegean regional operation, distribution coverage expanded to İzmir and the Aegean region." },
-        { label: "", desc: "" },
-        { label: "50th Anniversary", desc: "With more than 100 active brands, thousands of customer relationships and 50+ years of institutional heritage, the company reinforces its constructive position in the industry." },
-      ],
+      items: {
+        "founding": { label: "Founding", desc: "Founded in Ümraniye, the company took its place among the founding distributors of the automotive aftermarket industry." },
+        "portfolio-expansion": { label: "Portfolio Expansion", desc: "As the supply network deepened, the company reached a leading distributor position in the İstanbul region; product categories were systematically expanded." },
+        "pending-1": { label: "", desc: "" },
+        "groupauto-membership": { label: "GROUPAUTO Membership", desc: "Full membership in the Europe-based independent aftermarket network provided access to global supply channels, manufacturer agreements and market intelligence." },
+        "pending-2": { label: "", desc: "" },
+        "national-logistics": { label: "National Logistics Network", desc: "Uninterrupted delivery capacity to all 81 provinces of Turkey was established. With the Opar Aegean regional operation, distribution coverage expanded to İzmir and the Aegean region." },
+        "pending-3": { label: "", desc: "" },
+        "anniversary-50": { label: "50th Anniversary", desc: "With more than 100 active brands, thousands of customer relationships and 50+ years of institutional heritage, the company reinforces its constructive position in the industry." },
+      } as Record<string, MilestoneCopy>,
     },
     values: {
       eyebrow: "Corporate Principles",
@@ -282,19 +277,14 @@ const content = {
   },
 } satisfies Record<Lang, any>;
 
-/** Kurumsal Rakamlar kartı: kart görünüre girince hedef değere sayarak ulaşır (LandingPage'deki MetricItem/CountUp desenine benzer, bu sayfaya özgü sadeleştirilmiş hali).
- * `badge` (Turu 5): yalnızca "network" grubundaki kartlara geçiliyor — kart
- * seviyesinde bile "bu rakam GROUPAUTO'ya ait" mesajını üstteki grup
- * etiketinden bağımsız olarak tekrar eden küçük bir rozet; kullanıcı yalnızca
- * bu tek kartı görse bile kaynağı belirsiz kalmasın diye. */
-function StatCard({ icon: Icon, target, plus, grouped, label, sub, badge }: {
+/** Kurumsal Rakamlar kartı: kart görünüre girince hedef değere sayarak ulaşır (LandingPage'deki MetricItem/CountUp desenine benzer, bu sayfaya özgü sadeleştirilmiş hali). */
+function StatCard({ icon: Icon, target, plus, grouped, label, sub }: {
   icon: React.ElementType;
   target: number;
   plus: boolean;
   grouped: boolean;
   label: string;
   sub: string;
-  badge?: string;
 }) {
   const [started, setStarted] = React.useState(false);
   const ref = React.useRef<HTMLDivElement>(null);
@@ -311,12 +301,7 @@ function StatCard({ icon: Icon, target, plus, grouped, label, sub, badge }: {
   const display = grouped ? count.toLocaleString("tr-TR") : String(count);
 
   return (
-    <div ref={ref} className="relative border border-slate-200 rounded-xl p-7 hover:border-[#1B3A8F]/30 hover:shadow-md transition-all group">
-      {badge && (
-        <span className="absolute top-4 right-4 text-[9px] font-bold uppercase tracking-wide text-[#7d9bea] bg-[#1B3A8F]/[0.07] rounded-full px-2 py-1">
-          {badge}
-        </span>
-      )}
+    <div ref={ref} className="border border-slate-200 rounded-xl p-5 sm:p-7 hover:border-[#1B3A8F]/30 hover:shadow-md transition-all group">
       <div className="w-11 h-11 bg-[#1B3A8F]/[0.07] rounded-xl flex items-center justify-center mb-4 group-hover:bg-[#1B3A8F]/[0.12] transition-colors">
         <Icon className="w-5 h-5 text-[#1B3A8F]" />
       </div>
@@ -330,144 +315,243 @@ function StatCard({ icon: Icon, target, plus, grouped, label, sub, badge }: {
 }
 
 /**
- * Zaman Çizgisi — Turu 5 (Accordion + Scroll-Sync): önceki tur "hepsi her zaman
- * açık" dikey liste hâline mobilde fazla kalabalık geldi (canlı geri bildirim).
- * Artık her satır varsayılan olarak yalnızca YIL + BAŞLIK gösteriyor;
- * açıklama gizli, satıra tıklayınca/dokununca (tek seferde yalnızca bir
- * satır) açılıyor — klasik accordion. AYRICA sayfa kaydırılırken görünüm
- * merkezine en yakın satır otomatik olarak aktif/açık hâle geliyor — bunun
- * için sıfırdan bir IntersectionObserver kurulmadı, Operasyon sayfasındaki
- * "Siparişten Teslimata" 4 adımlı animasyonunda zaten kanıtlanmış olan
- * `useViewportFocusIndex` hook'u (bkz. src/hooks/use-motion.ts) AYNEN yeniden
- * kullanıldı — rAF+scroll event tabanlı, her satırın GERÇEK
- * getBoundingClientRect'ini ölçüyor, eşik-tetiklemeli değil sürekli
- * "şu an en yakın hangisi" hesaplıyor; bu yüzden bir satır açılıp
- * yüksekliği değiştiğinde (aşağıdaki satırları ittiğinde) sahte bir
- * "yeni satır göründü" tetiklemesi YOK — yalnızca gerçek bir sonraki
- * scroll event'inde güncelleniyor, geri besleme döngüsü riski taşımıyor.
+ * Zaman Çizgisi — Turu 6 (Bağımsız Kaydırma + Yalnız Tıklamayla Açılma).
  *
- * Manuel tıklama ile scroll-senkronu birlikte çalışıyor: tıklama anında
- * `manualOverrideRef` 2.5sn'lik bir muafiyet penceresi açıyor — bu süre
- * boyunca scroll-hook'un güncellemesi görmezden geliniyor (kullanıcı az
- * önce seçtiği satırın hemen elinden alınmaması için), süre dolunca scroll
- * yeniden devralıyor. `prefers-reduced-motion` altında hook'un kendi scroll
- * dinleyicisi hiç kurulmuyor (activeIndex sürekli -1 kalıyor) — bu durumda
- * zaman çizelgesi salt tıklamayla çalışır, hiçbir satır otomatik açılmaz/
- * kapanmaz (mevcut davranış bozulmaz, yalnızca "scroll'a bağlı otomatik
- * geçiş" kısmı devre dışı kalır — okumak için hareket ZORUNLU değildir).
+ * Turu 5'teki sayfa-scroll senkronu (`useViewportFocusIndex` + 2.5 sn'lik
+ * manuel muafiyet penceresi) kullanıcı kararıyla KALDIRILDI: açık kayıt artık
+ * sayfa ya da liste kaydırılırken kendiliğinden değişmez, zamanlayıcıyla
+ * geri alınmaz — bu modülde seçimi değiştiren TEK şey kullanıcının tıklaması/
+ * dokunması/klavye etkinleştirmesidir. (Paylaşılan `useViewportFocusIndex`
+ * hook'unun kendisi — Kariyer'in kültür modülü kullanıyor — DEĞİŞMEDİ.)
  *
- * `pending: true` kayıtlar (bkz. MILESTONE_META üstteki not) artık daha da
- * hafif — küçük/soluk yıl rakamı + "Yakında" rozetiyle gerçek dönüm
- * noktalarının önüne asla geçmiyor; uydurma başlık/açıklama eklenmez.
+ * Yerleşim: bölüm başlığı dışarıda; yıllar SINIRLI YÜKSEKLİKLİ, native
+ * `overflow-y: auto` bir bölgede (mobilde ~5, masaüstünde ~5,5 satır sığar —
+ * son satır kırpık kalarak "devamı var" ipucu verir). Ek ipuçları: ince ama
+ * GÖRÜNÜR scrollbar (`.do-thin-scroll`, index.css) + uçlarda beliren solma
+ * gradyanları. Touch/wheel kaydırma tamamen native: `preventDefault` yok,
+ * body scroll kilidi yok, `overscroll-behavior` varsayılan (uçlarda sayfaya
+ * zincirlenir → kullanıcı listenin içinde mahsur kalmaz).
  *
- * Çizgi konumlandırma notu (değişmedi): bağlayıcı dikey çizgi her satırın
- * kendi `relative` kutusu içinde `top-0 bottom-0` ile çiziliyor — yüzde
- * tabanlı olduğu için satırın gerçek yüksekliğini (açık/kapalı fark etmeksizin)
- * otomatik kapsıyor, JS ölçüm gerekmiyor.
+ * Seçim: `openId` (kayıt id'si) — index ya da görünen yıl metni DEĞİL; aynı
+ * yıla ileride iki olay eklense de karışmaz, dil değişince de açık kayıt aynı
+ * kalır. Satırın TAMAMI (yıl + düğüm + başlık) tek bir `<button>`: yıla ya da
+ * başlığa dokunmak aynı açıklamayı açar; aynı satıra tekrar basınca kapanır,
+ * başka satır seçilince öncekini kapatır. Kapalı açıklama görsel olarak değil
+ * ERİŞİLEBİLİRLİK açısından da kapalı (`inert` + `aria-hidden` + visibility).
+ *
+ * Açıklama açılırken gerekiyorsa YALNIZCA listenin kendi `scrollTop`'u
+ * düzeltilir (açıklama alt kenardan taşıyorsa) — `window.scrollTo` /
+ * `scrollIntoView` yok, sayfa hiç oynamaz. Düzeltme, açılış geçişi
+ * BİTTİKTEN sonra (onTransitionEnd) yapılır: o an satırın son yüksekliği
+ * bilinir. `prefers-reduced-motion`'da yalnızca geçiş süresi kısalır (global
+ * kural), seçim/davranış aynı kalır; düzeltme de `smooth` yerine anında.
+ *
+ * Eksen geometrisi: yıl sütunu / düğüm sütunu genişlikleri ve ilk satır
+ * yüksekliği CSS değişkenleri (--tl-yw/--tl-nw/--tl-lh) — çizgi tam düğüm
+ * merkezinden (yıl + düğüm/2) geçer, üç sütunun ortak hizası tek kaynaktan.
+ * (Turu 5'te çizgi sabit px ofsetlerle (72/116/140px) konumlanıyordu ve düğüm
+ * merkezinden 12–24px kayıktı — çizgi başlık sütununun sol kenarına denk
+ * geliyordu; tek kaynaktan türetme bunu da giderdi.)
+ *
+ * `pending: true` kayıtlar ("Yakında") gerçek bir tarih ama yazılmamış içerik
+ * demektir — uydurma başlık/açıklama eklenmez, küçük/soluk gösterilir.
  */
 function MilestoneTimeline({ t }: { t: (typeof content)["tr"]["timeline"] }) {
-  const MILESTONES = MILESTONE_META.map((m, i) => ({ ...m, ...t.items[i] }));
+  const MILESTONES = joinById(MILESTONE_META, t.items);
   const reveal = useReveal();
+  const uid = React.useId();
 
-  const [openIndex, setOpenIndex] = React.useState<number | null>(null);
-  const manualOverrideRef = React.useRef(false);
-  const overrideTimeoutRef = React.useRef<number | undefined>(undefined);
-  const [setFocusRef, scrollActiveIndex] = useViewportFocusIndex(MILESTONES.length, 0.42, 0.45);
+  const [openId, setOpenId] = React.useState<string | null>(null);
+  const [edges, setEdges] = React.useState({ top: false, bottom: false });
+  const scrollerRef = React.useRef<HTMLDivElement>(null);
+  const rowRefs = React.useRef(new Map<string, HTMLLIElement>());
+
+  const toggle = (id: string) => setOpenId((cur) => (cur === id ? null : id));
+
+  // Yalnızca "üstte/altta daha fazla var" gösterge durumunu günceller —
+  // seçime ASLA dokunmaz.
+  const updateEdges = React.useCallback(() => {
+    const el = scrollerRef.current;
+    if (!el) return;
+    const top = el.scrollTop > 2;
+    const bottom = el.scrollTop + el.clientHeight < el.scrollHeight - 2;
+    setEdges((prev) => (prev.top === top && prev.bottom === bottom ? prev : { top, bottom }));
+  }, []);
 
   React.useEffect(() => {
-    if (manualOverrideRef.current) return;
-    if (scrollActiveIndex >= 0) setOpenIndex(scrollActiveIndex);
-  }, [scrollActiveIndex]);
+    const el = scrollerRef.current;
+    if (!el) return;
+    updateEdges();
+    if (typeof ResizeObserver === "undefined") return;
+    const ro = new ResizeObserver(updateEdges);
+    ro.observe(el);
+    if (el.firstElementChild) ro.observe(el.firstElementChild);
+    return () => ro.disconnect();
+  }, [updateEdges]);
 
-  React.useEffect(() => () => window.clearTimeout(overrideTimeoutRef.current), []);
-
-  const handleRowToggle = (i: number) => {
-    setOpenIndex((prev) => (prev === i ? null : i));
-    manualOverrideRef.current = true;
-    window.clearTimeout(overrideTimeoutRef.current);
-    overrideTimeoutRef.current = window.setTimeout(() => { manualOverrideRef.current = false; }, 2500);
+  // Açılan satırın (başlık + açıklama) liste görünümünde tam görünmesini
+  // sağlar: yalnızca listenin scrollTop'unu ayarlar; satırın kendi üstü asla
+  // görünümün dışına itilmez (çok uzun açıklamada başlık öncelikli).
+  const ensureVisible = (id: string) => {
+    const scroller = scrollerRef.current;
+    const row = rowRefs.current.get(id);
+    if (!scroller || !row) return;
+    // Alt pay, alttaki solma gradyanının (h-12 = 48px) altında kalmamak için
+    // daha geniş: açılan açıklamanın son satırı soluk görünmesin.
+    const padTop = 12;
+    const padBottom = 44;
+    const s = scroller.getBoundingClientRect();
+    const r = row.getBoundingClientRect();
+    const rowTop = r.top - s.top + scroller.scrollTop;
+    const rowBottom = rowTop + r.height;
+    const viewTop = scroller.scrollTop;
+    const viewBottom = viewTop + scroller.clientHeight;
+    let next = viewTop;
+    if (rowBottom > viewBottom - padBottom) next = rowBottom - scroller.clientHeight + padBottom;
+    if (rowTop < next + padTop) next = rowTop - padTop;
+    next = Math.max(0, Math.min(next, scroller.scrollHeight - scroller.clientHeight));
+    if (Math.abs(next - viewTop) > 1) {
+      const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      scroller.scrollTo({ top: next, behavior: reduced ? "auto" : "smooth" });
+    }
   };
 
   return (
     <section className="bg-[#1B3A8F] py-20 md:py-24 lg:py-28 text-white overflow-x-clip">
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
-        <div ref={reveal} className="do-reveal mb-12 md:mb-16 max-w-2xl">
+        <div ref={reveal} className="do-reveal mb-8 md:mb-10 max-w-2xl">
           <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea]">{t.eyebrow}</span>
           <h2 className="text-3xl md:text-4xl font-black mt-2 tracking-tight">{t.heading}</h2>
         </div>
 
-        <ol className="relative max-w-4xl list-none pl-0" aria-label={t.listAriaLabel}>
-          {MILESTONES.map((m, i) => {
-            const isLast = i === MILESTONES.length - 1;
-            const isOpen = openIndex === i;
-            return (
-              <li
-                key={m.year}
-                ref={(el) => { reveal(el); setFocusRef[i](el); }}
-                className={`do-reveal relative flex ${isLast ? "" : "pb-5 sm:pb-6 lg:pb-7"}`}
-              >
-                {!isLast && (
-                  <span
-                    className="absolute top-0 bottom-0 w-px bg-white/15 left-[72px] sm:left-[116px] lg:left-[140px]"
-                    aria-hidden="true"
-                  />
-                )}
-                <span
-                  className={`w-12 sm:w-20 lg:w-24 shrink-0 pt-0.5 font-black tabular-nums leading-none transition-colors duration-300 ${
-                    m.pending
-                      ? "text-base sm:text-lg lg:text-xl text-white/35"
-                      : `text-xl sm:text-2xl lg:text-3xl ${isOpen ? "text-white" : "text-white/80"}`
-                  }`}
-                >
-                  {m.year}
-                </span>
-                <span className="w-6 sm:w-8 lg:w-10 shrink-0 flex justify-center">
-                  <span
-                    className={`relative z-10 mt-2 block w-3 h-3 rounded-full ring-4 ring-[#1B3A8F] transition-colors duration-300 ${
-                      m.pending ? "bg-white/20" : isOpen ? "bg-[#7d9bea]" : "bg-white/40"
-                    }`}
-                    aria-hidden="true"
-                  />
-                </span>
-                <div className="flex-1 min-w-0 pb-1">
-                  <button
-                    type="button"
-                    onClick={() => handleRowToggle(i)}
-                    aria-expanded={isOpen}
-                    className="group flex items-start justify-between gap-3 w-full text-left rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7d9bea] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1B3A8F]"
+        <div ref={reveal} className="do-reveal relative max-w-4xl">
+          <div
+            ref={scrollerRef}
+            role="region"
+            aria-label={t.listAriaLabel}
+            tabIndex={0}
+            onScroll={updateEdges}
+            className="do-thin-scroll relative h-[300px] sm:h-[340px] lg:h-[380px] max-h-[72svh] overflow-y-auto pr-2 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white/60"
+          >
+            {/* Eksen geometrisi tek yerde (bkz. üstteki not): --tl-yw yıl
+                sütunu, --tl-nw düğüm sütunu, --tl-lh satırın ilk metin satırı
+                yüksekliği (yıl/düğüm/başlık aynı düşey merkezde), --tl-py
+                satırın üst/alt iç boşluğu. */}
+            <ol className="list-none m-0 p-0 [--tl-py:1.25rem] [--tl-yw:3.5rem] [--tl-nw:1.5rem] [--tl-lh:22px] sm:[--tl-yw:5rem] sm:[--tl-nw:2rem] sm:[--tl-lh:25px] lg:[--tl-yw:6rem] lg:[--tl-nw:2.5rem] lg:[--tl-lh:28px]">
+              {MILESTONES.map((m, i) => {
+                const isOpen = openId === m.id;
+                const isFirst = i === 0;
+                const isLast = i === MILESTONES.length - 1;
+                const btnId = `${uid}-tl-btn-${m.id}`;
+                const panelId = `${uid}-tl-panel-${m.id}`;
+                return (
+                  <li
+                    key={m.id}
+                    ref={(el) => {
+                      if (el) rowRefs.current.set(m.id, el);
+                      else rowRefs.current.delete(m.id);
+                    }}
+                    className="relative"
                   >
-                    {m.pending ? (
-                      <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-white/35">
-                        <Clock className="w-3.5 h-3.5" strokeWidth={2} /> {t.comingSoon}
-                      </span>
-                    ) : (
-                      <h3 className={`text-[16px] sm:text-[18px] lg:text-[20px] font-bold leading-snug transition-colors duration-300 ${isOpen ? "text-white" : "text-white/85"}`}>
-                        {m.label}
-                      </h3>
+                    {MILESTONES.length > 1 && (
+                      <span
+                        aria-hidden="true"
+                        className={`absolute left-[calc(var(--tl-yw)+var(--tl-nw)/2)] -translate-x-1/2 w-px bg-white/15 ${
+                          isFirst
+                            ? "top-[calc(var(--tl-py)+var(--tl-lh)/2)] bottom-0"
+                            : isLast
+                              ? "top-0 h-[calc(var(--tl-py)+var(--tl-lh)/2)]"
+                              : "top-0 bottom-0"
+                        }`}
+                      />
                     )}
-                    <ChevronDown
-                      className={`w-4 h-4 mt-1 shrink-0 transition-transform duration-300 ${m.pending ? "text-white/25" : "text-white/50"} ${isOpen ? "rotate-180" : ""}`}
-                      strokeWidth={2}
-                    />
-                  </button>
-                  <div
-                    className={`grid transition-[grid-template-rows] duration-300 ease-out ${
-                      isOpen ? "grid-rows-[1fr] mt-2" : "grid-rows-[0fr] mt-0"
-                    }`}
-                  >
-                    <div className="overflow-hidden">
-                      {m.pending ? (
-                        <p className="text-white/55 text-[13px] italic leading-relaxed max-w-xl">{t.pendingText}</p>
-                      ) : (
-                        <p className="text-white/70 text-[13.5px] sm:text-[14.5px] lg:text-[15px] leading-relaxed max-w-2xl">{m.desc}</p>
-                      )}
+                    <h3 className="m-0">
+                      <button
+                        type="button"
+                        id={btnId}
+                        aria-expanded={isOpen}
+                        aria-controls={panelId}
+                        onClick={() => toggle(m.id)}
+                        className="group relative flex w-full items-start text-left py-[var(--tl-py)] rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[#7d9bea]"
+                      >
+                        <span className="w-[var(--tl-yw)] shrink-0 h-[var(--tl-lh)] flex items-center">
+                          <span
+                            className={`font-black tabular-nums leading-none transition-colors duration-300 ${
+                              m.pending
+                                ? "text-base sm:text-lg lg:text-xl text-white/55"
+                                : `text-lg sm:text-2xl lg:text-3xl ${isOpen ? "text-white" : "text-white/80 group-hover:text-white"}`
+                            }`}
+                          >
+                            {m.year}
+                          </span>
+                        </span>
+                        <span
+                          aria-hidden="true"
+                          className="w-[var(--tl-nw)] shrink-0 h-[var(--tl-lh)] flex items-center justify-center"
+                        >
+                          <span
+                            className={`relative z-10 block w-3 h-3 rounded-full ring-4 ring-[#1B3A8F] transition-colors duration-300 ${
+                              m.pending ? "bg-white/25" : isOpen ? "bg-[#7d9bea]" : "bg-white/40 group-hover:bg-white/60"
+                            }`}
+                          />
+                        </span>
+                        <span className="flex-1 min-w-0 flex items-start justify-between gap-3">
+                          {m.pending ? (
+                            <span className="inline-flex items-center gap-1.5 h-[var(--tl-lh)] text-[11px] font-bold uppercase tracking-wider text-white/55">
+                              <Clock className="w-3.5 h-3.5" strokeWidth={2} aria-hidden="true" /> {t.comingSoon}
+                            </span>
+                          ) : (
+                            <span
+                              className={`block text-[15px] min-[360px]:text-[16px] sm:text-[18px] lg:text-[20px] font-bold leading-[var(--tl-lh)] transition-colors duration-300 ${
+                                isOpen ? "text-white" : "text-white/85 group-hover:text-white"
+                              }`}
+                            >
+                              {m.label}
+                            </span>
+                          )}
+                          <span className="h-[var(--tl-lh)] shrink-0 flex items-center">
+                            <ChevronDown
+                              aria-hidden="true"
+                              className={`w-4 h-4 transition-transform duration-300 ${m.pending ? "text-white/30" : "text-white/50"} ${isOpen ? "rotate-180" : ""}`}
+                              strokeWidth={2}
+                            />
+                          </span>
+                        </span>
+                      </button>
+                    </h3>
+                    <div
+                      id={panelId}
+                      aria-hidden={!isOpen}
+                      inert={!isOpen}
+                      onTransitionEnd={(e) => {
+                        if (isOpen && e.target === e.currentTarget && e.propertyName === "grid-template-rows") ensureVisible(m.id);
+                      }}
+                      className={`grid pl-[calc(var(--tl-yw)+var(--tl-nw))] pr-7 transition-[grid-template-rows,visibility,margin-top] duration-300 ease-out ${
+                        isOpen ? "grid-rows-[1fr] visible -mt-2" : "grid-rows-[0fr] invisible mt-0"
+                      }`}
+                    >
+                      <div className="overflow-hidden">
+                        {m.pending ? (
+                          <p className="text-white/55 text-[13px] italic leading-relaxed max-w-xl pb-1">{t.pendingText}</p>
+                        ) : (
+                          <p className="text-white/70 text-[13.5px] sm:text-[14.5px] lg:text-[15px] leading-relaxed max-w-2xl pb-1">{m.desc}</p>
+                        )}
+                      </div>
                     </div>
-                  </div>
-                </div>
-              </li>
-            );
-          })}
-        </ol>
+                  </li>
+                );
+              })}
+            </ol>
+          </div>
+          <div
+            aria-hidden="true"
+            className={`pointer-events-none absolute left-0 right-2 top-0 h-8 rounded-t-lg bg-gradient-to-b from-[#1B3A8F] to-transparent transition-opacity duration-200 ${edges.top ? "opacity-100" : "opacity-0"}`}
+          />
+          <div
+            aria-hidden="true"
+            className={`pointer-events-none absolute left-0 right-2 bottom-0 h-12 rounded-b-lg bg-gradient-to-t from-[#1B3A8F] to-transparent transition-opacity duration-200 ${edges.bottom ? "opacity-100" : "opacity-0"}`}
+          />
+        </div>
       </div>
     </section>
   );
@@ -482,15 +566,9 @@ export function HakkimizdaPage() {
   // ayrı IntersectionObserver kurma deseni yerine, çok-elemanlı useReveal kaydı).
   const reveal = useReveal();
 
-  // Dil-bağımsız yapısal veri (ikon) + dile göre değişen metin (label/sub/title/desc/tags)
-  // burada index'e göre birleştirilir — bkz. modül üstü FACT_META/VALUE_ICONS/vb. notu.
-  const FACT_STATS = FACT_META.map((m, i) => ({ ...m, icon: FACT_ICONS[i], label: t.facts.items[i].label, sub: t.facts.items[i].sub }));
-  // Turu 5: `group` alanına göre iki ayrı, açıkça etiketli alt kümeye
-  // bölünüyor (bkz. FACT_META üstteki not) — .filter() burada index'e değil
-  // her kaydın kendi `group` alanına dayanıyor, sıra değişse de doğru gruba
-  // düşer.
-  const DELTA_FACTS = FACT_STATS.filter((f) => f.group === "delta");
-  const NETWORK_FACTS = FACT_STATS.filter((f) => f.group === "network");
+  // Rakamlar: yapısal alanlar (FACT_META) + dile göre metin (t.facts.items),
+  // `id` üzerinden birleşir (bkz. src/lib/join-by-id.ts) — index eşlemesi yok.
+  const FACT_STATS = joinById(FACT_META, t.facts.items);
   const VALUES = t.values.items.map((v, i) => ({ ...v, icon: VALUE_ICONS[i] }));
   // Değer Çerçevemiz Etkileşim Turu 2: varsayılan yüzey beyaz + lacivert
   // başlık (editoryal indeks); aktif öğe (hover/focus/dokunma) TÜM hücreyi
@@ -552,16 +630,12 @@ export function HakkimizdaPage() {
         </div>
       </section>
 
-      {/* KURUMSAL RAKAMLAR — light. Turu 5: eskiden dört rakam tek, ayrışmamış
-          bir gridde duruyordu — ikisi Delta Oto'nun kendi rakamı (1976,
-          100+), ikisi GROUPAUTO International'ın kendi resmi rakamıydı (118,
-          29); hiçbir ayrım olmadığından "bu sayı kime ait?" belirsizliği
-          vardı (canlı geri bildirim). Artık iki AÇIKÇA etiketli alt grup:
-          "Delta Oto Ölçeği" ve "Ağ / Ekosistem Erişimi" (GROUPAUTO Türkiye
-          üyeliği üzerinden) — aralarında görünür bir ayraç + ikinci grubun
-          her kartında ayrıca küçük bir "GROUPAUTO" rozeti (bkz. StatCard
-          `badge` prop'u) kart seviyesinde de kaynağı netleştiriyor. Sayı
-          değerleri DEĞİŞMEDİ (1976 / 118 / 29 / 100+), yalnızca sunumu. */}
+      {/* KURUMSAL RAKAMLAR — light. Turu 6: "Ağ / Ekosistem Erişimi" alt
+          bölümü (118 ülke / 29 üye kartları, GROUPAUTO rozetleri, grup
+          başlıkları) kullanıcı kararıyla TAMAMEN kaldırıldı — CSS ile
+          gizlenmedi, başka yere taşınmadı. Geriye yalnızca Delta Oto'nun
+          kendi iki verisi (kuruluş yılı, aktif marka) kalıyor: tek, başlıksız
+          iki kartlık bir grid. */}
       <section className="bg-white py-20 border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div ref={reveal} className="do-reveal mb-12">
@@ -569,33 +643,19 @@ export function HakkimizdaPage() {
             <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-2 tracking-tight">{t.facts.heading}</h2>
           </div>
 
-          <div className="space-y-10">
-            <div>
-              <span className="block text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-4">
-                {t.facts.groupDeltaLabel}
-              </span>
-              <div className="grid grid-cols-2 gap-5">
-                {DELTA_FACTS.map((stat, i) => (
-                  <div key={stat.id} ref={reveal} className={`do-reveal ${STAGGER_CLASSES[i] ?? ""}`}>
-                    <StatCard {...stat} />
-                  </div>
-                ))}
+          <div className="grid grid-cols-2 gap-4 sm:gap-5">
+            {FACT_STATS.map((stat, i) => (
+              <div key={stat.id} ref={reveal} className={`do-reveal ${STAGGER_CLASSES[i] ?? ""}`}>
+                <StatCard
+                  icon={stat.icon}
+                  target={stat.target}
+                  plus={stat.plus}
+                  grouped={stat.grouped}
+                  label={stat.label}
+                  sub={stat.sub}
+                />
               </div>
-            </div>
-
-            <div className="pt-10 border-t border-slate-100">
-              <span className="block text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-1">
-                {t.facts.groupNetworkLabel}
-              </span>
-              <span className="block text-[12.5px] text-slate-400 mb-4">{t.facts.groupNetworkNote}</span>
-              <div className="grid grid-cols-2 gap-5">
-                {NETWORK_FACTS.map((stat, i) => (
-                  <div key={stat.id} ref={reveal} className={`do-reveal ${STAGGER_CLASSES[i + 2] ?? ""}`}>
-                    <StatCard {...stat} badge={t.facts.networkBadge} />
-                  </div>
-                ))}
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>

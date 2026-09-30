@@ -19,22 +19,38 @@ const HQ_DIRECTIONS_URL = `https://www.google.com/maps/dir/?api=1&destination=${
 // sağlandı (LinkedIn şirket sayfası + Instagram). Aynı LinkedIn URL'i
 // KariyerPage.tsx'teki "LinkedIn'de Pozisyonları İnceleyin" CTA'sında da
 // güncellendi — iki yerde farklı/eski bir bağlantı kalmasın diye.
-// Konum: Footer Revizyonu talebiyle bottom legal bar'dan (kopuk/sonradan-
-// eklenmiş görünüyordu) Sertifikalar kolonunun altına taşındı.
+// Konum (Turu 6): ikonlar ne logonun yanında ne de ayrı bir satırda — telefon
+// ve faks satırlarının SAĞINDA (LinkedIn telefonla, Instagram faksla aynı
+// satırda, düşey merkezleri aynı). URL'ler DEĞİŞMEDİ.
 //
 // GROUPAUTO Türkiye üyelik rozeti: "Groupauto Logo Types-01.png" kaynağından
 // (kullanıcı sağladı) — trim edilip webp'e dönüştürüldü, sanat değiştirilmedi.
-// Header/Supplier Assets Round: sertifika/üyelik alt-bölümünün hiyerarşisi
-// yeniden kuruldu — artık SOSYAL İKONLAR önce, tek bir ayraç, sonra GROUPAUTO
-// Türkiye üyeliği EN SONDA (kullanıcı talimatı: üyelik mesajı bu alt-
-// bölümün son öğesi olmalı). Rozet ölçülü şekilde büyütüldü (h-8 → h-10) —
-// hâlâ ana Delta logosunun (59-70px) çok altında, baskın değil. Jenerik
-// "Kalite standartlarımız..." açıklama metni tamamen kaldırıldı — sertifika
-// kutuları kendi başına duruyor, gereksiz dolgu cümleye ihtiyaç yok.
-const SOCIAL_LINKS: { label: string; href: string; Icon: typeof Linkedin }[] = [
-  { label: "LinkedIn", href: "https://www.linkedin.com/company/delta-oto-aksam%C4%B1-san-ve-tic-a-%C5%9F/?viewAsMember=true", Icon: Linkedin },
-  { label: "Instagram", href: "https://www.instagram.com/delta_oto/", Icon: Instagram },
-];
+// Üyelik/bayilik alanı Turu 6'da iki eşit sütun + tam ortada ince gri dikey
+// ayraç olarak yeniden kuruldu (bkz. aşağıdaki üyelik/bayilik bloğu).
+const SOCIAL_LINKS = {
+  linkedin: { label: "LinkedIn", href: "https://www.linkedin.com/company/delta-oto-aksam%C4%B1-san-ve-tic-a-%C5%9F/?viewAsMember=true", Icon: Linkedin },
+  instagram: { label: "Instagram", href: "https://www.instagram.com/delta_oto/", Icon: Instagram },
+} satisfies Record<string, { label: string; href: string; Icon: typeof Linkedin }>;
+
+/** Telefon/faks satırının sağ sütunundaki sosyal ikon. 32px'lik daire (dokunma hedefi korunur)
+ *  ama `-my-1.5` ile satıra KATKISI 20px — iki satırın aralığı (20 + gap-3 = 32px) tam bir
+ *  daire yüksekliği, dolayısıyla iki daire çakışmadan üst üste oturur ve iletişim bloğu
+ *  eskisinden UZAMAZ (ikonlar artık ayrı bir satır/ek yükseklik istemiyor). */
+function SocialIconLink({ id }: { id: keyof typeof SOCIAL_LINKS }) {
+  const { label, href, Icon } = SOCIAL_LINKS[id];
+  return (
+    <a
+      href={href}
+      target="_blank"
+      rel="noopener noreferrer"
+      aria-label={label}
+      className="-my-1.5 w-8 h-8 rounded-full flex items-center justify-center text-gray-500 hover:text-white hover:bg-white/5 transition-all duration-200"
+    >
+      <Icon className="w-4 h-4" strokeWidth={1.75} />
+    </a>
+  );
+}
+
 // Sıra Turu 3: "İletişim" artık son sırada, "Temsilcilerimiz"in HEMEN
 // altında (görev talimatı) — yalnızca bu dizinin sırası değişti, header'ın
 // kendi nav dizisi (SiteHeader.tsx'teki NAV) ve adres/iletişim bloğunun
@@ -134,95 +150,82 @@ export function SiteFooter() {
                 CSS negatif margin gibi kırılgan bir "telafi" yerine kaynağı
                 düzeltmek tercih edildi. Bu asset yalnızca burada kullanılıyor
                 (grep ile doğrulandı), başka hiçbir sayfa/bileşen etkilenmedi. */}
-            {/* Sosyal İkon Yeniden Yerleşim Turu: eskiden 3. sütunda,
-                sertifika kutularının altında AYRI bir satırdı — "üyelikler"
-                ile karışık, iletişim bilgisinden kopuk duruyordu (kullanıcı
-                geri bildirimi). Artık logoyla AYNI üst satırda, sağa yaslı —
-                hem "iletişim bloğuyla aynı genel dikey bölge" hem de "sağda
-                hizalı" kısıtını karşılıyor, hem de tek başına yatay bir
-                şerit gibi durmak yerine logoyla birlikte kompakt bir üst
-                bant oluşturuyor. flex-wrap + ikon grubunda ml-auto: logo
-                (64-76px yükseklikte, sabit en-boy oranıyla ~265-315px
-                genişlik) + ikonlar dar 1. sütun genişliğinde (masaüstünde
-                bile ~373px, gap-x-12 payı yüzünden) aynı satıra SIĞMIYOR —
-                logo boyutunu küçültmek yerine (önceki bir turda kasıtlı
-                olarak "ölçülü" 64/76px'e büyütülmüştü, geri alınmadı) ikon
-                grubu kendi satırına düşüyor, ml-auto ile o satırda sağa
-                yaslı kalıyor. Bu her genişlikte (320'den 1920'ye) TUTARLI
-                şekilde gerçekleşiyor — canlı QA'da doğrulandı, "logo satırı +
-                hemen altında sağa yaslı ikon satırı + iletişim listesi"
-                üç-satırlı kompakt bir üst blok olarak kararlı biçimde
-                oturuyor; "tek bir yatay satıra sıkışmış" olmadığı için
-                kullanıcının o kısıtını da doğal olarak karşılıyor. */}
-            <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 mb-4">
+            {/* Turu 6: sosyal ikonlar logonun yanından/altından KALDIRILDI —
+                LinkedIn telefon satırının, Instagram faks satırının sağ
+                sütununda (aşağıdaki iki satırlık grid). `w-fit`: blok, logonun
+                genişliğine oturur; böylece sağ sütundaki ikonların sağ kenarı
+                logonun sağ kenarıyla hizalanır ve 320px'te bile (logo 265px <
+                272px sütun) ikonlar yeni satıra düşmez. `block` img: satır-içi
+                baseline boşluğunu önler.
+
+                Logo ORANI: md+'da eski `h-[76px] w-auto` + preflight'ın
+                `max-width:100%`'i, sütun logodan dar olduğunda (768–1099px:
+                208–313px sütun < 314px logo) yüksekliği SABİT tutup genişliği
+                kıstığı için logo yatayda SIKIŞIYORDU (oran 2,74 ≈ 4,14 yerine —
+                ölçümle doğrulandı, bu tur öncesinde de vardı). Artık md+'da
+                genişlik = min(sütun, 314,27px), yükseklik oranla türetilir
+                (`h-auto`): 1100px+'da piksel piksel aynı (314,27×76), daha dar
+                sütunda orantılı küçülür — asla esnemez/sıkışmaz. <md'de 64px
+                sabit yükseklik aynen korundu. */}
+            <div className="w-fit max-w-full">
               <img
                 src="/images/delta-oto-logo-classic.webp"
                 alt="Delta Oto"
                 width={918}
                 height={222}
-                className="h-[64px] md:h-[76px] w-auto do-logo-invert opacity-90"
+                className="block h-[64px] w-auto md:h-auto md:w-full md:max-w-[314.27px] do-logo-invert opacity-90 mb-4"
               />
-              {SOCIAL_LINKS.length > 0 && (
-                <div className="flex items-center gap-1.5 shrink-0 ml-auto">
-                  {SOCIAL_LINKS.map(({ label, href, Icon }) => (
-                    <a
-                      key={label}
-                      href={href}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      aria-label={label}
-                      className="w-8 h-8 rounded-full flex items-center justify-center text-gray-500 hover:text-white hover:bg-white/5 transition-all duration-200"
-                    >
-                      <Icon className="w-4 h-4" strokeWidth={1.75} />
-                    </a>
-                  ))}
-                </div>
-              )}
+              <ul className="flex flex-col gap-3 text-sm text-gray-500">
+                {/* Footer İletişim Turu: ayrı "Yol Tarifi" bağlantısı kaldırıldı
+                    — artık adres metninin TAMAMI (ikonuyla birlikte) tek bir
+                    tıklanabilir alan, aynı Google Maps hedefine gidiyor. Görünür
+                    metin hâlâ yalnızca adres; "Yol Tarifi" amacı yalnızca
+                    aria-label'da (ekran okuyucu için netlik, yeni görünür satır
+                    değil). */}
+                <li className="flex items-start gap-3">
+                  <MapPin className="w-4 h-4 shrink-0 text-gray-500 mt-0.5" aria-hidden="true" />
+                  <a
+                    href={HQ_DIRECTIONS_URL}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={`${T.directions[lang]}: Barbaros Cd. Beyit Sk. No:17, Yukarı Dudullu - Ümraniye / İstanbul`}
+                    className="leading-relaxed hover:text-white transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7d9bea]/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0c11]"
+                  >
+                    Barbaros Cd. Beyit Sk. No:17,<br />Yukarı Dudullu - Ümraniye / İstanbul
+                  </a>
+                </li>
+                <li className="flex items-center gap-3">
+                  <Mail className="w-4 h-4 shrink-0 text-gray-500" aria-hidden="true" />
+                  <a href="mailto:info@deltaoto.com" className="hover:text-white transition-colors">info@deltaoto.com</a>
+                </li>
+                {/* Telefon + faks: İKİ SATIRLIK ORTAK GRID. Her satır aynı şablonu
+                    kullanır (sol: ikon + numara, sağ: 2rem'lik sosyal ikon
+                    sütunu) ve iki satır aynı genişlikte (ul'nin tamamı) olduğundan
+                    iki sosyal ikon tek bir sağ sütunda alt alta hizalanır;
+                    `items-center` ikonu satırın düşey merkezine koyar (LinkedIn ↔
+                    telefon, Instagram ↔ faks). Görünür "Faks" etiketi YOK (ikon
+                    `aria-hidden`; anlam sr-only "Faks:" önekiyle taşınıyor). Faks
+                    numarası düz metin — tel: bağlantısı yok, seçilip
+                    kopyalanabilir. */}
+                <li className="grid grid-cols-[minmax(0,1fr)_2rem] items-center gap-x-3">
+                  <span className="flex items-center gap-3 min-w-0">
+                    <Phone className="w-4 h-4 shrink-0 text-gray-500" aria-hidden="true" />
+                    <a href="tel:+902165266464" className="hover:text-white transition-colors">0216 526 64 64</a>
+                  </span>
+                  <SocialIconLink id="linkedin" />
+                </li>
+                <li className="grid grid-cols-[minmax(0,1fr)_2rem] items-center gap-x-3">
+                  <span className="flex items-center gap-3 min-w-0">
+                    <Printer className="w-4 h-4 shrink-0 text-gray-500" aria-hidden="true" />
+                    <span>
+                      <span className="sr-only">{T.fax[lang]}: </span>
+                      0216 526 33 44
+                    </span>
+                  </span>
+                  <SocialIconLink id="instagram" />
+                </li>
+              </ul>
             </div>
-            <ul className="space-y-3 text-sm text-gray-500">
-              {/* Footer İletişim Turu: ayrı "Yol Tarifi" bağlantısı kaldırıldı
-                  — artık adres metninin TAMAMI (ikonuyla birlikte) tek bir
-                  tıklanabilir alan, aynı Google Maps hedefine gidiyor. Görünür
-                  metin hâlâ yalnızca adres; "Yol Tarifi" amacı yalnızca
-                  aria-label'da (ekran okuyucu için netlik, yeni görünür satır
-                  değil). */}
-              <li className="flex items-start gap-3">
-                <MapPin className="w-4 h-4 shrink-0 text-gray-500 mt-0.5" aria-hidden="true" />
-                <a
-                  href={HQ_DIRECTIONS_URL}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={`${T.directions[lang]}: Barbaros Cd. Beyit Sk. No:17, Yukarı Dudullu - Ümraniye / İstanbul`}
-                  className="leading-relaxed hover:text-white transition-colors rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7d9bea]/50 focus-visible:ring-offset-2 focus-visible:ring-offset-[#0a0c11]"
-                >
-                  Barbaros Cd. Beyit Sk. No:17,<br />Yukarı Dudullu - Ümraniye / İstanbul
-                </a>
-              </li>
-              <li className="flex items-center gap-3">
-                <Mail className="w-4 h-4 shrink-0 text-gray-500" aria-hidden="true" />
-                <a href="mailto:info@deltaoto.com" className="hover:text-white transition-colors">info@deltaoto.com</a>
-              </li>
-              <li className="flex items-center gap-3">
-                <Phone className="w-4 h-4 shrink-0 text-gray-500" aria-hidden="true" />
-                <a href="tel:+902165266464" className="hover:text-white transition-colors">0216 526 64 64</a>
-              </li>
-              {/* Faks Turu 2: görünür "Faks" etiketi KALDIRILDI (kullanıcı bu
-                  turda önceki kararı geri aldı) — satır artık yalnızca
-                  [Printer ikonu] + numara, telefonun hemen altında ayrı bir
-                  satır olarak duruyor (KORUNDU). Anlamı ekran okuyucu için
-                  hâlâ taşınıyor — ikon `aria-hidden`, numaradan hemen önce
-                  görsel olarak gizli (sr-only) bir "Faks:" ön eki var, bu
-                  yüzden anlam kaybı yok, yalnızca görünür metin gitti. tel:
-                  bağlantısı YOK (düz metin) — numara yine de seçilebilir/
-                  kopyalanabilir. */}
-              <li className="flex items-center gap-3">
-                <Printer className="w-4 h-4 shrink-0 text-gray-500" aria-hidden="true" />
-                <span>
-                  <span className="sr-only">{T.fax[lang]}: </span>
-                  0216 526 33 44
-                </span>
-              </li>
-            </ul>
           </div>
 
           <div className="md:pl-6">
@@ -254,37 +257,49 @@ export function SiteFooter() {
                 </div>
               ))}
             </div>
-            {/* Üyelikler Turu 5: sosyal ikonlar artık burada değil (1. sütuna,
-                logonun yanına taşındı — bkz. yukarıdaki not). "Üyelikler"
-                (başlıktaki söz) artık gerçekten İKİ üyelik gösteriyor —
-                GROUPAUTO Türkiye + Opar Ege Bölge Bayiliği — yan yana,
-                kompakt bir 2 sütunlu mini-grid'de; her biri kendi kısa
-                etiketiyle üstte, logosuyla altta (aynı dikey hiyerarşi:
-                önce metin, sonra rozet/logo). Opar logosu LandingPage.tsx'te
-                GROUPAUTO paneliyle birebir aynı muamele gören
-                opar-logo-white.svg (negatif/beyaz, koyu zeminde) — sanat
-                yeniden çizilmedi. İki logo da GROUPAUTO rozetinin eski h-12
-                boyutundan biraz küçültülmüş ortak bir h-8 hizasında —
-                yan yana dururken biri diğerini ezmesin diye. */}
-            <div className="mt-3.5 pt-3.5 border-t border-white/5 grid grid-cols-2 gap-4">
-              <div>
-                <span className="block text-[11px] text-gray-400 leading-tight mb-2.5">{T.groupautoMember[lang]}</span>
-                <img
-                  src="/images/groupauto-turkiye-badge.webp"
-                  alt="GROUPAUTO Türkiye"
-                  width={400}
-                  height={199}
-                  className="h-8 w-auto shrink-0 rounded-[3px]"
-                />
-              </div>
-              <div>
-                <span className="block text-[11px] text-gray-400 leading-tight mb-2.5">{T.oparMember[lang]}</span>
-                <img
-                  src="/images/opar-logo-white.svg"
-                  alt="Opar"
-                  width={849}
-                  height={341}
-                  className="h-6 w-auto shrink-0 opacity-90"
+            {/* Üyelik / bayilik alanı (Turu 6): iki EŞİT sütun, her biri kendi
+                açıklamasını ortalı taşır ve altında kendi gerçek logosunu YATAY
+                ORTALI gösterir — GROUPAUTO Türkiye üyeliği (sol) ve Opar Ege Bölge
+                BAYİLİĞİ (sağ; "Opar üyesi"/sertifika iddiası değil). Sütunlar
+                `row-span-2 grid-rows-subgrid` ile ÜST grid'in iki satırını
+                paylaşır: açıklama satırının yüksekliği iki sütun için ORTAK
+                (biri iki, diğeri üç satıra sarılsa bile), logo satırı da bu
+                yüzden iki sütunda AYNI düşey noktadan başlar. Sütun iç
+                boşlukları simetrik (px-2 / md:px-3) ve dikey ayraç tam %50'de
+                (left-1/2 + -translate-x-1/2) — içerikten iki yana eşit uzaklık.
+                Ayraç ince/gri; dış çerçeve ya da kart YOK. Opar logosu
+                opar-logo-white.svg (LandingPage'deki GROUPAUTO paneliyle aynı
+                muamele), GROUPAUTO rozeti mevcut gerçek dosya — ikisi de
+                esnetilmedi/yeniden çizilmedi, yalnızca yükseklikle ölçeklendi. */}
+            <div className="mt-3.5 pt-3.5 border-t border-white/5">
+              <div className="relative grid grid-cols-2 grid-rows-[auto_auto] gap-y-2.5">
+                <div className="row-span-2 grid grid-rows-subgrid justify-items-center px-2 md:px-3 text-center">
+                  <span className="self-center text-[11px] text-gray-400 leading-tight">{T.groupautoMember[lang]}</span>
+                  <span className="flex items-center justify-center">
+                    <img
+                      src="/images/groupauto-turkiye-badge.webp"
+                      alt="GROUPAUTO Türkiye"
+                      width={400}
+                      height={199}
+                      className="h-8 w-auto shrink-0 rounded-[3px]"
+                    />
+                  </span>
+                </div>
+                <div className="row-span-2 grid grid-rows-subgrid justify-items-center px-2 md:px-3 text-center">
+                  <span className="self-center text-[11px] text-gray-400 leading-tight">{T.oparMember[lang]}</span>
+                  <span className="flex items-center justify-center">
+                    <img
+                      src="/images/opar-logo-white.svg"
+                      alt="Opar"
+                      width={849}
+                      height={341}
+                      className="h-7 w-auto shrink-0 opacity-90"
+                    />
+                  </span>
+                </div>
+                <span
+                  aria-hidden="true"
+                  className="pointer-events-none absolute left-1/2 top-0 bottom-0 w-px -translate-x-1/2 bg-white/[0.14]"
                 />
               </div>
             </div>

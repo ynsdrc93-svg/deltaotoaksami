@@ -469,6 +469,31 @@
   inset: -6px;
 }
 
+/* İnce ama GÖRÜNÜR scrollbar — bağımsız kaydırılan bölgelerin (Hakkımızda
+   kronolojisi) "burada kaydırılabilir" olduğu keşfedilebilsin diye. Renkler
+   koyu zeminde (lacivert) varsayılan; --do-scroll-thumb/-track ile
+   ezilebilir. WebKit/Blink'te ::-webkit-scrollbar kullanılır (iOS Safari
+   dahil kalıcı/görünür çizer); standart scrollbar-width/-color YALNIZCA bu
+   pseudo'yu tanımayan motorlara (Firefox) verilir — Chrome 121+/Safari 18.2+
+   standart özellik görürse ::-webkit-scrollbar stilini yok sayardı.
+   Kaydırma davranışına (overscroll zincirlemesi vb.) dokunmaz. */
+.do-thin-scroll::-webkit-scrollbar { width: 6px; }
+.do-thin-scroll::-webkit-scrollbar-track {
+  background: var(--do-scroll-track, rgba(255, 255, 255, 0.1));
+  border-radius: 999px;
+}
+.do-thin-scroll::-webkit-scrollbar-thumb {
+  background: var(--do-scroll-thumb, rgba(255, 255, 255, 0.42));
+  border-radius: 999px;
+}
+.do-thin-scroll::-webkit-scrollbar-thumb:hover { background: var(--do-scroll-thumb-hover, rgba(255, 255, 255, 0.62)); }
+@supports not selector(::-webkit-scrollbar) {
+  .do-thin-scroll {
+    scrollbar-width: thin;
+    scrollbar-color: var(--do-scroll-thumb, rgba(255, 255, 255, 0.42)) var(--do-scroll-track, rgba(255, 255, 255, 0.1));
+  }
+}
+
 /* Respect prefers-reduced-motion everywhere, not just one page */
 @media (prefers-reduced-motion: reduce) {
   .do-beam, .do-beam-delay { animation: none; opacity: 0; }
