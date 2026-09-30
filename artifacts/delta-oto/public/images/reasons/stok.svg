@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <defs>
+    <linearGradient id="stokBg" x1="0" y1="0" x2="400" y2="300" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#132C6E"/>
+      <stop offset="1" stop-color="#0A0D14"/>
+    </linearGradient>
+    <linearGradient id="stokBox1" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#4D74D6"/>
+      <stop offset="1" stop-color="#2547B5"/>
+    </linearGradient>
+    <linearGradient id="stokBox2" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#2547B5"/>
+      <stop offset="1" stop-color="#1B3A8F"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#stokBg)"/>
+
+  <!-- Orderly warehouse shelving grid: uniform rounded units in ranked rows,
+       reading as stacked/organized stock rather than a scattered mosaic. -->
+  <g>
+    <!-- Row 1 -->
+    <rect x="34" y="46" width="72" height="54" rx="6" fill="url(#stokBox1)" opacity="0.95"/>
+    <rect x="116" y="46" width="72" height="54" rx="6" fill="url(#stokBox2)" opacity="0.85"/>
+    <rect x="198" y="46" width="72" height="54" rx="6" fill="url(#stokBox1)" opacity="0.7"/>
+    <rect x="280" y="46" width="86" height="54" rx="6" fill="url(#stokBox2)" opacity="0.55"/>
+
+    <!-- Row 2 -->
+    <rect x="34" y="112" width="72" height="54" rx="6" fill="url(#stokBox2)" opacity="0.7"/>
+    <rect x="116" y="112" width="72" height="54" rx="6" fill="url(#stokBox1)" opacity="0.9"/>
+    <rect x="198" y="112" width="72" height="54" rx="6" fill="url(#stokBox2)" opacity="0.6"/>
+    <rect x="280" y="112" width="86" height="54" rx="6" fill="url(#stokBox1)" opacity="0.8"/>
+
+    <!-- Row 3 -->
+    <rect x="34" y="178" width="72" height="54" rx="6" fill="url(#stokBox1)" opacity="0.55"/>
+    <rect x="116" y="178" width="72" height="54" rx="6" fill="url(#stokBox2)" opacity="0.9"/>
+    <rect x="198" y="178" width="72" height="54" rx="6" fill="url(#stokBox1)" opacity="0.75"/>
+    <rect x="280" y="178" width="86" height="54" rx="6" fill="url(#stokBox2)" opacity="0.65"/>
+
+    <!-- Row 4 (partial, suggests the grid continues past the frame) -->
+    <rect x="34" y="244" width="72" height="40" rx="6" fill="url(#stokBox2)" opacity="0.5"/>
+    <rect x="116" y="244" width="72" height="40" rx="6" fill="url(#stokBox1)" opacity="0.65"/>
+    <rect x="198" y="244" width="72" height="40" rx="6" fill="url(#stokBox2)" opacity="0.4"/>
+    <rect x="280" y="244" width="86" height="40" rx="6" fill="url(#stokBox1)" opacity="0.5"/>
+  </g>
+
+  <!-- Thin top-edge highlights on the front row to read as shelf-lip/box-lid detail -->
+  <g stroke="#7D9BEA" stroke-width="1.5" opacity="0.5">
+    <line x1="42" y1="54" x2="98" y2="54"/>
+    <line x1="124" y1="54" x2="180" y2="54"/>
+    <line x1="206" y1="54" x2="262" y2="54"/>
+    <line x1="288" y1="54" x2="358" y2="54"/>
+  </g>
+</svg>

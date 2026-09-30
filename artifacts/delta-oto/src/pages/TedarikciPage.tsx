@@ -19,14 +19,21 @@ import { useLang, type Lang } from "@/lib/i18n";
 // belirleniyor — ileride bir panelde yalnızca `order` değişse bile hangi
 // kaydın hangi içerikle eşleştiği (id sabit) asla karışmaz. Kod hiçbir
 // yerde "7 kart" varsayımı yapmıyor (bkz. ReasonsRail: `count = items.length`).
-const REASON_META: { id: string; order: number; published: boolean }[] = [
-  { id: "stok", order: 1, published: true },
-  { id: "erisim", order: 2, published: true },
-  { id: "tek-muhatap", order: 3, published: true },
-  { id: "guven", order: 4, published: true },
-  { id: "deneyim", order: 5, published: true },
-  { id: "urun-cesitliligi", order: 6, published: true },
-  { id: "dijital-kolaylik", order: 7, published: true },
+//
+// `image` (Turu 5): düz lacivert dolgu "cansız" bulundu (kullanıcı geri
+// bildirimi) — gerçek fotoğraf bu ortamda erişilemediğinden (egress politikası,
+// önceki turlarda doğrulandı) her kavram için elle çizilmiş, kurumsal/temsili
+// bir yerel SVG illüstrasyon üretildi (bkz. public/images/reasons/). Yol da
+// diğer alanlar gibi ayrı bir yapısal veri — ileride bir panelden yalnızca
+// bu alan değiştirilerek görsel güncellenebilir, kod DEĞİŞMEZ.
+const REASON_META: { id: string; order: number; published: boolean; image: string }[] = [
+  { id: "stok", order: 1, published: true, image: "/images/reasons/stok.svg" },
+  { id: "erisim", order: 2, published: true, image: "/images/reasons/erisim.svg" },
+  { id: "tek-muhatap", order: 3, published: true, image: "/images/reasons/tek-muhatap.svg" },
+  { id: "guven", order: 4, published: true, image: "/images/reasons/guven.svg" },
+  { id: "deneyim", order: 5, published: true, image: "/images/reasons/deneyim.svg" },
+  { id: "urun-cesitliligi", order: 6, published: true, image: "/images/reasons/urun-cesitliligi.svg" },
+  { id: "dijital-kolaylik", order: 7, published: true, image: "/images/reasons/dijital-kolaylik.svg" },
 ];
 
 const content = {
@@ -643,7 +650,7 @@ function ReasonCard({
   onFocusOpen,
   setRef,
 }: {
-  item: { id: string; title: string; desc: string };
+  item: { id: string; title: string; desc: string; image: string };
   isOpen: boolean;
   accessible: boolean;
   onOpen: () => void;
@@ -663,9 +670,25 @@ function ReasonCard({
       onFocus={accessible ? onFocusOpen : undefined}
       onBlur={accessible ? onClose : undefined}
       onClick={onOpen}
-      className="group relative shrink-0 w-[172px] h-[172px] sm:w-[260px] sm:h-[200px] lg:w-[300px] lg:h-[220px] rounded-2xl overflow-hidden text-left appearance-none cursor-pointer bg-gradient-to-br from-[#1B3A8F] to-[#0e1016] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7d9bea] focus-visible:ring-offset-2 focus-visible:ring-offset-white"
+      className="group relative shrink-0 w-[172px] h-[172px] sm:w-[260px] sm:h-[200px] lg:w-[300px] lg:h-[220px] rounded-2xl overflow-hidden text-left appearance-none cursor-pointer bg-[#0e1016] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7d9bea] focus-visible:ring-offset-2 focus-visible:ring-offset-white"
     >
-      <div className="absolute inset-0 do-grid-bg opacity-[0.12]" aria-hidden="true" />
+      {/* Kart görseli — Turu 5: eski düz lacivert degrade yerine kavrama özgü
+          yerel SVG illüstrasyon (bkz. REASON_META `image` notu). Kart
+          boyutu (yukarıdaki w-/h- sınıfları) DEĞİŞMEDİ — useMeasuredMarquee
+          döngü ölçümü hâlâ geçerli. object-cover: kartın kendi en-boy oranı
+          breakpoint'e göre değiştiği için (172×172 kare → 300×220 geniş)
+          görsel her zaman kutuyu doldurup gerekirse kırpılıyor, hiçbir zaman
+          gerilmiyor/boşluk bırakmıyor. */}
+      <img src={item.image} alt="" aria-hidden="true" className="absolute inset-0 w-full h-full object-cover" />
+      {/* Koyu overlay — metnin illüstrasyonun üstünde her zaman okunur
+          kalması için (açık/kapalı fark etmeksizin), açıkken biraz daha
+          güçleniyor (aynı BenefitCard/KariyerPage.tsx deseni, oradaki
+          from-black gradyan yerine burada düz bir lacivert-siyah katman —
+          kartın içeriği köşeden köşeye değil ortalanmış olduğundan salt alt-
+          ağırlıklı bir gradyan yerine tüm kart yüzeyinde tutarlı kontrast
+          gerekiyordu). */}
+      <div className={`absolute inset-0 bg-[#0e1016] transition-opacity duration-300 ${isOpen ? "opacity-75" : "opacity-60"}`} aria-hidden="true" />
+      <div className="absolute inset-0 do-grid-bg opacity-[0.1]" aria-hidden="true" />
       <div className="relative h-full p-5 sm:p-6 flex flex-col justify-center">
         <h3
           className={`text-white font-black text-[17px] sm:text-[19px] lg:text-[21px] leading-snug transition-transform duration-300 ease-out ${
@@ -691,7 +714,7 @@ function ReasonsRail({
   pauseLabel,
   resumeLabel,
 }: {
-  items: { id: string; title: string; desc: string }[];
+  items: { id: string; title: string; desc: string; image: string }[];
   pauseLabel: string;
   resumeLabel: string;
 }) {
@@ -788,7 +811,7 @@ export function TedarikciPage() {
   const REASONS = REASON_META
     .filter((m) => m.published)
     .sort((a, b) => a.order - b.order)
-    .map((m, i) => ({ id: m.id, ...t.advantages.items[i] }));
+    .map((m, i) => ({ id: m.id, image: m.image, ...t.advantages.items[i] }));
 
   return (
     <div className="do-site bg-white min-h-screen">

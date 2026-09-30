@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <defs>
+    <linearGradient id="ucBg" x1="0" y1="0" x2="400" y2="300" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#14307A"/>
+      <stop offset="1" stop-color="#0A0D14"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#ucBg)"/>
+
+  <!-- Scattered mosaic of mixed geometric forms at varied sizes — breadth
+       and variety, deliberately loose/organic rather than "stok"'s strict
+       uniform grid of same-shape units. -->
+  <circle cx="72" cy="70" r="30" fill="#4D74D6" opacity="0.8"/>
+  <rect x="150" y="40" width="52" height="52" rx="8" fill="#7D9BEA" opacity="0.7" transform="rotate(8 176 66)"/>
+  <polygon points="270,30 312,96 228,96" fill="#2547B5" opacity="0.8"/>
+  <circle cx="330" cy="150" r="42" fill="#1B3A8F" opacity="0.85"/>
+  <rect x="40" y="150" width="66" height="66" rx="10" fill="#2547B5" opacity="0.6" transform="rotate(-6 73 183)"/>
+  <polygon points="185,150 235,230 135,230" fill="#4D74D6" opacity="0.65"/>
+  <circle cx="300" cy="250" r="24" fill="#7D9BEA" opacity="0.75"/>
+  <rect x="230" y="210" width="40" height="40" rx="7" fill="#1B3A8F" opacity="0.7" transform="rotate(14 250 230)"/>
+  <circle cx="60" cy="255" r="20" fill="#2547B5" opacity="0.7"/>
+</svg>

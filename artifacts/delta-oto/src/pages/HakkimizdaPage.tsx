@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "wouter";
 import {
   ChevronRight,
+  ChevronDown,
   Clock,
   Globe,
   Award,
@@ -18,7 +19,7 @@ import {
 } from "lucide-react";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
-import { useCounter, useReveal } from "../hooks/use-motion";
+import { useCounter, useReveal, useViewportFocusIndex } from "../hooks/use-motion";
 import { useDocumentMeta } from "@/hooks/use-document-meta";
 import { useLang, routeFor, gundemAnchor, gundemDetailRoute, type Lang } from "@/lib/i18n";
 import { AGENDA_ITEMS } from "@/lib/agenda";
@@ -38,11 +39,25 @@ const FACT_ICONS = [Award, Globe, Users, TrendingUp];
 // NOT: toLocaleString("tr-TR") çağrısı StatCard içinde sabit — bu, sitedeki
 // diğer sayaç bileşenleriyle (LandingPage CountUp, OperasyonPage CountUp)
 // aynı, önceden kurulmuş davranıştır; bu görevin kapsamı dışında değiştirilmedi.
-const FACT_META: { target: number; plus: boolean; grouped: boolean }[] = [
-  { target: 1976, plus: false, grouped: false },
-  { target: 118,  plus: false, grouped: false }, // Düzeltme: eskiden 40+ idi — sayfanın kendi groupauto.stats'ıyla (118 Ülke) tutarsızdı, gerçek resmi rakamla eşitlendi
-  { target: 29,   plus: false, grouped: false }, // Düzeltme: resmi Groupauto International üye sayısı (29 Members) — bkz. aşağıdaki not
-  { target: 100,  plus: true,  grouped: false }, // İçerik/UX Revizyon Notu: sitewide marka iddiası 250+ → 100+ değişti (bkz. content.*.facts.items[3])
+// Turu 5 düzeltmesi: `group` alanı eklendi — "Rakamlarla Delta Oto" eskiden
+// dört rakamı TEK, ayrışmamış bir gridde gösteriyordu; bunlardan ikisi
+// (1976, 100+) Delta Oto'NUN KENDİ rakamı, diğer ikisi (118, 29) ise
+// GROUPAUTO International'ın KENDİ resmi rakamı (Delta yalnızca üyesi
+// olduğu bir ağın parçası) — hiçbir görsel/metinsel ayrım olmadan yan yana
+// durmaları "bu sayı kime ait?" belirsizliğine yol açıyordu (canlı geri
+// bildirim). Artık render iki ayrı, açıkça etiketli alt gruba bölünüyor
+// (bkz. aşağıdaki render'da DELTA_FACTS/NETWORK_FACTS filtrelemesi) — sayı
+// değerleri DEĞİŞMEDİ, yalnızca hangi gruba ait oldukları artık açık.
+// `id` (Turu 5, CMS Hazırlık): önceden React key'i doğrudan `target`
+// (rakamın kendisi) idi — kırılgan, çünkü rakam ileride güncellenirse
+// (ör. "100" → "105") aynı zamanda kaydın "kimliği" de değişmiş olurdu.
+// Artık ayrı, rakamdan bağımsız sabit bir string id var — REASON_META
+// (TedarikciPage.tsx) ve MILESTONE_META ile aynı kalıp.
+const FACT_META: { id: string; target: number; plus: boolean; grouped: boolean; group: "delta" | "network" }[] = [
+  { id: "founding-year", target: 1976, plus: false, grouped: false, group: "delta" },
+  { id: "country-network", target: 118,  plus: false, grouped: false, group: "network" }, // Düzeltme: eskiden 40+ idi — sayfanın kendi groupauto.stats'ıyla (118 Ülke) tutarsızdı, gerçek resmi rakamla eşitlendi
+  { id: "groupauto-members", target: 29,   plus: false, grouped: false, group: "network" }, // Düzeltme: resmi Groupauto International üye sayısı (29 Members) — bkz. aşağıdaki not
+  { id: "active-brands", target: 100,  plus: true,  grouped: false, group: "delta" }, // İçerik/UX Revizyon Notu: sitewide marka iddiası 250+ → 100+ değişti (bkz. content.*.facts.items[3])
 ];
 
 // `pending: true` kayıtlar gerçek bir tarih ama henüz yazılmamış içerik demektir —
@@ -95,9 +110,13 @@ const content = {
     facts: {
       eyebrow: "Rakamlarla Delta Oto",
       heading: "Kurumsal Ölçek ve Erişim",
+      groupDeltaLabel: "Delta Oto Ölçeği",
+      groupNetworkLabel: "Ağ / Ekosistem Erişimi",
+      groupNetworkNote: "GROUPAUTO Türkiye üyeliği üzerinden",
+      networkBadge: "GROUPAUTO",
       items: [
         { label: "Kuruluş Yılı", sub: "50+ yıl sektör deneyimi" },
-        { label: "Ülke Ağı", sub: "GROUPAUTO Türkiye" },
+        { label: "Ülke Ağı", sub: "Distribütör kapsama alanı" },
         { label: "Groupauto Üyesi", sub: "Küresel distribütör ağı" },
         { label: "Aktif Marka", sub: "Sürekli güncellenen portföy" },
       ],
@@ -183,9 +202,13 @@ const content = {
     facts: {
       eyebrow: "Delta Oto by the Numbers",
       heading: "Corporate Scale and Reach",
+      groupDeltaLabel: "Delta Oto Scale",
+      groupNetworkLabel: "Network / Ecosystem Access",
+      groupNetworkNote: "Through GROUPAUTO Türkiye membership",
+      networkBadge: "GROUPAUTO",
       items: [
         { label: "Founding Year", sub: "50+ years of industry experience" },
-        { label: "Country Network", sub: "GROUPAUTO Türkiye" },
+        { label: "Country Network", sub: "Distributor coverage area" },
         { label: "GROUPAUTO Members", sub: "Global distributor network" },
         { label: "Active Brands", sub: "Continuously updated portfolio" },
       ],
@@ -259,14 +282,19 @@ const content = {
   },
 } satisfies Record<Lang, any>;
 
-/** Kurumsal Rakamlar kartı: kart görünüre girince hedef değere sayarak ulaşır (LandingPage'deki MetricItem/CountUp desenine benzer, bu sayfaya özgü sadeleştirilmiş hali). */
-function StatCard({ icon: Icon, target, plus, grouped, label, sub }: {
+/** Kurumsal Rakamlar kartı: kart görünüre girince hedef değere sayarak ulaşır (LandingPage'deki MetricItem/CountUp desenine benzer, bu sayfaya özgü sadeleştirilmiş hali).
+ * `badge` (Turu 5): yalnızca "network" grubundaki kartlara geçiliyor — kart
+ * seviyesinde bile "bu rakam GROUPAUTO'ya ait" mesajını üstteki grup
+ * etiketinden bağımsız olarak tekrar eden küçük bir rozet; kullanıcı yalnızca
+ * bu tek kartı görse bile kaynağı belirsiz kalmasın diye. */
+function StatCard({ icon: Icon, target, plus, grouped, label, sub, badge }: {
   icon: React.ElementType;
   target: number;
   plus: boolean;
   grouped: boolean;
   label: string;
   sub: string;
+  badge?: string;
 }) {
   const [started, setStarted] = React.useState(false);
   const ref = React.useRef<HTMLDivElement>(null);
@@ -283,7 +311,12 @@ function StatCard({ icon: Icon, target, plus, grouped, label, sub }: {
   const display = grouped ? count.toLocaleString("tr-TR") : String(count);
 
   return (
-    <div ref={ref} className="border border-slate-200 rounded-xl p-7 hover:border-[#1B3A8F]/30 hover:shadow-md transition-all group">
+    <div ref={ref} className="relative border border-slate-200 rounded-xl p-7 hover:border-[#1B3A8F]/30 hover:shadow-md transition-all group">
+      {badge && (
+        <span className="absolute top-4 right-4 text-[9px] font-bold uppercase tracking-wide text-[#7d9bea] bg-[#1B3A8F]/[0.07] rounded-full px-2 py-1">
+          {badge}
+        </span>
+      )}
       <div className="w-11 h-11 bg-[#1B3A8F]/[0.07] rounded-xl flex items-center justify-center mb-4 group-hover:bg-[#1B3A8F]/[0.12] transition-colors">
         <Icon className="w-5 h-5 text-[#1B3A8F]" />
       </div>
@@ -297,30 +330,63 @@ function StatCard({ icon: Icon, target, plus, grouped, label, sub }: {
 }
 
 /**
- * Zaman Çizgisi: yukarıdan aşağıya akan tek dikey liste (Tur 3 — eski yatay
- * scroll-snap karusel/yıl şeridi TAMAMEN kaldırıldı, aktif kart/IntersectionObserver
- * mekanizması yok; kronoloji okuması artık hiçbir etkileşime/animasyona bağlı
- * değil). Her satır AYNI ANDA render edilir (mobilde ve masaüstünde tek yapı,
- * ayrı kopya yok) — solda yıl, ortada bağlayıcı çizgi+düğüm, sağda başlık/açıklama;
- * satır yüksekliği içerik kadar, sabit değil. Görünürlüğe girdikçe hafif bir
- * giriş vurgusu için mevcut sayfa çapındaki `useReveal`/`.do-reveal` yeniden
- * kullanılıyor — salt kozmetik, okumayı geciktirmiyor ve azaltılmış hareket
- * modunda (index.css'teki global kural) tamamen devre dışı kalıyor.
+ * Zaman Çizgisi — Turu 5 (Accordion + Scroll-Sync): önceki tur "hepsi her zaman
+ * açık" dikey liste hâline mobilde fazla kalabalık geldi (canlı geri bildirim).
+ * Artık her satır varsayılan olarak yalnızca YIL + BAŞLIK gösteriyor;
+ * açıklama gizli, satıra tıklayınca/dokununca (tek seferde yalnızca bir
+ * satır) açılıyor — klasik accordion. AYRICA sayfa kaydırılırken görünüm
+ * merkezine en yakın satır otomatik olarak aktif/açık hâle geliyor — bunun
+ * için sıfırdan bir IntersectionObserver kurulmadı, Operasyon sayfasındaki
+ * "Siparişten Teslimata" 4 adımlı animasyonunda zaten kanıtlanmış olan
+ * `useViewportFocusIndex` hook'u (bkz. src/hooks/use-motion.ts) AYNEN yeniden
+ * kullanıldı — rAF+scroll event tabanlı, her satırın GERÇEK
+ * getBoundingClientRect'ini ölçüyor, eşik-tetiklemeli değil sürekli
+ * "şu an en yakın hangisi" hesaplıyor; bu yüzden bir satır açılıp
+ * yüksekliği değiştiğinde (aşağıdaki satırları ittiğinde) sahte bir
+ * "yeni satır göründü" tetiklemesi YOK — yalnızca gerçek bir sonraki
+ * scroll event'inde güncelleniyor, geri besleme döngüsü riski taşımıyor.
  *
- * `pending: true` kayıtlar (bkz. MILESTONE_META üstteki not) düşük opaklıklı
- * düğüm ve açık "Yakında" etiketiyle dürüst placeholder olarak kalır; uydurma
- * başlık/açıklama eklenmez.
+ * Manuel tıklama ile scroll-senkronu birlikte çalışıyor: tıklama anında
+ * `manualOverrideRef` 2.5sn'lik bir muafiyet penceresi açıyor — bu süre
+ * boyunca scroll-hook'un güncellemesi görmezden geliniyor (kullanıcı az
+ * önce seçtiği satırın hemen elinden alınmaması için), süre dolunca scroll
+ * yeniden devralıyor. `prefers-reduced-motion` altında hook'un kendi scroll
+ * dinleyicisi hiç kurulmuyor (activeIndex sürekli -1 kalıyor) — bu durumda
+ * zaman çizelgesi salt tıklamayla çalışır, hiçbir satır otomatik açılmaz/
+ * kapanmaz (mevcut davranış bozulmaz, yalnızca "scroll'a bağlı otomatik
+ * geçiş" kısmı devre dışı kalır — okumak için hareket ZORUNLU değildir).
  *
- * Çizgi konumlandırma notu: bağlayıcı dikey çizgi her satırın kendi `relative`
- * kutusu içinde `top-0 bottom-0` ile çiziliyor — yüzde tabanlı olduğu için
- * satırın gerçek (içerik + alt boşluk) yüksekliğini otomatik kapsıyor, JS ile
- * ölçüm gerekmiyor; ardışık satırların çizgileri sınırda kesintisiz birleşiyor.
- * Yatay `left` değeri yıl/düğüm kolon genişlikleriyle birebir hesaplanmış sabit
- * bir px değeri (breakpoint başına), düğümün yatay merkeziyle örtüşüyor.
+ * `pending: true` kayıtlar (bkz. MILESTONE_META üstteki not) artık daha da
+ * hafif — küçük/soluk yıl rakamı + "Yakında" rozetiyle gerçek dönüm
+ * noktalarının önüne asla geçmiyor; uydurma başlık/açıklama eklenmez.
+ *
+ * Çizgi konumlandırma notu (değişmedi): bağlayıcı dikey çizgi her satırın
+ * kendi `relative` kutusu içinde `top-0 bottom-0` ile çiziliyor — yüzde
+ * tabanlı olduğu için satırın gerçek yüksekliğini (açık/kapalı fark etmeksizin)
+ * otomatik kapsıyor, JS ölçüm gerekmiyor.
  */
 function MilestoneTimeline({ t }: { t: (typeof content)["tr"]["timeline"] }) {
   const MILESTONES = MILESTONE_META.map((m, i) => ({ ...m, ...t.items[i] }));
   const reveal = useReveal();
+
+  const [openIndex, setOpenIndex] = React.useState<number | null>(null);
+  const manualOverrideRef = React.useRef(false);
+  const overrideTimeoutRef = React.useRef<number | undefined>(undefined);
+  const [setFocusRef, scrollActiveIndex] = useViewportFocusIndex(MILESTONES.length, 0.42, 0.45);
+
+  React.useEffect(() => {
+    if (manualOverrideRef.current) return;
+    if (scrollActiveIndex >= 0) setOpenIndex(scrollActiveIndex);
+  }, [scrollActiveIndex]);
+
+  React.useEffect(() => () => window.clearTimeout(overrideTimeoutRef.current), []);
+
+  const handleRowToggle = (i: number) => {
+    setOpenIndex((prev) => (prev === i ? null : i));
+    manualOverrideRef.current = true;
+    window.clearTimeout(overrideTimeoutRef.current);
+    overrideTimeoutRef.current = window.setTimeout(() => { manualOverrideRef.current = false; }, 2500);
+  };
 
   return (
     <section className="bg-[#1B3A8F] py-20 md:py-24 lg:py-28 text-white overflow-x-clip">
@@ -333,11 +399,12 @@ function MilestoneTimeline({ t }: { t: (typeof content)["tr"]["timeline"] }) {
         <ol className="relative max-w-4xl list-none pl-0" aria-label={t.listAriaLabel}>
           {MILESTONES.map((m, i) => {
             const isLast = i === MILESTONES.length - 1;
+            const isOpen = openIndex === i;
             return (
               <li
                 key={m.year}
-                ref={reveal}
-                className={`do-reveal relative flex ${isLast ? "" : "pb-9 sm:pb-11 lg:pb-14"}`}
+                ref={(el) => { reveal(el); setFocusRef[i](el); }}
+                className={`do-reveal relative flex ${isLast ? "" : "pb-5 sm:pb-6 lg:pb-7"}`}
               >
                 {!isLast && (
                   <span
@@ -345,31 +412,57 @@ function MilestoneTimeline({ t }: { t: (typeof content)["tr"]["timeline"] }) {
                     aria-hidden="true"
                   />
                 )}
-                <span className="w-12 sm:w-20 lg:w-24 shrink-0 pt-0.5 font-black tabular-nums leading-none text-xl sm:text-2xl lg:text-3xl text-white">
+                <span
+                  className={`w-12 sm:w-20 lg:w-24 shrink-0 pt-0.5 font-black tabular-nums leading-none transition-colors duration-300 ${
+                    m.pending
+                      ? "text-base sm:text-lg lg:text-xl text-white/35"
+                      : `text-xl sm:text-2xl lg:text-3xl ${isOpen ? "text-white" : "text-white/80"}`
+                  }`}
+                >
                   {m.year}
                 </span>
                 <span className="w-6 sm:w-8 lg:w-10 shrink-0 flex justify-center">
                   <span
-                    className={`relative z-10 mt-2 block w-3 h-3 rounded-full ring-4 ring-[#1B3A8F] ${
-                      m.pending ? "bg-white/25" : "bg-[#7d9bea]"
+                    className={`relative z-10 mt-2 block w-3 h-3 rounded-full ring-4 ring-[#1B3A8F] transition-colors duration-300 ${
+                      m.pending ? "bg-white/20" : isOpen ? "bg-[#7d9bea]" : "bg-white/40"
                     }`}
                     aria-hidden="true"
                   />
                 </span>
                 <div className="flex-1 min-w-0 pb-1">
-                  {m.pending ? (
-                    <>
-                      <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-white/45 mb-2">
+                  <button
+                    type="button"
+                    onClick={() => handleRowToggle(i)}
+                    aria-expanded={isOpen}
+                    className="group flex items-start justify-between gap-3 w-full text-left rounded-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7d9bea] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1B3A8F]"
+                  >
+                    {m.pending ? (
+                      <span className="inline-flex items-center gap-1.5 text-[11px] font-bold uppercase tracking-wider text-white/35">
                         <Clock className="w-3.5 h-3.5" strokeWidth={2} /> {t.comingSoon}
                       </span>
-                      <p className="text-white/55 text-[13px] italic leading-relaxed max-w-xl">{t.pendingText}</p>
-                    </>
-                  ) : (
-                    <>
-                      <h3 className="text-[16px] sm:text-[18px] lg:text-[20px] font-bold text-white mb-1.5 sm:mb-2 leading-snug">{m.label}</h3>
-                      <p className="text-white/70 text-[13.5px] sm:text-[14.5px] lg:text-[15px] leading-relaxed max-w-2xl">{m.desc}</p>
-                    </>
-                  )}
+                    ) : (
+                      <h3 className={`text-[16px] sm:text-[18px] lg:text-[20px] font-bold leading-snug transition-colors duration-300 ${isOpen ? "text-white" : "text-white/85"}`}>
+                        {m.label}
+                      </h3>
+                    )}
+                    <ChevronDown
+                      className={`w-4 h-4 mt-1 shrink-0 transition-transform duration-300 ${m.pending ? "text-white/25" : "text-white/50"} ${isOpen ? "rotate-180" : ""}`}
+                      strokeWidth={2}
+                    />
+                  </button>
+                  <div
+                    className={`grid transition-[grid-template-rows] duration-300 ease-out ${
+                      isOpen ? "grid-rows-[1fr] mt-2" : "grid-rows-[0fr] mt-0"
+                    }`}
+                  >
+                    <div className="overflow-hidden">
+                      {m.pending ? (
+                        <p className="text-white/55 text-[13px] italic leading-relaxed max-w-xl">{t.pendingText}</p>
+                      ) : (
+                        <p className="text-white/70 text-[13.5px] sm:text-[14.5px] lg:text-[15px] leading-relaxed max-w-2xl">{m.desc}</p>
+                      )}
+                    </div>
+                  </div>
                 </div>
               </li>
             );
@@ -392,6 +485,12 @@ export function HakkimizdaPage() {
   // Dil-bağımsız yapısal veri (ikon) + dile göre değişen metin (label/sub/title/desc/tags)
   // burada index'e göre birleştirilir — bkz. modül üstü FACT_META/VALUE_ICONS/vb. notu.
   const FACT_STATS = FACT_META.map((m, i) => ({ ...m, icon: FACT_ICONS[i], label: t.facts.items[i].label, sub: t.facts.items[i].sub }));
+  // Turu 5: `group` alanına göre iki ayrı, açıkça etiketli alt kümeye
+  // bölünüyor (bkz. FACT_META üstteki not) — .filter() burada index'e değil
+  // her kaydın kendi `group` alanına dayanıyor, sıra değişse de doğru gruba
+  // düşer.
+  const DELTA_FACTS = FACT_STATS.filter((f) => f.group === "delta");
+  const NETWORK_FACTS = FACT_STATS.filter((f) => f.group === "network");
   const VALUES = t.values.items.map((v, i) => ({ ...v, icon: VALUE_ICONS[i] }));
   // Değer Çerçevemiz Etkileşim Turu 2: varsayılan yüzey beyaz + lacivert
   // başlık (editoryal indeks); aktif öğe (hover/focus/dokunma) TÜM hücreyi
@@ -453,19 +552,50 @@ export function HakkimizdaPage() {
         </div>
       </section>
 
-      {/* KURUMSAL RAKAMLAR — light */}
+      {/* KURUMSAL RAKAMLAR — light. Turu 5: eskiden dört rakam tek, ayrışmamış
+          bir gridde duruyordu — ikisi Delta Oto'nun kendi rakamı (1976,
+          100+), ikisi GROUPAUTO International'ın kendi resmi rakamıydı (118,
+          29); hiçbir ayrım olmadığından "bu sayı kime ait?" belirsizliği
+          vardı (canlı geri bildirim). Artık iki AÇIKÇA etiketli alt grup:
+          "Delta Oto Ölçeği" ve "Ağ / Ekosistem Erişimi" (GROUPAUTO Türkiye
+          üyeliği üzerinden) — aralarında görünür bir ayraç + ikinci grubun
+          her kartında ayrıca küçük bir "GROUPAUTO" rozeti (bkz. StatCard
+          `badge` prop'u) kart seviyesinde de kaynağı netleştiriyor. Sayı
+          değerleri DEĞİŞMEDİ (1976 / 118 / 29 / 100+), yalnızca sunumu. */}
       <section className="bg-white py-20 border-b border-slate-100">
         <div className="max-w-7xl mx-auto px-6 lg:px-8">
           <div ref={reveal} className="do-reveal mb-12">
             <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#1B3A8F]">{t.facts.eyebrow}</span>
             <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-2 tracking-tight">{t.facts.heading}</h2>
           </div>
-          <div className="grid grid-cols-2 lg:grid-cols-4 gap-5">
-            {FACT_STATS.map((stat, i) => (
-              <div key={stat.target} ref={reveal} className={`do-reveal ${STAGGER_CLASSES[i] ?? ""}`}>
-                <StatCard {...stat} />
+
+          <div className="space-y-10">
+            <div>
+              <span className="block text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-4">
+                {t.facts.groupDeltaLabel}
+              </span>
+              <div className="grid grid-cols-2 gap-5">
+                {DELTA_FACTS.map((stat, i) => (
+                  <div key={stat.id} ref={reveal} className={`do-reveal ${STAGGER_CLASSES[i] ?? ""}`}>
+                    <StatCard {...stat} />
+                  </div>
+                ))}
               </div>
-            ))}
+            </div>
+
+            <div className="pt-10 border-t border-slate-100">
+              <span className="block text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400 mb-1">
+                {t.facts.groupNetworkLabel}
+              </span>
+              <span className="block text-[12.5px] text-slate-400 mb-4">{t.facts.groupNetworkNote}</span>
+              <div className="grid grid-cols-2 gap-5">
+                {NETWORK_FACTS.map((stat, i) => (
+                  <div key={stat.id} ref={reveal} className={`do-reveal ${STAGGER_CLASSES[i + 2] ?? ""}`}>
+                    <StatCard {...stat} badge={t.facts.networkBadge} />
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
       </section>

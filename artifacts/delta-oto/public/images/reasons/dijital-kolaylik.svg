@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <defs>
+    <linearGradient id="dkBg" x1="0" y1="0" x2="400" y2="300" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#122A6B"/>
+      <stop offset="1" stop-color="#0A0D14"/>
+    </linearGradient>
+    <linearGradient id="dkBar" x1="0" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#1B3A8F"/>
+      <stop offset="1" stop-color="#7D9BEA"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#dkBg)"/>
+
+  <!-- Abstract screen/dashboard: a rounded "device" frame with a header bar
+       and a small bar-chart + status dots suggesting a live portal, without
+       drawing a literal interface. -->
+  <rect x="56" y="46" width="288" height="208" rx="16" fill="#0E1016" opacity="0.55" stroke="#4D74D6" stroke-width="2"/>
+
+  <!-- header bar -->
+  <rect x="80" y="70" width="140" height="12" rx="6" fill="#7D9BEA" opacity="0.8"/>
+  <circle cx="300" cy="76" r="7" fill="#4D74D6" opacity="0.7"/>
+  <circle cx="324" cy="76" r="7" fill="#2547B5" opacity="0.6"/>
+
+  <!-- bar chart -->
+  <rect x="80" y="182" width="26" height="48" rx="4" fill="url(#dkBar)" opacity="0.85"/>
+  <rect x="118" y="152" width="26" height="78" rx="4" fill="url(#dkBar)" opacity="0.95"/>
+  <rect x="156" y="168" width="26" height="62" rx="4" fill="url(#dkBar)" opacity="0.8"/>
+  <rect x="194" y="130" width="26" height="100" rx="4" fill="url(#dkBar)"/>
+  <rect x="232" y="190" width="26" height="40" rx="4" fill="url(#dkBar)" opacity="0.7"/>
+
+  <!-- status/data dots -->
+  <circle cx="300" cy="150" r="5" fill="#7D9BEA"/>
+  <circle cx="300" cy="170" r="5" fill="#4D74D6" opacity="0.75"/>
+  <circle cx="300" cy="190" r="5" fill="#2547B5" opacity="0.6"/>
+</svg>

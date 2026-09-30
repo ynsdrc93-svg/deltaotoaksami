@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300">
+  <defs>
+    <linearGradient id="guvenBg" x1="0" y1="0" x2="400" y2="300" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#152F79"/>
+      <stop offset="1" stop-color="#0A0D14"/>
+    </linearGradient>
+    <linearGradient id="ringA" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#4D74D6"/>
+      <stop offset="1" stop-color="#1B3A8F"/>
+    </linearGradient>
+    <linearGradient id="ringB" x1="1" y1="1" x2="0" y2="0">
+      <stop offset="0" stop-color="#7D9BEA"/>
+      <stop offset="1" stop-color="#2547B5"/>
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#guvenBg)"/>
+
+  <!-- Two overlapping rings — two parties in a durable, trusted partnership —
+       rather than a security-shield motif, since the concept here is
+       relationship quality, not protection. Distinct from "deneyim"'s
+       same-center concentric rings: these are two separate, offset circles. -->
+  <circle cx="162" cy="150" r="82" fill="none" stroke="url(#ringA)" stroke-width="7" opacity="0.85"/>
+  <circle cx="246" cy="150" r="82" fill="none" stroke="url(#ringB)" stroke-width="7" opacity="0.85"/>
+  <circle cx="204" cy="150" r="38" fill="#7D9BEA" opacity="0.18"/>
+</svg>

@@ -83,8 +83,12 @@ const T = {
   // eklemiyor.
   directions: { tr: "Yol Tarifi", en: "Directions" },
   fax: { tr: "Faks", en: "Fax" },
-  established: { tr: "Delta Oto · Kuruluş 1976", en: "Delta Oto · Established 1976" },
   groupautoMember: { tr: "GROUPAUTO Türkiye Üyesi", en: "GROUPAUTO Türkiye Member" },
+  // Turu 5: Opar'ın kendi bayilik ilişkisi de üyelikler alanına eklendi —
+  // etiket LandingPage.tsx'teki Opar panelinin AYNI, zaten kurulu terimi
+  // (identifier: "Ege Bölge Bayiliği" / "Aegean Regional Dealership") —
+  // yeni bir terim uydurulmadı.
+  oparMember: { tr: "Opar Ege Bölge Bayiliği", en: "Opar Aegean Regional Dealership" },
 } satisfies Record<string, Record<Lang, string>>;
 
 export function SiteFooter() {
@@ -130,13 +134,51 @@ export function SiteFooter() {
                 CSS negatif margin gibi kırılgan bir "telafi" yerine kaynağı
                 düzeltmek tercih edildi. Bu asset yalnızca burada kullanılıyor
                 (grep ile doğrulandı), başka hiçbir sayfa/bileşen etkilenmedi. */}
-            <img
-              src="/images/delta-oto-logo-classic.webp"
-              alt="Delta Oto"
-              width={918}
-              height={222}
-              className="h-[64px] md:h-[76px] w-auto do-logo-invert mb-4 opacity-90"
-            />
+            {/* Sosyal İkon Yeniden Yerleşim Turu: eskiden 3. sütunda,
+                sertifika kutularının altında AYRI bir satırdı — "üyelikler"
+                ile karışık, iletişim bilgisinden kopuk duruyordu (kullanıcı
+                geri bildirimi). Artık logoyla AYNI üst satırda, sağa yaslı —
+                hem "iletişim bloğuyla aynı genel dikey bölge" hem de "sağda
+                hizalı" kısıtını karşılıyor, hem de tek başına yatay bir
+                şerit gibi durmak yerine logoyla birlikte kompakt bir üst
+                bant oluşturuyor. flex-wrap + ikon grubunda ml-auto: logo
+                (64-76px yükseklikte, sabit en-boy oranıyla ~265-315px
+                genişlik) + ikonlar dar 1. sütun genişliğinde (masaüstünde
+                bile ~373px, gap-x-12 payı yüzünden) aynı satıra SIĞMIYOR —
+                logo boyutunu küçültmek yerine (önceki bir turda kasıtlı
+                olarak "ölçülü" 64/76px'e büyütülmüştü, geri alınmadı) ikon
+                grubu kendi satırına düşüyor, ml-auto ile o satırda sağa
+                yaslı kalıyor. Bu her genişlikte (320'den 1920'ye) TUTARLI
+                şekilde gerçekleşiyor — canlı QA'da doğrulandı, "logo satırı +
+                hemen altında sağa yaslı ikon satırı + iletişim listesi"
+                üç-satırlı kompakt bir üst blok olarak kararlı biçimde
+                oturuyor; "tek bir yatay satıra sıkışmış" olmadığı için
+                kullanıcının o kısıtını da doğal olarak karşılıyor. */}
+            <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 mb-4">
+              <img
+                src="/images/delta-oto-logo-classic.webp"
+                alt="Delta Oto"
+                width={918}
+                height={222}
+                className="h-[64px] md:h-[76px] w-auto do-logo-invert opacity-90"
+              />
+              {SOCIAL_LINKS.length > 0 && (
+                <div className="flex items-center gap-1.5 shrink-0 ml-auto">
+                  {SOCIAL_LINKS.map(({ label, href, Icon }) => (
+                    <a
+                      key={label}
+                      href={href}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      aria-label={label}
+                      className="w-8 h-8 rounded-full flex items-center justify-center text-gray-500 hover:text-white hover:bg-white/5 transition-all duration-200"
+                    >
+                      <Icon className="w-4 h-4" strokeWidth={1.75} />
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
             <ul className="space-y-3 text-sm text-gray-500">
               {/* Footer İletişim Turu: ayrı "Yol Tarifi" bağlantısı kaldırıldı
                   — artık adres metninin TAMAMI (ikonuyla birlikte) tek bir
@@ -212,43 +254,39 @@ export function SiteFooter() {
                 </div>
               ))}
             </div>
-            {/* Footer Revizyonu (bu tur): ikonlar w-8→w-9, w-4→w-[18px] —
-                sertifika kutularının (w-20 h-16) hemen altında artık daha
-                "kasıtlı" bir ağırlıkla duruyor, önceki boyut biraz fazla
-                ürkek/silik kalıyordu. Konum/sıra DEĞİŞMEDİ — hiyerarşi hâlâ
-                kullanıcının istediği gibi: sertifikalar → sosyal → ayraç →
-                GroupAuto Türkiye üyeliği (en sonda). */}
-            {SOCIAL_LINKS.length > 0 && (
-              <div className="flex items-center gap-2.5">
-                {SOCIAL_LINKS.map(({ label, href, Icon }) => (
-                  <a
-                    key={label}
-                    href={href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    aria-label={label}
-                    className="w-9 h-9 rounded-full flex items-center justify-center text-gray-500 hover:text-white hover:bg-white/5 transition-all duration-200"
-                  >
-                    <Icon className="w-[18px] h-[18px]" strokeWidth={1.75} />
-                  </a>
-                ))}
+            {/* Üyelikler Turu 5: sosyal ikonlar artık burada değil (1. sütuna,
+                logonun yanına taşındı — bkz. yukarıdaki not). "Üyelikler"
+                (başlıktaki söz) artık gerçekten İKİ üyelik gösteriyor —
+                GROUPAUTO Türkiye + Opar Ege Bölge Bayiliği — yan yana,
+                kompakt bir 2 sütunlu mini-grid'de; her biri kendi kısa
+                etiketiyle üstte, logosuyla altta (aynı dikey hiyerarşi:
+                önce metin, sonra rozet/logo). Opar logosu LandingPage.tsx'te
+                GROUPAUTO paneliyle birebir aynı muamele gören
+                opar-logo-white.svg (negatif/beyaz, koyu zeminde) — sanat
+                yeniden çizilmedi. İki logo da GROUPAUTO rozetinin eski h-12
+                boyutundan biraz küçültülmüş ortak bir h-8 hizasında —
+                yan yana dururken biri diğerini ezmesin diye. */}
+            <div className="mt-3.5 pt-3.5 border-t border-white/5 grid grid-cols-2 gap-4">
+              <div>
+                <span className="block text-[11px] text-gray-400 leading-tight mb-2.5">{T.groupautoMember[lang]}</span>
+                <img
+                  src="/images/groupauto-turkiye-badge.webp"
+                  alt="GROUPAUTO Türkiye"
+                  width={400}
+                  height={199}
+                  className="h-8 w-auto shrink-0 rounded-[3px]"
+                />
               </div>
-            )}
-            {/* GroupAuto Türkiye rozeti — düzeltme turu: önceki sürüm rozet+
-                metni yan yana (flex items-center) diziyordu; doğru hiyerarşi
-                metin ÖNCE, rozet doğrudan ALTINDA (dikey yığın) olmalı —
-                rozet metnin altına "asılı" duruyor, yan yana değil, ayrı
-                yüzen bir ikon da değil. Rozetin kendisi büyütülmedi (h-12
-                korunur), yalnızca dizilim dikeyleşti. */}
-            <div className="mt-3.5 pt-3.5 border-t border-white/5">
-              <span className="block text-[12.5px] text-gray-300 font-semibold leading-tight mb-2.5">{T.groupautoMember[lang]}</span>
-              <img
-                src="/images/groupauto-turkiye-badge.webp"
-                alt="GROUPAUTO Türkiye"
-                width={400}
-                height={199}
-                className="h-12 w-auto shrink-0 rounded-[3px]"
-              />
+              <div>
+                <span className="block text-[11px] text-gray-400 leading-tight mb-2.5">{T.oparMember[lang]}</span>
+                <img
+                  src="/images/opar-logo-white.svg"
+                  alt="Opar"
+                  width={849}
+                  height={341}
+                  className="h-6 w-auto shrink-0 opacity-90"
+                />
+              </div>
             </div>
           </div>
 
@@ -277,12 +315,11 @@ export function SiteFooter() {
               </React.Fragment>
             ))}
           </div>
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-gray-500">
+          {/* Turu 5: "Delta Oto · Kuruluş 1976" satırı tamamen kaldırıldı
+              (kullanıcı talebi) — geriye yalnızca telif satırı kaldı,
+              artık bir "boş taraf"la eşleşmediği için ortalanmış. */}
+          <div className="text-center text-xs text-gray-500">
             <span>{T.rights[lang]}</span>
-            <div className="flex items-center gap-1.5">
-              <div className="w-1.5 h-1.5 rounded-full bg-[#1B3A8F] animate-pulse" />
-              <span>{T.established[lang]}</span>
-            </div>
           </div>
         </div>
       </div>
