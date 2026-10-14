@@ -455,6 +455,30 @@ function BenefitCard({
   );
 }
 
+/**
+ * Tek yönlü sonsuz bant. Döngü mesafesi VARSAYILMAZ, ÖLÇÜLÜR (useMeasuredMarquee).
+ *
+ * Geniş ekran boşluğu düzeltmesi — kopya sayısı da ölçüme dayalı: eski sabit
+ * "iki kopya" yalnızca görünür pencere ≤ döngü mesafesi (8 kart × 300px = 2400px)
+ * iken boşluksuz kalırdı; ~2400px üstünde (2560/3440 vb.) sağda boşluk açılıyordu.
+ * Artık `copies = max(2, ceil(pencereGenişliği / döngüMesafesi) + 1)`: bant sola
+ * en fazla bir döngü mesafesi kaydığından (x ∈ (−D, 0]) toplam içerik
+ * (copies − 1)·D ≥ pencere olmak zorunda. D = ilk özgün kart ile ikinci kopyanın
+ * ilk kartı arasındaki gerçek `getBoundingClientRect().left` farkı; hesap kırpma
+ * penceresi/iz boyutu değişince (resize, yönelim, geç yüklenen görsel/yazı tipi)
+ * ResizeObserver ile yeniden yapılır. Kopya eklemek/çıkarmak D'yi ve bandın o anki
+ * konumunu (x) değiştirmez — duraklatılmış/açık kart yerinde kalır.
+ *
+ * Birleşim: iz soldan yalnızca kart ARALIĞI kadar (`pl` = gap) boşluk taşır;
+ * böylece son kart → ilk kart aralığı diğer tüm aralıklarla birebir aynıdır ve
+ * desen tam D periyotludur (gap'ten büyük bir sol dolgu sarma anında sıçrama
+ * yaratırdı — bkz. TedarikciPage ReasonsRail).
+ *
+ * Ekran okuyucu/klavye: yalnızca İLK kopya erişilebilir; diğer kopyalar
+ * `aria-hidden` + `tabIndex=-1`. Açık kart `id` ile tutulur, kopyalar arasında
+ * aynı id açılır (fare hangi kopyaya girerse girsin). Bu bandın duraklama/açık
+ * durumu Neden Delta bandınınkinden BAĞIMSIZDIR (ayrı bileşen, ayrı state/ref).
+ */
 function BenefitsRail({
   items,
   pauseLabel,
@@ -469,10 +493,37 @@ function BenefitsRail({
   const { cropRef, trackRef, setItemRef, setSeqBStart, setPaused, focusItemIntoView } = useMeasuredMarquee(count, 42);
   const [openId, setOpenId] = React.useState<string | null>(null);
   const [manualPaused, setManualPaused] = React.useState(false);
+  const [copies, setCopies] = React.useState(2);
+  const firstA = React.useRef<HTMLElement | null>(null);
+  const firstB = React.useRef<HTMLElement | null>(null);
 
   React.useEffect(() => {
     setPaused(manualPaused || openId !== null);
   }, [manualPaused, openId, setPaused]);
+
+  // Kanca ilk özgün kartı ve ikinci kopyanın ilk kartını kendi ölçümü için
+  // tutuyor; aynı iki öğeyi kopya-sayısı hesabı için de burada tutuyoruz.
+  const setFirstA = React.useCallback((el: HTMLElement | null) => { firstA.current = el; setItemRef[0]?.(el); }, [setItemRef]);
+  const setFirstB = React.useCallback((el: HTMLElement | null) => { firstB.current = el; setSeqBStart(el); }, [setSeqBStart]);
+
+  React.useLayoutEffect(() => {
+    const crop = cropRef.current;
+    if (!crop || reducedMotion) return;
+    const update = () => {
+      const a = firstA.current;
+      const b = firstB.current;
+      if (!a || !b) return;
+      const loop = b.getBoundingClientRect().left - a.getBoundingClientRect().left;
+      const view = crop.clientWidth;
+      if (loop > 0 && view > 0) setCopies(Math.max(2, Math.ceil(view / loop) + 1));
+    };
+    update();
+    if (typeof ResizeObserver === "undefined") return;
+    const ro = new ResizeObserver(update);
+    ro.observe(crop);
+    if (trackRef.current) ro.observe(trackRef.current);
+    return () => ro.disconnect();
+  }, [count, reducedMotion, cropRef, trackRef]);
 
   const close = (id: string) => setOpenId((cur) => (cur === id ? null : cur));
 
@@ -510,30 +561,21 @@ function BenefitsRail({
         </button>
       </div>
       <div ref={cropRef} className="overflow-hidden">
-        <div ref={trackRef} className="flex gap-3 sm:gap-5 px-4 sm:px-6 lg:px-8 w-max">
-          {items.map((item, i) => (
-            <BenefitCard
-              key={`a-${item.id}`}
-              item={item}
-              isOpen={openId === item.id}
-              accessible
-              setRef={setItemRef[i]}
-              onOpen={() => setOpenId(item.id)}
-              onClose={() => close(item.id)}
-              onFocusOpen={() => { setOpenId(item.id); focusItemIntoView(i); }}
-            />
-          ))}
-          {items.map((item, i) => (
-            <BenefitCard
-              key={`b-${item.id}`}
-              item={item}
-              isOpen={openId === item.id}
-              accessible={false}
-              setRef={i === 0 ? setSeqBStart : undefined}
-              onOpen={() => setOpenId(item.id)}
-              onClose={() => close(item.id)}
-            />
-          ))}
+        <div ref={trackRef} className="flex gap-3 sm:gap-5 pl-3 sm:pl-5 w-max">
+          {Array.from({ length: copies }, (_, c) =>
+            items.map((item, i) => (
+              <BenefitCard
+                key={`${c}-${item.id}`}
+                item={item}
+                isOpen={openId === item.id}
+                accessible={c === 0}
+                setRef={c === 0 ? (i === 0 ? setFirstA : setItemRef[i]) : c === 1 && i === 0 ? setFirstB : undefined}
+                onOpen={() => setOpenId(item.id)}
+                onClose={() => close(item.id)}
+                onFocusOpen={c === 0 ? () => { setOpenId(item.id); focusItemIntoView(i); } : undefined}
+              />
+            )),
+          )}
         </div>
       </div>
     </div>
