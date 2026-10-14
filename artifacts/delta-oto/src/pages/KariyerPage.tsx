@@ -13,6 +13,7 @@ import { useReveal, useViewportFocusIndex, usePrefersReducedMotion } from "../ho
 import { useMeasuredMarquee } from "../hooks/use-measured-marquee";
 import { useDocumentMeta } from "@/hooks/use-document-meta";
 import { useLang, type Lang } from "@/lib/i18n";
+import { joinById } from "@/lib/join-by-id";
 
 // Dil-bağımsız yapısal veri (ikon/URL/renk) — metinler content{} objesinde.
 // İki dil dalı arasında ikon bileşenlerini tekrar etmemek için ayrı tutulur;
@@ -22,39 +23,45 @@ const JOB_PLATFORMS = [
   { name: "Kariyer.net", url: "https://www.kariyer.net", Icon: ExternalLink },
 ];
 
-// Yan Haklar Tek Bant Turu: önceki iki-bantlı/ikonlu kart tasarımı
-// REDDEDİLDİ — kullanıcı TEK yönlü, kesintisiz, fotoğraf-öncelikli bir bant
-// istedi (bkz. BenefitsRail). Sekiz gerçek hak artık grup ayrımı OLMADAN
-// (groupHeadings kaldırıldı) tek sırada.
+// Yan Haklar — veri modeli ve görseller (Turu 7). Her hakkın YAPISAL alanları
+// burada, dil-bağımsız (id/order/published/image/imageSmall/focalPoint); dile
+// göre değişen METİN (label/sub/alt) content.*.benefits.items içinde AYNI
+// `id` ile anahtarlanan bir sözlükte. İkisi `joinById` ile id üzerinden
+// birleşir (src/lib/join-by-id.ts) — index/etiket metnine göre eşleme YOK;
+// bir kart gizlenir/yeniden sıralanırsa görsel, başlık ve açıklama birlikte
+// gider. (Eskiden React key'i etiket metniydi.)
 //
-// GÖRSEL KAYNAK NOTU (dürüst durum): Bu turda her hak için temsili bir
-// lifestyle fotoğrafı planlandı (yönergeler: sağlık→sakin iyi yaşam sahnesi,
-// yemek→özenli öğün, ulaşım→kent içi ulaşım, esnek saat→doğal çalışma
-// sahnesi, eğitim bütçesi→yetişkin mesleki öğrenme, kariyer görüşmesi→iki
-// profesyonelin görüşmesi, marka/ürün eğitimi→teknik parça incelemesi,
-// mentorluk→deneyim paylaşımı). BU OTURUMDA GERÇEK FOTOĞRAF EKLENEMEDİ:
-// ortamın ağ çıkışı (egress proxy) unsplash.com/pexels.com/genel web
-// erişimini politika gereği engelliyor (WebFetch + doğrudan curl ile
-// doğrulandı, 3 farklı harici alan adında hepsi EGRESS_BLOCKED) — bu yüzden
-// lisansı doğrulanabilir hiçbir dış görsel indirilemedi; mevcut repo/
-// attached_assets içinde de bu sekiz temayla eşleşen kullanılmamış bir
-// lifestyle fotoğrafı yok (yalnızca tesis/ürün/logo görselleri var, aynı
-// fotoğrafı sekiz karta dağıtmamak için onlar da kullanılmadı). Geçici
-// çözüm: her kart kendi BENEFIT_VISUALS degrade rengiyle (marka paleti,
-// gerçek fotoğraf İDDİA ETMİYOR) render ediliyor — yapı (tek bant, ölçülü
-// döngü, hover/focus/tap açıklama) TAM teslim edildi, yalnızca nihai
-// fotoğraf malzemesi bekliyor. Gerçek fotoğraflar geldiğinde tek yapılacak,
-// her BenefitsRail kartına bir `photo` src'i eklemek (bkz. BenefitCard).
-const BENEFIT_VISUALS = [
-  "bg-gradient-to-br from-[#1B3A8F] via-[#2547B5] to-[#0e1016]",
-  "bg-gradient-to-tr from-[#0e1016] via-[#1B3A8F] to-[#4d74d6]",
-  "bg-gradient-to-b from-[#2547B5] via-[#1B3A8F] to-[#0e1016]",
-  "bg-gradient-to-bl from-[#4d74d6] via-[#1B3A8F] to-[#0e1016]",
-  "bg-gradient-to-t from-[#0e1016] via-[#2547B5] to-[#7d9bea]",
-  "bg-gradient-to-r from-[#0e1016] via-[#1B3A8F] to-[#0e1016]",
-  "bg-gradient-to-bl from-[#7d9bea] via-[#1B3A8F] to-[#0e1016]",
-  "bg-gradient-to-t from-[#1B3A8F] via-[#2547B5] to-[#0e1016]",
+// GÖRSELLER (dürüst durum): sekiz hakkın her biri için AYRI bir görsel var —
+// public/images/benefits/<id>.webp (900×1200, 3:4) ve mobil için
+// <id>-sm.webp (450×600; srcSet ile seçilir). Bunlar FOTOĞRAF DEĞİL: ortamın
+// ağ politikası stok-foto sitelerine (unsplash/pexels/pixabay/wikimedia…)
+// erişimi engellediğinden ve depoda/yüklemelerde hazır bir Yan Haklar
+// görseli bulunmadığından, her kart için bu projede ÖZGÜN olarak üretilmiş,
+// ortak sanat yönlü (lacivert kurumsal palet + tek sıcak ışık kaynağı)
+// editoryal illüstrasyonlar hazırlandı ve WebP olarak eklendi — geçici
+// SVG/degrade yedeği YOK. Gerçek fotoğraflar geldiğinde yalnızca bu
+// kayıtlardaki `image`/`imageSmall` (ve dile göre `alt`) değişir.
+// `alt` metinleri görselin TEMSİLİ bir illüstrasyon olduğunu söyler; Delta
+// Oto'nun gerçek personeli/ofisi olduğunu iddia etmez.
+const BENEFIT_META: {
+  id: string;
+  order: number;
+  published: boolean;
+  image: string;
+  imageSmall: string;
+  focalPoint: string;
+}[] = [
+  { id: "saglik-sigortasi", order: 1, published: true, image: "/images/benefits/saglik-sigortasi.webp", imageSmall: "/images/benefits/saglik-sigortasi-sm.webp", focalPoint: "50% 46%" },
+  { id: "yemek-karti", order: 2, published: true, image: "/images/benefits/yemek-karti.webp", imageSmall: "/images/benefits/yemek-karti-sm.webp", focalPoint: "50% 40%" },
+  { id: "ulasim-destegi", order: 3, published: true, image: "/images/benefits/ulasim-destegi.webp", imageSmall: "/images/benefits/ulasim-destegi-sm.webp", focalPoint: "50% 52%" },
+  { id: "esnek-calisma", order: 4, published: true, image: "/images/benefits/esnek-calisma.webp", imageSmall: "/images/benefits/esnek-calisma-sm.webp", focalPoint: "50% 42%" },
+  { id: "egitim-butcesi", order: 5, published: true, image: "/images/benefits/egitim-butcesi.webp", imageSmall: "/images/benefits/egitim-butcesi-sm.webp", focalPoint: "50% 50%" },
+  { id: "kariyer-gorusmesi", order: 6, published: true, image: "/images/benefits/kariyer-gorusmesi.webp", imageSmall: "/images/benefits/kariyer-gorusmesi-sm.webp", focalPoint: "50% 48%" },
+  { id: "urun-egitimleri", order: 7, published: true, image: "/images/benefits/urun-egitimleri.webp", imageSmall: "/images/benefits/urun-egitimleri-sm.webp", focalPoint: "50% 40%" },
+  { id: "mentorluk", order: 8, published: true, image: "/images/benefits/mentorluk.webp", imageSmall: "/images/benefits/mentorluk-sm.webp", focalPoint: "50% 45%" },
 ];
+
+type BenefitCopy = { label: string; sub: string; alt: string };
 
 const content = {
   tr: {
@@ -119,16 +126,16 @@ const content = {
       desc: "Uzun vadeli kurumsal ilişkilerde çalışanların gelişimine yatırım yapıyoruz.",
       pause: "Duraklat",
       resume: "Devam Et",
-      items: [
-        { label: "Özel sağlık sigortası", sub: "Tüm çalışanlar için" },
-        { label: "Yemek kartı katkısı", sub: "Her iş günü için sağlanır" },
-        { label: "Ulaşım desteği", sub: "Servis hattı veya yol bedeli" },
-        { label: "Esnek çalışma saatleri", sub: "Pozisyona göre uygulanır" },
-        { label: "Sektörel eğitim bütçesi", sub: "Yıllık gelişim programı" },
-        { label: "Yıllık kariyer görüşmesi", sub: "Şeffaf performans değerlendirmesi" },
-        { label: "Marka ve ürün eğitimleri", sub: "Tedarikçi işbirliğiyle" },
-        { label: "Mentorluk programı", sub: "Kıdemli çalışan rehberliği" },
-      ],
+      items: {
+        "saglik-sigortasi": { label: "Özel sağlık sigortası", sub: "Tüm çalışanlar için", alt: "Temsili illüstrasyon: gün doğumunda gölün kıyısında meditasyon yapan kişi" },
+        "yemek-karti": { label: "Yemek kartı katkısı", sub: "Her iş günü için sağlanır", alt: "Temsili illüstrasyon: yukarıdan görünen öğle yemeği tabağı, çay ve yemek kartı" },
+        "ulasim-destegi": { label: "Ulaşım desteği", sub: "Servis hattı veya yol bedeli", alt: "Temsili illüstrasyon: gün doğumunda otobüs durağında bekleyen çalışan ve şehir içi otobüs" },
+        "esnek-calisma": { label: "Esnek çalışma saatleri", sub: "Pozisyona göre uygulanır", alt: "Temsili illüstrasyon: pencere önünde dizüstü bilgisayar, masa saati ve gündüzden geceye uzanan gökyüzü" },
+        "egitim-butcesi": { label: "Sektörel eğitim bütçesi", sub: "Yıllık gelişim programı", alt: "Temsili illüstrasyon: lamba ışığında kitap yığını, açık kitap ve gözlük" },
+        "kariyer-gorusmesi": { label: "Yıllık kariyer görüşmesi", sub: "Şeffaf performans değerlendirmesi", alt: "Temsili illüstrasyon: iki profesyonelin tablet üzerindeki grafiğe bakarak yaptığı birebir görüşme" },
+        "urun-egitimleri": { label: "Marka ve ürün eğitimleri", sub: "Tedarikçi işbirliğiyle", alt: "Temsili illüstrasyon: fren diski sunumu yapan eğitmen ve izleyen katılımcılar" },
+        "mentorluk": { label: "Mentorluk programı", sub: "Kıdemli çalışan rehberliği", alt: "Temsili illüstrasyon: merdivende genç çalışana elini uzatan kıdemli çalışan" },
+      } as Record<string, BenefitCopy>,
     },
   },
   en: {
@@ -187,16 +194,16 @@ const content = {
       desc: "We invest in our employees' growth as part of long-term working relationships.",
       pause: "Pause",
       resume: "Resume",
-      items: [
-        { label: "Private health insurance", sub: "For all employees" },
-        { label: "Meal card allowance", sub: "Provided for every working day" },
-        { label: "Transportation support", sub: "Shuttle service or commuting allowance" },
-        { label: "Flexible working hours", sub: "Applied depending on the role" },
-        { label: "Industry training budget", sub: "Annual development program" },
-        { label: "Annual career review", sub: "Transparent performance evaluation" },
-        { label: "Brand and product training", sub: "Delivered in collaboration with suppliers" },
-        { label: "Mentorship program", sub: "Guidance from senior colleagues" },
-      ],
+      items: {
+        "saglik-sigortasi": { label: "Private health insurance", sub: "For all employees", alt: "Representative illustration: a person meditating by a lake at sunrise" },
+        "yemek-karti": { label: "Meal card allowance", sub: "Provided for every working day", alt: "Representative illustration: a lunch plate, tea and a meal card seen from above" },
+        "ulasim-destegi": { label: "Transportation support", sub: "Shuttle service or commuting allowance", alt: "Representative illustration: a commuter waiting at a bus stop at sunrise with a city bus passing" },
+        "esnek-calisma": { label: "Flexible working hours", sub: "Applied depending on the role", alt: "Representative illustration: a laptop and desk clock by a window, the sky moving from day to night" },
+        "egitim-butcesi": { label: "Industry training budget", sub: "Annual development program", alt: "Representative illustration: a stack of books, an open book and glasses under a desk lamp" },
+        "kariyer-gorusmesi": { label: "Annual career review", sub: "Transparent performance evaluation", alt: "Representative illustration: a one-to-one review between two professionals looking at a chart on a tablet" },
+        "urun-egitimleri": { label: "Brand and product training", sub: "Delivered in collaboration with suppliers", alt: "Representative illustration: a trainer presenting a brake disc to an attentive audience" },
+        "mentorluk": { label: "Mentorship program", sub: "Guidance from senior colleagues", alt: "Representative illustration: a senior colleague reaching a hand down to a junior colleague on a staircase" },
+      } as Record<string, BenefitCopy>,
     },
   },
 } satisfies Record<Lang, any>;
@@ -326,30 +333,42 @@ function CultureManifesto({ items }: { items: { title: string; desc: string }[] 
   );
 }
 
+type BenefitItem = {
+  id: string;
+  label: string;
+  sub: string;
+  image: string;
+  imageSmall: string;
+  alt: string;
+  focalPoint: string;
+};
+
 /**
- * Yan Haklar — Tek Bant Turu: bkz. üstteki BENEFIT_VISUALS yorumu (görsel
- * kaynak notu). Yapı:
+ * Yan Haklar — tek bant. Yapı:
  *  - TEK yönlü (sağdan sola), TEK bant — ikinci sıra yok, grup pill'i yok.
- *  - Varsayılan: görsel + degrade + kısa başlık. Açıklama KAPALI.
- *  - Hover/focus/tap: bant durur (useMeasuredMarquee pausedRef), o kartın
- *    gradyanı hafifçe güçlenir, başlık yukarı kayar, açıklama grid-rows
- *    0fr→1fr ile (layout'u itmeden, kendi katmanında) açılır.
+ *  - Her kartın KENDİ görseli var (bkz. BENEFIT_META üstündeki not): ilk bakışta
+ *    görsel + başlık görünür; açıklama KAPALI.
+ *  - Metin bölgesinde KONTROLLÜ koyu gradyan: yalnızca kartın alt kısmı
+ *    (kapalıyken ~%54, açıkken ~%72) lacivert-siyaha geçer; görselin geri
+ *    kalanı doğal rengiyle görünür — düz renk bloğu hissi yok.
+ *  - Hover/focus/tap: bant durur (useMeasuredMarquee pausedRef), görsel çok hafif
+ *    büyür, gradyan yükselir, başlık yukarı kayar, açıklama grid-rows 0fr→1fr
+ *    ile (layout'u itmeden, kendi katmanında) açılır.
+ *  - Açık kart `id` ile tutulur (index değil).
  *  - Her benzersiz hak GERÇEK bir <button> (klavye odaklanabilir, görünür
  *    focus-visible ring); ikinci (görsel) kopya aria-hidden + tabIndex=-1 —
  *    ekran okuyucu sekiz hakkı iki kez duymaz, Tab asla görünmeyen kopyaya
- *    girmez. Fare her iki kopyada da çalışır (aria-hidden mouse'u etkilemez)
- *    — hangi kopya "görünürse" o da doğru açıklamayı gösterir.
+ *    girmez. Fare her iki kopyada da çalışır (aria-hidden mouse'u etkilemez).
  *  - Klavye odağı bandı durdurur VE odaklanan kart kırpma penceresinin
- *    dışındaysa içine kaydırır (useMeasuredMarquee.focusItemIntoView) —
- *    transform tabanlı bir bant native scrollIntoView'e cevap vermediği
- *    için.
+ *    dışındaysa içine kaydırır (useMeasuredMarquee.focusItemIntoView).
+ *  - Görsel `aria-hidden`: kartın erişilebilir adı başlık + açıklamadır;
+ *    `alt` yine de dile göre kayıttan gelir (görsel yüklenemezse/arama
+ *    motorları için) ve "temsili illüstrasyon" olduğunu söyler.
  *  - prefers-reduced-motion: otomatik akış tamamen kapalı; sekiz hak TEK
- *    kopya olarak yatay kaydırılabilir (overflow-x-auto) bir sırada —
- *    hiçbiri overflow-hidden içinde kaybolmuyor.
+ *    kopya olarak yatay kaydırılabilir (overflow-x-auto) bir sırada.
  */
 function BenefitCard({
   item,
-  index,
   isOpen,
   accessible,
   onOpen,
@@ -357,8 +376,7 @@ function BenefitCard({
   onFocusOpen,
   setRef,
 }: {
-  item: { label: string; sub: string };
-  index: number;
+  item: BenefitItem;
   isOpen: boolean;
   accessible: boolean;
   onOpen: () => void;
@@ -366,11 +384,11 @@ function BenefitCard({
   onFocusOpen?: () => void;
   setRef?: (el: HTMLButtonElement | null) => void;
 }) {
-  const visual = BENEFIT_VISUALS[index % BENEFIT_VISUALS.length];
   return (
     <button
       type="button"
       ref={setRef}
+      data-benefit-id={item.id}
       tabIndex={accessible ? 0 : -1}
       aria-hidden={accessible ? undefined : true}
       aria-expanded={accessible ? isOpen : undefined}
@@ -379,26 +397,47 @@ function BenefitCard({
       onFocus={accessible ? onFocusOpen : undefined}
       onBlur={accessible ? onClose : undefined}
       onClick={onOpen}
-      className="group relative shrink-0 w-[148px] sm:w-[280px] aspect-[3/4] rounded-2xl overflow-hidden text-left appearance-none cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7d9bea] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1B3A8F]"
+      className="group relative shrink-0 w-[148px] sm:w-[280px] aspect-[3/4] rounded-2xl overflow-hidden text-left appearance-none cursor-pointer bg-[#0b1230] ring-1 ring-white/15 shadow-[0_18px_40px_-18px_rgba(2,6,24,0.75)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#7d9bea] focus-visible:ring-offset-2 focus-visible:ring-offset-[#1B3A8F]"
     >
-      {/* Fotoğraf katmanı — bkz. BENEFIT_VISUALS yorumu: gerçek lifestyle
-          fotoğrafı bu oturumda eklenemedi, marka paleti degrade + ince doku
-          geçici olarak yerini tutuyor (fotoğraf İDDİA ETMİYOR). */}
-      <div className={`absolute inset-0 ${visual}`} />
-      <div className="absolute inset-0 do-grid-bg opacity-[0.15]" aria-hidden="true" />
+      {/* Kartın kendi görseli. Boyutlar (width/height) en-boy oranını (3:4)
+          yüklenmeden önce de sabitler — görsel yüklemesi döngü ölçümünü
+          etkilemez. srcSet: mobil kart (148px) 450w dosyayı, masaüstü (280px,
+          2x ekranlarda 560px) 900w dosyayı seçer. `loading="lazy"` BİLİNÇLİ olarak
+          YOK: bant `overflow-hidden` bir kırpma penceresinde akıyor ve tarayıcı
+          lazy görselleri, kırpma alanının dışındaki kartlar için kök-marjla
+          önceden YÜKLEMİYOR — kartlar pencereye girerken görsel sonradan
+          "pop" ederdi (canlı QA'da: mobilde 8. kart, tablette 6–8. kartlar
+          boş geliyordu). Sekiz görselin toplamı mobilde ~80KB, masaüstünde
+          ~190KB — eager yükleme maliyeti ihmal edilebilir. */}
+      <img
+        src={item.image}
+        srcSet={`${item.imageSmall} 450w, ${item.image} 900w`}
+        sizes="(min-width: 640px) 280px, 148px"
+        alt={item.alt}
+        aria-hidden="true"
+        width={900}
+        height={1200}
+        decoding="async"
+        draggable={false}
+        className={`absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out ${isOpen ? "scale-[1.05]" : "scale-100"}`}
+        style={{ objectPosition: item.focalPoint }}
+      />
+      {/* Kontrollü koyu gradyan — yalnızca metin bölgesinde (bkz. üstteki not). */}
       <div
-        className={`absolute inset-0 bg-gradient-to-t from-[#0e1016] to-transparent transition-[opacity] duration-300 ${
-          isOpen ? "opacity-100 from-[85%]" : "opacity-90 from-[55%]"
-        }`}
+        aria-hidden="true"
+        className="absolute inset-x-0 bottom-0 transition-[height] duration-300 ease-out"
+        style={{
+          height: isOpen ? "72%" : "54%",
+          background:
+            "linear-gradient(to top, rgba(6,11,34,0.95) 0%, rgba(6,11,34,0.78) 36%, rgba(6,11,34,0.34) 70%, rgba(6,11,34,0) 100%)",
+        }}
       />
       {/* Mobil Yoğunluk Turu: p-5→p-4 yalnızca <sm — kart genişliğiyle (148px)
           orantılı, açıklama açıldığında sabit (aspect-[3/4]) yükseklikte
-          kesilme/taşma riskini azaltır; canlı ölçümle doğrulandı (bkz. görev
-          raporu). Font boyutları KORUNDU — okunurluk küçültülerek
-          sığdırılmadı, yalnızca genişlik/dolgu/boşluk ayarlandı. */}
+          kesilme/taşma riskini azaltır. Font boyutları KORUNDU. */}
       <div className="relative h-full p-4 sm:p-5 flex flex-col justify-end">
         <h3
-          className={`text-white font-bold text-[16px] leading-snug transition-transform duration-300 ease-out ${
+          className={`text-white font-bold text-[16px] leading-snug [text-shadow:0_1px_10px_rgba(2,6,24,0.7)] transition-transform duration-300 ease-out ${
             isOpen ? "-translate-y-1" : ""
           }`}
         >
@@ -409,7 +448,7 @@ function BenefitCard({
             isOpen ? "grid-rows-[1fr] mt-1.5" : "grid-rows-[0fr] mt-0"
           }`}
         >
-          <p className="overflow-hidden text-white/75 text-[12.5px] leading-relaxed">{item.sub}</p>
+          <p className="overflow-hidden text-white/85 text-[12.5px] leading-relaxed">{item.sub}</p>
         </div>
       </div>
     </button>
@@ -421,36 +460,35 @@ function BenefitsRail({
   pauseLabel,
   resumeLabel,
 }: {
-  items: { label: string; sub: string }[];
+  items: BenefitItem[];
   pauseLabel: string;
   resumeLabel: string;
 }) {
   const reducedMotion = usePrefersReducedMotion();
   const count = items.length;
   const { cropRef, trackRef, setItemRef, setSeqBStart, setPaused, focusItemIntoView } = useMeasuredMarquee(count, 42);
-  const [openIndex, setOpenIndex] = React.useState<number | null>(null);
+  const [openId, setOpenId] = React.useState<string | null>(null);
   const [manualPaused, setManualPaused] = React.useState(false);
 
   React.useEffect(() => {
-    setPaused(manualPaused || openIndex !== null);
-  }, [manualPaused, openIndex, setPaused]);
+    setPaused(manualPaused || openId !== null);
+  }, [manualPaused, openId, setPaused]);
 
-  const close = (i: number) => setOpenIndex((cur) => (cur === i ? null : cur));
+  const close = (id: string) => setOpenId((cur) => (cur === id ? null : cur));
 
   if (reducedMotion) {
     return (
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex gap-3 sm:gap-5 overflow-x-auto pb-2 -mx-1 px-1">
-          {items.map((item, i) => (
+          {items.map((item) => (
             <BenefitCard
-              key={item.label}
+              key={item.id}
               item={item}
-              index={i}
-              isOpen={openIndex === i}
+              isOpen={openId === item.id}
               accessible
-              onOpen={() => setOpenIndex(i)}
-              onClose={() => close(i)}
-              onFocusOpen={() => setOpenIndex(i)}
+              onOpen={() => setOpenId(item.id)}
+              onClose={() => close(item.id)}
+              onFocusOpen={() => setOpenId(item.id)}
             />
           ))}
         </div>
@@ -475,27 +513,25 @@ function BenefitsRail({
         <div ref={trackRef} className="flex gap-3 sm:gap-5 px-4 sm:px-6 lg:px-8 w-max">
           {items.map((item, i) => (
             <BenefitCard
-              key={`a-${item.label}`}
+              key={`a-${item.id}`}
               item={item}
-              index={i}
-              isOpen={openIndex === i}
+              isOpen={openId === item.id}
               accessible
               setRef={setItemRef[i]}
-              onOpen={() => setOpenIndex(i)}
-              onClose={() => close(i)}
-              onFocusOpen={() => { setOpenIndex(i); focusItemIntoView(i); }}
+              onOpen={() => setOpenId(item.id)}
+              onClose={() => close(item.id)}
+              onFocusOpen={() => { setOpenId(item.id); focusItemIntoView(i); }}
             />
           ))}
           {items.map((item, i) => (
             <BenefitCard
-              key={`b-${item.label}`}
+              key={`b-${item.id}`}
               item={item}
-              index={i}
-              isOpen={openIndex === i}
+              isOpen={openId === item.id}
               accessible={false}
               setRef={i === 0 ? setSeqBStart : undefined}
-              onOpen={() => setOpenIndex(i)}
-              onClose={() => close(i)}
+              onOpen={() => setOpenId(item.id)}
+              onClose={() => close(item.id)}
             />
           ))}
         </div>
@@ -509,6 +545,8 @@ export function KariyerPage() {
   const t = content[lang];
   useDocumentMeta(t.meta.title, t.meta.description);
   const reveal = useReveal();
+  // Yan Haklar: yapısal kayıtlar (BENEFIT_META) + dile göre metin/alt `id` ile birleşir.
+  const BENEFITS = joinById(BENEFIT_META, t.benefits.items);
 
   const scrollToPlatforms = () => {
     const target = document.getElementById("kariyer-platformlari");
@@ -662,11 +700,9 @@ export function KariyerPage() {
         </div>
       </section>
 
-      {/* YAN HAKLAR — Tek Bant Turu: önceki iki-bantlı/ikonlu kart tasarımı
-          REDDEDİLDİ ("temiz ama kurumsal panel gibi, ucuz"). Bkz.
-          BenefitsRail/BenefitCard üstündeki yorumlar: artık TEK yönlü, TEK
-          bant, sekiz hak grup ayrımı olmadan aynı sırada; varsayılan
-          görünüm fotoğraf(yerine geçici degrade)+başlık, açıklama yalnızca
+      {/* YAN HAKLAR — tek yönlü, tek bant; sekiz hakkın HER BİRİ kendi
+          görseliyle (public/images/benefits/, bkz. BENEFIT_META notu).
+          Varsayılan görünüm görsel + başlık; açıklama yalnızca
           hover/focus/tap ile açılıyor. Sekiz gerçek hak aynen korundu. */}
       <section className="relative bg-[#1B3A8F] text-white py-24 overflow-hidden">
         <div className="absolute inset-0 do-grid-bg opacity-25" />
@@ -681,7 +717,7 @@ export function KariyerPage() {
         </div>
 
         <div className="relative z-10">
-          <BenefitsRail items={t.benefits.items} pauseLabel={t.benefits.pause} resumeLabel={t.benefits.resume} />
+          <BenefitsRail items={BENEFITS} pauseLabel={t.benefits.pause} resumeLabel={t.benefits.resume} />
         </div>
       </section>
 
