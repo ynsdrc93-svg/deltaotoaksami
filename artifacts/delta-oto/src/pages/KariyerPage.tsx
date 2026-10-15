@@ -31,18 +31,15 @@ const JOB_PLATFORMS = [
 // bir kart gizlenir/yeniden sıralanırsa görsel, başlık ve açıklama birlikte
 // gider. (Eskiden React key'i etiket metniydi.)
 //
-// GÖRSELLER (dürüst durum): sekiz hakkın her biri için AYRI bir görsel var —
-// public/images/benefits/<id>.webp (900×1200, 3:4) ve mobil için
-// <id>-sm.webp (450×600; srcSet ile seçilir). Bunlar FOTOĞRAF DEĞİL: ortamın
-// ağ politikası stok-foto sitelerine (unsplash/pexels/pixabay/wikimedia…)
-// erişimi engellediğinden ve depoda/yüklemelerde hazır bir Yan Haklar
-// görseli bulunmadığından, her kart için bu projede ÖZGÜN olarak üretilmiş,
-// ortak sanat yönlü (lacivert kurumsal palet + tek sıcak ışık kaynağı)
-// editoryal illüstrasyonlar hazırlandı ve WebP olarak eklendi — geçici
-// SVG/degrade yedeği YOK. Gerçek fotoğraflar geldiğinde yalnızca bu
-// kayıtlardaki `image`/`imageSmall` (ve dile göre `alt`) değişir.
-// `alt` metinleri görselin TEMSİLİ bir illüstrasyon olduğunu söyler; Delta
-// Oto'nun gerçek personeli/ofisi olduğunu iddia etmez.
+// GÖRSELLER (dürüst durum): sekiz hakkın her biri için AYRI bir fotoğraf var —
+// public/images/benefits/<id>-photo.webp (900×1200, 3:4) ve mobil için
+// <id>-photo-sm.webp (450×600; srcSet ile seçilir). Kullanıcının sağladığı
+// bağımsız yapay-zekâ üretimi TEMSİLİ görsellerdir (stok değil, kolaj değil,
+// görsele gömülü logo/yazı/koyu katman yok); Delta Oto'nun gerçek personeli
+// ya da tesisi DEĞİLDİR. `alt` metinleri bunu açıkça söyler ("Temsili görsel:"
+// / "Representative image:"). Dosya boyutu: sekiz büyük dosya toplam 844.634 B,
+// sekiz küçük dosya toplam 274.544 B. Görseller değişirse yalnızca bu
+// kayıtlardaki `image`/`imageSmall`/`focalPoint` (ve dile göre `alt`) güncellenir.
 const BENEFIT_META: {
   id: string;
   order: number;
@@ -51,14 +48,14 @@ const BENEFIT_META: {
   imageSmall: string;
   focalPoint: string;
 }[] = [
-  { id: "saglik-sigortasi", order: 1, published: true, image: "/images/benefits/saglik-sigortasi.webp", imageSmall: "/images/benefits/saglik-sigortasi-sm.webp", focalPoint: "50% 46%" },
-  { id: "yemek-karti", order: 2, published: true, image: "/images/benefits/yemek-karti.webp", imageSmall: "/images/benefits/yemek-karti-sm.webp", focalPoint: "50% 40%" },
-  { id: "ulasim-destegi", order: 3, published: true, image: "/images/benefits/ulasim-destegi.webp", imageSmall: "/images/benefits/ulasim-destegi-sm.webp", focalPoint: "50% 52%" },
-  { id: "esnek-calisma", order: 4, published: true, image: "/images/benefits/esnek-calisma.webp", imageSmall: "/images/benefits/esnek-calisma-sm.webp", focalPoint: "50% 42%" },
-  { id: "egitim-butcesi", order: 5, published: true, image: "/images/benefits/egitim-butcesi.webp", imageSmall: "/images/benefits/egitim-butcesi-sm.webp", focalPoint: "50% 50%" },
-  { id: "kariyer-gorusmesi", order: 6, published: true, image: "/images/benefits/kariyer-gorusmesi.webp", imageSmall: "/images/benefits/kariyer-gorusmesi-sm.webp", focalPoint: "50% 48%" },
-  { id: "urun-egitimleri", order: 7, published: true, image: "/images/benefits/urun-egitimleri.webp", imageSmall: "/images/benefits/urun-egitimleri-sm.webp", focalPoint: "50% 40%" },
-  { id: "mentorluk", order: 8, published: true, image: "/images/benefits/mentorluk.webp", imageSmall: "/images/benefits/mentorluk-sm.webp", focalPoint: "50% 45%" },
+  { id: "saglik-sigortasi", order: 1, published: true, image: "/images/benefits/saglik-sigortasi-photo.webp", imageSmall: "/images/benefits/saglik-sigortasi-photo-sm.webp", focalPoint: "50% 50%" },
+  { id: "yemek-karti", order: 2, published: true, image: "/images/benefits/yemek-karti-photo.webp", imageSmall: "/images/benefits/yemek-karti-photo-sm.webp", focalPoint: "50% 50%" },
+  { id: "ulasim-destegi", order: 3, published: true, image: "/images/benefits/ulasim-destegi-photo.webp", imageSmall: "/images/benefits/ulasim-destegi-photo-sm.webp", focalPoint: "50% 50%" },
+  { id: "esnek-calisma", order: 4, published: true, image: "/images/benefits/esnek-calisma-photo.webp", imageSmall: "/images/benefits/esnek-calisma-photo-sm.webp", focalPoint: "50% 50%" },
+  { id: "egitim-butcesi", order: 5, published: true, image: "/images/benefits/egitim-butcesi-photo.webp", imageSmall: "/images/benefits/egitim-butcesi-photo-sm.webp", focalPoint: "50% 50%" },
+  { id: "kariyer-gorusmesi", order: 6, published: true, image: "/images/benefits/kariyer-gorusmesi-photo.webp", imageSmall: "/images/benefits/kariyer-gorusmesi-photo-sm.webp", focalPoint: "50% 50%" },
+  { id: "urun-egitimleri", order: 7, published: true, image: "/images/benefits/urun-egitimleri-photo.webp", imageSmall: "/images/benefits/urun-egitimleri-photo-sm.webp", focalPoint: "50% 50%" },
+  { id: "mentorluk", order: 8, published: true, image: "/images/benefits/mentorluk-photo.webp", imageSmall: "/images/benefits/mentorluk-photo-sm.webp", focalPoint: "50% 50%" },
 ];
 
 type BenefitCopy = { label: string; sub: string; alt: string };
@@ -127,14 +124,14 @@ const content = {
       pause: "Duraklat",
       resume: "Devam Et",
       items: {
-        "saglik-sigortasi": { label: "Özel sağlık sigortası", sub: "Tüm çalışanlar için", alt: "Temsili illüstrasyon: gün doğumunda gölün kıyısında meditasyon yapan kişi" },
-        "yemek-karti": { label: "Yemek kartı katkısı", sub: "Her iş günü için sağlanır", alt: "Temsili illüstrasyon: yukarıdan görünen öğle yemeği tabağı, çay ve yemek kartı" },
-        "ulasim-destegi": { label: "Ulaşım desteği", sub: "Servis hattı veya yol bedeli", alt: "Temsili illüstrasyon: gün doğumunda otobüs durağında bekleyen çalışan ve şehir içi otobüs" },
-        "esnek-calisma": { label: "Esnek çalışma saatleri", sub: "Pozisyona göre uygulanır", alt: "Temsili illüstrasyon: pencere önünde dizüstü bilgisayar, masa saati ve gündüzden geceye uzanan gökyüzü" },
-        "egitim-butcesi": { label: "Sektörel eğitim bütçesi", sub: "Yıllık gelişim programı", alt: "Temsili illüstrasyon: lamba ışığında kitap yığını, açık kitap ve gözlük" },
-        "kariyer-gorusmesi": { label: "Yıllık kariyer görüşmesi", sub: "Şeffaf performans değerlendirmesi", alt: "Temsili illüstrasyon: iki profesyonelin tablet üzerindeki grafiğe bakarak yaptığı birebir görüşme" },
-        "urun-egitimleri": { label: "Marka ve ürün eğitimleri", sub: "Tedarikçi işbirliğiyle", alt: "Temsili illüstrasyon: fren diski sunumu yapan eğitmen ve izleyen katılımcılar" },
-        "mentorluk": { label: "Mentorluk programı", sub: "Kıdemli çalışan rehberliği", alt: "Temsili illüstrasyon: merdivende genç çalışana elini uzatan kıdemli çalışan" },
+        "saglik-sigortasi": { label: "Özel sağlık sigortası", sub: "Tüm çalışanlar için", alt: "Temsili görsel: aydınlık bir klinikte hekimle görüşen yetişkin." },
+        "yemek-karti": { label: "Yemek kartı katkısı", sub: "Her iş günü için sağlanır", alt: "Temsili görsel: öğle molasında bir yemek masası." },
+        "ulasim-destegi": { label: "Ulaşım desteği", sub: "Servis hattı veya yol bedeli", alt: "Temsili görsel: kent içi toplu taşıma platformunda yolcu." },
+        "esnek-calisma": { label: "Esnek çalışma saatleri", sub: "Pozisyona göre uygulanır", alt: "Temsili görsel: ofis masasında saat, defter ve çalışma planlaması." },
+        "egitim-butcesi": { label: "Sektörel eğitim bütçesi", sub: "Yıllık gelişim programı", alt: "Temsili görsel: profesyonel eğitimde not alan yetişkin katılımcı." },
+        "kariyer-gorusmesi": { label: "Yıllık kariyer görüşmesi", sub: "Şeffaf performans değerlendirmesi", alt: "Temsili görsel: ofiste yüz yüze değerlendirme görüşmesi yapan iki yetişkin." },
+        "urun-egitimleri": { label: "Marka ve ürün eğitimleri", sub: "Tedarikçi işbirliğiyle", alt: "Temsili görsel: otomotiv parçalarını birlikte inceleyen iki yetişkin." },
+        "mentorluk": { label: "Mentorluk programı", sub: "Kıdemli çalışan rehberliği", alt: "Temsili görsel: deneyim paylaşımı sırasında birlikte notları inceleyen iki yetişkin." },
       } as Record<string, BenefitCopy>,
     },
   },
@@ -195,14 +192,14 @@ const content = {
       pause: "Pause",
       resume: "Resume",
       items: {
-        "saglik-sigortasi": { label: "Private health insurance", sub: "For all employees", alt: "Representative illustration: a person meditating by a lake at sunrise" },
-        "yemek-karti": { label: "Meal card allowance", sub: "Provided for every working day", alt: "Representative illustration: a lunch plate, tea and a meal card seen from above" },
-        "ulasim-destegi": { label: "Transportation support", sub: "Shuttle service or commuting allowance", alt: "Representative illustration: a commuter waiting at a bus stop at sunrise with a city bus passing" },
-        "esnek-calisma": { label: "Flexible working hours", sub: "Applied depending on the role", alt: "Representative illustration: a laptop and desk clock by a window, the sky moving from day to night" },
-        "egitim-butcesi": { label: "Industry training budget", sub: "Annual development program", alt: "Representative illustration: a stack of books, an open book and glasses under a desk lamp" },
-        "kariyer-gorusmesi": { label: "Annual career review", sub: "Transparent performance evaluation", alt: "Representative illustration: a one-to-one review between two professionals looking at a chart on a tablet" },
-        "urun-egitimleri": { label: "Brand and product training", sub: "Delivered in collaboration with suppliers", alt: "Representative illustration: a trainer presenting a brake disc to an attentive audience" },
-        "mentorluk": { label: "Mentorship program", sub: "Guidance from senior colleagues", alt: "Representative illustration: a senior colleague reaching a hand down to a junior colleague on a staircase" },
+        "saglik-sigortasi": { label: "Private health insurance", sub: "For all employees", alt: "Representative image: an adult consulting a clinician in a bright office." },
+        "yemek-karti": { label: "Meal card allowance", sub: "Provided for every working day", alt: "Representative image: a meal during a lunch break." },
+        "ulasim-destegi": { label: "Transportation support", sub: "Shuttle service or commuting allowance", alt: "Representative image: a commuter on an urban public transport platform." },
+        "esnek-calisma": { label: "Flexible working hours", sub: "Applied depending on the role", alt: "Representative image: a desk clock and notebook used for work planning." },
+        "egitim-butcesi": { label: "Industry training budget", sub: "Annual development program", alt: "Representative image: an adult taking notes during professional training." },
+        "kariyer-gorusmesi": { label: "Annual career review", sub: "Transparent performance evaluation", alt: "Representative image: two adults in a face-to-face professional review meeting." },
+        "urun-egitimleri": { label: "Brand and product training", sub: "Delivered in collaboration with suppliers", alt: "Representative image: two adults examining automotive components together." },
+        "mentorluk": { label: "Mentorship program", sub: "Guidance from senior colleagues", alt: "Representative image: two adults reviewing notes during a mentoring conversation." },
       } as Record<string, BenefitCopy>,
     },
   },
@@ -348,12 +345,16 @@ type BenefitItem = {
  *  - TEK yönlü (sağdan sola), TEK bant — ikinci sıra yok, grup pill'i yok.
  *  - Her kartın KENDİ görseli var (bkz. BENEFIT_META üstündeki not): ilk bakışta
  *    görsel + başlık görünür; açıklama KAPALI.
- *  - Metin bölgesinde KONTROLLÜ koyu gradyan: yalnızca kartın alt kısmı
- *    (kapalıyken ~%54, açıkken ~%72) lacivert-siyaha geçer; görselin geri
- *    kalanı doğal rengiyle görünür — düz renk bloğu hissi yok.
+ *  - Metin bölgesinde KONTROLLÜ koyu okunurluk katmanı (scrim): yalnızca metin
+ *    bloğunun (başlık + açılınca açıklama) arkası ve üstündeki 56px'lik yumuşak
+ *    geçiş koyulaşır; yüksekliği metnin GERÇEK yüksekliğini izler (başlık 1–3
+ *    satıra sarsa da, açıklama açılsa da metin koyu bölgede kalır). Fotoğrafın
+ *    geri kalanı (yüzler, ürün, tabak, fren diski) doğal renginde görünür —
+ *    tam yüzey lacivert filtre YOK. Gerçek fotoğraflarla ölçüldü: beyaz metnin
+ *    en kötü piksel kontrastı ≥ 5,7:1 (TR+EN, mobil+masaüstü, kapalı+açık).
  *  - Hover/focus/tap: bant durur (useMeasuredMarquee pausedRef), görsel çok hafif
- *    büyür, gradyan yükselir, başlık yukarı kayar, açıklama grid-rows 0fr→1fr
- *    ile (layout'u itmeden, kendi katmanında) açılır.
+ *    büyür, başlık yukarı kayar, açıklama grid-rows 0fr→1fr ile (kart boyutunu
+ *    değiştirmeden, kendi katmanında) açılır; scrim metinle birlikte uzar.
  *  - Açık kart `id` ile tutulur (index değil).
  *  - Her benzersiz hak GERÇEK bir <button> (klavye odaklanabilir, görünür
  *    focus-visible ring); ikinci (görsel) kopya aria-hidden + tabIndex=-1 —
@@ -363,7 +364,7 @@ type BenefitItem = {
  *    dışındaysa içine kaydırır (useMeasuredMarquee.focusItemIntoView).
  *  - Görsel `aria-hidden`: kartın erişilebilir adı başlık + açıklamadır;
  *    `alt` yine de dile göre kayıttan gelir (görsel yüklenemezse/arama
- *    motorları için) ve "temsili illüstrasyon" olduğunu söyler.
+ *    motorları için) ve "temsili görsel" olduğunu söyler.
  *  - prefers-reduced-motion: otomatik akış tamamen kapalı; sekiz hak TEK
  *    kopya olarak yatay kaydırılabilir (overflow-x-auto) bir sırada.
  */
@@ -407,8 +408,10 @@ function BenefitCard({
           lazy görselleri, kırpma alanının dışındaki kartlar için kök-marjla
           önceden YÜKLEMİYOR — kartlar pencereye girerken görsel sonradan
           "pop" ederdi (canlı QA'da: mobilde 8. kart, tablette 6–8. kartlar
-          boş geliyordu). Sekiz görselin toplamı mobilde ~80KB, masaüstünde
-          ~190KB — eager yükleme maliyeti ihmal edilebilir. */}
+          boş geliyordu). Gerçek dosya boyutları: sekiz küçük (450w) dosya toplam
+          274.544 B, sekiz büyük (900w) dosya toplam 844.634 B; tarayıcı ekran
+          yoğunluğuna göre yalnızca birini seçer (kopya kartlar aynı URL'yi
+          paylaştığından ek istek oluşmaz). */}
       <img
         src={item.image}
         srcSet={`${item.imageSmall} 450w, ${item.image} 900w`}
@@ -422,33 +425,35 @@ function BenefitCard({
         className={`absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out ${isOpen ? "scale-[1.05]" : "scale-100"}`}
         style={{ objectPosition: item.focalPoint }}
       />
-      {/* Kontrollü koyu gradyan — yalnızca metin bölgesinde (bkz. üstteki not). */}
-      <div
-        aria-hidden="true"
-        className="absolute inset-x-0 bottom-0 transition-[height] duration-300 ease-out"
-        style={{
-          height: isOpen ? "72%" : "54%",
-          background:
-            "linear-gradient(to top, rgba(6,11,34,0.95) 0%, rgba(6,11,34,0.78) 36%, rgba(6,11,34,0.34) 70%, rgba(6,11,34,0) 100%)",
-        }}
-      />
       {/* Mobil Yoğunluk Turu: p-5→p-4 yalnızca <sm — kart genişliğiyle (148px)
           orantılı, açıklama açıldığında sabit (aspect-[3/4]) yükseklikte
-          kesilme/taşma riskini azaltır. Font boyutları KORUNDU. */}
+          kesilme/taşma riskini azaltır. Font boyutları KORUNDU.
+          Okunurluk katmanı (scrim) METİN BLOĞUNUN çocuğu: yüksekliği sabit bir
+          kart yüzdesi değil, başlığın/açıklamanın GERÇEK yüksekliğidir (üstüne
+          56px'lik yumuşak geçiş eklenir). Böylece başlık 1–3 satıra sarsa da
+          (EN etiketleri 148px'te 3 satır), açıklama açılsa da metin her zaman
+          kapalı koyu bölgenin içinde kalır; metnin üstündeki fotoğraf (yüz /
+          ürün) doğal renginde kalır — tam yüzey lacivert filtre YOK. */}
       <div className="relative h-full p-4 sm:p-5 flex flex-col justify-end">
-        <h3
-          className={`text-white font-bold text-[16px] leading-snug [text-shadow:0_1px_10px_rgba(2,6,24,0.7)] transition-transform duration-300 ease-out ${
-            isOpen ? "-translate-y-1" : ""
-          }`}
-        >
-          {item.label}
-        </h3>
-        <div
-          className={`grid transition-[grid-template-rows] duration-300 ease-out ${
-            isOpen ? "grid-rows-[1fr] mt-1.5" : "grid-rows-[0fr] mt-0"
-          }`}
-        >
-          <p className="overflow-hidden text-white/85 text-[12.5px] leading-relaxed">{item.sub}</p>
+        <div className="relative">
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -inset-x-4 -bottom-4 -top-14 sm:-inset-x-5 sm:-bottom-5 bg-[linear-gradient(to_top,rgba(5,13,30,0.82)_0px,rgba(5,13,30,0.7)_calc(100%-56px),rgba(5,13,30,0.32)_calc(100%-28px),rgba(5,13,30,0)_100%)]"
+          />
+          <h3
+            className={`relative text-white font-bold text-[16px] leading-snug [text-shadow:0_1px_10px_rgba(2,6,24,0.7)] transition-transform duration-300 ease-out ${
+              isOpen ? "-translate-y-1" : ""
+            }`}
+          >
+            {item.label}
+          </h3>
+          <div
+            className={`relative grid transition-[grid-template-rows] duration-300 ease-out ${
+              isOpen ? "grid-rows-[1fr] mt-1.5" : "grid-rows-[0fr] mt-0"
+            }`}
+          >
+            <p className="overflow-hidden text-white/85 text-[12.5px] leading-relaxed">{item.sub}</p>
+          </div>
         </div>
       </div>
     </button>
