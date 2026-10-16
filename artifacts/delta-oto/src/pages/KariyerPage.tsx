@@ -425,6 +425,15 @@ function BenefitCard({
         className={`absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out ${isOpen ? "scale-[1.05]" : "scale-100"}`}
         style={{ objectPosition: item.focalPoint }}
       />
+      {/* Lacivert marka rötuşu: fotoğrafın TAMAMINA hafif, sabit (hover/açık/
+          kapalı durumundan bağımsız) lacivert örtü — fotoğraf → bu örtü → metin
+          okunurluk katmanı (aşağıda) → yazılar sırası. Blur yok; fotoğrafı
+          büyüten img'nin DIŞINDA ayrı bir katman olduğundan açılışta ölçeklenmez.
+          pointer-events-none: tıklama/hover/odak etkileşimlerini engellemez. */}
+      <div
+        aria-hidden="true"
+        className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(27,58,143,0.24)_0%,rgba(27,58,143,0.30)_55%,rgba(8,18,43,0.38)_100%)]"
+      />
       {/* Mobil Yoğunluk Turu: p-5→p-4 yalnızca <sm — kart genişliğiyle (148px)
           orantılı, açıklama açıldığında sabit (aspect-[3/4]) yükseklikte
           kesilme/taşma riskini azaltır. Font boyutları KORUNDU.
