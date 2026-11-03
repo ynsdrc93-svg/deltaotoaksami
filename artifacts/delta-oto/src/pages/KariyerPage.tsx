@@ -345,13 +345,15 @@ type BenefitItem = {
  *  - TEK yönlü (sağdan sola), TEK bant — ikinci sıra yok, grup pill'i yok.
  *  - Her kartın KENDİ görseli var (bkz. BENEFIT_META üstündeki not): ilk bakışta
  *    görsel + başlık görünür; açıklama KAPALI.
- *  - Metin bölgesinde KONTROLLÜ koyu okunurluk katmanı (scrim): yalnızca metin
- *    bloğunun (başlık + açılınca açıklama) arkası ve üstündeki 56px'lik yumuşak
- *    geçiş koyulaşır; yüksekliği metnin GERÇEK yüksekliğini izler (başlık 1–3
+ *  - İki okunurluk katmanı, ikisi de sabit (hover/açık/kapalıdan bağımsız):
+ *    (1) fotoğrafın TAMAMINI kaplayan, aşağıdan yukarı saydamlaşan lacivert
+ *    gradyan (alt ≈ opak, orta yumuşak geçiş, üst oldukça saydam — bkz. img'nin
+ *    altındaki not); (2) metin bloğunun çocuğu olan scrim: yüksekliği metnin
+ *    GERÇEK yüksekliğini + üstündeki 56px'lik yumuşak geçişi izler (başlık 1–3
  *    satıra sarsa da, açıklama açılsa da metin koyu bölgede kalır). Fotoğrafın
- *    geri kalanı (yüzler, ürün, tabak, fren diski) doğal renginde görünür —
- *    tam yüzey lacivert filtre YOK. Gerçek fotoğraflarla ölçüldü: beyaz metnin
- *    en kötü piksel kontrastı ≥ 5,7:1 (TR+EN, mobil+masaüstü, kapalı+açık).
+ *    üst bölümü (yüzler, ürün, tabak, fren diski) doğal renginde kalır.
+ *    Gerçek fotoğraflarla ölçüldü: beyaz metnin en kötü piksel kontrastı
+ *    ≥ 8,3:1 (TR+EN, 390/1440/1920, kapalı+açık).
  *  - Hover/focus/tap: bant durur (useMeasuredMarquee pausedRef), görsel çok hafif
  *    büyür, başlık yukarı kayar, açıklama grid-rows 0fr→1fr ile (kart boyutunu
  *    değiştirmeden, kendi katmanında) açılır; scrim metinle birlikte uzar.
@@ -425,14 +427,20 @@ function BenefitCard({
         className={`absolute inset-0 h-full w-full object-cover transition-transform duration-500 ease-out ${isOpen ? "scale-[1.05]" : "scale-100"}`}
         style={{ objectPosition: item.focalPoint }}
       />
-      {/* Lacivert marka rötuşu: fotoğrafın TAMAMINA hafif, sabit (hover/açık/
-          kapalı durumundan bağımsız) lacivert örtü — fotoğraf → bu örtü → metin
-          okunurluk katmanı (aşağıda) → yazılar sırası. Blur yok; fotoğrafı
-          büyüten img'nin DIŞINDA ayrı bir katman olduğundan açılışta ölçeklenmez.
-          pointer-events-none: tıklama/hover/odak etkileşimlerini engellemez. */}
+      {/* Lacivert marka katmanı: fotoğrafın TAMAMINI kaplayan, AŞAĞIDAN YUKARI
+          saydamlaşan tek gradyan — alt bölüm opağa yakın derin lacivert (yazıların
+          zemini), orta bölüm yumuşak geçiş, üst bölüm oldukça saydam (fotoğraf
+          doğal kalır, "cam gibi" netlik kırılır). Sabit: hover/açık/kapalı
+          durumundan bağımsız, aynı karakter. Sıra: fotoğraf → bu katman → metin
+          okunurluk katmanı (aşağıda) → yazılar. Blur/filtre yok; zoom yapan
+          img'nin DIŞINDA ayrı katman (açılışta ölçeklenmez). pointer-events-none:
+          tıklama/hover/odak etkileşimlerini engellemez.
+          Duraklar (alttan yukarı): %0 .96 · %16 .90 · %34 .78 · %55 .44 · %76 .14 ·
+          %100 .06 — renk de derin laciverdden (8,18,48) marka lacivertine (27,58,143)
+          geçer. */}
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute inset-0 bg-[linear-gradient(180deg,rgba(27,58,143,0.24)_0%,rgba(27,58,143,0.30)_55%,rgba(8,18,43,0.38)_100%)]"
+        className="pointer-events-none absolute inset-0 bg-[linear-gradient(to_top,rgba(8,18,48,0.96)_0%,rgba(10,24,68,0.90)_16%,rgba(14,34,96,0.78)_34%,rgba(27,58,143,0.44)_55%,rgba(27,58,143,0.14)_76%,rgba(27,58,143,0.06)_100%)]"
       />
       {/* Mobil Yoğunluk Turu: p-5→p-4 yalnızca <sm — kart genişliğiyle (148px)
           orantılı, açıklama açıldığında sabit (aspect-[3/4]) yükseklikte
@@ -442,12 +450,12 @@ function BenefitCard({
           56px'lik yumuşak geçiş eklenir). Böylece başlık 1–3 satıra sarsa da
           (EN etiketleri 148px'te 3 satır), açıklama açılsa da metin her zaman
           kapalı koyu bölgenin içinde kalır; metnin üstündeki fotoğraf (yüz /
-          ürün) doğal renginde kalır — tam yüzey lacivert filtre YOK. */}
+          ürün) doğal renginde kalır; bu scrim tek başına kartı karartmaz (üstte alt→üst gradyan ayrı katmandır). */}
       <div className="relative h-full p-4 sm:p-5 flex flex-col justify-end">
         <div className="relative">
           <div
             aria-hidden="true"
-            className="pointer-events-none absolute -inset-x-4 -bottom-4 -top-14 sm:-inset-x-5 sm:-bottom-5 bg-[linear-gradient(to_top,rgba(5,13,30,0.82)_0px,rgba(5,13,30,0.7)_calc(100%-56px),rgba(5,13,30,0.32)_calc(100%-28px),rgba(5,13,30,0)_100%)]"
+            className="pointer-events-none absolute -inset-x-4 -bottom-4 -top-14 sm:-inset-x-5 sm:-bottom-5 bg-[linear-gradient(to_top,rgba(5,13,30,0.86)_0px,rgba(5,13,30,0.78)_calc(100%-56px),rgba(5,13,30,0.34)_calc(100%-28px),rgba(5,13,30,0)_100%)]"
           />
           <h3
             className={`relative text-white font-bold text-[16px] leading-snug [text-shadow:0_1px_10px_rgba(2,6,24,0.7)] transition-transform duration-300 ease-out ${

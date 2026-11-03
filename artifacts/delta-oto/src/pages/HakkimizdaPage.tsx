@@ -833,15 +833,56 @@ export function HakkimizdaPage() {
           zaten kendi üst boşluğunu taşıyor, ayrı bir dolgu bloğuna gerek
           yok). */}
 
-      {/* GROUPAUTO — dark */}
-      {/* Not: eskiden burada çok düşük opaklıkta (opacity-10, üstüne de
-          %80 siyah katman) jenerik bir depo görseli (delta-oto-ops.png)
-          vardı — pratikte görünmez denecek kadar silikti. delta-oto-depot.jpg'i
-          burada da (dördüncü kez) kullanmak tekrar hissini güçlendireceğinden,
-          görsel katman tamamen kaldırıldı; grid doku zaten yeterli zemin
-          dokusu sağlıyor. */}
-      <section className="relative bg-[#0e1016] text-white py-24 overflow-hidden">
-        <div className="absolute inset-0 do-grid-bg opacity-30" />
+      {/* GROUPAUTO — marka mavisi.
+          Zemin artık düz siyah (#0e1016) DEĞİL: GROUPAUTO logosundan türetilmiş
+          palet — logonun derin laciverti (≈#001060) → kraliyet mavisi (≈#0050a0)
+          — çapraz bir gradyan; sağ üstte soğuk bir ışık odağı, sol altta
+          vinyet, bir de çok hafif çapraz parıltı bandı. Katman sırası (alttan):
+          zemin gradyanı → ışık/vinyet/parıltı → grid doku → "G" filigranı →
+          içerik. Tüm dekoratif katmanlar aria-hidden + pointer-events-none.
+          "G" FİLİGRANI: harici/uydurma logo YOK — mevcut
+          /images/groupauto-turkiye-logo-color.webp dosyasından kırpılıp
+          türetilen /images/groupauto-g-mark.webp (572×408, yalnızca alfa maskesi;
+          hızlı çizgilerin parlak şeritleri %30 alfaya indirilerek çizgi detayı
+          korunmuş). CSS mask-image ile, düşük opaklıklı beyaz→açık mavi gradyanla
+          boyanır; büyük ve sağa taşırılmış — içeriğin ARKASINDA, silik.
+          Marka sarısı (logodaki hız çizgileri ≈#e7df34) yalnızca bölümün üst
+          kenarında ince bir vurgu çizgisi olarak kullanılır.
+          (Eski not: önceki dönemde burada çok silik bir depo görseli vardı;
+          kaldırılmıştı, grid doku korunuyor.) */}
+      <section
+        className="relative isolate bg-[#061440] text-white py-24 overflow-hidden"
+        style={{ background: "linear-gradient(118deg, #050f35 0%, #07205f 34%, #0a3786 68%, #0b4aa0 100%)" }}
+      >
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-0"
+          style={{
+            background:
+              "radial-gradient(60% 75% at 90% 6%, rgba(52,140,226,0.34) 0%, rgba(52,140,226,0) 62%), radial-gradient(55% 70% at 2% 102%, rgba(2,8,34,0.62) 0%, rgba(2,8,34,0) 70%), linear-gradient(104deg, rgba(255,255,255,0) 44%, rgba(255,255,255,0.045) 52%, rgba(255,255,255,0) 60%)",
+          }}
+        />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute inset-x-0 top-0 h-px"
+          style={{ background: "linear-gradient(90deg, rgba(231,223,52,0) 0%, rgba(231,223,52,0.55) 16%, rgba(231,223,52,0) 46%)" }}
+        />
+        <div className="absolute inset-0 do-grid-bg opacity-40" />
+        <div
+          aria-hidden="true"
+          className="pointer-events-none absolute z-0 aspect-[572/408] w-[420px] sm:w-[600px] lg:w-[820px] -right-[84px] top-[10px] opacity-75 sm:opacity-80 lg:opacity-100 sm:-right-[130px] lg:-right-[110px] lg:top-1/2 lg:-translate-y-1/2"
+          style={{
+            background: "linear-gradient(135deg, rgba(255,255,255,0.20) 0%, rgba(170,205,255,0.11) 55%, rgba(120,170,255,0.04) 100%)",
+            WebkitMaskImage: "url(/images/groupauto-g-mark.webp)",
+            maskImage: "url(/images/groupauto-g-mark.webp)",
+            WebkitMaskRepeat: "no-repeat",
+            maskRepeat: "no-repeat",
+            WebkitMaskSize: "contain",
+            maskSize: "contain",
+            WebkitMaskPosition: "center",
+            maskPosition: "center",
+          }}
+        />
         <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
           {/* Mobil Taşma Turu (regresyon): bu gridin do-reveal-left/right
               çifti, Gündem gridindeki AYNI kök nedenle (bkz. o bölümdeki
@@ -853,7 +894,7 @@ export function HakkimizdaPage() {
               kanıtlanmış yerel çözüm: overflow-x-clip. */}
           <div className="grid lg:grid-cols-2 gap-14 items-start overflow-x-clip">
             <div ref={reveal} className="do-reveal-left">
-              <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#7d9bea] block mb-4">{t.groupauto.eyebrow}</span>
+              <span className="text-xs font-bold uppercase tracking-[0.25em] text-[#a9c0ff] block mb-4">{t.groupauto.eyebrow}</span>
               <h2 className="text-3xl md:text-4xl font-black tracking-tight mb-6">{t.groupauto.heading}</h2>
               <p className="text-gray-300 leading-[1.85] text-base mb-8 max-w-lg">
                 {t.groupauto.body}
@@ -866,7 +907,7 @@ export function HakkimizdaPage() {
                   </div>
                 ))}
               </div>
-              <Link href={routeFor("partners", lang)} className="inline-flex items-center gap-2 text-[#7d9bea] text-[14px] font-semibold hover:text-white transition-colors group">
+              <Link href={routeFor("partners", lang)} className="inline-flex items-center gap-2 text-[#a9c0ff] text-[14px] font-semibold hover:text-white transition-colors group">
                 {t.groupauto.exploreLink} <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>
             </div>
