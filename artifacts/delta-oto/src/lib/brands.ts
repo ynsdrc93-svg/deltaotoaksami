@@ -69,8 +69,8 @@ export interface Brand {
 // göre içerik sınırlarına kırpma (~%3 kenar boşluğu) → 560px genişliğe
 // (mevcut asset kuralıyla aynı) yeniden boyutlandırma — sanat yeniden
 // çizilmedi, renklendirilmedi, deforme edilmedi. Revize PDF'te de OLMAYAN
-// yalnızca 2 sınıflandırılmış marka (Optima, Taifun) mevcut doğrulanmış
-// asset'leriyle DEĞİŞMEDEN kalıyor. Frendi/IOTO/King Piston/Silbak/Supsan
+// Optima mevcut doğrulanmış asset'iyle DEĞİŞMEDEN kalıyor (Taifun ve Üçel için
+// bkz. aşağıdaki "Resmi Logo Düzeltmesi" notu). Frendi/IOTO/King Piston/Silbak/Supsan
 // için logoBackground:"dark" bayrağının kaldırılması (önceki turdan) hâlâ
 // geçerli — revize PDF'teki bu markaların artwork'ü de açık zeminde tam
 // okunaklı.
@@ -85,8 +85,22 @@ export interface Brand {
 // doğrulanamadı) ve Üçel (bulunan "ucelotomotiv.com.tr" bir PERAKENDE zinciri
 // profiline sahip — İstanbul'da çok şubeli satış/servis noktaları; Delta'nın
 // tedarikçi duvarındaki bir ÜRETİCİ markasıyla aynı şirket olduğu
-// doğrulanamadı, üstelik Üçel logosuna dokunulmaması ayrıca istendi). Yanlış
+// doğrulanamadı). Yanlış
 // marka için yanlış siteye link vermektense hiç link vermemek tercih edildi.
+//
+// Resmi Logo Düzeltmesi (Taifun + Üçel): (1) Üçel'in eski görseli YANLIŞTI —
+// kullanıcının sağladığı resmi dosya (ucelkaucuk.com/assets/images/
+// ucel-logo-new-2.png, 1600×400 şeffaf PNG: altın amblem + petrol yeşili
+// ÜÇEL) olduğu gibi public/images/brands/ucel.png olarak kaynak-of-truth
+// konuldu, webp kardeşi ondan üretildi. (2) Taifun artık hasVerifiedLogo:true:
+// kullanıcının sağladığı resmi Illustrator PDF'i (Taifun-Logo.pdf, saf
+// vektör, tek sayfa, gömülü raster/yazı tipi YOK) pdftocairo ile 400dpi
+// şeffaf render → alfa sınırlarına kırpma (~%3 kenar boşluğu) → 560px
+// genişlik (diğer markalarla aynı kural) ile taifun.png yapıldı; sanat
+// yeniden çizilmedi, renkler PDF'in dolgularıyla birebir (#343434 / #C71B1B /
+// #E7BD10). İki logonun webp'i scripts/optimize-images.mjs'te KAYIPSIZ
+// (lossless) üretilir — düz renkli resmi logoların renkleri bozulmasın diye.
+// Taifun/Üçel için website hâlâ doğrulanmış değil → linksiz.
 export const CLASSIFIED_BRANDS: Brand[] = [
   { slug: "behr", name: "Behr", website: "https://www.mahle-aftermarket.com/eu/en/corporate-info/our-brands/", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "beru", name: "Beru", origin: "global", hasVerifiedLogo: true, logoFormat: "webp", logoScale: 1.1 },
@@ -138,7 +152,7 @@ export const CLASSIFIED_BRANDS: Brand[] = [
   { slug: "spart", name: "Spart", origin: "yerli", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "supsan", name: "Supsan", website: "https://supsan.com/tr/", origin: "yerli", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "swag", name: "SWAG", website: "https://www.swag.de/", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
-  { slug: "taifun", name: "Taifun", origin: "yerli", hasVerifiedLogo: false },
+  { slug: "taifun", name: "Taifun", origin: "yerli", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "teknorot", name: "Teknorot", website: "https://www.teknorot.com/en/", origin: "yerli", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "trw", name: "TRW", website: "https://aftermarket.zf.com/en/aftermarket-portal/our-brands/trw/", origin: "global", hasVerifiedLogo: true, logoFormat: "webp" },
   { slug: "ucel", name: "Üçel", origin: "yerli", hasVerifiedLogo: true, logoFormat: "webp" },
@@ -154,11 +168,12 @@ export const CLASSIFIED_BRANDS: Brand[] = [
 // Marka logoları üçüncü tarafların kimlikleridir: bir logonun görünümüne
 // yönelik öznel bir yorum (ör. "bu logo diğerlerinin yanında zayıf duruyor")
 // TEK BAŞINA o markayı vitrinden çıkarmak veya asset'ini değiştirmek için
-// yeterli gerekçe DEĞİLDİR. hasVerifiedLogo:false olan markalar (ör. Taifun)
+// yeterli gerekçe DEĞİLDİR. hasVerifiedLogo:false olan bir marka olursa
 // gerçek logo yerine tipografik yer tutucuyla akar (bkz. shared/BrandLogo.tsx)
 // ve CLASSIFIED_BRANDS'teki tüm markalarla birlikte wall/strip'te gösterilmeye
 // devam eder — yalnızca kullanıcı resmi/doğrulanmış bir logo asseti sağlarsa
-// ya da açıkça teknik bir asset düzeltmesi isterse değişir.
+// ya da açıkça teknik bir asset düzeltmesi isterse değişir (şu an hepsi
+// doğrulanmış logoya sahip; Taifun'un resmi logosu eklendi).
 export const GLOBAL_BRANDS: Brand[] = CLASSIFIED_BRANDS.filter((b) => b.origin === "global");
 export const YERLI_BRANDS: Brand[] = CLASSIFIED_BRANDS.filter((b) => b.origin === "yerli");
 

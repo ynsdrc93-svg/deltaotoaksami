@@ -13,9 +13,9 @@ const ROOT = path.resolve(import.meta.dirname, "..");
 const BRANDS_DIR = path.join(ROOT, "public/images/brands");
 
 // src/lib/brands.ts -> CLASSIFIED_BRANDS içinde hasVerifiedLogo:true VE
-// logoFormat "svg" OLMAYAN 52 marka. SVG logolar (behr, beru, blueprint,
-// ferodo, henkel, optima, silbak, supsan) kasıtlı olarak dışarıda — SVG'ler
-// raster'a çevrilmiyor. taifun (hasVerifiedLogo:false) hiç asset içermiyor.
+// logoFormat "svg" OLMAYAN 53 marka (Taifun'un resmi logosu eklendi). SVG
+// logolar (behr, beru, blueprint, ferodo, henkel, optima, silbak, supsan)
+// kasıtlı olarak dışarıda — SVG'ler raster'a çevrilmiyor.
 // UNCLASSIFIED_BRANDS (dormant, hiçbir sayfada render edilmiyor) kasıtlı
 // olarak dışarıda — dönüştürülse bile hiçbir performans kazancı sağlamaz.
 const BRAND_SLUGS = [
@@ -23,9 +23,15 @@ const BRAND_SLUGS = [
   "delphi", "denso", "dolz", "elring", "era", "fag", "febi", "filtron", "frendi", "gates",
   "gkn", "hlmando", "hattat", "hella", "ina", "ioto", "kale", "kingpiston", "lemforder",
   "liquimoly", "luk", "mahle", "mannfilter", "monroe", "ngk", "nrf", "osram", "purflux",
-  "rapro", "sachs", "segautomotive", "skf", "spart", "swag", "teknorot", "trw", "ucel",
+  "rapro", "sachs", "segautomotive", "skf", "spart", "swag", "taifun", "teknorot", "trw", "ucel",
   "ufifilters", "valeo", "vdo", "vitesco", "wolflubricants", "opar", "marelli",
 ];
+
+// Düz renkli, vektör kökenli resmi logolar (Taifun: resmi PDF'ten; Üçel: resmi
+// PNG) KAYIPSIZ WebP olarak üretilir — kayıplı q90 düz marka renklerini ±2
+// kaydırıyordu; kayıpsız dosya hem renkleri birebir korur hem (bu iki logo
+// için) benzer/daha küçük boyuttadır. Diğer tüm markalar q90 kalır.
+const LOSSLESS_SLUGS = new Set(["taifun", "ucel"]);
 
 // En büyük gerçek CSS render yüksekliği: BrandLogo.tsx "wall" boyutu
 // (lg:max-h-14 = 56px). ~2.9x retina güvenlik payı ile hedef yükseklik —
@@ -51,7 +57,7 @@ async function convertBrandLogos() {
     }
     await sharp(src)
       .resize({ height: BRAND_LOGO_TARGET_HEIGHT, withoutEnlargement: true })
-      .webp({ quality: 90 })
+      .webp(LOSSLESS_SLUGS.has(slug) ? { lossless: true, effort: 6 } : { quality: 90 })
       .toFile(dst);
     const after = (await stat(dst)).size;
     totalBefore += before;

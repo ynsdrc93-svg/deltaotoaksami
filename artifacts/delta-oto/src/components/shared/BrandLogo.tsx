@@ -6,7 +6,7 @@ import type { Brand } from "@/lib/brands";
 // tedarikçi şeridi ("strip") aynı bileşeni, aynı brand datasını kullanır.
 // Gerçek en-boy oranı her zaman korunur (object-fit: contain, sabit
 // yükseklik + auto genişlik) — hiçbir logo deforme edilmez. hasVerifiedLogo
-// false olan markalar (ör. henüz doğrulanmış logosu olmayan TAIFUN) için
+// false olan markalar (şu an yok — Taifun'un resmi logosu eklendi) için
 // kırık görsel yerine temiz bir tipografik yer tutucu kullanılır.
 // logoBackground: "dark" olan markalar (yalnızca beyaz/açık renkli çizim
 // içeren, şeffaf zeminde görünmeyen asset'ler — bkz. brands.ts) koyu bir
@@ -39,8 +39,8 @@ const SIZES: Record<BrandLogoSize, SizeStyle> = {
     light: "do-card bg-white rounded-2xl flex items-center justify-center h-16 px-2 py-2 sm:h-32 sm:px-4 sm:py-6 lg:h-36 shadow-sm",
     dark: "do-card bg-[#0e1016] border border-white/10 rounded-2xl flex items-center justify-center h-16 px-2 py-2 sm:h-32 sm:px-4 sm:py-6 lg:h-36 shadow-sm",
     img: "max-h-8 sm:max-h-12 lg:max-h-16 w-auto h-auto max-w-full object-contain",
-    // Optical Balance Round: doğrulanmış görseli olmayan tek marka (Taifun)
-    // bu tipografik yer tutucuyu kullanıyor — komşu logo görsellerinin
+    // Optical Balance Round: doğrulanmış görseli olmayan bir marka (eskiden
+    // Taifun) bu tipografik yer tutucuyu kullanır — komşu logo görsellerinin
     // yanında "ezik" durmasın diye 15px→17px, tracking-tight→normal.
     textSize: "text-[17px] tracking-normal",
     textHover: "",
