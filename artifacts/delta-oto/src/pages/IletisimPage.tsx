@@ -12,14 +12,13 @@ import { useLang, routeFor, type Lang } from "@/lib/i18n";
 // Departman kartlarının ikonları veriye değil DİZİN'e (index) bağlı — metin
 // içeriği content.tr/content.en'de, ikon eşlemesi burada sabit (bkz.
 // TedarikciPage.tsx'teki ADVANTAGE_ICONS ile aynı desen).
-const DEPT_ICONS = [Package, MonitorSmartphone, Users, Globe];
+const DEPT_ICONS = [Package, MonitorSmartphone, Globe];
 
 // Merkez Adres kartındaki satırların ikonları — aynı index-eşleme deseni.
 const ADDRESS_ICONS = [MapPin, Phone, Mail, Globe];
 const contactPhone = { text: GENERAL_CONTACT.phone, href: "tel:+902165266464" };
 const contactEmail = { text: GENERAL_CONTACT.email, href: `mailto:${GENERAL_CONTACT.email}` };
 const portal = { text: "Parçabul B2B", href: "https://b2b.parcabul.com.tr/login.aspx" };
-const careers = "https://www.kariyer.net/firma-profil/delta-oto-aksami-san-tic-a-s-96885-430603";
 
 // Sayfa Kısaltma Turu: eskiden burada "LOKASYON SIRASI" notuyla belgelenen
 // "Bizi Nerede Bulabilirsiniz" / Operasyon Merkezlerimiz modülü TAMAMEN
@@ -33,7 +32,7 @@ const content = {
   tr: {
     meta: {
       title: "Bize Ulaşın — Satış, B2B ve Kurumsal İletişim | Delta Oto",
-      description: "Delta Oto ile iletişime geçin: satış ve sipariş, B2B portal desteği, insan kaynakları ve kurumsal iletişim için telefon, e-posta ve iletişim formu.",
+      description: "Satış, sipariş, Parçabul B2B desteği ve genel talepleriniz için Delta Oto ile iletişime geçin.",
     },
     hero: {
       eyebrow: "İletişim Kanallarımız · Ümraniye, İstanbul",
@@ -49,7 +48,7 @@ const content = {
       general: {
         title: "Genel İletişim",
         desc: "Satış, Parçabul B2B ve kurumsal iletişim kanallarına ulaşın.",
-        link: "Departmanları görün",
+        link: "İletişim kanallarını görün",
       },
       findRep: {
         title: "Bölge Temsilcinizi Bulun",
@@ -58,7 +57,7 @@ const content = {
       },
     },
     departments: {
-      eyebrow: "Departman İletişim",
+      eyebrow: "İletişim Kanalları",
       heading: "Doğru Birime Ulaşın",
       body: "Talebinize uygun iletişim kanalını seçin.",
       list: [
@@ -71,11 +70,6 @@ const content = {
           dept: "B2B Portal Desteği",
           links: [contactPhone, portal],
           info: "Kullanıcı adınız veya şifreniz için santrali arayabilir ya da satış temsilcinize ulaşabilirsiniz.",
-        },
-        {
-          dept: "İnsan Kaynakları",
-          links: [{ text: "Delta Oto Kariyer.net profili", href: careers }],
-          info: "Kariyer başvuruları ve staj talepleri",
         },
         {
           dept: "Genel Kurumsal",
@@ -116,7 +110,7 @@ const content = {
   en: {
     meta: {
       title: "Contact Us — Sales, B2B and Corporate Contacts | Delta Oto",
-      description: "Get in touch with Delta Oto: phone and email for sales and orders, B2B portal support, human resources and corporate affairs, plus a contact form.",
+      description: "Contact Delta Oto for sales, orders, Parçabul B2B support and general inquiries.",
     },
     hero: {
       eyebrow: "Contact Channels · Ümraniye, İstanbul",
@@ -132,7 +126,7 @@ const content = {
       general: {
         title: "General Contact",
         desc: "Find our sales, Parçabul B2B and corporate contact channels.",
-        link: "View departments",
+        link: "View contact channels",
       },
       findRep: {
         title: "Find Your Regional Representative",
@@ -141,7 +135,7 @@ const content = {
       },
     },
     departments: {
-      eyebrow: "Department Contacts",
+      eyebrow: "Contact Channels",
       heading: "Reach the Right Department",
       body: "Choose the contact channel that matches your inquiry.",
       list: [
@@ -154,11 +148,6 @@ const content = {
           dept: "B2B Portal Support",
           links: [contactPhone, portal],
           info: "For help with your username or password, call the switchboard or contact your sales representative.",
-        },
-        {
-          dept: "Human Resources",
-          links: [{ text: "Delta Oto on Kariyer.net", href: careers }],
-          info: "Job applications and internship requests",
         },
         {
           dept: "Corporate Affairs",
@@ -361,11 +350,11 @@ export function IletisimPage() {
             <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-2 tracking-tight">{t.departments.heading}</h2>
             <p className="text-slate-500 mt-3 text-[15px]">{t.departments.body}</p>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
+          <div className="grid md:grid-cols-3 gap-5">
             {t.departments.list.map(({ dept, links, info }, i) => {
               const Icon = DEPT_ICONS[i];
               return (
-                <div key={dept} ref={reveal} className={`do-reveal do-d${(i % 4) + 1} bg-white border border-slate-200 rounded-xl p-6 hover:border-[#1B3A8F]/30 hover:shadow-md transition-all flex flex-col`}>
+                <div key={dept} ref={reveal} className={`do-reveal do-d${i + 1} bg-white border border-slate-200 rounded-xl p-6 hover:border-[#1B3A8F]/30 hover:shadow-md transition-all flex flex-col`}>
                   <div className="w-10 h-10 bg-[#1B3A8F]/[0.08] rounded-xl flex items-center justify-center mb-4">
                     <Icon className="w-5 h-5 text-[#1B3A8F]" />
                   </div>
