@@ -26,13 +26,20 @@ function telHref(phone: string) {
 
 function RepresentativeCard({ rep, lang }: { rep: Representative; lang: Lang }) {
   const side = rep.side && (lang === "tr" ? `${rep.side} Yakası` : rep.side === "Avrupa" ? "European Side" : "Anatolian Side");
+  const isOpar = rep.channel === "Opar" && !rep.general;
   return (
     <article className="rep-card">
       <div className="rep-card-person">
-        <img src={`${import.meta.env.BASE_URL}images/representatives/${rep.id}.webp`} alt={rep.name} width="400" height="480" />
+        <img className="rep-portrait" src={`${import.meta.env.BASE_URL}images/representatives/${rep.id}.webp`} alt={rep.name} width="400" height="480" />
         <div>
           <h4>{rep.name}</h4>
-          <p>{[rep.general ? UI.general[lang] : rep.channel, side].filter(Boolean).join(" · ")}</p>
+          <p className="rep-card-details">
+            <span className={isOpar ? "rep-channel rep-channel-opar" : "rep-channel"}>
+              {isOpar && <img src={`${import.meta.env.BASE_URL}images/opar-logo.svg`} alt="" width="849" height="341" />}
+              {rep.general ? UI.general[lang] : rep.channel}
+            </span>
+            {side && <span>{side}</span>}
+          </p>
         </div>
       </div>
       <a href={telHref(rep.phone)}><Phone aria-hidden="true" />{rep.phone}</a>
