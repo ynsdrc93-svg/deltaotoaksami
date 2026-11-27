@@ -1,203 +1,73 @@
-import React from "react";
 import { LegalPageLayout } from "@/components/shared/LegalPageLayout";
 import { useDocumentMeta } from "@/hooks/use-document-meta";
-import { useLang, routeFor, type Lang } from "@/lib/i18n";
+import { routeFor, useLang } from "@/lib/i18n";
 
-// Bkz. KvkkAydinlatmaMetniPage.tsx üstündeki not — üç sayfa (bu, Çerez
-// Politikası, KVKK Aydınlatma Metni) aynı arka plana ve aynı "genel taslak"
-// kapsamına sahiptir.
 const content = {
-  tr: {
-    meta: {
-      title: "Gizlilik Politikası | Delta Oto",
-      description: "Delta Oto'nun web sitesi ziyaretçilerinin ve iletişime geçen kullanıcıların kişisel bilgilerini nasıl topladığını ve kullandığını açıklayan gizlilik politikası.",
-    },
-    eyebrow: "Yasal",
-    title: "Gizlilik Politikası",
-    lastUpdated: "Son güncelleme: 1 Eylül 2026 · Taslak",
-    draftNotice: "Bu sayfa taslak niteliğindedir; yayından önce Delta Oto yetkilileri ve hukuk danışmanı tarafından incelenip onaylanmalıdır.",
-    tocLabel: "İçindekiler",
-    relatedLabel: "İlgili Belgeler",
-    sections: [
+  "tr": {
+    "title": "Gizlilik Politikası",
+    "sections": [
       {
-        id: "genel",
-        heading: "1. Genel Bilgilendirme",
-        paragraphs: [
-          "Delta Oto olarak, www.deltaoto.com.tr internet sitesini ziyaret eden ve bizimle iletişime geçen kullanıcılarımızın gizliliğine önem veririz. Bu Gizlilik Politikası, hangi bilgileri topladığımızı, bu bilgileri nasıl kullandığımızı ve verilerinizi nasıl koruduğumuzu açıklar.",
-          "Kişisel verilerin işlenmesine ilişkin ayrıntılı hukuki bilgi için KVKK Aydınlatma Metni'ni, çerez kullanımına ilişkin bilgi için Çerez Politikası'nı inceleyebilirsiniz.",
-        ],
+        "id": "bolum-1",
+        "heading": "İletişim formu",
+        "paragraph": "Formda yazdığınız bilgiler cihazınızda bir e-posta taslağına aktarılır. Bu form bilgilerinizi internet sitesinin sunucusuna göndermez veya veritabanına kaydetmez. Mesajı e-posta uygulamanızdan gönderirseniz bilgiler Delta Oto’nun kurumsal e-posta kutusuna ulaşır ve talebinizi yanıtlamak için kullanılır."
       },
       {
-        id: "topladigimiz-bilgiler",
-        heading: "2. Topladığımız Bilgiler",
-        paragraphs: [
-          "Bu site, yalnızca siz bizimle İletişim sayfasındaki form, e-posta veya telefon aracılığıyla iletişime geçtiğinizde, gönüllü olarak paylaştığınız bilgileri toplar: ad soyad, firma unvanı, telefon, e-posta adresi ve mesajınızın içeriği.",
-          "Sitede bir kullanıcı hesabı, üyelik veya giriş sistemi bulunmamaktadır. B2B portalımız (b2b.parcabul.com.tr) ayrı bir sistemdir ve kendi erişim koşullarına tabidir.",
-        ],
+        "id": "bolum-2",
+        "heading": "Site ve dış bağlantılar",
+        "paragraph": "Bu kurumsal sitede reklam veya ziyaretçi takibi yapılmaz. Parçabul B2B, harita ve sosyal medya gibi bağlantılar sizi ilgili hizmete götürür. Bu hizmetlerin kendi gizlilik koşulları geçerlidir."
       },
       {
-        id: "kullanim-amaci",
-        heading: "3. Bilgilerin Kullanım Amacı",
-        paragraphs: [
-          "Paylaştığınız bilgiler yalnızca talebinizi ilgili departmana yönlendirmek ve size geri dönüş yapmak amacıyla kullanılır. Bilgileriniz pazarlama amaçlı toplu e-posta veya SMS gönderimi için kullanılmaz; onayınız olmadan üçüncü taraflara satılmaz veya kiralanmaz.",
-        ],
-      },
-      {
-        id: "ucuncu-taraflar",
-        heading: "4. Üçüncü Taraflarla Paylaşım",
-        paragraphs: [
-          "Kişisel verileriniz, yasal bir yükümlülük bulunmadıkça üçüncü taraflarla paylaşılmaz.",
-          "Sitede yazı tipleri Google Fonts üzerinden yüklenmektedir; bu, tarayıcınızın Google'ın sunucularına bir kaynak isteği göndermesi anlamına gelir. Site bunun dışında herhangi bir analitik, reklam veya izleme aracı kullanmamaktadır.",
-        ],
-      },
-      {
-        id: "veri-guvenligi",
-        heading: "5. Veri Güvenliği",
-        paragraphs: [
-          "Bizimle paylaştığınız bilgilerin güvenliğini sağlamak için makul teknik ve idari önlemler alınır. Ancak internet üzerinden hiçbir iletimin %100 güvenli olmadığını hatırlatmak isteriz.",
-        ],
-      },
-      {
-        id: "haklariniz",
-        heading: "6. Haklarınız",
-        paragraphs: [
-          "6698 sayılı Kişisel Verilerin Korunması Kanunu kapsamındaki haklarınızın tam listesi ve bu hakları nasıl kullanabileceğiniz için KVKK Aydınlatma Metni sayfamızı inceleyebilirsiniz.",
-        ],
-      },
-      {
-        id: "degisiklikler",
-        heading: "7. Politika Değişiklikleri",
-        paragraphs: [
-          "Bu politika, site içeriği veya yasal gereklilikler değiştikçe güncellenebilir. Güncel sürüm her zaman bu sayfada yayınlanır.",
-        ],
-      },
-      {
-        id: "iletisim",
-        heading: "8. Bize Ulaşın",
-        paragraphs: [
-          "Gizlilik uygulamalarımızla ilgili sorularınız için info@deltaoto.com adresinden veya İletişim sayfamızdaki kanallardan bize ulaşabilirsiniz.",
-        ],
-        // MERSİS Tutarlılık Turu: bu sayfada daha önce hiçbir resmî şirket
-        // kimliği/iletişim bloğu yoktu. Yeni icat edilmiş bir bilgi değil —
-        // yalnızca sitede zaten (footer, KVKK Aydınlatma Metni) doğrulanmış
-        // olan unvan/adres/MERSİS, "Bize Ulaşın" bölümünün doğal bir uzantısı
-        // olarak küçük bir liste halinde ekleniyor.
-        list: [
-          "Delta Oto Aksamı San. ve Tic. A.Ş.",
-          "Barbaros Cd. Beyit Sk. No:17, Yukarı Dudullu — Ümraniye / İstanbul",
-          "MERSİS No: 0274002057500013",
-        ],
-      },
-    ],
+        "id": "bolum-3",
+        "heading": "İletişim",
+        "paragraph": "Sorularınız için info@deltaoto.com adresini kullanabilirsiniz."
+      }
+    ]
   },
-  en: {
-    meta: {
-      title: "Privacy Policy | Delta Oto",
-      description: "Delta Oto's privacy policy explaining how information from website visitors and contacts is collected and used.",
-    },
-    eyebrow: "Legal",
-    title: "Privacy Policy",
-    lastUpdated: "Last updated: September 1, 2026 · Draft",
-    draftNotice: "This page is a draft. It must be reviewed and approved by Delta Oto and legal counsel before publication.",
-    tocLabel: "Contents",
-    relatedLabel: "Related Documents",
-    sections: [
+  "en": {
+    "title": "Privacy Policy",
+    "sections": [
       {
-        id: "genel",
-        heading: "1. Overview",
-        paragraphs: [
-          "At Delta Oto, we take the privacy of visitors to www.deltaoto.com.tr and everyone who contacts us seriously. This Privacy Policy explains what information we collect, how we use it, and how we protect it.",
-          "For detailed legal information on the processing of personal data, see our Personal Data Protection Notice (KVKK). For information on cookie use, see our Cookie Policy.",
-        ],
+        "id": "bolum-1",
+        "heading": "Contact form",
+        "paragraph": "The form prepares an email draft on your device. It does not submit your details to the website server or store them in a website database. If you send the message from your email app, Delta Oto receives it in its corporate inbox and uses it to respond to your inquiry."
       },
       {
-        id: "topladigimiz-bilgiler",
-        heading: "2. Information We Collect",
-        paragraphs: [
-          "This site only collects information you voluntarily share when you contact us — through the form on the Contact page, by email, or by phone: full name, company name, phone number, email address, and the content of your message.",
-          "The site has no user account, membership, or login system. Our B2B portal (b2b.parcabul.com.tr) is a separate system with its own access terms.",
-        ],
+        "id": "bolum-2",
+        "heading": "Website and external links",
+        "paragraph": "This corporate site does not use advertising or visitor tracking. Links to services such as Parçabul B2B, maps and social media take you to those services, which have their own privacy terms."
       },
       {
-        id: "kullanim-amaci",
-        heading: "3. How We Use This Information",
-        paragraphs: [
-          "Information you share is used only to route your request to the relevant department and to respond to you. It is not used for bulk marketing emails or SMS, and it is not sold or rented to third parties without your consent.",
-        ],
-      },
-      {
-        id: "ucuncu-taraflar",
-        heading: "4. Sharing with Third Parties",
-        paragraphs: [
-          "Your personal data is not shared with third parties unless legally required.",
-          "Fonts on this site are loaded via Google Fonts, meaning your browser sends a resource request directly to Google's servers. Beyond this, the site does not use any analytics, advertising, or tracking tool.",
-        ],
-      },
-      {
-        id: "veri-guvenligi",
-        heading: "5. Data Security",
-        paragraphs: [
-          "Reasonable technical and administrative measures are taken to protect the information you share with us. However, no transmission over the internet is ever 100% secure.",
-        ],
-      },
-      {
-        id: "haklariniz",
-        heading: "6. Your Rights",
-        paragraphs: [
-          "For the full list of your rights under Turkish Law No. 6698 on the Protection of Personal Data and how to exercise them, see our Personal Data Protection Notice (KVKK).",
-        ],
-      },
-      {
-        id: "degisiklikler",
-        heading: "7. Changes to This Policy",
-        paragraphs: [
-          "This policy may be updated as site content or legal requirements change. The current version is always published on this page.",
-        ],
-      },
-      {
-        id: "iletisim",
-        heading: "8. Contact Us",
-        paragraphs: [
-          "For questions about our privacy practices, reach us at info@deltaoto.com or through the channels on our Contact page.",
-        ],
-        list: [
-          "Delta Oto Aksamı San. ve Tic. A.Ş.",
-          "Barbaros Cd. Beyit Sk. No:17, Yukarı Dudullu — Ümraniye / İstanbul, Türkiye",
-          "MERSIS No: 0274002057500013",
-        ],
-      },
-    ],
-  },
-} satisfies Record<Lang, any>;
+        "id": "bolum-3",
+        "heading": "Contact",
+        "paragraph": "For questions, email info@deltaoto.com."
+      }
+    ]
+  }
+};
 
 export function GizlilikPolitikasiPage() {
   const lang = useLang();
-  const t = content[lang];
-  useDocumentMeta(t.meta.title, t.meta.description, "noindex, follow");
+  const { title, sections } = content[lang];
+  const tr = lang === "tr";
+  useDocumentMeta(`${title} | Delta Oto`, sections[0].paragraph, "noindex, follow");
 
   return (
     <LegalPageLayout
-      eyebrow={t.eyebrow}
-      title={t.title}
-      lastUpdatedLabel={t.lastUpdated}
-      draftNoticeText={t.draftNotice}
-      tocLabel={t.tocLabel}
-      toc={t.sections.map((s) => ({ id: s.id, label: s.heading }))}
-      relatedLabel={t.relatedLabel}
+      eyebrow={tr ? "Site Bilgileri" : "Website Information"}
+      title={title}
+      lastUpdatedLabel={tr ? "27 Kasım 2026" : "27 November 2026"}
+      tocLabel={tr ? "İçindekiler" : "Contents"}
+      toc={sections.map(({ id, heading }) => ({ id, label: heading }))}
+      relatedLabel={tr ? "İlgili sayfalar" : "Related pages"}
       related={[
-        { href: routeFor("kvkk", lang), label: lang === "tr" ? "KVKK Aydınlatma Metni" : "Personal Data Protection Notice (KVKK)" },
+        { href: routeFor("kvkk", lang), label: lang === "tr" ? "İletişim Verileri" : "Contact Data" },
         { href: routeFor("cookies", lang), label: lang === "tr" ? "Çerez Politikası" : "Cookie Policy" },
       ]}
     >
-      {t.sections.map((s) => (
-        <section key={s.id} id={s.id}>
-          <h2>{s.heading}</h2>
-          {s.paragraphs.map((p, i) => <p key={i}>{p}</p>)}
-          {s.list && (
-            <ul>
-              {s.list.map((li, i) => <li key={i}>{li}</li>)}
-            </ul>
-          )}
+      {sections.map(({ id, heading, paragraph }) => (
+        <section key={id} id={id}>
+          <h2>{heading}</h2>
+          <p>{paragraph}</p>
         </section>
       ))}
     </LegalPageLayout>

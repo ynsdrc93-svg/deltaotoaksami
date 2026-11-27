@@ -20,7 +20,7 @@ import { joinById } from "@/lib/join-by-id";
 // sıralama content.*.benefits.items / content.*.platforms.items ile birebir eşleşir.
 const JOB_PLATFORMS = [
   { name: "LinkedIn", url: "https://www.linkedin.com/company/delta-oto-aksam%C4%B1-san-ve-tic-a-%C5%9F/?viewAsMember=true", Icon: Linkedin },
-  { name: "Kariyer.net", url: "https://www.kariyer.net", Icon: ExternalLink },
+  { name: "Kariyer.net", url: "https://www.kariyer.net/firma-profil/delta-oto-aksami-san-tic-a-s-96885-430603", Icon: ExternalLink },
 ];
 
 // Yan Haklar — veri modeli ve görseller (Turu 7). Her hakkın YAPISAL alanları
@@ -758,7 +758,7 @@ export function KariyerPage() {
           <div className="p-7 bg-slate-50 border border-slate-200 rounded-xl text-center">
             <p className="text-slate-600 text-[14px]">{t.platforms.proactive.title}</p>
             <p className="text-slate-900 font-semibold text-[14px] mt-1">
-              {t.platforms.proactive.prefix}<a href="mailto:ik@deltaoto.com" className="text-[#1B3A8F] hover:underline">ik@deltaoto.com</a>{t.platforms.proactive.suffix}
+              {lang === "tr" ? "Delta Oto’nun güncel ilanlarını Kariyer.net profilinden takip edebilirsiniz." : "Visit Delta Oto’s Kariyer.net profile for current vacancies."}
             </p>
           </div>
         </div>

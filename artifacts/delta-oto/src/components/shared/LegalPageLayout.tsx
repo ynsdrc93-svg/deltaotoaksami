@@ -1,20 +1,13 @@
 import React from "react";
 import { Link } from "wouter";
-import { Info } from "lucide-react";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
 import { useReveal } from "@/hooks/use-motion";
 
-// Üç yasal sayfanın (KVKK Aydınlatma Metni, Gizlilik Politikası, Çerez
-// Politikası) paylaştığı tek düzen kabuğu — hero/taslak-uyarısı/içindekiler/
-// ilgili-belgeler bloklarının üçünde birebir aynı kalmasını garanti eder.
-// Asıl gövde metni (numaralı bölümler) `children` olarak page dosyalarında
-// kalır; bu bileşen yalnızca çerçeveyi standardize eder.
 export interface LegalPageLayoutProps {
   eyebrow: string;
   title: string;
   lastUpdatedLabel: string;
-  draftNoticeText: string;
   tocLabel: string;
   toc: { id: string; label: string }[];
   relatedLabel: string;
@@ -23,7 +16,7 @@ export interface LegalPageLayoutProps {
 }
 
 export function LegalPageLayout({
-  eyebrow, title, lastUpdatedLabel, draftNoticeText, tocLabel, toc, relatedLabel, related, children,
+  eyebrow, title, lastUpdatedLabel, tocLabel, toc, relatedLabel, related, children,
 }: LegalPageLayoutProps) {
   const reveal = useReveal();
 
@@ -44,10 +37,7 @@ export function LegalPageLayout({
             {lastUpdatedLabel}
           </p>
 
-          <div ref={reveal} className="do-reveal do-d3 flex items-start gap-3 bg-amber-50 border border-amber-200 rounded-lg px-5 py-4">
-            <Info className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-            <p className="text-[13.5px] text-amber-900 leading-relaxed">{draftNoticeText}</p>
-          </div>
+
         </div>
       </section>
 

@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "wouter";
-import { MapPin, Mail, Phone, Printer, BadgeCheck, Linkedin, Instagram } from "lucide-react";
+import { MapPin, Mail, Phone, Printer, Linkedin, Instagram } from "lucide-react";
 import { useLang, routeFor, type Lang, type RouteKey } from "@/lib/i18n";
 
 // Google Maps Yol Tarifi Turu: koordinat UYDURULMADI — mevcut, tek adres
@@ -75,18 +75,12 @@ const QUICK_LINKS: { key: RouteKey; label: Record<Lang, string> }[] = [
 const LEGAL_LINKS: { key: RouteKey; label: Record<Lang, string>; shortLabel: Record<Lang, string> }[] = [
   { key: "privacy", label: { tr: "Gizlilik Politikası", en: "Privacy Policy" }, shortLabel: { tr: "Gizlilik", en: "Privacy" } },
   { key: "cookies", label: { tr: "Çerez Politikası", en: "Cookie Policy" }, shortLabel: { tr: "Çerezler", en: "Cookies" } },
-  { key: "kvkk", label: { tr: "KVKK Aydınlatma Metni", en: "KVKK Notice" }, shortLabel: { tr: "KVKK", en: "KVKK" } },
-];
-
-const CERTS: { label: Record<Lang, string> }[] = [
-  { label: { tr: "OSS\nDerneği", en: "OSS\nAssociation" } },
-  { label: { tr: "ISO\n9001", en: "ISO\n9001" } },
-  { label: { tr: "TS\nEN", en: "TS\nEN" } },
+  { key: "kvkk", label: { tr: "İletişim Verileri Hakkında Bilgilendirme", en: "Contact Data Notice" }, shortLabel: { tr: "KVKK", en: "KVKK" } },
 ];
 
 const T = {
   quickLinks: { tr: "Hızlı Bağlantılar", en: "Quick Links" },
-  certsHeading: { tr: "Sertifikalar & Üyelikler", en: "Certifications & Memberships" },
+  membershipsHeading: { tr: "Üyelikler ve Bayilikler", en: "Memberships and Dealerships" },
   rights: { tr: "© 2026 Delta Oto. Tüm hakları saklıdır.", en: "© 2026 Delta Oto. All rights reserved." },
   // "Yol Tarifi" artık ayrı görünür bir bağlantı DEĞİL (bkz. adres <li>'si) —
   // yalnızca ekran okuyucular için o linkin AMACINI netleştiren bir
@@ -237,21 +231,16 @@ export function SiteFooter() {
             </ul>
             <div className="mt-3">
               <Link href={routeFor("spart", lang)}>
-                <img src="/images/spart-logo.png" alt="SPART Original Replacement" className="h-9 w-auto rounded-md opacity-90 hover:opacity-100 transition-opacity" />
+                <img src="/images/spart/logo.webp" alt="SPART Original Replacement" className="h-9 w-auto rounded-md opacity-90 hover:opacity-100 transition-opacity" />
               </Link>
             </div>
           </div>
 
           <div>
-            <h4 className="text-white text-xs font-bold uppercase tracking-[0.2em] mb-4">{T.certsHeading[lang]}</h4>
-            <div className="flex gap-4 mb-4">
-              {CERTS.map(({ label }) => (
-                <div key={label.tr} className="w-20 h-16 border border-white/8 rounded-lg flex flex-col items-center justify-center gap-1 bg-white/3 hover:border-white/15 transition-colors">
-                  <BadgeCheck className="w-3.5 h-3.5 text-gray-500" />
-                  <span className="text-[10px] text-gray-400 font-bold text-center whitespace-pre-line leading-tight">{label[lang]}</span>
-                </div>
-              ))}
-            </div>
+            <h4 className="text-white text-xs font-bold uppercase tracking-[0.2em] mb-4">{T.membershipsHeading[lang]}</h4>
+            <a href="https://oss.org.tr/tr/uyeler/uyeler" className="text-xs text-gray-400 hover:text-white">
+              {lang === "tr" ? "OSS Derneği Üyesi" : "OSS Association Member"}
+            </a>
             {/* Üyelik / bayilik alanı (Turu 6): iki EŞİT sütun, her biri kendi
                 açıklamasını ortalı taşır ve altında kendi gerçek logosunu YATAY
                 ORTALI gösterir — GROUPAUTO Türkiye üyeliği (sol) ve Opar Ege Bölge

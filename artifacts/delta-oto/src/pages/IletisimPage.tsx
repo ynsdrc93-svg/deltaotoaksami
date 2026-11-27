@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Link } from "wouter";
-import { MapPin, Phone, Mail, Globe, Clock, ChevronRight, ArrowRight, Users, Package, MonitorSmartphone, Loader2, CheckCircle2, AlertCircle } from "lucide-react";
+import { MapPin, Phone, Mail, Globe, ChevronRight, ArrowRight, Users, Package, MonitorSmartphone } from "lucide-react";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
 import { RepresentativeFinderModal } from "@/components/shared/RepresentativeFinderModal";
-import { submitContactForm } from "@workspace/api-client-react";
+import { GENERAL_CONTACT } from "@/lib/representatives";
 import { useDocumentMeta } from "@/hooks/use-document-meta";
 import { useReveal } from "@/hooks/use-motion";
 import { useLang, routeFor, type Lang } from "@/lib/i18n";
@@ -16,6 +16,10 @@ const DEPT_ICONS = [Package, MonitorSmartphone, Users, Globe];
 
 // Merkez Adres kartındaki satırların ikonları — aynı index-eşleme deseni.
 const ADDRESS_ICONS = [MapPin, Phone, Mail, Globe];
+const contactPhone = { text: GENERAL_CONTACT.phone, href: "tel:+902165266464" };
+const contactEmail = { text: GENERAL_CONTACT.email, href: `mailto:${GENERAL_CONTACT.email}` };
+const portal = { text: "Parçabul B2B", href: "https://b2b.parcabul.com.tr/login.aspx" };
+const careers = "https://www.kariyer.net/firma-profil/delta-oto-aksami-san-tic-a-s-96885-430603";
 
 // Sayfa Kısaltma Turu: eskiden burada "LOKASYON SIRASI" notuyla belgelenen
 // "Bizi Nerede Bulabilirsiniz" / Operasyon Merkezlerimiz modülü TAMAMEN
@@ -29,7 +33,7 @@ const content = {
   tr: {
     meta: {
       title: "Bize Ulaşın — Satış, B2B ve Kurumsal İletişim | Delta Oto",
-      description: "Delta Oto ile iletişime geçin: satış ve sipariş, B2B portal desteği, insan kaynakları ve kurumsal iletişim için doğrudan hat, e-posta ve iletişim formu.",
+      description: "Delta Oto ile iletişime geçin: satış ve sipariş, B2B portal desteği, insan kaynakları ve kurumsal iletişim için telefon, e-posta ve iletişim formu.",
     },
     hero: {
       eyebrow: "İletişim Kanallarımız · Ümraniye, İstanbul",
@@ -44,7 +48,7 @@ const content = {
       heading: "İki Hızlı Yol",
       general: {
         title: "Genel İletişim",
-        desc: "Satış, B2B portal, İK ve kurumsal iletişim ekiplerimize doğrudan ulaşın.",
+        desc: "Satış, Parçabul B2B ve kurumsal iletişim kanallarına ulaşın.",
         link: "Departmanları görün",
       },
       findRep: {
@@ -56,35 +60,27 @@ const content = {
     departments: {
       eyebrow: "Departman İletişim",
       heading: "Doğru Birime Ulaşın",
-      body: "Her talep türü için ilgili departman doğrudan burada.",
+      body: "Talebinize uygun iletişim kanalını seçin.",
       list: [
         {
           dept: "Satış & Sipariş",
-          lines: ["0216 526 64 64"],
+          links: [contactPhone, contactEmail],
           info: "Ürün sorguları, sipariş ve fiyat bilgisi",
-          hours: "Pazartesi – Cumartesi, 08:30 – 18:00",
-          email: "satis@deltaoto.com",
         },
         {
           dept: "B2B Portal Desteği",
-          lines: ["0216 526 33 44"],
-          info: "Portal erişimi, kullanıcı yetkilendirme, teknik destek",
-          hours: "Pazartesi – Cuma, 09:00 – 17:30",
-          email: "b2b@deltaoto.com",
+          links: [contactPhone, portal],
+          info: "Kullanıcı adınız veya şifreniz için santrali arayabilir ya da satış temsilcinize ulaşabilirsiniz.",
         },
         {
           dept: "İnsan Kaynakları",
-          lines: [] as string[],
+          links: [{ text: "Delta Oto Kariyer.net profili", href: careers }],
           info: "Kariyer başvuruları ve staj talepleri",
-          hours: "Pazartesi – Cuma, 09:00 – 17:00",
-          email: "ik@deltaoto.com",
         },
         {
           dept: "Genel Kurumsal",
-          lines: [] as string[],
+          links: [contactEmail],
           info: "Kurumsal iletişim ve genel talepler",
-          hours: "Pazartesi – Cuma, 08:30 – 17:30",
-          email: "info@deltaoto.com",
         },
       ],
     },
@@ -93,47 +89,34 @@ const content = {
       heading: "Genel İletişim",
       items: [
         { label: "Merkez Ofis", lines: ["Barbaros Cd. Beyit Sk. No:17,", "Yukarı Dudullu — Ümraniye / İstanbul"] as (string | { text: string; href: string })[] },
-        { label: "Santral", lines: ["0216 526 64 64 / 0216 526 33 44", "Satış: Pzt–Cmt 08:30–18:00 · B2B: Pzt–Cuma 09:00–17:30"] as (string | { text: string; href: string })[] },
-        { label: "Kurumsal E-posta", lines: ["info@deltaoto.com", "b2b@deltaoto.com"] as (string | { text: string; href: string })[] },
-        { label: "Dijital Kanallar", lines: ["www.deltaoto.com.tr", { text: "b2b.parcabul.com.tr (B2B Portal)", href: "https://b2b.parcabul.com.tr/login.aspx" }] as (string | { text: string; href: string })[] },
+        { label: "Santral", lines: [contactPhone] as (string | { text: string; href: string })[] },
+        { label: "Kurumsal E-posta", lines: [contactEmail] as (string | { text: string; href: string })[] },
+        { label: "Dijital Kanallar", lines: [{ text: "b2b.parcabul.com.tr (B2B Portal)", href: "https://b2b.parcabul.com.tr/login.aspx" }] as (string | { text: string; href: string })[] },
       ],
     },
     form: {
       eyebrow: "Talep Formu",
       heading: "Bize Yazın",
-      body: "Talebiniz en kısa sürede ilgili birime yönlendirilecektir.",
-      honeypotLabel: "Web siteniz",
+      body: "Formu doldurun, hazırlanan mesajı e-posta uygulamanızdan bize gönderin.",
       fields: {
         ad: { label: "Ad Soyad", ph: "Adınız ve soyadınız" },
-        firma: { label: "Firma Ünvanı", ph: "Firma adı" },
         telefon: { label: "Telefon", ph: "+90 5XX XXX XX XX" },
-        email: { label: "Kurumsal E-posta", ph: "ornek@firma.com.tr" },
+        email: { label: "E-posta", ph: "ornek@posta.com" },
       },
       subjectLabel: "Talep Konusu",
-      subjectPlaceholder: "Konu seçiniz",
-      subjects: [
-        "Sipariş ve Teslimat Süreci",
-        "Stok ve Ürün Bilgisi",
-        "B2B Portal Erişimi ve Yetkilendirme",
-        "Genel Kurumsal Talep",
-        "Kurumsal İletişim",
-        "İnsan Kaynakları & Kariyer",
-        "Diğer",
-      ],
+      subjectPlaceholder: "Konu",
       messageLabel: "Mesajınız",
       messagePlaceholder: "Talebinizi ve konuyu kısaca açıklayınız...",
-      successMsg: "Talebiniz alındı, en kısa sürede size dönüş yapacağız.",
-      errorMsg: "Talebiniz gönderilemedi. Lütfen tekrar deneyin ya da bizi doğrudan arayın.",
-      submitting: "Gönderiliyor...",
-      submit: "Talep Gönderin",
-      privacy: "Verileriniz yalnızca talebinizi karşılamak amacıyla kullanılır.",
-      privacyLinkLabel: "KVKK Aydınlatma Metni'ni inceleyin",
+      emailHint: "Mesajı göndermek için e-posta uygulamanızı kullanın. Açılmadıysa",
+      submit: "E-posta Uygulamasını Aç",
+      privacy: "Bu form, yazdıklarınızı cihazınızda e-posta taslağına aktarır.",
+      privacyLinkLabel: "Gizlilik bilgileri",
     },
   },
   en: {
     meta: {
       title: "Contact Us — Sales, B2B and Corporate Contacts | Delta Oto",
-      description: "Get in touch with Delta Oto: direct lines and email for sales and orders, B2B portal support, human resources and corporate affairs, plus a contact form.",
+      description: "Get in touch with Delta Oto: phone and email for sales and orders, B2B portal support, human resources and corporate affairs, plus a contact form.",
     },
     hero: {
       eyebrow: "Contact Channels · Ümraniye, İstanbul",
@@ -148,7 +131,7 @@ const content = {
       heading: "Two Quick Paths",
       general: {
         title: "General Contact",
-        desc: "Reach our sales, B2B portal, HR and corporate communications teams directly.",
+        desc: "Find our sales, Parçabul B2B and corporate contact channels.",
         link: "View departments",
       },
       findRep: {
@@ -160,35 +143,27 @@ const content = {
     departments: {
       eyebrow: "Department Contacts",
       heading: "Reach the Right Department",
-      body: "The right department for every type of request, listed directly here.",
+      body: "Choose the contact channel that matches your inquiry.",
       list: [
         {
           dept: "Sales & Orders",
-          lines: ["0216 526 64 64"],
+          links: [contactPhone, contactEmail],
           info: "Product inquiries, orders and pricing information",
-          hours: "Monday – Saturday, 08:30 – 18:00",
-          email: "satis@deltaoto.com",
         },
         {
           dept: "B2B Portal Support",
-          lines: ["0216 526 33 44"],
-          info: "Portal access, user authorization, technical support",
-          hours: "Monday – Friday, 09:00 – 17:30",
-          email: "b2b@deltaoto.com",
+          links: [contactPhone, portal],
+          info: "For help with your username or password, call the switchboard or contact your sales representative.",
         },
         {
           dept: "Human Resources",
-          lines: [] as string[],
+          links: [{ text: "Delta Oto on Kariyer.net", href: careers }],
           info: "Job applications and internship requests",
-          hours: "Monday – Friday, 09:00 – 17:00",
-          email: "ik@deltaoto.com",
         },
         {
           dept: "Corporate Affairs",
-          lines: [] as string[],
+          links: [contactEmail],
           info: "Corporate communications and general inquiries",
-          hours: "Monday – Friday, 08:30 – 17:30",
-          email: "info@deltaoto.com",
         },
       ],
     },
@@ -197,66 +172,54 @@ const content = {
       heading: "General Contact",
       items: [
         { label: "Head Office", lines: ["Barbaros Cd. Beyit Sk. No:17,", "Yukarı Dudullu — Ümraniye / İstanbul"] as (string | { text: string; href: string })[] },
-        { label: "Switchboard", lines: ["0216 526 64 64 / 0216 526 33 44", "Sales: Mon–Sat 08:30–18:00 · B2B: Mon–Fri 09:00–17:30"] as (string | { text: string; href: string })[] },
-        { label: "Corporate Email", lines: ["info@deltaoto.com", "b2b@deltaoto.com"] as (string | { text: string; href: string })[] },
-        { label: "Digital Channels", lines: ["www.deltaoto.com.tr", { text: "b2b.parcabul.com.tr (B2B Portal)", href: "https://b2b.parcabul.com.tr/login.aspx" }] as (string | { text: string; href: string })[] },
+        { label: "Switchboard", lines: [contactPhone] as (string | { text: string; href: string })[] },
+        { label: "Corporate Email", lines: [contactEmail] as (string | { text: string; href: string })[] },
+        { label: "Digital Channels", lines: [{ text: "b2b.parcabul.com.tr (B2B Portal)", href: "https://b2b.parcabul.com.tr/login.aspx" }] as (string | { text: string; href: string })[] },
       ],
     },
     form: {
       eyebrow: "Request Form",
       heading: "Write to Us",
-      body: "Your request will be routed to the right team as soon as possible.",
-      honeypotLabel: "Your website",
+      body: "Fill out the form, then send the prepared message from your email app.",
       fields: {
         ad: { label: "Full Name", ph: "Your first and last name" },
-        firma: { label: "Company Name", ph: "Company name" },
         telefon: { label: "Phone", ph: "+90 5XX XXX XX XX" },
-        email: { label: "Corporate Email", ph: "example@company.com.tr" },
+        email: { label: "Email", ph: "name@example.com" },
       },
       subjectLabel: "Subject",
-      subjectPlaceholder: "Select a subject",
-      subjects: [
-        "Order & Delivery Process",
-        "Stock & Product Information",
-        "B2B Portal Access & Authorization",
-        "General Corporate Inquiry",
-        "Corporate Communications",
-        "Human Resources & Careers",
-        "Other",
-      ],
+      subjectPlaceholder: "Subject",
       messageLabel: "Your Message",
       messagePlaceholder: "Briefly describe your request and subject...",
-      successMsg: "Your request has been received. We'll get back to you as soon as possible.",
-      errorMsg: "Your request couldn't be sent. Please try again or call us directly.",
-      submitting: "Sending...",
-      submit: "Send Request",
-      privacy: "Your information is used only to process your request.",
-      privacyLinkLabel: "Read our KVKK Notice",
+      emailHint: "Send the message from your email app. If it did not open, write to",
+      submit: "Open Email App",
+      privacy: "This form prepares an email draft on your device.",
+      privacyLinkLabel: "Privacy information",
     },
   },
 } satisfies Record<Lang, any>;
-
-const EMPTY_FORM = { ad: "", firma: "", telefon: "", email: "", konu: "", mesaj: "", website: "" };
 
 export function IletisimPage() {
   const lang = useLang();
   const t = content[lang];
   useDocumentMeta(t.meta.title, t.meta.description);
-  const [form, setForm] = useState(EMPTY_FORM);
-  const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
+  const [emailDraftOpened, setEmailDraftOpened] = useState(false);
   const [repModalOpen, setRepModalOpen] = useState(false);
   const reveal = useReveal();
 
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
-    setStatus("submitting");
-    try {
-      await submitContactForm(form);
-      setForm(EMPTY_FORM);
-      setStatus("success");
-    } catch {
-      setStatus("error");
-    }
+  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const fields = new FormData(event.currentTarget);
+    const subject = String(fields.get("konu") ?? "").trim();
+    const body = [
+      `${t.form.fields.ad.label}: ${fields.get("ad")}`,
+      `${t.form.fields.email.label}: ${fields.get("email")}`,
+      fields.get("telefon") ? `${t.form.fields.telefon.label}: ${fields.get("telefon")}` : "",
+      "",
+      String(fields.get("mesaj") ?? "").trim(),
+    ].join("\r\n");
+
+    window.location.href = `${contactEmail.href}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    setEmailDraftOpened(true);
   }
 
   return (
@@ -399,7 +362,7 @@ export function IletisimPage() {
             <p className="text-slate-500 mt-3 text-[15px]">{t.departments.body}</p>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-5">
-            {t.departments.list.map(({ dept, lines, info, hours, email }, i) => {
+            {t.departments.list.map(({ dept, links, info }, i) => {
               const Icon = DEPT_ICONS[i];
               return (
                 <div key={dept} ref={reveal} className={`do-reveal do-d${(i % 4) + 1} bg-white border border-slate-200 rounded-xl p-6 hover:border-[#1B3A8F]/30 hover:shadow-md transition-all flex flex-col`}>
@@ -409,20 +372,11 @@ export function IletisimPage() {
                   <h3 className="text-[14px] font-bold text-slate-900 mb-2 leading-snug">{dept}</h3>
                   <p className="text-slate-500 text-[12.5px] leading-relaxed mb-3 flex-1">{info}</p>
                   <div className="border-t border-slate-100 pt-3 space-y-1.5">
-                    {lines.map((l: string) => (
-                      <div key={l} className="flex items-center gap-2">
-                        <Phone className="w-3.5 h-3.5 text-[#1B3A8F] shrink-0" />
-                        <span className="text-[13px] font-semibold text-slate-800">{l}</span>
-                      </div>
+                    {links.map(({ href, text }) => (
+                      <a key={href} href={href} className="block text-[13px] text-[#1B3A8F] hover:underline font-medium">
+                        {text}
+                      </a>
                     ))}
-                    <div className="flex items-center gap-2">
-                      <Mail className="w-3.5 h-3.5 text-[#1B3A8F] shrink-0" />
-                      <a href={`mailto:${email}`} className="text-[13px] text-[#1B3A8F] hover:underline font-medium">{email}</a>
-                    </div>
-                    <div className="flex items-start gap-2 mt-1">
-                      <Clock className="w-3.5 h-3.5 text-slate-400 shrink-0 mt-0.5" />
-                      <span className="text-[11.5px] text-slate-500 leading-snug">{hours}</span>
-                    </div>
                   </div>
                 </div>
               );
@@ -462,7 +416,7 @@ export function IletisimPage() {
                         const href = typeof l === "string" ? undefined : l.href;
                         const cls = `text-[12.5px] leading-snug ${idx === 0 ? "text-slate-900 font-semibold" : "text-slate-500"}`;
                         return href ? (
-                          <a key={idx} href={href} target="_blank" rel="noopener noreferrer" className={`${cls} hover:text-[#1B3A8F] hover:underline transition-colors`}>{text}</a>
+                          <a key={idx} href={href} target={href.startsWith("https:") ? "_blank" : undefined} rel="noopener noreferrer" className={`${cls} hover:text-[#1B3A8F] hover:underline transition-colors`}>{text}</a>
                         ) : (
                           <div key={idx} className={cls}>{text}</div>
                         );
@@ -481,26 +435,9 @@ export function IletisimPage() {
               <p className="text-slate-500 mt-2 text-[14px]">{t.form.body}</p>
             </div>
             <form onSubmit={handleSubmit}>
-              {/* Honeypot — gerçek kullanıcılar görmez/doldurmaz; ekran okuyucudan da
-                  aria-hidden ile tamamen gizli. Doluysa backend isteği bot kabul eder.
-                  sr-only negatif offset kullanmadığı için sayfa genişliğini etkilemez. */}
-              <div className="sr-only" aria-hidden="true">
-                <label htmlFor="website">{t.form.honeypotLabel}</label>
-                <input
-                  id="website"
-                  name="website"
-                  type="text"
-                  tabIndex={-1}
-                  autoComplete="off"
-                  maxLength={200}
-                  value={form.website}
-                  onChange={e => setForm(f => ({ ...f, website: e.target.value }))}
-                />
-              </div>
               <div className="grid md:grid-cols-2 gap-5">
                 {[
                   { id: "ad", label: t.form.fields.ad.label, ph: t.form.fields.ad.ph, type: "text", required: true, maxLength: 100 },
-                  { id: "firma", label: t.form.fields.firma.label, ph: t.form.fields.firma.ph, type: "text", required: false, maxLength: 150 },
                   { id: "telefon", label: t.form.fields.telefon.label, ph: t.form.fields.telefon.ph, type: "tel", required: false, maxLength: 40 },
                   { id: "email", label: t.form.fields.email.label, ph: t.form.fields.email.ph, type: "email", required: true, maxLength: 254 },
                 ].map(({ id, label, ph, type, required, maxLength }) => (
@@ -508,69 +445,54 @@ export function IletisimPage() {
                     <label htmlFor={id} className="block text-[11.5px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">{label}</label>
                     <input
                       id={id}
+                      name={id}
+                      autoComplete={id === "ad" ? "name" : id === "email" ? "email" : "tel"}
                       type={type}
                       required={required}
                       maxLength={maxLength}
                       placeholder={ph}
                       className="w-full border border-slate-200 rounded-lg px-4 py-3 text-[14px] text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#1B3A8F] focus:ring-1 focus:ring-[#1B3A8F]/20 transition"
-                      value={(form as Record<string, string>)[id]}
-                      onChange={e => setForm(f => ({ ...f, [id]: e.target.value }))}
                     />
                   </div>
                 ))}
               </div>
               <div className="mt-5">
                 <label htmlFor="konu" className="block text-[11.5px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">{t.form.subjectLabel}</label>
-                <select
+                <input
                   id="konu"
-                  className="w-full border border-slate-200 rounded-lg px-4 py-3 text-[14px] text-slate-700 focus:outline-none focus:border-[#1B3A8F] focus:ring-1 focus:ring-[#1B3A8F]/20 transition bg-white"
-                  value={form.konu}
-                  onChange={e => setForm(f => ({ ...f, konu: e.target.value }))}
-                >
-                  <option value="">{t.form.subjectPlaceholder}</option>
-                  {t.form.subjects.map((s) => (
-                    <option key={s}>{s}</option>
-                  ))}
-                </select>
+                  name="konu"
+                  required
+                  maxLength={120}
+                  placeholder={t.form.subjectPlaceholder}
+                  className="w-full border border-slate-200 rounded-lg px-4 py-3 text-[14px] text-slate-900 focus:outline-none focus:border-[#1B3A8F]"
+                />
               </div>
               <div className="mt-5">
                 <label htmlFor="mesaj" className="block text-[11.5px] font-bold text-slate-500 uppercase tracking-wider mb-1.5">{t.form.messageLabel}</label>
                 <textarea
                   id="mesaj"
+                  name="mesaj"
+                  required
                   rows={4}
-                  maxLength={5000}
+                  maxLength={1500}
                   placeholder={t.form.messagePlaceholder}
                   className="w-full border border-slate-200 rounded-lg px-4 py-3 text-[14px] text-slate-900 placeholder:text-slate-400 focus:outline-none focus:border-[#1B3A8F] focus:ring-1 focus:ring-[#1B3A8F]/20 transition resize-none"
-                  value={form.mesaj}
-                  onChange={e => setForm(f => ({ ...f, mesaj: e.target.value }))}
                 />
               </div>
-              {status === "success" && (
-                <div className="mt-6 flex items-center gap-2.5 bg-emerald-50 border border-emerald-200 text-emerald-700 text-[13.5px] font-medium rounded-lg px-4 py-3.5">
-                  <CheckCircle2 className="w-4.5 h-4.5 shrink-0" />
-                  {t.form.successMsg}
-                </div>
-              )}
-              {status === "error" && (
-                <div className="mt-6 flex items-center gap-2.5 bg-red-50 border border-red-200 text-red-700 text-[13.5px] font-medium rounded-lg px-4 py-3.5">
-                  <AlertCircle className="w-4.5 h-4.5 shrink-0" />
-                  {t.form.errorMsg}
-                </div>
+              {emailDraftOpened && (
+                <p className="mt-5 text-sm text-slate-700" role="status">
+                  {t.form.emailHint} <a href={contactEmail.href} className="text-[#1B3A8F] underline">{contactEmail.text}</a>.
+                </p>
               )}
               <button
                 type="submit"
-                disabled={status === "submitting"}
-                className="mt-6 w-full bg-[#1B3A8F] hover:bg-[#2547B5] disabled:opacity-60 disabled:cursor-not-allowed text-white font-semibold py-4 rounded-lg transition-colors flex items-center justify-center gap-2 group shadow-[0_4px_16px_rgba(27,58,143,0.2)]"
+                className="mt-6 w-full bg-[#1B3A8F] hover:bg-[#2547B5] text-white font-semibold py-4 rounded-lg transition-colors flex items-center justify-center gap-2"
               >
-                {status === "submitting" ? (
-                  <>{t.form.submitting} <Loader2 className="w-4 h-4 animate-spin" /></>
-                ) : (
-                  <>{t.form.submit} <ChevronRight className="w-4 h-4 group-hover:translate-x-0.5 transition-transform" /></>
-                )}
+                {t.form.submit} <ChevronRight className="w-4 h-4" />
               </button>
               <p className="text-center text-[12px] text-slate-400 mt-4">
                 {t.form.privacy}{" "}
-                <Link href={routeFor("kvkk", lang)} className="text-[#1B3A8F] font-medium hover:underline">
+                <Link href={routeFor("privacy", lang)} className="text-[#1B3A8F] font-medium hover:underline">
                   {t.form.privacyLinkLabel}
                 </Link>
               </p>

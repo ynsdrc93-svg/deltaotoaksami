@@ -44,6 +44,7 @@ function RepresentativeCard({ rep, lang }: { rep: Representative; lang: Lang }) 
 function Representatives({ plate, lang }: { plate: number; lang: Lang }) {
   const province = provinceByPlate(plate)!;
   const reps = representativesForProvince(plate);
+  const generalSalesOnly = reps.length === 1 && reps[0].general;
   const rail = useRef<HTMLDivElement>(null);
   const [edges, setEdges] = useState({ start: true, end: true });
 
@@ -69,7 +70,9 @@ function Representatives({ plate, lang }: { plate: number; lang: Lang }) {
   return (
     <section className="rep-results" aria-label={province.name}>
       <div className="rep-results-header">
-        <h3 aria-live="polite">{province.name} <span>{reps.length} {lang === "tr" ? "temsilci" : reps.length === 1 ? "representative" : "representatives"}</span></h3>
+        <h3 aria-live="polite">{province.name} <span>{generalSalesOnly
+          ? (lang === "tr" ? "Bu il için genel satış irtibatı" : "General sales contact for this province")
+          : `${reps.length} ${lang === "tr" ? "temsilci" : reps.length === 1 ? "representative" : "representatives"}`}</span></h3>
         {!(edges.start && edges.end) && <div className="rep-controls">
           <button type="button" disabled={edges.start} onClick={() => advance(-1)} aria-label={UI.previous[lang]}><ArrowLeft /></button>
           <button type="button" disabled={edges.end} onClick={() => advance(1)} aria-label={UI.next[lang]}><ArrowRight /></button>
