@@ -4,7 +4,7 @@ import TurkeyMap from "turkey-map-react";
 import { cities as turkeyCities } from "turkey-map-react/lib/data";
 import { useEscapeKey } from "@/hooks/use-motion";
 import {
-  representativeForProvince,
+  representativesForProvince,
   GENERAL_CONTACT,
   type Representative,
 } from "@/lib/representatives";
@@ -14,7 +14,6 @@ import {
   provincesInRegion,
   provinceByPlate,
   type TurkeyRegion,
-  type TurkeyProvince,
 } from "@/lib/turkey-regions";
 import type { Lang } from "@/lib/i18n";
 
@@ -32,10 +31,6 @@ const UI = {
   hintAll: { tr: "Haritadan bir il seçin veya yukarıdan bölge seçerek daraltın.", en: "Select a province on the map, or narrow down by region above." },
   hintEmpty: { tr: "Haritadan veya listeden bir il seçerek başlayın.", en: "Start by selecting a province on the map or from the list." },
   notFoundPrompt: { tr: "İlinizi bulamadınız mı?", en: "Can't find your province?" },
-  fallbackBody: {
-    tr: "Bu il için güncel bir temsilci ataması henüz yayınlanmadı. Ekibimize genel satış hattımız üzerinden doğrudan ulaşabilirsiniz.",
-    en: "No representative has been assigned for this province yet. You can reach our team directly through our general sales line.",
-  },
 } satisfies Record<string, Record<Lang, string>>;
 
 const CITY_PATH_BY_PLATE: Map<number, string> = new Map(
@@ -95,52 +90,32 @@ const PROVINCE_LABEL_OFFSETS: Record<number, { dx: number; dy: number }> = {
 const LABEL_FONT_SIZE = 8.5;
 
 function telHref(phone: string): string {
-  return `tel:${phone.replace(/\s+/g, "")}`;
+  return `tel:+90${phone.replace(/\s+/g, "").replace(/^0/, "")}`;
 }
 
-function FallbackDetail({ province, lang }: { province: TurkeyProvince; lang: Lang }) {
+function RepresentativeDetail({ rep, lang }: { rep: Representative; lang: Lang }) {
+  const side = rep.side && (lang === "tr" ? `${rep.side} Yakası` : rep.side === "Avrupa" ? "European Side" : "Anatolian Side");
+  const channel = rep.general ? (lang === "tr" ? "Genel satış" : "General sales") : rep.channel;
   return (
-    <div>
-      <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#1B3A8F]">{province.region}</span>
-      <h3 className="text-xl font-black text-slate-900 mt-1 mb-4">{province.name}</h3>
-      <p className="text-slate-500 text-[13.5px] leading-relaxed mb-6">
-        {UI.fallbackBody[lang]}
-      </p>
-      <div className="space-y-2.5">
-        <a href={telHref(GENERAL_CONTACT.phone)} className="flex items-center gap-2.5 text-[13.5px] font-semibold text-slate-700 hover:text-[#1B3A8F] transition-colors">
-          <Phone className="w-4 h-4 text-[#1B3A8F] shrink-0" /> {GENERAL_CONTACT.phone}
+    <article className="py-4 first:pt-0 last:pb-0">
+      <div className="flex gap-3 items-center">
+        <img src={`${import.meta.env.BASE_URL}images/representatives/${rep.id}.webp`}
+          width="400" height="480" alt={rep.name}
+          className="w-20 h-24 rounded-lg object-cover shrink-0 bg-slate-100" />
+        <div className="min-w-0">
+          <h4 className="font-bold text-lg leading-tight text-slate-900">{rep.name}</h4>
+          <p className="mt-1 text-sm text-slate-600">{[channel, side].filter(Boolean).join(" · ")}</p>
+        </div>
+      </div>
+      <div className="mt-3 space-y-2">
+        <a href={telHref(rep.phone)} className="flex items-center gap-2 text-sm font-semibold text-[#1B3A8F] hover:underline">
+          <Phone aria-hidden="true" className="w-4 h-4 shrink-0" /> {rep.phone}
         </a>
-        <a href={`mailto:${GENERAL_CONTACT.email}`} className="flex items-center gap-2.5 text-[13.5px] font-semibold text-slate-700 hover:text-[#1B3A8F] transition-colors break-all">
-          <Mail className="w-4 h-4 text-[#1B3A8F] shrink-0" /> {GENERAL_CONTACT.email}
+        <a href={`mailto:${rep.email}`} className="flex items-center gap-2 text-sm text-[#1B3A8F] hover:underline break-all">
+          <Mail aria-hidden="true" className="w-4 h-4 shrink-0" /> {rep.email}
         </a>
       </div>
-    </div>
-  );
-}
-
-function RepresentativeDetail({ rep, province }: { rep: Representative; province: TurkeyProvince }) {
-  return (
-    <div>
-      {/* Coğrafi bağlam province verisinden gelir (province.region ·
-          province.name) — rep.region kullanılmaz, çünkü bu ilin ataması tek
-          bir temsilciye özelse (ör. Gümüşhane) ikisi aynı string olup
-          "Gümüşhane · Gümüşhane" gibi anlamsız bir tekrar üretebilir. */}
-      <span className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#1B3A8F]">{province.region} · {province.name}</span>
-      <h3 className="text-xl font-black text-slate-900 mt-1 leading-snug">{rep.name}</h3>
-      {rep.title && <p className="text-slate-500 text-[13px] mt-0.5 mb-5">{rep.title}</p>}
-      <div className="space-y-2.5 mt-5">
-        {rep.phone && (
-          <a href={telHref(rep.phone)} className="flex items-center gap-2.5 text-[13.5px] font-semibold text-slate-700 hover:text-[#1B3A8F] transition-colors">
-            <Phone className="w-4 h-4 text-[#1B3A8F] shrink-0" /> {rep.phone}
-          </a>
-        )}
-        {rep.email && (
-          <a href={`mailto:${rep.email}`} className="flex items-center gap-2.5 text-[13.5px] font-semibold text-slate-700 hover:text-[#1B3A8F] transition-colors break-all">
-            <Mail className="w-4 h-4 text-[#1B3A8F] shrink-0" /> {rep.email}
-          </a>
-        )}
-      </div>
-    </div>
+    </article>
   );
 }
 
@@ -166,7 +141,7 @@ export function RepresentativeFinderModal({ open, onClose, lang }: { open: boole
   const activeRegionPlates = new Set(regionProvinces.map((p) => p.plate));
   const visibleProvinces = selectedRegion === "all" ? TURKEY_PROVINCES : regionProvinces;
   const selectedProvince = selectedPlate != null ? provinceByPlate(selectedPlate) ?? null : null;
-  const selectedRep = selectedPlate != null ? representativeForProvince(selectedPlate) : undefined;
+  const selectedReps = selectedPlate != null ? representativesForProvince(selectedPlate) : [];
 
   function selectProvince(plate: number) {
     setSelectedPlate(plate);
@@ -249,7 +224,7 @@ export function RepresentativeFinderModal({ open, onClose, lang }: { open: boole
               <button
                 key={region}
                 type="button"
-                onClick={() => setSelectedRegion(region)}
+                onClick={() => { setSelectedRegion(region); setSelectedPlate(null); }}
                 aria-pressed={selectedRegion === region}
                 className={`text-[11.5px] font-semibold px-3 py-1.5 rounded-full border transition-all duration-200 ${
                   selectedRegion === region
@@ -262,7 +237,7 @@ export function RepresentativeFinderModal({ open, onClose, lang }: { open: boole
             ))}
           </div>
 
-          <div className="grid lg:grid-cols-[3fr_1fr] gap-4 sm:gap-5">
+          <div className="grid items-start lg:grid-cols-[minmax(0,1fr)_19rem] gap-4 sm:gap-5">
             {/* Harita + il ızgarası — tek "feature panel" çerçevesi, tüm 81 il adı her zaman görünür.
                 Mobilde max-width sınırı yok — harita panelin tüm genişliğini
                 kullanır, bu da etiketlerin fiziksel render boyutunu (dolayısıyla
@@ -359,10 +334,13 @@ export function RepresentativeFinderModal({ open, onClose, lang }: { open: boole
                       {UI.hintEmpty[lang]}
                     </p>
                   </div>
-                ) : selectedRep ? (
-                  <RepresentativeDetail rep={selectedRep} province={selectedProvince} />
                 ) : (
-                  <FallbackDetail province={selectedProvince} lang={lang} />
+                  <section aria-live="polite">
+                    <h3 className="text-xl font-bold text-slate-900 mb-4">{selectedProvince.name}</h3>
+                    <div className="divide-y divide-slate-200">
+                      {selectedReps.map(rep => <RepresentativeDetail key={rep.id} rep={rep} lang={lang} />)}
+                    </div>
+                  </section>
                 )}
               </div>
             </div>
