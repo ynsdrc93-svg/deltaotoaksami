@@ -55,22 +55,23 @@ export const AGENDA_ITEMS: AgendaItem[] = [
     date: { tr: "2025 · Dubai", en: "2025 · Dubai" },
     category: { tr: "Küresel Zirve", en: "Global Summit" },
     title: {
-      tr: "Dubai O2O Tedarikçi Günleri 2025",
-      en: "Dubai O2O Supplier Days 2025",
+      tr: "GROUPAUTO International Kongresi · Dubai 2025",
+      en: "GROUPAUTO International Congress · Dubai 2025",
     },
     summary: {
-      tr: "Dubai'de düzenlenen O2O Tedarikçi Günleri'nde Türkiye'yi ve Delta Oto'yu temsil ettik.",
-      en: "We represented Türkiye and Delta Oto at the O2O Supplier Days held in Dubai.",
+      tr: "GROUPAUTO Türkiye, Dubai’de düzenlenen uluslararası kongrede yedek parça üreticileriyle birebir görüşmeler gerçekleştirdi.",
+      en: "GROUPAUTO Türkiye met with spare parts manufacturers at the international congress in Dubai.",
     },
     body: {
       tr: [
-        "Dubai'de düzenlenen O2O Tedarikçi Günleri'nde Türkiye'yi ve Delta Oto'yu temsil ettik. 35'ten fazla global üreticiyle gerçekleştirilen görüşmelerde tedarik portföyümüzü ve piyasa trendlerini ele aldık.",
+        "7–9 Ekim 2025’te Dubai’de düzenlenen GROUPAUTO International Kongresi’nde otomotiv satış sonrası sektörünün temsilcileri bir araya geldi. GROUPAUTO Türkiye, etkinlik kapsamında uluslararası yedek parça üreticileriyle birebir görüşmeler gerçekleştirdi.",
       ],
       en: [
-        "We represented Türkiye and Delta Oto at the O2O Supplier Days held in Dubai. In meetings with more than 35 global manufacturers, we discussed our supply portfolio and market trends.",
+        "Automotive aftermarket representatives gathered for the GROUPAUTO International Congress in Dubai on 7–9 October 2025. GROUPAUTO Türkiye held one-to-one meetings with international spare parts manufacturers during the event.",
       ],
     },
     sourceType: "article",
+    sourceUrl: "https://www.linkedin.com/posts/group-auto-turkey_g%C3%BCc%C3%BCm%C3%BCzberaberli%C4%9Fimizbirliktegelece%C4%9Fe-drivingtotomorrow-activity-7382805092355190784-uePD",
     featured: false,
   },
 ];

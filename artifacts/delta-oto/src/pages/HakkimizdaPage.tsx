@@ -3,7 +3,6 @@ import { Link } from "wouter";
 import {
   ChevronRight,
   ChevronDown,
-  Clock,
   Award,
   TrendingUp,
   ShieldCheck,
@@ -58,21 +57,10 @@ const FACT_META: {
   { id: "active-brands", order: 2, published: true, icon: TrendingUp, target: 100, plus: true, grouped: false }, // İçerik/UX Revizyon Notu: sitewide marka iddiası 250+ → 100+ değişti
 ];
 
-// `pending: true` kayıtlar gerçek bir tarih ama henüz yazılmamış içerik demektir —
-// uydurma olay eklemek yerine dürüstçe "detaylar ekleniyor" olarak işaretlenir.
-// `id` yıl metninden BAĞIMSIZ, kararlı bir kimliktir (olay kimliği; aynı yıla
-// ileride ikinci bir olay eklenirse ayrı id alır, sıra `order` ile belirlenir).
-// Açık kayıt da bu id ile tutulur (bkz. MilestoneTimeline). year/pending
-// dil-bağımsızdır; label/desc content.*.timeline.items[id]'den gelir.
-const MILESTONE_META: { id: string; order: number; published: boolean; year: string; pending: boolean }[] = [
-  { id: "founding", order: 1, published: true, year: "1976", pending: false },
-  { id: "portfolio-expansion", order: 2, published: true, year: "1990", pending: false },
-  { id: "pending-1", order: 3, published: true, year: "1998", pending: true },
-  { id: "groupauto-membership", order: 4, published: true, year: "2005", pending: false },
-  { id: "pending-2", order: 5, published: true, year: "2010", pending: true },
-  { id: "national-logistics", order: 6, published: true, year: "2015", pending: false },
-  { id: "pending-3", order: 7, published: true, year: "2020", pending: true },
-  { id: "anniversary-50", order: 8, published: true, year: "2026", pending: false },
+const MILESTONE_META = [
+  { id: "founding", order: 1, published: true, year: "1976" },
+  { id: "anniversary-50", order: 2, published: true, year: "2026" },
+  { id: "opar-aegean", order: 3, published: true, year: "2026" },
 ];
 
 type FactCopy = { label: string; sub: string };
@@ -126,17 +114,10 @@ const content = {
       eyebrow: "Kurumsal Tarihçe",
       heading: "50+ Yıllık Gelişim Kronolojisi",
       listAriaLabel: "Kuruluştan bugüne kurumsal tarihçe zaman çizelgesi",
-      comingSoon: "Yakında",
-      pendingText: "Bu döneme ait detaylar yakında eklenecek.",
       items: {
-        "founding": { label: "Kuruluş", desc: "Ümraniye'de temelleri atılan şirket, otomotiv aftermarket sektörünün kurucu distribütörleri arasında yerini aldı." },
-        "portfolio-expansion": { label: "Portföy Genişlemesi", desc: "Tedarik ağının derinleşmesiyle birlikte İstanbul bölgesinde lider distribütör konumuna ulaşıldı; ürün kategorileri sistematik biçimde genişletildi." },
-        "pending-1": { label: "", desc: "" },
-        "groupauto-membership": { label: "GROUPAUTO Üyeliği", desc: "Avrupa merkezli bağımsız aftermarket ağına tam üye olunarak küresel tedarik kanallarına, üretici anlaşmalarına ve piyasa bilgisine erişim sağlandı." },
-        "pending-2": { label: "", desc: "" },
-        "national-logistics": { label: "Ulusal Lojistik Ağı", desc: "Türkiye'nin 81 iline kesintisiz teslimat kapasitesi kuruldu. Opar Ege bölge operasyonuyla dağıtım coğrafyası İzmir ve Ege'ye yayıldı." },
-        "pending-3": { label: "", desc: "" },
-        "anniversary-50": { label: "50. Kuruluş Yılı", desc: "100'den fazla aktif marka, binlerce müşteri ilişkisi ve 50+ yıllık kurumsal birikimiyle sektördeki yapıcı konumunu pekiştiriyor." },
+        "founding": { label: "Kuruluş", desc: "Delta Oto Aksamı, otomotiv yedek parça dağıtımı alanında faaliyet göstermek üzere kuruldu." },
+        "anniversary-50": { label: "50. Kuruluş Yılı", desc: "Delta Oto, otomotiv yedek parça dağıtımında 50. yılını kutladı." },
+        "opar-aegean": { label: "Opar Ege Bölge Bayiliği", desc: "Mayıs 2026’da Opar Ege Bölge Bayiliği operasyonu devralındı." },
       } as Record<string, MilestoneCopy>,
     },
     values: {
@@ -145,7 +126,7 @@ const content = {
       body: "50+ yıllık deneyim, dört temel kurumsal ilke üzerine inşa edilmiştir. Bu ilkeler her karar sürecinde referans alınır.",
       items: [
         { title: "Kurumsal Güvenilirlik", desc: "Ticari ilişkilerde öngörülebilirlik ve taahhüt bütünlüğü, Delta Oto'nun temel kurumsal kimliğini oluşturur. Her sipariş ve her iş birliği bu güven çerçevesinde yürütülür." },
-        { title: "Ürün Kalite Güvencesi", desc: "Portföydeki her marka, denetimli kaynak doğrulamasından geçer. Kayıt dışı ve sahte ürün sıfır toleranstır; OEM ve OEM eşdeğeri standart zorunluluğu istisnasız uygulanır." },
+        { title: "Ürün Kalite Güvencesi", desc: "Portföydeki her marka, denetimli kaynak doğrulamasından geçer. Kayıt dışı ve sahte ürün sıfır toleranstır; ürün kaynağı ve izlenebilirliği esas alınır." },
         { title: "Operasyonel Mükemmellik", desc: "Siparişten teslimata uzanan sürecin her halkasında performans standardı titizlikle korunur. WMS destekli süreçler, stok doğruluğunu ve hız taahhüdünü güvence altına alır." },
         { title: "Sürdürülebilir Büyüme", desc: "Müşteri portföyünün rekabet gücünü artırmak ve uzun vadeli iş ortaklıkları kurmak, Delta Oto'nun büyüme stratejisinin merkezindedir. Kısa vadeli kâr yerine ilişki kalitesi önceliklidir." },
       ],
@@ -158,8 +139,9 @@ const content = {
     groupauto: {
       eyebrow: "Küresel Ağ",
       heading: "GROUPAUTO Türkiye Üyeliği",
-      body: "Avrupa merkezli GROUPAUTO ağının Türkiye üyesi sıfatıyla, 118 ülkedeki distribütörler ve küresel üreticilerle doğrudan bağlantı içindeyiz. Bu üyelik; ürün erişimini, tedarik koşullarını ve piyasa bilgisini rakiplerimizin önünde konumlandırır.",
-      stats: [["29", "Üye Ağ"], ["71", "Referans Tedarikçi"], ["1.958", "Distribütör"]] as [string, string][],
+      body: "Delta Oto, GROUPAUTO Türkiye üyesidir. 118 ülkeye ulaşan uluslararası ağ, otomotiv satış sonrası sektöründe distribütörleri ve üreticileri bir araya getirir.",
+      stats: [["28", "Üye"], ["75", "Referans Tedarikçi"], ["2.010", "Distribütör"]] as [string, string][],
+      sourceLabel: "Kaynak: GROUPAUTO International, 27 Kasım 2026",
       exploreLink: "Marka Portföyümüzü İnceleyin",
       benefitsHeading: "Üyeliğin Faydaları",
       benefits: [
@@ -192,7 +174,7 @@ const content = {
   en: {
     meta: {
       title: "About Us — 50+ Years of Corporate Experience in the Automotive Aftermarket | Delta Oto",
-      description: "Delta Oto's corporate history, value framework, business units and GROUPAUTO Türkiye membership since 1976 — global supply strength across 118 countries.",
+      description: "Explore the history of Delta Oto, founded in 1976, and its membership in the GROUPAUTO Türkiye network.",
     },
     hero: {
       eyebrow: "Founded 1976 · Delta Oto",
@@ -212,17 +194,10 @@ const content = {
       eyebrow: "Corporate History",
       heading: "A 50+ Year Timeline of Growth",
       listAriaLabel: "Corporate history timeline from founding to today",
-      comingSoon: "Coming Soon",
-      pendingText: "Details for this period will be added soon.",
       items: {
-        "founding": { label: "Founding", desc: "Founded in Ümraniye, the company took its place among the founding distributors of the automotive aftermarket industry." },
-        "portfolio-expansion": { label: "Portfolio Expansion", desc: "As the supply network deepened, the company reached a leading distributor position in the İstanbul region; product categories were systematically expanded." },
-        "pending-1": { label: "", desc: "" },
-        "groupauto-membership": { label: "GROUPAUTO Membership", desc: "Full membership in the Europe-based independent aftermarket network provided access to global supply channels, manufacturer agreements and market intelligence." },
-        "pending-2": { label: "", desc: "" },
-        "national-logistics": { label: "National Logistics Network", desc: "Uninterrupted delivery capacity to all 81 provinces of Turkey was established. With the Opar Aegean regional operation, distribution coverage expanded to İzmir and the Aegean region." },
-        "pending-3": { label: "", desc: "" },
-        "anniversary-50": { label: "50th Anniversary", desc: "With more than 100 active brands, thousands of customer relationships and 50+ years of institutional heritage, the company reinforces its constructive position in the industry." },
+        "founding": { label: "Founding", desc: "Delta Oto Aksamı was founded as an automotive spare parts distributor." },
+        "anniversary-50": { label: "50th Anniversary", desc: "Delta Oto marked 50 years in automotive spare parts distribution." },
+        "opar-aegean": { label: "Opar Aegean Regional Dealership", desc: "Delta Oto took over the Opar Aegean Regional Dealership operation in May 2026." },
       } as Record<string, MilestoneCopy>,
     },
     values: {
@@ -231,7 +206,7 @@ const content = {
       body: "50+ years of experience are built on four core corporate principles. These principles are the reference point in every decision-making process.",
       items: [
         { title: "Corporate Reliability", desc: "Predictability and integrity of commitment in business relationships form the core of Delta Oto's corporate identity. Every order and every partnership is carried out within this framework of trust." },
-        { title: "Product Quality Assurance", desc: "Every brand in the portfolio undergoes audited source verification. Unregistered and counterfeit products are subject to zero tolerance; the OEM or OEM-equivalent standard requirement is applied without exception." },
+        { title: "Product Quality Assurance", desc: "Every brand in the portfolio undergoes audited source verification. Unregistered and counterfeit products are subject to zero tolerance; we focus on product sourcing and traceability." },
         { title: "Operational Excellence", desc: "Performance standards are carefully maintained at every link in the process from order to delivery. WMS-supported processes safeguard stock accuracy and our commitment to speed." },
         { title: "Sustainable Growth", desc: "Strengthening the competitiveness of our customer portfolio and building long-term business partnerships are at the center of Delta Oto's growth strategy. Relationship quality takes priority over short-term profit." },
       ],
@@ -244,8 +219,9 @@ const content = {
     groupauto: {
       eyebrow: "Global Network",
       heading: "GROUPAUTO Türkiye Membership",
-      body: "As the Turkey member of the Europe-based GROUPAUTO network, we are directly connected with distributors and global manufacturers across 118 countries. This membership puts our product access, supply terms and market intelligence ahead of our competitors.",
-      stats: [["29", "Members"], ["71", "Referenced Suppliers"], ["1,958", "Distributors"]] as [string, string][],
+      body: "Delta Oto is a member of GROUPAUTO Türkiye. The international network brings together automotive aftermarket distributors and manufacturers across 118 countries.",
+      stats: [["28", "Members"], ["75", "Referenced Suppliers"], ["2,010", "Distributors"]] as [string, string][],
+      sourceLabel: "Source: GROUPAUTO International, 27 November 2026",
       exploreLink: "Explore Our Brand Portfolio",
       benefitsHeading: "Benefits of Membership",
       benefits: [
@@ -353,8 +329,6 @@ function StatCard({ icon: Icon, target, plus, grouped, label, sub }: {
  * merkezinden 12–24px kayıktı — çizgi başlık sütununun sol kenarına denk
  * geliyordu; tek kaynaktan türetme bunu da giderdi.)
  *
- * `pending: true` kayıtlar ("Yakında") gerçek bir tarih ama yazılmamış içerik
- * demektir — uydurma başlık/açıklama eklenmez, küçük/soluk gösterilir.
  */
 function MilestoneTimeline({ t }: { t: (typeof content)["tr"]["timeline"] }) {
   const MILESTONES = joinById(MILESTONE_META, t.items);
@@ -431,7 +405,7 @@ function MilestoneTimeline({ t }: { t: (typeof content)["tr"]["timeline"] }) {
             aria-label={t.listAriaLabel}
             tabIndex={0}
             onScroll={updateEdges}
-            className="do-thin-scroll relative h-[300px] sm:h-[340px] lg:h-[380px] max-h-[72svh] overflow-y-auto pr-2 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white/60"
+            className="do-thin-scroll relative max-h-[min(300px,72svh)] sm:max-h-[min(340px,72svh)] lg:max-h-[min(380px,72svh)] overflow-y-auto pr-2 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-white/60"
           >
             {/* Eksen geometrisi tek yerde (bkz. üstteki not): --tl-yw yıl
                 sütunu, --tl-nw düğüm sütunu, --tl-lh satırın ilk metin satırı
@@ -476,10 +450,8 @@ function MilestoneTimeline({ t }: { t: (typeof content)["tr"]["timeline"] }) {
                       >
                         <span className="w-[var(--tl-yw)] shrink-0 h-[var(--tl-lh)] flex items-center">
                           <span
-                            className={`font-black tabular-nums leading-none transition-colors duration-300 ${
-                              m.pending
-                                ? "text-base sm:text-lg lg:text-xl text-white/55"
-                                : `text-lg sm:text-2xl lg:text-3xl ${isOpen ? "text-white" : "text-white/80 group-hover:text-white"}`
+                            className={`font-black tabular-nums text-lg sm:text-2xl lg:text-3xl leading-none transition-colors duration-300 ${
+                              isOpen ? "text-white" : "text-white/80 group-hover:text-white"
                             }`}
                           >
                             {m.year}
@@ -491,28 +463,22 @@ function MilestoneTimeline({ t }: { t: (typeof content)["tr"]["timeline"] }) {
                         >
                           <span
                             className={`relative z-10 block w-3 h-3 rounded-full ring-4 ring-[#1B3A8F] transition-colors duration-300 ${
-                              m.pending ? "bg-white/25" : isOpen ? "bg-[#7d9bea]" : "bg-white/40 group-hover:bg-white/60"
+                              isOpen ? "bg-[#7d9bea]" : "bg-white/40 group-hover:bg-white/60"
                             }`}
                           />
                         </span>
                         <span className="flex-1 min-w-0 flex items-start justify-between gap-3">
-                          {m.pending ? (
-                            <span className="inline-flex items-center gap-1.5 h-[var(--tl-lh)] text-[11px] font-bold uppercase tracking-wider text-white/55">
-                              <Clock className="w-3.5 h-3.5" strokeWidth={2} aria-hidden="true" /> {t.comingSoon}
-                            </span>
-                          ) : (
-                            <span
-                              className={`block text-[15px] min-[360px]:text-[16px] sm:text-[18px] lg:text-[20px] font-bold leading-[var(--tl-lh)] transition-colors duration-300 ${
-                                isOpen ? "text-white" : "text-white/85 group-hover:text-white"
-                              }`}
-                            >
-                              {m.label}
-                            </span>
-                          )}
+                          <span
+                            className={`block text-[15px] min-[360px]:text-[16px] sm:text-[18px] lg:text-[20px] font-bold leading-[var(--tl-lh)] transition-colors duration-300 ${
+                              isOpen ? "text-white" : "text-white/85 group-hover:text-white"
+                            }`}
+                          >
+                            {m.label}
+                          </span>
                           <span className="h-[var(--tl-lh)] shrink-0 flex items-center">
                             <ChevronDown
                               aria-hidden="true"
-                              className={`w-4 h-4 transition-transform duration-300 ${m.pending ? "text-white/30" : "text-white/50"} ${isOpen ? "rotate-180" : ""}`}
+                              className={`w-4 h-4 transition-transform duration-300 text-white/50 ${isOpen ? "rotate-180" : ""}`}
                               strokeWidth={2}
                             />
                           </span>
@@ -531,11 +497,7 @@ function MilestoneTimeline({ t }: { t: (typeof content)["tr"]["timeline"] }) {
                       }`}
                     >
                       <div className="overflow-hidden">
-                        {m.pending ? (
-                          <p className="text-white/55 text-[13px] italic leading-relaxed max-w-xl pb-1">{t.pendingText}</p>
-                        ) : (
-                          <p className="text-white/70 text-[13.5px] sm:text-[14.5px] lg:text-[15px] leading-relaxed max-w-2xl pb-1">{m.desc}</p>
-                        )}
+                        <p className="text-white/70 text-[13.5px] sm:text-[14.5px] lg:text-[15px] leading-relaxed max-w-2xl pb-1">{m.desc}</p>
                       </div>
                     </div>
                   </li>
@@ -907,6 +869,9 @@ export function HakkimizdaPage() {
                   </div>
                 ))}
               </div>
+              <a href="https://groupauto.com/group" className="block mb-5 text-xs text-gray-400 hover:text-white underline underline-offset-2">
+                {t.groupauto.sourceLabel}
+              </a>
               <Link href={routeFor("partners", lang)} className="inline-flex items-center gap-2 text-[#a9c0ff] text-[14px] font-semibold hover:text-white transition-colors group">
                 {t.groupauto.exploreLink} <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </Link>

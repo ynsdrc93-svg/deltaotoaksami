@@ -83,14 +83,14 @@ export function GundemDetailPage() {
             </p>
           ))}
 
-          {item.sourceType === "social" && item.sourceUrl && (
+          {item.sourceUrl && (
             <a
               href={item.sourceUrl}
               target="_blank"
               rel="noopener noreferrer"
               className="inline-flex items-center gap-1.5 mt-8 text-[14px] font-semibold text-[#1B3A8F] hover:text-[#2547B5] transition-colors"
             >
-              {lang === "tr" ? "Gönderiyi Gör" : "View Post"}
+              {lang === "tr" ? "Kaynağı Gör" : "View Source"}
               <ArrowUpRight className="w-3.5 h-3.5" />
             </a>
           )}

@@ -7,7 +7,7 @@ import { useDocumentMeta } from "@/hooks/use-document-meta";
 import { useLang, type Lang } from "@/lib/i18n";
 
 /** Counts up from 0 once scrolled into view; snaps straight to target under prefers-reduced-motion (see useCounter). Adapted from LandingPage's CountUp. */
-function CountUp({ target, suffix = "", duration = 1600, className = "" }: { target: number; suffix?: string; duration?: number; className?: string }) {
+function CountUp({ target, duration = 1600, className = "" }: { target: number; duration?: number; className?: string }) {
   const [started, setStarted] = useState(false);
   const spanRef = useRef<HTMLSpanElement>(null);
   const count = useCounter(target, duration, started);
@@ -16,7 +16,7 @@ function CountUp({ target, suffix = "", duration = 1600, className = "" }: { tar
     if (spanRef.current) obs.observe(spanRef.current);
     return () => obs.disconnect();
   }, []);
-  return <span ref={spanRef} className={className}>{(started ? count : 0).toLocaleString("tr-TR")}{suffix}</span>;
+  return <span ref={spanRef} className={className}>{(started ? count : 0).toLocaleString("tr-TR")}</span>;
 }
 
 // Teslimat kartı ikonları — sıra content.tr/en.delivery.cards ile birebir eşleşir.
@@ -34,8 +34,8 @@ const content = {
       body: "Lojistik ağımız; Gebze ve İzmir'deki operasyon noktalarımızdan 81 ile hızlı, güvenilir ve planlı dağıtım sunar.",
       stats: [
         { target: 2, label: "Operasyon Merkezi", sub: "Gebze · İzmir" },
-        { target: 50000, suffix: "+", label: "SKU", sub: "Sürekli stok derinliği" },
-        { value: "17:00", label: "Son Sipariş Saati", sub: "Aynı gün sevkiyat" },
+        { value: "WMS", label: "Depo Yönetimi", sub: "Stok ve sipariş takibi" },
+        { value: "17.00", label: "Son Sipariş Saati", sub: "Aynı gün sevkiyat" },
         { target: 81, label: "İl", sub: "Ulusal dağıtım kapsamı" },
       ],
     },
@@ -43,30 +43,30 @@ const content = {
     // "yanınızdayız" / "net ve güvenilir bir taahhüt" / "müşterilerinizi
     // korumuş olursunuz" gibi satış-dili ifadeler kaldırıldı — kullanıcı
     // bunları yapay/çocuksu/AI-copy hissi veren fazlalık olarak reddetti.
-    // Aynı operasyonel gerçekler (17:00 kesim, ertesi gün, Cumartesi) sade
+    // Aynı operasyonel gerçekler (17.00 kesim, ertesi gün, Cumartesi) sade
     // B2B diliyle kaldı; hiçbir taahhüt güçlendirilmedi.
     delivery: {
       eyebrow: "Teslimat Yapısı",
       heading: "Planlı Sevkiyat",
-      body: "Stok derinliğimiz ve geniş lojistik ağımız; acil ihtiyaçta aynı gün, standart siparişlerde ertesi iş günü sevkiyatı mümkün kılar. Cumartesi sevkiyat kapasitesiyle hafta sonu kesintisi yaşanmaz.",
+      body: "Sevkiyat, stok durumu ve sipariş saatine göre planlanır. Teslimat süresi varış noktasına ve sevkiyat planına bağlıdır.",
       featuredBadge: "Öne Çıkan",
       cards: [
         {
           title: "Aynı Gün Sevkiyat",
-          highlight: "17:00 Son Sipariş Saati",
-          desc: "Stokta olan ürünler için 17:00'e kadar iletilen siparişler, sipariş saatine bakılmaksızın aynı gün kargoya verilir.",
+          highlight: "17.00 Son Sipariş Saati",
+          desc: "Stokta bulunan ürünlerde, sevkiyat günlerinde saat 17.00’ye kadar alınan siparişlerin aynı gün sevk edilmesi hedeflenir.",
           featured: true,
         },
         {
-          title: "Ertesi Gün Teslimat",
+          title: "Ertesi İş Günü Teslimat",
           highlight: "İstanbul ve Çevre İller",
-          desc: "Standart siparişlerde İstanbul ve yakın il müşterileri için ertesi iş günü teslimat hedeflenir.",
+          desc: "İstanbul ve yakın illerdeki standart siparişlerde ertesi iş günü teslimat hedeflenir.",
           featured: false,
         },
         {
           title: "Cumartesi Operasyonu",
-          highlight: "Hafta Sonu Kesintisiz",
-          desc: "Cumartesi günleri de sevkiyat kapasitemiz açıktır. Hafta içi geç saatte gelen siparişler, Cumartesi yükleme seçeneğiyle karşılanır.",
+          highlight: "Sevkiyat Planına Göre",
+          desc: "Cumartesi sevkiyatları güzergâha ve yükleme planına göre düzenlenir.",
           featured: false,
         },
       ],
@@ -114,9 +114,9 @@ const content = {
       eyebrow: "Lojistik Altyapı",
       heading: "Sistem ve Kalite",
       items: [
-        { title: "Tedarik Kaynağı & Ürün Güveni", desc: "Kayıt dışı ve sahte ürüne sıfır tolerans; her marka denetimli kaynak doğrulamasından ve süregelen kontrolden geçer." },
-        { title: "WMS Destekli Depo Yönetimi", desc: "Stok doğruluğu ve sipariş hazırlığı sistem kontrolünde; hata payı sıfıra yakın." },
-        { title: "Sevkiyat Kalite Kontrolü", desc: "Her sevkiyat WMS ve fiziksel kontrolden geçer; hasarlı/eksik gönderim oranı hedefte sıfır." },
+        { title: "Tedarik Kaynağı & Ürün Güveni", desc: "Kayıt dışı ve sahte ürüne sıfır tolerans; ürünlerin tedarik kaynağı ve izlenebilirliği esas alınır." },
+        { title: "WMS Destekli Depo Yönetimi", desc: "Stok hareketleri ve sipariş hazırlığı depo yönetim sistemi üzerinden takip edilir." },
+        { title: "Sevkiyat Kalite Kontrolü", desc: "Paketlenen siparişler sevk öncesinde ürün ve adet bilgileriyle karşılaştırılır." },
       ],
     },
     process: {
@@ -127,7 +127,7 @@ const content = {
         { num: "01", title: "Talep İletimi", desc: "B2B portalı veya yetkili satış temsilcisi aracılığıyla sipariş kaydı oluşturulur." },
         { num: "02", title: "Anlık Stok Doğrulama", desc: "Envanter sistemi ürün varlığını gerçek zamanlı teyit eder; alternatif ürün gerekiyorsa satış temsilcisi devreye girer." },
         { num: "03", title: "WMS Sevkiyat Hazırlığı", desc: "Sistem talimatıyla depo personeli picking ve paketleme sürecini başlatır; her adım kayıt altına alınır." },
-        { num: "04", title: "Sevk & Teslimat Takibi", desc: "Anlaşmalı lojistik partnerleriyle sevkiyat gerçekleştirilir; kritik siparişlerde aynı gün teslimat hedeflenir." },
+        { num: "04", title: "Sevk & Teslimat Takibi", desc: "Sipariş, planlanan güzergâha göre sevk edilir ve teslimat durumu takip edilir." },
       ],
       cta: {
         eyebrow: "Hemen Başlayın",
@@ -148,7 +148,7 @@ const content = {
       body: "Our logistics network delivers fast, reliable and planned distribution to all 81 provinces from our operations points in Gebze and İzmir.",
       stats: [
         { target: 2, label: "Operations Centers", sub: "Gebze · İzmir" },
-        { target: 50000, suffix: "+", label: "SKU", sub: "Continuous stock depth" },
+        { value: "WMS", label: "Warehouse Management", sub: "Inventory and order tracking" },
         { value: "17:00", label: "Order Cutoff Time", sub: "Same-day dispatch" },
         { target: 81, label: "Provinces", sub: "Nationwide distribution coverage" },
       ],
@@ -156,25 +156,25 @@ const content = {
     delivery: {
       eyebrow: "Delivery Structure",
       heading: "Planned Dispatch",
-      body: "Our stock depth and broad logistics network enable same-day dispatch for urgent needs and next-business-day dispatch for standard orders. Our Saturday dispatch capacity keeps the weekend covered.",
+      body: "We plan dispatch around stock availability and order time. Delivery timing depends on the destination and dispatch schedule.",
       featuredBadge: "Featured",
       cards: [
         {
           title: "Same-Day Dispatch",
           highlight: "17:00 Order Cutoff",
-          desc: "For in-stock items, orders placed by 17:00 ship the same day, regardless of exactly when they came in.",
+          desc: "On dispatch days, we aim to ship orders for in-stock items the same day when received by 5:00 p.m. Türkiye time.",
           featured: true,
         },
         {
-          title: "Next-Day Delivery",
+          title: "Next-Business-Day Delivery",
           highlight: "İstanbul and Surrounding Provinces",
           desc: "For standard orders, next-business-day delivery is targeted for customers in İstanbul and neighboring provinces.",
           featured: false,
         },
         {
           title: "Saturday Operations",
-          highlight: "Uninterrupted Through the Weekend",
-          desc: "Our dispatch capacity stays open on Saturdays as well. Orders that come in late during the week are covered by the Saturday loading option.",
+          highlight: "Subject to the Dispatch Schedule",
+          desc: "Saturday dispatch is scheduled according to the route and loading plan.",
           featured: false,
         },
       ],
@@ -194,9 +194,9 @@ const content = {
       eyebrow: "Logistics Infrastructure",
       heading: "Systems and Quality",
       items: [
-        { title: "Supply Source & Product Trust", desc: "Zero tolerance for unregistered or counterfeit product; every brand undergoes audited source verification and ongoing controls." },
-        { title: "WMS-Supported Warehouse Management", desc: "Stock accuracy and order prep run under system control — error margin near zero." },
-        { title: "Dispatch Quality Control", desc: "Every shipment passes a WMS and physical check — damaged or incomplete stays near zero." },
+        { title: "Supply Source & Product Trust", desc: "Zero tolerance for unregistered or counterfeit product; we focus on product sourcing and traceability." },
+        { title: "WMS-Supported Warehouse Management", desc: "The warehouse management system tracks stock movements and order preparation." },
+        { title: "Dispatch Quality Control", desc: "Packed orders are checked against product and quantity details before dispatch." },
       ],
     },
     process: {
@@ -207,7 +207,7 @@ const content = {
         { num: "01", title: "Order Submission", desc: "The order is logged through the B2B portal or an authorized sales representative." },
         { num: "02", title: "Real-Time Stock Verification", desc: "The inventory system confirms product availability in real time; a sales representative steps in if an alternative product is needed." },
         { num: "03", title: "WMS Dispatch Preparation", desc: "Following system instructions, warehouse staff begin picking and packing; every step is logged." },
-        { num: "04", title: "Dispatch & Delivery Tracking", desc: "Shipment is carried out with contracted logistics partners; same-day delivery is targeted for critical orders." },
+        { num: "04", title: "Dispatch & Delivery Tracking", desc: "Orders are dispatched on the planned route and tracked through delivery." },
       ],
       cta: {
         eyebrow: "Start Now",
@@ -338,20 +338,20 @@ export function OperasyonPage() {
           </p>
           {/* 2x2 (mobil) / 1x4 (sm+) grid — eşit sütun genişliği garantili; eski
               flex-wrap + min-w yaklaşımı içerik-bağımlı genişlik ürettiği için
-              (ör. "50.000+" diğer değerlerden çok daha geniş) mobilde dengesiz
+              (ör. "geniş değerler" diğer değerlerden çok daha geniş) mobilde dengesiz
               satır kırılmasına yol açıyordu. divide-x yalnızca sm+'da (tek satır)
               devrede — 2 satırlı mobil grid'de divide-x/y birleşimi yanlış
               kenarlıklara yol açacağından mobilde ayrım salt boşlukla sağlanır.
               text-center yalnızca mobilde: kısa değerler ("3", "81") solda
-              sıkışık, uzun değerler ("50.000+") sütunu dolduruyor gibi
+              sıkışık, uzun değerler ("geniş değerler") sütunu dolduruyor gibi
               görünüp dengesiz hizalanmış hissi veriyordu — ortalamak her
               kartı içerik uzunluğundan bağımsız eşit görünür kılar. sm+'da
               (tek satır, divide-x) orijinal sola yaslı düzen korunur. */}
           <div ref={ref} className="do-reveal do-d3 grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-3 sm:gap-0 sm:divide-x sm:divide-white/10 border-t border-b border-white/15">
-            {t.hero.stats.map(({ target, suffix, value, label, sub }) => (
+            {t.hero.stats.map(({ target, value, label, sub }) => (
               <div key={label} className="py-3 sm:px-6 sm:py-5 text-center sm:text-left sm:first:pl-0">
                 <div className="text-[26px] sm:text-3xl md:text-4xl font-black text-white tabular-nums leading-none">
-                  {target !== undefined ? <CountUp target={target} suffix={suffix} /> : value}
+                  {target !== undefined ? <CountUp target={target} /> : value}
                 </div>
                 <div className="text-[10.5px] sm:text-[11px] font-bold text-[#7d9bea] uppercase tracking-[0.12em] sm:tracking-[0.15em] mt-2 sm:mt-2.5">{label}</div>
                 <div className="text-[10.5px] sm:text-[11px] text-white/50 mt-1 leading-snug">{sub}</div>
@@ -495,7 +495,7 @@ export function OperasyonPage() {
 
       {/* SİSTEM VE KALİTE — dark. Hard-edit (§21-22, önceki tur): eskiden 8
           madde, iki tematik grup altında. Beşi kaldırıldı — üç merkezden
-          dağıtım/17:00/Opar zaten yukarıdaki Operasyon Altyapısı ve Teslimat
+          dağıtım/17.00/Opar zaten yukarıdaki Operasyon Altyapısı ve Teslimat
           bölümlerinde söylendi; GROUPAUTO ağı ve tek-tedarikçi kolaylığı bu
           sayfanın değil İş Ortaklarımız'ın konusuydu. Kalan 3 madde gerçekten
           operasyonel ve BAŞKA YERDE yok.

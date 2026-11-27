@@ -106,10 +106,10 @@ const content = {
       // Sevkiyat" ve "Türkiye Geneli Dağıtım" bu bölümün kendi başlığı VE
       // gövde metniyle (üç merkez, Türkiye geneli dağıtım) aynı gerçeği
       // ÜÇÜNCÜ kez tekrarlıyordu. Yalnızca bu bölümde henüz söylenmemiş, somut
-      // iki fark yaratan kart kaldı: 17:00 kesim saati ve 50.000+ SKU derinliği.
+      // iki kart kaldı: aynı gün sevkiyat koşulu ve stok sorgulama.
       cards: [
-        { title: "Aynı Gün Sevk", desc: "17:00'e kadar iletilen siparişler, stokta olan ürünler için aynı gün yola çıkar." },
-        { title: "Derin Stok", desc: "50.000'i aşkın aktif SKU ile talep edilen ürünün büyük bölümü hazır stoktan karşılanır." },
+        { title: "Aynı Gün Sevk", desc: "Stokta bulunan ürünlerde, sevkiyat günlerinde saat 17.00’ye kadar alınan siparişlerin aynı gün sevk edilmesi hedeflenir." },
+        { title: "Stok Sorgulama", desc: "Güncel stok durumunu Parçabul B2B üzerinden sorgulayabilirsiniz." },
       ],
     },
     partners: {
@@ -184,8 +184,8 @@ const content = {
       body: "From our operations points in Gebze and İzmir, we provide planned, fast and reliable distribution across Türkiye. Our strong inventory structure and regular delivery operations support a portfolio of more than 100 brands.",
       hubs: [{ label: "Gebze", plate: 41 }, { label: "İzmir", plate: 35 }],
       cards: [
-        { title: "Same-Day Dispatch", desc: "Orders placed before 17:00 ship the same day for items in stock." },
-        { title: "Deep Inventory", desc: "With more than 50,000 active SKUs, most orders are fulfilled directly from stock." },
+        { title: "Same-Day Dispatch", desc: "On dispatch days, we aim to ship orders for in-stock items the same day when received by 5:00 p.m. Türkiye time." },
+        { title: "Stock Availability", desc: "Check current stock availability in the Parçabul B2B portal." },
       ],
     },
     partners: {
