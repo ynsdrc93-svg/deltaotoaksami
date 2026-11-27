@@ -18,7 +18,6 @@ export type RouteKey =
   | "about"
   | "partners"
   | "operations"
-  | "representatives"
   | "careers"
   | "contact"
   | "spart"
@@ -34,7 +33,6 @@ const ROUTES: Record<RouteKey, Record<Lang, string>> = {
   about: { tr: "/hakkimizda", en: "/en/about" },
   partners: { tr: "/tedarikciler", en: "/en/partners" },
   operations: { tr: "/operasyon", en: "/en/operations" },
-  representatives: { tr: "/temsilcilerimiz", en: "/en/representatives" },
   careers: { tr: "/kariyer", en: "/en/careers" },
   contact: { tr: "/iletisim", en: "/en/contact" },
   spart: { tr: "/spart", en: "/en/spart" },

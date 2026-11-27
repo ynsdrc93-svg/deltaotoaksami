@@ -1,5 +1,5 @@
 import { lazy, Suspense, useEffect } from "react";
-import { Switch, Route } from "wouter";
+import { Switch, Route, Redirect } from "wouter";
 import { LandingPage } from "@/components/LandingPage";
 import { ScrollToTopButton } from "@/components/shared/ScrollToTopButton";
 import { ScrollToTop } from "@/components/shared/ScrollToTop";
@@ -16,7 +16,6 @@ const TedarikciPage = lazy(() => import("@/pages/TedarikciPage").then((m) => ({ 
 const OperasyonPage = lazy(() => import("@/pages/OperasyonPage").then((m) => ({ default: m.OperasyonPage })));
 const KariyerPage = lazy(() => import("@/pages/KariyerPage").then((m) => ({ default: m.KariyerPage })));
 const IletisimPage = lazy(() => import("@/pages/IletisimPage").then((m) => ({ default: m.IletisimPage })));
-const TemsilcilerimizPage = lazy(() => import("@/pages/TemsilcilerimizPage").then((m) => ({ default: m.TemsilcilerimizPage })));
 const SpartPage = lazy(() => import("@/pages/SpartPage").then((m) => ({ default: m.SpartPage })));
 const GizlilikPolitikasiPage = lazy(() => import("@/pages/GizlilikPolitikasiPage").then((m) => ({ default: m.GizlilikPolitikasiPage })));
 const CerezPolitikasiPage = lazy(() => import("@/pages/CerezPolitikasiPage").then((m) => ({ default: m.CerezPolitikasiPage })));
@@ -58,8 +57,8 @@ function App() {
           <Route path="/en/careers" component={KariyerPage} />
           <Route path="/iletisim" component={IletisimPage} />
           <Route path="/en/contact" component={IletisimPage} />
-          <Route path="/temsilcilerimiz" component={TemsilcilerimizPage} />
-          <Route path="/en/representatives" component={TemsilcilerimizPage} />
+          <Route path="/temsilcilerimiz"><Redirect to="/iletisim" replace /></Route>
+          <Route path="/en/representatives"><Redirect to="/en/contact" replace /></Route>
           <Route path="/spart" component={SpartPage} />
           <Route path="/en/spart" component={SpartPage} />
           <Route path="/gizlilik-politikasi" component={GizlilikPolitikasiPage} />

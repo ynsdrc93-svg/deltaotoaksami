@@ -51,16 +51,11 @@ function SocialIconLink({ id }: { id: keyof typeof SOCIAL_LINKS }) {
   );
 }
 
-// Sıra Turu 3: "İletişim" artık son sırada, "Temsilcilerimiz"in HEMEN
-// altında (görev talimatı) — yalnızca bu dizinin sırası değişti, header'ın
-// kendi nav dizisi (SiteHeader.tsx'teki NAV) ve adres/iletişim bloğunun
-// footer içindeki konumu DOKUNULMADI.
 const QUICK_LINKS: { key: RouteKey; label: Record<Lang, string> }[] = [
   { key: "about", label: { tr: "Hakkımızda", en: "About Us" } },
   { key: "partners", label: { tr: "İş Ortaklarımız", en: "Partners" } },
   { key: "operations", label: { tr: "Operasyon ve Lojistik", en: "Operations & Logistics" } },
   { key: "careers", label: { tr: "Kariyer", en: "Careers" } },
-  { key: "representatives", label: { tr: "Temsilcilerimiz", en: "Representatives" } },
   { key: "contact", label: { tr: "İletişim", en: "Contact" } },
 ];
 

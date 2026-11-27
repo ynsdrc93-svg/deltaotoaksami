@@ -8,10 +8,11 @@ import type { Lang } from "@/lib/i18n";
 import "./representative-finder.css";
 
 const paths = new Map(cities.map(city => [city.plateNumber, city.path]));
+const provinceOptions = [...TURKEY_PROVINCES].sort((a, b) => a.name.localeCompare(b.name, "tr"));
 const UI = {
   title: { tr: "Satış temsilcinizi bulun", en: "Find your sales representative" },
   hint: { tr: "Haritadan ilinizi seçin.", en: "Select your province on the map." },
-  pan: { tr: "Haritayı sağa veya sola kaydırabilirsiniz.", en: "Swipe left or right to explore the map." },
+  choose: { tr: "İl seçin", en: "Select a province" },
   close: { tr: "Kapat", en: "Close" },
   map: { tr: "Türkiye illeri", en: "Provinces of Türkiye" },
   previous: { tr: "Önceki temsilci", en: "Previous representative" },
@@ -103,11 +104,18 @@ export function RepresentativeFinderModal({ open, onClose, lang }: { open: boole
         if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) onClose();
       }}>
       <header className="rep-header">
-        <div><h2>{UI.title[lang]}</h2><p>{UI.hint[lang]} <span>{UI.pan[lang]}</span></p></div>
+        <div><h2>{UI.title[lang]}</h2><p className="rep-map-hint">{UI.hint[lang]}</p></div>
         <button type="button" onClick={onClose} aria-label={UI.close[lang]}><X /></button>
       </header>
       <div className="rep-body">
-        <div className="rep-map-scroll">
+        <label className="rep-choose">
+          <span>{lang === "tr" ? "İliniz" : "Your province"}</span>
+          <select value={selectedPlate ?? ""} onChange={event => setSelectedPlate(Number(event.target.value))}>
+            <option value="" disabled>{UI.choose[lang]}</option>
+            {provinceOptions.map(({ plate, name }) => <option key={plate} value={plate}>{name}</option>)}
+          </select>
+        </label>
+        <div className="rep-map-area">
           <svg className="rep-map" viewBox="10 132 1030 468" role="group" aria-label={UI.map[lang]}>
             {TURKEY_PROVINCES.map(({ plate, name }) => (
               <g key={plate} className="rep-province" role="button" tabIndex={0} aria-label={name} aria-pressed={plate === selectedPlate}
