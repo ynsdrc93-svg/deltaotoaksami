@@ -49,7 +49,7 @@ const content = {
       },
       findRep: {
         title: "Bölge Temsilcinizi Bulun",
-        desc: "81 il, 7 bölge — haritadan ilinizi seçin, size özel temsilciyi görün.",
+        desc: "Haritadan ilinizi seçerek satış temsilcilerimizin iletişim bilgilerine ulaşın.",
         link: "Haritayı Açın",
       },
     },
@@ -153,7 +153,7 @@ const content = {
       },
       findRep: {
         title: "Find Your Regional Representative",
-        desc: "81 provinces, 7 regions — pick your province on the map to see your dedicated representative.",
+        desc: "Choose your province on the map to find contact details for your sales representatives.",
         link: "Open the Map",
       },
     },

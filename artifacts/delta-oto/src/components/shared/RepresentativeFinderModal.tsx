@@ -1,361 +1,137 @@
-import React, { useEffect, useRef, useState } from "react";
-import { X, MapPin, Phone, Mail } from "lucide-react";
-import TurkeyMap from "turkey-map-react";
-import { cities as turkeyCities } from "turkey-map-react/lib/data";
-import { useEscapeKey } from "@/hooks/use-motion";
-import {
-  representativesForProvince,
-  GENERAL_CONTACT,
-  type Representative,
-} from "@/lib/representatives";
-import {
-  TURKEY_REGIONS,
-  TURKEY_PROVINCES,
-  provincesInRegion,
-  provinceByPlate,
-  type TurkeyRegion,
-} from "@/lib/turkey-regions";
+import { useEffect, useRef, useState } from "react";
+import { ArrowLeft, ArrowRight, Mail, Phone, X } from "lucide-react";
+import { cities } from "turkey-map-react/lib/data";
+import { representativesForProvince, GENERAL_CONTACT, type Representative } from "@/lib/representatives";
+import { TURKEY_PROVINCES, provinceByPlate } from "@/lib/turkey-regions";
+import { PROVINCE_LABELS } from "@/lib/province-labels";
 import type { Lang } from "@/lib/i18n";
+import "./representative-finder.css";
 
-// Bölge temsilcisi bulma deneyiminin TEK yeri — /iletisim ve /temsilcilerimiz
-// aynı modalı açar, mantık burada tekilleşir (DRY). `lang` prop olarak
-// alınır (kendi useLang() çağırmaz) — çağıran sayfa zaten bu değeri
-// hesaplıyor, tek kaynaktan aşağı akar. Bölge/il adları (TURKEY_REGIONS,
-// province.name) coğrafi özel adlardır — marka adları gibi çevrilmez, her
-// iki dilde de Türkçe haliyle kalır.
+const paths = new Map(cities.map(city => [city.plateNumber, city.path]));
 const UI = {
-  dialogLabel: { tr: "Bölge Temsilcinizi Bulun", en: "Find Your Representative" },
-  title: { tr: "Bölge Temsilcinizi Bulun", en: "Find Your Representative" },
+  title: { tr: "Satış temsilcinizi bulun", en: "Find your sales representative" },
+  hint: { tr: "Haritadan ilinizi seçin.", en: "Select your province on the map." },
+  pan: { tr: "Haritayı sağa veya sola kaydırabilirsiniz.", en: "Swipe left or right to explore the map." },
   close: { tr: "Kapat", en: "Close" },
-  allTurkey: { tr: "Tüm Türkiye", en: "All of Türkiye" },
-  hintAll: { tr: "Haritadan bir il seçin veya yukarıdan bölge seçerek daraltın.", en: "Select a province on the map, or narrow down by region above." },
-  hintEmpty: { tr: "Haritadan veya listeden bir il seçerek başlayın.", en: "Start by selecting a province on the map or from the list." },
-  notFoundPrompt: { tr: "İlinizi bulamadınız mı?", en: "Can't find your province?" },
-} satisfies Record<string, Record<Lang, string>>;
-
-const CITY_PATH_BY_PLATE: Map<number, string> = new Map(
-  turkeyCities.map((c: { plateNumber: number; path: string }) => [c.plateNumber, c.path]),
-);
-
-// Otomatik bounding-box merkezi çoğu il için iyi çalışıyor, ancak gerçekten
-// küçük/sıkışık birkaç il (Doğu Marmara ve Batı Karadeniz kümeleri) için
-// okunabilirlik adına küçük, elle ayarlanmış nudge'lar — il konumunu/veriyi
-// DEĞİŞTİRMEZ, yalnızca o ilin etiketinin görsel yerleşimini ince ayarlar.
-const PROVINCE_LABEL_OFFSETS: Record<number, { dx: number; dy: number }> = {
-  34: { dx: 4, dy: 20 },    // İstanbul — boğaz nedeniyle bbox merkezi sudaki boşluğa denk gelebilir; dy Kocaeli çakışmasını gidermek için büyütüldü
-  41: { dx: -10, dy: -24 }, // Kocaeli — İstanbul'a yakın, dy büyütüldü (Sakarya/Yalova'ya hâlâ yeterli mesafede)
-  77: { dx: 12, dy: 10 },   // Yalova — Kocaeli/Bursa arasında çok küçük
-  11: { dx: 8, dy: 10 },    // Bilecik
-  54: { dx: -4, dy: 10 },   // Sakarya
-  81: { dx: 10, dy: -2 },   // Düzce
-  74: { dx: -8, dy: -6 },   // Bartın
-  78: { dx: 8, dy: 10 },    // Karabük
-  67: { dx: -10, dy: 4 },   // Zonguldak
-  69: { dx: 16, dy: 30 },   // Bayburt — Gümüşhane ve Erzurum'la neredeyse aynı yükseklikte (yatay üçlü zincir); güneye kaydırılarak ikisinden de dikey olarak ayrıştırıldı
-  79: { dx: 0, dy: 10 },    // Kilis
-  73: { dx: 0, dy: -8 },    // Şırnak
-  // Etiketler artık TEK sabit boyutta (bkz. LABEL_FONT_SIZE) — bu satırdan
-  // itibaren eklenen nudge'lar komşu il çiftleri arasındaki gerçek merkez
-  // mesafesinin bu sabit boyutta yeterli olmadığı yerler için, Playwright'la
-  // ölçülen gerçek bounding-box çakışmasına göre eklendi (bkz.
-  // RepresentativeFinderModal QA) — boyut farkı değil, yalnızca konum düzeltmesi.
-  2:  { dx: 8, dy: 14 },    // Adıyaman — Kahramanmaraş'a yakın
-  46: { dx: -8, dy: -12 },  // Kahramanmaraş — Adıyaman'a yakın
-  3:  { dx: 10, dy: 12 },   // Afyonkarahisar — en uzun il adı, Uşak'a yakın
-  64: { dx: -10, dy: -12 }, // Uşak — Afyonkarahisar'a yakın
-  1:  { dx: -6, dy: -6 },   // Adana — Osmaniye'ye yakın
-  35: { dx: 0, dy: 14 },    // İzmir — Manisa'ya yakın
-  45: { dx: 0, dy: -12 },   // Manisa — İzmir'e yakın
-  21: { dx: 0, dy: -12 },   // Diyarbakır — Batman'a yakın
-  72: { dx: 0, dy: 12 },    // Batman — Diyarbakır'a yakın, küçük il
-  80: { dx: 10, dy: 30 },   // Osmaniye — hem Adana hem Gaziantep'e yakın, küçük il; güneye kaydırıldı
-  27: { dx: 6, dy: -8 },    // Gaziantep — Osmaniye'ye yakın
-  // Doğu Karadeniz kümesi (Giresun/Gümüşhane/Trabzon/Bayburt) haritanın en
-  // sıkışık dörtlüsü — dördü de kümenin ortak merkezinden dışa doğru
-  // kaydırıldı (tek bir ili itmek sorunu komşusuna devrediyordu).
-  28: { dx: -8, dy: 0 },    // Giresun
-  29: { dx: -4, dy: 12 },   // Gümüşhane
-  61: { dx: 6, dy: -8 },    // Trabzon
+  map: { tr: "Türkiye illeri", en: "Provinces of Türkiye" },
+  previous: { tr: "Önceki temsilci", en: "Previous representative" },
+  next: { tr: "Sonraki temsilci", en: "Next representative" },
+  general: { tr: "Genel satış", en: "General sales" },
 };
 
-// Tüm il etiketleri TEK bir sabit font boyutu kullanır — bbox-alanına göre
-// kademeli boyutlandırma ve seçili-il büyütmesi bilerek KALDIRILDI (kullanıcı
-// kararı: büyüklük farkı olmasın, vurgulama yalnızca renk/ağırlıkla yapılsın
-// — bkz. render'daki fill/fontWeight dallanması ve fillForProvince). Referans
-// ölçek: "Çankırı" etiketinin önceki (area>2200 kademesi) boyutu — masaüstünde
-// 8.5, mobilde 8.5×1.8=15.3 — kullanıcının onayladığı okunabilirlik seviyesi.
-// `scale`: harita SVG'si viewBox birimlerinde sabit kalıyor ama mobilde
-// fiziksel render genişliği masaüstünün çok altında — aynı birim font-size
-// mobilde ekranda çok daha küçük piksele düşüyor, ~1.8 bu küçülmeyi telafi eder.
-const LABEL_FONT_SIZE = 8.5;
-
-function telHref(phone: string): string {
+function telHref(phone: string) {
   return `tel:+90${phone.replace(/\s+/g, "").replace(/^0/, "")}`;
 }
 
-function RepresentativeDetail({ rep, lang }: { rep: Representative; lang: Lang }) {
+function RepresentativeCard({ rep, lang }: { rep: Representative; lang: Lang }) {
   const side = rep.side && (lang === "tr" ? `${rep.side} Yakası` : rep.side === "Avrupa" ? "European Side" : "Anatolian Side");
-  const channel = rep.general ? (lang === "tr" ? "Genel satış" : "General sales") : rep.channel;
   return (
-    <article className="py-4 first:pt-0 last:pb-0">
-      <div className="flex gap-3 items-center">
-        <img src={`${import.meta.env.BASE_URL}images/representatives/${rep.id}.webp`}
-          width="400" height="480" alt={rep.name}
-          className="w-20 h-24 rounded-lg object-cover shrink-0 bg-slate-100" />
-        <div className="min-w-0">
-          <h4 className="font-bold text-lg leading-tight text-slate-900">{rep.name}</h4>
-          <p className="mt-1 text-sm text-slate-600">{[channel, side].filter(Boolean).join(" · ")}</p>
+    <article className="rep-card">
+      <div className="rep-card-person">
+        <img src={`${import.meta.env.BASE_URL}images/representatives/${rep.id}.webp`} alt={rep.name} width="400" height="480" />
+        <div>
+          <h4>{rep.name}</h4>
+          <p>{[rep.general ? UI.general[lang] : rep.channel, side].filter(Boolean).join(" · ")}</p>
         </div>
       </div>
-      <div className="mt-3 space-y-2">
-        <a href={telHref(rep.phone)} className="flex items-center gap-2 text-sm font-semibold text-[#1B3A8F] hover:underline">
-          <Phone aria-hidden="true" className="w-4 h-4 shrink-0" /> {rep.phone}
-        </a>
-        <a href={`mailto:${rep.email}`} className="flex items-center gap-2 text-sm text-[#1B3A8F] hover:underline break-all">
-          <Mail aria-hidden="true" className="w-4 h-4 shrink-0" /> {rep.email}
-        </a>
-      </div>
+      <a href={telHref(rep.phone)}><Phone aria-hidden="true" />{rep.phone}</a>
+      <a href={`mailto:${rep.email}`}><Mail aria-hidden="true" />{rep.email}</a>
     </article>
   );
 }
 
-export function RepresentativeFinderModal({ open, onClose, lang }: { open: boolean; onClose: () => void; lang: Lang }) {
-  const [selectedRegion, setSelectedRegion] = useState<TurkeyRegion | "all">("all");
-  const [selectedPlate, setSelectedPlate] = useState<number | null>(null);
-  const [labelPositions, setLabelPositions] = useState<Map<number, { x: number; y: number }>>(new Map());
-  const closeButtonRef = useRef<HTMLButtonElement>(null);
-  const allProvincesLayerRef = useRef<SVGGElement>(null);
-  // Tailwind'in `sm` eşiğiyle (640px) hizalı — bu genişliğin altında harita
-  // fiziksel olarak çok daha küçük render edildiği için il etiketleri
-  // LABEL_FONT_SIZE ile birlikte ölçeklenir (bkz. yukarıdaki not).
-  const [isNarrow, setIsNarrow] = useState(false);
+function Representatives({ plate, lang }: { plate: number; lang: Lang }) {
+  const province = provinceByPlate(plate)!;
+  const reps = representativesForProvince(plate);
+  const rail = useRef<HTMLDivElement>(null);
+  const [edges, setEdges] = useState({ start: true, end: true });
+
   useEffect(() => {
-    const mq = window.matchMedia("(max-width: 639px)");
-    const update = () => setIsNarrow(mq.matches);
+    const el = rail.current;
+    if (!el) return;
+    const update = () => setEdges({ start: el.scrollLeft <= 2, end: el.scrollLeft + el.clientWidth >= el.scrollWidth - 2 });
+    const observer = new ResizeObserver(update);
+    observer.observe(el);
+    el.parentElement?.scrollIntoView({ block: "nearest", inline: "nearest" });
+    el.addEventListener("scroll", update, { passive: true });
     update();
-    mq.addEventListener("change", update);
-    return () => mq.removeEventListener("change", update);
+    return () => { observer.disconnect(); el.removeEventListener("scroll", update); };
   }, []);
 
-  const regionProvinces = selectedRegion === "all" ? [] : provincesInRegion(selectedRegion);
-  const activeRegionPlates = new Set(regionProvinces.map((p) => p.plate));
-  const visibleProvinces = selectedRegion === "all" ? TURKEY_PROVINCES : regionProvinces;
-  const selectedProvince = selectedPlate != null ? provinceByPlate(selectedPlate) ?? null : null;
-  const selectedReps = selectedPlate != null ? representativesForProvince(selectedPlate) : [];
-
-  function selectProvince(plate: number) {
-    setSelectedPlate(plate);
-    const region = provinceByPlate(plate)?.region;
-    if (region) setSelectedRegion(region);
+  function advance(direction: number) {
+    const el = rail.current;
+    if (!el || !el.firstElementChild) return;
+    const step = el.firstElementChild.getBoundingClientRect().width + parseFloat(getComputedStyle(el).columnGap);
+    el.scrollBy({ left: direction * step, behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth" });
   }
 
-  function fillForProvince(plate: number): string {
-    if (plate === selectedPlate) return "#1B3A8F";
-    if (activeRegionPlates.has(plate)) return "#9db3e8";
-    return "transparent";
-  }
+  return (
+    <section className="rep-results" aria-label={province.name}>
+      <div className="rep-results-header">
+        <h3 aria-live="polite">{province.name} <span>{reps.length} {lang === "tr" ? "temsilci" : reps.length === 1 ? "representative" : "representatives"}</span></h3>
+        {!(edges.start && edges.end) && <div className="rep-controls">
+          <button type="button" disabled={edges.start} onClick={() => advance(-1)} aria-label={UI.previous[lang]}><ArrowLeft /></button>
+          <button type="button" disabled={edges.end} onClick={() => advance(1)} aria-label={UI.next[lang]}><ArrowRight /></button>
+        </div>}
+      </div>
+      <div className="rep-rail" ref={rail}>
+        {reps.map(rep => <RepresentativeCard key={rep.id} rep={rep} lang={lang} />)}
+      </div>
+    </section>
+  );
+}
 
-  // İl geometrisi hiç değişmediği için etiket konumları yalnızca bir kez,
-  // mount'ta hesaplanır (path'in gerçek bounding-box merkezi). Bölge/il
-  // seçimi yalnızca hangi etiketin vurgulanacağını belirler — konumları
-  // yeniden hesaplamaz.
-  useEffect(() => {
-    if (!allProvincesLayerRef.current) return;
-    const next = new Map<number, { x: number; y: number }>();
-    allProvincesLayerRef.current.querySelectorAll("path[data-plate]").forEach((el) => {
-      const plate = Number(el.getAttribute("data-plate"));
-      const bbox = (el as SVGGraphicsElement).getBBox();
-      next.set(plate, { x: bbox.x + bbox.width / 2, y: bbox.y + bbox.height / 2 });
-    });
-    setLabelPositions(next);
-  }, []);
+export function RepresentativeFinderModal({ open, onClose, lang }: { open: boolean; onClose: () => void; lang: Lang }) {
+  const dialog = useRef<HTMLDialogElement>(null);
+  const [selectedPlate, setSelectedPlate] = useState<number | null>(null);
 
-  useEscapeKey(onClose, open);
   useEffect(() => {
-    document.body.style.overflow = open ? "hidden" : "";
-    return () => { document.body.style.overflow = ""; };
-  }, [open]);
-  useEffect(() => {
-    if (open) closeButtonRef.current?.focus();
+    const el = dialog.current;
+    if (!open || !el) return;
+    const previous = document.body.style.overflow;
+    el.showModal();
+    document.body.style.overflow = "hidden";
+    return () => { el.close(); document.body.style.overflow = previous; };
   }, [open]);
 
   return (
-    <div
-      className={`fixed inset-0 z-[80] transition-opacity duration-300 ${open ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"}`}
-      aria-hidden={!open}
-    >
-      <div className="absolute inset-0 bg-black/60 backdrop-blur-sm" onClick={onClose} />
-      <div
-        className={`absolute inset-0 sm:inset-5 lg:inset-x-0 lg:top-4 lg:bottom-4 lg:mx-auto lg:max-w-6xl bg-white sm:rounded-2xl shadow-2xl flex flex-col transition-all duration-300 ${
-          open ? "translate-y-0 opacity-100" : "translate-y-3 opacity-0"
-        }`}
-        role="dialog"
-        aria-modal="true"
-        aria-label={UI.dialogLabel[lang]}
-      >
-        <div className="flex items-center justify-between gap-4 px-5 py-3.5 lg:px-6 lg:py-4 border-b border-slate-100 shrink-0">
-          <h2 className="text-lg lg:text-xl font-black text-slate-900">{UI.title[lang]}</h2>
-          <button
-            ref={closeButtonRef}
-            type="button"
-            onClick={onClose}
-            aria-label={UI.close[lang]}
-            className="shrink-0 w-8 h-8 rounded-full flex items-center justify-center text-slate-400 hover:bg-slate-100 hover:text-slate-700 transition-colors"
-          >
-            <X className="w-4 h-4" />
-          </button>
-        </div>
-
-        <div className="flex-1 overflow-y-auto p-2 sm:p-5 lg:p-6">
-          <div className="flex flex-wrap gap-2 mb-3">
-            <button
-              type="button"
-              onClick={() => { setSelectedRegion("all"); setSelectedPlate(null); }}
-              aria-pressed={selectedRegion === "all"}
-              className={`text-[11.5px] font-semibold px-3 py-1.5 rounded-full border transition-all duration-200 ${
-                selectedRegion === "all"
-                  ? "bg-[#1B3A8F] border-[#1B3A8F] text-white shadow-sm shadow-[#1B3A8F]/20"
-                  : "border-slate-200 text-slate-600 hover:border-[#1B3A8F]/40"
-              }`}
-            >
-              {UI.allTurkey[lang]}
-            </button>
-            {TURKEY_REGIONS.map((region) => (
-              <button
-                key={region}
-                type="button"
-                onClick={() => { setSelectedRegion(region); setSelectedPlate(null); }}
-                aria-pressed={selectedRegion === region}
-                className={`text-[11.5px] font-semibold px-3 py-1.5 rounded-full border transition-all duration-200 ${
-                  selectedRegion === region
-                    ? "bg-[#1B3A8F] border-[#1B3A8F] text-white shadow-sm shadow-[#1B3A8F]/20"
-                    : "border-slate-200 text-slate-600 hover:border-[#1B3A8F]/40"
-                }`}
-              >
-                {region}
-              </button>
+    <dialog className="rep-finder" ref={dialog} aria-label={UI.title[lang]}
+      onCancel={event => { event.preventDefault(); onClose(); }}
+      onClick={event => {
+        if (event.target !== dialog.current) return;
+        const bounds = event.currentTarget.getBoundingClientRect();
+        if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) onClose();
+      }}>
+      <header className="rep-header">
+        <div><h2>{UI.title[lang]}</h2><p>{UI.hint[lang]} <span>{UI.pan[lang]}</span></p></div>
+        <button type="button" onClick={onClose} aria-label={UI.close[lang]}><X /></button>
+      </header>
+      <div className="rep-body">
+        <div className="rep-map-scroll">
+          <svg className="rep-map" viewBox="10 132 1030 468" role="group" aria-label={UI.map[lang]}>
+            {TURKEY_PROVINCES.map(({ plate, name }) => (
+              <g key={plate} className="rep-province" role="button" tabIndex={0} aria-label={name} aria-pressed={plate === selectedPlate}
+                onClick={() => setSelectedPlate(plate)}
+                onKeyDown={event => {
+                  if (event.key === "Enter" || event.key === " ") { event.preventDefault(); setSelectedPlate(plate); }
+                }}>
+                <path d={paths.get(plate)} />
+              </g>
             ))}
-          </div>
-
-          <div className="grid items-start lg:grid-cols-[minmax(0,1fr)_19rem] gap-4 sm:gap-5">
-            {/* Harita + il ızgarası — tek "feature panel" çerçevesi, tüm 81 il adı her zaman görünür.
-                Mobilde max-width sınırı yok — harita panelin tüm genişliğini
-                kullanır, bu da etiketlerin fiziksel render boyutunu (dolayısıyla
-                okunabilirliğini) doğrudan büyütür. */}
-            <div className="rounded-2xl border border-slate-100 bg-slate-50/60 p-1 sm:p-4 lg:p-5">
-              <div className="relative mx-auto">
-                <TurkeyMap
-                  hoverable
-                  customStyle={{ idleColor: "#e2e8f0", hoverColor: "#c7d5f5" }}
-                  onClick={(city) => selectProvince(city.plateNumber)}
-                />
-                <svg viewBox="0 80 1050 585" className="absolute inset-0 w-full h-full pointer-events-none" aria-hidden="true">
-                  <g ref={allProvincesLayerRef}>
-                    {TURKEY_PROVINCES.map((p) => (
-                      <path
-                        key={p.plate}
-                        data-plate={p.plate}
-                        d={CITY_PATH_BY_PLATE.get(p.plate)}
-                        fill={fillForProvince(p.plate)}
-                        stroke={p.plate === selectedPlate || activeRegionPlates.has(p.plate) ? "#ffffff" : "none"}
-                        strokeWidth={1}
-                      />
-                    ))}
-                  </g>
-                  {TURKEY_PROVINCES.map((p) => {
-                    const pos = labelPositions.get(p.plate);
-                    if (!pos) return null;
-                    const offset = PROVINCE_LABEL_OFFSETS[p.plate];
-                    const isSelected = p.plate === selectedPlate;
-                    const isQuiet = selectedRegion !== "all" && !activeRegionPlates.has(p.plate) && !isSelected;
-                    const labelScale = isNarrow ? 1.8 : 1;
-                    return (
-                      <text
-                        key={p.plate}
-                        x={pos.x + (offset?.dx ?? 0)}
-                        y={pos.y + (offset?.dy ?? 0)}
-                        textAnchor="middle"
-                        dominantBaseline="middle"
-                        fontSize={LABEL_FONT_SIZE * labelScale}
-                        fontWeight={isSelected ? 700 : isQuiet ? 500 : 700}
-                        fill={isSelected ? "#ffffff" : "#1B3A8F"}
-                        fillOpacity={isQuiet ? 0.55 : 1}
-                        stroke={isSelected ? "none" : "#ffffff"}
-                        strokeOpacity={isQuiet ? 0.7 : 1}
-                        strokeWidth={isSelected ? 0 : 2.3 * labelScale}
-                        paintOrder="stroke"
-                      >
-                        {p.name}
-                      </text>
-                    );
-                  })}
-                </svg>
-              </div>
-
-              {/* "Tüm Türkiye": kısa tek satır ipucu. Bölge seçili: o bölgenin il
-                  ızgarası — 81 ili listelemeye çalışmak yerine, yalnızca seçili
-                  bölgenin illeri kompakt bir ızgarada gösterilir. */}
-              {selectedRegion === "all" ? (
-                <p className="text-slate-400 text-[11.5px] text-center mt-2.5">
-                  {UI.hintAll[lang]}
-                </p>
-              ) : (
-                <div className="grid grid-cols-3 sm:grid-cols-4 lg:grid-cols-6 gap-2 mt-3">
-                  {visibleProvinces.map((p) => {
-                    const isSelected = p.plate === selectedPlate;
-                    return (
-                      <button
-                        key={p.plate}
-                        type="button"
-                        onClick={() => selectProvince(p.plate)}
-                        aria-pressed={isSelected}
-                        className={`text-[12px] font-semibold px-2 py-2 rounded-md border truncate transition-colors ${
-                          isSelected
-                            ? "bg-[#1B3A8F] border-[#1B3A8F] text-white"
-                            : "bg-white border-slate-200 text-slate-600 hover:border-[#1B3A8F]/40 hover:text-[#1B3A8F]"
-                        }`}
-                      >
-                        {p.name}
-                      </button>
-                    );
-                  })}
-                </div>
-              )}
-            </div>
-
-            {/* Temsilci/fallback detayı — kolonun kalan boşluğunu dikey ortalayarak kullanır */}
-            <div className="relative do-card bg-white border border-slate-200 rounded-2xl p-4 sm:p-5 overflow-hidden flex flex-col justify-center min-h-[140px] sm:min-h-[160px]">
-              <MapPin className="absolute -right-3 -bottom-3 w-16 h-16 sm:-right-4 sm:-bottom-4 sm:w-20 sm:h-20 text-slate-50 pointer-events-none" strokeWidth={1} aria-hidden="true" />
-              <div className="relative">
-                {!selectedProvince ? (
-                  <div className="text-center">
-                    <MapPin className="w-7 h-7 text-slate-300 mx-auto mb-4" strokeWidth={1.5} />
-                    <p className="text-slate-400 text-[13.5px] leading-relaxed">
-                      {UI.hintEmpty[lang]}
-                    </p>
-                  </div>
-                ) : (
-                  <section aria-live="polite">
-                    <h3 className="text-xl font-bold text-slate-900 mb-4">{selectedProvince.name}</h3>
-                    <div className="divide-y divide-slate-200">
-                      {selectedReps.map(rep => <RepresentativeDetail key={rep.id} rep={rep} lang={lang} />)}
-                    </div>
-                  </section>
-                )}
-              </div>
-            </div>
-          </div>
+            {TURKEY_PROVINCES.map(({ plate, name }) => (
+              <text key={plate} x={PROVINCE_LABELS[plate][0]} y={PROVINCE_LABELS[plate][1]}
+                className={plate === selectedPlate ? "is-selected" : ""} aria-hidden="true"
+                textAnchor="middle" dominantBaseline="central" onClick={() => setSelectedPlate(plate)}>{name}</text>
+            ))}
+          </svg>
         </div>
-
-        <div className="border-t border-slate-100 px-5 lg:px-6 py-2.5 shrink-0 flex flex-wrap items-center justify-between gap-2 bg-slate-50/60">
-          <span className="text-[11.5px] text-slate-500">{UI.notFoundPrompt[lang]}</span>
-          <div className="flex items-center gap-2.5">
-            <a href={telHref(GENERAL_CONTACT.phone)} className="text-[11.5px] font-semibold text-[#1B3A8F] hover:text-[#2547B5] transition-colors">{GENERAL_CONTACT.phone}</a>
-            <span className="text-slate-300">·</span>
-            <a href={`mailto:${GENERAL_CONTACT.email}`} className="text-[11.5px] font-semibold text-[#1B3A8F] hover:text-[#2547B5] transition-colors">{GENERAL_CONTACT.email}</a>
-          </div>
-        </div>
+        {selectedPlate !== null && <Representatives key={selectedPlate} plate={selectedPlate} lang={lang} />}
       </div>
-    </div>
+      <footer className="rep-footer">
+        <span>{UI.general[lang]}</span>
+        <a href={telHref(GENERAL_CONTACT.phone)}>{GENERAL_CONTACT.phone}</a>
+        <a href={`mailto:${GENERAL_CONTACT.email}`}>{GENERAL_CONTACT.email}</a>
+      </footer>
+    </dialog>
   );
 }
