@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link } from "wouter";
-import { MapPin, Phone, Mail, Globe, ChevronRight, ArrowRight, Users, Package, MonitorSmartphone } from "lucide-react";
+import { MapPin, Phone, Mail, Globe, ChevronRight, ArrowRight, Users, Package } from "lucide-react";
 import { SiteHeader } from "@/components/shared/SiteHeader";
 import { SiteFooter } from "@/components/shared/SiteFooter";
 import { RepresentativeFinderModal } from "@/components/shared/RepresentativeFinderModal";
@@ -12,7 +12,7 @@ import { useLang, routeFor, type Lang } from "@/lib/i18n";
 // Departman kartlarının ikonları veriye değil DİZİN'e (index) bağlı — metin
 // içeriği content.tr/content.en'de, ikon eşlemesi burada sabit (bkz.
 // TedarikciPage.tsx'teki ADVANTAGE_ICONS ile aynı desen).
-const DEPT_ICONS = [Package, MonitorSmartphone, Globe];
+const DEPT_ICONS = [Package, Mail];
 
 // Merkez Adres kartındaki satırların ikonları — aynı index-eşleme deseni.
 const ADDRESS_ICONS = [MapPin, Phone, Mail, Globe];
@@ -62,19 +62,14 @@ const content = {
       body: "Talebinize uygun iletişim kanalını seçin.",
       list: [
         {
-          dept: "Satış & Sipariş",
-          links: [contactPhone, contactEmail],
-          info: "Ürün sorguları, sipariş ve fiyat bilgisi",
-        },
-        {
-          dept: "B2B Portal Desteği",
+          dept: "Satış, Sipariş ve Portal Desteği",
           links: [contactPhone, portal],
-          info: "Kullanıcı adınız veya şifreniz için santrali arayabilir ya da satış temsilcinize ulaşabilirsiniz.",
+          info: "Ürün, fiyat ve sipariş sorularınız veya Parçabul’a giriş desteği için bizi arayın.",
         },
         {
-          dept: "Genel Kurumsal",
+          dept: "İletişim",
           links: [contactEmail],
-          info: "Kurumsal iletişim ve genel talepler",
+          info: "Genel sorularınız ve talepleriniz için bize yazın.",
         },
       ],
     },
@@ -140,19 +135,14 @@ const content = {
       body: "Choose the contact channel that matches your inquiry.",
       list: [
         {
-          dept: "Sales & Orders",
-          links: [contactPhone, contactEmail],
-          info: "Product inquiries, orders and pricing information",
-        },
-        {
-          dept: "B2B Portal Support",
+          dept: "Sales, Orders and Portal Support",
           links: [contactPhone, portal],
-          info: "For help with your username or password, call the switchboard or contact your sales representative.",
+          info: "Call us for product, pricing and order inquiries or help signing in to Parçabul.",
         },
         {
-          dept: "Corporate Affairs",
+          dept: "Contact",
           links: [contactEmail],
-          info: "Corporate communications and general inquiries",
+          info: "Email us with general questions and inquiries.",
         },
       ],
     },
@@ -350,7 +340,7 @@ export function IletisimPage() {
             <h2 className="text-3xl md:text-4xl font-black text-slate-900 mt-2 tracking-tight">{t.departments.heading}</h2>
             <p className="text-slate-500 mt-3 text-[15px]">{t.departments.body}</p>
           </div>
-          <div className="grid md:grid-cols-3 gap-5">
+          <div className="grid sm:grid-cols-2 gap-5">
             {t.departments.list.map(({ dept, links, info }, i) => {
               const Icon = DEPT_ICONS[i];
               return (

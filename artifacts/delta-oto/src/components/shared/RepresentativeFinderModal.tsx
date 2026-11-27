@@ -35,8 +35,9 @@ function RepresentativeCard({ rep, lang }: { rep: Representative; lang: Lang }) 
           <h4>{rep.name}</h4>
           <p className="rep-card-details">
             <span className={isOpar ? "rep-channel rep-channel-opar" : "rep-channel"}>
-              {isOpar && <img src={`${import.meta.env.BASE_URL}images/opar-logo.svg`} alt="" width="849" height="341" />}
-              {rep.general ? UI.general[lang] : rep.channel}
+              {isOpar
+                ? <img src={`${import.meta.env.BASE_URL}images/opar-logo.svg`} alt="Opar" width="849" height="341" />
+                : rep.general ? UI.general[lang] : rep.channel}
             </span>
             {side && <span>{side}</span>}
           </p>
